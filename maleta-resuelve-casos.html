@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Resuelve los casos - Actividad interactiva</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      --ink: #1f2933;
+      --line: #343a40;
+      --ok: #1f8f4d;
+      --bad: #c0392b;
+      --soft: #f4f5f7;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #fff;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      user-select: none;
+    }
+    .topbar, .page-wrap, .tray, .authors, .final-screen { width: min(100%, 1120px); }
+    .student-bar {
+      width: min(100%, 1120px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+    }
+    .student-bar input {
+      border: 1px solid var(--line);
+      min-height: 34px;
+      padding: 0 8px;
+      font: inherit;
+      min-width: 120px;
+    }
+    .student-bar select {
+      border: 1px solid var(--line);
+      min-height: 34px;
+      padding: 0 8px;
+      font: inherit;
+      min-width: 120px;
+      background: #fff;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 34px;
+      font-size: clamp(13px, 2vw, 16px);
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      align-items: center;
+    }
+    .feedback {
+      min-width: 8em;
+      text-align: right;
+      font-weight: 700;
+    }
+    .therapist-back {
+      display: none;
+      position: fixed;
+      left: 8px;
+      top: 8px;
+      z-index: 60;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      min-height: 38px;
+      padding: 0 10px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .therapist-back.active {
+      display: inline-block;
+    }
+    .feedback.ok { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+    .page-wrap {
+      position: relative;
+      width: min(100%, 1120px, calc((100svh - 220px) * 1.414));
+      max-height: calc(100svh - 220px);
+      aspect-ratio: 1685 / 1191;
+    }
+    .page-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+    .tray {
+      min-height: 74px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .tray.passive .suspect-btn, .tray.passive #confirmButton { display: none; }
+    .suspect-btn, .next-button, .restart-button, .confirm-button {
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      min-height: 42px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    .finalize-reading-btn {
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      min-height: 42px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    .suspect-btn {
+      border-width: 2px;
+      font-size: clamp(14px, 2.6vw, 17px);
+    }
+    .suspect-btn.selected {
+      border-color: #1f8f4d;
+      box-shadow: 0 0 0 3px rgba(31, 143, 77, 0.28);
+    }
+    .suspect-btn.used {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .next-button[data-locked="true"] {
+      opacity: 0.45;
+    }
+    .authors {
+      text-align: center;
+      font-size: 12px;
+      color: #4b5563;
+      line-height: 1.35;
+    }
+    .explanation-box {
+      width: min(100%, 1120px);
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.35;
+      min-height: 52px;
+    }
+    .explanation-box.ok { border-color: var(--ok); }
+    .explanation-box.bad { border-color: var(--bad); }
+    .explanation-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .explanation-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .explain-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      min-height: 30px;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .quick-summary-btn {
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      min-height: 42px;
+      padding: 0 12px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+    }
+    .quick-summary-btn.active {
+      display: inline-block;
+    }
+    .summary-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      place-items: center;
+      z-index: 80;
+      padding: 16px;
+    }
+    .summary-modal.active { display: grid; }
+    .summary-card {
+      width: min(100%, 560px);
+      background: #fff;
+      border: 2px solid var(--line);
+      padding: 14px;
+    }
+    .summary-card h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+    .manual-button {
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      min-height: 34px;
+      padding: 0 10px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .manual-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      place-items: center;
+      z-index: 85;
+      padding: 16px;
+    }
+    .manual-modal.active { display: grid; }
+    .manual-card {
+      width: min(100%, 760px);
+      background: #fff;
+      border: 2px solid var(--line);
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .manual-card h3 { margin: 0 0 8px; }
+    .summary-pill {
+      display: inline-block;
+      border: 1px solid #9ca3af;
+      padding: 4px 8px;
+      margin: 3px 4px 3px 0;
+      font-size: 13px;
+      font-weight: 700;
+      background: #f8fafc;
+    }
+    .coach-toggle {
+      position: fixed;
+      right: 8px;
+      bottom: 8px;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 1;
+      z-index: 50;
+    }
+    .coach-panel {
+      position: fixed;
+      right: 10px;
+      bottom: 44px;
+      width: min(92vw, 320px);
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 10px;
+      display: none;
+      z-index: 51;
+      font-size: 14px;
+    }
+    .coach-panel.active { display: block; }
+    .coach-panel .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 6px 0;
+      flex-wrap: wrap;
+    }
+    .coach-panel label { font-weight: 700; }
+    .coach-help {
+      font-size: 12px;
+      line-height: 1.35;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      padding: 8px;
+      margin: 4px 0 8px;
+      background: #f9fafb;
+    }
+    .coach-panel select, .coach-panel button {
+      border: 1px solid var(--line);
+      background: #fff;
+      min-height: 32px;
+      font: inherit;
+      padding: 0 8px;
+    }
+    .final-screen {
+      display: none;
+      min-height: 56svh;
+      place-items: center;
+    }
+    .final-screen.active { display: grid; }
+    .final-box {
+      width: min(100%, 540px);
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 24px;
+      text-align: center;
+    }
+    .final-box h1 {
+      margin: 0 0 18px;
+      font-size: clamp(28px, 6vw, 42px);
+    }
+    .final-box p {
+      margin: 8px 0;
+      font-size: clamp(17px, 3.5vw, 22px);
+    }
+    .hidden { display: none; }
+    .report-screen {
+      display: none;
+      width: min(100%, 1120px);
+      margin: 0 auto;
+      padding: 8px 0 18px;
+    }
+    .report-screen.active { display: block; }
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .kpi {
+      border: 2px solid var(--line);
+      padding: 10px;
+      background: #fff;
+    }
+    .kpi h3 { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
+    .kpi p { margin: 0; font-size: 22px; font-weight: 800; }
+    .report-charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .chart-box, .table-box {
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 10px;
+    }
+    .chart-box h3, .table-box h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+    canvas.report-canvas {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border: 1px solid #d1d5db;
+      background: #fff;
+    }
+    .table-box table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .table-box th, .table-box td {
+      border: 1px solid #d1d5db;
+      padding: 4px 6px;
+      text-align: left;
+    }
+    .report-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .clinical-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .clinical-item {
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 8px;
+      font-size: 12px;
+    }
+    .clinical-item strong { display:block; font-size: 18px; margin-top: 4px; }
+    @media (max-width: 760px) {
+      body { padding: 6px; gap: 6px; }
+      .page-wrap {
+        width: min(100%, calc((100svh - 250px) * 1.414));
+        max-height: calc(100svh - 250px);
+      }
+      .suspect-btn, .next-button, .confirm-button, .restart-button {
+        min-height: 40px;
+        padding: 0 10px;
+      }
+      .report-grid { grid-template-columns: 1fr 1fr; }
+      .report-charts { grid-template-columns: 1fr; }
+      .clinical-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main id="activity">
+    <section class="student-bar" aria-label="Datos del alumno">
+      <strong>Alumno</strong>
+      <input id="studentName" type="text" placeholder="Nombre">
+      <select id="studentAge" aria-label="Edad">
+        <option value="">Edad</option>
+        <option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        <option value="9">9</option><option value="10">10</option><option value="11">11</option>
+        <option value="12">12</option><option value="13">13</option><option value="14">14</option>
+        <option value="15">15</option><option value="16">16</option><option value="17">17</option>
+        <option value="18">18</option>
+      </select>
+      <select id="studentGrade" aria-label="Curso">
+        <option value="">Curso</option>
+        <option value="1º Primaria">1º Primaria</option>
+        <option value="2º Primaria">2º Primaria</option>
+        <option value="3º Primaria">3º Primaria</option>
+        <option value="4º Primaria">4º Primaria</option>
+        <option value="5º Primaria">5º Primaria</option>
+        <option value="6º Primaria">6º Primaria</option>
+        <option value="1º ESO">1º ESO</option>
+        <option value="2º ESO">2º ESO</option>
+      </select>
+    </section>
+    <section class="topbar" aria-label="Progreso">
+      <button id="therapistBack" class="therapist-back" type="button">Atrás</button>
+      <div class="stats">
+        <span id="pageCounter">Página 1/31</span>
+        <span>Caso: <strong id="caseCounter">-</strong></span>
+        <span>Fase: <strong id="phaseLabel">-</strong></span>
+        <span>Aciertos: <strong id="scoreOk">0</strong></span>
+        <span>Errores: <strong id="scoreBad">0</strong></span>
+        <span>Intentos: <strong id="scoreAttempts">0</strong></span>
+        <span>Precisión: <strong id="scoreAccuracy">0%</strong></span>
+        <span>T. respuesta: <strong id="scoreAvgResponse">0.0s</strong></span>
+        <span>T. caso: <strong id="scoreCaseTime">0.0s</strong></span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button id="manualButton" class="manual-button" type="button">Manual</button>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="page-wrap" aria-label="Página del cuaderno">
+      <img id="pageImage" class="page-image" alt="Página del cuaderno Resuelve los casos">
+    </section>
+
+    <section id="tray" class="tray" aria-label="Selección">
+      <div id="suspectButtons"></div>
+      <button id="finalizeReadingButton" class="finalize-reading-btn" type="button">Finalizar lectura</button>
+      <button id="quickSummaryButton" class="quick-summary-btn" type="button">Micro resumen</button>
+      <button id="confirmButton" class="confirm-button" type="button">Confirmar</button>
+      <button id="nextButton" class="next-button" type="button">Siguiente</button>
+    </section>
+    <section id="explanationBox" class="explanation-box" aria-live="polite">
+      <div class="explanation-title">Pista de aprendizaje</div>
+      <div id="explanationText">Resuelve cada caso y aquí verás por qué era correcto o no.</div>
+      <div id="explanationActions" class="explanation-actions"></div>
+    </section>
+
+    <section class="authors">
+      Material original conservado sin rediseño. Autoría visible del cuaderno: @elblogdecharolucero @maestradiferente @logopedia_creativa
+    </section>
+  </main>
+
+  <section id="finalScreen" class="final-screen" aria-live="polite">
+    <div class="final-box">
+      <h1>Resultado final</h1>
+      <p>Aciertos: <strong id="finalOk">0</strong></p>
+      <p>Errores: <strong id="finalBad">0</strong></p>
+      <p>Intentos: <strong id="finalAttempts">0</strong></p>
+      <p>Porcentaje: <strong id="finalPercent">0%</strong></p>
+      <p>Tiempo total: <strong id="finalTime">0:00</strong></p>
+      <p>Tiempo medio de respuesta: <strong id="finalAvgResponse">0.0s</strong></p>
+      <p>Precisión primer intento: <strong id="finalFirstTry">0%</strong></p>
+      <p>Tiempo medio lectura perfiles: <strong id="finalAvgProfile">0.0s</strong></p>
+      <p>Tiempo medio por caso: <strong id="finalAvgCase">0.0s</strong></p>
+      <button id="openReportButton" class="restart-button" type="button">Ver informe visual</button>
+      <button id="downloadReportButton" class="restart-button" type="button">Descargar informe</button>
+      <button id="restartButton" class="restart-button" type="button">Reiniciar</button>
+    </div>
+  </section>
+  <section id="reportScreen" class="report-screen" aria-live="polite">
+    <div class="report-grid">
+      <div class="kpi"><h3>Precisión por intento</h3><p id="kpiPrecision">0%</p></div>
+      <div class="kpi"><h3>Resolución de casos</h3><p id="kpiFirstTry">0%</p></div>
+      <div class="kpi"><h3>T. respuesta medio</h3><p id="kpiResponse">0.0s</p></div>
+      <div class="kpi"><h3>T. lectura casos</h3><p id="kpiReading">0.0s</p></div>
+    </div>
+    <div class="table-box">
+      <h3>Ficha del alumno y comparativa esperable</h3>
+      <table>
+        <tbody>
+          <tr><th>Nombre</th><td id="repStudentName">-</td><th>Edad</th><td id="repStudentAge">-</td></tr>
+          <tr><th>Curso</th><td id="repStudentGrade">-</td><th>Curso estimado para baremo</th><td id="repGradeNum">-</td></tr>
+          <tr><th>PPM real (casos)</th><td id="repActualPpm">-</td><th>PPM esperado medio</th><td id="repExpectedPpm">-</td></tr>
+          <tr><th>Diferencia vs esperable</th><td id="repGap">-</td><th>Rango esperable</th><td id="repRange">-</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:8px 0 0; font-size:12px; color:#4b5563;">Comparativa estimada con referencia de 32 palabras por caso.</p>
+    </div>
+    <div class="table-box">
+      <h3>Tabla de referencia (fluidez orientativa, ppm)</h3>
+      <table>
+        <thead>
+          <tr><th>Curso Primaria</th><th>Mínimo</th><th>Medio</th><th>Máximo</th></tr>
+        </thead>
+        <tbody id="referenceTableBody"></tbody>
+      </table>
+      <p style="margin:8px 0 0; font-size:12px; color:#4b5563;">Uso orientativo educativo. No sustituye baremación diagnóstica estandarizada.</p>
+    </div>
+    <div class="report-charts">
+      <div class="chart-box">
+        <h3>Tiempo de lectura por caso</h3>
+        <canvas id="chartCaseReading" class="report-canvas" width="520" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Errores por caso</h3>
+        <canvas id="chartCaseErrors" class="report-canvas" width="520" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Tiempo de respuesta por intento</h3>
+        <canvas id="chartResponseAttempts" class="report-canvas" width="520" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Intentos por caso</h3>
+        <canvas id="chartAttemptsByCase" class="report-canvas" width="520" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Comparativa vs media esperable</h3>
+        <canvas id="chartExpectedVsActual" class="report-canvas" width="520" height="220"></canvas>
+      </div>
+    </div>
+    <div class="clinical-grid">
+      <div class="clinical-item">Memoria de trabajo (proxy)<strong id="idxWorkingMemory">0%</strong></div>
+      <div class="clinical-item">Impulsividad de respuesta<strong id="idxImpulsivity">0%</strong></div>
+      <div class="clinical-item">Lectura superficial (riesgo)<strong id="idxSuperficial">0%</strong></div>
+      <div class="clinical-item">Consistencia atencional<strong id="idxConsistency">0%</strong></div>
+      <div class="clinical-item">Autorregulación (1er intento)<strong id="idxSelfRegulation">0%</strong></div>
+      <div class="clinical-item">Uso de apoyos (resumen/perfil)<strong id="idxSupportUse">0</strong></div>
+      <div class="clinical-item">Carga ejecutiva (errores/caso)<strong id="idxExecLoad">0.0</strong></div>
+      <div class="clinical-item">Índice clínico global<strong id="idxClinicalGlobal">0/100</strong></div>
+      <div class="clinical-item">Comprensión textual global<strong id="idxTextComp">0%</strong></div>
+      <div class="clinical-item">Comprensión inferencial<strong id="idxInferential">0%</strong></div>
+      <div class="clinical-item">Retención de perfiles<strong id="idxRetention">0%</strong></div>
+      <div class="clinical-item">Tolerancia a la dificultad<strong id="idxPerseverance">0%</strong></div>
+      <div class="clinical-item">Fatiga cognitiva (riesgo)<strong id="idxFatigue">0%</strong></div>
+    </div>
+    <div class="table-box">
+      <h3>Resumen por nivel</h3>
+      <table>
+        <thead><tr><th>Nivel</th><th>Caso</th><th>Intentos</th><th>Errores</th><th>Lectura</th><th>Respuesta</th><th>Esperado edad</th></tr></thead>
+        <tbody id="reportTableBody"></tbody>
+      </table>
+    </div>
+    <div class="table-box">
+      <h3>Explicación para familias</h3>
+      <p id="parentSummaryText" style="margin:0; font-size:14px; line-height:1.5;"></p>
+    </div>
+    <div class="report-actions">
+      <button id="reportBackFinal" class="restart-button" type="button">Volver al resumen</button>
+      <button id="reportDownload" class="restart-button" type="button">Descargar informe</button>
+      <button id="reportRestart" class="restart-button" type="button">Nueva sesión</button>
+    </div>
+  </section>
+  <section id="summaryModal" class="summary-modal" aria-live="polite">
+    <div class="summary-card">
+      <h3 id="summaryTitle">Micro resumen</h3>
+      <div id="summaryPills"></div>
+      <div style="margin-top:10px;">
+        <button id="closeSummaryButton" class="restart-button" type="button">Volver al perfil</button>
+      </div>
+    </div>
+  </section>
+  <section id="manualModal" class="manual-modal" aria-live="polite">
+    <div class="manual-card">
+      <h3>Manual de uso rápido</h3>
+      <p><strong>Paciente</strong>: 1) Lee perfil/caso. 2) Pulsa <strong>Finalizar lectura</strong>. 3) En caso, elige sospechoso y confirma. 4) Revisa explicación y usa “Ver perfil” si hace falta.</p>
+      <p><strong>Profesional</strong>: usa <strong>Panel profesional</strong> para navegación libre, salto por nivel/pantalla e informe visual.</p>
+      <p><strong>Acceso Panel profesional</strong>: clave <strong>profesional</strong>.</p>
+      <p><strong>Métricas</strong>: tiempo lectura de perfil/caso, tiempo de respuesta, aciertos, errores, impulsividad, comprensión textual, retención, fatiga y más índices clínicos.</p>
+      <button id="closeManualButton" class="restart-button" type="button">Cerrar manual</button>
+    </div>
+  </section>
+
+  <button id="coachToggle" class="coach-toggle" type="button" aria-label="Panel profesional">Panel profesional</button>
+  <aside id="coachPanel" class="coach-panel" aria-label="Panel de control profesional">
+    <div class="row"><strong>Panel profesional</strong></div>
+    <div class="coach-help">
+      1) Activa <strong>navegación libre</strong> para moverte sin bloqueo.<br>
+      2) Usa "Ir al nivel" o "Ir a pantalla PDF".<br>
+      3) Vuelve a <strong>modo paciente</strong> para bloquear el avance.
+    </div>
+    <div class="row">
+      <label for="levelSelect">Ir al nivel</label>
+      <select id="levelSelect"></select>
+      <button id="goLevelButton" type="button">Abrir</button>
+    </div>
+    <div class="row">
+      <label for="pageSelect">Ir a pantalla PDF</label>
+      <select id="pageSelect"></select>
+      <button id="goPageButton" type="button">Abrir</button>
+    </div>
+    <div class="row">
+      <button id="coachPrev" type="button">← Anterior</button>
+      <button id="coachNext" type="button">Siguiente →</button>
+      <button id="coachLock" type="button">Navegación libre: OFF</button>
+    </div>
+    <div class="row">
+      <button id="coachReport" type="button">Descargar informe</button>
+      <button id="coachDemo" type="button">Modo demo</button>
+    </div>
+  </aside>
+
+  <script>
+    const suspects = ["Hugo", "Mateo", "Iván", "Samuel", "Alba", "Sara", "Carla", "Lucía", "Pablo", "Martina"];
+    const profilePageBySuspect = { Hugo: 3, Mateo: 4, "Iván": 5, Samuel: 6, Alba: 7, Sara: 8, Carla: 9, "Lucía": 10, Pablo: 11, Martina: 12 };
+    const caseAnswers = { 1: "Iván", 2: "Sara", 3: "Carla", 4: "Samuel", 5: "Iván", 6: "Pablo", 7: "Mateo", 8: "Pablo", 9: "Martina", 10: "Alba", 11: "Mateo", 12: "Lucía", 13: "Hugo", 14: "Iván", 15: "Alba" };
+    // Referencia orientativa de fluidez lectora (ppm) por curso de Primaria.
+    // Basada en tablas educativas de uso escolar; no es baremo diagnóstico clínico.
+    const expectedPpmByGrade = {
+      1: { min: 38, mid: 46, max: 55 },
+      2: { min: 64, mid: 73, max: 83 },
+      3: { min: 88, mid: 99, max: 111 },
+      4: { min: 111, mid: 124, max: 139 },
+      5: { min: 136, mid: 149, max: 167 },
+      6: { min: 161, mid: 177, max: 195 }
+    };
+    const profileMicroSummaries = {
+      "Hugo": ["Portero del equipo", "Muy competitivo", "Practica tras clase", "Pista: pulsera hecha a mano"],
+      "Mateo": ["Destaca en ciencias", "Meticuloso", "Lleva libreta", "Pista: inventos/lápiz invisible"],
+      "Iván": ["Bromista y estratega", "Le gustan enigmas", "Organiza torneos", "Pista: dado de la suerte"],
+      "Samuel": ["Ordenado y constante", "Practica natación", "Colecciona llaveros", "Pista: evita ascensores"],
+      "Alba": ["Muy lógica", "Buena en matemáticas", "Reservada y leal", "Pista: tarjetas misteriosas"],
+      "Sara": ["Periodismo escolar", "Muy curiosa", "Siempre con cámara", "Pista: tiene dos cámaras"],
+      "Carla": ["Música/coro escolar", "Solidaria", "Organiza búsquedas", "Pista: calcetines desparejados"],
+      "Lucía": ["Capitana de teatro", "Le encantan acertijos", "Amiga de todos", "Pista: diario en código"],
+      "Pablo": ["Muy observador", "Dibuja todo", "Cuaderno de bocetos", "Pista: contraseña Estrella fugaz"],
+      "Martina": ["Deportista y alta", "Club de ajedrez", "Experta en secretos", "Pista: cuida un ratón aunque le da miedo"]
+    };
+    const casePage = (caseId) => caseId + 14;
+    const pageImageSrc = (page) => `assets/maleta/pages/page-${String(page).padStart(2, "0")}.png`;
+
+    const levelPlan = [
+      { level: 1, addSuspect: null, caseId: 13, base: ["Hugo", "Mateo"] },
+      { level: 2, addSuspect: "Iván", caseId: 11 },
+      { level: 3, addSuspect: "Samuel", caseId: 1 },
+      { level: 4, addSuspect: "Alba", caseId: 4 },
+      { level: 5, addSuspect: "Sara", caseId: 10 },
+      { level: 6, addSuspect: "Carla", caseId: 2 },
+      { level: 7, addSuspect: "Lucía", caseId: 3 },
+      { level: 8, addSuspect: "Pablo", caseId: 12 },
+      { level: 9, addSuspect: "Martina", caseId: 6 },
+      { level: 10, addSuspect: null, caseId: 5 },
+      { level: 11, addSuspect: null, caseId: 7 },
+      { level: 12, addSuspect: null, caseId: 8 },
+      { level: 13, addSuspect: null, caseId: 9 },
+      { level: 14, addSuspect: null, caseId: 14 },
+      { level: 15, addSuspect: null, caseId: 15 }
+    ];
+
+    const flow = [];
+    const activeSuspects = [...levelPlan[0].base];
+    flow.push({ type: "cover", page: 1, label: "Portada" });
+    flow.push({ type: "cover", page: 2, label: "Portada" });
+    levelPlan.forEach((lv) => {
+      if (lv.addSuspect) activeSuspects.push(lv.addSuspect);
+      const learnedSet = lv.addSuspect ? [lv.addSuspect] : [];
+      const shownProfiles = lv.level === 1 ? lv.base : learnedSet;
+      shownProfiles.forEach((suspect) => flow.push({ type: "profile", level: lv.level, suspect, page: profilePageBySuspect[suspect], options: [...activeSuspects] }));
+      flow.push({ type: "case", level: lv.level, caseId: lv.caseId, suspectAnswer: caseAnswers[lv.caseId], page: casePage(lv.caseId), options: [...activeSuspects] });
+    });
+    flow.push({ type: "outro", page: 30, label: "Cierre" });
+    flow.push({ type: "solutions", page: 31, label: "Soluciones" });
+
+    function validateLevelPackaging() {
+      // 1) cada caso solo puede usar perfiles disponibles en ese nivel
+      const invalidStep = flow.find((step) => step.type === "case" && !step.options.includes(step.suspectAnswer));
+      if (invalidStep) {
+        throw new Error(`Caso ${invalidStep.caseId} invalido: ${invalidStep.suspectAnswer} no fue presentado antes.`);
+      }
+      // 2) evitar patrón trivial: caso = último perfil recién introducido
+      const trivialLevel = levelPlan.find((lv) => lv.addSuspect && caseAnswers[lv.caseId] === lv.addSuspect);
+      if (trivialLevel) {
+        throw new Error(`Nivel ${trivialLevel.level} trivial: el caso apunta al ultimo perfil presentado (${trivialLevel.addSuspect}).`);
+      }
+      // 3) cada nivel debe tener opciones coherentes (sin perfiles futuros)
+      const seenByLevel = new Set(levelPlan[0].base);
+      levelPlan.forEach((lv) => {
+        if (lv.addSuspect) seenByLevel.add(lv.addSuspect);
+        const caseStep = flow.find((s) => s.type === "case" && s.level === lv.level);
+        if (!caseStep) throw new Error(`Nivel ${lv.level} sin caso asignado.`);
+        const hasFutureProfile = caseStep.options.some((name) => !seenByLevel.has(name));
+        if (hasFutureProfile) throw new Error(`Nivel ${lv.level} contiene perfiles futuros en opciones.`);
+      });
+    }
+    validateLevelPackaging();
+
+    const totalCases = levelPlan.length;
+    const totalProfiles = flow.filter((x) => x.type === "profile").length;
+
+    const state = {
+      index: 0, ok: 0, bad: 0, attempts: 0, firstTryHits: 0,
+      solvedCases: new Set(), selectedSuspect: null, startTime: Date.now(),
+      readingStartAt: Date.now(), responseStartAt: Date.now(), currentCaseErrors: 0,
+      responseTimes: [], readingProfiles: [], readingCases: [], screenReadings: [],
+      timerId: null, therapistUnlocked: false, therapistMode: false, caseStats: {},
+      seenProfiles: new Set(), returnCaseIndex: null, readingFinalized: false, finalizedReadingMs: 0,
+      attemptLog: [], supportUsage: { summaries: 0, profileJumps: 0 }, learnedProfiles: new Set()
+    };
+
+    const activity = document.getElementById("activity");
+    const finalScreen = document.getElementById("finalScreen");
+    const pageImage = document.getElementById("pageImage");
+    const pageCounter = document.getElementById("pageCounter");
+    const caseCounter = document.getElementById("caseCounter");
+    const phaseLabel = document.getElementById("phaseLabel");
+    const scoreOk = document.getElementById("scoreOk");
+    const scoreBad = document.getElementById("scoreBad");
+    const scoreAttempts = document.getElementById("scoreAttempts");
+    const scoreAccuracy = document.getElementById("scoreAccuracy");
+    const scoreAvgResponse = document.getElementById("scoreAvgResponse");
+    const scoreCaseTime = document.getElementById("scoreCaseTime");
+    const manualButton = document.getElementById("manualButton");
+    const feedback = document.getElementById("feedback");
+    const explanationBox = document.getElementById("explanationBox");
+    const explanationText = document.getElementById("explanationText");
+    const explanationActions = document.getElementById("explanationActions");
+    const tray = document.getElementById("tray");
+    const finalizeReadingButton = document.getElementById("finalizeReadingButton");
+    const quickSummaryButton = document.getElementById("quickSummaryButton");
+    const suspectButtons = document.getElementById("suspectButtons");
+    const confirmButton = document.getElementById("confirmButton");
+    const nextButton = document.getElementById("nextButton");
+    const restartButton = document.getElementById("restartButton");
+    const openReportButton = document.getElementById("openReportButton");
+    const downloadReportButton = document.getElementById("downloadReportButton");
+    const reportScreen = document.getElementById("reportScreen");
+    const reportBackFinal = document.getElementById("reportBackFinal");
+    const reportDownload = document.getElementById("reportDownload");
+    const reportRestart = document.getElementById("reportRestart");
+    const coachToggle = document.getElementById("coachToggle");
+    const coachPanel = document.getElementById("coachPanel");
+    const therapistBack = document.getElementById("therapistBack");
+    const levelSelect = document.getElementById("levelSelect");
+    const pageSelect = document.getElementById("pageSelect");
+    const goLevelButton = document.getElementById("goLevelButton");
+    const goPageButton = document.getElementById("goPageButton");
+    const coachPrev = document.getElementById("coachPrev");
+    const coachNext = document.getElementById("coachNext");
+    const coachLock = document.getElementById("coachLock");
+    const coachReport = document.getElementById("coachReport");
+    const coachDemo = document.getElementById("coachDemo");
+    const chartCaseReading = document.getElementById("chartCaseReading");
+    const chartCaseErrors = document.getElementById("chartCaseErrors");
+    const chartResponseAttempts = document.getElementById("chartResponseAttempts");
+    const chartAttemptsByCase = document.getElementById("chartAttemptsByCase");
+    const chartExpectedVsActual = document.getElementById("chartExpectedVsActual");
+    const studentNameInput = document.getElementById("studentName");
+    const studentAgeInput = document.getElementById("studentAge");
+    const studentGradeInput = document.getElementById("studentGrade");
+    const reportTableBody = document.getElementById("reportTableBody");
+    const referenceTableBody = document.getElementById("referenceTableBody");
+    const summaryModal = document.getElementById("summaryModal");
+    const summaryTitle = document.getElementById("summaryTitle");
+    const summaryPills = document.getElementById("summaryPills");
+    const closeSummaryButton = document.getElementById("closeSummaryButton");
+    const manualModal = document.getElementById("manualModal");
+    const closeManualButton = document.getElementById("closeManualButton");
+
+    const normalize = (v) => v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const average = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    const formatSeconds = (ms) => `${(ms / 1000).toFixed(1)}s`;
+    const formatClock = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+    const parseGradeNumber = (text) => {
+      const m = String(text || "").match(/[1-6]/);
+      return m ? Number(m[0]) : null;
+    };
+    const expectedProfile = (gradeNum) => expectedPpmByGrade[gradeNum] || expectedPpmByGrade[3];
+
+    function captureReadingTime() {
+      const current = flow[state.index];
+      if (!current) return;
+      const elapsed = state.readingFinalized ? state.finalizedReadingMs : (Date.now() - state.readingStartAt);
+      if (elapsed < 0) return;
+      state.screenReadings.push({ type: current.type, page: current.page, level: current.level || null, caseId: current.caseId || null, suspect: current.suspect || null, ms: elapsed });
+    }
+
+    function updateStats() {
+      scoreOk.textContent = state.ok;
+      scoreBad.textContent = state.bad;
+      scoreAttempts.textContent = state.attempts;
+      scoreAccuracy.textContent = `${state.attempts ? Math.round((state.ok / state.attempts) * 100) : 0}%`;
+      scoreAvgResponse.textContent = formatSeconds(average(state.responseTimes));
+    }
+
+    function showFeedback(msg, type) {
+      feedback.textContent = msg;
+      feedback.className = `feedback ${type}`;
+    }
+
+    function findProfileReference(suspect, untilIndex) {
+      for (let i = untilIndex; i >= 0; i -= 1) {
+        const step = flow[i];
+        if (step?.type === "profile" && step.suspect === suspect) return { stepIndex: i + 1, pdfPage: step.page };
+      }
+      return { stepIndex: "-", pdfPage: profilePageBySuspect[suspect] || "-" };
+    }
+
+    function firstStepForProfile(suspect) {
+      return flow.findIndex((step) => step.type === "profile" && step.suspect === suspect);
+    }
+
+    function showExplanation(kind, text) {
+      explanationBox.classList.remove("ok", "bad");
+      if (kind) explanationBox.classList.add(kind);
+      explanationText.textContent = text;
+      explanationActions.innerHTML = "";
+    }
+
+    function setExplanationActions(targetSuspect) {
+      explanationActions.innerHTML = "";
+      if (!targetSuspect) return;
+      const profileIndex = firstStepForProfile(targetSuspect);
+      if (profileIndex >= 0) {
+        const profileBtn = document.createElement("button");
+        profileBtn.className = "explain-btn";
+        profileBtn.type = "button";
+        profileBtn.textContent = `Ver perfil de ${targetSuspect}`;
+        profileBtn.addEventListener("click", () => {
+          state.supportUsage.profileJumps += 1;
+          state.returnCaseIndex = state.index;
+          goToIndex(profileIndex);
+        });
+        explanationActions.appendChild(profileBtn);
+      }
+      if (typeof state.returnCaseIndex === "number") {
+        const backBtn = document.createElement("button");
+        backBtn.className = "explain-btn";
+        backBtn.type = "button";
+        backBtn.textContent = "Volver al caso";
+        backBtn.addEventListener("click", () => {
+          const idx = state.returnCaseIndex;
+          state.returnCaseIndex = null;
+          goToIndex(idx);
+        });
+        explanationActions.appendChild(backBtn);
+      }
+    }
+
+    function clearTimer() {
+      if (state.timerId) window.clearInterval(state.timerId);
+      state.timerId = null;
+    }
+    function updateScreenTimer() {
+      scoreCaseTime.textContent = formatSeconds(Date.now() - state.readingStartAt);
+    }
+    function startTimer() {
+      clearTimer();
+      updateScreenTimer();
+      state.timerId = window.setInterval(updateScreenTimer, 200);
+    }
+
+    function renderSuspects(options) {
+      suspectButtons.innerHTML = "";
+      options.forEach((name) => {
+        const btn = document.createElement("button");
+        btn.className = "suspect-btn";
+        btn.type = "button";
+        btn.textContent = name;
+        btn.dataset.suspect = name;
+        btn.addEventListener("click", () => {
+          if (btn.classList.contains("used")) return;
+          state.selectedSuspect = name;
+          suspectButtons.querySelectorAll(".suspect-btn").forEach((b) => b.classList.toggle("selected", b.dataset.suspect === name));
+          feedback.textContent = "";
+          feedback.className = "feedback";
+        });
+        suspectButtons.appendChild(btn);
+      });
+      suspectButtons.style.display = "flex";
+      suspectButtons.style.flexWrap = "wrap";
+      suspectButtons.style.gap = "8px";
+      suspectButtons.style.justifyContent = "center";
+    }
+
+    function isCurrentCaseSolved() {
+      const current = flow[state.index];
+      return current.type === "case" && state.solvedCases.has(current.caseId);
+    }
+
+    function renderPage() {
+      const current = flow[state.index];
+      if (current.type === "profile") {
+        state.seenProfiles.add(current.suspect);
+      }
+      pageImage.src = pageImageSrc(current.page);
+      pageCounter.textContent = `Pantalla ${state.index + 1}/${flow.length} (PDF ${current.page}/31)`;
+      caseCounter.textContent = current.type === "case" ? `${current.caseId}/15` : (current.level ? `Nivel ${current.level}` : "-");
+      if (current.type === "profile") {
+        phaseLabel.textContent = `Aprendizaje de perfil (${current.suspect})`;
+      } else if (current.type === "case") {
+        phaseLabel.textContent = `Discriminación de perfiles (Nivel ${current.level})`;
+      } else {
+        phaseLabel.textContent = "Transición";
+      }
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      if (current.type === "profile") {
+        showExplanation(null, `Objetivo: memorizar rasgos de ${current.suspect} para compararlos en casos posteriores. Lee, pulsa Finalizar lectura y continúa.`);
+      } else if (current.type === "case") {
+        showExplanation(null, "Objetivo: comparar pistas entre varios perfiles conocidos. No siempre será el último perfil presentado.");
+      } else {
+        showExplanation(null, "Avanza cuando estés listo para continuar.");
+      }
+      if (typeof state.returnCaseIndex === "number" && state.index !== state.returnCaseIndex) {
+        const backBtn = document.createElement("button");
+        explanationActions.innerHTML = "";
+        backBtn.className = "explain-btn";
+        backBtn.type = "button";
+        backBtn.textContent = "Volver al caso";
+        backBtn.addEventListener("click", () => {
+          const idx = state.returnCaseIndex;
+          state.returnCaseIndex = null;
+          goToIndex(idx);
+        });
+        explanationActions.appendChild(backBtn);
+      }
+      state.selectedSuspect = null;
+      state.readingStartAt = Date.now();
+      state.readingFinalized = !["profile", "case"].includes(current.type);
+      state.finalizedReadingMs = 0;
+
+      const isCase = current.type === "case";
+      const isProfile = current.type === "profile";
+      tray.classList.toggle("passive", !isCase);
+      confirmButton.disabled = !isCase;
+      quickSummaryButton.classList.toggle("active", isProfile);
+      finalizeReadingButton.style.display = (isCase || isProfile) ? "inline-block" : "none";
+      finalizeReadingButton.disabled = state.readingFinalized;
+      if (isCase) {
+        if (!state.learnedProfiles.has(current.suspectAnswer) && !state.therapistMode) {
+          const idx = firstStepForProfile(current.suspectAnswer);
+          if (idx >= 0 && idx !== state.index) {
+            showFeedback("Primero revisa ese perfil", "bad");
+            showExplanation("bad", `Antes de resolver este caso debes conocer a ${current.suspectAnswer}. Te llevo a su ficha ahora.`);
+            return goToIndex(idx);
+          }
+        }
+        const optionPool = (current.options || suspects).filter((name) => state.learnedProfiles.has(name));
+        if (optionPool.length < 2 && !state.therapistMode) {
+          const missing = (current.options || suspects).find((name) => !state.learnedProfiles.has(name));
+          const idx = missing ? firstStepForProfile(missing) : -1;
+          if (idx >= 0 && idx !== state.index) {
+            showFeedback("Falta revisar perfiles previos", "bad");
+            showExplanation("bad", `Vamos primero a la ficha de ${missing} para mantener la secuencia correcta.`);
+            return goToIndex(idx);
+          }
+        }
+        renderSuspects(optionPool.length ? optionPool : (current.options || suspects));
+      } else {
+        renderSuspects(current.options || suspects);
+      }
+
+      if (isCase) {
+        if (state.solvedCases.has(current.caseId)) {
+          confirmButton.disabled = true;
+          nextButton.dataset.locked = "false";
+        } else {
+          confirmButton.disabled = !state.readingFinalized;
+          nextButton.dataset.locked = state.therapistMode ? "false" : "true";
+          state.responseStartAt = state.readingFinalized ? Date.now() : 0;
+          state.currentCaseErrors = 0;
+        }
+      } else {
+        nextButton.dataset.locked = "false";
+      }
+      nextButton.textContent = state.index === flow.length - 1 ? "Ver resultado" : "Siguiente";
+      updateStats();
+      startTimer();
+      syncCoachPanel();
+    }
+
+    function openQuickSummary() {
+      const current = flow[state.index];
+      if (!current || current.type !== "profile") return;
+      state.supportUsage.summaries += 1;
+      const bullets = profileMicroSummaries[current.suspect] || ["Revisa el perfil completo para consolidar la información clave."];
+      summaryTitle.textContent = `Micro resumen · ${current.suspect}`;
+      summaryPills.innerHTML = bullets.map((b) => `<span class="summary-pill">${b}</span>`).join("");
+      summaryModal.classList.add("active");
+    }
+
+    function closeQuickSummary() {
+      summaryModal.classList.remove("active");
+    }
+
+    function openManual() {
+      manualModal.classList.add("active");
+    }
+
+    function closeManual() {
+      manualModal.classList.remove("active");
+    }
+
+    function confirmSelection() {
+      const current = flow[state.index];
+      if (current.type !== "case" || state.solvedCases.has(current.caseId)) return;
+      if (!state.readingFinalized) return showFeedback("Primero pulsa Finalizar lectura", "bad");
+      if (!state.selectedSuspect) return showFeedback("Selecciona un sospechoso", "bad");
+      if (!state.caseStats[current.caseId]) {
+        state.caseStats[current.caseId] = { level: current.level, attempts: 0, errors: 0, readingMs: 0, responseMs: 0 };
+      }
+      state.attempts += 1;
+      state.caseStats[current.caseId].attempts += 1;
+      const attemptResponseMs = Date.now() - state.responseStartAt;
+      if (normalize(state.selectedSuspect) === normalize(current.suspectAnswer)) {
+        const responseMs = Date.now() - state.responseStartAt;
+        const readingMs = Date.now() - state.readingStartAt;
+        state.ok += 1;
+        state.responseTimes.push(responseMs);
+        state.caseStats[current.caseId].responseMs = responseMs;
+        if (!state.caseStats[current.caseId].readingMs) state.caseStats[current.caseId].readingMs = state.finalizedReadingMs || readingMs;
+        if (state.currentCaseErrors === 0) state.firstTryHits += 1;
+        state.solvedCases.add(current.caseId);
+        confirmButton.disabled = true;
+        nextButton.dataset.locked = "false";
+        showFeedback("Acierto", "ok");
+        const selectedRef = findProfileReference(state.selectedSuspect, state.index);
+        showExplanation(
+          "ok",
+          `Correcto. Este caso se ajusta al perfil ${current.suspectAnswer}. Buena lectura de pistas. Puedes repasar su ficha en la pantalla ${selectedRef.stepIndex} (PDF ${selectedRef.pdfPage}) para reforzar por qué encaja.`
+        );
+        setExplanationActions(current.suspectAnswer);
+        state.attemptLog.push({ caseId: current.caseId, level: current.level, correct: true, responseMs: attemptResponseMs, readingMs: state.finalizedReadingMs || readingMs });
+      } else {
+        state.bad += 1;
+        state.currentCaseErrors += 1;
+        state.caseStats[current.caseId].errors += 1;
+        showFeedback("Error, inténtalo de nuevo", "bad");
+        const wrongRef = findProfileReference(state.selectedSuspect, state.index);
+        const rightRef = findProfileReference(current.suspectAnswer, state.index);
+        showExplanation(
+          "bad",
+          `No encaja ${state.selectedSuspect}. Las pistas de este caso se corresponden mejor con ${current.suspectAnswer}. Revisa la ficha de ${state.selectedSuspect} en pantalla ${wrongRef.stepIndex} (PDF ${wrongRef.pdfPage}) y compárala con ${current.suspectAnswer} en pantalla ${rightRef.stepIndex} (PDF ${rightRef.pdfPage}).`
+        );
+        setExplanationActions(current.suspectAnswer);
+        state.attemptLog.push({ caseId: current.caseId, level: current.level, correct: false, responseMs: attemptResponseMs, readingMs: state.finalizedReadingMs || 0 });
+      }
+      updateStats();
+    }
+
+    function canAdvance() {
+      const current = flow[state.index];
+      if (state.therapistMode) return true;
+      if (current.type !== "case") return true;
+      return state.solvedCases.has(current.caseId);
+    }
+
+    function goToIndex(nextIndex) {
+      if (nextIndex < 0 || nextIndex >= flow.length) return;
+      captureReadingTime();
+      state.index = nextIndex;
+      renderPage();
+    }
+
+    function nextPage() {
+      const current = flow[state.index];
+      if ((current.type === "profile" || current.type === "case") && !state.readingFinalized) {
+        showFeedback("Pulsa Finalizar lectura para registrar el tiempo", "bad");
+        return;
+      }
+      if (!canAdvance()) return showFeedback("Resuelve el caso para continuar", "bad");
+      if (state.index === flow.length - 1) return showFinal();
+      goToIndex(state.index + 1);
+    }
+
+    function finalizeReading() {
+      const current = flow[state.index];
+      if (!current || state.readingFinalized || !["profile", "case"].includes(current.type)) return;
+      state.readingFinalized = true;
+      state.finalizedReadingMs = Date.now() - state.readingStartAt;
+      finalizeReadingButton.disabled = true;
+      if (current.type === "profile") {
+        state.readingProfiles.push(state.finalizedReadingMs);
+        state.learnedProfiles.add(current.suspect);
+        showFeedback("Lectura de perfil registrada", "ok");
+      } else if (current.type === "case") {
+        state.readingCases.push(state.finalizedReadingMs);
+        state.responseStartAt = Date.now();
+        confirmButton.disabled = false;
+        if (!state.caseStats[current.caseId]) {
+          state.caseStats[current.caseId] = { level: current.level, attempts: 0, errors: 0, readingMs: 0, responseMs: 0 };
+        }
+        state.caseStats[current.caseId].readingMs = state.finalizedReadingMs;
+        showFeedback("Lectura de caso registrada", "ok");
+      }
+    }
+
+    function showFinal() {
+      captureReadingTime();
+      clearTimer();
+      activity.classList.add("hidden");
+      finalScreen.classList.add("active");
+      const percent = totalCases ? Math.round((state.ok / totalCases) * 100) : 0;
+      const firstTry = totalCases ? Math.round((state.firstTryHits / totalCases) * 100) : 0;
+      const avgProfileRead = average(state.readingProfiles);
+      const avgCaseRead = average(state.readingCases);
+      document.getElementById("finalOk").textContent = state.ok;
+      document.getElementById("finalBad").textContent = state.bad;
+      document.getElementById("finalAttempts").textContent = state.attempts;
+      document.getElementById("finalPercent").textContent = `${percent}%`;
+      document.getElementById("finalTime").textContent = formatClock(Date.now() - state.startTime);
+      document.getElementById("finalAvgResponse").textContent = formatSeconds(average(state.responseTimes));
+      document.getElementById("finalFirstTry").textContent = `${firstTry}%`;
+      document.getElementById("finalAvgProfile").textContent = formatSeconds(avgProfileRead);
+      document.getElementById("finalAvgCase").textContent = formatSeconds(avgCaseRead);
+      try {
+        localStorage.setItem("maleta_resuelve_los_casos_last_session", JSON.stringify(buildReportData()));
+      } catch (error) {
+        console.warn("No se pudo guardar medicion local", error);
+      }
+    }
+
+    function buildReportData() {
+      const stdDev = (arr) => {
+        if (!arr.length) return 0;
+        const m = average(arr);
+        return Math.sqrt(average(arr.map((v) => (v - m) ** 2)));
+      };
+      const totalTimeMs = Date.now() - state.startTime;
+      const student = {
+        name: (studentNameInput.value || "").trim(),
+        age: Number(studentAgeInput.value || 0) || null,
+        grade: (studentGradeInput.value || "").trim()
+      };
+      const gradeNum = parseGradeNumber(student.grade) || (student.age ? Math.min(6, Math.max(1, student.age - 5)) : 3);
+      const expected = expectedProfile(gradeNum);
+      const solvedCount = state.solvedCases.size;
+      const percent = totalCases ? Math.round((state.ok / totalCases) * 100) : 0;
+      const firstTry = totalCases ? Math.round((state.firstTryHits / totalCases) * 100) : 0;
+      const avgResponseMs = average(state.responseTimes);
+      const avgCaseReadingMs = average(state.readingCases);
+      const avgProfileReadingMs = average(state.readingProfiles);
+      const attemptsPerCase = totalCases ? state.attempts / totalCases : 0;
+      const errorRate = state.attempts ? (state.bad / state.attempts) * 100 : 0;
+      const readingEfficiency = avgCaseReadingMs > 0 ? (1 / avgCaseReadingMs) * 1000 : 0;
+      const responseEfficiency = avgResponseMs > 0 ? (1 / avgResponseMs) * 1000 : 0;
+      const globalIndex = Math.round(((percent * 0.45) + (firstTry * 0.35) + ((100 - errorRate) * 0.20)) * 10) / 10;
+      const impulsiveWrong = state.attemptLog.filter((a) => !a.correct && a.responseMs < 2500).length;
+      const impulsivityPercent = state.attempts ? (impulsiveWrong / state.attempts) * 100 : 0;
+      const superficialCases = Object.values(state.caseStats).filter((c) => c.readingMs > 0 && c.readingMs < 8000 && c.errors > 0).length;
+      const superficialReadingPercent = solvedCount ? (superficialCases / solvedCount) * 100 : 0;
+      const consistencyCv = avgCaseReadingMs > 0 ? (stdDev(state.readingCases) / avgCaseReadingMs) * 100 : 0;
+      const consistencyIndex = Math.max(0, 100 - consistencyCv);
+      const execLoad = solvedCount ? state.bad / solvedCount : 0;
+      const supportUseCount = (state.supportUsage.summaries || 0) + (state.supportUsage.profileJumps || 0);
+      const firstTryByCase = Object.entries(state.caseStats).filter(([, v]) => v.attempts === 1).length;
+      const selfRegulationPercent = solvedCount ? (firstTryByCase / solvedCount) * 100 : 0;
+      const workingMemoryCases = Object.entries(state.caseStats).filter(([, v]) => v.level >= 8);
+      const wmHits = workingMemoryCases.filter(([, v]) => v.attempts === 1).length;
+      const workingMemoryPercent = workingMemoryCases.length ? (wmHits / workingMemoryCases.length) * 100 : 0;
+      const profileCountAtLevel = (level) => Math.min(10, level + 1);
+      const inferredWeights = Object.entries(state.caseStats).map(([caseId, row]) => {
+        const level = row.level || 1;
+        const memoryLoad = Math.max(1, profileCountAtLevel(level));
+        const solvedEffort = row.attempts <= 1 ? 1 : Math.max(0.2, 1 - (row.errors / Math.max(1, row.attempts)));
+        return { memoryLoad, solvedEffort };
+      });
+      const inferentialPercent = inferredWeights.length
+        ? average(inferredWeights.map((x) => Math.min(100, (x.solvedEffort * 70) + ((x.memoryLoad / 10) * 30))))
+        : 0;
+      const responseByAttempt = state.attemptLog.map((a) => a.responseMs);
+      const firstHalf = responseByAttempt.slice(0, Math.floor(responseByAttempt.length / 2) || 1);
+      const secondHalf = responseByAttempt.slice(Math.floor(responseByAttempt.length / 2) || 1);
+      const fatigueDelta = (average(secondHalf) - average(firstHalf));
+      const fatigueRiskPercent = responseByAttempt.length > 2
+        ? Math.max(0, Math.min(100, (fatigueDelta / Math.max(1, average(firstHalf))) * 100))
+        : 0;
+      const retentionPercent = Math.max(0, Math.min(100, (workingMemoryPercent * 0.6) + (selfRegulationPercent * 0.4)));
+      const perseverancePercent = Math.max(0, Math.min(100, 100 - (impulsivityPercent * 0.4) - (errorRate * 0.6)));
+      const textComprehensionPercent = Math.max(0, Math.min(100,
+        (inferentialPercent * 0.35)
+        + ((100 - superficialReadingPercent) * 0.25)
+        + (selfRegulationPercent * 0.20)
+        + (retentionPercent * 0.20)
+      ));
+      const clinicalGlobal = Math.round(
+        (percent * 0.28)
+        + (selfRegulationPercent * 0.18)
+        + (workingMemoryPercent * 0.16)
+        + ((100 - impulsivityPercent) * 0.14)
+        + ((100 - superficialReadingPercent) * 0.12)
+        + (consistencyIndex * 0.12)
+      );
+      const wordsPerCaseRef = 32;
+      const actualCasePpm = avgCaseReadingMs > 0 ? (wordsPerCaseRef * 60000) / avgCaseReadingMs : 0;
+      const expectedCasePpm = expected.mid;
+      const expectedGapPercent = expectedCasePpm > 0 ? ((actualCasePpm - expectedCasePpm) / expectedCasePpm) * 100 : 0;
+      return {
+        student,
+        savedAt: new Date().toISOString(),
+        totalCases,
+        totalProfiles,
+        solvedCases: solvedCount,
+        hits: state.ok,
+        errors: state.bad,
+        attempts: state.attempts,
+        scorePercent: percent,
+        firstTryAccuracyPercent: firstTry,
+        totalTimeMs,
+        totalTimeClock: formatClock(totalTimeMs),
+        averageResponseMs: Math.round(avgResponseMs),
+        averageCaseReadingMs: Math.round(avgCaseReadingMs),
+        averageProfileReadingMs: Math.round(avgProfileReadingMs),
+        attemptsPerCase: Number(attemptsPerCase.toFixed(2)),
+        errorRatePercent: Number(errorRate.toFixed(1)),
+        readingEfficiencyScreensPerSecond: Number(readingEfficiency.toFixed(3)),
+        responseEfficiencyAnswersPerSecond: Number(responseEfficiency.toFixed(3)),
+        globalPerformanceIndex: globalIndex,
+        expectedBenchmarks: {
+          gradeNum,
+          expectedPpmMin: expected.min,
+          expectedPpmMid: expected.mid,
+          expectedPpmMax: expected.max,
+          actualCasePpm: Number(actualCasePpm.toFixed(1)),
+          expectedGapPercent: Number(expectedGapPercent.toFixed(1))
+        },
+        progression: state.screenReadings,
+        clinical: {
+          workingMemoryPercent: Number(workingMemoryPercent.toFixed(1)),
+          impulsivityPercent: Number(impulsivityPercent.toFixed(1)),
+          superficialReadingPercent: Number(superficialReadingPercent.toFixed(1)),
+          consistencyIndex: Number(consistencyIndex.toFixed(1)),
+          selfRegulationPercent: Number(selfRegulationPercent.toFixed(1)),
+          supportUseCount,
+          execLoad: Number(execLoad.toFixed(2)),
+          clinicalGlobal,
+          textComprehensionPercent: Number(textComprehensionPercent.toFixed(1)),
+          inferentialPercent: Number(inferentialPercent.toFixed(1)),
+          retentionPercent: Number(retentionPercent.toFixed(1)),
+          perseverancePercent: Number(perseverancePercent.toFixed(1)),
+          fatigueRiskPercent: Number(fatigueRiskPercent.toFixed(1))
+        }
+      };
+    }
+
+    function downloadReport() {
+      const report = buildReportData();
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const reportHtml = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Informe maleta</title><style>body{font-family:Arial,sans-serif;margin:24px;color:#111}h1{margin:0 0 10px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #ccc;padding:6px;text-align:left}.kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.card{border:1px solid #333;padding:8px}</style></head><body><h1>Informe clínico · Resuelve los casos</h1><p>Fecha: ${new Date(report.savedAt).toLocaleString()}</p><p>Alumno: ${report.student.name || "-"} · Edad: ${report.student.age || "-"} · Curso: ${report.student.grade || "-"}</p><div class="kpi"><div class="card"><strong>Precisión</strong><br>${report.scorePercent}%</div><div class="card"><strong>Primer intento</strong><br>${report.firstTryAccuracyPercent}%</div><div class="card"><strong>Tiempo total</strong><br>${report.totalTimeClock}</div><div class="card"><strong>T. respuesta medio</strong><br>${formatSeconds(report.averageResponseMs)}</div><div class="card"><strong>T. lectura perfiles</strong><br>${formatSeconds(report.averageProfileReadingMs)}</div><div class="card"><strong>T. lectura casos</strong><br>${formatSeconds(report.averageCaseReadingMs)}</div><div class="card"><strong>PPM caso (real)</strong><br>${report.expectedBenchmarks.actualCasePpm}</div><div class="card"><strong>PPM esperado (curso)</strong><br>${report.expectedBenchmarks.expectedPpmMid}</div><div class="card"><strong>Diferencia</strong><br>${report.expectedBenchmarks.expectedGapPercent}%</div></div><table><thead><tr><th>#</th><th>Tipo</th><th>PDF</th><th>Nivel</th><th>Caso</th><th>Perfil</th><th>ms</th></tr></thead><tbody>${report.progression.map((s,i)=>`<tr><td>${i+1}</td><td>${s.type}</td><td>${s.page}</td><td>${s.level??"-"}</td><td>${s.caseId??"-"}</td><td>${s.suspect??"-"}</td><td>${s.ms}</td></tr>`).join("")}</tbody></table></body></html>`;
+      const htmlBlob = new Blob([reportHtml], { type: "text/html;charset=utf-8" });
+      const htmlUrl = URL.createObjectURL(htmlBlob);
+      const htmlA = document.createElement("a");
+      htmlA.href = htmlUrl;
+      htmlA.download = `informe-maleta-${stamp}.html`;
+      document.body.appendChild(htmlA);
+      htmlA.click();
+      htmlA.remove();
+      URL.revokeObjectURL(htmlUrl);
+
+      const lines = [
+        "INFORME CLINICO - RESUELVE LOS CASOS",
+        `Fecha: ${new Date(report.savedAt).toLocaleString()}`,
+        `Alumno: ${report.student.name || "-"}`,
+        `Edad: ${report.student.age || "-"}`,
+        `Curso: ${report.student.grade || "-"}`,
+        `Casos resueltos: ${report.solvedCases}/${report.totalCases}`,
+        `Aciertos: ${report.hits}`,
+        `Errores: ${report.errors}`,
+        `Intentos: ${report.attempts}`,
+        `Precision global: ${report.scorePercent}%`,
+        `Precision al primer intento: ${report.firstTryAccuracyPercent}%`,
+        `Tiempo total de sesion: ${report.totalTimeClock}`,
+        `Tiempo medio de respuesta: ${formatSeconds(report.averageResponseMs)}`,
+        `Tiempo medio de lectura de perfiles: ${formatSeconds(report.averageProfileReadingMs)}`,
+        `Tiempo medio de lectura de casos: ${formatSeconds(report.averageCaseReadingMs)}`,
+        `Intentos por caso: ${report.attemptsPerCase}`,
+        `Tasa de error: ${report.errorRatePercent}%`,
+        `Indice global de rendimiento: ${report.globalPerformanceIndex}/100`,
+        `Memoria de trabajo (proxy): ${report.clinical.workingMemoryPercent}%`,
+        `Impulsividad de respuesta: ${report.clinical.impulsivityPercent}%`,
+        `Lectura superficial (riesgo): ${report.clinical.superficialReadingPercent}%`,
+        `Consistencia atencional: ${report.clinical.consistencyIndex}%`,
+        `Autorregulacion (1er intento): ${report.clinical.selfRegulationPercent}%`,
+        `Uso de apoyos: ${report.clinical.supportUseCount}`,
+        `Carga ejecutiva (errores/caso): ${report.clinical.execLoad}`,
+        `Indice clinico global: ${report.clinical.clinicalGlobal}/100`,
+        `PPM caso (real): ${report.expectedBenchmarks.actualCasePpm}`,
+        `PPM esperado (curso ${report.expectedBenchmarks.gradeNum}): ${report.expectedBenchmarks.expectedPpmMid}`,
+        `Diferencia respecto a esperado: ${report.expectedBenchmarks.expectedGapPercent}%`,
+        `Comprension textual global: ${report.clinical.textComprehensionPercent}%`,
+        `Comprension inferencial: ${report.clinical.inferentialPercent}%`,
+        `Retencion de perfiles: ${report.clinical.retentionPercent}%`,
+        `Tolerancia a la dificultad: ${report.clinical.perseverancePercent}%`,
+        `Fatiga cognitiva (riesgo): ${report.clinical.fatigueRiskPercent}%`,
+        "",
+        "Detalle por pantalla (ms):",
+        ...report.progression.map((s, i) => `${i + 1}. ${s.type} | PDF ${s.page} | Nivel ${s.level ?? "-"} | Caso ${s.caseId ?? "-"} | Perfil ${s.suspect ?? "-"} | ${s.ms}`)
+      ];
+      const text = lines.join("\n");
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `informe-maleta-${stamp}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      try {
+        localStorage.setItem("maleta_resuelve_los_casos_last_report", JSON.stringify(report));
+      } catch (error) {
+        console.warn("No se pudo guardar informe", error);
+      }
+    }
+
+    function drawBarChart(canvas, labels, values, color) {
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      const pad = { l: 34, r: 10, t: 10, b: 30 };
+      const max = Math.max(1, ...values);
+      const chartW = w - pad.l - pad.r;
+      const chartH = h - pad.t - pad.b;
+      const step = chartW / Math.max(1, values.length);
+      const barW = Math.max(8, step - 6);
+      ctx.strokeStyle = "#e5e7eb";
+      for (let i = 1; i <= 4; i += 1) {
+        const gy = pad.t + (chartH * (i / 4));
+        ctx.beginPath();
+        ctx.moveTo(pad.l, gy);
+        ctx.lineTo(w - pad.r, gy);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = "#6b7280";
+      ctx.beginPath();
+      ctx.moveTo(pad.l, pad.t);
+      ctx.lineTo(pad.l, h - pad.b);
+      ctx.lineTo(w - pad.r, h - pad.b);
+      ctx.stroke();
+      values.forEach((v, i) => {
+        const x = pad.l + i * step + 3;
+        const bh = (v / max) * (chartH - 2);
+        const y = h - pad.b - bh;
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, barW, bh);
+        ctx.fillStyle = "#111827";
+        ctx.font = "10px Arial";
+        ctx.fillText(labels[i], x, h - 14);
+      });
+    }
+
+    function drawLineChart(canvas, labels, values, color) {
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      const pad = { l: 34, r: 10, t: 10, b: 30 };
+      const max = Math.max(1, ...values);
+      const chartW = w - pad.l - pad.r;
+      const chartH = h - pad.t - pad.b;
+      const step = values.length > 1 ? chartW / (values.length - 1) : chartW;
+      ctx.strokeStyle = "#e5e7eb";
+      for (let i = 1; i <= 4; i += 1) {
+        const gy = pad.t + (chartH * (i / 4));
+        ctx.beginPath();
+        ctx.moveTo(pad.l, gy);
+        ctx.lineTo(w - pad.r, gy);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = "#6b7280";
+      ctx.beginPath();
+      ctx.moveTo(pad.l, pad.t);
+      ctx.lineTo(pad.l, h - pad.b);
+      ctx.lineTo(w - pad.r, h - pad.b);
+      ctx.stroke();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = pad.l + i * step;
+        const y = h - pad.b - ((v / max) * (chartH - 4));
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      if (values.length > 2) {
+        const x1 = pad.l;
+        const y1 = h - pad.b - ((values[0] / max) * (chartH - 4));
+        const x2 = pad.l + ((values.length - 1) * step);
+        const y2 = h - pad.b - ((values[values.length - 1] / max) * (chartH - 4));
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = "#9ca3af";
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      values.forEach((v, i) => {
+        const x = pad.l + i * step;
+        const y = h - pad.b - ((v / max) * (chartH - 4));
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#111827";
+        ctx.font = "10px Arial";
+        ctx.fillText(labels[i], x - 6, h - 14);
+      });
+    }
+
+    function renderVisualReport() {
+      const report = buildReportData();
+      const attemptPrecision = report.attempts ? Math.round((report.hits / report.attempts) * 100) : 0;
+      document.getElementById("kpiPrecision").textContent = `${attemptPrecision}%`;
+      document.getElementById("kpiFirstTry").textContent = `${report.scorePercent}%`;
+      document.getElementById("kpiResponse").textContent = formatSeconds(report.averageResponseMs);
+      document.getElementById("kpiReading").textContent = formatSeconds(report.averageCaseReadingMs);
+      document.getElementById("repStudentName").textContent = report.student.name || "-";
+      document.getElementById("repStudentAge").textContent = report.student.age || "-";
+      document.getElementById("repStudentGrade").textContent = report.student.grade || "-";
+      document.getElementById("repGradeNum").textContent = `${report.expectedBenchmarks.gradeNum}º Primaria`;
+      document.getElementById("repActualPpm").textContent = String(report.expectedBenchmarks.actualCasePpm);
+      document.getElementById("repExpectedPpm").textContent = String(report.expectedBenchmarks.expectedPpmMid);
+      document.getElementById("repGap").textContent = `${report.expectedBenchmarks.expectedGapPercent}%`;
+      document.getElementById("repRange").textContent = `${report.expectedBenchmarks.expectedPpmMin} - ${report.expectedBenchmarks.expectedPpmMax} ppm`;
+      referenceTableBody.innerHTML = Object.entries(expectedPpmByGrade)
+        .map(([grade, v]) => `<tr><td>${grade}º Primaria</td><td>${v.min}</td><td>${v.mid}</td><td>${v.max}</td></tr>`)
+        .join("");
+
+      const cases = Object.keys(state.caseStats).map(Number).sort((a, b) => a - b);
+      const labels = cases.map((c) => `C${c}`);
+      const reading = cases.map((c) => (state.caseStats[c].readingMs || 0) / 1000);
+      const errors = cases.map((c) => state.caseStats[c].errors || 0);
+      const attempts = cases.map((c) => state.caseStats[c].attempts || 0);
+      drawBarChart(chartCaseReading, labels, reading, "#2563eb");
+      drawBarChart(chartCaseErrors, labels, errors, "#dc2626");
+      drawBarChart(chartAttemptsByCase, labels, attempts, "#7c3aed");
+      drawBarChart(
+        chartExpectedVsActual,
+        ["Esperable min", "Esperable medio", "Esperable max", "Real alumno"],
+        [
+          report.expectedBenchmarks.expectedPpmMin,
+          report.expectedBenchmarks.expectedPpmMid,
+          report.expectedBenchmarks.expectedPpmMax,
+          report.expectedBenchmarks.actualCasePpm
+        ],
+        "#0f766e"
+      );
+      const attemptLabels = state.attemptLog.map((_, i) => `I${i + 1}`);
+      const attemptResponse = state.attemptLog.map((a) => (a.responseMs || 0) / 1000);
+      drawLineChart(chartResponseAttempts, attemptLabels.length ? attemptLabels : ["I0"], attemptResponse.length ? attemptResponse : [0], "#0f766e");
+
+      reportTableBody.innerHTML = cases.map((c) => {
+        const row = state.caseStats[c];
+        const expectedReadMs = report.expectedBenchmarks.expectedPpmMid > 0
+          ? (32 * 60000) / report.expectedBenchmarks.expectedPpmMid
+          : 0;
+        return `<tr><td>${row.level}</td><td>${c}</td><td>${row.attempts}</td><td>${row.errors}</td><td>${formatSeconds(row.readingMs)}</td><td>${formatSeconds(row.responseMs)}</td><td>${formatSeconds(expectedReadMs)}</td></tr>`;
+      }).join("");
+
+      document.getElementById("idxWorkingMemory").textContent = `${report.clinical.workingMemoryPercent}%`;
+      document.getElementById("idxImpulsivity").textContent = `${report.clinical.impulsivityPercent}%`;
+      document.getElementById("idxSuperficial").textContent = `${report.clinical.superficialReadingPercent}%`;
+      document.getElementById("idxConsistency").textContent = `${report.clinical.consistencyIndex}%`;
+      document.getElementById("idxSelfRegulation").textContent = `${report.clinical.selfRegulationPercent}%`;
+      document.getElementById("idxSupportUse").textContent = String(report.clinical.supportUseCount);
+      document.getElementById("idxExecLoad").textContent = String(report.clinical.execLoad);
+      document.getElementById("idxClinicalGlobal").textContent = `${report.clinical.clinicalGlobal}/100`;
+      document.getElementById("idxTextComp").textContent = `${report.clinical.textComprehensionPercent}%`;
+      document.getElementById("idxInferential").textContent = `${report.clinical.inferentialPercent}%`;
+      document.getElementById("idxRetention").textContent = `${report.clinical.retentionPercent}%`;
+      document.getElementById("idxPerseverance").textContent = `${report.clinical.perseverancePercent}%`;
+      document.getElementById("idxFatigue").textContent = `${report.clinical.fatigueRiskPercent}%`;
+      const displayName = report.student.name || "El alumno";
+      const speedStatus = report.expectedBenchmarks.expectedGapPercent >= 10
+        ? "por encima de la referencia orientativa"
+        : report.expectedBenchmarks.expectedGapPercent <= -10
+          ? "por debajo de la referencia orientativa"
+          : "en línea con la referencia orientativa";
+      const impulseRisk = report.clinical.impulsivityPercent > 35
+        ? "se observa tendencia a responder con cierta impulsividad"
+        : "no se observa impulsividad marcada en la respuesta";
+      const comprehensionStatus = report.clinical.textComprehensionPercent >= 75
+        ? "la comprensión funcional del texto es buena para la tarea"
+        : report.clinical.textComprehensionPercent >= 55
+          ? "la comprensión es adecuada pero todavía inestable"
+          : "la comprensión necesita refuerzo específico";
+      const fatigueStatus = report.clinical.fatigueRiskPercent >= 35
+        ? "aparecen señales de fatiga cognitiva al avanzar la actividad"
+        : "no se aprecian señales relevantes de fatiga durante la actividad";
+
+      const parentSummary = `${displayName} ha completado ${report.solvedCases} de ${report.totalCases} casos, con una resolución global del ${report.scorePercent}% `
+        + `y una precisión por intento cercana al ${report.attempts ? Math.round((report.hits / report.attempts) * 100) : 0}%. `
+        + `En esta sesión, el tiempo medio de lectura por caso ha sido ${formatSeconds(report.averageCaseReadingMs)} y el tiempo medio de respuesta ${formatSeconds(report.averageResponseMs)}. `
+        + `En velocidad lectora orientativa para su curso (${report.expectedBenchmarks.expectedPpmMid} ppm), su rendimiento actual (${report.expectedBenchmarks.actualCasePpm} ppm) está ${speedStatus}. `
+        + `A nivel de proceso, ${impulseRisk}, ${comprehensionStatus} y ${fatigueStatus}. `
+        + `Esto sugiere que conviene seguir trabajando: 1) lectura atenta de pistas antes de responder, 2) contraste entre dos perfiles parecidos, `
+        + `3) breve autoexplicación oral de por qué elige una opción, y 4) pausas cortas cada varios casos para mantener la calidad. `
+        + `Importante: este informe es una observación funcional de la actividad y NO equivale a una prueba psicométrica ni a un diagnóstico clínico por sí solo; `
+        + `debe interpretarse junto con la valoración profesional y otras fuentes de información.`;
+      document.getElementById("parentSummaryText").textContent = parentSummary;
+    }
+
+    function loadDemoSession() {
+      restart();
+      studentNameInput.value = "Paciente Demo";
+      studentAgeInput.value = "9";
+      studentGradeInput.value = "4º Primaria";
+      const demoCases = Array.from({ length: 15 }, (_, i) => i + 1);
+      state.startTime = Date.now() - (18 * 60 * 1000);
+      state.ok = 15;
+      state.bad = 7;
+      state.attempts = 22;
+      state.firstTryHits = 10;
+      state.solvedCases = new Set(demoCases);
+      state.responseTimes = [4100, 5200, 3900, 6100, 4800, 5500, 7000, 4600, 5100, 6200, 4300, 6800, 5300, 4900, 5900];
+      state.readingProfiles = [12000, 10500, 9800, 11000, 9600, 11500, 10100, 9900, 9400, 10800];
+      state.readingCases = [15000, 13200, 14100, 15900, 13800, 14600, 17000, 13600, 14500, 16100, 14000, 16800, 14700, 14200, 15500];
+      state.attemptLog = [];
+      state.caseStats = {};
+      demoCases.forEach((caseId, idx) => {
+        const errors = idx % 4 === 0 ? 1 : (idx % 7 === 0 ? 2 : 0);
+        const attempts = 1 + errors;
+        const level = idx + 1;
+        state.caseStats[caseId] = {
+          level,
+          attempts,
+          errors,
+          readingMs: state.readingCases[idx],
+          responseMs: state.responseTimes[idx]
+        };
+        for (let a = 0; a < attempts; a += 1) {
+          const correct = a === attempts - 1;
+          state.attemptLog.push({
+            caseId,
+            level,
+            correct,
+            responseMs: correct ? state.responseTimes[idx] : Math.max(1300, state.responseTimes[idx] - 1800),
+            readingMs: state.readingCases[idx]
+          });
+        }
+      });
+      state.supportUsage = { summaries: 9, profileJumps: 4 };
+      state.screenReadings = flow.map((step, i) => ({
+        type: step.type,
+        page: step.page,
+        level: step.level || null,
+        caseId: step.caseId || null,
+        suspect: step.suspect || null,
+        ms: step.type === "case" ? state.readingCases[Math.max(0, (step.caseId || 1) - 1)] : (step.type === "profile" ? 10300 : 3000 + (i % 3) * 500)
+      }));
+      state.readingFinalized = true;
+      state.finalizedReadingMs = 0;
+      activity.classList.add("hidden");
+      finalScreen.classList.remove("active");
+      openVisualReport();
+    }
+
+    function openVisualReport() {
+      renderVisualReport();
+      finalScreen.classList.remove("active");
+      activity.classList.add("hidden");
+      reportScreen.classList.add("active");
+    }
+
+    function backToFinal() {
+      reportScreen.classList.remove("active");
+      activity.classList.add("hidden");
+      finalScreen.classList.add("active");
+    }
+
+    function restart() {
+      clearTimer();
+      state.index = 0; state.ok = 0; state.bad = 0; state.attempts = 0; state.firstTryHits = 0;
+      state.solvedCases = new Set(); state.selectedSuspect = null; state.startTime = Date.now();
+      state.readingStartAt = Date.now(); state.responseStartAt = Date.now(); state.currentCaseErrors = 0;
+      state.responseTimes = []; state.readingProfiles = []; state.readingCases = []; state.screenReadings = [];
+      state.caseStats = {};
+      state.seenProfiles = new Set();
+      state.learnedProfiles = new Set();
+      state.readingFinalized = false;
+      state.finalizedReadingMs = 0;
+      state.attemptLog = [];
+      state.supportUsage = { summaries: 0, profileJumps: 0 };
+      activity.classList.remove("hidden");
+      finalScreen.classList.remove("active");
+      reportScreen.classList.remove("active");
+      renderPage();
+    }
+
+    function syncCoachPanel() {
+      pageSelect.innerHTML = flow.map((step, i) => {
+        const kind = step.type === "profile" ? "Perfil" : step.type === "case" ? "Caso" : "Transición";
+        const extra = step.type === "case"
+          ? ` · Caso ${step.caseId}`
+          : step.type === "profile"
+            ? ` · ${step.suspect}`
+            : "";
+        return `<option value="${i}">Pantalla ${i + 1}/${flow.length} · ${kind}${extra}</option>`;
+      }).join("");
+      pageSelect.value = String(state.index);
+      if (!levelSelect.innerHTML) {
+        levelSelect.innerHTML = levelPlan.map((lv) => `<option value="${lv.level}">Nivel ${lv.level}</option>`).join("");
+      }
+      coachLock.textContent = state.therapistMode ? "Navegación libre: ON" : "Navegación libre: OFF";
+      therapistBack.classList.toggle("active", state.therapistUnlocked);
+    }
+
+    function firstIndexOfLevel(level) {
+      return flow.findIndex((step) => step.level === level);
+    }
+
+    coachToggle.addEventListener("click", () => {
+      if (!state.therapistUnlocked) {
+        const key = window.prompt("Clave profesional:");
+        if (key !== "profesional") return;
+        state.therapistUnlocked = true;
+        state.therapistMode = true;
+      }
+      coachPanel.classList.toggle("active");
+      syncCoachPanel();
+      renderPage();
+    });
+    goLevelButton.addEventListener("click", () => {
+      const idx = firstIndexOfLevel(Number(levelSelect.value));
+      if (idx >= 0) goToIndex(idx);
+    });
+    goPageButton.addEventListener("click", () => goToIndex(Number(pageSelect.value)));
+    coachPrev.addEventListener("click", () => goToIndex(state.index - 1));
+    coachNext.addEventListener("click", () => goToIndex(state.index + 1));
+    coachLock.addEventListener("click", () => {
+      state.therapistMode = !state.therapistMode;
+      syncCoachPanel();
+      renderPage();
+    });
+    therapistBack.addEventListener("click", () => goToIndex(state.index - 1));
+    coachReport.addEventListener("click", openVisualReport);
+    coachDemo.addEventListener("click", loadDemoSession);
+    openReportButton.addEventListener("click", openVisualReport);
+    reportBackFinal.addEventListener("click", backToFinal);
+    reportDownload.addEventListener("click", downloadReport);
+    reportRestart.addEventListener("click", restart);
+    downloadReportButton.addEventListener("click", downloadReport);
+    quickSummaryButton.addEventListener("click", openQuickSummary);
+    finalizeReadingButton.addEventListener("click", finalizeReading);
+    closeSummaryButton.addEventListener("click", closeQuickSummary);
+    summaryModal.addEventListener("click", (event) => {
+      if (event.target === summaryModal) closeQuickSummary();
+    });
+    manualButton.addEventListener("click", openManual);
+    closeManualButton.addEventListener("click", closeManual);
+    manualModal.addEventListener("click", (event) => {
+      if (event.target === manualModal) closeManual();
+    });
+
+    confirmButton.addEventListener("click", confirmSelection);
+    nextButton.addEventListener("click", nextPage);
+    restartButton.addEventListener("click", restart);
+    renderPage();
+  </script>
+</body>
+</html>
