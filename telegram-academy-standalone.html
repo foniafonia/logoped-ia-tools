@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia Telegram - Skool Academy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006399;
+            --secondary: #31a24c;
+            --bg-dark: #0e1419;
+            --bg-light: #192734;
+            --text-primary: #ffffff;
+            --text-secondary: #b0bec5;
+            --border: #38444d;
+            --success: #31a24c;
+            --warning: #ff9900;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2332 100%);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(14, 20, 25, 0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '📚';
+            font-size: 1.8rem;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-light);
+            color: var(--text-primary);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .filter-section {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-badge {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .category-badge:hover {
+            background: var(--bg-dark);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-badge.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 136, 204, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .results-count strong {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-toggle {
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-toggle.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(0, 136, 204, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .card-media {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.1), rgba(49, 162, 76, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-category {
+            display: inline-block;
+            width: fit-content;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 136, 204, 0.15);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-right: 2rem;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-body {
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-group {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">Academia Telegram</div>
+            <div class="search-container">
+                <div class="search-box">
+                    <input
+                        type="text"
+                        class="search-input"
+                        id="searchInput"
+                        placeholder="Busca: tutoriales, React, ejercicios..."
+                    >
+                    <button class="btn" id="searchBtn">🔍</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="filter-section">
+            <div class="filter-title">🏷️ Filtrar por categoría</div>
+            <div class="filter-group" id="categoryFilters"></div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                <div class="filter-title">📁 Tipo de contenido</div>
+                <div class="filter-group" id="typeFilters"></div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="clearFilters">✕ Limpiar filtros</button>
+                <button class="btn btn-secondary" id="toggleView">📊 Cambiar vista</button>
+            </div>
+        </div>
+
+        <div class="results-info">
+            <div class="results-count">
+                Mostrando <strong id="resultCount">0</strong> de <strong id="totalCount">0</strong> resultados
+            </div>
+            <div class="view-options">
+                <button class="view-toggle active" data-view="grid" title="Vista de grilla">⊞</button>
+                <button class="view-toggle" data-view="list" title="Vista de lista">☰</button>
+            </div>
+        </div>
+
+        <div class="content-grid" id="contentGrid"></div>
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state-icon">📭</div>
+            <div class="empty-state-title">No se encontraron resultados</div>
+            <p>Intenta con otros filtros o palabras clave</p>
+        </div>
+    </main>
+
+    <div class="modal" id="contentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // DATOS DE DEMOSTRACIÓN
+        const demoData = [
+            {
+                id: 1,
+                timestamp: "2026-06-29 14:30",
+                author: "Academia",
+                text: "Tutorial: Primeros pasos con JavaScript - Guía completa para principiantes. Aprende sobre variables, funciones y control de flujo.",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "artículo",
+                category: "tutoriales",
+                links: [{ url: "#", text: "Ver tutorial completo" }],
+                mentions: []
+            },
+            {
+                id: 2,
+                timestamp: "2026-06-28 10:15",
+                author: "Instructor",
+                text: "Nueva plantilla de proyecto React disponible. Descarga y comienza tu proyecto en 5 minutos. Esta plantilla incluye: ESLint, Prettier, testing setup.",
+                media: { images: [], videos: [], files: [{ url: "#", name: "react-template.zip" }], audio: [], stickers: [] },
+                type: "archivo",
+                category: "recursos",
+                links: [{ url: "#", text: "Ver en GitHub" }],
+                mentions: []
+            },
+            {
+                id: 3,
+                timestamp: "2026-06-27 16:45",
+                author: "Juan Pérez",
+                text: "¿Alguien sabe cómo configurar ESLint en React? Necesito ayuda con la configuración. @Instructor",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "mensaje",
+                category: "preguntas",
+                links: [],
+                mentions: ["@Instructor"]
+            },
+            {
+                id: 4,
+                timestamp: "2026-06-26 09:00",
+                author: "Academia",
+                text: "📢 WEBINAR EN VIVO: Arquitectura de Microservicios - Hoy a las 7 PM. Aprenderemos qué son los microservicios, cuándo usarlos, mejores prácticas.",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "mensaje",
+                category: "eventos",
+                links: [{ url: "#", text: "Enlace Zoom" }],
+                mentions: []
+            },
+            {
+                id: 5,
+                timestamp: "2026-06-25 13:20",
+                author: "Academia",
+                text: "Ejercicio Práctico #5: Construye un carrito de compras en React con Context API. Duración: 3 horas. Nivel: Intermedio.",
+                media: { images: [], videos: [], files: [{ url: "#", name: "ejercicio-5-starter.zip" }], audio: [], stickers: [] },
+                type: "archivo",
+                category: "ejercicios",
+                links: [{ url: "#", text: "Ver solución" }],
+                mentions: []
+            },
+            {
+                id: 6,
+                timestamp: "2026-06-24 15:30",
+                author: "María García",
+                text: "Compartiendo mi solución al ejercicio de componentes. ¿Qué opinan del enfoque que usé? Especialmente de cómo separé la lógica y el UI.",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "mensaje",
+                category: "discusiones",
+                links: [],
+                mentions: ["@Academia", "@Instructor"]
+            },
+            {
+                id: 7,
+                timestamp: "2026-06-23 11:00",
+                author: "Instructor",
+                text: "Artículo interesante sobre optimización en React. Recomendado si quieren mejorar el performance. Cubre React.memo, useMemo, useCallback.",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "enlace",
+                category: "enlaces",
+                links: [{ url: "#", text: "Leer artículo completo" }],
+                mentions: []
+            },
+            {
+                id: 8,
+                timestamp: "2026-06-22 14:20",
+                author: "Academia",
+                text: "📸 Video tutorial: State Management con Redux - 15 minutos. Aprenderemos qué es Redux, cuándo usarlo y cómo implementarlo en tus proyectos.",
+                media: { images: [], videos: [{ url: "#", title: "Redux Tutorial" }], files: [], audio: [], stickers: [] },
+                type: "video",
+                category: "tutoriales",
+                links: [],
+                mentions: []
+            },
+            {
+                id: 9,
+                timestamp: "2026-06-21 09:45",
+                author: "Carlos López",
+                text: "const fibonacci = (n) => n <= 1 ? n : fibonacci(n - 1) + fibonacci(n - 2); Solución simple pero ineficiente. Mejor usar memoization.",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "mensaje",
+                category: "código",
+                links: [],
+                mentions: []
+            },
+            {
+                id: 10,
+                timestamp: "2026-06-20 16:00",
+                author: "Academia",
+                text: "🎤 Sesión de preguntas y respuestas en vivo - Mañana a las 6 PM. Trae tus dudas sobre React, JavaScript, desarrollo web, ¡lo que quieras!",
+                media: { images: [], videos: [], files: [], audio: [], stickers: [] },
+                type: "mensaje",
+                category: "eventos",
+                links: [{ url: "#", text: "Enlace de la sesión" }],
+                mentions: []
+            }
+        ];
+
+        // APLICACIÓN
+        class AcademyApp {
+            constructor() {
+                this.allMessages = demoData;
+                this.filteredMessages = [];
+                this.activeCategories = [];
+                this.activeTypes = [];
+                this.currentView = 'grid';
+                this.currentSearch = '';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.render();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchInput').addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') this.search();
+                });
+                document.getElementById('searchBtn').addEventListener('click', () => this.search());
+                document.getElementById('clearFilters').addEventListener('click', () => this.clearFilters());
+                document.getElementById('toggleView').addEventListener('click', () => this.toggleViewMode());
+                document.getElementById('modalClose').addEventListener('click', () => this.closeModal());
+                document.getElementById('contentModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'contentModal') this.closeModal();
+                });
+
+                document.querySelectorAll('.view-toggle').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.setViewMode(e.target.dataset.view));
+                });
+            }
+
+            render() {
+                this.applyFilters();
+                this.renderFilters();
+                this.renderContent();
+                this.updateStats();
+            }
+
+            applyFilters() {
+                this.filteredMessages = this.allMessages.filter(msg => {
+                    const matchCategory = this.activeCategories.length === 0 || this.activeCategories.includes(msg.category);
+                    const matchType = this.activeTypes.length === 0 || this.activeTypes.includes(msg.type);
+                    const matchSearch = this.currentSearch === '' ||
+                        msg.text.toLowerCase().includes(this.currentSearch.toLowerCase()) ||
+                        msg.author.toLowerCase().includes(this.currentSearch.toLowerCase());
+                    return matchCategory && matchType && matchSearch;
+                });
+            }
+
+            renderFilters() {
+                const categories = [...new Set(this.allMessages.map(m => m.category))].sort();
+                const types = [...new Set(this.allMessages.map(m => m.type))].sort();
+
+                const categoryContainer = document.getElementById('categoryFilters');
+                categoryContainer.innerHTML = '';
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = `category-badge ${this.activeCategories.includes(cat) ? 'active' : ''}`;
+                    btn.textContent = this.getCategoryLabel(cat);
+                    btn.addEventListener('click', () => this.toggleCategory(cat));
+                    categoryContainer.appendChild(btn);
+                });
+
+                const typeContainer = document.getElementById('typeFilters');
+                typeContainer.innerHTML = '';
+                types.forEach(type => {
+                    const btn = document.createElement('button');
+                    btn.className = `category-badge ${this.activeTypes.includes(type) ? 'active' : ''}`;
+                    btn.textContent = this.getTypeLabel(type);
+                    btn.addEventListener('click', () => this.toggleType(type));
+                    typeContainer.appendChild(btn);
+                });
+            }
+
+            renderContent() {
+                const gridContainer = document.getElementById('contentGrid');
+                const emptyState = document.getElementById('emptyState');
+
+                gridContainer.innerHTML = '';
+
+                if (this.filteredMessages.length === 0) {
+                    gridContainer.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                gridContainer.style.display = 'grid';
+
+                this.filteredMessages.forEach(msg => {
+                    const card = this.createCardElement(msg);
+                    gridContainer.appendChild(card);
+                });
+            }
+
+            createCardElement(msg) {
+                const card = document.createElement('div');
+                card.className = 'content-card';
+                card.addEventListener('click', () => this.openModal(msg));
+
+                const iconMap = {
+                    imagen: '🖼️',
+                    video: '🎬',
+                    audio: '🎵',
+                    archivo: '📄',
+                    enlace: '🔗',
+                    artículo: '📰',
+                    mensaje: '💬',
+                };
+
+                const content = `
+                    <div class="card-media">${iconMap[msg.type] || '📌'}</div>
+                    <div class="card-content">
+                        <span class="card-category">${this.getCategoryLabel(msg.category)}</span>
+                        <h3 class="card-title">${this.getTitleFromMessage(msg)}</h3>
+                        <p class="card-description">${msg.text.substring(0, 120)}...</p>
+                        <div class="card-meta">
+                            <div>📅 ${this.formatDate(msg.timestamp)}</div>
+                            <div>${msg.links.length > 0 ? '🔗' : ''}</div>
+                        </div>
+                    </div>
+                `;
+
+                card.innerHTML = content;
+                return card;
+            }
+
+            openModal(msg) {
+                const modal = document.getElementById('contentModal');
+                document.getElementById('modalTitle').textContent = this.getTitleFromMessage(msg);
+
+                const date = new Date(msg.timestamp).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+
+                document.getElementById('modalMeta').innerHTML = `
+                    <span>👤 ${msg.author}</span>
+                    <span>📅 ${date}</span>
+                    <span>🏷️ ${this.getCategoryLabel(msg.category)}</span>
+                `;
+
+                let body = `<p>${msg.text}</p>`;
+
+                if (msg.links.length > 0) {
+                    body += '<div style="margin-top: 1.5rem;"><h4>🔗 Enlaces:</h4>';
+                    msg.links.forEach(link => {
+                        body += `<p><a href="${link.url}" style="color: var(--primary);">${link.text}</a></p>`;
+                    });
+                    body += '</div>';
+                }
+
+                document.getElementById('modalBody').innerHTML = body;
+                modal.classList.add('active');
+            }
+
+            closeModal() {
+                document.getElementById('contentModal').classList.remove('active');
+            }
+
+            toggleCategory(cat) {
+                const index = this.activeCategories.indexOf(cat);
+                if (index > -1) this.activeCategories.splice(index, 1);
+                else this.activeCategories.push(cat);
+                this.render();
+            }
+
+            toggleType(type) {
+                const index = this.activeTypes.indexOf(type);
+                if (index > -1) this.activeTypes.splice(index, 1);
+                else this.activeTypes.push(type);
+                this.render();
+            }
+
+            search() {
+                this.currentSearch = document.getElementById('searchInput').value;
+                this.render();
+            }
+
+            clearFilters() {
+                this.activeCategories = [];
+                this.activeTypes = [];
+                this.currentSearch = '';
+                document.getElementById('searchInput').value = '';
+                this.render();
+            }
+
+            toggleViewMode() {
+                this.currentView = this.currentView === 'grid' ? 'list' : 'grid';
+                this.setViewMode(this.currentView);
+            }
+
+            setViewMode(mode) {
+                this.currentView = mode;
+                document.querySelectorAll('.view-toggle').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.view === mode) btn.classList.add('active');
+                });
+            }
+
+            updateStats() {
+                document.getElementById('resultCount').textContent = this.filteredMessages.length;
+                document.getElementById('totalCount').textContent = this.allMessages.length;
+            }
+
+            getTitleFromMessage(msg) {
+                if (msg.text.length < 60) return msg.text;
+                const words = msg.text.split(' ');
+                let title = '';
+                for (let word of words) {
+                    if ((title + word).length < 60) title += word + ' ';
+                    else break;
+                }
+                return title.trim() + '...';
+            }
+
+            getCategoryLabel(cat) {
+                const labels = {
+                    'tutoriales': '📚 Tutoriales',
+                    'recursos': '🛠️ Recursos',
+                    'enlaces': '🔗 Enlaces',
+                    'videos': '🎬 Videos',
+                    'preguntas': '❓ Preguntas',
+                    'anuncios': '📢 Anuncios',
+                    'ejercicios': '✏️ Ejercicios',
+                    'código': '💻 Código',
+                    'discusiones': '💬 Discusiones',
+                    'eventos': '🎪 Eventos',
+                    'general': '📌 General',
+                };
+                return labels[cat] || cat;
+            }
+
+            getTypeLabel(type) {
+                const labels = {
+                    'imagen': '🖼️ Imagen',
+                    'video': '🎬 Video',
+                    'audio': '🎵 Audio',
+                    'archivo': '📄 Archivo',
+                    'enlace': '🔗 Enlace',
+                    'artículo': '📰 Artículo',
+                    'mensaje': '💬 Mensaje',
+                };
+                return labels[type] || type;
+            }
+
+            formatDate(dateStr) {
+                try {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
+                } catch (e) {
+                    return dateStr;
+                }
+            }
+        }
+
+        // Inicia la app
+        document.addEventListener('DOMContentLoaded', () => {
+            new AcademyApp();
+        });
+    </script>
+</body>
+</html>
