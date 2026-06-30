@@ -1,0 +1,227 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2026-06-29 14:30",
+    "author": "Academia",
+    "text": "Tutorial: Primeros pasos con JavaScript - Guía completa para principiantes. Aprende sobre variables, funciones y control de flujo. En este tutorial cubriremos: qué son las variables, tipos de datos en JS, funciones y cómo usarlas correctamente.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "artículo",
+    "category": "tutoriales",
+    "links": [
+      {
+        "url": "https://ejemplo.com/js-tutorial",
+        "text": "Ver tutorial completo"
+      }
+    ],
+    "mentions": []
+  },
+  {
+    "id": 2,
+    "timestamp": "2026-06-28 10:15",
+    "author": "Instructor",
+    "text": "Nueva plantilla de proyecto React disponible. Descarga y comienza tu proyecto en 5 minutos. Esta plantilla incluye: ESLint, Prettier, testing setup, componentes de ejemplo y mucho más.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [
+        {
+          "url": "files/react-template-2024.zip",
+          "name": "react-template-2024.zip"
+        }
+      ],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "archivo",
+    "category": "recursos",
+    "links": [
+      {
+        "url": "https://github.com/ejemplo/react-template",
+        "text": "Ver en GitHub"
+      }
+    ],
+    "mentions": []
+  },
+  {
+    "id": 3,
+    "timestamp": "2026-06-27 16:45",
+    "author": "Juan Pérez",
+    "text": "¿Alguien sabe cómo configurar ESLint en React? Necesito ayuda con la configuración. He intentado seguir la documentación oficial pero no me funciona. @Instructor",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "mensaje",
+    "category": "preguntas",
+    "links": [],
+    "mentions": [
+      "@Instructor"
+    ]
+  },
+  {
+    "id": 4,
+    "timestamp": "2026-06-26 09:00",
+    "author": "Academia",
+    "text": "📢 WEBINAR EN VIVO: Arquitectura de Microservicios - Hoy a las 7 PM. No te lo pierdas! Aprenderemos qué son los microservicios, cuándo usarlos, mejores prácticas y ejemplos reales.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "mensaje",
+    "category": "eventos",
+    "links": [
+      {
+        "url": "https://zoom.us/j/123456789",
+        "text": "Enlace Zoom"
+      }
+    ],
+    "mentions": []
+  },
+  {
+    "id": 5,
+    "timestamp": "2026-06-25 13:20",
+    "author": "Academia",
+    "text": "Ejercicio Práctico #5: Construye un carrito de compras en React con Context API. Duración: 3 horas. Nivel: Intermedio. Requisitos: Conocimiento básico de React, ES6+",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [
+        {
+          "url": "files/ejercicio-5-starter.zip",
+          "name": "ejercicio-5-starter.zip"
+        }
+      ],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "archivo",
+    "category": "ejercicios",
+    "links": [
+      {
+        "url": "https://github.com/ejemplo/ejercicios/carrito-compras",
+        "text": "Ver solución"
+      }
+    ],
+    "mentions": []
+  },
+  {
+    "id": 6,
+    "timestamp": "2026-06-24 15:30",
+    "author": "María García",
+    "text": "Compartiendo mi solución al ejercicio de componentes. ¿Qué opinan del enfoque que usé? Especialmente de cómo separé la lógica y el UI. @Academia @Instructor",
+    "media": {
+      "images": [
+        {
+          "url": "images/componentes-solucion.png",
+          "title": "Mi solución de componentes"
+        }
+      ],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "imagen",
+    "category": "discusiones",
+    "links": [],
+    "mentions": [
+      "@Academia",
+      "@Instructor"
+    ]
+  },
+  {
+    "id": 7,
+    "timestamp": "2026-06-23 11:00",
+    "author": "Instructor",
+    "text": "Artículo interesante sobre optimización en React. Recomendado si quieren mejorar el performance de sus aplicaciones. Cubre React.memo, useMemo, useCallback y Code Splitting.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "enlace",
+    "category": "enlaces",
+    "links": [
+      {
+        "url": "https://blog-ejemplo.com/react-optimization-guide",
+        "text": "Leer artículo completo"
+      }
+    ],
+    "mentions": []
+  },
+  {
+    "id": 8,
+    "timestamp": "2026-06-22 14:20",
+    "author": "Academia",
+    "text": "📸 Video tutorial: State Management con Redux - 15 minutos de contenido puro. Aprenderemos qué es Redux, cuándo usarlo y cómo implementarlo en tus proyectos React.",
+    "media": {
+      "images": [],
+      "videos": [
+        {
+          "url": "video_files/redux-tutorial-2024.mp4",
+          "title": "Redux Tutorial - State Management"
+        }
+      ],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "video",
+    "category": "tutoriales",
+    "links": [],
+    "mentions": []
+  },
+  {
+    "id": 9,
+    "timestamp": "2026-06-21 09:45",
+    "author": "Carlos López",
+    "text": "const fibonacci = (n) => n <= 1 ? n : fibonacci(n - 1) + fibonacci(n - 2); // Solución simple pero ineficiente. Mejor usar memoization para grandes valores.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "mensaje",
+    "category": "código",
+    "links": [],
+    "mentions": []
+  },
+  {
+    "id": 10,
+    "timestamp": "2026-06-20 16:00",
+    "author": "Academia",
+    "text": "🎤 Sesión de preguntas y respuestas en vivo - Mañana a las 6 PM. Trae tus dudas sobre React, JavaScript, desarrollo web, carrera profesional, ¡lo que quieras! Será una sesión abierta donde todos podremos aprender juntos.",
+    "media": {
+      "images": [],
+      "videos": [],
+      "files": [],
+      "audio": [],
+      "stickers": []
+    },
+    "type": "mensaje",
+    "category": "eventos",
+    "links": [
+      {
+        "url": "https://zoom.us/j/987654321",
+        "text": "Enlace de la sesión"
+      }
+    ],
+    "mentions": []
+  }
+]
