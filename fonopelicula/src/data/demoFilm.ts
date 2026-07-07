@@ -4,8 +4,12 @@ import type { Avatar, Film, MockStudent, Reward } from '../types';
  * CONTENIDO DEMO — Para adaptar a la película real:
  * 1. Cambia `youtubeId` por el id del vídeo definitivo.
  * 2. Ajusta `videoStart` / `videoEnd` de cada escena (segundos).
+ *    Regla de producto: cada fragmento dura 90–120 s como máximo; el reproductor
+ *    corta ANTES si la edad lo pide y nunca deja ver más allá del rango.
  * 3. Sustituye títulos, narrativa y actividades por el contenido real.
  * La estructura de datos no necesita cambios.
+ *
+ * Los fragmentos demo están repartidos a lo largo de la película (~39 min).
  */
 
 export const rewards: Reward[] = [
@@ -40,7 +44,7 @@ export const film: Film = {
       emoji: '🔮',
       color: '#3E7CB1',
       videoStart: 0,
-      videoEnd: 95,
+      videoEnd: 110,
       narrative:
         '¡Hola! Soy Foni, la estrella del cine. ¡Los trozos de mi película se han perdido! Mira esta primera escena con mucha atención: si superas los retos, recuperaremos la película juntos.',
       rewardId: 'r-claqueta',
@@ -94,8 +98,8 @@ export const film: Film = {
       subtitle: 'Un detalle muy importante',
       emoji: '🔍',
       color: '#F7B32B',
-      videoStart: 95,
-      videoEnd: 190,
+      videoStart: 350,
+      videoEnd: 460,
       narrative:
         '¡Genial, ya tenemos el primer trozo! En esta escena hay una pista escondida. Fíjate bien en los detalles: los buenos detectives escuchan y miran con atención.',
       rewardId: 'r-gema',
@@ -147,8 +151,8 @@ export const film: Film = {
       subtitle: 'Nace un gran equipo',
       emoji: '🤝',
       color: '#5F9E3E',
-      videoStart: 190,
-      videoEnd: 285,
+      videoStart: 760,
+      videoEnd: 870,
       narrative:
         '¡La película va volviendo! Ahora los personajes se van a conocer. Los equipos son más fuertes que las personas solas… ¿te has fijado en cómo se ayudan?',
       rewardId: 'r-palomitas',
@@ -217,8 +221,8 @@ export const film: Film = {
       subtitle: '¡Cuidado, se complica!',
       emoji: '⛈️',
       color: '#E4572E',
-      videoStart: 285,
-      videoEnd: 380,
+      videoStart: 1180,
+      videoEnd: 1290,
       narrative:
         '¡Uy! En toda buena historia aparece un problema gordo. No te preocupes: fíjate en QUÉ pasa y POR QUÉ pasa. Eso nos ayudará a recuperar este trozo de película.',
       rewardId: 'r-cofre-bronce',
@@ -271,8 +275,8 @@ export const film: Film = {
       subtitle: 'Hay que ser valiente',
       emoji: '💡',
       color: '#E8891D',
-      videoStart: 380,
-      videoEnd: 475,
+      videoStart: 1620,
+      videoEnd: 1730,
       narrative:
         'Casi lo tenemos… Ahora llega el momento más difícil: tomar una decisión importante. Piensa: ¿qué harías tú en su lugar? Ser valiente también se entrena.',
       rewardId: 'r-valiente',
@@ -341,8 +345,8 @@ export const film: Film = {
       subtitle: 'La gran celebración',
       emoji: '🏆',
       color: '#5F9E3E',
-      videoStart: 475,
-      videoEnd: 570,
+      videoStart: 2200,
+      videoEnd: 2310,
       narrative:
         '¡Último trozo de película! Si superas estos retos, la habrás desbloqueado ENTERA. Repasa todo lo que ha pasado… ¡y a por el final!',
       rewardId: 'r-cofre-oro',

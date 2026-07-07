@@ -6,8 +6,8 @@ export interface AgeConfig {
   ages: string;
   emoji: string;
   description: string;
-  /** duración máxima del fragmento de vídeo en segundos; null = fragmento completo */
-  clipSeconds: number | null;
+  /** duración máxima del fragmento de vídeo en segundos (regla de producto: 90–120 s) */
+  clipSeconds: number;
   /** nº máximo de opciones en test/emociones */
   maxOptions: number;
   /** nº máximo de pasos en secuencias */
@@ -26,8 +26,8 @@ export const ageConfigs: Record<AgeGroup, AgeConfig> = {
     label: 'Peques',
     ages: '3–5 años',
     emoji: '🧸',
-    description: 'Escenas de 1 minuto · 2 opciones · retos suaves',
-    clipSeconds: 60,
+    description: 'Escenas de minuto y medio · 2 opciones · retos suaves',
+    clipSeconds: 90,
     maxOptions: 2,
     maxSequence: 3,
     memoryPairs: 3,
@@ -65,8 +65,8 @@ export const ageConfigs: Record<AgeGroup, AgeConfig> = {
     label: 'A mi ritmo',
     ages: 'Marcado por el profesional',
     emoji: '🎚️',
-    description: 'Fragmento completo, cortes a voluntad',
-    clipSeconds: null,
+    description: 'Escenas de 2 minutos como máximo · dificultad completa',
+    clipSeconds: 120,
     maxOptions: 4,
     maxSequence: 4,
     memoryPairs: 4,
