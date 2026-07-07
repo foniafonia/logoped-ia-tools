@@ -58,7 +58,7 @@ export default function DemoControls() {
               />
               <DemoItem
                 icon={<Hand size={16} />}
-                label="4 · Minijuego con la mano"
+                label="4 · Retos mágicos (mano/voz)"
                 onClick={() => run(() => openScene(firstScene.id, 'bonus'))}
               />
               <DemoItem

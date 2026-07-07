@@ -59,6 +59,8 @@ export interface Scene {
   narrative: string;
   activities: Activity[];
   rewardId: string;
+  /** vocabulario de la escena para el reto de "la palabra mágica" */
+  magicWords: string[];
 }
 
 export interface Film {

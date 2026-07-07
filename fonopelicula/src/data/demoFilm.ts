@@ -48,6 +48,7 @@ export const film: Film = {
       narrative:
         '¡Hola! Soy Foni, la estrella del cine. ¡Los trozos de mi película se han perdido! Mira esta primera escena con mucha atención: si superas los retos, recuperaremos la película juntos.',
       rewardId: 'r-claqueta',
+      magicWords: ['misterio', 'estrella', 'sorpresa'],
       activities: [
         {
           id: 'a1-1',
@@ -103,6 +104,7 @@ export const film: Film = {
       narrative:
         '¡Genial, ya tenemos el primer trozo! En esta escena hay una pista escondida. Fíjate bien en los detalles: los buenos detectives escuchan y miran con atención.',
       rewardId: 'r-gema',
+      magicWords: ['pista', 'detective', 'camino'],
       activities: [
         {
           id: 'a2-1',
@@ -156,6 +158,7 @@ export const film: Film = {
       narrative:
         '¡La película va volviendo! Ahora los personajes se van a conocer. Los equipos son más fuertes que las personas solas… ¿te has fijado en cómo se ayudan?',
       rewardId: 'r-palomitas',
+      magicWords: ['amigos', 'equipo', 'sonrisa'],
       activities: [
         {
           id: 'a3-1',
@@ -226,6 +229,7 @@ export const film: Film = {
       narrative:
         '¡Uy! En toda buena historia aparece un problema gordo. No te preocupes: fíjate en QUÉ pasa y POR QUÉ pasa. Eso nos ayudará a recuperar este trozo de película.',
       rewardId: 'r-cofre-bronce',
+      magicWords: ['problema', 'tormenta', 'plan'],
       activities: [
         {
           id: 'a4-1',
@@ -280,6 +284,7 @@ export const film: Film = {
       narrative:
         'Casi lo tenemos… Ahora llega el momento más difícil: tomar una decisión importante. Piensa: ¿qué harías tú en su lugar? Ser valiente también se entrena.',
       rewardId: 'r-valiente',
+      magicWords: ['valiente', 'idea', 'corazón'],
       activities: [
         {
           id: 'a5-1',
@@ -350,6 +355,7 @@ export const film: Film = {
       narrative:
         '¡Último trozo de película! Si superas estos retos, la habrás desbloqueado ENTERA. Repasa todo lo que ha pasado… ¡y a por el final!',
       rewardId: 'r-cofre-oro',
+      magicWords: ['final', 'trofeo', 'fiesta'],
       activities: [
         {
           id: 'a6-1',

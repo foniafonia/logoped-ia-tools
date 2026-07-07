@@ -35,10 +35,19 @@ rápido para reuniones: mapa → escena → pregunta → recompensa → panel pr
 - **Motor de actividades** con 5 tipos: test, verdadero/falso, ordenar secuencia,
   elegir emoción y memoria de parejas. 20 actividades mock con objetivo pedagógico,
   contador de racha 🔥 y sonidos.
-- **Minijuego con cámara (MediaPipe Hands)**: tras los retos, "caza" los objetos de la
-  escena moviendo la mano delante de la webcam (hand tracking 100 % local, assets en
-  `public/mediapipe` + `public/models`, sin CDN). Modo ratón/dedo si no hay cámara.
-  Pausa automática con pestaña oculta y limpieza completa de cámara/RAF al salir.
+- **Retos mágicos multimodales**: tras los retos de cada escena, el niño elige entre
+  tres minijuegos (rota la recomendación por capítulo), todos 100 % locales:
+  - ✋ **Cazamanos** (MediaPipe Hands): atrapa los objetos de la escena moviendo la mano
+    delante de la webcam (assets en `public/mediapipe` + `public/models`, sin CDN).
+    Modo ratón/dedo si no hay cámara.
+  - 🎈 **Globo de voz** (WebAudio + micrófono): infla globos soplando o manteniendo la
+    voz — control de soplo e intensidad vocal. Modo "mantener pulsado" sin micro.
+  - 🗣️ **Palabra mágica** (Web Speech API es-ES): Foni dice palabras de la escena
+    (`magicWords` en los datos) y el niño las repite; el navegador las reconoce en
+    local. Botón de validación por adulto si el navegador no soporta reconocimiento.
+  Todos con pausa automática con pestaña oculta y limpieza completa al salir.
+- **Foni habla (TTS)**: los enunciados se leen en voz alta — automático en modo Peques,
+  botón de altavoz en el resto (`src/lib/speech.ts`, síntesis de voz del navegador).
 - **Juice**: sonidos WebAudio sintetizados (sin assets), confeti de canvas limitado en
   FPS/tiempo, animaciones suaves con `prefers-reduced-motion` respetado, toggle de mute.
 - **Recompensas**: estrellas (1–3 según aciertos a la primera), monedas (+5 por captura

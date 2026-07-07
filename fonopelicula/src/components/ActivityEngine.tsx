@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ChevronLeft, Flame, RotateCcw, Target } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { Check, ChevronLeft, Flame, RotateCcw, Target, Volume2 } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ageConfigs } from '../data/ages';
 import { sfx } from '../lib/audio';
+import { canSpeak, speak, stopSpeaking } from '../lib/speech';
 import { useGameStore } from '../store/gameStore';
 import type { Activity, ActivityOption, Scene } from '../types';
 
@@ -29,6 +30,12 @@ export default function ActivityEngine({ scene }: Props) {
   const rawActivity = scene.activities[Math.min(idx, total - 1)];
   const activity = useAdaptedActivity(rawActivity, cfg.maxOptions, cfg.maxSequence, cfg.memoryPairs);
   const locked = feedback === 'correct';
+
+  /* Foni lee el enunciado en alto: automático en modo Peques */
+  useEffect(() => {
+    if (ageGroup === 'mini' && canSpeak()) speak(activity.prompt);
+    return () => stopSpeaking();
+  }, [activity.id, activity.prompt, ageGroup]);
 
   const handleResult = (ok: boolean) => {
     if (locked) return;
@@ -109,7 +116,19 @@ export default function ActivityEngine({ scene }: Props) {
         <span className="chip mb-3">
           <Target size={12} /> Objetivo: {activity.objective}
         </span>
-        <h1 className="mb-5 font-hand text-3xl leading-tight">{activity.prompt}</h1>
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <h1 className="font-hand text-3xl leading-tight">{activity.prompt}</h1>
+          {canSpeak() && (
+            <button
+              onClick={() => speak(activity.prompt)}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-cielo/50 bg-cielo/10 text-cielo shadow-crayon transition hover:scale-105"
+              aria-label="Escuchar la pregunta"
+              title="Foni lee la pregunta en voz alta"
+            >
+              <Volume2 size={20} />
+            </button>
+          )}
+        </div>
 
         {(activity.type === 'quiz' || activity.type === 'trueFalse' || activity.type === 'emotion') && (
           <OptionsActivity key={activity.id} activity={activity} locked={locked} onAnswer={handleResult} />

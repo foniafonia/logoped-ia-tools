@@ -322,18 +322,15 @@ export default function HandCatchGame({ scene, goal, speed, onDone, onSkip }: Pr
   const playing = mode === 'camera' || mode === 'mouse';
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <div className="mb-4 flex items-center justify-between">
-        <p className="font-hand text-xl text-tinta/70">Reto mágico · Capítulo {scene.order}</p>
-        {playing && (
-          <div className="flex items-center gap-2">
-            <span className="chip border-sol/60 bg-sol/15 text-sm">✋ {caught} / {goal}</span>
-            <span className="chip text-sm">
-              <Timer size={13} /> {timeLeft}s
-            </span>
-          </div>
-        )}
-      </div>
+    <div>
+      {playing && (
+        <div className="mb-3 flex items-center justify-between">
+          <span className="chip border-sol/60 bg-sol/15 text-sm">✋ {caught} / {goal}</span>
+          <span className="chip text-sm">
+            <Timer size={13} /> {timeLeft}s
+          </span>
+        </div>
+      )}
 
       <div
         ref={containerRef}

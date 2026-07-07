@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import ActivityEngine from './components/ActivityEngine';
 import AgeGate from './components/AgeGate';
 import AvatarPanel from './components/AvatarPanel';
+import BonusHub from './components/BonusHub';
 import DemoControls from './components/DemoControls';
-import HandCatchGame from './components/HandCatchGame';
 import InteractivePlayer from './components/InteractivePlayer';
 import MapView from './components/MapView';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
@@ -115,11 +115,11 @@ export default function App() {
             <ActivityEngine key={activeScene.id} scene={activeScene} />
           )}
           {view === 'scene' && activeScene && scenePhase === 'bonus' && (
-            <HandCatchGame
+            <BonusHub
               key={activeScene.id}
               scene={activeScene}
-              goal={cfg.catchGoal}
-              speed={cfg.catchSpeed}
+              catchGoal={cfg.catchGoal}
+              catchSpeed={cfg.catchSpeed}
               onDone={closeBonus}
               onSkip={() => closeBonus(0)}
             />
