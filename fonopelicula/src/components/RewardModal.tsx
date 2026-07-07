@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Coins, Map, Star, Target } from 'lucide-react';
+import { useEffect } from 'react';
 import { film, getReward } from '../data/demoFilm';
+import { sfx } from '../lib/audio';
+import { burstConfetti } from '../lib/confetti';
 import { filmPercent, useGameStore } from '../store/gameStore';
 import type { Scene } from '../types';
+import SceneArt from './SceneArt';
 
 interface Props {
   scene: Scene;
@@ -13,6 +17,16 @@ export default function RewardModal({ scene }: Props) {
   const results = useGameStore((s) => s.results);
   const goMap = useGameStore((s) => s.goMap);
   const openScene = useGameStore((s) => s.openScene);
+
+  useEffect(() => {
+    burstConfetti();
+    sfx.win();
+    const timers = [1, 2, 3]
+      .filter((n) => n <= lastResult.stars)
+      .map((n) => window.setTimeout(() => sfx.star(n), 300 + n * 200));
+    return () => timers.forEach((t) => window.clearTimeout(t));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const reward = getReward(scene.rewardId);
   const nextScene = film.scenes.find((s) => s.order === scene.order + 1) ?? null;
@@ -29,12 +43,15 @@ export default function RewardModal({ scene }: Props) {
         role="dialog"
         aria-label="Escena completada"
       >
-        <div className="px-6 py-5 text-white" style={{ backgroundColor: scene.color }}>
-          <p className="text-5xl" aria-hidden>🎉</p>
-          <h2 className="font-hand text-3xl">¡Escena completada!</h2>
-          <p className="text-sm font-bold opacity-90">
-            Capítulo {scene.order}: {scene.title}
-          </p>
+        <div className="relative h-32 overflow-hidden">
+          <SceneArt sceneId={scene.id} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-tinta/35 text-white">
+            <p className="text-4xl drop-shadow" aria-hidden>🎉</p>
+            <h2 className="font-hand text-3xl drop-shadow">¡Escena completada!</h2>
+            <p className="text-sm font-bold drop-shadow">
+              Capítulo {scene.order}: {scene.title}
+            </p>
+          </div>
         </div>
 
         <div className="p-6">

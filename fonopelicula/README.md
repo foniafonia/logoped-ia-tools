@@ -21,13 +21,28 @@ rápido para reuniones: mapa → escena → pregunta → recompensa → panel pr
 
 ## Qué incluye
 
-- **Mapa de mundos** con 6 capítulos, camino, bloqueo progresivo y estrellas.
+- **Selector de edad** (3–5, 6–8, 9–12, «a mi ritmo»): corta los fragmentos de película
+  (60/90/120 s o completo con botón "Ver más película") y adapta la dificultad
+  (nº de opciones, pasos de secuencia, parejas de memoria, ritmo del minijuego).
+  Config en [`src/data/ages.ts`](src/data/ages.ts).
+- **Mapa de mundos ilustrado**: paisaje con camino serpenteante, nubes animadas,
+  avatar "¡estás aquí!", 6 capítulos con miniaturas SVG propias, bloqueo progresivo y estrellas.
+- **Ilustraciones SVG por escena** ([`SceneArt.tsx`](src/components/SceneArt.tsx)):
+  pósters estilo crayon únicos por capítulo (bola de cristal, lupa, arcoíris, tormenta,
+  bombilla, estreno de cine).
 - **Reproductor interactivo**: embebe fragmentos reales de YouTube por rangos `start`/`end`
-  (con póster elegante si no hay conexión) y botón de saltar vídeo para demos.
+  cortados según edad, póster ilustrado, y botón de saltar vídeo para demos.
 - **Motor de actividades** con 5 tipos: test, verdadero/falso, ordenar secuencia,
-  elegir emoción y memoria de parejas. 20 actividades mock etiquetadas con objetivo pedagógico.
-- **Recompensas**: estrellas (1–3 por escena según aciertos a la primera), monedas, corazones,
-  8 coleccionables (pegatinas, gemas, cofres, insignias) y modal de celebración.
+  elegir emoción y memoria de parejas. 20 actividades mock con objetivo pedagógico,
+  contador de racha 🔥 y sonidos.
+- **Minijuego con cámara (MediaPipe Hands)**: tras los retos, "caza" los objetos de la
+  escena moviendo la mano delante de la webcam (hand tracking 100 % local, assets en
+  `public/mediapipe` + `public/models`, sin CDN). Modo ratón/dedo si no hay cámara.
+  Pausa automática con pestaña oculta y limpieza completa de cámara/RAF al salir.
+- **Juice**: sonidos WebAudio sintetizados (sin assets), confeti de canvas limitado en
+  FPS/tiempo, animaciones suaves con `prefers-reduced-motion` respetado, toggle de mute.
+- **Recompensas**: estrellas (1–3 según aciertos a la primera), monedas (+5 por captura
+  del minijuego), corazones, 8 coleccionables y modal de celebración con confeti.
 - **Avatar** con 3 personajes, nivel y corazones.
 - **Panel de progreso**: % de película desbloqueada, precisión, misión actual, colección.
 - **Panel profesional** (mock): alumnos, precisión media, tabla de resultados

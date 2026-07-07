@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   Clapperboard,
   Gift,
+  Hand,
   HelpCircle,
   Map,
   Play,
@@ -56,13 +57,18 @@ export default function DemoControls() {
                 onClick={() => run(() => openScene(firstScene.id, 'activity'))}
               />
               <DemoItem
+                icon={<Hand size={16} />}
+                label="4 · Minijuego con la mano"
+                onClick={() => run(() => openScene(firstScene.id, 'bonus'))}
+              />
+              <DemoItem
                 icon={<Gift size={16} />}
-                label="4 · Ver una recompensa"
+                label="5 · Ver una recompensa"
                 onClick={() => run(() => previewReward(firstScene.id))}
               />
               <DemoItem
                 icon={<Users size={16} />}
-                label="5 · Panel profesional"
+                label="6 · Panel profesional"
                 onClick={() => run(goDashboard)}
               />
             </ul>

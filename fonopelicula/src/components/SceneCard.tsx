@@ -1,6 +1,7 @@
 import { Check, Lock, Play, RotateCcw, Sparkles, Star } from 'lucide-react';
 import { getReward } from '../data/demoFilm';
 import type { Scene } from '../types';
+import SceneArt from './SceneArt';
 
 interface Props {
   scene: Scene;
@@ -15,20 +16,33 @@ export default function SceneCard({ scene, status, stars, onPlay }: Props) {
 
   return (
     <article
-      className={`card flex items-center gap-4 p-4 transition ${
-        locked ? 'opacity-60 grayscale' : 'hover:-translate-y-0.5 hover:shadow-lift'
+      className={`card flex items-center gap-4 p-3 transition sm:p-4 ${
+        locked ? 'opacity-70 saturate-50' : 'hover:-translate-y-0.5 hover:shadow-lift'
       }`}
     >
       <div
-        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-tinta/20 text-3xl shadow-crayon"
-        style={{ backgroundColor: locked ? '#d8d2c4' : `${scene.color}2e` }}
-        aria-hidden
+        className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-lg border-2 border-tinta/20 shadow-crayon sm:h-24 sm:w-36 ${
+          locked ? 'grayscale' : ''
+        }`}
       >
-        {locked ? <Lock size={24} className="text-tinta/50" /> : scene.emoji}
+        <SceneArt sceneId={scene.id} />
+        {locked && (
+          <span className="absolute inset-0 flex items-center justify-center bg-tinta/45">
+            <Lock size={26} className="text-white" />
+          </span>
+        )}
+        {status === 'done' && (
+          <span className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-hierba text-white shadow">
+            <Check size={14} />
+          </span>
+        )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-extrabold uppercase tracking-wide" style={{ color: locked ? undefined : scene.color }}>
+        <p
+          className="text-xs font-extrabold uppercase tracking-wide"
+          style={{ color: locked ? undefined : scene.color }}
+        >
           Capítulo {scene.order}
         </p>
         <h3 className="truncate font-hand text-2xl leading-tight">{scene.title}</h3>
@@ -40,7 +54,7 @@ export default function SceneCard({ scene, status, stars, onPlay }: Props) {
             </span>
           )}
           {status === 'available' && (
-            <span className="chip border-sol/60 bg-sol/15 text-calabaza">
+            <span className="chip anim-bounce-soft border-sol/60 bg-sol/15 text-calabaza">
               <Sparkles size={12} /> ¡Disponible!
             </span>
           )}

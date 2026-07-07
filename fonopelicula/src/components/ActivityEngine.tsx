@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ChevronLeft, RotateCcw, Target } from 'lucide-react';
+import { Check, ChevronLeft, Flame, RotateCcw, Target } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
+import { ageConfigs } from '../data/ages';
+import { sfx } from '../lib/audio';
 import { useGameStore } from '../store/gameStore';
 import type { Activity, ActivityOption, Scene } from '../types';
 
@@ -9,26 +11,35 @@ interface Props {
 }
 
 export default function ActivityEngine({ scene }: Props) {
-  const finishScene = useGameStore((s) => s.finishScene);
+  const setPendingResult = useGameStore((s) => s.setPendingResult);
+  const setPhase = useGameStore((s) => s.setPhase);
   const addCoins = useGameStore((s) => s.addCoins);
   const loseHeart = useGameStore((s) => s.loseHeart);
   const goMap = useGameStore((s) => s.goMap);
+  const ageGroup = useGameStore((s) => s.ageGroup);
+  const cfg = ageConfigs[ageGroup ?? 'libre'];
 
   const [idx, setIdx] = useState(0);
   const [firstTry, setFirstTry] = useState(0);
   const [failedThis, setFailedThis] = useState(false);
+  const [streak, setStreak] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
   const total = scene.activities.length;
-  const activity = scene.activities[Math.min(idx, total - 1)];
+  const rawActivity = scene.activities[Math.min(idx, total - 1)];
+  const activity = useAdaptedActivity(rawActivity, cfg.maxOptions, cfg.maxSequence, cfg.memoryPairs);
   const locked = feedback === 'correct';
 
   const handleResult = (ok: boolean) => {
     if (locked) return;
     if (ok) {
       const ft = failedThis ? firstTry : firstTry + 1;
-      if (!failedThis) setFirstTry(ft);
+      if (!failedThis) {
+        setFirstTry(ft);
+        setStreak(streak + 1);
+      }
       addCoins(10);
+      sfx.correct();
       setFeedback('correct');
       window.setTimeout(() => {
         setFeedback(null);
@@ -36,14 +47,17 @@ export default function ActivityEngine({ scene }: Props) {
         if (idx + 1 >= total) {
           const ratio = ft / total;
           const stars = ratio === 1 ? 3 : ratio >= 0.6 ? 2 : 1;
-          finishScene(scene.id, stars, ft, total);
+          setPendingResult({ stars, firstTryCorrect: ft, totalActivities: total });
+          setPhase('bonus');
         } else {
           setIdx(idx + 1);
         }
       }, 1500);
     } else {
       setFailedThis(true);
+      setStreak(0);
       loseHeart();
+      sfx.wrong();
       setFeedback('wrong');
       window.setTimeout(() => setFeedback(null), 1600);
     }
@@ -55,9 +69,23 @@ export default function ActivityEngine({ scene }: Props) {
         <button onClick={goMap} className="btn-secondary !px-3 !py-2 !text-base">
           <ChevronLeft size={16} /> Mapa
         </button>
-        <p className="font-hand text-xl text-tinta/70">
-          Reto {Math.min(idx + 1, total)} de {total}
-        </p>
+        <div className="flex items-center gap-2">
+          <AnimatePresence>
+            {streak >= 2 && (
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                className="chip border-cereza/60 bg-cereza/10 text-sm text-cereza"
+              >
+                <Flame size={14} /> Racha x{streak}
+              </motion.span>
+            )}
+          </AnimatePresence>
+          <p className="font-hand text-xl text-tinta/70">
+            Reto {Math.min(idx + 1, total)} de {total}
+          </p>
+        </div>
       </div>
 
       <div className="mb-4 flex items-center gap-2" aria-hidden>
@@ -65,7 +93,11 @@ export default function ActivityEngine({ scene }: Props) {
           <span
             key={a.id}
             className={`flex h-9 flex-1 items-center justify-center rounded-md border-2 text-lg transition ${
-              i < idx ? 'border-hierba bg-hierba/20' : i === idx ? 'border-tinta/40 bg-white' : 'border-tinta/15 bg-white/40 opacity-50'
+              i < idx
+                ? 'border-hierba bg-hierba/20'
+                : i === idx
+                  ? 'border-tinta/40 bg-white'
+                  : 'border-tinta/15 bg-white/40 opacity-50'
             }`}
           >
             {i < idx ? '🎞️' : '·'}
@@ -111,6 +143,34 @@ export default function ActivityEngine({ scene }: Props) {
       </AnimatePresence>
     </div>
   );
+}
+
+/* ---------- Adaptación por edad ---------- */
+
+function useAdaptedActivity(
+  activity: Activity,
+  maxOptions: number,
+  maxSequence: number,
+  memoryPairs: number,
+): Activity {
+  return useMemo(() => {
+    if ((activity.type === 'quiz' || activity.type === 'emotion') && activity.options) {
+      const correct = activity.options.find((o) => o.id === activity.correctOptionId);
+      if (!correct || activity.options.length <= maxOptions) return activity;
+      const distractors = shuffle(activity.options.filter((o) => o.id !== correct.id)).slice(
+        0,
+        maxOptions - 1,
+      );
+      return { ...activity, options: shuffle([correct, ...distractors]) };
+    }
+    if (activity.type === 'sequence' && activity.sequenceItems) {
+      return { ...activity, sequenceItems: activity.sequenceItems.slice(0, maxSequence) };
+    }
+    if (activity.type === 'memory' && activity.memoryPairs) {
+      return { ...activity, memoryPairs: activity.memoryPairs.slice(0, memoryPairs) };
+    }
+    return activity;
+  }, [activity, maxOptions, maxSequence, memoryPairs]);
 }
 
 /* ---------- Test / Verdadero-Falso / Emociones ---------- */
@@ -275,6 +335,7 @@ function MemoryActivity({
     if (next.length === 2) {
       const [a, b] = next.map((k) => cards.find((c) => c.key === k)!);
       if (a.pairId === b.pairId) {
+        sfx.pop();
         const nextMatched = [...matched, a.pairId];
         setMatched(nextMatched);
         setFlipped([]);

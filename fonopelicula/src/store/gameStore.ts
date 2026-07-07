@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { AgeGroup } from '../data/ages';
 import { avatars, film } from '../data/demoFilm';
 import type { SceneResult } from '../types';
 
 export type View = 'map' | 'scene' | 'dashboard';
-export type ScenePhase = 'video' | 'activity' | 'reward';
+export type ScenePhase = 'video' | 'activity' | 'bonus' | 'reward';
 
 interface LastResult {
   stars: number;
@@ -21,6 +22,10 @@ interface GameState {
   hearts: number;
   avatarId: string;
   lastResult: LastResult;
+  /** resultado de las actividades a la espera del minijuego bonus */
+  pendingResult: LastResult;
+  ageGroup: AgeGroup | null;
+  muted: boolean;
 
   openScene: (sceneId: string, phase?: ScenePhase) => void;
   setPhase: (phase: ScenePhase) => void;
@@ -28,9 +33,12 @@ interface GameState {
   goDashboard: () => void;
   addCoins: (amount: number) => void;
   loseHeart: () => void;
+  setPendingResult: (result: LastResult) => void;
   finishScene: (sceneId: string, stars: number, firstTryCorrect: number, totalActivities: number) => void;
   previewReward: (sceneId: string) => void;
   setAvatar: (avatarId: string) => void;
+  setAgeGroup: (age: AgeGroup | null) => void;
+  toggleMuted: () => void;
   unlockAll: () => void;
   resetDemo: () => void;
 }
@@ -49,6 +57,9 @@ export const useGameStore = create<GameState>()(
       activeSceneId: null,
       scenePhase: 'video',
       lastResult: { stars: 0, firstTryCorrect: 0, totalActivities: 0 },
+      pendingResult: { stars: 1, firstTryCorrect: 0, totalActivities: 0 },
+      ageGroup: null,
+      muted: false,
       ...initialProgress,
 
       openScene: (sceneId, phase = 'video') =>
@@ -63,6 +74,8 @@ export const useGameStore = create<GameState>()(
       addCoins: (amount) => set((s) => ({ coins: s.coins + amount })),
 
       loseHeart: () => set((s) => ({ hearts: Math.max(1, s.hearts - 1) })),
+
+      setPendingResult: (result) => set({ pendingResult: result }),
 
       finishScene: (sceneId, stars, firstTryCorrect, totalActivities) =>
         set((s) => {
@@ -95,6 +108,10 @@ export const useGameStore = create<GameState>()(
 
       setAvatar: (avatarId) => set({ avatarId }),
 
+      setAgeGroup: (ageGroup) => set({ ageGroup }),
+
+      toggleMuted: () => set((s) => ({ muted: !s.muted })),
+
       unlockAll: () =>
         set((s) => {
           const starPattern = [3, 2, 3, 3, 2, 3];
@@ -119,6 +136,8 @@ export const useGameStore = create<GameState>()(
           activeSceneId: null,
           scenePhase: 'video',
           lastResult: { stars: 0, firstTryCorrect: 0, totalActivities: 0 },
+          pendingResult: { stars: 1, firstTryCorrect: 0, totalActivities: 0 },
+          ageGroup: null,
           ...initialProgress,
         }),
     }),
@@ -129,6 +148,8 @@ export const useGameStore = create<GameState>()(
         coins: s.coins,
         hearts: s.hearts,
         avatarId: s.avatarId,
+        ageGroup: s.ageGroup,
+        muted: s.muted,
       }),
     },
   ),
