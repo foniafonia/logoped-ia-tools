@@ -14,7 +14,7 @@ import { film } from '../data/demoFilm';
 import { sfx } from '../lib/audio';
 import { useGameStore } from '../store/gameStore';
 import type { Scene } from '../types';
-import SceneArt from './SceneArt';
+import SceneThumb from './SceneThumb';
 
 /**
  * Reproductor con corte forzoso: usa la IFrame API de YouTube con los controles
@@ -236,7 +236,7 @@ export default function InteractivePlayer({ scene }: Props) {
 
           {status === 'poster' && (
             <button onClick={startPlayback} className="group absolute inset-0" aria-label="Reproducir escena">
-              <SceneArt sceneId={scene.id} />
+              <SceneThumb sceneId={scene.id} />
               <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-tinta/25 transition group-hover:bg-tinta/15">
                 <span className="flex items-center gap-2 rounded-full border-2 border-white/70 bg-tinta/50 px-6 py-3 font-hand text-2xl text-white backdrop-blur-sm transition group-hover:scale-105">
                   <Play size={22} className="fill-white" /> Ver escena

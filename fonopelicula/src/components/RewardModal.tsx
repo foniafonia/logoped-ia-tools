@@ -6,7 +6,7 @@ import { sfx } from '../lib/audio';
 import { burstConfetti } from '../lib/confetti';
 import { filmPercent, useGameStore } from '../store/gameStore';
 import type { Scene } from '../types';
-import SceneArt from './SceneArt';
+import SceneThumb from './SceneThumb';
 
 interface Props {
   scene: Scene;
@@ -44,7 +44,7 @@ export default function RewardModal({ scene }: Props) {
         aria-label="Escena completada"
       >
         <div className="relative h-32 overflow-hidden">
-          <SceneArt sceneId={scene.id} />
+          <SceneThumb sceneId={scene.id} />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-tinta/35 text-white">
             <p className="text-4xl drop-shadow" aria-hidden>🎉</p>
             <h2 className="font-hand text-3xl drop-shadow">¡Escena completada!</h2>

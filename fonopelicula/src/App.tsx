@@ -10,7 +10,7 @@ import InteractivePlayer from './components/InteractivePlayer';
 import MapView from './components/MapView';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import RewardModal from './components/RewardModal';
-import SceneArt from './components/SceneArt';
+import SceneThumb from './components/SceneThumb';
 import { ageConfigs } from './data/ages';
 import { avatars, film } from './data/demoFilm';
 import { setMuted, sfx } from './lib/audio';
@@ -127,7 +127,7 @@ export default function App() {
           {view === 'scene' && activeScene && scenePhase === 'reward' && (
             <div className="mx-auto max-w-3xl overflow-hidden rounded-xl border-2 border-tinta/15 opacity-60">
               <div className="aspect-video">
-                <SceneArt sceneId={activeScene.id} />
+                <SceneThumb sceneId={activeScene.id} />
               </div>
             </div>
           )}

@@ -1,7 +1,7 @@
 import { Check, Lock, Play, RotateCcw, Sparkles, Star } from 'lucide-react';
 import { getReward } from '../data/demoFilm';
 import type { Scene } from '../types';
-import SceneArt from './SceneArt';
+import SceneThumb from './SceneThumb';
 
 interface Props {
   scene: Scene;
@@ -25,7 +25,7 @@ export default function SceneCard({ scene, status, stars, onPlay }: Props) {
           locked ? 'grayscale' : ''
         }`}
       >
-        <SceneArt sceneId={scene.id} />
+        <SceneThumb sceneId={scene.id} />
         {locked && (
           <span className="absolute inset-0 flex items-center justify-center bg-tinta/45">
             <Lock size={26} className="text-white" />
