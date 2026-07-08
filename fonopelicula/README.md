@@ -35,17 +35,23 @@ rápido para reuniones: mapa → escena → pregunta → recompensa → panel pr
 - **Motor de actividades** con 5 tipos: test, verdadero/falso, ordenar secuencia,
   elegir emoción y memoria de parejas. 20 actividades mock con objetivo pedagógico,
   contador de racha 🔥 y sonidos.
-- **Retos mágicos multimodales**: tras los retos de cada escena, el niño elige entre
-  tres minijuegos (rota la recomendación por capítulo), todos 100 % locales:
-  - ✋ **Cazamanos** (MediaPipe Hands): atrapa los objetos de la escena moviendo la mano
-    delante de la webcam (assets en `public/mediapipe` + `public/models`, sin CDN).
-    Modo ratón/dedo si no hay cámara.
-  - 🎈 **Globo de voz** (WebAudio + micrófono): infla globos soplando o manteniendo la
-    voz — control de soplo e intensidad vocal. Modo "mantener pulsado" sin micro.
-  - 🗣️ **Palabra mágica** (Web Speech API es-ES): Foni dice palabras de la escena
-    (`magicWords` en los datos) y el niño las repite; el navegador las reconoce en
-    local. Botón de validación por adulto si el navegador no soporta reconocimiento.
-  Todos con pausa automática con pestaña oculta y limpieza completa al salir.
+- **Retos mágicos con juegos reales**: tras los retos de cada escena, el niño elige entre
+  tres minijuegos (rota la recomendación por capítulo). Son **ports fieles de juegos ya
+  existentes del ecosistema Logoped-IA**, no mecánicas inventadas — misma lógica, misma
+  física, mismo contenido que el original, adaptados a React/TS:
+  - 🎨 **Pintura en el aire** ([`AirPaintGame.tsx`](src/components/AirPaintGame.tsx)):
+    port de `pintura-aire-colores` — agarra la bola de pintura cerrando el puño
+    (MediaPipe Hands), lánzala con impulso al objeto del color pedido. Misma
+    clasificación de gesto, física de lanzamiento y SVG de objetos que el original.
+  - 😊 **Praxias mágicas** ([`PraxiasGame.tsx`](src/components/PraxiasGame.tsx) +
+    [`src/lib/mirrorfono.ts`](src/lib/mirrorfono.ts)): port de MirrorFono — sonrisa, beso,
+    boca, mejillas y soplo frente a la cámara (Face Landmarker), mismas fórmulas de
+    landmarks faciales y modo simulación de respaldo.
+  - 🔎 **Caza del sonido** ([`BuscaSonidoGame.tsx`](src/components/BuscaSonidoGame.tsx)):
+    port de "Busca Sonido" de FonoMundos — conciencia fonológica /m/s/p/r/, mismo
+    vocabulario y lógica de rondas.
+  Todos 100 % locales (sin CDN, sin backend), con pausa en pestaña oculta y cleanup
+  completo de cámara/micro al salir.
 - **Foni habla (TTS)**: los enunciados se leen en voz alta — automático en modo Peques,
   botón de altavoz en el resto (`src/lib/speech.ts`, síntesis de voz del navegador).
 - **Juice**: sonidos WebAudio sintetizados (sin assets), confeti de canvas limitado en
@@ -97,10 +103,10 @@ src/
 
 ## Mejoras futuras
 
-- Control real del reproductor con la YouTube IFrame API (detectar fin de fragmento).
-- Locuciones de Foni (TTS o grabadas) y refuerzo auditivo en cada feedback.
-- Más tipos de actividad: asociación imagen-palabra con imágenes reales, huecos de vocabulario,
-  grabación de voz para repetición/denominación.
+- Más ports de juegos reales del ecosistema (candidatos: Constructor de Sílabas Aire,
+  Puzzle Agarre Aire, Karaoke Tartamudez) como cuarto/quinto reto mágico.
+- Locuciones grabadas de Foni (en vez de solo TTS del navegador) para mayor calidez.
+- Más tipos de actividad: asociación imagen-palabra con imágenes reales, huecos de vocabulario.
 - Modo colegio: sesiones por grupo, ranking amable, informes por aula.
 - Multi-película: selector de películas ("mundos") con la misma estructura de datos.
-- Accesibilidad: lectura de enunciados en voz alta, modo pictogramas, alto contraste.
+- Accesibilidad: modo pictogramas, alto contraste.

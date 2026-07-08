@@ -27,6 +27,15 @@
   .chip {
     @apply inline-flex items-center gap-1 rounded-full border border-tinta/20 bg-white/70 px-3 py-1 text-xs font-bold;
   }
+  .air-paint-ball {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+    transition: transform 0.12s ease;
+    cursor: grab;
+  }
+  .air-paint-ball.grabbed {
+    transform: translate(-50%, -50%) scale(1.08);
+    cursor: grabbing;
+  }
 }
 
 @layer utilities {

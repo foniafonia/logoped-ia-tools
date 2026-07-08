@@ -2,37 +2,43 @@ import { Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { sfx } from '../lib/audio';
 import type { Scene } from '../types';
-import BlowBalloonGame from './BlowBalloonGame';
-import HandCatchGame from './HandCatchGame';
-import MagicWordGame from './MagicWordGame';
+import AirPaintGame from './AirPaintGame';
+import BuscaSonidoGame from './BuscaSonidoGame';
+import PraxiasGame from './PraxiasGame';
 
 /**
- * Tras las actividades, el niño elige su "reto mágico":
- * mano (cámara), voz/soplo (micro) o palabra mágica (habla).
+ * Tras las actividades, el niño elige su "reto mágico": tres ports fieles de
+ * juegos reales del ecosistema Logoped-IA, no mecánicas inventadas.
+ * - AirPaintGame: port de "Pintura en el aire: colores" (pintura-aire-colores)
+ * - PraxiasGame: port de MirrorFono (praxias orofaciales con cámara)
+ * - BuscaSonidoGame: port de "Busca Sonido" de FonoMundos
  * Cada escena recomienda uno distinto para que roten.
  */
 
-type BonusKind = 'hand' | 'balloon' | 'word';
+type BonusKind = 'paint' | 'praxias' | 'busca';
 
-const BONUS_INFO: Record<BonusKind, { emoji: string; title: string; text: string }> = {
-  hand: {
-    emoji: '✋',
-    title: 'Cazamanos',
-    text: 'Atrapa los objetos con tu mano delante de la cámara',
+const BONUS_INFO: Record<BonusKind, { emoji: string; title: string; text: string; source: string }> = {
+  paint: {
+    emoji: '🎨',
+    title: 'Pintura en el aire',
+    text: 'Agarra la pintura con el puño y lánzala al color pedido',
+    source: 'Port de pintura-aire-colores',
   },
-  balloon: {
-    emoji: '🎈',
-    title: 'Globo de voz',
-    text: 'Infla globos soplando o manteniendo tu voz',
+  praxias: {
+    emoji: '😊',
+    title: 'Praxias mágicas',
+    text: 'Sonríe, besa el aire e infla las mejillas frente a la cámara',
+    source: 'Port de MirrorFono',
   },
-  word: {
-    emoji: '🗣️',
-    title: 'Palabra mágica',
-    text: 'Repite en voz alta las palabras de la escena',
+  busca: {
+    emoji: '🔎',
+    title: 'Caza del sonido',
+    text: 'Toca los dibujos que empiezan por el sonido de Foni',
+    source: 'Port de FonoMundos',
   },
 };
 
-const ROTATION: BonusKind[] = ['hand', 'balloon', 'word'];
+const ROTATION: BonusKind[] = ['paint', 'praxias', 'busca'];
 
 interface Props {
   scene: Scene;
@@ -46,27 +52,27 @@ export default function BonusHub({ scene, catchGoal, catchSpeed, onDone, onSkip 
   const [chosen, setChosen] = useState<BonusKind | null>(null);
   const recommended = ROTATION[(scene.order - 1) % ROTATION.length];
 
-  if (chosen === 'hand') {
+  if (chosen === 'paint') {
     return (
       <div className="mx-auto max-w-3xl">
         <Header scene={scene} />
-        <HandCatchGame scene={scene} goal={catchGoal} speed={catchSpeed} onDone={onDone} onSkip={onSkip} />
+        <AirPaintGame scene={scene} goal={catchGoal} speed={catchSpeed} onDone={onDone} onSkip={onSkip} />
       </div>
     );
   }
-  if (chosen === 'balloon') {
+  if (chosen === 'praxias') {
     return (
       <div className="mx-auto max-w-3xl">
         <Header scene={scene} />
-        <BlowBalloonGame scene={scene} onDone={onDone} />
+        <PraxiasGame scene={scene} onDone={onDone} onSkip={onSkip} />
       </div>
     );
   }
-  if (chosen === 'word') {
+  if (chosen === 'busca') {
     return (
       <div className="mx-auto max-w-3xl">
         <Header scene={scene} />
-        <MagicWordGame scene={scene} onDone={onDone} />
+        <BuscaSonidoGame scene={scene} onDone={onDone} />
       </div>
     );
   }
@@ -103,6 +109,7 @@ export default function BonusHub({ scene, catchGoal, catchSpeed, onDone, onSkip 
                 <span className="text-5xl" aria-hidden>{info.emoji}</span>
                 <span className="font-hand text-2xl leading-none">{info.title}</span>
                 <span className="text-xs font-semibold text-tinta/65">{info.text}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wide text-tinta/40">{info.source}</span>
               </button>
             );
           })}
