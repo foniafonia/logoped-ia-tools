@@ -111,7 +111,8 @@
   #playerHost{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:2px solid var(--line);}
   #playerHost iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   #playerHost audio{width:100%;height:100%;}
-  .player-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+  .player-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .seek-info{font-size:13px;font-weight:700;color:var(--muted);}
   .progressbar{height:10px;background:var(--soft);border-radius:999px;overflow:hidden;margin:14px 0 4px;border:1px solid var(--line);}
   .progressbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--gold));width:0;transition:width .3s;}
   .history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
@@ -188,10 +189,10 @@
       <p class="hint">Usa una lista preparada o pega la tuya (una canción por línea): coplas, boleros, rock de los 80,
         canciones del pueblo… La lista define el juego; tú eliges el repertorio que conecta con tu grupo.</p>
       <p class="hint" style="background:#f7fbf7;border-left:5px solid var(--brand-2);padding:10px 12px;border-radius:8px">
-        🎧 <b>¿Quieres que la música suene sola?</b> Añade un enlace tras una barra <code>|</code>:<br>
-        <code>Bésame mucho | https://www.youtube.com/watch?v=...</code><br>
-        Vale YouTube o un audio <code>.mp3</code>. Sin enlace, el dinamizador ofrece un botón para buscarla en YouTube.
-        Prueba la lista <b>«Demo con música»</b>: ya trae los enlaces puestos.</p>
+        🎧 <b>¿Quieres que la música suene sola y arranque en el estribillo?</b> Formato:<br>
+        <code>Título | enlace | segundo</code> &nbsp;→&nbsp; <code>Bésame mucho | https://youtu.be/5NCG0zciiYQ | 15</code><br>
+        El tercer número es el segundo donde empieza a sonar (el momento reconocible). Vale YouTube o un audio <code>.mp3</code>.
+        Sin enlace, el dinamizador te deja buscarla en YouTube. Prueba la lista <b>«Demo con música»</b>: ya trae enlaces y estribillos puestos.</p>
 
       <div class="chips" id="presetChips"></div>
 
@@ -273,12 +274,18 @@
 
       <div id="playerBox" class="player-box" style="display:none">
         <div id="playerHost"></div>
+        <div class="player-actions" id="seekControls">
+          <button class="btn ghost" id="btnFromStart">⏮ Desde el principio</button>
+          <button class="btn ghost" id="btnHook">🎯 Al estribillo</button>
+          <button class="btn ghost" id="btnFwd">⏭ +15 s</button>
+          <span class="seek-info" id="seekInfo"></span>
+        </div>
         <div class="player-actions">
           <button class="btn ghost" id="btnOpenYt">↗ Abrir en YouTube</button>
           <button class="btn ghost" id="btnStop">⏹ Parar música</button>
           <button class="btn gold" id="btnReveal" style="display:none">👁 Mostrar título</button>
         </div>
-        <p class="hint" style="margin:8px 0 0">Si el vídeo no suena aquí (algunos no permiten incrustarse), pulsa <b>«Abrir en YouTube»</b>.</p>
+        <p class="hint" style="margin:8px 0 0">Arranca en el estribillo. ¿Cae mal? Ajústalo con <b>⏭ +15 s</b> / <b>⏮ principio</b>, o edita el número tras la segunda barra en la lista. Si un vídeo no permite incrustarse, usa <b>«Abrir en YouTube»</b>.</p>
       </div>
 
       <div class="progressbar"><i id="prog"></i></div>
@@ -349,18 +356,18 @@ const PRESETS = {
   demo: {
     label:"🎵 Demo con música (suena sola)",
     songs:[
-      "Cielito lindo | https://www.youtube.com/watch?v=U5RC3BJ2PMo",
-      "Bésame mucho | https://www.youtube.com/watch?v=5NCG0zciiYQ",
-      "El porompompero | https://www.youtube.com/watch?v=bIhFm-qzoTo",
-      "Historia de un amor | https://www.youtube.com/watch?v=qJiYlH_tdhs",
-      "Y viva España | https://www.youtube.com/watch?v=ubuIDiVVIYs",
-      "Sabor a mí | https://www.youtube.com/watch?v=Qg_L54DW69U",
-      "Reloj | https://www.youtube.com/watch?v=DUxWgcXxE-k",
-      "Quizás, quizás, quizás | https://www.youtube.com/watch?v=rDGgUGBD-90",
-      "Volver | https://www.youtube.com/watch?v=7txRnZ45Eyc",
-      "Contigo en la distancia | https://www.youtube.com/watch?v=51RP36Joeh4",
-      "Dos gardenias | https://www.youtube.com/watch?v=p-Pb-eN5NSc",
-      "Que nadie sepa mi sufrir | https://www.youtube.com/watch?v=Ialr2WStddo"
+      "Cielito lindo | https://www.youtube.com/watch?v=U5RC3BJ2PMo | 21",
+      "Bésame mucho | https://www.youtube.com/watch?v=5NCG0zciiYQ | 15",
+      "El porompompero | https://www.youtube.com/watch?v=bIhFm-qzoTo | 30",
+      "Historia de un amor | https://www.youtube.com/watch?v=qJiYlH_tdhs | 14",
+      "Y viva España | https://www.youtube.com/watch?v=ubuIDiVVIYs | 34",
+      "Sabor a mí | https://www.youtube.com/watch?v=Qg_L54DW69U | 15",
+      "Reloj | https://www.youtube.com/watch?v=DUxWgcXxE-k | 12",
+      "Quizás, quizás, quizás | https://www.youtube.com/watch?v=rDGgUGBD-90 | 16",
+      "Volver | https://www.youtube.com/watch?v=7txRnZ45Eyc | 26",
+      "Contigo en la distancia | https://www.youtube.com/watch?v=51RP36Joeh4 | 20",
+      "Dos gardenias | https://www.youtube.com/watch?v=p-Pb-eN5NSc | 16",
+      "Que nadie sepa mi sufrir | https://www.youtube.com/watch?v=Ialr2WStddo | 22"
     ]
   },
   copla: {
@@ -392,7 +399,7 @@ const PRESETS = {
 /* ---------------- Estado ---------------- */
 const LS_KEY = "bingoMusicalListas";
 let currentCards = [];   // matriz de cartones generados (cada uno: {id, cells:[{text,free}]})
-let caller = { pool:[], idx:-1, order:[], revealed:false };
+let caller = { pool:[], idx:-1, order:[], revealed:false, curStart:0 };
 
 /* ---------------- Utilidades ---------------- */
 const $ = s => document.querySelector(s);
@@ -408,13 +415,34 @@ function shuffle(arr){
   for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
-/* Cada línea: "Título" o "Título | enlace". */
-function parseEntry(line){
-  const i = line.indexOf("|");
-  if(i === -1) return {title:line.trim(), url:""};
-  return {title:line.slice(0,i).trim(), url:line.slice(i+1).trim()};
+/* Cada línea: "Título" · "Título | enlace" · "Título | enlace | segundos".
+   El tercer campo (o t=/start= en la URL) marca el segundo de arranque (el estribillo). */
+function parseTime(s){
+  if(!s) return 0;
+  s=(""+s).trim();
+  let m=s.match(/^(\d+):(\d{1,2})$/);            // formato mm:ss
+  if(m) return (+m[1])*60 + (+m[2]);
+  m=s.match(/(\d+)h/); const h=m?+m[1]:0;
+  const mn=(s.match(/(\d+)m/)||[])[1]; const sc=(s.match(/(\d+)s/)||[])[1];
+  if(mn||sc||h) return h*3600 + (+mn||0)*60 + (+sc||0);
+  const n=parseInt(s,10); return isNaN(n)?0:n;
 }
-function serializeEntry(e){ return e.url ? (e.title+" | "+e.url) : e.title; }
+function urlStart(url){
+  const m=(url||"").match(/[?&](?:t|start)=([0-9hms:]+)/i);
+  return m?parseTime(m[1]):0;
+}
+function parseEntry(line){
+  const parts=line.split("|");
+  const title=(parts[0]||"").trim();
+  const url=(parts[1]||"").trim();
+  let start=parts.length>2 ? parseTime(parts[2]) : 0;
+  if(!start) start=urlStart(url);
+  return {title, url, start};
+}
+function serializeEntry(e){
+  if(!e.url) return e.title;
+  return e.start ? (e.title+" | "+e.url+" | "+e.start) : (e.title+" | "+e.url);
+}
 function getEntries(){
   return $("#songs").value.split("\n").map(l=>l.trim()).filter(Boolean).map(parseEntry).filter(e=>e.title);
 }
@@ -645,30 +673,43 @@ function stopMusic(){
   $("#playerHost").innerHTML="";
   $("#playerBox").style.display="none";
 }
+function embedAt(start){
+  const e=currentEntry();
+  const host=$("#playerHost");
+  const id=ytId(e.url);
+  start=Math.max(0,Math.round(start||0));
+  caller.curStart=start;
+  if(id){
+    // youtube-nocookie + start: arranca en el segundo del estribillo
+    host.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen '+
+      'src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1&start='+start+'"></iframe>';
+  } else if(isAudioUrl(e.url)){
+    const url=e.url.replace(/"/g,"%22")+(start?("#t="+start):"");
+    host.innerHTML='<audio autoplay controls src="'+url+'"></audio>';
+  }
+  $("#seekInfo").textContent = start? ("arranca en "+fmtSec(start)) : "desde el principio";
+}
+function fmtSec(s){ const m=Math.floor(s/60), r=s%60; return m? (m+":"+String(r).padStart(2,"0")) : (s+"s"); }
 function playCurrent(){
   const e=currentEntry();
   const box=$("#playerBox"), host=$("#playerHost");
   if(!e){ stopMusic(); return; }
   const id=ytId(e.url);
   const auto=$("#autoMusic").checked;
-  const openBtn=$("#btnOpenYt");
-  openBtn.dataset.url = id ? ("https://www.youtube.com/watch?v="+id) : (e.url || ytSearchUrl(e.title));
-
-  if(!auto){ // modo manual: no incrusta, deja el botón para abrir
-    host.innerHTML="";
-    box.style.display="block";
-    return;
-  }
+  $("#btnOpenYt").dataset.url = id
+    ? ("https://www.youtube.com/watch?v="+id+(e.start?("&t="+e.start):""))
+    : (e.url || ytSearchUrl(e.title));
+  const hasEmbed = id || isAudioUrl(e.url);
   box.style.display="block";
-  if(id){
-    host.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen '+
-      'src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1"></iframe>';
-  } else if(isAudioUrl(e.url)){
-    host.innerHTML='<audio autoplay controls src="'+e.url.replace(/"/g,"%22")+'"></audio>';
+  $("#seekControls").style.display = hasEmbed ? "flex" : "none";
+
+  if(!auto){ host.innerHTML=""; $("#seekInfo").textContent="música manual"; return; }
+  if(hasEmbed){
+    embedAt(e.start||0);
   } else {
-    // sin enlace válido: abre búsqueda en YouTube (gesto de usuario desde «Siguiente»)
     host.innerHTML='<div style="color:#fff;display:grid;place-items:center;height:100%;padding:16px;text-align:center;font-weight:700">'+
       '🔎 Sin enlace guardado.<br>Pulsa «Abrir en YouTube» para buscarla.</div>';
+    $("#seekInfo").textContent="";
     try{ window.open(ytSearchUrl(e.title),"_blank","noopener"); }catch(err){}
   }
 }
@@ -720,6 +761,9 @@ $("#btnRepeat").addEventListener("click",()=>{
 });
 $("#btnReveal").addEventListener("click",()=>{ caller.revealed=true; updateStage(); });
 $("#btnStop").addEventListener("click",stopMusic);
+$("#btnFromStart").addEventListener("click",()=>{ if(currentEntry()) embedAt(0); });
+$("#btnHook").addEventListener("click",()=>{ const e=currentEntry(); if(e) embedAt(e.start||0); });
+$("#btnFwd").addEventListener("click",()=>{ if(currentEntry()) embedAt((caller.curStart||0)+15); });
 $("#btnOpenYt").addEventListener("click",()=>{
   const e=currentEntry(); if(!e){ return; }
   const url=$("#btnOpenYt").dataset.url || ytSearchUrl(e.title);
