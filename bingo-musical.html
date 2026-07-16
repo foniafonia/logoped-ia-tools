@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bingo Musical · Logoped-IA</title>
+<style>
+  :root{
+    --ink:#1f2933;
+    --brand:#16a34a;
+    --brand-2:#22c55e;
+    --gold:#eab308;
+    --gold-d:#ca8a04;
+    --paper:#fbfaf6;
+    --soft:#f1f4ef;
+    --line:#d7ddd3;
+    --ok:#1f8f4d;
+    --bad:#c0392b;
+    --muted:#6b7280;
+    color-scheme:light;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--paper);color:var(--ink);}
+  body{-webkit-text-size-adjust:100%;}
+  h1,h2,h3{margin:0;line-height:1.15;}
+  button{font:inherit;cursor:pointer;}
+  a{color:var(--brand);}
+
+  /* ---------- Cabecera ---------- */
+  .top{
+    background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 55%,var(--gold) 130%);
+    color:#fff;padding:20px 18px;
+  }
+  .top .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .logo{
+    width:56px;height:56px;border-radius:14px;flex:none;
+    background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:30px;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);
+  }
+  .top h1{font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.5px;}
+  .top p{margin:4px 0 0;font-size:clamp(13px,2.4vw,16px);opacity:.95;}
+  .badge-brand{margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.5px;
+    background:rgba(255,255,255,.2);padding:6px 12px;border-radius:999px;text-transform:uppercase;}
+
+  /* ---------- Pestañas ---------- */
+  .tabs{max-width:1100px;margin:0 auto;padding:0 12px;display:flex;gap:6px;flex-wrap:wrap;
+    position:sticky;top:0;background:var(--paper);z-index:20;padding-top:12px;border-bottom:2px solid var(--line);}
+  .tab{
+    border:2px solid var(--line);border-bottom:none;background:var(--soft);color:var(--ink);
+    padding:11px 18px;border-radius:12px 12px 0 0;font-weight:700;font-size:15px;opacity:.7;
+  }
+  .tab.active{background:#fff;opacity:1;border-color:var(--brand);color:var(--brand);}
+  main{max-width:1100px;margin:0 auto;padding:18px 14px 60px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---------- Bloques ---------- */
+  .card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:18px;margin:0 0 18px;}
+  .card h2{font-size:19px;font-weight:800;display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+  .card h2 .n{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;flex:none;}
+  .hint{color:var(--muted);font-size:14px;margin:2px 0 14px;line-height:1.5;}
+  label{display:block;font-weight:700;font-size:14px;margin:0 0 6px;}
+  textarea,input[type=text],input[type=number],select{
+    width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink);
+  }
+  textarea{min-height:190px;resize:vertical;line-height:1.6;}
+  .row{display:flex;gap:14px;flex-wrap:wrap;}
+  .row > div{flex:1 1 160px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;}
+  .chip{border:2px solid var(--line);background:var(--soft);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;}
+  .chip:hover{border-color:var(--brand-2);}
+  .chip.active{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .btn{border:none;border-radius:12px;padding:13px 20px;font-weight:800;font-size:16px;
+    background:var(--brand);color:#fff;box-shadow:0 2px 0 var(--brand);}
+  .btn:hover{background:var(--brand-2);}
+  .btn.gold{background:var(--gold);color:#3a2c00;box-shadow:0 2px 0 var(--gold-d);}
+  .btn.gold:hover{background:#f5c531;}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none;}
+  .btn.ghost:hover{border-color:var(--brand);color:var(--brand);}
+  .btn.lg{padding:18px 26px;font-size:20px;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .count-note{font-size:13px;color:var(--muted);}
+  .warn{color:var(--bad);font-weight:700;}
+
+  /* ---------- Cartones (pantalla) ---------- */
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .bcard{border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:#fff;page-break-inside:avoid;break-inside:avoid;}
+  .bcard-head{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;}
+  .bcard-head .t{font-weight:800;font-size:15px;letter-spacing:.5px;}
+  .bcard-head .id{font-size:12px;font-weight:700;opacity:.9;}
+  .bcard-body{display:grid;gap:5px;padding:8px;background:var(--soft);}
+  .bcell{background:#fff;border:1.5px solid var(--line);border-radius:8px;min-height:64px;
+    display:grid;place-items:center;text-align:center;padding:6px;font-weight:700;font-size:13px;line-height:1.25;position:relative;}
+  .bcell.free{background:#fff7db;border-color:var(--gold);color:var(--gold-d);font-weight:800;}
+  .bcell.marked::after{content:"";position:absolute;inset:6px;border:3px solid var(--bad);border-radius:50%;opacity:.55;}
+  .bcard-foot{font-size:10px;color:var(--muted);text-align:center;padding:4px;border-top:1px dashed var(--line);}
+
+  /* ---------- Dinamizador ---------- */
+  .stage{background:#fff;border:2px solid var(--line);border-radius:16px;padding:22px;text-align:center;margin-bottom:16px;}
+  .now-label{font-size:13px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+  .now-song{font-size:clamp(28px,7vw,52px);font-weight:800;line-height:1.1;margin:10px 0;color:var(--brand);min-height:1.1em;word-break:break-word;}
+  .now-sub{color:var(--muted);font-size:15px;min-height:1.2em;}
+  .caller-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .progressbar{height:10px;background:var(--soft);border-radius:999px;overflow:hidden;margin:14px 0 4px;border:1px solid var(--line);}
+  .progressbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--gold));width:0;transition:width .3s;}
+  .history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .history span{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;}
+  .history span.last{background:var(--gold);border-color:var(--gold-d);color:#3a2c00;}
+
+  .mech{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px;}
+  .mech button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:12px;text-align:left;font-weight:700;}
+  .mech button .ic{font-size:22px;}
+  .mech button .nm{display:block;font-size:15px;margin-top:4px;}
+  .mech button .go{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
+  .mech button.active{border-color:var(--brand);background:#eefaf1;box-shadow:0 0 0 3px rgba(34,197,94,.15);}
+  .mech-detail{background:#f7fbf7;border:2px solid var(--brand-2);border-radius:14px;padding:16px;margin-bottom:16px;}
+  .mech-detail h3{color:var(--brand);font-size:17px;margin-bottom:8px;}
+  .mech-detail ul{margin:8px 0 0;padding-left:20px;}
+  .mech-detail li{margin:4px 0;line-height:1.5;font-size:15px;}
+  .mech-detail .goal{background:#fff7db;border-left:5px solid var(--gold);padding:8px 12px;border-radius:8px;margin-top:12px;font-size:14px;}
+  .mech-detail .goal b{color:var(--gold-d);}
+
+  /* ---------- Clínico ---------- */
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+  .goalcard{border:2px solid var(--line);border-radius:14px;padding:16px;background:#fff;}
+  .goalcard .ic{font-size:26px;}
+  .goalcard h3{font-size:16px;margin:6px 0 6px;color:var(--brand);}
+  .goalcard p{margin:0;font-size:14px;color:#374151;line-height:1.55;}
+
+  .empty{text-align:center;color:var(--muted);padding:40px 10px;font-size:16px;}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:12px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .toast.show{opacity:1;}
+  footer{max-width:1100px;margin:0 auto;padding:10px 14px 40px;color:var(--muted);font-size:13px;text-align:center;}
+
+  /* ---------- Impresión ---------- */
+  .print-only{display:none;}
+  @media print{
+    .top,.tabs,.no-print,footer{display:none !important;}
+    body,html{background:#fff;}
+    main{padding:0;max-width:none;}
+    .view{display:none !important;}
+    #printArea{display:block !important;}
+    .cards-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .bcard{border-color:#000;}
+    .bcell{min-height:70px;}
+    @page{margin:10mm;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo">🎵</div>
+    <div>
+      <h1>Bingo Musical</h1>
+      <p>Un mismo cartón, cinco actividades. Atención · memoria · voz · encuentro.</p>
+    </div>
+    <span class="badge-brand">Logoped-IA</span>
+  </div>
+</header>
+
+<nav class="tabs no-print" id="tabs">
+  <button class="tab active" data-view="config">1 · Canciones</button>
+  <button class="tab" data-view="cartones">2 · Cartones</button>
+  <button class="tab" data-view="juego">3 · Dinamizar</button>
+  <button class="tab" data-view="clinico">4 · Guía clínica</button>
+</nav>
+
+<main>
+
+  <!-- ============ VISTA 1: CONFIG ============ -->
+  <section class="view active" id="view-config">
+    <div class="card">
+      <h2><span class="n">1</span>Elige o pega tu lista de canciones</h2>
+      <p class="hint">Usa una lista preparada o pega la tuya (una canción por línea): coplas, boleros, rock de los 80,
+        canciones del pueblo… La lista define el juego; tú eliges el repertorio que conecta con tu grupo.</p>
+
+      <div class="chips" id="presetChips"></div>
+
+      <label for="songs">Canciones (una por línea)</label>
+      <textarea id="songs" placeholder="Ej.:&#10;Cielito lindo&#10;Bésame mucho&#10;El porompompero&#10;Que nadie sepa mi sufrir&#10;..."></textarea>
+
+      <div class="actions">
+        <span class="count-note" id="songCount">0 canciones</span>
+        <button class="btn ghost" id="btnSort">Ordenar A-Z</button>
+        <button class="btn ghost" id="btnDedup">Quitar repetidas</button>
+        <button class="btn ghost" id="btnClear">Vaciar</button>
+        <button class="btn ghost" id="btnSave">💾 Guardar lista</button>
+      </div>
+      <p class="hint" id="loadNote" style="margin-top:12px"></p>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">2</span>Formato de los cartones</h2>
+      <p class="hint">Para personas mayores recomendamos casillas grandes (cartón 3×3 o 4×4) y texto bien legible.</p>
+      <div class="row">
+        <div>
+          <label for="size">Tamaño del cartón</label>
+          <select id="size">
+            <option value="3">3 × 3 (9 casillas · fácil, senior)</option>
+            <option value="4" selected>4 × 4 (16 casillas · estándar)</option>
+            <option value="5">5 × 5 (25 casillas · avanzado)</option>
+          </select>
+        </div>
+        <div>
+          <label for="qty">Número de cartones</label>
+          <input type="number" id="qty" value="12" min="1" max="200">
+        </div>
+        <div>
+          <label for="free">Casilla libre central</label>
+          <select id="free">
+            <option value="yes">Sí (regalo — recomendado)</option>
+            <option value="no" selected>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:16px">
+        <button class="btn lg" id="btnGenerate">🎴 Generar cartones →</button>
+      </div>
+      <p class="hint warn" id="genWarn" style="display:none"></p>
+    </div>
+  </section>
+
+  <!-- ============ VISTA 2: CARTONES ============ -->
+  <section class="view" id="view-cartones">
+    <div class="card no-print">
+      <h2><span class="n">🎴</span>Tus cartones</h2>
+      <p class="hint">Imprímelos y a jugar. Cada cartón es aleatorio y distinto. Con el mismo material puedes hacer las cinco versiones del juego (pestaña <b>Dinamizar</b>).</p>
+      <div class="actions">
+        <button class="btn gold" id="btnPrint">🖨️ Imprimir / Guardar PDF</button>
+        <button class="btn ghost" id="btnRegen">🔀 Volver a generar</button>
+        <span class="count-note" id="cardsInfo"></span>
+      </div>
+    </div>
+    <div id="cardsHost"></div>
+  </section>
+
+  <!-- ============ VISTA 3: DINAMIZAR ============ -->
+  <section class="view" id="view-juego">
+    <div class="card no-print">
+      <h2><span class="n">3</span>Elige la mecánica</h2>
+      <p class="hint">Primero decides <b>qué quieres conseguir</b> con este grupo; después eliges la mecánica. Nunca al revés.</p>
+      <div class="mech" id="mechButtons"></div>
+      <div class="mech-detail" id="mechDetail"></div>
+    </div>
+
+    <div class="stage no-print">
+      <div class="now-label">Suena ahora</div>
+      <div class="now-song" id="nowSong">—</div>
+      <div class="now-sub" id="nowSub">Pulsa “Siguiente canción” para empezar la partida.</div>
+      <div class="progressbar"><i id="prog"></i></div>
+      <div class="now-sub" id="progText" style="margin-top:2px"></div>
+      <div class="caller-actions">
+        <button class="btn lg" id="btnNext">▶ Siguiente canción</button>
+        <button class="btn ghost" id="btnRepeat">🔁 Repetir</button>
+        <button class="btn ghost" id="btnReset">↺ Reiniciar partida</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2 style="font-size:16px"><span class="n" style="background:var(--gold);color:#3a2c00">✓</span>Canciones ya cantadas</h2>
+      <p class="hint" id="calledEmpty">Aún no ha sonado ninguna. El historial sirve para comprobar los cartones ganadores.</p>
+      <div class="history" id="called"></div>
+    </div>
+  </section>
+
+  <!-- ============ VISTA 4: CLÍNICO ============ -->
+  <section class="view" id="view-clinico">
+    <div class="card">
+      <h2><span class="n">4</span>Por qué funciona en logopedia y con personas mayores</h2>
+      <p class="hint">El bingo musical no es solo un juego: es una herramienta de estimulación cognitiva, comunicativa y emocional.
+        Mismo material, distintos objetivos según la mecánica que pongas encima.</p>
+      <div class="grid2">
+        <div class="goalcard"><div class="ic">🎯</div><h3>Atención sostenida</h3><p>Escuchar, reconocer y buscar el título en el cartón entrena la atención auditiva y la exploración visual mantenida.</p></div>
+        <div class="goalcard"><div class="ic">🧠</div><h3>Memoria y reminiscencia</h3><p>Las canciones de su época evocan recuerdos autobiográficos. La música activa la memoria cuando otras vías fallan (útil en deterioro cognitivo y demencias).</p></div>
+        <div class="goalcard"><div class="ic">🗣️</div><h3>Producción vocal y habla</h3><p>Cantar trabaja respiración, coordinación fonorrespiratoria, prosodia, articulación e intensidad. Muy útil en párkinson (hipofonía) y afasia (canto conservado).</p></div>
+        <div class="goalcard"><div class="ic">💬</div><h3>Evocación y denominación</h3><p>Decir el título en alto es una tarea de acceso léxico y recuperación de palabras: nombrar la canción es denominación pura.</p></div>
+        <div class="goalcard"><div class="ic">🤝</div><h3>Cohesión y turnos</h3><p>Jugar en equipo entrena la pragmática: esperar turno, escuchar al otro, cooperar, iniciar y mantener interacción social.</p></div>
+        <div class="goalcard"><div class="ic">🌱</div><h3>Vínculo intergeneracional</h3><p>Cuando el mayor sabe la canción que el joven no conoce, deja de ser paciente y pasa a ser referente. El vínculo no se pide: se produce.</p></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:17px">Adaptaciones útiles para el dinamizador</h2>
+      <div class="mech-detail" style="border-color:var(--gold)">
+        <ul style="padding-left:20px;margin:0">
+          <li><b>Fragmentos claros:</b> pon 15-30 s de la canción; deja silencio para que el grupo evoque el título antes de decirlo.</li>
+          <li><b>Doble pista:</b> si nadie la reconoce, canta tú el estribillo o di el primer verso.</li>
+          <li><b>Ritmo lento:</b> con personas mayores, deja tiempo de sobra entre canción y canción. No hay prisa.</li>
+          <li><b>Refuerzo positivo:</b> celebra cada acierto y cada intento de cantar, no solo el bingo.</li>
+          <li><b>Cartón 3×3:</b> menos carga visual y motora; ideal para deterioro cognitivo o baja visión.</li>
+          <li><b>Registro:</b> anota quién evoca solo, quién necesita pista y quién se anima a cantar. Es información clínica.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Zona de impresión (se rellena al imprimir) -->
+<div id="printArea" class="print-only"></div>
+
+<footer class="no-print">
+  Bingo Musical · herramienta libre de Logoped-IA. Funciona sin conexión: guárdala y úsala con tu grupo.
+  Diseñada con método: primero el objetivo, después la mecánica.
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ---------------- Datos: listas preparadas ---------------- */
+const PRESETS = {
+  copla: {
+    label:"🌹 Copla y canción española",
+    songs:["Cielito lindo","El porompompero","Que nadie sepa mi sufrir","Y viva España","La bien pagá","Ojos verdes","María de la O","Francisco Alegre","Limosna de amores","Tatuaje","La Zarzamora","Romance de la Reina Mercedes","Suspiros de España","Mi jaca","Campanera","Lisboa antigua","Islas Canarias","Como una ola","Torre de arena","Nana del caballo grande","A tu vera","Callejuela sin salida","Dime que me quieres","En tierra extraña","Rocío"]
+  },
+  bolero: {
+    label:"💃 Boleros y romances",
+    songs:["Bésame mucho","Contigo en la distancia","Sabor a mí","Solamente una vez","Historia de un amor","Perfidia","Reloj","Quizás, quizás, quizás","Piel canela","La barca","Amor, amor, amor","Dos gardenias","El reloj","Espérame en el cielo","Aquellos ojos verdes","Nosotros","Toda una vida","Somos novios","Angelitos negros","Alma, corazón y vida","Usted","Frenesí","Noche de ronda","Vereda tropical","Bésame"]
+  },
+  sesentas:{
+    label:"🎸 Los 60 y 70 en español",
+    songs:["Un rayo de sol","La chica ye-yé","Black is black","El baúl de los recuerdos","Cuéntame","Eres tú","Mi limón, mi limonero","Un beso y una flor","Libre","María Isabel","El cóndor pasa","Mediterráneo","Palabras para Julia","La, la, la","Todo negro","Aleluya","Soy rebelde","Amor de hombre","Achilipú","El garrotín","Get back","Vino griego","Digan lo que digan","Devuélveme a mi chica","Resistiré"]
+  },
+  ochentas:{
+    label:"📻 Éxitos de los 80",
+    songs:["Bailando","Vivir así es morir de amor","La chica de ayer","Enamorado de la moda juvenil","Mujer contra mujer","Cuando pienses en volver","Devuélveme a mi chica","Cuando zarpa el amor","Mediterráneo","No controles","Escuela de calor","Maquillaje","Hombres","Ni tú ni nadie","Cadillac solitario","La estatua del jardín botánico","Cruz de navajas","Insurrección","A quién le importa","Voy a por ti","Susurrando","Ya no puedo más","Perlas ensangrentadas","Chica de ayer","Al calor del amor en un bar"]
+  },
+  villancicos:{
+    label:"🎄 Villancicos populares",
+    songs:["Noche de paz","Los peces en el río","Campana sobre campana","El tamborilero","Ande, ande, ande","Arre borriquito","Dime niño de quién eres","Hacia Belén va una burra","La marimorena","Ya vienen los Reyes","Blanca Navidad","Adeste fideles","El burrito sabanero","Rin rin","Fum, fum, fum","Alegría, alegría","Zúmbale al pandero","Pero mira cómo beben","A la nanita nana","Gatatumba","Vamos pastores vamos","En el portal de Belén","Din don dan","Villancico de las campanas","El niño del tambor"]
+  },
+  regional:{
+    label:"🪗 Populares y de siempre",
+    songs:["Asturias patria querida","Que viva la gente","La morena de mi copla","Eres alta y delgada","El vito","Mi carro","Paquito el chocolatero","Amparito Roca","El gato montés","Los campanilleros","Anda jaleo","Los cuatro muleros","Que bonito","Clavelitos","La tarara","A tí Andalucía","Viva Cartagena","Uno de enero","El abuelo","Que canten los niños","Verde que te quiero verde","Al vaivén de mi carreta","La hija de don Juan Alba","Cántame","Adiós con el corazón"]
+  }
+};
+
+/* ---------------- Estado ---------------- */
+const LS_KEY = "bingoMusicalListas";
+let currentCards = [];   // matriz de cartones generados (cada uno: {id, cells:[{text,free}]})
+let caller = { pool:[], idx:-1, order:[] };
+
+/* ---------------- Utilidades ---------------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+let seed = 123456789 ^ (new Date().getSeconds()*7919); // sin Date.now(): varía por segundo de carga
+function rnd(){ // PRNG determinista simple (xorshift) para no depender de Math.random en cada barajado
+  seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
+  return ((seed >>> 0) / 4294967296);
+}
+function reseed(){ seed = (seed ^ (seed*2654435761)) >>> 0; if(seed===0) seed=987654321; }
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function getSongs(){
+  return $("#songs").value.split("\n").map(s=>s.trim()).filter(Boolean);
+}
+function toast(msg){
+  const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1800);
+}
+function updateCount(){
+  const n=getSongs().length;
+  $("#songCount").textContent = n+" cancion"+(n===1?"":"es");
+}
+
+/* ---------------- Pestañas ---------------- */
+$$(".tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    $$(".tab").forEach(t=>t.classList.remove("active"));
+    $$(".view").forEach(v=>v.classList.remove("active"));
+    tab.classList.add("active");
+    $("#view-"+tab.dataset.view).classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+function goTab(name){ $$(".tab").forEach(t=>{ if(t.dataset.view===name) t.click(); }); }
+
+/* ---------------- Presets ---------------- */
+const chipsHost = $("#presetChips");
+Object.entries(PRESETS).forEach(([key,p])=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.textContent=p.label; b.dataset.key=key;
+  b.addEventListener("click",()=>{
+    $("#songs").value = p.songs.join("\n");
+    $$("#presetChips .chip").forEach(c=>c.classList.remove("active"));
+    b.classList.add("active");
+    updateCount(); toast(p.songs.length+" canciones cargadas");
+  });
+  chipsHost.appendChild(b);
+});
+
+/* ---------------- Guardar / cargar listas ---------------- */
+function loadSaved(){
+  let data={};
+  try{ data=JSON.parse(localStorage.getItem(LS_KEY)||"{}"); }catch(e){ data={}; }
+  const keys=Object.keys(data);
+  const note=$("#loadNote");
+  if(!keys.length){ note.textContent="Aún no has guardado ninguna lista propia."; return; }
+  note.innerHTML="Listas guardadas: ";
+  keys.forEach(k=>{
+    const a=document.createElement("button");
+    a.className="chip"; a.style.marginRight="6px";
+    a.textContent="📂 "+k;
+    a.addEventListener("click",()=>{ $("#songs").value=data[k].join("\n"); updateCount(); toast('Lista "'+k+'" cargada'); });
+    const del=document.createElement("button");
+    del.className="chip"; del.textContent="✕"; del.title="Borrar";
+    del.style.marginRight="12px"; del.style.padding="8px 10px";
+    del.addEventListener("click",()=>{ delete data[k]; localStorage.setItem(LS_KEY,JSON.stringify(data)); loadSaved(); });
+    note.appendChild(a); note.appendChild(del);
+  });
+}
+$("#btnSave").addEventListener("click",()=>{
+  const songs=getSongs();
+  if(songs.length<1){ toast("La lista está vacía"); return; }
+  const name=prompt("Nombre para esta lista:","Mi lista");
+  if(!name) return;
+  let data={};
+  try{ data=JSON.parse(localStorage.getItem(LS_KEY)||"{}"); }catch(e){ data={}; }
+  data[name.trim()]=songs;
+  localStorage.setItem(LS_KEY,JSON.stringify(data));
+  loadSaved(); toast('Guardada "'+name.trim()+'"');
+});
+
+/* ---------------- Botones lista ---------------- */
+$("#songs").addEventListener("input",updateCount);
+$("#btnSort").addEventListener("click",()=>{ $("#songs").value=getSongs().sort((a,b)=>a.localeCompare(b,"es")).join("\n"); updateCount(); });
+$("#btnDedup").addEventListener("click",()=>{
+  const seen=new Set(),out=[];
+  getSongs().forEach(s=>{ const k=s.toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(s);} });
+  $("#songs").value=out.join("\n"); updateCount(); toast("Repetidas eliminadas");
+});
+$("#btnClear").addEventListener("click",()=>{ if(confirm("¿Vaciar la lista de canciones?")){ $("#songs").value=""; updateCount(); } });
+
+/* ---------------- Generar cartones ---------------- */
+function generate(){
+  const songs=getSongs();
+  const size=parseInt($("#size").value,10);
+  const qty=Math.max(1,Math.min(200,parseInt($("#qty").value,10)||1));
+  const useFree=$("#free").value==="yes";
+  const cells=size*size;
+  const needed=useFree ? cells-1 : cells;
+  const warn=$("#genWarn");
+
+  if(songs.length<needed){
+    warn.style.display="block";
+    warn.textContent="⚠ Necesitas al menos "+needed+" canciones para un cartón "+size+"×"+size+
+      (useFree?" con casilla libre":"")+". Tienes "+songs.length+". Añade más o reduce el tamaño.";
+    return false;
+  }
+  warn.style.display="none";
+  reseed();
+  currentCards=[];
+  const centerIndex = useFree ? Math.floor(cells/2) : -1;
+  for(let c=0;c<qty;c++){
+    const pick=shuffle(songs).slice(0,needed);
+    const cardCells=[]; let p=0;
+    for(let i=0;i<cells;i++){
+      if(i===centerIndex){ cardCells.push({text:"★ LIBRE",free:true}); }
+      else { cardCells.push({text:pick[p++],free:false}); }
+    }
+    currentCards.push({id:c+1,size,cells:cardCells});
+  }
+  renderCards();
+  return true;
+}
+
+function renderCards(){
+  const host=$("#cardsHost");
+  if(!currentCards.length){ host.innerHTML='<p class="empty">Todavía no hay cartones. Ve a la pestaña «Canciones» y pulsa «Generar cartones».</p>'; return; }
+  const size=currentCards[0].size;
+  const grid=document.createElement("div"); grid.className="cards-grid";
+  currentCards.forEach(card=>grid.appendChild(buildCardEl(card)));
+  host.innerHTML=""; host.appendChild(grid);
+  $("#cardsInfo").textContent=currentCards.length+" cartones · "+size+"×"+size;
+}
+function buildCardEl(card){
+  const el=document.createElement("div"); el.className="bcard";
+  el.innerHTML=
+    '<div class="bcard-head"><span class="t">🎵 BINGO MUSICAL</span><span class="id">Cartón '+String(card.id).padStart(3,"0")+'</span></div>';
+  const body=document.createElement("div"); body.className="bcard-body";
+  body.style.gridTemplateColumns="repeat("+card.size+",1fr)";
+  card.cells.forEach(cell=>{
+    const c=document.createElement("div");
+    c.className="bcell"+(cell.free?" free":"");
+    c.textContent=cell.text;
+    body.appendChild(c);
+  });
+  el.appendChild(body);
+  const foot=document.createElement("div"); foot.className="bcard-foot";
+  foot.textContent="Logoped-IA · Bingo Musical";
+  el.appendChild(foot);
+  return el;
+}
+
+$("#btnGenerate").addEventListener("click",()=>{ if(generate()){ goTab("cartones"); toast(currentCards.length+" cartones generados"); } });
+$("#btnRegen").addEventListener("click",()=>{ if(generate()) toast("Cartones regenerados"); });
+
+/* ---------------- Impresión ---------------- */
+$("#btnPrint").addEventListener("click",()=>{
+  if(!currentCards.length){ toast("Genera cartones primero"); return; }
+  const area=$("#printArea");
+  const grid=document.createElement("div"); grid.className="cards-grid";
+  currentCards.forEach(card=>grid.appendChild(buildCardEl(card)));
+  area.innerHTML=""; area.appendChild(grid);
+  window.print();
+});
+
+/* ---------------- Dinamizador: mecánicas ---------------- */
+const MECHANICS=[
+  { key:"clasico", ic:"🎴", nm:"Clásico", go:"Memoria y atención",
+    title:"Bingo clásico",
+    steps:["Suena la canción. Quien la tenga en su cartón, la tacha.","Deja unos segundos de silencio para que evoquen el título antes de confirmarlo.","Gana quien complete línea y, después, cartón (bingo).","Comprueba el cartón ganador con el historial de «canciones cantadas»."],
+    goal:"Atención auditiva sostenida, memoria de reconocimiento y exploración visual del cartón." },
+  { key:"equipos", ic:"👥", nm:"Por equipos", go:"Cohesión y voz",
+    title:"Versión por equipos",
+    steps:["Divide al grupo en equipos.","Cuando suena la canción, gana punto extra el equipo que primero la cante, la cante más fuerte o más coordinado.","El dinamizador decide el criterio de cada ronda (rapidez, intensidad, coordinación).","La escucha se convierte en acción colectiva y producción vocal."],
+    goal:"Cohesión grupal, producción vocal en grupo (intensidad y prosodia) y pragmática de turnos." },
+  { key:"pulsador", ic:"🔔", nm:"Pulsador", go:"Activación y decisión",
+    title:"Versión pulsador",
+    steps:["Coloca un pulsador (o campana, o timbre) a cierta distancia.","El equipo que se levante, llegue al pulsador y diga el título, canta y puntúa.","Añade velocidad, decisión y un punto de teatro.","Adapta la distancia a la movilidad del grupo — puede ser levantar la mano."],
+    goal:"Activación física y cognitiva, velocidad de acceso léxico, iniciativa y toma de decisiones." },
+  { key:"intergen", ic:"🌱", nm:"Intergeneracional", go:"Encuentro y vínculo",
+    title:"Versión intergeneracional",
+    steps:["Suenan canciones de los mayores que los jóvenes no conocen.","Los mayores les soplan el título: de repente son imprescindibles en el juego.","O se alterna: cada canción es de una generación. Los mayores señalan a un joven para que cante el estribillo, y los jóvenes a un mayor.","El vínculo no se pide: se produce."],
+    goal:"Encuentro entre generaciones, autoestima y rol del mayor como referente, comunicación funcional." },
+  { key:"retos", ic:"⭐", nm:"Con retos", go:"Activación y producción",
+    title:"Versión con retos en el cartón",
+    steps:["Marca algunas casillas con puntos extra.","Punto extra para quien identifique antes la canción.","Punto extra para quien baile o se mueva con ella.","Punto extra para quien se atreva a cantarla en alto."],
+    goal:"Producción vocal voluntaria, desinhibición, movimiento y motivación." }
+];
+
+const mechHost=$("#mechButtons");
+MECHANICS.forEach((m,i)=>{
+  const b=document.createElement("button");
+  b.dataset.key=m.key;
+  b.innerHTML='<span class="ic">'+m.ic+'</span><span class="nm">'+m.nm+'</span><span class="go">'+m.go+'</span>';
+  b.addEventListener("click",()=>selectMech(m.key));
+  mechHost.appendChild(b);
+});
+function selectMech(key){
+  const m=MECHANICS.find(x=>x.key===key);
+  $$("#mechButtons button").forEach(b=>b.classList.toggle("active",b.dataset.key===key));
+  $("#mechDetail").innerHTML=
+    '<h3>'+m.ic+' '+m.title+'</h3>'+
+    '<ul>'+m.steps.map(s=>'<li>'+s+'</li>').join("")+'</ul>'+
+    '<div class="goal"><b>Objetivo clínico:</b> '+m.goal+'</div>';
+}
+selectMech("clasico");
+
+/* ---------------- Dinamizador: locutor ---------------- */
+function startCaller(){
+  const songs=getSongs();
+  if(songs.length<2){ toast("Añade canciones en la pestaña 1"); return false; }
+  reseed();
+  caller.order=shuffle(songs);
+  caller.idx=-1;
+  renderCalled();
+  updateStage();
+  return true;
+}
+function updateStage(){
+  const total=caller.order.length;
+  const done=caller.idx+1;
+  if(caller.idx<0){
+    $("#nowSong").textContent="—";
+    $("#nowSub").textContent=total?("Lista preparada: "+total+" canciones barajadas. Pulsa «Siguiente»."):"Carga una lista de canciones primero.";
+  } else {
+    $("#nowSong").textContent=caller.order[caller.idx];
+    $("#nowSub").textContent="Canción "+done+" de "+total;
+  }
+  const pct=total?Math.round(done/total*100):0;
+  $("#prog").style.width=pct+"%";
+  $("#progText").textContent=total?(done+" / "+total+" sonadas"):"";
+  $("#btnNext").disabled = total>0 && caller.idx>=total-1;
+  if(total>0 && caller.idx>=total-1){ $("#nowSub").textContent="¡Se acabaron las canciones! ("+total+"/"+total+")"; }
+}
+function renderCalled(){
+  const host=$("#called");
+  const list=caller.idx>=0 ? caller.order.slice(0,caller.idx+1) : [];
+  $("#calledEmpty").style.display = list.length ? "none":"block";
+  host.innerHTML="";
+  list.slice().reverse().forEach((s,i)=>{
+    const sp=document.createElement("span");
+    if(i===0) sp.className="last";
+    sp.textContent=s;
+    host.appendChild(sp);
+  });
+}
+$("#btnNext").addEventListener("click",()=>{
+  if(!caller.order.length){ if(!startCaller()) return; }
+  if(caller.idx<caller.order.length-1){ caller.idx++; updateStage(); renderCalled(); }
+});
+$("#btnRepeat").addEventListener("click",()=>{
+  if(caller.idx>=0){ const s=caller.order[caller.idx]; toast("🔁 "+s); }
+});
+$("#btnReset").addEventListener("click",()=>{
+  if(confirm("¿Reiniciar la partida y volver a barajar?")){ startCaller(); toast("Partida reiniciada"); }
+});
+
+/* ---------------- Inicio ---------------- */
+(function init(){
+  // Carga por defecto la copla para que la herramienta sea usable al instante
+  $("#songs").value = PRESETS.copla.songs.join("\n");
+  $$("#presetChips .chip")[0].classList.add("active");
+  updateCount();
+  loadSaved();
+  renderCards();
+})();
+</script>
+</body>
+</html>
