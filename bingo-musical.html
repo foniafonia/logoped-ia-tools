@@ -103,6 +103,15 @@
   .now-song{font-size:clamp(28px,7vw,52px);font-weight:800;line-height:1.1;margin:10px 0;color:var(--brand);min-height:1.1em;word-break:break-word;}
   .now-sub{color:var(--muted);font-size:15px;min-height:1.2em;}
   .caller-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .toggles{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;}
+  .switch{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;background:var(--soft);
+    border:2px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;}
+  .switch input{width:18px;height:18px;accent-color:var(--brand);}
+  .player-box{margin:14px auto 4px;max-width:640px;}
+  #playerHost{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:2px solid var(--line);}
+  #playerHost iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  #playerHost audio{width:100%;height:100%;}
+  .player-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
   .progressbar{height:10px;background:var(--soft);border-radius:999px;overflow:hidden;margin:14px 0 4px;border:1px solid var(--line);}
   .progressbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--gold));width:0;transition:width .3s;}
   .history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
@@ -178,11 +187,16 @@
       <h2><span class="n">1</span>Elige o pega tu lista de canciones</h2>
       <p class="hint">Usa una lista preparada o pega la tuya (una canción por línea): coplas, boleros, rock de los 80,
         canciones del pueblo… La lista define el juego; tú eliges el repertorio que conecta con tu grupo.</p>
+      <p class="hint" style="background:#f7fbf7;border-left:5px solid var(--brand-2);padding:10px 12px;border-radius:8px">
+        🎧 <b>¿Quieres que la música suene sola?</b> Añade un enlace tras una barra <code>|</code>:<br>
+        <code>Bésame mucho | https://www.youtube.com/watch?v=...</code><br>
+        Vale YouTube o un audio <code>.mp3</code>. Sin enlace, el dinamizador ofrece un botón para buscarla en YouTube.
+        Prueba la lista <b>«Demo con música»</b>: ya trae los enlaces puestos.</p>
 
       <div class="chips" id="presetChips"></div>
 
-      <label for="songs">Canciones (una por línea)</label>
-      <textarea id="songs" placeholder="Ej.:&#10;Cielito lindo&#10;Bésame mucho&#10;El porompompero&#10;Que nadie sepa mi sufrir&#10;..."></textarea>
+      <label for="songs">Canciones (una por línea · opcional «Título | enlace»)</label>
+      <textarea id="songs" placeholder="Ej.:&#10;Cielito lindo | https://www.youtube.com/watch?v=U5RC3BJ2PMo&#10;Bésame mucho&#10;El porompompero&#10;..."></textarea>
 
       <div class="actions">
         <span class="count-note" id="songCount">0 canciones</span>
@@ -249,9 +263,24 @@
     </div>
 
     <div class="stage no-print">
+      <div class="toggles no-print">
+        <label class="switch"><input type="checkbox" id="autoMusic" checked> 🔊 Sonar sola al pasar</label>
+        <label class="switch"><input type="checkbox" id="hideTitle"> 🙈 Ocultar título (que lo adivinen)</label>
+      </div>
       <div class="now-label">Suena ahora</div>
       <div class="now-song" id="nowSong">—</div>
       <div class="now-sub" id="nowSub">Pulsa “Siguiente canción” para empezar la partida.</div>
+
+      <div id="playerBox" class="player-box" style="display:none">
+        <div id="playerHost"></div>
+        <div class="player-actions">
+          <button class="btn ghost" id="btnOpenYt">↗ Abrir en YouTube</button>
+          <button class="btn ghost" id="btnStop">⏹ Parar música</button>
+          <button class="btn gold" id="btnReveal" style="display:none">👁 Mostrar título</button>
+        </div>
+        <p class="hint" style="margin:8px 0 0">Si el vídeo no suena aquí (algunos no permiten incrustarse), pulsa <b>«Abrir en YouTube»</b>.</p>
+      </div>
+
       <div class="progressbar"><i id="prog"></i></div>
       <div class="now-sub" id="progText" style="margin-top:2px"></div>
       <div class="caller-actions">
@@ -315,7 +344,25 @@
 "use strict";
 
 /* ---------------- Datos: listas preparadas ---------------- */
+/* Formato de cada línea: "Título" o "Título | enlace" (YouTube o audio .mp3). */
 const PRESETS = {
+  demo: {
+    label:"🎵 Demo con música (suena sola)",
+    songs:[
+      "Cielito lindo | https://www.youtube.com/watch?v=U5RC3BJ2PMo",
+      "Bésame mucho | https://www.youtube.com/watch?v=5NCG0zciiYQ",
+      "El porompompero | https://www.youtube.com/watch?v=bIhFm-qzoTo",
+      "Historia de un amor | https://www.youtube.com/watch?v=qJiYlH_tdhs",
+      "Y viva España | https://www.youtube.com/watch?v=ubuIDiVVIYs",
+      "Sabor a mí | https://www.youtube.com/watch?v=Qg_L54DW69U",
+      "Reloj | https://www.youtube.com/watch?v=DUxWgcXxE-k",
+      "Quizás, quizás, quizás | https://www.youtube.com/watch?v=rDGgUGBD-90",
+      "Volver | https://www.youtube.com/watch?v=7txRnZ45Eyc",
+      "Contigo en la distancia | https://www.youtube.com/watch?v=51RP36Joeh4",
+      "Dos gardenias | https://www.youtube.com/watch?v=p-Pb-eN5NSc",
+      "Que nadie sepa mi sufrir | https://www.youtube.com/watch?v=Ialr2WStddo"
+    ]
+  },
   copla: {
     label:"🌹 Copla y canción española",
     songs:["Cielito lindo","El porompompero","Que nadie sepa mi sufrir","Y viva España","La bien pagá","Ojos verdes","María de la O","Francisco Alegre","Limosna de amores","Tatuaje","La Zarzamora","Romance de la Reina Mercedes","Suspiros de España","Mi jaca","Campanera","Lisboa antigua","Islas Canarias","Como una ola","Torre de arena","Nana del caballo grande","A tu vera","Callejuela sin salida","Dime que me quieres","En tierra extraña","Rocío"]
@@ -345,7 +392,7 @@ const PRESETS = {
 /* ---------------- Estado ---------------- */
 const LS_KEY = "bingoMusicalListas";
 let currentCards = [];   // matriz de cartones generados (cada uno: {id, cells:[{text,free}]})
-let caller = { pool:[], idx:-1, order:[] };
+let caller = { pool:[], idx:-1, order:[], revealed:false };
 
 /* ---------------- Utilidades ---------------- */
 const $ = s => document.querySelector(s);
@@ -361,9 +408,28 @@ function shuffle(arr){
   for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
-function getSongs(){
-  return $("#songs").value.split("\n").map(s=>s.trim()).filter(Boolean);
+/* Cada línea: "Título" o "Título | enlace". */
+function parseEntry(line){
+  const i = line.indexOf("|");
+  if(i === -1) return {title:line.trim(), url:""};
+  return {title:line.slice(0,i).trim(), url:line.slice(i+1).trim()};
 }
+function serializeEntry(e){ return e.url ? (e.title+" | "+e.url) : e.title; }
+function getEntries(){
+  return $("#songs").value.split("\n").map(l=>l.trim()).filter(Boolean).map(parseEntry).filter(e=>e.title);
+}
+function getSongs(){ return getEntries().map(e=>e.title); }
+function ytId(url){
+  if(!url) return null;
+  let m;
+  if((m=url.match(/[?&]v=([\w-]{11})/))) return m[1];
+  if((m=url.match(/youtu\.be\/([\w-]{11})/))) return m[1];
+  if((m=url.match(/\/embed\/([\w-]{11})/))) return m[1];
+  if((m=url.match(/\/shorts\/([\w-]{11})/))) return m[1];
+  return null;
+}
+function isAudioUrl(url){ return /\.(mp3|ogg|m4a|wav|aac)(\?.*)?$/i.test(url||""); }
+function ytSearchUrl(title){ return "https://www.youtube.com/results?search_query="+encodeURIComponent(title); }
 function toast(msg){
   const t=$("#toast"); t.textContent=msg; t.classList.add("show");
   clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1800);
@@ -433,10 +499,13 @@ $("#btnSave").addEventListener("click",()=>{
 
 /* ---------------- Botones lista ---------------- */
 $("#songs").addEventListener("input",updateCount);
-$("#btnSort").addEventListener("click",()=>{ $("#songs").value=getSongs().sort((a,b)=>a.localeCompare(b,"es")).join("\n"); updateCount(); });
+$("#btnSort").addEventListener("click",()=>{
+  const out=getEntries().sort((a,b)=>a.title.localeCompare(b.title,"es")).map(serializeEntry);
+  $("#songs").value=out.join("\n"); updateCount();
+});
 $("#btnDedup").addEventListener("click",()=>{
   const seen=new Set(),out=[];
-  getSongs().forEach(s=>{ const k=s.toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(s);} });
+  getEntries().forEach(e=>{ const k=e.title.toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(serializeEntry(e)); } });
   $("#songs").value=out.join("\n"); updateCount(); toast("Repetidas eliminadas");
 });
 $("#btnClear").addEventListener("click",()=>{ if(confirm("¿Vaciar la lista de canciones?")){ $("#songs").value=""; updateCount(); } });
@@ -559,58 +628,112 @@ selectMech("clasico");
 
 /* ---------------- Dinamizador: locutor ---------------- */
 function startCaller(){
-  const songs=getSongs();
-  if(songs.length<2){ toast("Añade canciones en la pestaña 1"); return false; }
+  const entries=getEntries();
+  if(entries.length<2){ toast("Añade canciones en la pestaña 1"); return false; }
   reseed();
-  caller.order=shuffle(songs);
+  caller.order=shuffle(entries);
   caller.idx=-1;
+  caller.revealed=false;
+  stopMusic();
   renderCalled();
   updateStage();
   return true;
 }
+function currentEntry(){ return caller.idx>=0 ? caller.order[caller.idx] : null; }
+
+function stopMusic(){
+  $("#playerHost").innerHTML="";
+  $("#playerBox").style.display="none";
+}
+function playCurrent(){
+  const e=currentEntry();
+  const box=$("#playerBox"), host=$("#playerHost");
+  if(!e){ stopMusic(); return; }
+  const id=ytId(e.url);
+  const auto=$("#autoMusic").checked;
+  const openBtn=$("#btnOpenYt");
+  openBtn.dataset.url = id ? ("https://www.youtube.com/watch?v="+id) : (e.url || ytSearchUrl(e.title));
+
+  if(!auto){ // modo manual: no incrusta, deja el botón para abrir
+    host.innerHTML="";
+    box.style.display="block";
+    return;
+  }
+  box.style.display="block";
+  if(id){
+    host.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen '+
+      'src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1"></iframe>';
+  } else if(isAudioUrl(e.url)){
+    host.innerHTML='<audio autoplay controls src="'+e.url.replace(/"/g,"%22")+'"></audio>';
+  } else {
+    // sin enlace válido: abre búsqueda en YouTube (gesto de usuario desde «Siguiente»)
+    host.innerHTML='<div style="color:#fff;display:grid;place-items:center;height:100%;padding:16px;text-align:center;font-weight:700">'+
+      '🔎 Sin enlace guardado.<br>Pulsa «Abrir en YouTube» para buscarla.</div>';
+    try{ window.open(ytSearchUrl(e.title),"_blank","noopener"); }catch(err){}
+  }
+}
 function updateStage(){
   const total=caller.order.length;
   const done=caller.idx+1;
-  if(caller.idx<0){
+  const e=currentEntry();
+  const hide=$("#hideTitle").checked;
+  $("#btnReveal").style.display = (e && hide && !caller.revealed) ? "inline-block" : "none";
+  if(!e){
     $("#nowSong").textContent="—";
     $("#nowSub").textContent=total?("Lista preparada: "+total+" canciones barajadas. Pulsa «Siguiente»."):"Carga una lista de canciones primero.";
+  } else if(hide && !caller.revealed){
+    $("#nowSong").textContent="🎵 ¿Qué canción suena?";
+    $("#nowSub").textContent="Canción "+done+" de "+total+" · deja que la evoquen y pulsa «Mostrar título».";
   } else {
-    $("#nowSong").textContent=caller.order[caller.idx];
+    $("#nowSong").textContent=e.title;
     $("#nowSub").textContent="Canción "+done+" de "+total;
   }
   const pct=total?Math.round(done/total*100):0;
   $("#prog").style.width=pct+"%";
   $("#progText").textContent=total?(done+" / "+total+" sonadas"):"";
   $("#btnNext").disabled = total>0 && caller.idx>=total-1;
-  if(total>0 && caller.idx>=total-1){ $("#nowSub").textContent="¡Se acabaron las canciones! ("+total+"/"+total+")"; }
+  if(total>0 && caller.idx>=total-1 && e){ $("#nowSub").textContent="¡Última canción! ("+total+"/"+total+")"; }
 }
 function renderCalled(){
   const host=$("#called");
   const list=caller.idx>=0 ? caller.order.slice(0,caller.idx+1) : [];
   $("#calledEmpty").style.display = list.length ? "none":"block";
   host.innerHTML="";
-  list.slice().reverse().forEach((s,i)=>{
+  list.slice().reverse().forEach((e,i)=>{
     const sp=document.createElement("span");
     if(i===0) sp.className="last";
-    sp.textContent=s;
+    sp.textContent=e.title;
     host.appendChild(sp);
   });
 }
 $("#btnNext").addEventListener("click",()=>{
   if(!caller.order.length){ if(!startCaller()) return; }
-  if(caller.idx<caller.order.length-1){ caller.idx++; updateStage(); renderCalled(); }
+  if(caller.idx<caller.order.length-1){
+    caller.idx++; caller.revealed=false;
+    updateStage(); renderCalled(); playCurrent();
+  }
 });
 $("#btnRepeat").addEventListener("click",()=>{
-  if(caller.idx>=0){ const s=caller.order[caller.idx]; toast("🔁 "+s); }
+  if(caller.idx<0){ toast("Aún no ha sonado ninguna"); return; }
+  playCurrent();
+  toast("🔁 "+currentEntry().title);
 });
+$("#btnReveal").addEventListener("click",()=>{ caller.revealed=true; updateStage(); });
+$("#btnStop").addEventListener("click",stopMusic);
+$("#btnOpenYt").addEventListener("click",()=>{
+  const e=currentEntry(); if(!e){ return; }
+  const url=$("#btnOpenYt").dataset.url || ytSearchUrl(e.title);
+  window.open(url,"_blank","noopener");
+});
+$("#hideTitle").addEventListener("change",()=>{ caller.revealed=false; updateStage(); });
 $("#btnReset").addEventListener("click",()=>{
   if(confirm("¿Reiniciar la partida y volver a barajar?")){ startCaller(); toast("Partida reiniciada"); }
 });
 
 /* ---------------- Inicio ---------------- */
 (function init(){
-  // Carga por defecto la copla para que la herramienta sea usable al instante
-  $("#songs").value = PRESETS.copla.songs.join("\n");
+  // Carga por defecto la lista Demo (con música) para que suene al instante
+  $("#songs").value = PRESETS.demo.songs.join("\n");
   $$("#presetChips .chip")[0].classList.add("active");
   updateCount();
   loadSaved();
