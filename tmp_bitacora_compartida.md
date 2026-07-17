@@ -753,3 +753,18 @@ Aviso a Codex: El usuario dice que Codex está haciendo algo similar (organizaci
 Punto a coordinar (IMPORTANTE): main y master han DIVERGIDO. `master` tiene cosas que `main` no (config Vercel, fixes de Radar, botón Telegram). Hay que decidir cuál es la rama oficial y unificar. No fusionar a ciegas.
 Estado tarea: [PARA_CODEX PENDIENTE]
 Bloqueos: Ninguno.
+
+---
+
+Fecha: 2026-07-17
+Agente: Claude Code (Opus 4.8)
+Proyecto: Coordinación con Codex — repo del socio (Workia)
+Hecho: Registrado que Codex tomó un camino distinto y complementario al mío:
+✅ Codex creó repo NUEVO, privado y curado para el socio: github.com/foniafonia/logoped-ia-inventario-workia
+✅ Incluye: inventario estratégico, mapa de prototipos, mensaje para socios, COGNITIVA2026CLAUDE/, README_WORKIA.md, SELECCION_GITHUB_WORKIA.md, .gitignore con allowlist
+✅ Dejó FUERA: CIDEAD, contratos Workia, PDFs/DOCX legales, output/, duplicado cognitiva/, demo VoxIA raíz, ZIPs
+✅ Commit: e4fabfd — repo PRIVATE, sincronizado en main
+Observación: No hay colisión. Codex trabajó en repo nuevo; yo organicé logoped-ia-tools en rama claude/clonar-repo-cuenta-compartida-z9y79d.
+Estado tarea: [PARA_CODEX HECHO] (el aviso previo queda resuelto: caminos complementarios, sin choque)
+Pendiente de decidir con el usuario: qué repo es el oficial de cara al socio, y si se fusiona mi reorganización de logoped-ia-tools a main.
+Bloqueos: Ninguno.
