@@ -1,0 +1,33 @@
+# =====================================================================
+#  QUÉ NO SE SUBE A GITHUB (red de seguridad)
+#  Todo lo que coincida con estas reglas se queda SOLO en local y
+#  nunca llega al repositorio compartido. Sirve para proteger cosas
+#  personales o privadas que NO son del proyecto.
+# =====================================================================
+
+# --- Cosas personales / privadas (NO del proyecto) ---
+# Pon aquí dentro cualquier archivo tuyo personal y no se subirá.
+personal/
+privado/
+PERSONAL_*
+PRIVADO_*
+*.personal
+*.privado
+
+# --- Secretos y credenciales (NUNCA subir) ---
+.env
+.env.*
+*.key
+*.pem
+secrets*
+credenciales*
+config.local.*
+
+# --- Archivos temporales y de sistema ---
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+.cache/
