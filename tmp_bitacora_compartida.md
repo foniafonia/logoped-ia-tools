@@ -736,3 +736,20 @@ Hecho:
 Estado: PROTOTIPO APROBADO — listo para publicar en redes y que Codex lo integre en la suite
 Siguiente paso para Codex: Incluir "Misión Perfiles" en el menú/suite de herramientas clínicas. Enlace directo: https://foniafonia.github.io/maleta-resuelve-casos/mision-perfiles-nuevo.html
 Bloqueos: Ninguno.
+
+---
+
+Fecha: 2026-07-17
+Agente: Claude Code (Opus 4.8)
+Proyecto: Repo compartido — organización y colaboración con socio tecnológico
+Hecho:
+✅ Rama: claude/clonar-repo-cuenta-compartida-z9y79d (NO fusionada aún a main)
+✅ COMPARTIR_REPO.md: guía para compartir el repo (colaborador vs organización) y trabajar en la nube
+✅ .gitignore: red de seguridad — ignora personal/, privado/, secretos. Solo se sube trabajo del proyecto, no cosas personales
+✅ README.md raíz: MAPA del repo (dónde va cada cosa)
+✅ Carpetas nuevas: colmenia/ y newsletter/ (con README explicativo cada una) para recoger material disperso de esos frentes
+Estado: LISTO en la rama, pendiente de decidir fusión a main con el usuario.
+Aviso a Codex: El usuario dice que Codex está haciendo algo similar (organización/compartir). ANTES de reorganizar carpetas o tocar README/.gitignore, leer esta entrada para no duplicar ni chocar. Si Codex ya montó otra estructura, coordinar antes de fusionar nada a main.
+Punto a coordinar (IMPORTANTE): main y master han DIVERGIDO. `master` tiene cosas que `main` no (config Vercel, fixes de Radar, botón Telegram). Hay que decidir cuál es la rama oficial y unificar. No fusionar a ciegas.
+Estado tarea: [PARA_CODEX PENDIENTE]
+Bloqueos: Ninguno.
