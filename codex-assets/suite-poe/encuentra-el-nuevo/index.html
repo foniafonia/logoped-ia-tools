@@ -1,0 +1,1831 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuentra el Nuevo - Terapia Fonológica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        .word-card {
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .word-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .word-card.correct {
+            animation: correctBounce 0.6s ease;
+            background: linear-gradient(135deg, #10B981, #065F46);
+        }
+        
+        .word-card.wrong {
+            animation: wrongShake 0.5s ease;
+            background: linear-gradient(135deg, #EF4444, #991B1B);
+        }
+        
+        .phoneme-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .phoneme-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .phoneme-card.selected {
+            background: linear-gradient(135deg, #D97706, #92400e);
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .position-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .position-card:hover {
+            background: rgba(217, 119, 6, 0.1);
+        }
+        
+        .position-card.selected {
+            background: linear-gradient(135deg, #D97706, #92400e);
+            color: white;
+        }
+        
+        @keyframes correctBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #FEF3C7 0%, #F59E0B 50%, #F97316 100%);
+            position: relative;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(255, 193, 7, 0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75px 75px, rgba(255, 193, 7, 0.1) 2px, transparent 2px);
+            background-size: 100px 100px;
+            background-position: 0 0, 50px 50px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .card-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        #gameBoard {
+            min-height: 600px;
+            height: 70vh;
+            max-height: 800px;
+            position: relative;
+        }
+        
+        .word-card {
+            position: absolute;
+            width: 100px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+        
+        .word-text {
+            font-size: 10px;
+            line-height: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        body.dark {
+            background: #181818;
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #92400e 0%, #78350f 50%, #451a03 100%);
+        }
+        
+        .dark .gradient-bg::before {
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(251, 191, 36, 0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75px 75px, rgba(251, 191, 36, 0.1) 2px, transparent 2px);
+        }
+        
+        @media (max-width: 768px) {
+            .word-card {
+                width: 85px;
+                height: 75px;
+                padding: 2px;
+            }
+            .card-emoji {
+                font-size: 2rem;
+                margin-bottom: 0.15rem;
+            }
+            .word-text {
+                font-size: 8px;
+            }
+            #gameBoard {
+                min-height: 500px;
+                height: 65vh;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .word-card {
+                width: 70px;
+                height: 65px;
+            }
+            .card-emoji {
+                font-size: 1.6rem;
+            }
+            .word-text {
+                font-size: 7px;
+            }
+        }
+        
+        /* Intro Panel Animations */
+        @keyframes bounce-gentle {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s ease-in-out infinite;
+        }
+        
+        .animate-fade-in-delay-1 {
+            animation: fade-in 1s ease-out 0.3s both;
+        }
+        
+        .animate-fade-in-delay-2 {
+            animation: fade-in 1s ease-out 0.6s both;
+        }
+        
+        .animate-fade-in-delay-5 {
+            animation: fade-in 1s ease-out 1.5s both;
+        }
+        
+        .animate-slide-up-delay-1 {
+            animation: slide-up 0.8s ease-out 0.8s both;
+        }
+        
+        .animate-slide-up-delay-2 {
+            animation: slide-up 0.8s ease-out 1.0s both;
+        }
+        
+        .animate-slide-up-delay-3 {
+            animation: slide-up 0.8s ease-out 1.2s both;
+        }
+        
+        .animate-slide-up-delay-4 {
+            animation: slide-up 0.8s ease-out 1.4s both;
+        }
+        
+        .intro-header {
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(251, 191, 36, 0.1) 70%);
+            padding: 2rem;
+            border-radius: 2rem;
+            border: 2px solid rgba(251, 191, 36, 0.2);
+        }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
+<body class="min-h-screen gradient-bg">
+    
+    <!-- Introduction Panel -->
+    <div id="introPanel" class="container mx-auto px-4 py-6">
+        <!-- Portada Principal con Imagen -->
+        <div class="text-center mb-12">
+            <div class="max-w-2xl mx-auto mb-8 animate-fade-in-delay-1">
+                <img src="https://pfst.cf2.poecdn.net/base/image/203c9c4d3015cf57debd7e4a71957b97008b3cef4da220e7e871735203360410?w=770&amp;h=548" alt="Encuentra el Nuevo - Terapia Fonológica" class="w-full h-auto rounded-3xl shadow-2xl border-4 border-white/20 animate-bounce-gentle">
+            </div>
+            <p class="text-lg md:text-xl text-white/90 font-medium animate-fade-in-delay-2">
+                Memoria + Pronunciación = Aprendizaje Efectivo
+            </p>
+        </div>
+
+        <!-- Call to Action Prominente -->
+        <div class="text-center mb-12 animate-fade-in-delay-5">
+            <div class="bg-white/30 backdrop-blur-sm rounded-3xl p-8 mb-6 border-2 border-amber-300/20">
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                    ¿Listo para Comenzar? 🚀
+                </h2>
+                <p class="text-white/90 mb-6 text-lg md:text-xl">
+                    Elige tu opción para empezar a jugar
+                </p>
+                <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                    <button id="quickStartBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-lg md:text-xl transition-all transform hover:scale-105 shadow-2xl border-2 border-amber-300/30">
+                        ⚡ Comenzar Rápido
+                        <div class="text-sm md:text-base opacity-90 mt-1">R fuerte inicial</div>
+                    </button>
+                    <div class="text-amber-800/60 hidden md:block font-bold text-xl">o</div>
+                    <button id="startConfigBtn" class="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-lg md:text-xl transition-all transform hover:scale-105 shadow-2xl border-2 border-yellow-300/30">
+                        🎯 Configurar Juego
+                        <div class="text-sm md:text-base opacity-90 mt-1">Personalizado</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- How it Works Section -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 animate-slide-up-delay-1">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+                🎯 ¿Cómo Funciona?
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center bg-white/10 rounded-2xl p-6 hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <h3 class="text-lg font-bold text-white mb-2">1. MEMORIZA</h3>
+                    <p class="text-white/80 text-sm">
+                        Observa y recuerda los elementos mostrados en pantalla durante unos segundos
+                    </p>
+                </div>
+                
+                <div class="text-center bg-white/10 rounded-2xl p-6 hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="text-5xl mb-4">🎯</div>
+                    <h3 class="text-lg font-bold text-white mb-2">2. IDENTIFICA</h3>
+                    <p class="text-white/80 text-sm">
+                        Encuentra y toca el NUEVO elemento que aparece entre todos los anteriores
+                    </p>
+                </div>
+                
+                <div class="text-center bg-white/10 rounded-2xl p-6 hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="text-5xl mb-4">🗣️</div>
+                    <h3 class="text-lg font-bold text-white mb-2">3. PRONUNCIA</h3>
+                    <p class="text-white/80 text-sm">
+                        Di la palabra en voz alta para practicar la pronunciación correcta
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Features -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 animate-slide-up-delay-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+                ⭐ Características del Juego
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">📢</div>
+                        <div>
+                            <h4 class="font-bold text-white">6 Fonemas Disponibles</h4>
+                            <p class="text-white/80 text-sm">R, S, L, Z/C, J/G y R suave</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">📍</div>
+                        <div>
+                            <h4 class="font-bold text-white">3 Posiciones</h4>
+                            <p class="text-white/80 text-sm">Inicial, media o final de palabra</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">🎮</div>
+                        <div>
+                            <h4 class="font-bold text-white">20 Niveles</h4>
+                            <p class="text-white/80 text-sm">Progresión de 3 a 20 elementos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">🎵</div>
+                        <div>
+                            <h4 class="font-bold text-white">Efectos de Sonido</h4>
+                            <p class="text-white/80 text-sm">Feedback auditivo inmediato</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">📱</div>
+                        <div>
+                            <h4 class="font-bold text-white">Totalmente Responsive</h4>
+                            <p class="text-white/80 text-sm">Funciona en tablets y móviles</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                        <div class="text-2xl">👩‍⚕️</div>
+                        <div>
+                            <h4 class="font-bold text-white">Para Logopedas</h4>
+                            <p class="text-white/80 text-sm">Herramienta terapéutica profesional</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target Audience -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 animate-slide-up-delay-3">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+                👥 ¿Para Quién es?
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="text-5xl mb-4">👦👧</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Niños 6-12 años</h3>
+                    <p class="text-white/80 text-sm">
+                        Con dificultades de pronunciación de fonemas específicos
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-5xl mb-4">👩‍⚕️</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Logopedas</h3>
+                    <p class="text-white/80 text-sm">
+                        Como herramienta complementaria en terapia fonológica
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-5xl mb-4">👨‍👩‍👧‍👦</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Familias</h3>
+                    <p class="text-white/80 text-sm">
+                        Para práctica en casa bajo supervisión profesional
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 animate-slide-up-delay-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+                🏆 Beneficios Terapéuticos
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <span>🧠</span> Cognitivos
+                    </h3>
+                    <ul class="space-y-2 text-white/80">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span>Mejora de la memoria de trabajo</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span>Fortalecimiento de la atención selectiva</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span>Desarrollo de funciones ejecutivas</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <span>🗣️</span> Fonológicos
+                    </h3>
+                    <ul class="space-y-2 text-white/80">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-400">✓</span>
+                            <span>Automatización de fonemas</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-400">✓</span>
+                            <span>Mejora de la conciencia fonológica</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-400">✓</span>
+                            <span>Incremento del vocabulario</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center animate-fade-in-delay-5">
+            <p class="text-white/60 text-sm">
+                Desarrollado con ❤️ para logopedas y familias
+            </p>
+        </div>
+    </div>
+
+    <!-- Configuration Panel -->
+    <div id="configPanel" class="container mx-auto px-4 py-6 hidden">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <button id="backToIntroFromConfig" class="bg-amber-500/80 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all transform hover:scale-105 border border-amber-300/30">
+                    🏠 Inicio
+                </button>
+                <div class="flex-1"></div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-amber-900 mb-2">🎯 Configuración del Juego</h1>
+            <p class="text-lg md:text-xl text-amber-800/90">Terapia Fonológica Personalizada</p>
+        </div>
+
+        <!-- Phoneme Selection -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-6 mb-6">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">📢 Selecciona el Fonema</h2>
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-4" id="phonemeGrid">
+                <!-- Phonemes will be generated here -->
+            </div>
+        </div>
+
+        <!-- Position Selection -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-6 mb-6">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">📍 Posición del Fonema</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="position-card bg-white/90 rounded-2xl p-4 text-center" data-position="initial">
+                    <div class="text-3xl mb-2">🏁</div>
+                    <div class="font-bold text-gray-800">INICIAL</div>
+                    <div class="text-sm text-gray-600">Palabra empieza con el fonema</div>
+                </div>
+                <div class="position-card bg-white/90 rounded-2xl p-4 text-center" data-position="medial">
+                    <div class="text-3xl mb-2">🎯</div>
+                    <div class="font-bold text-gray-800">MEDIA</div>
+                    <div class="text-sm text-gray-600">Palabra contiene el fonema</div>
+                </div>
+                <div class="position-card bg-white/90 rounded-2xl p-4 text-center" data-position="final">
+                    <div class="text-3xl mb-2">🏆</div>
+                    <div class="font-bold text-gray-800">FINAL</div>
+                    <div class="text-sm text-gray-600">Palabra termina con el fonema</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Summary -->
+        <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-white mb-4 text-center">📋 Configuración Actual</h2>
+            <div class="text-center text-white">
+                <p class="text-lg">
+                    <span class="font-bold">Fonema:</span> 
+                    <span id="selectedPhonemeDisplay">No seleccionado</span>
+                </p>
+                <p class="text-lg">
+                    <span class="font-bold">Posición:</span> 
+                    <span id="selectedPositionDisplay">No seleccionada</span>
+                </p>
+                <p class="text-sm text-white/80 mt-2" id="wordCountDisplay">
+                    Selecciona fonema y posición para ver palabras disponibles
+                </p>
+            </div>
+        </div>
+
+        <!-- Start Button -->
+        <div class="text-center">
+            <button id="startGameBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-amber-300/30" disabled="">
+                🚀 Comenzar Juego
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Panel -->
+    <div id="gamePanel" class="container mx-auto px-4 py-6 hidden">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <button id="backToIntroFromGame" class="bg-amber-500/80 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all transform hover:scale-105 border border-amber-300/30">
+                    🏠 Inicio
+                </button>
+                <div class="flex-1"></div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-amber-900 mb-1">🔍 Encuentra el Nuevo</h1>
+            <p class="text-sm md:text-base text-amber-800/90" id="gameSubtitle">
+                Fonema R - Memoria y Pronunciación
+            </p>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="flex justify-center mb-3">
+            <div class="bg-amber-100/30 backdrop-blur-sm rounded-xl p-3 flex gap-4 text-amber-900 border border-amber-300/30">
+                <div class="text-center">
+                    <div class="text-lg font-bold" id="currentItems">3</div>
+                    <div class="text-xs">Items</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold" id="currentRound">1</div>
+                    <div class="text-xs">Ronda</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold" id="score">0</div>
+                    <div class="text-xs">Puntos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-amber-100/30 backdrop-blur-sm rounded-xl p-3 mb-4 text-amber-900 text-center border border-amber-300/30">
+            <p id="instruction" class="text-sm md:text-base font-semibold">
+                ¡Toca el NUEVO elemento que aparece! 🎯
+            </p>
+        </div>
+
+        <!-- Game Board -->
+        <div class="w-full mx-auto mb-4">
+            <div id="gameBoard" class="relative bg-white/10 backdrop-blur-sm rounded-3xl border-2 border-white/20 overflow-hidden">
+                <!-- Cards will be positioned absolutely here -->
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="flex justify-center gap-4 mb-4">
+            <button id="backToConfigBtn" class="bg-amber-600/80 hover:bg-amber-700 text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 border border-amber-300/30">
+                ⬅️ Configurar
+            </button>
+            <button id="startBtn" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 border border-amber-300/30">
+                🚀 Comenzar
+            </button>
+            <button id="sayWordBtn" class="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base transition-all transform hover:scale-105 border border-yellow-300/30 hidden">
+                🗣️ Pronunciar
+            </button>
+        </div>
+
+        <!-- Instructions for Therapist -->
+        <div class="bg-amber-100/30 backdrop-blur-sm rounded-xl p-3 text-amber-900 text-center border border-amber-300/30">
+            <h3 class="text-sm md:text-base font-bold mb-2">📢 Instrucciones para el Logopeda</h3>
+            <p class="text-xs md:text-sm">
+                Cuando el niño identifique correctamente el nuevo elemento, pídale que lo pronuncie claramente. 
+                Use el botón "Pronunciar" para dar el modelo correcto de pronunciación.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Phoneme data with words in different positions
+        const phonemeData = {
+            '/r/': {
+                name: 'R fuerte',
+                symbol: 'RR',
+                color: '#EF4444',
+                initial: [
+                    { word: "RATÓN", emoji: "🐭" },
+                    { word: "ROSA", emoji: "🌹" },
+                    { word: "ROJO", emoji: "🔴" },
+                    { word: "RUEDA", emoji: "⚙️" },
+                    { word: "RAMA", emoji: "🌿" },
+                    { word: "RADIO", emoji: "📻" },
+                    { word: "RANA", emoji: "🐸" },
+                    { word: "ROBOT", emoji: "🤖" },
+                    { word: "RISA", emoji: "😄" },
+                    { word: "RÁPIDO", emoji: "💨" },
+                    { word: "REGALO", emoji: "🎁" },
+                    { word: "RELOJ", emoji: "⏰" },
+                    { word: "REMO", emoji: "🚣" },
+                    { word: "RECREO", emoji: "🏫" },
+                    { word: "RATITA", emoji: "🐁" },
+                    { word: "RORRO", emoji: "👶" },
+                    { word: "RAÍZ", emoji: "🌱" },
+                    { word: "ROCA", emoji: "🪨" },
+                    { word: "RUTA", emoji: "🛣️" },
+                    { word: "RUIDOSO", emoji: "🔊" }
+                ],
+                medial: [
+                    { word: "CARRO", emoji: "🚗" },
+                    { word: "PERRO", emoji: "🐕" },
+                    { word: "TORRE", emoji: "🏰" },
+                    { word: "TIERRA", emoji: "🌍" },
+                    { word: "BARRIO", emoji: "🏘️" },
+                    { word: "CORRER", emoji: "🏃" },
+                    { word: "FERROCARRIL", emoji: "🚂" },
+                    { word: "TERRIBLE", emoji: "😱" },
+                    { word: "ARROZ", emoji: "🍚" },
+                    { word: "BURRO", emoji: "🫏" },
+                    { word: "CERRAR", emoji: "🔒" },
+                    { word: "HORROR", emoji: "👻" },
+                    { word: "MARRON", emoji: "🤎" },
+                    { word: "NARRAR", emoji: "📚" },
+                    { word: "PARRAFO", emoji: "📄" },
+                    { word: "QUARRAR", emoji: "🎭" },
+                    { word: "SERRAR", emoji: "🪚" },
+                    { word: "TERRON", emoji: "🧱" },
+                    { word: "VIRREY", emoji: "👑" },
+                    { word: "ZARRAR", emoji: "🔧" }
+                ],
+                final: [
+                    { word: "COLLAR", emoji: "📿" },
+                    { word: "LUGAR", emoji: "📍" },
+                    { word: "LUNAR", emoji: "🌙" },
+                    { word: "POLAR", emoji: "🐻‍❄️" },
+                    { word: "SOLAR", emoji: "☀️" },
+                    { word: "ALTAR", emoji: "⛪" },
+                    { word: "CESAR", emoji: "👑" },
+                    { word: "HOGAR", emoji: "🏠" },
+                    { word: "JUGAR", emoji: "🎮" },
+                    { word: "MOTOR", emoji: "🔧" },
+                    { word: "PILAR", emoji: "🏛️" },
+                    { word: "RADAR", emoji: "📡" },
+                    { word: "SIMILAR", emoji: "🔄" },
+                    { word: "TUMOR", emoji: "🏥" },
+                    { word: "VULGAR", emoji: "😤" },
+                    { word: "POPULAR", emoji: "⭐" },
+                    { word: "CIRCULAR", emoji: "⭕" },
+                    { word: "FAMILIAR", emoji: "👨‍👩‍👧‍👦" },
+                    { word: "REGULAR", emoji: "📏" },
+                    { word: "SINGULAR", emoji: "1️⃣" }
+                ]
+            },
+            '/ɾ/': {
+                name: 'R suave',
+                symbol: 'R',
+                color: '#F97316',
+                initial: [
+                    { word: "RATÓN", emoji: "🐭" },
+                    { word: "ROSA", emoji: "🌹" },
+                    { word: "ROJO", emoji: "🔴" },
+                    { word: "RUEDA", emoji: "⚙️" },
+                    { word: "RAMA", emoji: "🌿" },
+                    { word: "RADIO", emoji: "📻" },
+                    { word: "RANA", emoji: "🐸" },
+                    { word: "ROBOT", emoji: "🤖" },
+                    { word: "RISA", emoji: "😄" },
+                    { word: "RÁPIDO", emoji: "💨" },
+                    { word: "REGALO", emoji: "🎁" },
+                    { word: "RELOJ", emoji: "⏰" },
+                    { word: "REMO", emoji: "🚣" },
+                    { word: "RECREO", emoji: "🏫" },
+                    { word: "RATITA", emoji: "🐁" },
+                    { word: "RORRO", emoji: "👶" },
+                    { word: "RAÍZ", emoji: "🌱" },
+                    { word: "ROCA", emoji: "🪨" },
+                    { word: "RUTA", emoji: "🛣️" },
+                    { word: "RUIDOSO", emoji: "🔊" }
+                ],
+                medial: [
+                    { word: "CARA", emoji: "😊" },
+                    { word: "PERA", emoji: "🍐" },
+                    { word: "TORO", emoji: "🐂" },
+                    { word: "MURO", emoji: "🧱" },
+                    { word: "CERO", emoji: "0️⃣" },
+                    { word: "LORO", emoji: "🦜" },
+                    { word: "FARO", emoji: "🗼" },
+                    { word: "HORA", emoji: "🕐" },
+                    { word: "PARO", emoji: "🛑" },
+                    { word: "PURO", emoji: "✨" },
+                    { word: "CORO", emoji: "🎵" },
+                    { word: "FORO", emoji: "🏛️" },
+                    { word: "GORO", emoji: "🧢" },
+                    { word: "HORO", emoji: "⏰" },
+                    { word: "MORO", emoji: "🕌" },
+                    { word: "NORA", emoji: "👩" },
+                    { word: "PERA", emoji: "🍐" },
+                    { word: "SERA", emoji: "🌅" },
+                    { word: "TERA", emoji: "🌍" },
+                    { word: "VARA", emoji: "🎋" }
+                ],
+                final: [
+                    { word: "MAR", emoji: "🌊" },
+                    { word: "POR", emoji: "➡️" },
+                    { word: "SER", emoji: "🧘" },
+                    { word: "VER", emoji: "👀" },
+                    { word: "IR", emoji: "🚶" },
+                    { word: "OR", emoji: "👂" },
+                    { word: "BAR", emoji: "🍺" },
+                    { word: "CAR", emoji: "🚗" },
+                    { word: "FAR", emoji: "🔦" },
+                    { word: "GAR", emoji: "🎣" },
+                    { word: "HAR", emoji: "✋" },
+                    { word: "JAR", emoji: "🏺" },
+                    { word: "LAR", emoji: "🏠" },
+                    { word: "NAR", emoji: "👃" },
+                    { word: "PAR", emoji: "👫" },
+                    { word: "TAR", emoji: "🎯" },
+                    { word: "VAR", emoji: "📏" },
+                    { word: "ZAR", emoji: "👑" },
+                    { word: "CREAR", emoji: "✨" },
+                    { word: "AMAR", emoji: "❤️" }
+                ]
+            },
+            '/s/': {
+                name: 'S',
+                symbol: 'S',
+                color: '#06B6D4',
+                initial: [
+                    { word: "SOL", emoji: "☀️" },
+                    { word: "SAPO", emoji: "🐸" },
+                    { word: "SILLA", emoji: "🪑" },
+                    { word: "SERPIENTE", emoji: "🐍" },
+                    { word: "SOMBRERO", emoji: "🎩" },
+                    { word: "SALTAR", emoji: "🦘" },
+                    { word: "SEMANA", emoji: "📅" },
+                    { word: "SILBAR", emoji: "🎵" },
+                    { word: "SONRISA", emoji: "😊" },
+                    { word: "SOLDADO", emoji: "🪖" },
+                    { word: "SUCIO", emoji: "🧽" },
+                    { word: "SUAVE", emoji: "🤏" },
+                    { word: "SUBIR", emoji: "⬆️" },
+                    { word: "SUEÑO", emoji: "😴" },
+                    { word: "SALUDO", emoji: "👋" },
+                    { word: "SEGURO", emoji: "🔒" },
+                    { word: "SIMPLE", emoji: "➖" },
+                    { word: "SORPRESA", emoji: "🎁" },
+                    { word: "SISTEMA", emoji: "⚙️" },
+                    { word: "SILENCIO", emoji: "🤫" }
+                ],
+                medial: [
+                    { word: "CASA", emoji: "🏠" },
+                    { word: "MESA", emoji: "🪑" },
+                    { word: "QUESO", emoji: "🧀" },
+                    { word: "BESO", emoji: "💋" },
+                    { word: "PESO", emoji: "⚖️" },
+                    { word: "ROSA", emoji: "🌹" },
+                    { word: "MUSEO", emoji: "🏛️" },
+                    { word: "PAYASO", emoji: "🤡" },
+                    { word: "PRINCESA", emoji: "👸" },
+                    { word: "PROMESA", emoji: "🤞" },
+                    { word: "EMPRESA", emoji: "🏢" },
+                    { word: "DEFENSA", emoji: "🛡️" },
+                    { word: "DIVERSO", emoji: "🌈" },
+                    { word: "FAMOSO", emoji: "⭐" },
+                    { word: "GENEROSO", emoji: "💝" },
+                    { word: "HERMOSO", emoji: "😍" },
+                    { word: "INCIENSO", emoji: "🕯️" },
+                    { word: "JOYOSO", emoji: "😄" },
+                    { word: "LUMINOSO", emoji: "💡" },
+                    { word: "MISTERIOSO", emoji: "🔍" }
+                ],
+                final: [
+                    { word: "TRES", emoji: "3️⃣" },
+                    { word: "MES", emoji: "📅" },
+                    { word: "FRANCÉS", emoji: "🇫🇷" },
+                    { word: "INGLÉS", emoji: "🇬🇧" },
+                    { word: "ESTRÉS", emoji: "😰" },
+                    { word: "DESPUÉS", emoji: "⏭️" },
+                    { word: "INTERÉS", emoji: "🤔" },
+                    { word: "CIPRÉS", emoji: "🌲" },
+                    { word: "TRAVÉS", emoji: "↔️" },
+                    { word: "REVÉS", emoji: "🔄" },
+                    { word: "BURGUÉS", emoji: "🎩" },
+                    { word: "CORTÉS", emoji: "🙇" },
+                    { word: "DANÉS", emoji: "🇩🇰" },
+                    { word: "FINÉS", emoji: "🇫🇮" },
+                    { word: "HOLANDÉS", emoji: "🇳🇱" },
+                    { word: "IRLANDÉS", emoji: "🇮🇪" },
+                    { word: "JAPONÉS", emoji: "🇯🇵" },
+                    { word: "LIBANÉS", emoji: "🇱🇧" },
+                    { word: "MARQUÉS", emoji: "👑" },
+                    { word: "PORTUGUÉS", emoji: "🇵🇹" }
+                ]
+            },
+            '/l/': {
+                name: 'L',
+                symbol: 'L',
+                color: '#10B981',
+                initial: [
+                    { word: "LUNA", emoji: "🌙" },
+                    { word: "LOBO", emoji: "🐺" },
+                    { word: "LIBRO", emoji: "📚" },
+                    { word: "LIMÓN", emoji: "🍋" },
+                    { word: "LÁMPARA", emoji: "💡" },
+                    { word: "LLUVIA", emoji: "🌧️" },
+                    { word: "LLAVE", emoji: "🔑" },
+                    { word: "LLAMA", emoji: "🦙" },
+                    { word: "LENGUA", emoji: "👅" },
+                    { word: "LEÓN", emoji: "🦁" },
+                    { word: "LECHE", emoji: "🥛" },
+                    { word: "LUGAR", emoji: "📍" },
+                    { word: "LARGO", emoji: "📏" },
+                    { word: "LÁPIZ", emoji: "✏️" },
+                    { word: "LOCO", emoji: "🤪" },
+                    { word: "LISTA", emoji: "📝" },
+                    { word: "LENTO", emoji: "🐌" },
+                    { word: "LIBRE", emoji: "🕊️" },
+                    { word: "LIMPIO", emoji: "✨" },
+                    { word: "LINDO", emoji: "😍" }
+                ],
+                medial: [
+                    { word: "POLO", emoji: "🏒" },
+                    { word: "HOLA", emoji: "👋" },
+                    { word: "COLA", emoji: "🥤" },
+                    { word: "BOLA", emoji: "⚽" },
+                    { word: "MULA", emoji: "🐴" },
+                    { word: "PELA", emoji: "🍌" },
+                    { word: "SALA", emoji: "🛋️" },
+                    { word: "TELA", emoji: "🧵" },
+                    { word: "VELA", emoji: "🕯️" },
+                    { word: "CELOS", emoji: "💚" },
+                    { word: "DULCE", emoji: "🍬" },
+                    { word: "FALDA", emoji: "👗" },
+                    { word: "GALGO", emoji: "🐕" },
+                    { word: "HIELO", emoji: "🧊" },
+                    { word: "ISLOTE", emoji: "🏝️" },
+                    { word: "JULIO", emoji: "📅" },
+                    { word: "KILO", emoji: "⚖️" },
+                    { word: "MOLE", emoji: "🐭" },
+                    { word: "PELO", emoji: "💇" },
+                    { word: "SOLO", emoji: "1️⃣" }
+                ],
+                final: [
+                    { word: "SOL", emoji: "☀️" },
+                    { word: "MAL", emoji: "❌" },
+                    { word: "FINAL", emoji: "🏁" },
+                    { word: "ANIMAL", emoji: "🐾" },
+                    { word: "CANAL", emoji: "📺" },
+                    { word: "TOTAL", emoji: "💯" },
+                    { word: "METAL", emoji: "🔩" },
+                    { word: "IGUAL", emoji: "=" },
+                    { word: "REAL", emoji: "👑" },
+                    { word: "MORAL", emoji: "⚖️" },
+                    { word: "DENTAL", emoji: "🦷" },
+                    { word: "HOTEL", emoji: "🏨" },
+                    { word: "PAPEL", emoji: "📄" },
+                    { word: "NIVEL", emoji: "📊" },
+                    { word: "CRUEL", emoji: "😈" },
+                    { word: "FIEL", emoji: "🤝" },
+                    { word: "MIEL", emoji: "🍯" },
+                    { word: "PIEL", emoji: "👋" },
+                    { word: "TÚNEL", emoji: "🚇" },
+                    { word: "ÁNGEL", emoji: "😇" }
+                ]
+            },
+            '/θ/': {
+                name: 'Z/C',
+                symbol: 'Z',
+                color: '#8B5CF6',
+                initial: [
+                    { word: "ZAPATO", emoji: "👠" },
+                    { word: "ZORRO", emoji: "🦊" },
+                    { word: "CEBRA", emoji: "🦓" },
+                    { word: "CERDO", emoji: "🐷" },
+                    { word: "CIELO", emoji: "☁️" },
+                    { word: "CINCO", emoji: "5️⃣" },
+                    { word: "CINE", emoji: "🎬" },
+                    { word: "CENA", emoji: "🍽️" },
+                    { word: "ZONA", emoji: "📍" },
+                    { word: "ZUMO", emoji: "🧃" },
+                    { word: "CERO", emoji: "0️⃣" },
+                    { word: "CERCA", emoji: "👆" },
+                    { word: "CIUDAD", emoji: "🏙️" },
+                    { word: "CÍRCULO", emoji: "⭕" },
+                    { word: "COCINA", emoji: "👩‍🍳" },
+                    { word: "CENTRO", emoji: "🎯" },
+                    { word: "CERRAR", emoji: "🔒" },
+                    { word: "CÉSPED", emoji: "🌱" },
+                    { word: "ZINC", emoji: "🔬" },
+                    { word: "ZÓCALO", emoji: "🏛️" }
+                ],
+                medial: [
+                    { word: "CORAZÓN", emoji: "❤️" },
+                    { word: "PRINCESA", emoji: "👸" },
+                    { word: "CABEZA", emoji: "🗣️" },
+                    { word: "CEREZO", emoji: "🌸" },
+                    { word: "POZO", emoji: "🕳️" },
+                    { word: "MARZO", emoji: "📅" },
+                    { word: "PLAZA", emoji: "🏛️" },
+                    { word: "PIZZA", emoji: "🍕" },
+                    { word: "BRAZO", emoji: "💪" },
+                    { word: "LAZO", emoji: "🎀" },
+                    { word: "FUERZA", emoji: "💪" },
+                    { word: "DULZURA", emoji: "🍯" },
+                    { word: "BELLEZA", emoji: "😍" },
+                    { word: "TRISTEZA", emoji: "😢" },
+                    { word: "LIMPIEZA", emoji: "🧽" },
+                    { word: "NATURALEZA", emoji: "🌿" },
+                    { word: "CABEZA", emoji: "🗣️" },
+                    { word: "PEREZA", emoji: "😴" },
+                    { word: "REALEZA", emoji: "👑" },
+                    { word: "RIQUEZA", emoji: "💰" }
+                ],
+                final: [
+                    { word: "LUZ", emoji: "💡" },
+                    { word: "PAZ", emoji: "☮️" },
+                    { word: "VOZ", emoji: "🗣️" },
+                    { word: "CRUZ", emoji: "✝️" },
+                    { word: "ARROZ", emoji: "🍚" },
+                    { word: "NARIZ", emoji: "👃" },
+                    { word: "FELIZ", emoji: "😊" },
+                    { word: "ACTRIZ", emoji: "🎭" },
+                    { word: "MATRIZ", emoji: "📊" },
+                    { word: "PERDIZ", emoji: "🐦" },
+                    { word: "BARNIZ", emoji: "🎨" },
+                    { word: "CAPAZ", emoji: "👍" },
+                    { word: "EFICAZ", emoji: "✅" },
+                    { word: "FUGAZ", emoji: "💨" },
+                    { word: "LOCUAZ", emoji: "🗣️" },
+                    { word: "MORDAZ", emoji: "😤" },
+                    { word: "RAPAZ", emoji: "👦" },
+                    { word: "TENAZ", emoji: "💪" },
+                    { word: "VIVAZ", emoji: "⚡" },
+                    { word: "VELOZ", emoji: "🏃‍♂️" }
+                ]
+            },
+            '/x/': {
+                name: 'J/G',
+                symbol: 'J',
+                color: '#F59E0B',
+                initial: [
+                    { word: "JIRAFA", emoji: "🦒" },
+                    { word: "JABÓN", emoji: "🧼" },
+                    { word: "JARDÍN", emoji: "🌺" },
+                    { word: "JUEGO", emoji: "🎮" },
+                    { word: "JUGO", emoji: "🧃" },
+                    { word: "JOYA", emoji: "💎" },
+                    { word: "JAULA", emoji: "🔒" },
+                    { word: "JAMÓN", emoji: "🥓" },
+                    { word: "GLOBO", emoji: "🎈" },
+                    { word: "GENTE", emoji: "👥" },
+                    { word: "GIGANTE", emoji: "🗻" },
+                    { word: "GITANO", emoji: "🎭" },
+                    { word: "JUNIO", emoji: "📅" },
+                    { word: "JULIO", emoji: "📅" },
+                    { word: "JOVEN", emoji: "👦" },
+                    { word: "JERSEY", emoji: "👕" },
+                    { word: "JINETE", emoji: "🏇" },
+                    { word: "JOCKEY", emoji: "🏇" },
+                    { word: "JABALÍ", emoji: "🐗" },
+                    { word: "JAGUAR", emoji: "🐆" }
+                ],
+                medial: [
+                    { word: "OJO", emoji: "👁️" },
+                    { word: "CAJA", emoji: "📦" },
+                    { word: "BAJO", emoji: "⬇️" },
+                    { word: "HIJO", emoji: "👦" },
+                    { word: "ROJO", emoji: "🔴" },
+                    { word: "VIEJO", emoji: "👴" },
+                    { word: "MEJOR", emoji: "👍" },
+                    { word: "MUJER", emoji: "👩" },
+                    { word: "OBJETO", emoji: "📦" },
+                    { word: "EJEMPLO", emoji: "📝" },
+                    { word: "EJERCICIO", emoji: "🏃" },
+                    { word: "ALEJADO", emoji: "↔️" },
+                    { word: "CONSEJO", emoji: "💡" },
+                    { word: "COMPLEJO", emoji: "🧩" },
+                    { word: "ESPEJO", emoji: "🪞" },
+                    { word: "FLOJERA", emoji: "😴" },
+                    { word: "HOJITA", emoji: "🍃" },
+                    { word: "MOJARÉ", emoji: "💧" },
+                    { word: "PAJITA", emoji: "🥤" },
+                    { word: "TEJADO", emoji: "🏠" }
+                ],
+                final: [
+                    { word: "RELOJ", emoji: "⏰" },
+                    { word: "CALOR", emoji: "🔥" },
+                    { word: "COLOR", emoji: "🌈" },
+                    { word: "DOLOR", emoji: "😣" },
+                    { word: "MOTOR", emoji: "🔧" },
+                    { word: "RUMOR", emoji: "🤫" },
+                    { word: "TUMOR", emoji: "🏥" },
+                    { word: "VAPOR", emoji: "💨" },
+                    { word: "BOJ", emoji: "🌳" },
+                    { word: "CARCAJ", emoji: "🏹" },
+                    { word: "HERRAJ", emoji: "🔧" },
+                    { word: "MASAJ", emoji: "💆" },
+                    { word: "POTAJ", emoji: "🍲" },
+                    { word: "RELAJ", emoji: "😌" },
+                    { word: "TRABAJ", emoji: "💼" },
+                    { word: "VIAJ", emoji: "✈️" },
+                    { word: "CORTEJ", emoji: "💝" },
+                    { word: "FESTEJ", emoji: "🎉" },
+                    { word: "MANEJ", emoji: "🚗" },
+                    { word: "PROTEJ", emoji: "🛡️" }
+                ]
+            }
+        };
+
+        // Game configuration
+        let gameConfig = {
+            selectedPhoneme: null,
+            selectedPosition: null,
+            wordsForGame: [],
+            startMode: 'configured'
+        };
+
+        // Game state
+        let gameState = {
+            currentItems: 3,
+            round: 1,
+            score: 0,
+            displayedWords: [],
+            newWordIndex: -1,
+            gameStarted: false,
+            waitingForNext: false,
+            lastCorrectWord: null,
+            sessionStartTime: 0,
+            roundStartTime: 0,
+            totalClicks: 0,
+            correctClicks: 0,
+            totalErrors: 0,
+            currentRoundErrors: 0,
+            sayWordUses: 0,
+            maxItemsReached: 3,
+            roundMetrics: [],
+            lastMeasurement: null
+        };
+
+        const MEASUREMENT_STORAGE_KEY = 'encuentra_nuevo_metrics_v1';
+
+        function getSelectedPhonemeProfile() {
+            const phoneme = gameConfig.selectedPhoneme || '/r/';
+            const profile = phonemeData[phoneme];
+            return {
+                phoneme,
+                name: profile?.name || 'Fonema',
+                symbol: profile?.symbol || phoneme
+            };
+        }
+
+        function getLargeLabels() {
+            const profile = getSelectedPhonemeProfile();
+            return ['articulacion', profile.name.toLowerCase()];
+        }
+
+        function getSmallLabels() {
+            const positionMap = {
+                initial: 'posicion inicial',
+                medial: 'posicion medial',
+                final: 'posicion final'
+            };
+            return [
+                'deteccion de novedad',
+                'memoria de trabajo visual',
+                'monitorizacion del error',
+                'velocidad de reconocimiento',
+                'pronunciacion guiada',
+                positionMap[gameConfig.selectedPosition] || 'posicion no definida'
+            ];
+        }
+
+        function getAverageReactionMs() {
+            if (!gameState.roundMetrics.length) return 0;
+            return Math.round(gameState.roundMetrics.reduce((sum, round) => sum + round.reactionMs, 0) / gameState.roundMetrics.length);
+        }
+
+        function getBestReactionMs() {
+            if (!gameState.roundMetrics.length) return 0;
+            return Math.min(...gameState.roundMetrics.map((round) => round.reactionMs));
+        }
+
+        function getReactionConsistency() {
+            if (gameState.roundMetrics.length <= 1) return 100;
+            const avg = getAverageReactionMs();
+            const variance = gameState.roundMetrics.reduce((sum, round) => sum + Math.pow(round.reactionMs - avg, 2), 0) / gameState.roundMetrics.length;
+            return Math.max(0, Math.min(100, 100 - Math.round(Math.sqrt(variance) / 120)));
+        }
+
+        function buildMeasurementPayload(status = 'in_progress') {
+            const profile = getSelectedPhonemeProfile();
+            const totalTimeMs = gameState.sessionStartTime ? Date.now() - gameState.sessionStartTime : 0;
+            const accuracy = gameState.totalClicks ? Math.round((gameState.correctClicks / gameState.totalClicks) * 100) : 100;
+            const avgReactionMs = getAverageReactionMs();
+            const avgErrors = gameState.roundMetrics.length
+                ? Number((gameState.roundMetrics.reduce((sum, round) => sum + round.errors, 0) / gameState.roundMetrics.length).toFixed(2))
+                : 0;
+            const firstAttemptRate = gameState.roundMetrics.length
+                ? Math.round((gameState.roundMetrics.filter((round) => round.errors === 0).length / gameState.roundMetrics.length) * 100)
+                : 0;
+            const consistency = getReactionConsistency();
+            const noveltyDetection = Math.max(0, Math.min(100, Math.round(firstAttemptRate * 0.5 + accuracy * 0.2 + Math.max(0, 100 - (avgReactionMs / 1000) * 10) * 0.3)));
+            const supportDependency = Math.max(0, Math.min(100, Math.round(gameState.sayWordUses * 12 + avgErrors * 10 + (gameConfig.startMode === 'quick' ? 8 : 0))));
+            const memoryLoad = Math.max(0, Math.min(100, Math.round(((gameState.maxItemsReached - 3) / 17) * 100)));
+            const perseverancia = Math.max(0, Math.min(100, Math.round(65 + gameState.roundMetrics.length * 2 - avgErrors * 8)));
+            const normalizedScore = Math.max(
+                0,
+                Math.min(100, Math.round(noveltyDetection * 0.4 + Math.max(0, 100 - supportDependency) * 0.15 + memoryLoad * 0.2 + consistency * 0.25))
+            );
+
+            return {
+                game: 'encuentra-el-nuevo',
+                updated_at: new Date().toISOString(),
+                status,
+                level_index: gameState.round,
+                level_label: `Ronda ${gameState.round} · ${gameState.currentItems} elementos`,
+                area: 'articulacion',
+                score: normalizedScore,
+                accuracy,
+                raw_score: gameState.score,
+                duration_seconds: Math.max(1, Math.round(totalTimeMs / 1000)),
+                total_time_ms: totalTimeMs,
+                average_time_ms: avgReactionMs,
+                best_time_ms: getBestReactionMs(),
+                reaction_consistency: consistency,
+                total_clicks: gameState.totalClicks,
+                correct_clicks: gameState.correctClicks,
+                total_errors: gameState.totalErrors,
+                average_errors: avgErrors,
+                first_attempt_rate: firstAttemptRate,
+                novelty_detection: noveltyDetection,
+                support_dependency: supportDependency,
+                memory_load: memoryLoad,
+                perseverance_index: perseverancia,
+                max_items_reached: gameState.maxItemsReached,
+                current_items: gameState.currentItems,
+                rounds_completed: gameState.roundMetrics.length,
+                say_word_uses: gameState.sayWordUses,
+                start_mode: gameConfig.startMode,
+                selected_phoneme: profile.phoneme,
+                phoneme_label: profile.name,
+                selected_position: gameConfig.selectedPosition || 'initial',
+                labels_large: getLargeLabels(),
+                labels_small: getSmallLabels(),
+                worked_dimensions: getSmallLabels(),
+                visual_load: memoryLoad,
+                executive_load: Math.max(0, Math.min(100, Math.round(avgErrors * 12 + (100 - consistency) * 0.4 + gameState.currentItems * 2))),
+                phonological_load: profile.phoneme === '/r/' ? 86 : profile.phoneme === '/ɾ/' ? 74 : 66,
+                semantic_load: 34,
+                clinical_summary: `${profile.name} en ${gameConfig.selectedPosition || 'inicial'}. Deteccion de novedad ${noveltyDetection}%, precision ${accuracy}%, acierto a la primera ${firstAttemptRate}% y carga de memoria ${memoryLoad}%.`,
+                summary: `${profile.name} · ${gameConfig.selectedPosition || 'inicial'} · ${gameState.currentItems} elementos · ${normalizedScore}/100`,
+                last_correct_word: gameState.lastCorrectWord?.word || null,
+                round_metrics: gameState.roundMetrics.slice(-20)
+            };
+        }
+
+        function persistMeasurement(status = 'in_progress') {
+            const payload = buildMeasurementPayload(status);
+            gameState.lastMeasurement = payload;
+            localStorage.setItem(MEASUREMENT_STORAGE_KEY, JSON.stringify(payload));
+            window.__encuentraNuevoMetrics = payload;
+            try {
+                window.parent?.postMessage({ type: 'logopedia-measurement', activity: 'poe-encuentra-el-nuevo', payload }, '*');
+            } catch (_) {}
+            return payload;
+        }
+
+        // DOM elements
+        const introPanel = document.getElementById('introPanel');
+        const configPanel = document.getElementById('configPanel');
+        const gamePanel = document.getElementById('gamePanel');
+        const startConfigBtn = document.getElementById('startConfigBtn');
+        const quickStartBtn = document.getElementById('quickStartBtn');
+        const backToIntroFromConfig = document.getElementById('backToIntroFromConfig');
+        const backToIntroFromGame = document.getElementById('backToIntroFromGame');
+        const phonemeGrid = document.getElementById('phonemeGrid');
+        const gameBoard = document.getElementById('gameBoard');
+        const startBtn = document.getElementById('startBtn');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const backToConfigBtn = document.getElementById('backToConfigBtn');
+        const sayWordBtn = document.getElementById('sayWordBtn');
+        const instruction = document.getElementById('instruction');
+        const currentItemsDisplay = document.getElementById('currentItems');
+        const currentRoundDisplay = document.getElementById('currentRound');
+        const scoreDisplay = document.getElementById('score');
+        const selectedPhonemeDisplay = document.getElementById('selectedPhonemeDisplay');
+        const selectedPositionDisplay = document.getElementById('selectedPositionDisplay');
+        const wordCountDisplay = document.getElementById('wordCountDisplay');
+        const gameSubtitle = document.getElementById('gameSubtitle');
+
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Initialize configuration panel
+        function initConfigPanel() {
+            // Generate phoneme cards
+            phonemeGrid.innerHTML = '';
+            Object.keys(phonemeData).forEach(phoneme => {
+                const data = phonemeData[phoneme];
+                const card = document.createElement('div');
+                card.className = 'phoneme-card bg-white/90 rounded-2xl p-4 text-center shadow-lg';
+                card.dataset.phoneme = phoneme;
+                card.innerHTML = `
+                    <div class="text-3xl font-bold mb-2" style="color: ${data.color}">${data.symbol}</div>
+                    <div class="font-bold text-gray-800">${data.name}</div>
+                `;
+                card.addEventListener('click', () => selectPhoneme(phoneme));
+                phonemeGrid.appendChild(card);
+            });
+
+            // Position cards event listeners
+            document.querySelectorAll('.position-card').forEach(card => {
+                card.addEventListener('click', () => selectPosition(card.dataset.position));
+            });
+        }
+
+        // Select phoneme
+        function selectPhoneme(phoneme) {
+            // Remove previous selection
+            document.querySelectorAll('.phoneme-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select current phoneme
+            document.querySelector(`[data-phoneme="${phoneme}"]`).classList.add('selected');
+            gameConfig.selectedPhoneme = phoneme;
+            
+            updateConfigDisplay();
+        }
+
+        // Select position
+        function selectPosition(position) {
+            // Remove previous selection
+            document.querySelectorAll('.position-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select current position
+            document.querySelector(`[data-position="${position}"]`).classList.add('selected');
+            gameConfig.selectedPosition = position;
+            
+            updateConfigDisplay();
+        }
+
+        // Update configuration display
+        function updateConfigDisplay() {
+            // Update phoneme display
+            if (gameConfig.selectedPhoneme) {
+                const phonemeData_item = phonemeData[gameConfig.selectedPhoneme];
+                selectedPhonemeDisplay.textContent = phonemeData_item.name;
+            } else {
+                selectedPhonemeDisplay.textContent = 'No seleccionado';
+            }
+
+            // Update position display
+            const positionNames = {
+                'initial': 'Inicial (empieza con...)',
+                'medial': 'Media (contiene...)',
+                'final': 'Final (termina con...)'
+            };
+            
+            if (gameConfig.selectedPosition) {
+                selectedPositionDisplay.textContent = positionNames[gameConfig.selectedPosition];
+            } else {
+                selectedPositionDisplay.textContent = 'No seleccionada';
+            }
+
+            // Update word count and enable/disable start button
+            if (gameConfig.selectedPhoneme && gameConfig.selectedPosition) {
+                const words = phonemeData[gameConfig.selectedPhoneme][gameConfig.selectedPosition];
+                wordCountDisplay.textContent = `${words.length} palabras disponibles para practicar`;
+                startGameBtn.disabled = false;
+                gameConfig.wordsForGame = words;
+                gameConfig.startMode = 'configured';
+            } else {
+                wordCountDisplay.textContent = 'Selecciona fonema y posición para ver palabras disponibles';
+                startGameBtn.disabled = true;
+            }
+        }
+
+        // Start game from config
+        function startGameFromConfig() {
+            if (!gameConfig.selectedPhoneme || !gameConfig.selectedPosition) return;
+            
+            // Update game subtitle
+            const phonemeData_item = phonemeData[gameConfig.selectedPhoneme];
+            const positionNames = {
+                'initial': 'Inicial',
+                'medial': 'Media', 
+                'final': 'Final'
+            };
+            gameSubtitle.textContent = `${phonemeData_item.name} - Posición ${positionNames[gameConfig.selectedPosition]}`;
+            
+            // Switch to game panel
+            configPanel.classList.add('hidden');
+            gamePanel.classList.remove('hidden');
+            
+            // Initialize game
+            initGame();
+        }
+
+        // Show configuration panel
+        function showConfigPanel() {
+            introPanel.classList.add('hidden');
+            configPanel.classList.remove('hidden');
+        }
+
+        // Back to intro panel
+        function backToIntro() {
+            // Hide all panels
+            configPanel.classList.add('hidden');
+            gamePanel.classList.add('hidden');
+            
+            // Show intro panel
+            introPanel.classList.remove('hidden');
+            
+            // Reset game state
+            gameState = {
+                currentItems: 3,
+                round: 1,
+                score: 0,
+                displayedWords: [],
+                newWordIndex: -1,
+                gameStarted: false,
+                waitingForNext: false,
+                lastCorrectWord: null,
+                sessionStartTime: 0,
+                roundStartTime: 0,
+                totalClicks: 0,
+                correctClicks: 0,
+                totalErrors: 0,
+                currentRoundErrors: 0,
+                sayWordUses: 0,
+                maxItemsReached: 3,
+                roundMetrics: [],
+                lastMeasurement: null
+            };
+            
+            // Reset game config
+            gameConfig = {
+                selectedPhoneme: null,
+                selectedPosition: null,
+                wordsForGame: [],
+                startMode: 'configured'
+            };
+            
+            // Reset UI elements
+            startBtn.classList.remove('hidden');
+            sayWordBtn.classList.add('hidden');
+            startBtn.textContent = "🚀 Comenzar";
+            
+            // Clear selections
+            document.querySelectorAll('.phoneme-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelectorAll('.position-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            updateConfigDisplay();
+        }
+
+        // Quick start with default configuration
+        function quickStart() {
+            // Set default configuration: R fuerte inicial (easiest level)
+            gameConfig.selectedPhoneme = '/r/';
+            gameConfig.selectedPosition = 'initial';
+            gameConfig.wordsForGame = phonemeData['/r/']['initial'];
+            gameConfig.startMode = 'quick';
+            
+            // Update game subtitle
+            gameSubtitle.textContent = "R fuerte - Posición Inicial";
+            
+            // Switch directly to game panel
+            introPanel.classList.add('hidden');
+            gamePanel.classList.remove('hidden');
+            
+            // Initialize game
+            initGame();
+        }
+
+        // Back to configuration
+        function backToConfig() {
+            gamePanel.classList.add('hidden');
+            configPanel.classList.remove('hidden');
+            
+            // Reset game state
+            gameState = {
+                currentItems: 3,
+                round: 1,
+                score: 0,
+                displayedWords: [],
+                newWordIndex: -1,
+                gameStarted: false,
+                waitingForNext: false,
+                lastCorrectWord: null,
+                sessionStartTime: 0,
+                roundStartTime: 0,
+                totalClicks: 0,
+                correctClicks: 0,
+                totalErrors: 0,
+                currentRoundErrors: 0,
+                sayWordUses: 0,
+                maxItemsReached: 3,
+                roundMetrics: [],
+                lastMeasurement: null
+            };
+            
+            startBtn.classList.remove('hidden');
+            sayWordBtn.classList.add('hidden');
+            startBtn.textContent = "🚀 Comenzar";
+        }
+
+        // Initialize game
+        function initGame() {
+            gameState = {
+                currentItems: 3,
+                round: 1,
+                score: 0,
+                displayedWords: [],
+                newWordIndex: -1,
+                gameStarted: false,
+                waitingForNext: false,
+                lastCorrectWord: null,
+                sessionStartTime: 0,
+                roundStartTime: 0,
+                totalClicks: 0,
+                correctClicks: 0,
+                totalErrors: 0,
+                currentRoundErrors: 0,
+                sayWordUses: 0,
+                maxItemsReached: 3,
+                roundMetrics: [],
+                lastMeasurement: null
+            };
+            
+            // Shuffle words and take first 3
+            const shuffledWords = shuffleArray([...gameConfig.wordsForGame]);
+            gameState.displayedWords = shuffledWords.slice(0, 3);
+            
+            updateDisplay();
+            createGameBoard();
+        }
+
+        // Shuffle array utility
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Get random position for card
+        function getRandomPosition(index, totalCards) {
+            const boardRect = gameBoard.getBoundingClientRect();
+            let cardWidth, cardHeight;
+            
+            if (window.innerWidth < 480) {
+                cardWidth = 70;
+                cardHeight = 65;
+            } else if (window.innerWidth < 768) {
+                cardWidth = 85;
+                cardHeight = 75;
+            } else {
+                cardWidth = 100;
+                cardHeight = 90;
+            }
+            
+            const padding = 10;
+            const maxX = boardRect.width - cardWidth - padding;
+            const maxY = boardRect.height - cardHeight - padding;
+            
+            let x, y;
+            let attempts = 0;
+            const maxAttempts = 100;
+            
+            do {
+                x = Math.random() * maxX + padding;
+                y = Math.random() * maxY + padding;
+                attempts++;
+            } while (attempts < maxAttempts && isOverlapping(x, y, cardWidth, cardHeight, index));
+            
+            return { x, y };
+        }
+
+        // Check if position overlaps with existing cards
+        function isOverlapping(x, y, width, height, excludeIndex) {
+            const existingCards = gameBoard.querySelectorAll('.word-card');
+            const margin = 8;
+            
+            for (let i = 0; i < existingCards.length; i++) {
+                if (i === excludeIndex) continue;
+                
+                const card = existingCards[i];
+                const cardRect = {
+                    left: parseInt(card.style.left),
+                    top: parseInt(card.style.top),
+                    right: parseInt(card.style.left) + width,
+                    bottom: parseInt(card.style.top) + height
+                };
+                
+                if (x < cardRect.right + margin && 
+                    x + width > cardRect.left - margin &&
+                    y < cardRect.bottom + margin && 
+                    y + height > cardRect.top - margin) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        // Create/update game board
+        function createGameBoard() {
+            gameBoard.innerHTML = '';
+            
+            gameState.displayedWords.forEach((word, index) => {
+                const card = document.createElement('div');
+                card.className = 'word-card bg-white/90 rounded-2xl shadow-lg border-2 border-transparent';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <span class="card-emoji">${word.emoji}</span>
+                    <div class="word-text text-gray-800">${word.word}</div>
+                `;
+                
+                const position = getRandomPosition(index, gameState.displayedWords.length);
+                card.style.left = position.x + 'px';
+                card.style.top = position.y + 'px';
+                
+                card.addEventListener('click', () => handleCardClick(index));
+                gameBoard.appendChild(card);
+            });
+        }
+
+        // Start game
+        function startGame() {
+            gameState.gameStarted = true;
+            gameState.sessionStartTime = Date.now();
+            startBtn.classList.add('hidden');
+            sayWordBtn.classList.remove('hidden');
+            
+            // Play start sound
+            playStartSound();
+            
+            instruction.textContent = "🧠 Memoriza estos elementos...";
+            persistMeasurement('in_progress');
+            
+            // After 2.5 seconds, add the new item
+            setTimeout(() => {
+                addNewItem();
+            }, 2500);
+        }
+
+        // Add new item
+        function addNewItem() {
+            if (gameState.currentItems >= 20) {
+                persistMeasurement('completed');
+                completeGame();
+                return;
+            }
+            
+            // Get next word that's not already displayed
+            const availableWords = gameConfig.wordsForGame.filter(word => 
+                !gameState.displayedWords.some(displayed => displayed.word === word.word)
+            );
+            
+            if (availableWords.length === 0) {
+                persistMeasurement('completed');
+                completeGame();
+                return;
+            }
+            
+            const newWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            gameState.displayedWords.push(newWord);
+            gameState.newWordIndex = gameState.displayedWords.length - 1;
+            gameState.currentItems++;
+            gameState.maxItemsReached = Math.max(gameState.maxItemsReached, gameState.currentItems);
+            gameState.currentRoundErrors = 0;
+            
+            // Clear board and show all items simultaneously
+            gameBoard.innerHTML = '';
+            
+            // Create all cards at once (including the new one)
+            gameState.displayedWords.forEach((word, index) => {
+                const card = document.createElement('div');
+                card.className = 'word-card bg-white/90 rounded-2xl shadow-lg border-2 border-transparent';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <span class="card-emoji">${word.emoji}</span>
+                    <div class="word-text text-gray-800">${word.word}</div>
+                `;
+                
+                const position = getRandomPosition(index, gameState.displayedWords.length);
+                card.style.left = position.x + 'px';
+                card.style.top = position.y + 'px';
+                
+                card.addEventListener('click', () => handleCardClick(index));
+                gameBoard.appendChild(card);
+            });
+            
+            instruction.textContent = "🎯 ¡Encuentra y toca el NUEVO elemento!";
+            updateDisplay();
+            gameState.roundStartTime = Date.now();
+            persistMeasurement('in_progress');
+        }
+
+        // Handle card click
+        function handleCardClick(cardIndex) {
+            if (gameState.waitingForNext || gameState.newWordIndex === -1) return;
+            gameState.totalClicks++;
+            
+            const card = gameBoard.children[cardIndex] || gameBoard.querySelector(`[data-index="${cardIndex}"]`);
+            
+            if (cardIndex === gameState.newWordIndex) {
+                // Correct!
+                playSuccessSound();
+                card.classList.add('correct');
+                gameState.score += 20;
+                gameState.correctClicks++;
+                gameState.lastCorrectWord = gameState.displayedWords[cardIndex];
+                gameState.waitingForNext = true;
+                const reactionMs = gameState.roundStartTime ? Date.now() - gameState.roundStartTime : 0;
+                gameState.roundMetrics.push({
+                    round: gameState.round,
+                    items: gameState.currentItems,
+                    errors: gameState.currentRoundErrors,
+                    reactionMs,
+                    targetWord: gameState.displayedWords[cardIndex].word,
+                    phoneme: gameConfig.selectedPhoneme,
+                    position: gameConfig.selectedPosition
+                });
+                gameState.newWordIndex = -1;
+                
+                instruction.textContent = `🎉 ¡Correcto! Pronuncia: "${gameState.lastCorrectWord.word}"`;
+                
+                setTimeout(() => {
+                    card.classList.remove('correct');
+                    gameState.round++;
+                    updateDisplay();
+                    
+                    if (gameState.currentItems < 20) {
+                        instruction.textContent = "🧠 Prepárate para el siguiente nivel...";
+                        gameState.waitingForNext = false;
+                        persistMeasurement('in_progress');
+                        
+                        // Automatically proceed to next level after 1.2 seconds
+                        setTimeout(() => {
+                            addNewItem();
+                        }, 1200);
+                    } else {
+                        persistMeasurement('completed');
+                        completeGame();
+                    }
+                }, 1500);
+                
+            } else {
+                // Wrong!
+                playErrorSound();
+                card.classList.add('wrong');
+                gameState.totalErrors++;
+                gameState.currentRoundErrors++;
+                instruction.textContent = "❌ Ese no es el nuevo. ¡Inténtalo de nuevo!";
+                
+                setTimeout(() => {
+                    card.classList.remove('wrong');
+                    instruction.textContent = "🎯 ¡Encuentra y toca el NUEVO elemento!";
+                }, 1000);
+                persistMeasurement('in_progress');
+            }
+            
+            updateDisplay();
+        }
+
+        // Complete game
+        function completeGame() {
+            instruction.textContent = "🎊 ¡Felicidades! ¡Has completado todos los niveles!";
+            startBtn.classList.remove('hidden');
+            startBtn.textContent = "🎮 Jugar de Nuevo";
+        }
+
+        // Update display
+        function updateDisplay() {
+            currentItemsDisplay.textContent = gameState.currentItems;
+            currentRoundDisplay.textContent = gameState.round;
+            scoreDisplay.textContent = gameState.score;
+        }
+
+        // Audio Context for sound effects
+        let audioContext;
+        
+        // Initialize audio context
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Play start sound - ascending melody
+        function playStartSound() {
+            initAudio();
+            const frequencies = [440, 523, 659]; // A4, C5, E5
+            frequencies.forEach((freq, index) => {
+                setTimeout(() => {
+                    playTone(freq, 0.15, 0.1);
+                }, index * 150);
+            });
+        }
+
+        // Play success sound - cheerful chord
+        function playSuccessSound() {
+            initAudio();
+            const frequencies = [523, 659, 784]; // C5, E5, G5
+            frequencies.forEach(freq => {
+                playTone(freq, 0.3, 0.08);
+            });
+        }
+
+        // Play error sound - gentle descending
+        function playErrorSound() {
+            initAudio();
+            const frequencies = [392, 349]; // G4, F4
+            frequencies.forEach((freq, index) => {
+                setTimeout(() => {
+                    playTone(freq, 0.2, 0.06);
+                }, index * 120);
+            });
+        }
+
+        // Generate tone
+        function playTone(frequency, duration, volume = 0.1) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Say word using Web Speech API
+        function sayWord(text) {
+            if ('speechSynthesis' in window) {
+                gameState.sayWordUses++;
+                persistMeasurement('in_progress');
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.7;
+                utterance.pitch = 1.1;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Event listeners
+        startConfigBtn.addEventListener('click', () => {
+            initAudio();
+            showConfigPanel();
+        });
+
+        quickStartBtn.addEventListener('click', () => {
+            initAudio();
+            quickStart();
+        });
+
+        backToIntroFromConfig.addEventListener('click', backToIntro);
+        
+        backToIntroFromGame.addEventListener('click', backToIntro);
+
+        startGameBtn.addEventListener('click', () => {
+            initAudio();
+            startGameFromConfig();
+        });
+
+        backToConfigBtn.addEventListener('click', backToConfig);
+
+        startBtn.addEventListener('click', () => {
+            initAudio();
+            
+            if (startBtn.textContent.includes('Nuevo')) {
+                initGame();
+                startBtn.textContent = "🚀 Comenzar";
+            } else {
+                startGame();
+            }
+        });
+
+        sayWordBtn.addEventListener('click', () => {
+            if (gameState.lastCorrectWord) {
+                sayWord(gameState.lastCorrectWord.word);
+            }
+        });
+
+        // Initialize configuration panel on load
+        initConfigPanel();
+    </script>
+
+
+</body></html>

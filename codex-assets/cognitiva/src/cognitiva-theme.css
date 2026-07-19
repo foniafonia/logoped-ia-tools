@@ -1,0 +1,97 @@
+/* TEMA VISUAL COGNITIVA — look "lápiz de cera / cuaderno".
+   Solo estética. No altera lógica clínica ni estructura de los talleres.
+   Se enlaza DESPUÉS del CSS propio de cada taller para ganar en cascada. */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Patrick+Hand&display=swap');
+
+:root{
+  --bg:#fdf3e3;
+  --ink:#4a3f35;
+  --line:#4a3f35;
+  --ok:#8bbf6a;
+  --err:#ef8e7a;
+  --font-mano:'Patrick Hand','Baloo 2',cursive;
+  --papel:#fdf3e3;--papel-2:#fbe6cf;--tinta:#4a3f35;
+  --cera-coral:#ef8e7a;--cera-mostaza:#f2c14e;--cera-verde:#8bbf6a;
+  --cera-azul:#6cb6d9;--cera-lila:#b08ed9;
+}
+
+body{
+  background-color:var(--papel) !important;
+  background-image:radial-gradient(rgba(74,63,53,.05) 1px,transparent 1px) !important;
+  background-size:22px 22px !important;
+  color:var(--tinta);
+}
+
+/* Contenedores: hoja de cuaderno dibujada a mano */
+.audio-zone,.feedback-zone,.text-zone,.text-block,.semantic-zone,
+.question-card,.letters-card,.help-popup{
+  background:var(--papel-2) !important;
+  border:3px solid var(--tinta) !important;
+  border-radius:255px 15px 225px 15px/15px 225px 15px 255px !important;
+  box-shadow:2px 3px 0 rgba(74,63,53,.18) !important;
+}
+
+/* Botón de acción principal (audio / repetir) */
+.repeat-btn,.audio-btn,.replay-btn{
+  font-family:var(--font-mano) !important;
+  background:var(--cera-azul) !important;
+  border:3px solid var(--tinta) !important;
+  border-radius:255px 15px 225px 15px/15px 225px 15px 255px !important;
+  color:var(--tinta) !important;
+  box-shadow:2px 3px 0 rgba(74,63,53,.18) !important;
+  transition:transform .12s ease;
+}
+.repeat-btn:hover,.audio-btn:hover,.replay-btn:hover{transform:translateY(-2px) rotate(-.8deg)}
+
+/* Botones/tarjetas de opción.
+   OJO: NO incluir .dot (punto de progreso) ni .slot (casilla con estados
+   .correct/.wrong/.selected) — el estilo de botón los deforma y su !important
+   tapa los estados de acierto/error. Se dejan con su CSS propio. */
+.syllable-btn,.letter-btn,.word-btn,.opt-btn,.phoneme-btn,.v-btn,
+.image-card,.vignette-chip{
+  font-family:var(--font-mano) !important;
+  background:#fff !important;
+  border:3px solid var(--tinta) !important;
+  border-radius:15px 225px 15px 255px/255px 15px 225px 15px !important;
+  color:var(--tinta) !important;
+  box-shadow:2px 3px 0 rgba(74,63,53,.18) !important;
+  transition:transform .12s ease;
+}
+.syllable-btn:hover,.letter-btn:hover,.word-btn:hover,.opt-btn:hover,
+.phoneme-btn:hover,.v-btn:hover,.image-card:hover,.vignette-chip:hover{
+  transform:translateY(-2px) rotate(-1.2deg);
+}
+
+/* Estados de acierto */
+.correct,.correct-hit,.syllable-btn.correct,.letter-btn.correct,
+.word-btn.correct,.opt-btn.correct,.image-card.correct{
+  background:var(--cera-verde) !important;
+  border-color:var(--tinta) !important;
+  color:var(--tinta) !important;
+}
+
+/* Estados de error */
+.error,.wrong,.soft-error,.syllable-btn.error,.letter-btn.error,
+.word-btn.error,.opt-btn.error,.image-card.wrong{
+  background:var(--cera-coral) !important;
+  border-color:var(--tinta) !important;
+}
+
+/* Usado / eliminado */
+.used,.eliminated{opacity:.3 !important;transform:scale(.96)}
+
+/* Botón "Terminar y volver al camino" (lleva estilo inline en el HTML) */
+button[onclick*="window.close"],
+body > button[onclick*="close"]{
+  display:block !important;margin:22px auto !important;
+  font-family:var(--font-mano) !important;font-size:1.3rem !important;font-weight:700 !important;
+  background:var(--cera-mostaza) !important;
+  border:3px solid var(--tinta) !important;
+  border-radius:255px 15px 225px 15px/15px 225px 15px 255px !important;
+  color:var(--tinta) !important;
+  box-shadow:2px 3px 0 rgba(74,63,53,.22) !important;
+  padding:14px 26px !important;
+  transform:rotate(-.8deg) !important;
+  transition:transform .12s ease !important;
+}
+button[onclick*="window.close"]:hover{transform:rotate(-.8deg) translateY(-2px) !important}

@@ -1,0 +1,17 @@
+{
+  "id_taller": "inf_1_obj_006g_007g_012g",
+  "codigo": "1º INFANTIL obj.006g-007g-012g",
+  "nombre": "Asociación fonema-grafema 'o' en mayúscula",
+  "modulo": "integracion_multisensorial_auditivo_visual",
+  "objetivo_clinico": ["transcodificacion_fonema_grafema"],
+  "mecanica": {
+    "estimulo_modelo": "audio_fonema_o",
+    "respuesta_esperada": "grafema_O_mayuscula",
+    "num_opciones": { "base": 3, "min": 2, "max": 4 },
+    "boton_repeticion_audio": true
+  },
+  "regla_distractores": {
+    "target": "O",
+    "no_similares": ["I", "L", "T", "V", "X", "M"]
+  }
+}

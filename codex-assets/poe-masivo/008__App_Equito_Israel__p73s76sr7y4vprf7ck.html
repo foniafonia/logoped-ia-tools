@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tokenbayitleatleat | Invierte en inmuebles israelíes desde ₪500</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6',     // Purple
+                        secondary: '#F59E0B',   // Amber/Yellow
+                        accent: '#EAB308',      // Yellow
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        dark: '#181818',
+                        purple: {
+                            50: '#F3E8FF',
+                            100: '#E9D5FF',
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                            700: '#6D28D9',
+                            800: '#5B21B6',
+                            900: '#4C1D95'
+                        },
+                        yellow: {
+                            50: '#FFFBEB',
+                            100: '#FEF3C7',
+                            400: '#FBBF24',
+                            500: '#F59E0B',
+                            600: '#D97706',
+                            700: '#B45309'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #8B5CF6 0%, #F59E0B 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .property-card {
+            transition: all 0.3s ease;
+        }
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* RTL Support for Hebrew */
+        html[dir="rtl"] {
+            text-align: right;
+        }
+        html[dir="rtl"] .flex {
+            flex-direction: row-reverse;
+        }
+        html[dir="rtl"] .space-x-4 > * + * {
+            margin-left: 0;
+            margin-right: 1rem;
+        }
+        
+        /* Slider Styling */
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .slider::-webkit-slider-track {
+            background: #d1d5db;
+            height: 8px;
+            border-radius: 4px;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #8B5CF6;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .slider::-moz-range-track {
+            background: #d1d5db;
+            height: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+        .slider::-moz-range-thumb {
+            background: #8B5CF6;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark text-gray-900 dark:text-white font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/80 dark:bg-dark/80 backdrop-blur-md z-[9999] border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="building-2" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold">tokenbayitleatleat</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="home">Inicio</a>
+                    <a href="#how-it-works" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="howItWorks">Cómo funciona</a>
+                    <a href="#properties" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="properties">Propiedades</a>
+                    <a href="#dashboard" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="dashboard">Dashboard</a>
+                    <a href="#marketplace" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="marketplace">Mercado</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <select id="languageSelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="he">🇮🇱 עברית</option>
+                    </select>
+                    <select id="currencySelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                        <option value="ILS">₪ ILS</option>
+                        <option value="EUR">€ EUR</option>
+                        <option value="USD">$ USD</option>
+                    </select>
+                    <button id="loginBtn" class="hidden md:block text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="login">Iniciar Sesión</button>
+                    <button id="registerBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors" data-i18n="register">Registrarse</button>
+                    <button id="menuBtn" class="md:hidden p-2 text-gray-700 dark:text-gray-300">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Menu Button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="floatingMenuBtn" onclick="showFloatingMenu()" class="bg-primary hover:bg-primary/90 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-20 pb-16 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                        Desde <span id="heroMinAmount">₪500</span><br>
+                        <span class="text-accent">Invierte en inmuebles</span><br>
+                        israelíes renovados
+                    </h1>
+                    <p class="text-xl mb-8 text-white/90">
+                        Construye tu patrimonio invirtiendo en fracciones de pisos viejos que renovamos, alquilamos y vendemos. Recibe un 8% mensual de los alquileres.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <button onclick="showAppDownloadModal()" class="bg-white text-primary hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                            <i data-lucide="smartphone" class="w-5 h-5 mr-2"></i>
+                            <span data-i18n="downloadApp">Descargar App</span>
+                        </button>
+                        <button onclick="showSection('properties')" class="bg-accent hover:bg-accent/90 text-white px-8 py-4 rounded-lg font-semibold transition-colors">
+                            <span data-i18n="viewProperties">Ver Propiedades</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-8 text-white/90">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">45K</div>
+                            <div class="text-sm" data-i18n="investors">Inversores</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold" id="heroManagement">₪28M</div>
+                            <div class="text-sm" data-i18n="underManagement">Bajo gestión</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">156</div>
+                            <div class="text-sm" data-i18n="properties">Propiedades</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">+8.5%</div>
+                            <div class="text-sm" data-i18n="profitability">Rentabilidad</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:flex justify-center hidden">
+                    <div class="relative">
+                        <div class="w-80 h-96 bg-white/10 rounded-3xl backdrop-blur-md p-6 border border-white/20">
+                            <div class="text-center text-white">
+                                <div class="w-20 h-20 bg-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i data-lucide="home" class="w-10 h-10"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Apartamento en Tel Aviv</h3>
+                                <p class="text-white/80 mb-4">3 habitaciones • 85m²</p>
+                                <div class="bg-white/20 rounded-lg p-4 mb-4">
+                                    <div class="text-2xl font-bold" id="heroPropertyValue">₪850,000</div>
+                                    <div class="text-sm text-white/80">Valor total</div>
+                                </div>
+                                <button class="w-full bg-white text-primary py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                                    <span>Invertir desde </span><span id="heroMinInvestment">₪500</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Cómo funciona tokenbayitleatleat</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Invierte en propiedades israelíes de forma simple y segura. Nosotros nos encargamos de todo el proceso.
+                </p>
+            </div>
+            
+            <!-- Basic Steps -->
+            <div class="grid md:grid-cols-4 gap-8 mb-20">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-4 text-sm font-bold">1</div>
+                    <h3 class="text-xl font-semibold mb-3">Regístrate</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Crea tu cuenta y verifica tu identidad en minutos</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="search" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div class="bg-accent text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-4 text-sm font-bold">2</div>
+                    <h3 class="text-xl font-semibold mb-3">Explora propiedades</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Descubre oportunidades de inversión en toda Israel</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="coins" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-4 text-sm font-bold">3</div>
+                    <h3 class="text-xl font-semibold mb-3">Compra tokens</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Invierte desde <span id="stepMinAmount">₪500</span> en fracciones de propiedades</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-success rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="trending-up" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div class="bg-success text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-4 text-sm font-bold">4</div>
+                    <h3 class="text-xl font-semibold mb-3">Recibe ingresos</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Obtén 8.5% anual de alquileres más ganancias de capital</p>
+                </div>
+            </div>
+
+            <!-- Investment Calculator -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8">
+                <h3 class="text-3xl font-bold text-center mb-8">Calculadora de Beneficios Proyectados</h3>
+                <p class="text-center text-gray-600 dark:text-gray-400 mb-8">
+                    Descubre cuánto podrías ganar reinvirtiendo tus beneficios de alquiler durante 20-30 años
+                </p>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Calculator Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-sm font-medium">Inversión Inicial</label>
+                                <select id="calculatorCurrency" class="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700">
+                                    <option value="ILS">₪ Shekel</option>
+                                    <option value="EUR" selected>€ Euro</option>
+                                    <option value="USD">$ Dólar</option>
+                                </select>
+                            </div>
+                            <div class="relative">
+                                <input type="range" id="initialInvestment" min="100" max="10000" value="500" step="50" 
+                                       class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    <span id="minInvestmentDisplay">€100</span>
+                                    <span id="maxInvestmentDisplay">€10,000</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span class="text-2xl font-bold text-primary" id="initialInvestmentDisplay">€500</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Inversión Mensual Adicional</label>
+                            <div class="relative">
+                                <input type="range" id="monthlyInvestment" min="100" max="2000" value="300" step="50" 
+                                       class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    <span id="monthlyMinDisplay">€100</span>
+                                    <span id="monthlyMaxDisplay">€2,000</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span class="text-2xl font-bold text-accent" id="monthlyInvestmentDisplay">€300</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Período de Inversión</label>
+                            <div class="relative">
+                                <input type="range" id="investmentPeriod" min="10" max="30" value="20" step="5" 
+                                       class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    <span>10 años</span>
+                                    <span>30 años</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span class="text-2xl font-bold text-secondary" id="investmentPeriodDisplay">20 años</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="reinvestProfits" checked class="mr-2">
+                                <label for="reinvestProfits" class="text-sm font-medium">Reinvertir beneficios automáticamente</label>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                                Al activar esta opción, los ingresos mensuales de alquiler se reinvierten automáticamente para acelerar el crecimiento.
+                            </p>
+                        </div>
+
+                        <!-- Results Summary -->
+                        <div class="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold mb-4">Resumen de Proyección</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-sm">Total invertido:</span>
+                                    <span class="font-semibold" id="totalInvestedDisplay">€73,350</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm">Valor final estimado:</span>
+                                    <span class="font-semibold text-green-600" id="finalValueDisplay">€245,780</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm">Beneficio total:</span>
+                                    <span class="font-semibold text-success" id="totalProfitDisplay">€172,430</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm">ROI total:</span>
+                                    <span class="font-semibold text-primary" id="totalROIDisplay">235%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm">Ingresos mensuales finales:</span>
+                                    <span class="font-semibold text-accent" id="finalMonthlyIncomeDisplay">€1,640</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Area -->
+                    <div class="relative">
+                        <canvas id="investmentChart" width="400" height="300" class="w-full border border-gray-200 dark:border-gray-600 rounded-lg"></canvas>
+                        <div class="mt-4 text-center">
+                            <div class="flex justify-center space-x-6 text-sm">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-primary rounded-full mr-2"></div>
+                                    <span>Valor de inversión</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-accent rounded-full mr-2"></div>
+                                    <span>Capital invertido</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section id="properties" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Propiedades disponibles</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Invierte en los mejores inmuebles de Israel</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="propertiesGrid">
+                <!-- Properties will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-20 bg-gray-50 dark:bg-gray-900 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Mi Dashboard</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Gestiona tus inversiones y revisa tu portafolio</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <select id="dashboardLanguageSelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="en">🇺🇸 English</option>
+                            <option value="he">🇮🇱 עברית</option>
+                        </select>
+                        <select id="dashboardCurrencySelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                            <option value="ILS">₪ ILS</option>
+                            <option value="EUR">€ EUR</option>
+                            <option value="USD">$ USD</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Valor Total</h3>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                    <div class="text-2xl font-bold" id="totalValue">₪15,750</div>
+                    <div class="text-sm text-green-500">+12.5% este mes</div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Ingresos Mensuales</h3>
+                        <i data-lucide="coins" class="w-4 h-4 text-accent"></i>
+                    </div>
+                    <div class="text-2xl font-bold" id="monthlyIncome">₪1,260</div>
+                    <div class="text-sm text-gray-500">8.5% promedio</div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Propiedades</h3>
+                        <i data-lucide="building-2" class="w-4 h-4 text-primary"></i>
+                    </div>
+                    <div class="text-2xl font-bold" id="propertiesCount">8</div>
+                    <div class="text-sm text-gray-500">En 5 ciudades</div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">ROI Total</h3>
+                        <i data-lucide="percent" class="w-4 h-4 text-secondary"></i>
+                    </div>
+                    <div class="text-2xl font-bold" id="totalROI">+18.7%</div>
+                    <div class="text-sm text-gray-500">Últimos 12 meses</div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">Mis Inversiones</h3>
+                    <div id="myInvestments" class="space-y-4">
+                        <!-- Investments will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">Historial de Ingresos</h3>
+                    <div id="incomeHistory" class="space-y-3">
+                        <!-- Income history will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="py-20 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Mercado Secundario</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Compra y vende tokens de otros inversores (3% comisión de venta)</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <select id="marketplaceLanguageSelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="en">🇺🇸 English</option>
+                            <option value="he">🇮🇱 עברית</option>
+                        </select>
+                        <select id="marketplaceCurrencySelector" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-sm">
+                            <option value="ILS">₪ ILS</option>
+                            <option value="EUR">€ EUR</option>
+                            <option value="USD">$ USD</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div class="flex gap-4">
+                        <select class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 text-base">
+                            <option>Todas las ciudades</option>
+                            <option>Tel Aviv</option>
+                            <option>Jerusalem</option>
+                            <option>Haifa</option>
+                            <option>Netanya</option>
+                        </select>
+                        <select class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 text-base">
+                            <option>Ordenar por precio</option>
+                            <option>Menor precio</option>
+                            <option>Mayor precio</option>
+                            <option>Mayor rentabilidad</option>
+                        </select>
+                    </div>
+                    <button id="sellTokensBtn" class="bg-secondary hover:bg-secondary/90 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                        Vender mis tokens
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="marketplaceGrid">
+                <!-- Marketplace items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <i data-lucide="building-2" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">tokenbayitleatleat</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Invierte en el futuro inmobiliario de Israel desde <span id="footerMinAmount">₪500</span>. Renovamos, alquilamos y vendemos por ti.
+                    </p>
+                    <div class="text-sm text-gray-400">
+                        Tel Aviv Finance Hub<br>
+                        Rothschild Blvd 45, Tel Aviv, Israel<br>
+                        contact@renovatoken.com
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Navegación</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><button onclick="showSection('home')" class="hover:text-white transition-colors text-left">🏠 Inicio</button></li>
+                        <li><button onclick="showSection('how-it-works')" class="hover:text-white transition-colors text-left">❓ Cómo funciona</button></li>
+                        <li><button onclick="showSection('properties')" class="hover:text-white transition-colors text-left">🏢 Invertir en propiedades</button></li>
+                        <li><button onclick="showSection('dashboard')" class="hover:text-white transition-colors text-left">📊 Dashboard</button></li>
+                        <li><button onclick="showSection('marketplace')" class="hover:text-white transition-colors text-left">🛒 Mercado</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Compañía</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><button onclick="showAboutModal()" class="hover:text-white transition-colors text-left">Sobre nosotros</button></li>
+                        <li><button onclick="showFAQModal()" class="hover:text-white transition-colors text-left">Preguntas frecuentes</button></li>
+                        <li><button onclick="showContactModal()" class="hover:text-white transition-colors text-left">Contacto</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Política de Cookies</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Política AML</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Descargar App</h4>
+                    <div class="space-y-3">
+                        <button onclick="showAppDownloadModal()" class="flex items-center bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors w-full text-left">
+                            <i data-lucide="smartphone" class="w-6 h-6 mr-3"></i>
+                            <div>
+                                <div class="text-xs text-gray-400">Disponible en</div>
+                                <div class="font-semibold">App Store</div>
+                            </div>
+                        </button>
+                        <button onclick="showAppDownloadModal()" class="flex items-center bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors w-full text-left">
+                            <i data-lucide="play" class="w-6 h-6 mr-3"></i>
+                            <div>
+                                <div class="text-xs text-gray-400">Disponible en</div>
+                                <div class="font-semibold">Google Play</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8">
+                <div class="text-center mb-4">
+                    <a href="#home" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors font-medium">
+                        <i data-lucide="arrow-up" class="w-4 h-4 mr-2"></i>
+                        Volver a inicio
+                    </a>
+                </div>
+                <div class="text-center text-gray-400">
+                    <p>&copy; 2025 RenovaToken Ltd. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals will be dynamically inserted here -->
+
+    <script>
+        // Enhanced translation system
+        const translations = {
+            es: {
+                home: "Inicio",
+                howItWorks: "Cómo funciona",
+                properties: "Propiedades",
+                dashboard: "Dashboard",
+                marketplace: "Mercado",
+                login: "Iniciar Sesión",
+                register: "Registrarse",
+                downloadApp: "Descargar App",
+                viewProperties: "Ver Propiedades",
+                investors: "Inversores",
+                underManagement: "Bajo gestión",
+                profitability: "Rentabilidad",
+                heroTitle: "Desde {minAmount}<br><span class='text-accent'>Invierte en inmuebles</span><br>israelíes renovados",
+                heroSubtitle: "Construye tu patrimonio invirtiendo en fracciones de pisos viejos que renovamos, alquilamos y vendemos. Recibe un 8% mensual de los alquileres."
+            },
+            en: {
+                home: "Home",
+                howItWorks: "How it Works",
+                properties: "Properties",
+                dashboard: "Dashboard",
+                marketplace: "Marketplace",
+                login: "Login",
+                register: "Sign Up",
+                downloadApp: "Download App",
+                viewProperties: "View Properties",
+                investors: "Investors",
+                underManagement: "Under management",
+                profitability: "Returns",
+                heroTitle: "From {minAmount}<br><span class='text-accent'>Invest in Israeli</span><br>renovated real estate",
+                heroSubtitle: "Build your wealth by investing in fractions of old apartments that we renovate, rent and sell. Receive 8% monthly from rentals."
+            },
+            he: {
+                home: "בית",
+                howItWorks: "איך זה עובד",
+                properties: "נכסים",
+                dashboard: "לוח בקרה",
+                marketplace: "שוק",
+                login: "התחברות",
+                register: "הרשמה",
+                downloadApp: "הורד אפליקציה",
+                viewProperties: "צפה בנכסים",
+                investors: "משקיעים",
+                underManagement: "בניהול",
+                profitability: "רווחיות",
+                heroTitle: "החל מ-{minAmount}<br><span class='text-accent'>השקע בנדל\"ן</span><br>ישראלי משופץ",
+                heroSubtitle: "בנה את העושר שלך על ידי השקעה בחלקים של דירות ישנות שאנחנו משפצים, משכירים ומוכרים. קבל 8% חודשי מהשכירות."
+            }
+        };
+
+        let currentLanguage = 'es';
+        
+        // Currency conversion rates (base: ILS)
+        const currencyRates = {
+            ILS: 1,
+            EUR: 0.27,
+            USD: 0.28
+        };
+
+        let currentCurrency = 'ILS';
+
+        function getCurrencySymbol(currency) {
+            const symbols = { ILS: '₪', EUR: '€', USD: '$' };
+            return symbols[currency] || '₪';
+        }
+
+        function convertPrice(price, fromCurrency = 'ILS', toCurrency = currentCurrency) {
+            const basePrice = price / currencyRates[fromCurrency];
+            return Math.round(basePrice * currencyRates[toCurrency]);
+        }
+
+        function formatPrice(price, currency = currentCurrency) {
+            const convertedPrice = convertPrice(price, 'ILS', currency);
+            const symbol = getCurrencySymbol(currency);
+            return `${symbol}${convertedPrice.toLocaleString()}`;
+        }
+
+        // Translation system
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage] && translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+
+            updateDynamicTranslations();
+            document.documentElement.lang = currentLanguage;
+            document.documentElement.dir = currentLanguage === 'he' ? 'rtl' : 'ltr';
+        }
+
+        function updateDynamicTranslations() {
+            const minAmount = formatPrice(500);
+            
+            // Update hero title
+            const heroTitle = document.querySelector('h1');
+            if (heroTitle && translations[currentLanguage]) {
+                heroTitle.innerHTML = translations[currentLanguage].heroTitle.replace('{minAmount}', minAmount);
+            }
+            
+            // Update hero subtitle
+            const heroSubtitle = document.querySelector('.text-xl.mb-8');
+            if (heroSubtitle && translations[currentLanguage]) {
+                heroSubtitle.textContent = translations[currentLanguage].heroSubtitle;
+            }
+        }
+
+        // Update all currency displays
+        function updateAllCurrencyDisplays() {
+            // Hero section
+            document.getElementById('heroMinAmount').textContent = formatPrice(500);
+            document.getElementById('heroManagement').textContent = formatPrice(28000000);
+            document.getElementById('heroPropertyValue').textContent = formatPrice(850000);
+            document.getElementById('heroMinInvestment').textContent = formatPrice(500);
+            document.getElementById('stepMinAmount').textContent = formatPrice(500);
+            document.getElementById('footerMinAmount').textContent = formatPrice(500);
+
+            // Dashboard
+            const dashboardSection = document.getElementById('dashboard');
+            if (!dashboardSection.classList.contains('hidden')) {
+                loadDashboard();
+            }
+
+            // Marketplace
+            const marketplaceSection = document.getElementById('marketplace');
+            if (!marketplaceSection.classList.contains('hidden')) {
+                loadMarketplace();
+            }
+
+            // Properties
+            const propertiesSection = document.getElementById('properties');
+            if (!propertiesSection.classList.contains('hidden')) {
+                loadProperties();
+            }
+
+            // Calculator
+            if (document.getElementById('initialInvestment')) {
+                updateCalculations();
+            }
+
+            updateDynamicTranslations();
+        }
+
+        // Language selector
+        document.getElementById('languageSelector').addEventListener('change', function() {
+            currentLanguage = this.value;
+            updateLanguage();
+            updateAllCurrencyDisplays();
+        });
+
+        // Currency selector
+        document.getElementById('currencySelector').addEventListener('change', function() {
+            currentCurrency = this.value;
+            updateAllCurrencyDisplays();
+        });
+
+        // Enhanced property data with complete details
+        const properties = [
+            {
+                id: 1,
+                title: "Apartamento en Tel Aviv",
+                location: "Florentin, Tel Aviv",
+                rooms: 3,
+                size: 85,
+                totalValue: 850000,
+                minInvestment: 500,
+                expectedYield: 8.2,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='skyGrad' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E3F2FD'/%3E%3Cstop offset='100%25' style='stop-color:%23BBDEFB'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23skyGrad)'/%3E%3Crect x='50' y='80' width='120' height='160' fill='%23FFF3E0' stroke='%23E65100' stroke-width='2'/%3E%3Crect x='180' y='60' width='140' height='180' fill='%23F3E5F5' stroke='%237B1FA2' stroke-width='2'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3ETel Aviv - Renovación%3C/text%3E%3C/svg%3E",
+                status: "En renovación",
+                completion: 65,
+                tokensSold: 1200,
+                totalTokens: 1700,
+                description: "Apartamento histórico en el corazón del barrio bohemio de Florentin. Renovación completa con acabados de lujo y diseño moderno.",
+                features: ["Balcón con vista", "Cocina americana", "Suelos de parquet", "A/C central"],
+                monthlyRent: 7500,
+                renovationBudget: 180000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f8f9fa'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23fff' stroke='%23ddd' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3ESalón Principal%3C/text%3E%3C/svg%3E",
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f0f8ff'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23e6f3ff' stroke='%234fc3f7' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3ECocina Moderna%3C/text%3E%3C/svg%3E",
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23fff5f5'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23ffe6e6' stroke='%23ff6b6b' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EDormitorio Principal%3C/text%3E%3C/svg%3E"
+                ],
+                detailedDescription: "🏙️ **OPORTUNIDAD DE ORO EN FLORENTIN** - El barrio más de moda de Tel Aviv\n\n**¿Por qué es una gran inversión?**\n• Florentin es el SoHo de Tel Aviv - área en plena gentrificación\n• Precios han subido 40% en los últimos 3 años\n• A 5 minutos de la estación central y playas\n• Rodeado de galerías, cafés y vida nocturna\n\n**La Propiedad:**\n• Edificio histórico de 1920 completamente renovado\n• 3 habitaciones (2 dobles + 1 estudio)\n• Techos altos de 3.2m con vigas expuestas\n• Balcón francés con vista a la calle peatonal\n• Cocina nueva con electrodomésticos Bosch\n\n**Potencial de Alquiler:**\n• Alquiler actual: ₪7,500/mes (€2,025)\n• Se pueden alquilar 2 habitaciones por separado: ₪4,500 + ₪3,500\n• Alquiler turístico (Airbnb): ₪350/noche\n• Zona con 98% ocupación anual\n\n**Comparativa de Mercado:**\n• Apartamentos similares renovados: ₪1,200,000\n• Nuestro precio post-renovación: ₪850,000 (29% descuento)\n• ROI proyectado: 12.5% anual\n\n**Timeline:**\n• Inicio renovación: Febrero 2025\n• Finalización: Mayo 2025\n• Primer alquiler: Junio 2025",
+                neighborhood: "Florentin es conocido como el barrio más bohemio y artístico de Tel Aviv, comparado con el SoHo de Nueva York. Ubicado entre Neve Tzedek y Jaffa, se ha convertido en el epicentro de la vida nocturna y cultural de la ciudad.",
+                nearbyAmenities: ["Metro Allenby (3 min)", "Playa Banana Beach (8 min)", "Mercado Levinsky (5 min)", "Estación Central (7 min)", "Hospital Ichilov (10 min)"],
+                marketComparison: {
+                    averagePrice: 1200000,
+                    ourPrice: 850000,
+                    discount: 29
+                }
+            },
+            {
+                id: 2,
+                title: "Casa en Jerusalem",
+                location: "Talbiya, Jerusalem",
+                rooms: 4,
+                size: 120,
+                totalValue: 1200000,
+                minInvestment: 500,
+                expectedYield: 7.8,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='skyGrad2' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFE0B2'/%3E%3Cstop offset='100%25' style='stop-color:%23FFCC80'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23skyGrad2)'/%3E%3Cpolygon points='80,100 200,40 320,100 320,240 80,240' fill='%23D7CCC8' stroke='%235D4037' stroke-width='2'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3EJerusalem - Piedra%3C/text%3E%3C/svg%3E",
+                status: "Disponible",
+                completion: 0,
+                tokensSold: 850,
+                totalTokens: 2400,
+                description: "Casa tradicional en piedra de Jerusalem en el exclusivo barrio de Talbiya. Proyecto de renovación preservando la arquitectura histórica.",
+                features: ["Jardín privado", "Arquitectura histórica", "Techos altos", "Ubicación premium"],
+                monthlyRent: 9500,
+                renovationBudget: 280000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f5f3f0'/%3E%3Cpolygon points='50,150 200,50 350,150 350,250 50,250' fill='%23e6ddd4' stroke='%23a0845c' stroke-width='3'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EFachada Principal%3C/text%3E%3C/svg%3E",
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23e8f5e8'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23d4ffd4' stroke='%234caf50' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EJardín Privado%3C/text%3E%3C/svg%3E",
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23fdf6e3'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23f7e98e' stroke='%23d4ac0d' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3ESalón con Techo Alto%3C/text%3E%3C/svg%3E"
+                ],
+                detailedDescription: "🕍 **EXCLUSIVA CASA EN TALBIYA** - El barrio más prestigioso de Jerusalem\n\n**¿Por qué es una oportunidad única?**\n• Talbiya es la zona residencial más exclusiva de Jerusalem\n• Precios promedian ₪15,000/m² - solo accesible para élites\n• Cerca de la residencia del Primer Ministro y embajadas\n• Arquitectura histórica protegida - imposible de replicar\n\n**La Propiedad:**\n• Casa de piedra de Jerusalem auténtica de 1930\n• 4 habitaciones amplias (todas con ventanas grandes)\n• Jardín privado de 200m² - rareza en Jerusalem\n• Techos abovedados de 4.5m\n• Ubicación en calle tranquila y arbolada\n\n**Potencial Excepcional:**\n• Alquiler mensual proyectado: ₪9,500 (€2,565)\n• Se puede dividir en 2 unidades independientes\n• Unidad principal: ₪6,500/mes\n• Estudio en jardín: ₪3,500/mes\n• Demanda altísima de diplomáticos y ejecutivos\n\n**Comparativa de Mercado:**\n• Casas similares en Talbiya: ₪1,800,000\n• Nuestro precio final: ₪1,200,000 (33% descuento)\n• ROI conservador: 9.5% anual",
+                neighborhood: "Talbiya es el barrio más exclusivo de Jerusalem, hogar de diplomáticos, políticos y personas adineradas. Construido en los años 1920-1930, mantiene su carácter histórico único.",
+                nearbyAmenities: ["Primera Estación (5 min)", "Centro de la ciudad (10 min)", "Universidad Hebrea (15 min)", "Knesset (8 min)", "Mahane Yehuda Market (12 min)"],
+                marketComparison: {
+                    averagePrice: 1800000,
+                    ourPrice: 1200000,
+                    discount: 33
+                }
+            },
+            {
+                id: 3,
+                title: "Loft en Haifa",
+                location: "Wadi Nisnas, Haifa",
+                rooms: 2,
+                size: 75,
+                totalValue: 650000,
+                minInvestment: 500,
+                expectedYield: 8.5,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='skyGrad3' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E8F5E8'/%3E%3Cstop offset='100%25' style='stop-color:%23C8E6C9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23skyGrad3)'/%3E%3Crect x='100' y='70' width='200' height='170' fill='%23EFEBE9' stroke='%23795548' stroke-width='3'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3EHaifa - Loft Industrial%3C/text%3E%3C/svg%3E",
+                status: "Alquilado",
+                completion: 100,
+                tokensSold: 1300,
+                totalTokens: 1300,
+                description: "Loft industrial convertido en moderno apartamento en el vibrante barrio árabe de Wadi Nisnas. Completamente renovado y alquilado.",
+                features: ["Techos altos", "Diseño industrial", "Loft abierto", "Zona multicultural"],
+                monthlyRent: 5500,
+                renovationBudget: 150000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f5f5f5'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23e0e0e0' stroke='%23666' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3ELoft Industrial%3C/text%3E%3C/svg%3E"
+                ]
+            },
+            {
+                id: 4,
+                title: "Apartamento en Netanya",
+                location: "Kiryat Hasharon, Netanya",
+                rooms: 3,
+                size: 90,
+                totalValue: 720000,
+                minInvestment: 500,
+                expectedYield: 8.0,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='skyGrad4' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E1F5FE'/%3E%3Cstop offset='100%25' style='stop-color:%23B3E5FC'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23skyGrad4)'/%3E%3Crect x='80' y='90' width='240' height='150' fill='%23FFF8E1' stroke='%23F57F17' stroke-width='2'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3ENetanya - Vista al Mar%3C/text%3E%3C/svg%3E",
+                status: "En renovación",
+                completion: 30,
+                tokensSold: 650,
+                totalTokens: 1440,
+                description: "Apartamento costero con vista al Mediterráneo en Netanya. Renovación moderna cerca de la playa y el centro comercial.",
+                features: ["Vista al mar", "Cerca de la playa", "Balcón amplio", "Acabados modernos"],
+                monthlyRent: 6200,
+                renovationBudget: 160000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23e1f5fe'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23b3e5fc' stroke='%2303a9f4' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EVista al Mar%3C/text%3E%3C/svg%3E"
+                ]
+            },
+            {
+                id: 5,
+                title: "Dúplex en Ramat Gan",
+                location: "Diamond Exchange, Ramat Gan",
+                rooms: 5,
+                size: 140,
+                totalValue: 1450000,
+                minInvestment: 500,
+                expectedYield: 7.5,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='100%25' height='100%25' fill='%23f3e5f5'/%3E%3Crect x='120' y='60' width='160' height='180' fill='%23e8eaf6' stroke='%233f51b5' stroke-width='2'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3ERamat Gan - Dúplex%3C/text%3E%3C/svg%3E",
+                status: "Disponible",
+                completion: 0,
+                tokensSold: 480,
+                totalTokens: 2900,
+                description: "Lujoso dúplex en la zona de la Bolsa de Diamantes. Propiedad premium en ubicación estratégica para profesionales.",
+                features: ["Dúplex de 2 plantas", "Zona empresarial", "Parking privado", "Diseño de lujo"],
+                monthlyRent: 11500,
+                renovationBudget: 350000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f3e5f5'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23e8eaf6' stroke='%233f51b5' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EDúplex Ejecutivo%3C/text%3E%3C/svg%3E"
+                ]
+            },
+            {
+                id: 6,
+                title: "Estudio en Herzliya",
+                location: "Herzliya Pituach, Herzliya",
+                rooms: 1,
+                size: 45,
+                totalValue: 580000,
+                minInvestment: 500,
+                expectedYield: 8.8,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='100%25' height='100%25' fill='%23e0f2f1'/%3E%3Crect x='150' y='100' width='100' height='140' fill='%23fff3e0' stroke='%23ff8f00' stroke-width='2'/%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Arial' font-size='14' font-weight='bold' fill='%23333'%3EHerzliya - Playa%3C/text%3E%3C/svg%3E",
+                status: "En renovación",
+                completion: 80,
+                tokensSold: 980,
+                totalTokens: 1160,
+                description: "Moderno estudio a 100m de la playa en Herzliya Pituach. Ideal para inversión de alquiler turístico y profesionales jóvenes.",
+                features: ["A 100m de la playa", "Edificio nuevo", "Completamente amueblado", "Zona tech"],
+                monthlyRent: 4200,
+                renovationBudget: 95000,
+                photos: [
+                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23e0f2f1'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23fff3e0' stroke='%23ff8f00' stroke-width='2'/%3E%3Ctext x='200' y='150' text-anchor='middle' font-size='16' fill='%23666'%3EEstudio Moderno%3C/text%3E%3C/svg%3E"
+                ]
+            }
+        ];
+
+        const userInvestments = [
+            {
+                propertyId: 1,
+                propertyName: "Apartamento en Tel Aviv - Florentin",
+                tokens: 10,
+                tokenPrice: 250,
+                value: 2500,
+                monthlyIncome: 200,
+                totalReturn: 12.5,
+                purchaseDate: "2024-08-15",
+                expectedYield: 8.2,
+                investmentAmount: 2500,
+                currentValue: 2812,
+                status: "En renovación",
+                completion: 65
+            },
+            {
+                propertyId: 3,
+                propertyName: "Loft en Haifa - Wadi Nisnas",
+                tokens: 8,
+                tokenPrice: 300,
+                value: 2400,
+                monthlyIncome: 170,
+                totalReturn: 8.5,
+                purchaseDate: "2024-06-20",
+                expectedYield: 8.5,
+                investmentAmount: 2400,
+                currentValue: 2604,
+                status: "Alquilado",
+                completion: 100
+            },
+            {
+                propertyId: 4,
+                propertyName: "Apartamento en Netanya - Vista al Mar",
+                tokens: 6,
+                tokenPrice: 400,
+                value: 2400,
+                monthlyIncome: 145,
+                totalReturn: 7.2,
+                purchaseDate: "2024-09-10",
+                expectedYield: 8.0,
+                investmentAmount: 2400,
+                currentValue: 2573,
+                status: "En renovación",
+                completion: 30
+            }
+        ];
+
+        const incomeHistory = [
+            { date: "2025-01-15", amount: 515, property: "Todos los inmuebles", type: "Alquiler mensual" },
+            { date: "2024-12-15", amount: 515, property: "Todos los inmuebles", type: "Alquiler mensual" },
+            { date: "2024-11-15", amount: 485, property: "Todos los inmuebles", type: "Alquiler mensual" },
+            { date: "2024-10-15", amount: 470, property: "Todos los inmuebles", type: "Alquiler mensual" },
+            { date: "2024-09-15", amount: 370, property: "Tel Aviv + Haifa", type: "Alquiler mensual" },
+            { date: "2024-08-20", amount: 85, property: "Loft en Haifa", type: "Reembolso de gastos" },
+            { date: "2024-08-15", amount: 170, property: "Loft en Haifa", type: "Primer alquiler" }
+        ];
+
+        const marketplaceItems = [
+            {
+                id: 1,
+                propertyName: "Apartamento en Tel Aviv - Florentin",
+                tokens: 5,
+                pricePerToken: 280,
+                originalPrice: 250,
+                seller: "Usuario123",
+                yield: 8.2,
+                description: "Venta por necesidad de liquidez. Propiedad en excelente estado.",
+                daysListed: 3,
+                totalValue: 1400,
+                reason: "Liquidez personal"
+            },
+            {
+                id: 2,
+                propertyName: "Casa en Jerusalem - Talbiya",
+                tokens: 3,
+                pricePerToken: 520,
+                originalPrice: 500,
+                seller: "InversionesTop",
+                yield: 7.8,
+                description: "Tokens premium en zona exclusiva con alto potencial.",
+                daysListed: 7,
+                totalValue: 1560,
+                reason: "Rebalanceo de cartera"
+            },
+            {
+                id: 3,
+                propertyName: "Estudio en Herzliya - Playa",
+                tokens: 8,
+                pricePerToken: 420,
+                originalPrice: 400,
+                seller: "CriptoInversor",
+                yield: 8.8,
+                description: "Excelente oportunidad cerca de la playa.",
+                daysListed: 1,
+                totalValue: 3360,
+                reason: "Diversificación"
+            }
+        ];
+
+        // Investment Calculator
+        let investmentChart;
+
+        function updateCalculations() {
+            const calcCurrency = document.getElementById('calculatorCurrency').value;
+            const initialAmount = parseFloat(document.getElementById('initialInvestment').value) || (calcCurrency === 'EUR' ? 100 : calcCurrency === 'USD' ? 100 : 500);
+            const monthlyAmount = parseFloat(document.getElementById('monthlyInvestment').value) || 100;
+            const years = parseInt(document.getElementById('investmentPeriod').value) || 20;
+            const reinvest = document.getElementById('reinvestProfits').checked;
+
+            // Update display values based on calculator currency
+            const symbol = getCurrencySymbol(calcCurrency);
+            document.getElementById('initialInvestmentDisplay').textContent = `${symbol}${initialAmount.toLocaleString()}`;
+            document.getElementById('monthlyInvestmentDisplay').textContent = `${symbol}${monthlyAmount.toLocaleString()}`;
+            document.getElementById('investmentPeriodDisplay').textContent = `${years} años`;
+            
+            // Update min/max displays based on currency
+            const minVal = calcCurrency === 'EUR' ? 100 : calcCurrency === 'USD' ? 100 : 500;
+            const maxVal = calcCurrency === 'EUR' ? 10000 : calcCurrency === 'USD' ? 10000 : 50000;
+            document.getElementById('minInvestmentDisplay').textContent = `${symbol}${minVal}`;
+            document.getElementById('maxInvestmentDisplay').textContent = `${symbol}${maxVal}`;
+            document.getElementById('monthlyMinDisplay').textContent = `${symbol}100`;
+            document.getElementById('monthlyMaxDisplay').textContent = `${symbol}2,000`;
+
+            const results = calculateInvestmentProjection(initialAmount, monthlyAmount, years, reinvest, calcCurrency);
+
+            document.getElementById('totalInvestedDisplay').textContent = `${symbol}${results.totalInvested.toLocaleString()}`;
+            document.getElementById('finalValueDisplay').textContent = `${symbol}${results.finalValue.toLocaleString()}`;
+            document.getElementById('totalProfitDisplay').textContent = `${symbol}${results.totalProfit.toLocaleString()}`;
+            document.getElementById('totalROIDisplay').textContent = `${results.roi}%`;
+            document.getElementById('finalMonthlyIncomeDisplay').textContent = `${symbol}${results.finalMonthlyIncome.toLocaleString()}`;
+
+            updateInvestmentChart(results.yearlyData, calcCurrency);
+        }
+
+        function calculateInvestmentProjection(initialAmount, monthlyAmount, years, reinvest, currency = 'EUR') {
+            const annualReturn = 0.085;
+            const monthlyReturn = annualReturn / 12;
+            
+            let totalValue = initialAmount;
+            let totalInvested = initialAmount;
+            const yearlyData = [];
+
+            for (let year = 1; year <= years; year++) {
+                for (let month = 1; month <= 12; month++) {
+                    totalValue += monthlyAmount;
+                    totalInvested += monthlyAmount;
+                    const monthlyProfit = totalValue * monthlyReturn;
+                    totalValue += reinvest ? monthlyProfit : monthlyProfit * 0.5;
+                }
+
+                yearlyData.push({
+                    year: year,
+                    totalValue: Math.round(totalValue),
+                    totalInvested: Math.round(totalInvested),
+                    profit: Math.round(totalValue - totalInvested)
+                });
+            }
+
+            const finalValue = Math.round(totalValue);
+            const totalProfit = Math.round(finalValue - totalInvested);
+            const roi = Math.round((totalProfit / totalInvested) * 100);
+            const finalMonthlyIncome = Math.round(finalValue * monthlyReturn);
+
+            return {
+                totalInvested: Math.round(totalInvested),
+                finalValue,
+                totalProfit,
+                roi,
+                finalMonthlyIncome,
+                yearlyData
+            };
+        }
+
+        // Add calculator currency change listener
+        function initializeCalculator() {
+            const initialInvestment = document.getElementById('initialInvestment');
+            if (!initialInvestment) return;
+
+            createInvestmentChart();
+
+            ['initialInvestment', 'monthlyInvestment', 'investmentPeriod'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateCalculations);
+            });
+
+            document.getElementById('reinvestProfits').addEventListener('change', updateCalculations);
+            document.getElementById('calculatorCurrency').addEventListener('change', function() {
+                const currency = this.value;
+                const slider = document.getElementById('initialInvestment');
+                const monthlySlider = document.getElementById('monthlyInvestment');
+                
+                // Update ranges based on currency
+                if (currency === 'ILS') {
+                    slider.min = 500;
+                    slider.max = 50000;
+                    slider.value = 2000;
+                    monthlySlider.value = 500;
+                } else if (currency === 'USD') {
+                    slider.min = 100;
+                    slider.max = 10000;
+                    slider.value = 500;
+                    monthlySlider.value = 300;
+                } else { // EUR
+                    slider.min = 100;
+                    slider.max = 10000;
+                    slider.value = 500;
+                    monthlySlider.value = 300;
+                }
+                
+                updateCalculations();
+            });
+            
+            updateCalculations();
+        }
+
+        function createInvestmentChart() {
+            const canvas = document.getElementById('investmentChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            ctx.scale(2, 2);
+            
+            investmentChart = {
+                canvas: canvas,
+                ctx: ctx,
+                data: [],
+                draw: function() {
+                    const width = rect.width;
+                    const height = rect.height;
+                    
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    if (this.data.length === 0) return;
+                    
+                    const padding = 50;
+                    const chartWidth = width - padding * 2;
+                    const chartHeight = height - padding * 2;
+                    
+                    const maxValue = Math.max(...this.data.map(d => d.totalValue));
+                    const scaleY = chartHeight / maxValue;
+                    const scaleX = chartWidth / Math.max(1, this.data.length - 1);
+                    
+                    // Grid
+                    ctx.strokeStyle = '#e5e7eb';
+                    ctx.lineWidth = 0.5;
+                    for (let i = 0; i <= 5; i++) {
+                        const y = padding + (chartHeight / 5) * i;
+                        ctx.beginPath();
+                        ctx.moveTo(padding, y);
+                        ctx.lineTo(width - padding, y);
+                        ctx.stroke();
+                    }
+                    
+                    // Investment value line
+                    if (this.data.length > 1) {
+                        ctx.strokeStyle = '#8B5CF6';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        this.data.forEach((point, index) => {
+                            const x = padding + index * scaleX;
+                            const y = padding + chartHeight - (point.totalValue * scaleY);
+                            if (index === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                ctx.lineTo(x, y);
+                            }
+                        });
+                        ctx.stroke();
+                        
+                        // Invested amount line
+                        ctx.strokeStyle = '#F59E0B';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        this.data.forEach((point, index) => {
+                            const x = padding + index * scaleX;
+                            const y = padding + chartHeight - (point.totalInvested * scaleY);
+                            if (index === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                ctx.lineTo(x, y);
+                            }
+                        });
+                        ctx.stroke();
+                    }
+                    
+                    // Labels
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '10px Inter';
+                    ctx.textAlign = 'center';
+                    
+                    // X-axis
+                    this.data.forEach((point, index) => {
+                        if (index % 5 === 0 || index === this.data.length - 1) {
+                            const x = padding + index * scaleX;
+                            ctx.fillText(`${point.year}`, x, height - 15);
+                        }
+                    });
+                    
+                    // Y-axis
+                    for (let i = 0; i <= 5; i++) {
+                        const value = (maxValue / 5) * (5 - i);
+                        const y = padding + (chartHeight / 5) * i;
+                        ctx.textAlign = 'right';
+                        if (value > 1000) {
+                            ctx.fillText(`€${Math.round(value/1000)}K`, padding - 5, y + 3);
+                        } else {
+                            ctx.fillText(`€${Math.round(value)}`, padding - 5, y + 3);
+                        }
+                    }
+                }
+            };
+        }
+
+        function updateInvestmentChart(data) {
+            if (investmentChart) {
+                investmentChart.data = data;
+                investmentChart.draw();
+            }
+        }
+
+        // Load properties
+        function loadProperties() {
+            const grid = document.getElementById('propertiesGrid');
+            grid.innerHTML = properties.map(property => `
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden property-card">
+                    <img src="${property.image}" alt="${property.title}" class="w-full h-48 object-cover cursor-pointer" onclick="showPropertyDetails(${property.id})">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full ${
+                                property.status === 'Disponible' ? 'bg-green-100 text-green-800' :
+                                property.status === 'En renovación' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-blue-100 text-blue-800'
+                            }">${property.status}</span>
+                            <span class="text-lg font-bold text-primary">${property.expectedYield}%</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">${property.title}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-3">${property.location}</p>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <i data-lucide="bed" class="w-4 h-4 mr-1"></i>
+                            <span class="mr-4">${property.rooms} hab.</span>
+                            <i data-lucide="maximize" class="w-4 h-4 mr-1"></i>
+                            <span>${property.size}m²</span>
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Valor total:</span>
+                                <span class="font-semibold">${formatPrice(property.totalValue)}</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Inversión mínima:</span>
+                                <span class="font-semibold">${formatPrice(property.minInvestment)}</span>
+                            </div>
+                            <div class="flex justify-between text-sm mb-4">
+                                <span>Alquiler mensual:</span>
+                                <span class="font-semibold text-green-600">${formatPrice(property.monthlyRent)}</span>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Tokens vendidos:</span>
+                                    <span>${property.tokensSold}/${property.totalTokens}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: ${(property.tokensSold / property.totalTokens) * 100}%"></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="showPropertyDetails(${property.id})" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg font-medium transition-colors text-sm">
+                                    Ver Detalles
+                                </button>
+                                <button onclick="openInvestmentModal(${property.id})" class="bg-primary hover:bg-primary/90 text-white py-2 px-3 rounded-lg font-medium transition-colors text-sm">
+                                    Invertir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function loadDashboard() {
+            // Calculate totals from user investments
+            let totalValue = 0;
+            let totalMonthlyIncome = 0;
+            let totalInvestment = 0;
+
+            userInvestments.forEach(investment => {
+                totalValue += investment.currentValue;
+                totalMonthlyIncome += investment.monthlyIncome;
+                totalInvestment += investment.investmentAmount;
+            });
+
+            // Update dashboard values with current currency
+            document.getElementById('totalValue').textContent = formatPrice(totalValue);
+            document.getElementById('monthlyIncome').textContent = formatPrice(totalMonthlyIncome);
+            document.getElementById('propertiesCount').textContent = userInvestments.length;
+
+            const totalROI = ((totalValue - totalInvestment) / totalInvestment * 100).toFixed(1);
+            document.getElementById('totalROI').textContent = `+${totalROI}%`;
+
+            // Load detailed investments with dropdown
+            const investmentsContainer = document.getElementById('myInvestments');
+            investmentsContainer.innerHTML = userInvestments.map(investment => `
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                    <div class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="toggleInvestmentDetails(${investment.propertyId})">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-medium">${investment.propertyName}</h4>
+                            <div class="text-right">
+                                <span class="text-green-500 text-sm font-semibold">+${investment.totalReturn}%</span>
+                                <div class="text-xs text-gray-500">${investment.status}</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Tokens:</span>
+                                <span class="font-medium ml-1">${investment.tokens}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Valor actual:</span>
+                                <span class="font-medium ml-1">${formatPrice(investment.currentValue)}</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-sm">
+                                <span class="text-gray-500">Ingreso mensual:</span>
+                                <span class="font-medium ml-1 text-green-600">${formatPrice(investment.monthlyIncome)}</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 investment-chevron-${investment.propertyId}"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed view (hidden by default) -->
+                    <div id="investment-details-${investment.propertyId}" class="hidden bg-gray-50 dark:bg-gray-700 p-4 border-t border-gray-200 dark:border-gray-600">
+                        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                            <div>
+                                <div class="text-gray-500">Precio por token:</div>
+                                <div class="font-medium">${formatPrice(investment.tokenPrice)}</div>
+                            </div>
+                            <div>
+                                <div class="text-gray-500">Fecha de compra:</div>
+                                <div class="font-medium">${new Date(investment.purchaseDate).toLocaleDateString('es-ES')}</div>
+                            </div>
+                            <div>
+                                <div class="text-gray-500">Inversión inicial:</div>
+                                <div class="font-medium">${formatPrice(investment.investmentAmount)}</div>
+                            </div>
+                            <div>
+                                <div class="text-gray-500">Rendimiento esperado:</div>
+                                <div class="font-medium">${investment.expectedYield}% anual</div>
+                            </div>
+                        </div>
+                        
+                        ${investment.status === 'En renovación' ? `
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-500">Progreso de renovación:</span>
+                                    <span>${investment.completion}%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: ${investment.completion}%"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="flex gap-2">
+                            <button onclick="viewPropertyDetails(${investment.propertyId})" class="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 py-2 px-3 rounded-lg font-medium transition-colors text-sm">
+                                Ver Propiedad
+                            </button>
+                            <button onclick="sellTokens(${investment.propertyId})" class="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 px-3 rounded-lg font-medium transition-colors text-sm">
+                                Vender Tokens
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Load detailed income history
+            const incomeContainer = document.getElementById('incomeHistory');
+            incomeContainer.innerHTML = incomeHistory.map(income => `
+                <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                    <div class="flex-1">
+                        <div class="font-medium">${formatPrice(income.amount)}</div>
+                        <div class="text-sm text-gray-500">${income.property}</div>
+                        <div class="text-xs text-gray-400">${income.type}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">${new Date(income.date).toLocaleDateString('es-ES')}</div>
+                        <div class="text-xs text-green-600">
+                            <i data-lucide="trending-up" class="w-3 h-3 inline mr-1"></i>
+                            Recibido
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Recreate icons
+            lucide.createIcons();
+        }
+
+        function loadMarketplace() {
+            const grid = document.getElementById('marketplaceGrid');
+            grid.innerHTML = marketplaceItems.map(item => `
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">${item.propertyName}</h3>
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between">
+                            <span>Tokens:</span>
+                            <span class="font-medium">${item.tokens}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Precio:</span>
+                            <span class="font-medium">${formatPrice(item.pricePerToken)}</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-accent hover:bg-accent/90 text-white py-3 rounded-lg font-semibold transition-colors">
+                        Comprar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Initialize specific section selectors
+        function initializeSectionSelectors() {
+            // Dashboard selectors
+            const dashboardLanguageSelector = document.getElementById('dashboardLanguageSelector');
+            const dashboardCurrencySelector = document.getElementById('dashboardCurrencySelector');
+            
+            if (dashboardLanguageSelector) {
+                dashboardLanguageSelector.value = currentLanguage;
+                dashboardLanguageSelector.addEventListener('change', function() {
+                    currentLanguage = this.value;
+                    updateLanguage();
+                    updateAllCurrencyDisplays();
+                });
+            }
+            
+            if (dashboardCurrencySelector) {
+                dashboardCurrencySelector.value = currentCurrency;
+                dashboardCurrencySelector.addEventListener('change', function() {
+                    currentCurrency = this.value;
+                    updateAllCurrencyDisplays();
+                });
+            }
+
+            // Marketplace selectors
+            const marketplaceLanguageSelector = document.getElementById('marketplaceLanguageSelector');
+            const marketplaceCurrencySelector = document.getElementById('marketplaceCurrencySelector');
+            
+            if (marketplaceLanguageSelector) {
+                marketplaceLanguageSelector.value = currentLanguage;
+                marketplaceLanguageSelector.addEventListener('change', function() {
+                    currentLanguage = this.value;
+                    updateLanguage();
+                    updateAllCurrencyDisplays();
+                });
+            }
+            
+            if (marketplaceCurrencySelector) {
+                marketplaceCurrencySelector.value = currentCurrency;
+                marketplaceCurrencySelector.addEventListener('change', function() {
+                    currentCurrency = this.value;
+                    updateAllCurrencyDisplays();
+                });
+            }
+        }
+
+        // Modal and interaction functions
+        function showSection(sectionId) {
+            ['home', 'how-it-works', 'properties', 'dashboard', 'marketplace'].forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    section.classList.toggle('hidden', id !== sectionId);
+                }
+            });
+
+            if (sectionId === 'properties') {
+                loadProperties();
+            } else if (sectionId === 'dashboard') {
+                loadDashboard();
+                setTimeout(initializeSectionSelectors, 100);
+            } else if (sectionId === 'marketplace') {
+                loadMarketplace();
+                setTimeout(initializeSectionSelectors, 100);
+            }
+        }
+
+        function showPropertyDetails(propertyId) {
+            const property = properties.find(p => p.id === propertyId);
+            if (!property) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">${property.title}</h2>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                <i data-lucide="x" class="w-6 h-6"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid lg:grid-cols-2 gap-6">
+                            <div>
+                                <img src="${property.image}" alt="${property.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                                <div class="grid grid-cols-2 gap-2">
+                                    ${property.photos ? property.photos.slice(0, 4).map(photo => `
+                                        <img src="${photo}" alt="Foto" class="w-full h-20 object-cover rounded cursor-pointer hover:opacity-75">
+                                    `).join('') : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="px-3 py-1 text-sm font-semibold rounded-full ${
+                                        property.status === 'Disponible' ? 'bg-green-100 text-green-800' :
+                                        property.status === 'En renovación' ? 'bg-yellow-100 text-yellow-800' :
+                                        'bg-blue-100 text-blue-800'
+                                    }">${property.status}</span>
+                                    <span class="text-xl font-bold text-primary">${property.expectedYield}% anual</span>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-500">Ubicación:</span>
+                                        <div class="font-medium">${property.location}</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Tamaño:</span>
+                                        <div class="font-medium">${property.rooms} hab. • ${property.size}m²</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Valor total:</span>
+                                        <div class="font-medium">${formatPrice(property.totalValue)}</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Alquiler mensual:</span>
+                                        <div class="font-medium text-green-600">${formatPrice(property.monthlyRent)}</div>
+                                    </div>
+                                </div>
+                                
+                                ${property.status === 'En renovación' && property.completion ? `
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span>Progreso de renovación:</span>
+                                            <span>${property.completion}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-yellow-500 h-2 rounded-full" style="width: ${property.completion}%"></div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <div>
+                                    <h4 class="font-semibold mb-2">Características:</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        ${property.features.map(feature => `
+                                            <div class="flex items-center">
+                                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                                <span>${feature}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Tokens vendidos:</span>
+                                        <span>${property.tokensSold}/${property.totalTokens}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: ${(property.tokensSold / property.totalTokens) * 100}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="openInvestmentModal(${property.id}); this.closest('.fixed').remove();" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition-colors">
+                                    Invertir desde ${formatPrice(property.minInvestment)}
+                                </button>
+                            </div>
+                        </div>
+                        
+                        ${property.detailedDescription ? `
+                            <div class="mt-6 pt-6 border-t">
+                                <h4 class="font-semibold mb-3">Análisis de Inversión:</h4>
+                                <div class="prose dark:prose-invert max-w-none text-sm">
+                                    ${property.detailedDescription.replace(/\n/g, '<br>')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function openInvestmentModal(propertyId) {
+            const property = properties.find(p => p.id === propertyId);
+            if (!property) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Invertir en ${property.title}</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Moneda de inversión</label>
+                            <select id="investmentCurrency" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-base bg-white dark:bg-gray-700" onchange="updateInvestmentPreview()">
+                                <option value="ILS">₪500 Shekel (1 token)</option>
+                                <option value="EUR">€100 Euro (1 token)</option>
+                                <option value="USD">$100 Dólar (1 token)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Cantidad de tokens</label>
+                            <input type="number" id="tokensAmount" min="1" max="50" value="1" 
+                                   class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-base bg-white dark:bg-gray-700"
+                                   oninput="updateInvestmentPreview()">
+                            <div class="text-xs text-gray-500 mt-1">Mínimo: 1 token • Máximo: 50 tokens</div>
+                        </div>
+                        
+                        <div id="investmentPreview" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Tokens seleccionados:</span>
+                                <span class="font-medium" id="tokensSelected">1</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total a invertir:</span>
+                                <span class="font-medium text-primary" id="totalInvestment">₪500</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Ingreso mensual estimado:</span>
+                                <span class="font-medium text-green-600" id="monthlyIncomePreview">₪34</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Rendimiento anual:</span>
+                                <span class="font-medium">${property.expectedYield}%</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="confirmInvestment(${property.id})" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition-colors">
+                            Confirmar Inversión
+                        </button>
+                        
+                        <div class="text-xs text-gray-500 text-center">
+                            Al invertir, aceptas nuestros términos y condiciones. Esta inversión conlleva riesgos.
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+            updateInvestmentPreview();
+            
+            // Investment preview function
+            window.updateInvestmentPreview = function() {
+                const currency = document.getElementById('investmentCurrency').value;
+                const tokens = parseInt(document.getElementById('tokensAmount').value) || 1;
+                
+                // Token prices based on currency
+                const tokenPrices = {
+                    ILS: 500,
+                    EUR: 100,
+                    USD: 100
+                };
+                
+                const tokenPrice = tokenPrices[currency];
+                const totalAmount = tokens * tokenPrice;
+                const monthlyIncome = (totalAmount * property.expectedYield / 100) / 12;
+                
+                // Update display values
+                document.getElementById('tokensSelected').textContent = tokens;
+                document.getElementById('totalInvestment').textContent = `${getCurrencySymbol(currency)}${totalAmount.toLocaleString()}`;
+                document.getElementById('monthlyIncomePreview').textContent = `${getCurrencySymbol(currency)}${Math.round(monthlyIncome)}`;
+            };
+        }
+
+        function confirmInvestment(propertyId) {
+            const currency = document.getElementById('investmentCurrency').value;
+            const tokens = parseInt(document.getElementById('tokensAmount').value) || 1;
+            
+            // Token prices based on currency
+            const tokenPrices = {
+                ILS: 500,
+                EUR: 100,
+                USD: 100
+            };
+            
+            const tokenPrice = tokenPrices[currency];
+            const totalAmount = tokens * tokenPrice;
+            const symbol = getCurrencySymbol(currency);
+            
+            // Close investment modal first
+            const currentModal = document.querySelector('.fixed');
+            if (currentModal) {
+                currentModal.remove();
+            }
+            
+            // Add investment to user data
+            const property = properties.find(p => p.id === propertyId);
+            if (property) {
+                const newInvestment = {
+                    propertyId: propertyId,
+                    propertyName: property.title + " - " + property.location.split(',')[1].trim(),
+                    tokens: tokens,
+                    tokenPrice: tokenPrice,
+                    value: totalAmount,
+                    monthlyIncome: Math.round((totalAmount * property.expectedYield / 100) / 12),
+                    totalReturn: 0,
+                    purchaseDate: new Date().toISOString().split('T')[0],
+                    expectedYield: property.expectedYield,
+                    investmentAmount: totalAmount,
+                    currentValue: totalAmount,
+                    status: property.status,
+                    completion: property.completion || 0
+                };
+                userInvestments.push(newInvestment);
+            }
+            
+            // Show success modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
+                    </div>
+                    <h2 class="text-xl font-bold mb-2">¡Inversión Exitosa!</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        Has comprado <strong>${tokens} token${tokens > 1 ? 's' : ''}</strong> por <strong>${symbol}${totalAmount.toLocaleString()}</strong> exitosamente.
+                    </p>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6 text-left">
+                        <div class="text-sm space-y-1">
+                            <div><strong>Tokens adquiridos:</strong> ${tokens}</div>
+                            <div><strong>Precio por token:</strong> ${symbol}${tokenPrice}</div>
+                            <div><strong>Total invertido:</strong> ${symbol}${totalAmount.toLocaleString()}</div>
+                            <div class="text-green-600"><strong>Ingresos estimados:</strong> ${symbol}${Math.round((totalAmount * 8.5 / 100) / 12)}/mes</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Recibirás tus primeros ingresos de alquiler el próximo mes. Los tokens aparecerán en tu dashboard en unos minutos.
+                    </p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="this.closest('.fixed').remove();" 
+                                class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 py-3 rounded-lg font-semibold transition-colors">
+                            Continuar
+                        </button>
+                        <button onclick="this.closest('.fixed').remove(); showSection('dashboard');" 
+                                class="bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition-colors">
+                            Ver Dashboard
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function toggleInvestmentDetails(propertyId) {
+            const details = document.getElementById(`investment-details-${propertyId}`);
+            const chevron = document.querySelector(`.investment-chevron-${propertyId}`);
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                details.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function viewPropertyDetails(propertyId) {
+            showPropertyDetails(propertyId);
+        }
+
+        function sellTokens(propertyId) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6">
+                    <h2 class="text-xl font-bold mb-4">Vender Tokens</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Puedes vender tus tokens en el mercado secundario con una comisión del 3%.
+                    </p>
+                    <div class="flex gap-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 py-2 rounded-lg font-medium transition-colors">
+                            Cancelar
+                        </button>
+                        <button onclick="showSection('marketplace'); this.closest('.fixed').remove();" class="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 rounded-lg font-medium transition-colors">
+                            Ir al Mercado
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function showAboutModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Sobre RenovaToken</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4 text-gray-600 dark:text-gray-400">
+                        <p>tokenbayitleatleat es la primera plataforma de tokenización inmobiliaria especializada en propiedades israelíes. Desde 2023, hemos democratizado el acceso a inversiones inmobiliarias premium.</p>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Nuestro Equipo</h3>
+                        <p>Fundada por expertos en bienes raíces y tecnología blockchain con más de 15 años de experiencia en el mercado israelí.</p>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Misión</h3>
+                        <p>Hacer accesible la inversión inmobiliaria en Israel a inversores globales mediante tecnología blockchain y gestión profesional.</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function showFAQModal() {
+            const faqs = [
+                {
+                    q: "¿Cómo funciona la tokenización?",
+                    a: "Cada propiedad se divide en tokens digitales que representan una fracción de la propiedad. Al comprar tokens, obtienes derechos proporcionales sobre los ingresos y apreciación."
+                },
+                {
+                    q: "¿Cuál es la inversión mínima?",
+                    a: "La inversión mínima es de ₪500 (aproximadamente €135). Esto te permite acceder a propiedades premium que normalmente requerirían cientos de miles de euros."
+                },
+                {
+                    q: "¿Cómo recibo los pagos?",
+                    a: "Los pagos de alquiler se distribuyen mensualmente de forma automática a tu wallet. Puedes elegir recibirlos en ILS, EUR o USD."
+                },
+                {
+                    q: "¿Puedo vender mis tokens?",
+                    a: "Sí, puedes vender tus tokens en nuestro mercado secundario en cualquier momento con una comisión del 3%."
+                }
+            ];
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full p-6 max-h-[80vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Preguntas Frecuentes</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        ${faqs.map(faq => `
+                            <div class="border-b border-gray-200 dark:border-gray-600 pb-4">
+                                <h3 class="font-semibold mb-2">${faq.q}</h3>
+                                <p class="text-gray-600 dark:text-gray-400">${faq.a}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function showContactModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Contacto</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 text-primary mr-3"></i>
+                            <span>contact@renovatoken.com</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="phone" class="w-5 h-5 text-primary mr-3"></i>
+                            <span>+972-3-123-4567</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-primary mr-3"></i>
+                            <span>Rothschild Blvd 45, Tel Aviv, Israel</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="clock" class="w-5 h-5 text-primary mr-3"></i>
+                            <span>Dom-Jue: 9:00-18:00 (GMT+2)</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        // Floating menu function
+        function showFloatingMenu() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Menú de Navegación</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-3">
+                        <button onclick="showSection('home'); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="home" class="w-5 h-5 mr-3 text-primary"></i>
+                            <span>Inicio</span>
+                        </button>
+                        <button onclick="showSection('how-it-works'); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="help-circle" class="w-5 h-5 mr-3 text-primary"></i>
+                            <span>Cómo funciona</span>
+                        </button>
+                        <button onclick="showSection('properties'); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="building-2" class="w-5 h-5 mr-3 text-primary"></i>
+                            <span>Propiedades</span>
+                        </button>
+                        <button onclick="showSection('dashboard'); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-primary"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        <button onclick="showSection('marketplace'); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="shopping-cart" class="w-5 h-5 mr-3 text-primary"></i>
+                            <span>Mercado</span>
+                        </button>
+                        <hr class="border-gray-200 dark:border-gray-600">
+                        <button onclick="showAboutModal(); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="info" class="w-5 h-5 mr-3 text-accent"></i>
+                            <span>Sobre nosotros</span>
+                        </button>
+                        <button onclick="showContactModal(); this.closest('.fixed').remove();" 
+                                class="w-full flex items-center p-3 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors text-left">
+                            <i data-lucide="phone" class="w-5 h-5 mr-3 text-accent"></i>
+                            <span>Contacto</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function showAppDownloadModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Descargar RenovaToken</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="smartphone" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Descarga nuestra app móvil para gestionar tus inversiones desde cualquier lugar
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <i data-lucide="smartphone" class="w-8 h-8 text-gray-600 dark:text-gray-400 mr-4"></i>
+                                <div>
+                                    <div class="font-semibold">iOS App</div>
+                                    <div class="text-sm text-gray-500">iPhone y iPad</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-accent font-medium">Próximamente</div>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <i data-lucide="play" class="w-8 h-8 text-gray-600 dark:text-gray-400 mr-4"></i>
+                                <div>
+                                    <div class="font-semibold">Android App</div>
+                                    <div class="text-sm text-gray-500">Dispositivos Android</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-accent font-medium">Próximamente</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-primary/10 rounded-lg">
+                        <div class="text-sm text-center">
+                            <strong>¡Mientras tanto!</strong><br>
+                            Puedes usar nuestra plataforma web desde tu móvil. Está optimizada para funcionar perfectamente en todos los dispositivos.
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode detection
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+
+            lucide.createIcons();
+            loadProperties();
+            showSection('home');
+            updateAllCurrencyDisplays();
+
+            // Navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showSection(targetId);
+                });
+            });
+
+            // Initialize calculator when section becomes visible
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const target = mutation.target;
+                        if (target.id === 'how-it-works' && !target.classList.contains('hidden')) {
+                            setTimeout(initializeCalculator, 100);
+                        }
+                    }
+                });
+            });
+
+            const howItWorksSection = document.getElementById('how-it-works');
+            if (howItWorksSection) {
+                observer.observe(howItWorksSection, { attributes: true });
+            }
+        });
+    </script>
+</body>
+</html>

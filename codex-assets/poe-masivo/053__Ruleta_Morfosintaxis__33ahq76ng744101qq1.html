@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruletas de Frases: Conjugamos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #e8f4fc;
+            --text-dark: #2d3748;
+        }
+
+        .dark {
+            --bg-main: #1a2332;
+            --text-dark: #f0f4f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            padding-top: 10px;
+        }
+
+        .title {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .title-letter {
+            display: inline-block;
+            padding: 4px 8px;
+            background: linear-gradient(180deg, #5ba3e0 0%, #4a90d9 100%);
+            color: white;
+            border-radius: 6px;
+            margin: 1px;
+            box-shadow: 0 3px 0 #3a7bc8;
+            font-size: clamp(1rem, 3vw, 1.8rem);
+        }
+
+        .title-conjugamos {
+            color: #6b7c93;
+            font-family: 'Fredoka One', cursive;
+            margin-left: 10px;
+        }
+
+        .subtitle {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: #6b7c93;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Post-it */
+        .postit {
+            position: absolute;
+            top: 0;
+            left: 10px;
+            background: #fff9c4;
+            padding: 10px 12px;
+            transform: rotate(-3deg);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .postit-icon { font-size: 1.8rem; }
+        .postit-text { font-weight: 800; color: #333; font-size: 0.85rem; }
+
+        /* Instructions Button */
+        .instructions-btn {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background: white;
+            border: 3px solid #4a90d9;
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            transition: transform 0.2s;
+            z-index: 100;
+        }
+
+        .instructions-btn:hover { transform: scale(1.05); }
+        .instructions-btn i { font-size: 1.5rem; color: #4a90d9; }
+        .instructions-btn span { font-size: 0.65rem; color: #4a90d9; font-weight: 700; }
+
+        /* Roulettes Container */
+        .roulettes-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .roulette-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Wheel Container */
+        .wheel-container {
+            position: relative;
+            width: min(280px, 28vw);
+            height: min(280px, 28vw);
+        }
+
+        @media (max-width: 900px) {
+            .wheel-container {
+                width: min(260px, 75vw);
+                height: min(260px, 75vw);
+            }
+        }
+
+        .wheel-border {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wheel-border.blue { background: #4a90d9; }
+        .wheel-border.green { background: #4caf50; }
+        .wheel-border.red { background: #e53935; }
+
+        .wheel-inner-container {
+            width: calc(100% - 14px);
+            height: calc(100% - 14px);
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            background: #f5f5f5;
+        }
+
+        .wheel-canvas {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.05s linear;
+        }
+
+        .wheel-canvas.stopping {
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        /* Center Pointer */
+        .center-pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 55px;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .pointer-shape {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
+            clip-path: polygon(50% 0%, 100% 65%, 50% 100%, 0% 65%);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Red Button */
+        .red-button-container { margin-top: 12px; }
+
+        .red-button {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ff6b6b 0%, #e53935 50%, #c62828 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b71c1c, 0 10px 15px rgba(0,0,0,0.3);
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .red-button::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            width: 16px;
+            height: 10px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .red-button:hover {
+            background: linear-gradient(180deg, #ff7b7b 0%, #ef5350 50%, #d32f2f 100%);
+        }
+
+        .red-button:active {
+            box-shadow: 0 3px 0 #b71c1c, 0 5px 8px rgba(0,0,0,0.3);
+            transform: translateY(3px);
+        }
+
+        .red-button.spinning {
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 6px 0 #b71c1c, 0 10px 15px rgba(0,0,0,0.3), 0 0 0 0 rgba(229, 57, 53, 0.4); }
+            50% { box-shadow: 0 6px 0 #b71c1c, 0 10px 15px rgba(0,0,0,0.3), 0 0 0 12px rgba(229, 57, 53, 0); }
+        }
+
+        /* Selected Item Display */
+        .selected-display {
+            margin-top: 12px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .selected-item.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .selected-item.blue { border: 4px solid #4a90d9; }
+        .selected-item.green { border: 4px solid #4caf50; }
+        .selected-item.red-border { border: 4px solid #e53935; }
+
+        .selected-item .item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .selected-item .item-text {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .selected-placeholder {
+            color: #aaa;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Result Section */
+        .result-section {
+            margin-top: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .result-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: #4a90d9;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* Sentence Builder */
+        .sentence-builder {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .sentence-structure {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .structure-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            text-align: center;
+        }
+
+        .structure-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .structure-value {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+            min-width: 100px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .structure-value.adverbio { background: linear-gradient(135deg, #5ba3e0, #4a90d9); }
+        .structure-value.pronombre { background: linear-gradient(135deg, #66bb6a, #4caf50); }
+        .structure-value.verbo { background: linear-gradient(135deg, #ef5350, #e53935); }
+        .structure-value.empty { background: #ddd; color: #999; }
+
+        .structure-arrow {
+            font-size: 1.5rem;
+            color: #bbb;
+        }
+
+        /* Sentence Preview */
+        .sentence-preview {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            text-align: center;
+            border: 3px dashed #4a90d9;
+        }
+
+        .sentence-preview-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4a90d9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .sentence-preview-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            font-style: italic;
+        }
+
+        .sentence-preview-text .highlight {
+            color: #4a90d9;
+        }
+
+        .sentence-placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Buttons Row */
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #5ba3e0, #4a90d9);
+            color: white;
+            box-shadow: 0 3px 0 #3a7bc8;
+        }
+
+        .action-btn.primary:hover { transform: translateY(-2px); }
+
+        .action-btn.secondary {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        /* Writing Section */
+        .writing-section { margin-top: 15px; }
+
+        .writing-label {
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .writing-area {
+            width: 100%;
+            min-height: 70px;
+            padding: 12px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .writing-area:focus {
+            outline: none;
+            border-color: #4a90d9;
+        }
+
+        /* Variants */
+        .variants-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #e0e0e0;
+        }
+
+        .variants-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            color: #ff9800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 8px;
+        }
+
+        .variant-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .variant-chip:hover { background: #e3f2fd; }
+        .variant-chip.active { background: #e3f2fd; border-color: #4a90d9; }
+
+        .variant-chip .chip-number {
+            width: 22px;
+            height: 22px;
+            background: #4a90d9;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .variant-chip .chip-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+
+        .modal-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: #4a90d9;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-section { margin-bottom: 15px; }
+        .modal-section h4 { font-size: 0.95rem; color: #333; margin-bottom: 6px; }
+        .modal-section p, .modal-section li { font-size: 0.85rem; color: #666; line-height: 1.5; }
+        .modal-section ul { padding-left: 18px; }
+
+        .modal-close {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #4a90d9;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        /* Dark mode */
+        .dark .result-section, .dark .modal-content { background: #2d3748; }
+        .dark .sentence-builder { background: linear-gradient(135deg, #1e3a5f 0%, #2d3748 100%); }
+        .dark .sentence-preview { background: #1a2332; border-color: #5ba3e0; }
+        .dark .sentence-preview-text { color: #e2e8f0; }
+        .dark .structure-label { color: #a0aec0; }
+        .dark .selected-item { background: #2d3748; }
+        .dark .selected-item .item-text { color: #e2e8f0; }
+        .dark .writing-area { background: #1a2332; border-color: #4a5568; color: #f0f4f8; }
+        .dark .writing-label { color: #a0aec0; }
+        .dark .variants-section { border-color: #4a5568; }
+        .dark .variant-chip { background: #1a2332; }
+        .dark .variant-chip .chip-text { color: #e2e8f0; }
+        .dark .action-btn.secondary { background: #1a2332; color: #a0aec0; border-color: #4a5568; }
+        .dark .postit { background: #fef3c7; }
+        .dark .instructions-btn { background: #2d3748; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="postit">
+                <span class="postit-icon">👆</span>
+                <span class="postit-text">Pulsa</span>
+            </div>
+
+            <button class="instructions-btn" id="instructionsBtn">
+                <i class="fas fa-info-circle"></i>
+                <span>INSTRUCCIONES</span>
+            </button>
+
+            <h1 class="title">
+                <span class="title-letter">R</span><span class="title-letter">U</span><span class="title-letter">L</span><span class="title-letter">E</span><span class="title-letter">T</span><span class="title-letter">A</span><span class="title-letter">S</span>
+                <span style="width: 8px;"></span>
+                <span class="title-letter">D</span><span class="title-letter">E</span>
+                <span style="width: 8px;"></span>
+                <span class="title-letter">F</span><span class="title-letter">R</span><span class="title-letter">A</span><span class="title-letter">S</span><span class="title-letter">E</span><span class="title-letter">S</span>
+                <span class="title-conjugamos">: CONJUGAMOS</span>
+            </h1>
+            <p class="subtitle">Pulsa e inventa la frase</p>
+        </header>
+
+        <!-- Roulettes -->
+        <div class="roulettes-container">
+            <!-- Wheel 1: Adverbios -->
+            <div class="roulette-wrapper">
+                <div class="wheel-container">
+                    <div class="wheel-border blue">
+                        <div class="wheel-inner-container">
+                            <canvas class="wheel-canvas" id="wheel1" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                    <div class="center-pointer">
+                        <div class="pointer-shape"></div>
+                    </div>
+                </div>
+                <div class="red-button-container">
+                    <button class="red-button" id="btn1"></button>
+                </div>
+                <div class="selected-display">
+                    <div class="selected-item blue" id="selected1">
+                        <span class="item-icon"></span>
+                        <span class="item-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wheel 2: Pronombres -->
+            <div class="roulette-wrapper">
+                <div class="wheel-container">
+                    <div class="wheel-border green">
+                        <div class="wheel-inner-container">
+                            <canvas class="wheel-canvas" id="wheel2" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                    <div class="center-pointer">
+                        <div class="pointer-shape"></div>
+                    </div>
+                </div>
+                <div class="red-button-container">
+                    <button class="red-button" id="btn2"></button>
+                </div>
+                <div class="selected-display">
+                    <div class="selected-item green" id="selected2">
+                        <span class="item-icon"></span>
+                        <span class="item-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wheel 3: Verbos -->
+            <div class="roulette-wrapper">
+                <div class="wheel-container">
+                    <div class="wheel-border red">
+                        <div class="wheel-inner-container">
+                            <canvas class="wheel-canvas" id="wheel3" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                    <div class="center-pointer">
+                        <div class="pointer-shape"></div>
+                    </div>
+                </div>
+                <div class="red-button-container">
+                    <button class="red-button" id="btn3"></button>
+                </div>
+                <div class="selected-display">
+                    <div class="selected-item red-border" id="selected3">
+                        <span class="item-icon"></span>
+                        <span class="item-text"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <section class="result-section">
+            <h3 class="result-title">🎯 Construye tu oración</h3>
+
+            <div class="sentence-builder">
+                <div class="sentence-structure">
+                    <div class="structure-box">
+                        <div class="structure-label">Adverbio de tiempo</div>
+                        <div class="structure-value adverbio" id="structureAdverbio">
+                            <span class="value-icon">❓</span>
+                            <span class="value-text">---</span>
+                        </div>
+                    </div>
+                    <span class="structure-arrow">+</span>
+                    <div class="structure-box">
+                        <div class="structure-label">Pronombre personal</div>
+                        <div class="structure-value pronombre" id="structurePronombre">
+                            <span class="value-icon">❓</span>
+                            <span class="value-text">---</span>
+                        </div>
+                    </div>
+                    <span class="structure-arrow">+</span>
+                    <div class="structure-box">
+                        <div class="structure-label">Verbo (conjugado)</div>
+                        <div class="structure-value verbo" id="structureVerbo">
+                            <span class="value-icon">❓</span>
+                            <span class="value-text">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sentence-preview">
+                    <div class="sentence-preview-label">💬 Ejemplo de oración</div>
+                    <div class="sentence-preview-text" id="sentencePreview">
+                        <span class="sentence-placeholder">Gira las ruletas para ver el ejemplo</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons-row">
+                <button class="action-btn secondary" id="resetBtn">
+                    <i class="fas fa-redo"></i> Reiniciar
+                </button>
+                <button class="action-btn primary" id="spinAllBtn">
+                    <i class="fas fa-play"></i> Girar todas
+                </button>
+            </div>
+
+            <div class="writing-section">
+                <label class="writing-label">
+                    <i class="fas fa-pencil-alt"></i> Escribe tu oración conjugada:
+                </label>
+                <textarea class="writing-area" id="writingArea" placeholder="Ejemplo: Ayer yo bajé las escaleras..."></textarea>
+            </div>
+
+            <div class="variants-section">
+                <h4 class="variants-title"><i class="fas fa-lightbulb"></i> Variantes de práctica</h4>
+                <div class="variants-grid">
+                    <div class="variant-chip" data-variant="1">
+                        <span class="chip-number">1</span>
+                        <span class="chip-text">Escribir la oración</span>
+                    </div>
+                    <div class="variant-chip" data-variant="2">
+                        <span class="chip-number">2</span>
+                        <span class="chip-text">Cambiar género</span>
+                    </div>
+                    <div class="variant-chip" data-variant="3">
+                        <span class="chip-number">3</span>
+                        <span class="chip-text">Cambiar a plural</span>
+                    </div>
+                    <div class="variant-chip" data-variant="4">
+                        <span class="chip-number">4</span>
+                        <span class="chip-text">Cambiar predicado</span>
+                    </div>
+                    <div class="variant-chip" data-variant="5">
+                        <span class="chip-number">5</span>
+                        <span class="chip-text">Más acciones</span>
+                    </div>
+                    <div class="variant-chip" data-variant="6">
+                        <span class="chip-number">6</span>
+                        <span class="chip-text">Cambiar tiempo verbal</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Juego educativo para logopedia y educación primaria
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h3 class="modal-title"><i class="fas fa-info-circle"></i> Instrucciones</h3>
+            <div class="modal-section">
+                <h4>🎯 Objetivo</h4>
+                <p>Mejorar la estructuración morfosintáctica elaborando oraciones de 3 elementos: Adverbio + Pronombre + Verbo.</p>
+            </div>
+            <div class="modal-section">
+                <h4>🎮 Cómo jugar</h4>
+                <ul>
+                    <li><strong>Pulsa</strong> el botón rojo para <strong>iniciar</strong> la ruleta</li>
+                    <li><strong>Pulsa de nuevo</strong> para <strong>detenerla</strong></li>
+                    <li>Repite con cada ruleta</li>
+                    <li>Formula una oración con las palabras obtenidas</li>
+                </ul>
+            </div>
+            <div class="modal-section">
+                <h4>💡 Variantes</h4>
+                <ul>
+                    <li>Escribir la oración formada</li>
+                    <li>Cambiar el sujeto a femenino/masculino</li>
+                    <li>Cambiar la frase a plural</li>
+                    <li>Cambiar el predicado</li>
+                    <li>Nombrar más acciones</li>
+                    <li>Cambiar el tiempo verbal</li>
+                </ul>
+            </div>
+            <button class="modal-close" id="modalClose">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            document.documentElement.classList.toggle('dark', event.matches);
+        });
+
+        // Data
+        const adverbios = [
+            { text: 'HOY', icon: '☀️' },
+            { text: 'AYER', icon: '📅' },
+            { text: 'MAÑANA', icon: '🌅' },
+            { text: 'AHORA', icon: '⏰' },
+            { text: 'ANTES', icon: '⏪' },
+            { text: 'DESPUÉS', icon: '⏩' }
+        ];
+
+        const pronombres = [
+            { text: 'YO', icon: '🙋' },
+            { text: 'TÚ', icon: '👆' },
+            { text: 'ÉL', icon: '👨' },
+            { text: 'ELLA', icon: '👩' },
+            { text: 'NOSOTROS', icon: '👨‍👦' },
+            { text: 'NOSOTRAS', icon: '👩‍👧' },
+            { text: 'VOSOTROS', icon: '👥' },
+            { text: 'VOSOTRAS', icon: '👭' },
+            { text: 'ELLOS', icon: '👬' },
+            { text: 'ELLAS', icon: '👯' }
+        ];
+
+        const verbos = [
+            { text: 'BAJAR', icon: '⬇️' },
+            { text: 'BARRER', icon: '🧹' },
+            { text: 'ESTUDIAR', icon: '📚' },
+            { text: 'PASAR', icon: '🚶' },
+            { text: 'PLANCHAR', icon: '👔' },
+            { text: 'SUBIR', icon: '⬆️' },
+            { text: 'LEER', icon: '📖' },
+            { text: 'JUGAR', icon: '⚽' },
+            { text: 'CANTAR', icon: '🎤' }
+        ];
+
+        // Conjugation helper
+        const conjugations = {
+            'BAJAR': { yo: 'bajo', tú: 'bajas', él: 'baja', ella: 'baja', nosotros: 'bajamos', nosotras: 'bajamos', vosotros: 'bajáis', vosotras: 'bajáis', ellos: 'bajan', ellas: 'bajan' },
+            'BARRER': { yo: 'barro', tú: 'barres', él: 'barre', ella: 'barre', nosotros: 'barremos', nosotras: 'barremos', vosotros: 'barréis', vosotras: 'barréis', ellos: 'barren', ellas: 'barren' },
+            'ESTUDIAR': { yo: 'estudio', tú: 'estudias', él: 'estudia', ella: 'estudia', nosotros: 'estudiamos', nosotras: 'estudiamos', vosotros: 'estudiáis', vosotras: 'estudiáis', ellos: 'estudian', ellas: 'estudian' },
+            'PASAR': { yo: 'paso', tú: 'pasas', él: 'pasa', ella: 'pasa', nosotros: 'pasamos', nosotras: 'pasamos', vosotros: 'pasáis', vosotras: 'pasáis', ellos: 'pasan', ellas: 'pasan' },
+            'PLANCHAR': { yo: 'plancho', tú: 'planchas', él: 'plancha', ella: 'plancha', nosotros: 'planchamos', nosotras: 'planchamos', vosotros: 'plancháis', vosotras: 'plancháis', ellos: 'planchan', ellas: 'planchan' },
+            'SUBIR': { yo: 'subo', tú: 'subes', él: 'sube', ella: 'sube', nosotros: 'subimos', nosotras: 'subimos', vosotros: 'subís', vosotras: 'subís', ellos: 'suben', ellas: 'suben' },
+            'LEER': { yo: 'leo', tú: 'lees', él: 'lee', ella: 'lee', nosotros: 'leemos', nosotras: 'leemos', vosotros: 'leéis', vosotras: 'leéis', ellos: 'leen', ellas: 'leen' },
+            'JUGAR': { yo: 'juego', tú: 'juegas', él: 'juega', ella: 'juega', nosotros: 'jugamos', nosotras: 'jugamos', vosotros: 'jugáis', vosotras: 'jugáis', ellos: 'juegan', ellas: 'juegan' },
+            'CANTAR': { yo: 'canto', tú: 'cantas', él: 'canta', ella: 'canta', nosotros: 'cantamos', nosotras: 'cantamos', vosotros: 'cantáis', vosotras: 'cantáis', ellos: 'cantan', ellas: 'cantan' }
+        };
+
+        const colors1 = ['#5ba3e0', '#f4a460', '#8fbc8f', '#cd853f', '#87ceeb', '#daa520'];
+        const colors2 = ['#90caf9', '#a5d6a7', '#ffe082', '#ffab91', '#b39ddb', '#80deea', '#f48fb1', '#c5e1a5', '#ffcc80', '#81d4fa'];
+        const colors3 = ['#ef9a9a', '#ce93d8', '#a5d6a7', '#ffe082', '#90caf9', '#ffab91', '#80cbc4', '#f48fb1', '#bcaaa4'];
+
+        // State
+        const state = {
+            wheel1: { spinning: false, rotation: 0, selected: null, animationId: null },
+            wheel2: { spinning: false, rotation: 0, selected: null, animationId: null },
+            wheel3: { spinning: false, rotation: 0, selected: null, animationId: null }
+        };
+
+        // Draw wheel on canvas
+        function drawWheel(canvasId, items, colors) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2 - 5;
+            const segmentAngle = (2 * Math.PI) / items.length;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            items.forEach((item, i) => {
+                const startAngle = i * segmentAngle - Math.PI / 2;
+                const endAngle = startAngle + segmentAngle;
+
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + segmentAngle / 2);
+
+                const iconDistance = radius * 0.65;
+                ctx.fillStyle = 'white';
+                ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetY = 2;
+                roundRect(ctx, iconDistance - 20, -20, 40, 40, 6);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.font = '22px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(item.icon, iconDistance, 0);
+
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 10px Nunito, sans-serif';
+                const textDistance = radius * 0.35;
+                ctx.fillText(item.text, textDistance, 0);
+
+                ctx.restore();
+            });
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 25, 0, 2 * Math.PI);
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fill();
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        // Initialize wheels
+        drawWheel('wheel1', adverbios, colors1);
+        drawWheel('wheel2', pronombres, colors2);
+        drawWheel('wheel3', verbos, colors3);
+
+        // Show selected item with zoom
+        function showSelectedItem(wheelNum, item) {
+            const selectedDiv = document.getElementById(`selected${wheelNum}`);
+            selectedDiv.querySelector('.item-icon').textContent = item.icon;
+            selectedDiv.querySelector('.item-text').textContent = item.text;
+            selectedDiv.classList.add('visible');
+        }
+
+        function hideSelectedItem(wheelNum) {
+            const selectedDiv = document.getElementById(`selected${wheelNum}`);
+            selectedDiv.classList.remove('visible');
+        }
+
+        // Update sentence display
+        function updateSentence() {
+            const s1 = state.wheel1.selected;
+            const s2 = state.wheel2.selected;
+            const s3 = state.wheel3.selected;
+
+            // Update structure boxes
+            const adverbioBox = document.getElementById('structureAdverbio');
+            const pronombreBox = document.getElementById('structurePronombre');
+            const verboBox = document.getElementById('structureVerbo');
+
+            if (s1) {
+                adverbioBox.innerHTML = `<span class="value-icon">${s1.icon}</span><span class="value-text">${s1.text}</span>`;
+            } else {
+                adverbioBox.innerHTML = `<span class="value-icon">❓</span><span class="value-text">---</span>`;
+            }
+
+            if (s2) {
+                pronombreBox.innerHTML = `<span class="value-icon">${s2.icon}</span><span class="value-text">${s2.text}</span>`;
+            } else {
+                pronombreBox.innerHTML = `<span class="value-icon">❓</span><span class="value-text">---</span>`;
+            }
+
+            if (s3) {
+                verboBox.innerHTML = `<span class="value-icon">${s3.icon}</span><span class="value-text">${s3.text}</span>`;
+            } else {
+                verboBox.innerHTML = `<span class="value-icon">❓</span><span class="value-text">---</span>`;
+            }
+
+            // Update sentence preview
+            const preview = document.getElementById('sentencePreview');
+            if (s1 && s2 && s3) {
+                const pronombre = s2.text.toLowerCase();
+                const conjugatedVerb = conjugations[s3.text][pronombre] || s3.text.toLowerCase();
+                const adverbio = s1.text.toLowerCase();
+                const pronombreDisplay = s2.text.toLowerCase();
+
+                preview.innerHTML = `"<span class="highlight">${adverbio.charAt(0).toUpperCase() + adverbio.slice(1)}</span> <span class="highlight">${pronombreDisplay}</span> <span class="highlight">${conjugatedVerb}</span>..."`;
+            } else {
+                preview.innerHTML = '<span class="sentence-placeholder">Gira las tres ruletas para ver el ejemplo</span>';
+            }
+        }
+
+        // Spin logic
+        function handleSpin(wheelNum) {
+            const wheelId = `wheel${wheelNum}`;
+            const canvas = document.getElementById(wheelId);
+            const btn = document.getElementById(`btn${wheelNum}`);
+            const wheelState = state[wheelId];
+            const items = wheelNum === 1 ? adverbios : wheelNum === 2 ? pronombres : verbos;
+
+            if (!wheelState.spinning) {
+                wheelState.spinning = true;
+                btn.classList.add('spinning');
+                hideSelectedItem(wheelNum);
+
+                const speed = 12;
+                function animate() {
+                    if (wheelState.spinning) {
+                        wheelState.rotation += speed;
+                        canvas.style.transform = `rotate(${wheelState.rotation}deg)`;
+                        wheelState.animationId = requestAnimationFrame(animate);
+                    }
+                }
+                animate();
+            } else {
+                wheelState.spinning = false;
+                btn.classList.remove('spinning');
+                cancelAnimationFrame(wheelState.animationId);
+
+                const segmentAngle = 360 / items.length;
+                const extraRotation = 720 + Math.random() * 360;
+                const finalRotation = wheelState.rotation + extraRotation;
+
+                canvas.classList.add('stopping');
+                wheelState.rotation = finalRotation;
+                canvas.style.transform = `rotate(${finalRotation}deg)`;
+
+                setTimeout(() => {
+                    canvas.classList.remove('stopping');
+                    const normalized = ((360 - (finalRotation % 360)) + 360) % 360;
+                    const selectedIndex = Math.floor(normalized / segmentAngle) % items.length;
+                    wheelState.selected = items[selectedIndex];
+                    showSelectedItem(wheelNum, wheelState.selected);
+                    updateSentence();
+                }, 4000);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('btn1').addEventListener('click', () => handleSpin(1));
+        document.getElementById('btn2').addEventListener('click', () => handleSpin(2));
+        document.getElementById('btn3').addEventListener('click', () => handleSpin(3));
+
+        document.getElementById('spinAllBtn').addEventListener('click', () => {
+            if (!state.wheel1.spinning) handleSpin(1);
+            setTimeout(() => { if (!state.wheel2.spinning) handleSpin(2); }, 150);
+            setTimeout(() => { if (!state.wheel3.spinning) handleSpin(3); }, 300);
+
+            setTimeout(() => { if (state.wheel1.spinning) handleSpin(1); }, 1800 + Math.random() * 800);
+            setTimeout(() => { if (state.wheel2.spinning) handleSpin(2); }, 2200 + Math.random() * 800);
+            setTimeout(() => { if (state.wheel3.spinning) handleSpin(3); }, 2600 + Math.random() * 800);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            state.wheel1.selected = null;
+            state.wheel2.selected = null;
+            state.wheel3.selected = null;
+            hideSelectedItem(1);
+            hideSelectedItem(2);
+            hideSelectedItem(3);
+            document.getElementById('writingArea').value = '';
+            updateSentence();
+        });
+
+        document.querySelectorAll('.variant-chip').forEach(chip => {
+            chip.addEventListener('click', () => chip.classList.toggle('active'));
+        });
+
+        document.getElementById('instructionsBtn').addEventListener('click', () => {
+            document.getElementById('modal').classList.add('visible');
+        });
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('modal').classList.remove('visible');
+        });
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Cuaderno Vocales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/cuaderno_vocales.css" />
+</head>
+<body>
+  <main class="screen">
+    <section class="top">
+      <div id="stepPill" class="pill">Vocal 1 de 5</div>
+      <button id="repeatBtn" class="repeat-btn" type="button">Repetir sonido</button>
+    </section>
+
+    <section class="options-zone" id="optionsZone"></section>
+
+    <section class="feedback-zone">
+      <div id="face" class="face">•ᴗ•</div>
+      <div id="pulse" class="pulse"></div>
+    </section>
+
+    <section id="finalBox" class="final hidden">
+      <h2>Cuaderno completado</h2>
+      <pre id="reportOut"></pre>
+    </section>
+  </main>
+
+  <script src="./src/cuaderno_vocales.js" defer></script>
+</body>
+</html>

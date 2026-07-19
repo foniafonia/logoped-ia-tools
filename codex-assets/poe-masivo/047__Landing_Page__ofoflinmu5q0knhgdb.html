@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Avanzado: Logopedia e Inteligencia Artificial - José Aserraf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'melilla-green': '#065F46',
+                        'melilla-light': '#059669',
+                        'melilla-gold': '#F59E0B',
+                        'melilla-white': '#FFFFFF',
+                        'melilla-dark': '#064E3B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #065F46 0%, #059669 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            overflow: hidden;
+        }
+        .demo-platform {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .demo-header {
+            background: linear-gradient(135deg, #065F46 0%, #059669 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .demo-sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+        .demo-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .demo-body {
+            display: flex;
+            flex: 1;
+            height: calc(100% - 80px);
+        }
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .close:hover {
+            opacity: 0.7;
+        }
+        .completed-topic {
+            background: linear-gradient(135deg, #065F46 0%, #059669 100%);
+            color: white;
+            font-weight: bold;
+        }
+        .pending-topic {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+            color: white;
+            opacity: 0.7;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.3s;
+        }
+        .menu-item:hover {
+            background: #e8f5e8;
+        }
+        .menu-item.active {
+            background: #065F46;
+            color: white;
+        }
+        .example-box {
+            background: #f0fdf4;
+            border: 2px solid #065F46;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .practice-example {
+            background: #f0fdf4;
+            border-left: 4px solid #065F46;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #064E3B;
+        }
+        .intro-topic {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            opacity: 0.8;
+        }
+        .intro-topic h4 {
+            color: #6b7280 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 text-white">
+                    Logopedia e Inteligencia Artificial
+                </h1>
+                <p class="text-xl md:text-2xl mb-6 text-white">El Futuro de la Rehabilitación del Lenguaje</p>
+                <p class="text-lg mb-8 text-white">Dirigido a la Consejería de Bienestar Social - Randa Mohamed</p>
+                <div class="bg-melilla-gold text-melilla-dark px-6 py-3 rounded-full inline-block font-bold">
+                    <i class="fas fa-brain mr-2"></i>
+                    Programa Pionero en España
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Instructor Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-gradient-to-r from-melilla-green to-melilla-light rounded-2xl p-8 text-white shadow-2xl">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/4 mb-6 md:mb-0">
+                            <div class="w-48 h-48 bg-white rounded-full mx-auto overflow-hidden border-4 border-white">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&h=225" alt="José Aserraf" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-8">
+                            <h2 class="text-3xl font-bold mb-4 text-white">José Aserraf</h2>
+                            <p class="text-xl mb-4 text-white">Logopeda Especialista en IA</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-melilla-gold mr-3"></i>
+                                    <span>Creador de Logopeda-IA</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-melilla-gold mr-3"></i>
+                                    <span>Desarrollador de JuegosLogopedos</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-melilla-gold mr-3"></i>
+                                    <span>Acelerado por EOI y CARE Melilla</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-melilla-gold mr-3"></i>
+                                    <span>Pionero en Aplicaciones Terapéuticas con IA</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-1/4 flex flex-col items-center space-y-4">
+                            <div class="bg-white p-4 rounded-xl">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/ab6f9bb438cc524438a7a085f4c47022b45daad67c917cb29893045f1ac0f27f?w=300&h=168" alt="Cluster Emprendimiento Melilla" class="h-16 w-auto">
+                            </div>
+                            <div class="bg-white p-4 rounded-xl">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/5ba521e8ea92ea43ecca5c124f1172e6c0b0f60926b81785e3a84755968724bd?w=218&h=231" alt="Ciudad Autónoma de Melilla" class="h-16 w-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What You'll Learn -->
+    <section class="py-16 bg-green-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-melilla-dark mb-4">¿Cómo Revolucionarás tu Consulta de Logopedia?</h2>
+                <p class="text-xl text-gray-600 mb-8">Aplicaciones prácticas inmediatas para tu trabajo diario</p>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-xl max-w-6xl mx-auto">
+                    <h3 class="text-2xl font-bold text-melilla-green mb-6">🎯 Transformaciones Reales en tu Práctica</h3>
+                    <div class="grid md:grid-cols-3 gap-6 text-left">
+                        <div class="example-box">
+                            <h4 class="font-bold text-melilla-green mb-2">📝 Informes en 30 segundos</h4>
+                            <p class="text-sm"><strong>Antes:</strong> 2 horas escribiendo informes manualmente</p>
+                            <p class="text-sm"><strong>Después:</strong> IA genera informes profesionales mientras hablas</p>
+                        </div>
+                        <div class="example-box">
+                            <h4 class="font-bold text-melilla-green mb-2">🎤 Detección automática</h4>
+                            <p class="text-sm"><strong>Antes:</strong> Contar disfluencias a mano durante sesiones</p>
+                            <p class="text-sm"><strong>Después:</strong> App cuenta automáticamente tartamudeos y pausas</p>
+                        </div>
+                        <div class="example-box">
+                            <h4 class="font-bold text-melilla-green mb-2">👨‍👩‍👧‍👦 Familias informadas</h4>
+                            <p class="text-sm"><strong>Antes:</strong> Llamadas constantes explicando ejercicios</p>
+                            <p class="text-sm"><strong>Después:</strong> Chatbot responde 24/7 y envía recordatorios</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Overview -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-melilla-dark mb-4">Contenido Progresivo del Curso</h2>
+                <p class="text-xl text-gray-600">Los mismos temas en 3 niveles: Básico → Intermedio → Experto</p>
+            </div>
+            
+            <!-- Module 1 -->
+            <div class="max-w-7xl mx-auto mb-12">
+                <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-melilla-green">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-melilla-green rounded-full mx-auto flex items-center justify-center mb-4">
+                            <i class="fas fa-play text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-melilla-dark">Módulo 1: Nivel Básico</h3>
+                        <p class="text-lg text-gray-600 mt-2">40 horas | Fundamentos prácticos inmediatos</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- ChatGPT Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('chatgpt-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">💬 ChatGPT Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="chatgpt-1-icon"></i>
+                            </div>
+                            <div id="chatgpt-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>📋 Ejemplo: Primer Informe</strong>
+                                    <p class="text-sm mt-2">Dices: "Niño 8 años, dislalia /r/"</p>
+                                    <p class="text-sm">➜ IA genera informe completo</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Crear cuenta y primeros pasos</strong></li>
+                                    <li>• Prompts básicos para informes</li>
+                                    <li>• Generar ejercicios simples</li>
+                                    <li>• 20 plantillas esenciales</li>
+                                    <li><strong>• Resultado: Asistente IA operativo</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Recording Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('recording-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">🎙️ Grabación Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="recording-1-icon"></i>
+                            </div>
+                            <div id="recording-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>🎯 Ejemplo: Transcripción automática</strong>
+                                    <p class="text-sm mt-2">Graba con móvil → App transcribe y cuenta disfluencias</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Apps gratuitas de transcripción</strong></li>
+                                    <li>• Técnicas de grabación correcta</li>
+                                    <li>• Análisis básico de repeticiones</li>
+                                    <li>• Conteo automático de pausas</li>
+                                    <li><strong>• Resultado: Análisis objetivo básico</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Assessment Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('assessment-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">📊 Evaluación Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="assessment-1-icon"></i>
+                            </div>
+                            <div id="assessment-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>🔍 Ejemplo: Screening simple</strong>
+                                    <p class="text-sm mt-2">Formulario básico detecta riesgo de TEL automáticamente</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Google Forms inteligentes</strong></li>
+                                    <li>• Cuestionarios adaptativos</li>
+                                    <li>• Alertas automáticas de riesgo</li>
+                                    <li>• Protocolos de derivación</li>
+                                    <li><strong>• Resultado: Sistema screening operativo</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Family Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('family-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">👨‍👩‍👧‍👦 Familia Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="family-1-icon"></i>
+                            </div>
+                            <div id="family-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>📱 Ejemplo: WhatsApp Bot básico</strong>
+                                    <p class="text-sm mt-2">Responde dudas frecuentes 24/7 automáticamente</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Chatbot WhatsApp gratuito</strong></li>
+                                    <li>• Respuestas automáticas FAQ</li>
+                                    <li>• Recordatorios de ejercicios</li>
+                                    <li>• Videos explicativos automáticos</li>
+                                    <li><strong>• Resultado: 70% menos consultas</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Planning Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('planning-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">🎯 Planificación Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="planning-1-icon"></i>
+                            </div>
+                            <div id="planning-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>📋 Ejemplo: Plan automático</strong>
+                                    <p class="text-sm mt-2">Introduces patología → IA genera plan de 8 sesiones</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Plantillas de planes por patología</strong></li>
+                                    <li>• Objetivos automáticos</li>
+                                    <li>• Ejercicios graduados</li>
+                                    <li>• Material descargable</li>
+                                    <li><strong>• Resultado: Planificación automática</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Automation Level 1 -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('automation-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-melilla-green">⚙️ Automatización Nivel 1</h4>
+                                <i class="fas fa-chevron-down text-melilla-green" id="automation-1-icon"></i>
+                            </div>
+                            <div id="automation-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>📅 Ejemplo: Gestión básica</strong>
+                                    <p class="text-sm mt-2">Programa citas y envía recordatorios automáticamente</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Calendly + recordatorios</strong></li>
+                                    <li>• Emails programados</li>
+                                    <li>• Backup automático</li>
+                                    <li>• Facturación básica</li>
+                                    <li><strong>• Resultado: 3h ahorradas/semana</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Voice Analysis Introduction -->
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('voice-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">🔊 Análisis Vocal - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="voice-intro-1-icon"></i>
+                            </div>
+                            <div id="voice-intro-1" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>👀 Preparación: Conceptos básicos</strong>
+                                    <p class="text-sm mt-2">Fundamentos para herramientas avanzadas</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• ¿Qué es un espectrograma?</strong></li>
+                                    <li>• Conceptos de frecuencia</li>
+                                    <li>• Reconocimiento visual básico</li>
+                                    <li>• Preparación para nivel 2</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Continue with other intro topics... -->
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('apps-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">📱 Apps - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="apps-intro-1-icon"></i>
+                            </div>
+                            <div id="apps-intro-1" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Tipos de apps logopédicas</strong></li>
+                                    <li>• Web vs nativa</li>
+                                    <li>• UX para terapia</li>
+                                    <li>• Preparación desarrollo</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('ai-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">🧠 Análisis IA - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="ai-intro-1-icon"></i>
+                            </div>
+                            <div id="ai-intro-1" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Machine Learning básico</strong></li>
+                                    <li>• Reconocimiento de patrones</li>
+                                    <li>• Limitaciones y ética</li>
+                                    <li>• Preparación análisis avanzado</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('dysphagia-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">🍽️ Disfagia - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="dysphagia-intro-1-icon"></i>
+                            </div>
+                            <div id="dysphagia-intro-1" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Escala IDDSI básica</strong></li>
+                                    <li>• Tipos de consistencias</li>
+                                    <li>• Conceptos de viscosidad</li>
+                                    <li>• Preparación calculadoras</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('caa-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">💬 CAA - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="caa-intro-1-icon"></i>
+                            </div>
+                            <div id="caa-intro-1" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• Sistemas CAA existentes</strong></li>
+                                    <li>• Criterios de selección</li>
+                                    <li>• Predicción de texto básica</li>
+                                    <li>• Preparación CAA inteligente</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="intro-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('iot-intro-1')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-gray-600">🌐 IoT - Intro</h4>
+                                <i class="fas fa-chevron-down text-gray-600" id="iot-intro-1-icon"></i>
+                            </div>
+                            <div id="iot-intro-1" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>• ¿Qué es IoT?</strong></li>
+                                    <li>• Sensores aplicables</li>
+                                    <li>• Casos de uso logopedia</li>
+                                    <li>• Preparación tecnología emergente</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-melilla-green text-white rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">🎯 Al terminar el Módulo 1 tendrás:</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <ul class="space-y-2">
+                                <li>✓ Asistente IA funcionando (ChatGPT)</li>
+                                <li>✓ Sistema grabación inteligente</li>
+                                <li>✓ Formularios de screening</li>
+                                <li>✓ Chatbot familiar básico</li>
+                            </ul>
+                            <ul class="space-y-2">
+                                <li>✓ Planificación automática</li>
+                                <li>✓ Automatización básica consulta</li>
+                                <li>✓ Conocimientos base para nivel 2</li>
+                                <li>✓ Herramientas operativas inmediatas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="max-w-7xl mx-auto mb-12">
+                <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-melilla-green">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-melilla-green rounded-full mx-auto flex items-center justify-center mb-4">
+                            <i class="fas fa-cogs text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-melilla-dark">Módulo 2: Nivel Intermedio</h3>
+                        <p class="text-lg text-gray-600 mt-2">40 horas | Los mismos temas pero más avanzados</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- ChatGPT Level 2 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('chatgpt-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">💬 ChatGPT Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="chatgpt-2-icon"></i>
+                            </div>
+                            <div id="chatgpt-2" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: APIs y automatización</strong>
+                                    <p class="text-sm mt-2">Integrar ChatGPT con otros sistemas</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ APIs de OpenAI</strong></li>
+                                    <li>⏳ Prompt engineering avanzado</li>
+                                    <li>⏳ Fine-tuning personalizado</li>
+                                    <li>⏳ Integración con apps</li>
+                                    <li><strong>⏳ Resultado: ChatGPT personalizado</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Recording Level 2 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('recording-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🎙️ Grabación Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="recording-2-icon"></i>
+                            </div>
+                            <div id="recording-2" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Análisis en tiempo real</strong>
+                                    <p class="text-sm mt-2">Detección automática durante la sesión</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Análisis en tiempo real</strong></li>
+                                    <li>⏳ Machine learning para voz</li>
+                                    <li>⏳ Clasificación automática</li>
+                                    <li>⏳ Alertas predictivas</li>
+                                    <li><strong>⏳ Resultado: Análisis profesional</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Continue with all other topics in Level 2... -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('assessment-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">📊 Evaluación Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="assessment-2-icon"></i>
+                            </div>
+                            <div id="assessment-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Algoritmos diagnósticos</strong></li>
+                                    <li>⏳ Machine learning para screening</li>
+                                    <li>⏳ Bases de datos normativas</li>
+                                    <li>⏳ Análisis predictivo de riesgo</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('family-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">👨‍👩‍👧‍👦 Familia Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="family-2-icon"></i>
+                            </div>
+                            <div id="family-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Chatbots multicanal</strong></li>
+                                    <li>⏳ Portal familiar completo</li>
+                                    <li>⏳ Seguimiento colaborativo</li>
+                                    <li>⏳ Análisis de adherencia</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('planning-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🎯 Planificación Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="planning-2-icon"></i>
+                            </div>
+                            <div id="planning-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ IA para planificación adaptativa</strong></li>
+                                    <li>⏳ Objetivos dinámicos</li>
+                                    <li>⏳ Análisis de progreso automático</li>
+                                    <li>⏳ Recomendaciones inteligentes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('automation-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">⚙️ Automatización Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="automation-2-icon"></i>
+                            </div>
+                            <div id="automation-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ RPA avanzada</strong></li>
+                                    <li>⏳ Flujos complejos</li>
+                                    <li>⏳ Integración sistemas</li>
+                                    <li>⏳ Gestión inteligente casos</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('voice-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🔊 Análisis Vocal Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="voice-2-icon"></i>
+                            </div>
+                            <div id="voice-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Análisis espectral automático</strong></li>
+                                    <li>⏳ Medición de formantes</li>
+                                    <li>⏳ Jitter y shimmer</li>
+                                    <li>⏳ Clasificación patológica</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('apps-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">📱 Apps Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="apps-2-icon"></i>
+                            </div>
+                            <div id="apps-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Desarrollo con Bubble.io</strong></li>
+                                    <li>⏳ APIs de IA integradas</li>
+                                    <li>⏳ Bases de datos complejas</li>
+                                    <li>⏳ Publicación stores</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('ai-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🧠 Análisis IA Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="ai-2-icon"></i>
+                            </div>
+                            <div id="ai-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Machine learning personalizado</strong></li>
+                                    <li>⏳ Modelos de clasificación</li>
+                                    <li>⏳ Análisis predictivo</li>
+                                    <li>⏳ Validación clínica</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('dysphagia-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🍽️ Disfagia Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="dysphagia-2-icon"></i>
+                            </div>
+                            <div id="dysphagia-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Calculadoras automáticas</strong></li>
+                                    <li>⏳ Análisis nutricional IA</li>
+                                    <li>⏳ Recetas personalizadas</li>
+                                    <li>⏳ Validación seguridad</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('caa-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">💬 CAA Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="caa-2-icon"></i>
+                            </div>
+                            <div id="caa-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Predicción inteligente</strong></li>
+                                    <li>⏳ Aprendizaje de patrones</li>
+                                    <li>⏳ Adaptación automática</li>
+                                    <li>⏳ Análisis de uso</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('iot-2')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🌐 IoT Nivel 2</h4>
+                                <i class="fas fa-chevron-down text-white" id="iot-2-icon"></i>
+                            </div>
+                            <div id="iot-2" class="accordion-content mt-3 hidden">
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Sensores básicos</strong></li>
+                                    <li>⏳ Recolección datos</li>
+                                    <li>⏳ Análisis automático</li>
+                                    <li>⏳ Alertas en tiempo real</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-melilla-green text-white rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">🚀 Nivel Intermedio: Herramientas Profesionales</h4>
+                        <p>Desarrolla capacidades avanzadas y crea soluciones personalizadas para tu práctica.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="max-w-7xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-melilla-green">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-melilla-green rounded-full mx-auto flex items-center justify-center mb-4">
+                            <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-melilla-dark">Módulo 3: Nivel Experto</h3>
+                        <p class="text-lg text-gray-600 mt-2">40 horas | Dominio completo y tecnologías emergentes</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- ChatGPT Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('chatgpt-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">💬 ChatGPT Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="chatgpt-3-icon"></i>
+                            </div>
+                            <div id="chatgpt-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: GPT especializado</strong>
+                                    <p class="text-sm mt-2">Crear un GPT que domina específicamente logopedia</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ GPT personalizado completo</strong></li>
+                                    <li>⏳ Fine-tuning con casos clínicos</li>
+                                    <li>⏳ Integración ecosistema completo</li>
+                                    <li>⏳ IA conversacional médica</li>
+                                    <li><strong>⏳ Resultado: Asistente IA experto</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Recording Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('recording-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🎙️ Grabación Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="recording-3-icon"></i>
+                            </div>
+                            <div id="recording-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: IA predictiva</strong>
+                                    <p class="text-sm mt-2">Sistema que predice evolución vocal</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Deep learning vocal</strong></li>
+                                    <li>⏳ Predicción de evolución</li>
+                                    <li>⏳ Análisis multidimensional</li>
+                                    <li>⏳ Integración wearables</li>
+                                    <li><strong>⏳ Resultado: Laboratorio IA completo</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Assessment Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('assessment-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">📊 Evaluación Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="assessment-3-icon"></i>
+                            </div>
+                            <div id="assessment-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: IA diagnóstica</strong>
+                                    <p class="text-sm mt-2">Sistema experto que rivaliza con especialistas</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ IA diagnóstica avanzada</strong></li>
+                                    <li>⏳ Modelos multimodales</li>
+                                    <li>⏳ Validación clínica</li>
+                                    <li>⏳ Explicabilidad IA</li>
+                                    <li><strong>⏳ Resultado: Sistema experto</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Family Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('family-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">👨‍👩‍👧‍👦 Familia Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="family-3-icon"></i>
+                            </div>
+                            <div id="family-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Ecosistema familiar</strong>
+                                    <p class="text-sm mt-2">Plataforma integral para toda la familia</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Ecosistema digital completo</strong></li>
+                                    <li>⏳ IA emocional para familias</li>
+                                    <li>⏳ Coaching automático</li>
+                                    <li>⏳ Análisis comportamental</li>
+                                    <li><strong>⏳ Resultado: Familia empoderada</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Planning Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('planning-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🎯 Planificación Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="planning-3-icon"></i>
+                            </div>
+                            <div id="planning-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: IA estratégica</strong>
+                                    <p class="text-sm mt-2">Planificación que se adapta en tiempo real</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Planificación adaptativa IA</strong></li>
+                                    <li>⏳ Algoritmos genéticos</li>
+                                    <li>⏳ Optimización multiobjetivo</li>
+                                    <li>⏳ Personalización extrema</li>
+                                    <li><strong>⏳ Resultado: Terapia de precisión</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Automation Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('automation-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">⚙️ Automatización Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="automation-3-icon"></i>
+                            </div>
+                            <div id="automation-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Consulta autónoma</strong>
+                                    <p class="text-sm mt-2">90% de tareas automáticas</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Hiperautomatización</strong></li>
+                                    <li>⏳ IA orquestadora</li>
+                                    <li>⏳ Decisiones autónomas</li>
+                                    <li>⏳ Monitoreo inteligente</li>
+                                    <li><strong>⏳ Resultado: Consulta del futuro</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Voice Analysis Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('voice-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🔊 Análisis Vocal Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="voice-3-icon"></i>
+                            </div>
+                            <div id="voice-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Biomarcadores vocales</strong>
+                                    <p class="text-sm mt-2">Detectar enfermedades por la voz</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Biomarcadores vocales</strong></li>
+                                    <li>⏳ IA para neurología</li>
+                                    <li>⏳ Detección precoz Parkinson</li>
+                                    <li>⏳ Análisis emocional profundo</li>
+                                    <li><strong>⏳ Resultado: Diagnóstico predictivo</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Apps Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('apps-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">📱 Apps Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="apps-3-icon"></i>
+                            </div>
+                            <div id="apps-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: App escalable</strong>
+                                    <p class="text-sm mt-2">Crear startup de logopedia IA</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Apps empresariales</strong></li>
+                                    <li>⏳ Arquitectura cloud nativa</li>
+                                    <li>⏳ Monetización IA</li>
+                                    <li>⏳ Escalabilidad global</li>
+                                    <li><strong>⏳ Resultado: Empresa tech propia</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- AI Analysis Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('ai-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🧠 Análisis IA Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="ai-3-icon"></i>
+                            </div>
+                            <div id="ai-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Investigación IA</strong>
+                                    <p class="text-sm mt-2">Publicar papers científicos con IA</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Investigación con IA</strong></li>
+                                    <li>⏳ Modelos propios</li>
+                                    <li>⏳ Publicaciones científicas</li>
+                                    <li>⏳ Colaboración internacional</li>
+                                    <li><strong>⏳ Resultado: Líder investigación</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Dysphagia Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('dysphagia-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🍽️ Disfagia Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="dysphagia-3-icon"></i>
+                            </div>
+                            <div id="dysphagia-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Cocina inteligente</strong>
+                                    <p class="text-sm mt-2">Robot que prepara comidas terapéuticas</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Robótica culinaria terapéutica</strong></li>
+                                    <li>⏳ IA nutricional avanzada</li>
+                                    <li>⏳ Texturas perfectas automáticas</li>
+                                    <li>⏳ Monitoreo de deglución</li>
+                                    <li><strong>⏳ Resultado: Cocina del futuro</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- CAA Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('caa-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">💬 CAA Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="caa-3-icon"></i>
+                            </div>
+                            <div id="caa-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Telepático digital</strong>
+                                    <p class="text-sm mt-2">Comunicar con solo pensar</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Brain-Computer Interface</strong></li>
+                                    <li>⏳ Comunicación neural</li>
+                                    <li>⏳ IA de intenciones</li>
+                                    <li>⏳ Realidad aumentada comunicativa</li>
+                                    <li><strong>⏳ Resultado: CAA del futuro</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- IoT Level 3 -->
+                        <div class="pending-topic rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="toggleAccordion('iot-3')">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white">🌐 IoT Nivel 3</h4>
+                                <i class="fas fa-chevron-down text-white" id="iot-3-icon"></i>
+                            </div>
+                            <div id="iot-3" class="accordion-content mt-3 hidden">
+                                <div class="practice-example">
+                                    <strong>⏳ Ejemplo: Casa terapéutica</strong>
+                                    <p class="text-sm mt-2">Hogar que monitorea y trata automáticamente</p>
+                                </div>
+                                <ul class="space-y-1 text-sm">
+                                    <li><strong>⏳ Ecosistema IoT terapéutico</strong></li>
+                                    <li>⏳ Edge computing médico</li>
+                                    <li>⏳ Gemelos digitales pacientes</li>
+                                    <li>⏳ 5G para logopedia</li>
+                                    <li><strong>⏳ Resultado: Casa inteligente terapéutica</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-melilla-green text-white rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">🏆 Nivel Experto: Liderazgo en Innovación</h4>
+                        <p>Domina las tecnologías más avanzadas y conviértete en referente en logopedia con IA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-melilla-dark mb-8">¿A Quién Está Dirigido?</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-melilla-green text-white p-6 rounded-xl">
+                        <i class="fas fa-user-md text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Profesionales Sanitarios</h3>
+                        <ul class="text-left space-y-2">
+                            <li>• Logopedas</li>
+                            <li>• Psicólogos</li>
+                            <li>• Médicos</li>
+                            <li>• Enfermeros</li>
+                        </ul>
+                    </div>
+                    <div class="bg-melilla-gold text-white p-6 rounded-xl">
+                        <i class="fas fa-hands-helping text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Profesionales de Apoyo</h3>
+                        <ul class="text-left space-y-2">
+                            <li>• Cuidadores</li>
+                            <li>• Personal Sociosanitario</li>
+                            <li>• Gestores Sanitarios</li>
+                            <li>• Profesionales Afines</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Demo Section -->
+    <section class="py-16 bg-green-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-melilla-dark mb-4">🎮 Demo Interactiva de la Plataforma</h2>
+                <p class="text-xl text-gray-600">Explora cómo aprenderás paso a paso</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center">
+                <button onclick="openModal('platform-demo')" class="bg-melilla-green text-white px-12 py-6 rounded-2xl font-bold text-xl hover:bg-melilla-dark transition-colors shadow-2xl">
+                    <i class="fas fa-play mr-3"></i>
+                    Abrir Plataforma Demo Completa
+                </button>
+                <p class="text-gray-600 mt-4">Navega por lecciones reales, completa ejercicios y ve tu progreso</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-melilla-dark mb-8">Inversión en tu Futuro Profesional</h2>
+                
+                <div class="bg-gradient-to-r from-melilla-green to-melilla-light rounded-2xl p-8 text-white shadow-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-6">Módulo 1: Fundamentos IA en Logopedia</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-bold mb-4">📊 Detalles de la Formación</h4>
+                            <ul class="text-left space-y-2">
+                                <li>• 40 horas de formación integral</li>
+                                <li>• 5h talleres presenciales en Melilla</li>
+                                <li>• 5h clases teóricas online</li>
+                                <li>• 10h tutoriales y material descargable</li>
+                                <li>• 20h prácticas con tutor personal</li>
+                                <li>• Certificado oficial al completar</li>
+                                <li>• Acceso de por vida a la plataforma</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-4">💰 Análisis de Inversión</h4>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                                <div class="text-3xl font-bold mb-2">2.500€</div>
+                                <div class="text-lg mb-4">Módulo completo</div>
+                                <div class="border-t border-white border-opacity-30 pt-4">
+                                    <div class="text-lg"><strong>62,50€ por hora</strong></div>
+                                    <div class="text-sm opacity-90">Formación especializada con seguimiento personalizado</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm opacity-90">
+                                <p>*Módulos 2 y 3 con precios a definir según demanda</p>
+                                <p>*Posibilidad de financiación disponible</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-melilla-gold bg-opacity-10 p-6 rounded-xl">
+                    <h4 class="text-xl font-bold text-melilla-dark mb-4">🎯 Retorno de Inversión</h4>
+                    <div class="grid md:grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-melilla-green">5h/semana</div>
+                            <div class="text-sm text-gray-600">Tiempo ahorrado</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-melilla-green">40%</div>
+                            <div class="text-sm text-gray-600">Más eficiencia</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-melilla-green">6 meses</div>
+                            <div class="text-sm text-gray-600">Recuperación inversión</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 gradient-bg text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">¿Listo para Transformar tu Práctica Logopédica?</h2>
+            <p class="text-xl mb-8 text-white">Únete al futuro de la rehabilitación del lenguaje con IA</p>
+            <div class="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
+                <button onclick="openModal('platform-demo')" class="bg-melilla-gold text-melilla-dark px-8 py-4 rounded-full font-bold hover:bg-yellow-600 transition-colors pulse">
+                    <i class="fas fa-play mr-2"></i>
+                    Ver Demo Completa
+                </button>
+                <button onclick="openModal('contact')" class="bg-white text-melilla-green px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-envelope mr-2"></i>
+                    Solicitar Información
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Demo Modal -->
+    <div id="platform-demo" class="modal">
+        <div class="modal-content">
+            <div class="demo-platform">
+                <div class="demo-header">
+                    <h3 class="text-xl font-bold">🎓 Plataforma Logopedia IA - Demo Interactiva</h3>
+                    <button class="close" onclick="closeModal('platform-demo')">&times;</button>
+                </div>
+                <div class="demo-body">
+                    <div class="demo-sidebar">
+                        <div class="p-4 border-b">
+                            <h4 class="font-bold text-melilla-green">Mi Progreso</h4>
+                            <div class="mt-2">
+                                <div class="bg-melilla-green h-2 rounded-full" style="width: 35%"></div>
+                                <div class="text-sm mt-1">35% completado</div>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item active" onclick="showDemoContent('dashboard')">
+                            <i class="fas fa-home mr-2"></i> Dashboard
+                        </div>
+                        <div class="menu-item" onclick="showDemoContent('chatgpt')">
+                            <i class="fas fa-robot mr-2"></i> ChatGPT Nivel 1
+                            <span class="float-right text-green-600">✓</span>
+                        </div>
+                        <div class="menu-item" onclick="showDemoContent('recording')">
+                            <i class="fas fa-microphone mr-2"></i> Grabación Nivel 1
+                            <span class="float-right text-blue-600">📚</span>
+                        </div>
+                        <div class="menu-item" onclick="showDemoContent('assessment')">
+                            <i class="fas fa-clipboard-check mr-2"></i> Evaluación Nivel 1
+                            <span class="float-right text-gray-400">🔒</span>
+                        </div>
+                        <div class="menu-item" onclick="showDemoContent('family')">
+                            <i class="fas fa-users mr-2"></i> Familia Nivel 1
+                            <span class="float-right text-gray-400">🔒</span>
+                        </div>
+                        
+                        <div class="p-4 border-t mt-4">
+                            <div class="bg-melilla-green text-white p-3 rounded text-center text-sm">
+                                <i class="fas fa-comments mr-2"></i>
+                                Chat con José Aserraf
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="demo-content">
+                        <div id="demo-dashboard" class="demo-section">
+                            <h2 class="text-2xl font-bold text-melilla-green mb-4">📊 Mi Dashboard</h2>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                    <h3 class="font-bold text-melilla-green mb-2">🎯 Progreso Módulo 1</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>ChatGPT Nivel 1</span>
+                                            <span class="text-green-600 font-bold">✓ Completado</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Grabación Nivel 1</span>
+                                            <span class="text-blue-600 font-bold">📚 En curso (75%)</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Evaluación Nivel 1</span>
+                                            <span class="text-gray-400">🔒 Bloqueado</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <h3 class="font-bold text-blue-600 mb-2">📅 Próximas Actividades</h3>
+                                    <div class="space-y-2 text-sm">
+                                        <div>• Taller presencial: Viernes 10:00h</div>
+                                        <div>• Entrega práctica: Análisis de voz</div>
+                                        <div>• Sesión de tutoría: Lunes 16:00h</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                <h3 class="font-bold text-yellow-700 mb-2">🏆 Logros Desbloqueados</h3>
+                                <div class="flex space-x-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl">🤖</div>
+                                        <div class="text-xs">Primer Bot</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl">📝</div>
+                                        <div class="text-xs">100 Informes</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl">🎤</div>
+                                        <div class="text-xs">Análisis Voz</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="demo-chatgpt" class="demo-section hidden">
+                            <h2 class="text-2xl font-bold text-melilla-green mb-4">🤖 ChatGPT Nivel 1 - Completado</h2>
+                            
+                            <div class="bg-green-100 border border-green-400 p-4 rounded-lg mb-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-600 text-2xl mr-3"></i>
+                                    <div>
+                                        <div class="font-bold">¡Lección Completada!</div>
+                                        <div class="text-sm">Has dominado ChatGPT básico para logopedia</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg border mb-4">
+                                <h3 class="font-bold mb-3">📋 Tu Logro: Primer Informe Automático</h3>
+                                <div class="bg-gray-50 p-4 rounded border-l-4 border-melilla-green">
+                                    <p class="text-sm"><strong>Tu entrada:</strong></p>
+                                    <p class="text-sm italic">"Niño 8 años, dislalia /r/, ejercicios vibración lingual"</p>
+                                    
+                                    <p class="text-sm mt-3"><strong>Informe generado:</strong></p>
+                                    <div class="bg-white p-3 mt-2 rounded text-sm">
+                                        <p><strong>INFORME DE SESIÓN</strong></p>
+                                        <p><strong>Paciente:</strong> 8 años</p>
+                                        <p><strong>Diagnóstico:</strong> Dislalia del fonema /r/</p>
+                                        <p><strong>Actividades:</strong> Ejercicios de vibración lingual</p>
+                                        <p><strong>Observaciones:</strong> Progreso favorable...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-melilla-green text-white p-4 rounded-lg">
+                                <h4 class="font-bold mb-2">🎯 Próximo nivel desbloqueado:</h4>
+                                <p class="text-sm">ChatGPT Nivel 2: APIs y automatización avanzada</p>
+                            </div>
+                        </div>
+
+                        <div id="demo-recording" class="demo-section hidden">
+                            <h2 class="text-2xl font-bold text-blue-600 mb-4">🎙️ Grabación Nivel 1 - En Progreso</h2>
+                            
+                            <div class="bg-blue-100 border border-blue-400 p-4 rounded-lg mb-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-play-circle text-blue-600 text-2xl mr-3"></i>
+                                    <div>
+                                        <div class="font-bold">Lección 3 de 4</div>
+                                        <div class="text-sm">Próximo: Análisis automático de repeticiones</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg border mb-4">
+                                <h3 class="font-bold mb-3">🔊 Simulador de Análisis en Vivo</h3>
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <button class="bg-red-500 text-white px-4 py-2 rounded-full mr-3 text-sm">
+                                            <i class="fas fa-microphone mr-1"></i> Grabando...
+                                        </button>
+                                        <div class="flex-1 bg-white h-2 rounded-full">
+                                            <div class="bg-red-500 h-2 rounded-full animate-pulse" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-sm text-gray-600 mb-3">
+                                        Transcripción: "El... el... el niño co-co-come pan..."
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 text-center">
+                                        <div class="bg-red-100 p-3 rounded">
+                                            <div class="font-bold text-red-600">8</div>
+                                            <div class="text-xs">Repeticiones</div>
+                                        </div>
+                                        <div class="bg-yellow-100 p-3 rounded">
+                                            <div class="font-bold text-yellow-600">150ms</div>
+                                            <div class="text-xs">Pausa media</div>
+                                        </div>
+                                        <div class="bg-green-100 p-3 rounded">
+                                            <div class="font-bold text-green-600">85%</div>
+                                            <div class="text-xs">Inteligibilidad</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                <h4 class="font-bold text-yellow-700 mb-2">📚 Siguiente:</h4>
+                                <p class="text-sm">Aprende a configurar alertas cuando detectes más de 10 repeticiones por minuto</p>
+                            </div>
+                        </div>
+
+                        <div id="demo-assessment" class="demo-section hidden">
+                            <h2 class="text-2xl font-bold text-gray-500 mb-4">🔒 Evaluación Nivel 1 - Bloqueado</h2>
+                            
+                            <div class="bg-gray-100 p-6 rounded-lg text-center">
+                                <i class="fas fa-lock text-4xl text-gray-400 mb-4"></i>
+                                <h3 class="font-bold text-gray-600 mb-2">Completa Grabación Nivel 1</h3>
+                                <p class="text-gray-500 mb-4">Termina la lección anterior para acceder a este contenido</p>
+                                
+                                <div class="bg-white p-4 rounded-lg border text-left">
+                                    <h4 class="font-bold text-melilla-green mb-2">👀 Adelanto:</h4>
+                                    <ul class="text-sm space-y-1">
+                                        <li>• Formularios que se adaptan automáticamente</li>
+                                        <li>• Alertas de riesgo TEL en tiempo real</li>
+                                        <li>• Protocolos de derivación automáticos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="demo-family" class="demo-section hidden">
+                            <h2 class="text-2xl font-bold text-gray-500 mb-4">🔒 Comunicación Familiar - Bloqueado</h2>
+                            
+                            <div class="bg-gray-100 p-6 rounded-lg text-center">
+                                <i class="fas fa-users text-4xl text-gray-400 mb-4"></i>
+                                <h3 class="font-bold text-gray-600 mb-2">Sigue el orden del curso</h3>
+                                <p class="text-gray-500 mb-4">Completa las lecciones anteriores para continuar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact" class="modal">
+        <div class="modal-content" style="max-width: 600px; height: auto;">
+            <div class="p-6">
+                <button class="close" onclick="closeModal('contact')">&times;</button>
+                <h2 class="text-2xl font-bold text-melilla-green mb-4">📞 Información de Contacto</h2>
+                <div class="space-y-4">
+                    <div class="bg-melilla-green text-white p-4 rounded">
+                        <h3 class="font-bold mb-2">José Aserraf</h3>
+                        <p>Logopeda Especialista en IA</p>
+                        <p>Creador de Logopeda-IA y JuegosLogopedos</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded">
+                        <h3 class="font-bold mb-2">Dirigido a:</h3>
+                        <p>Consejería de Bienestar Social</p>
+                        <p>Randa Mohamed - Consejera</p>
+                        <p>Ciudad Autónoma de Melilla</p>
+                    </div>
+                    <div class="bg-melilla-gold text-white p-4 rounded">
+                        <h3 class="font-bold mb-2">Información del Curso</h3>
+                        <p>• 3 Módulos de 40 horas cada uno</p>
+                        <p>• Modalidad híbrida (presencial + online)</p>
+                        <p>• Certificación oficial</p>
+                        <p>• Prácticas tutorizadas personalizadas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            if (modalId === 'platform-demo') {
+                showDemoContent('dashboard');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function toggleAccordion(accordionId) {
+            const content = document.getElementById(accordionId);
+            const icon = document.getElementById(accordionId + '-icon');
+            
+            if (content && icon) {
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    content.classList.add('hidden');
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            }
+        }
+
+        function showDemoContent(contentType) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.demo-section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            // Remove active class from all menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            // Show selected section
+            const targetSection = document.getElementById('demo-' + contentType);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+            
+            // Add active class to clicked menu item
+            if (event && event.target) {
+                event.target.closest('.menu-item').classList.add('active');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        });
+
+        // Auto-expand first accordion on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                toggleAccordion('chatgpt-1');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

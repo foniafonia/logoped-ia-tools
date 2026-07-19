@@ -1,0 +1,55 @@
+{
+  "id_taller": "pri_6_lenguaje_abstracto_001",
+  "codigo": "LA-ABS-001",
+  "nombre": "Comprensión de lenguaje abstracto y figurativo",
+  "modulo": "procesos_semanticos_abstractos",
+  "objetivo_clinico": [
+    "inhibicion_significado_literal",
+    "acceso_a_significado_figurado",
+    "flexibilidad_cognitiva_y_abstraccion"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "segundo_intento_tras_error_literal": true,
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "seleccion_significado_abstracto",
+    "estimulo": "frase_hecha_o_refran",
+    "num_opciones": 3,
+    "regla_distractores": {
+      "distractor_literal_obligatorio": true,
+      "distractor_abstracto_incorrecto": true
+    }
+  },
+  "banco_items": [
+    {
+      "id_item": "abs_001",
+      "frase": "Tirar la toalla",
+      "opciones": [
+        { "id": "a", "texto": "Rendirse ante una situacion dificil", "tipo": "correcta" },
+        { "id": "b", "texto": "Lanzar una toalla al suelo al terminar de ducharse", "tipo": "literal" },
+        { "id": "c", "texto": "Estar muy cansado por no dormir", "tipo": "abstracta_incorrecta" }
+      ]
+    },
+    {
+      "id_item": "abs_002",
+      "frase": "Estar en las nubes",
+      "opciones": [
+        { "id": "a", "texto": "Estar distraido y no prestar atencion", "tipo": "correcta" },
+        { "id": "b", "texto": "Volar por encima de una nube", "tipo": "literal" },
+        { "id": "c", "texto": "Tener miedo a las tormentas", "tipo": "abstracta_incorrecta" }
+      ]
+    },
+    {
+      "id_item": "abs_003",
+      "frase": "Romper el hielo",
+      "opciones": [
+        { "id": "a", "texto": "Iniciar una conversacion para quitar la tension", "tipo": "correcta" },
+        { "id": "b", "texto": "Partir un bloque de hielo con la mano", "tipo": "literal" },
+        { "id": "c", "texto": "Enfadarse con un amigo por una discusion", "tipo": "abstracta_incorrecta" }
+      ]
+    }
+  ]
+}

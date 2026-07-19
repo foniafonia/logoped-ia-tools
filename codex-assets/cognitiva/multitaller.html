@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multitaller Cognitiva</title>
+  <style>
+    body{font-family:Manrope,system-ui,sans-serif;background:#f5f7fb;margin:0;padding:20px;color:#1f2730}
+    .card{max-width:960px;margin:0 auto;background:#fff;border:1px solid #d6dfeb;border-radius:14px;padding:16px}
+    .grid{display:grid;gap:8px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .cell{padding:12px;border-radius:10px;border:1px solid #cbd8ea;font-weight:700}
+    .pending{background:#eef2f7;color:#596b82}
+    .active{background:#dff0ff;color:#1f5faa}
+    .done{background:#ddf5e6;color:#137045}
+    .reinforce{background:#fde6e3;color:#a33b2f}
+    button{margin-top:12px;padding:10px 12px;border-radius:10px;border:1px solid #8eb7ea;background:#eaf3ff;color:#1f5faa;font-weight:800;cursor:pointer}
+    pre{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Multitaller <a href="./index.html" style="font-size:13px;font-weight:400;color:#5b6f86;margin-left:12px">← Volver al portal</a></h1>
+    <div id="matrix" class="grid"></div>
+    <button id="btnLanzar">Lanzar taller activo</button>
+    <pre id="estado"></pre>
+  </main>
+  <script src="./src/multitaller.js" defer></script>
+</body>
+</html>

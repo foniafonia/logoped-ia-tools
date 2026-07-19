@@ -1,0 +1,55 @@
+{
+  "id_taller": "inf_2_obj_015q",
+  "codigo": "2º INFANTIL obj.015q",
+  "nombre": "Adquisición de sílabas directas con fonema Ñ en mayúscula",
+  "modulo": "ruta_fonologica_silabas_directas",
+  "objetivo_clinico": [
+    "transcodificacion_grafema_fonema",
+    "integracion_consonante_vocal",
+    "automatizacion_ruta_fonologica"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "reproducir_audio_automatico_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_reaccion_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "discriminacion_auditiva_silabica",
+    "estimulo_modelo": "audio_silaba_directa_ÑV",
+    "estructura_objetivo": "CV",
+    "set_silabas_objetivo": [
+      "ÑA",
+      "ÑE",
+      "ÑI",
+      "ÑO",
+      "ÑU"
+    ],
+    "num_opciones": {
+      "base": 3,
+      "min": 2,
+      "max": 4
+    },
+    "boton_repeticion_audio": true,
+    "tiempo_max_respuesta_ms": 8000
+  },
+  "regla_distractores": {
+    "tipo_1_vocal": "misma consonante Ñ con vocal diferente",
+    "tipo_2_contraste": "silaba CV con consonante contrastada",
+    "consonantes_contraste": [
+      "M",
+      "L",
+      "P",
+      "D"
+    ]
+  }
+}

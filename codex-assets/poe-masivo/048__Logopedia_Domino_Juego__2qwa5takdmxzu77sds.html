@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dominó Logopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --wood-light: #e8c990;
+            --wood-dark: #c9a66b;
+            --wood-grain: #d4b07a;
+            --tile-wood-light: #f5e6c8;
+            --tile-wood-mid: #e8d4a8;
+            --tile-wood-dark: #d4bc82;
+            --tile-wood-grain: #c9a860;
+            --tile-border: #a88b4a;
+            --tile-shadow: rgba(80, 50, 20, 0.4);
+            --accent: #4a9c6d;
+            --accent-hover: #3d8259;
+            --text-dark: #5a4a2a;
+            --slot-bg: rgba(100, 60, 30, 0.4);
+        }
+
+        .dark {
+            --wood-light: #4a3d2a;
+            --wood-dark: #3a2d1a;
+            --wood-grain: #5a4d3a;
+            --tile-wood-light: #6a5a3a;
+            --tile-wood-mid: #5a4a2a;
+            --tile-wood-dark: #4a3a1a;
+            --tile-wood-grain: #7a6a4a;
+            --tile-border: #8a7a4a;
+            --text-dark: #e8dcc8;
+            --slot-bg: rgba(60, 40, 20, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 80px,
+                    rgba(139, 90, 43, 0.08) 80px,
+                    rgba(139, 90, 43, 0.08) 82px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0px,
+                    transparent 200px,
+                    rgba(139, 90, 43, 0.04) 200px,
+                    rgba(139, 90, 43, 0.04) 204px
+                ),
+                linear-gradient(135deg, var(--wood-light) 0%, var(--wood-dark) 50%, var(--wood-grain) 100%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            padding: 10px;
+            max-width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--text-dark);
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.3), -1px -1px 0 rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .phoneme-select {
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            border: 3px solid var(--tile-border);
+            border-radius: 20px;
+            background: linear-gradient(145deg, var(--tile-wood-light), var(--tile-wood-mid));
+            color: var(--text-dark);
+            cursor: pointer;
+            box-shadow: 0 3px 8px var(--tile-shadow);
+        }
+
+        .btn {
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            border: 3px solid;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px var(--tile-shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #5cb87a, var(--accent));
+            border-color: #3d7a52;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px var(--tile-shadow);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(145deg, var(--tile-wood-light), var(--tile-wood-mid));
+            border-color: var(--tile-border);
+            color: var(--text-dark);
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .board {
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px,
+                    transparent 30px,
+                    rgba(100, 60, 30, 0.05) 30px,
+                    rgba(100, 60, 30, 0.05) 32px
+                ),
+                linear-gradient(145deg, rgba(80, 50, 25, 0.35), rgba(60, 35, 15, 0.45));
+            border-radius: 20px;
+            min-height: 320px;
+            padding: 15px;
+            position: relative;
+            box-shadow:
+                inset 0 4px 20px rgba(0,0,0,0.3),
+                inset 0 -2px 10px rgba(255,255,255,0.1),
+                0 8px 20px rgba(0,0,0,0.2);
+            border: 4px solid rgba(100, 70, 40, 0.5);
+        }
+
+        .board-title {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .play-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 55px);
+            grid-template-rows: repeat(auto-fill, 55px);
+            gap: 2px;
+            min-height: 280px;
+            justify-content: center;
+            align-content: start;
+            position: relative;
+        }
+
+        .grid-cell {
+            width: 55px;
+            height: 55px;
+            position: relative;
+        }
+
+        .hand {
+            background:
+                linear-gradient(145deg, rgba(50, 35, 20, 0.6), rgba(35, 22, 10, 0.7));
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow:
+                inset 0 4px 15px rgba(0,0,0,0.4),
+                0 4px 15px rgba(0,0,0,0.2);
+            border: 4px solid rgba(80, 55, 30, 0.5);
+        }
+
+        .hand-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        /* Domino tile - wooden toy style */
+        .domino {
+            position: relative;
+            cursor: grab;
+            transition: transform 0.15s, box-shadow 0.15s;
+            user-select: none;
+            touch-action: none;
+            z-index: 1;
+        }
+
+        .domino.horizontal {
+            width: 110px;
+            height: 55px;
+        }
+
+        .domino.vertical {
+            width: 55px;
+            height: 110px;
+        }
+
+        .domino-body {
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    transparent 8px,
+                    rgba(180, 140, 80, 0.15) 8px,
+                    rgba(180, 140, 80, 0.15) 10px
+                ),
+                linear-gradient(180deg,
+                    var(--tile-wood-light) 0%,
+                    var(--tile-wood-mid) 30%,
+                    var(--tile-wood-dark) 70%,
+                    var(--tile-wood-mid) 100%
+                );
+            border-radius: 10px;
+            display: flex;
+            box-shadow:
+                0 4px 12px var(--tile-shadow),
+                0 2px 4px rgba(0,0,0,0.2),
+                inset 0 2px 4px rgba(255,255,255,0.4),
+                inset 0 -2px 4px rgba(0,0,0,0.1);
+            border: 3px solid var(--tile-border);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .domino.horizontal .domino-body {
+            flex-direction: row;
+        }
+
+        .domino.vertical .domino-body {
+            flex-direction: column;
+        }
+
+        .domino:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 20px var(--tile-shadow);
+            z-index: 10;
+        }
+
+        .domino.dragging {
+            opacity: 0.95;
+            transform: scale(1.08);
+            z-index: 1000;
+            cursor: grabbing;
+        }
+
+        .domino.placed {
+            cursor: default;
+        }
+
+        .domino.placed:hover {
+            transform: none;
+            box-shadow:
+                0 4px 12px var(--tile-shadow),
+                0 2px 4px rgba(0,0,0,0.2),
+                inset 0 2px 4px rgba(255,255,255,0.4),
+                inset 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .domino-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 3px;
+        }
+
+        /* Divider line - carved wood effect */
+        .domino.horizontal .domino-half:first-child::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: linear-gradient(180deg,
+                rgba(0,0,0,0.2) 0%,
+                rgba(0,0,0,0.3) 50%,
+                rgba(0,0,0,0.2) 100%
+            );
+            border-radius: 2px;
+            box-shadow: 1px 0 0 rgba(255,255,255,0.3);
+        }
+
+        .domino.vertical .domino-half:first-child::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 8px;
+            right: 8px;
+            height: 3px;
+            background: linear-gradient(90deg,
+                rgba(0,0,0,0.2) 0%,
+                rgba(0,0,0,0.3) 50%,
+                rgba(0,0,0,0.2) 100%
+            );
+            border-radius: 2px;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .domino-icon {
+            font-size: 1.6rem;
+            line-height: 1;
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+        }
+
+        .domino-word {
+            font-size: 0.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 1px;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+        }
+
+        /* Placed tiles container */
+        .placed-tiles {
+            position: relative;
+            min-height: 280px;
+        }
+
+        .placed-tile {
+            position: absolute;
+            transition: none;
+        }
+
+        .score-display {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background:
+                linear-gradient(145deg, #5cb87a, var(--accent));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px var(--tile-shadow);
+            z-index: 100;
+            border: 3px solid #3d7a52;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .phoneme-badge {
+            display: inline-block;
+            background: linear-gradient(145deg, #5cb87a, var(--accent));
+            color: white;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-left: 5px;
+            border: 2px solid #3d7a52;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+        }
+
+        .instructions {
+            background:
+                linear-gradient(145deg, var(--tile-wood-light), var(--tile-wood-mid));
+            padding: 12px 15px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            border: 3px solid var(--tile-border);
+            box-shadow: 0 4px 10px var(--tile-shadow);
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* Win Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            padding: 20px;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal {
+            background:
+                linear-gradient(145deg, var(--tile-wood-light), var(--tile-wood-mid));
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 350px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 4px solid var(--tile-border);
+        }
+
+        .modal h2 {
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            font-size: 1.8rem;
+        }
+
+        .modal p {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        /* Message toast */
+        .message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #e85a5a, #c94444);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 200;
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            border: 4px solid #a03030;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .message.success {
+            background: linear-gradient(145deg, #5cb87a, var(--accent));
+            border-color: #3d7a52;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .message.hidden {
+            display: none;
+        }
+
+        /* Drop zones indicator */
+        .drop-hint {
+            position: absolute;
+            background: rgba(90, 200, 120, 0.3);
+            border: 3px dashed rgba(90, 200, 120, 0.7);
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @media (max-width: 450px) {
+            h1 { font-size: 1.3rem; }
+            .domino.horizontal { width: 90px; height: 45px; }
+            .domino.vertical { width: 45px; height: 90px; }
+            .domino-icon { font-size: 1.3rem; }
+            .domino-word { font-size: 0.4rem; }
+            .controls { gap: 6px; }
+            .btn, .phoneme-select { padding: 6px 12px; font-size: 0.85rem; }
+            .board { min-height: 280px; padding: 10px; }
+            .play-grid { grid-template-columns: repeat(auto-fill, 45px); grid-template-rows: repeat(auto-fill, 45px); }
+            .grid-cell { width: 45px; height: 45px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎲 Dominó Logopedia 🎲</h1>
+        </header>
+
+        <div class="instructions">
+            Arrastra las fichas y conecta <span class="highlight">imágenes iguales</span>.
+            ¡Di cada palabra en voz alta!
+            <span class="phoneme-badge" id="currentPhoneme">/R/</span>
+        </div>
+
+        <div class="controls">
+            <select class="phoneme-select" id="phonemeSelect">
+                <option value="r">Fonema /R/</option>
+                <option value="rr">Fonema /RR/</option>
+                <option value="s">Fonema /S/</option>
+                <option value="l">Fonema /L/</option>
+                <option value="k">Fonema /K/</option>
+                <option value="g">Fonema /G/</option>
+                <option value="mixed">Mixto</option>
+            </select>
+            <button class="btn btn-primary" id="newGameBtn">🔄 Nuevo</button>
+            <button class="btn btn-secondary" id="speakBtn">🔊 Decir</button>
+        </div>
+
+        <div class="game-area">
+            <div class="board">
+                <div class="board-title">📋 Tablero</div>
+                <div class="placed-tiles" id="placedTiles"></div>
+            </div>
+
+            <div class="hand">
+                <div class="board-title" style="color: rgba(255,255,255,0.8);">✋ Tus Fichas</div>
+                <div class="hand-tiles" id="handTiles"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="score-display" id="scoreDisplay">⭐ 0</div>
+
+    <div class="message hidden" id="message"></div>
+
+    <div class="modal-overlay hidden" id="winModal">
+        <div class="modal">
+            <h2>🎉 ¡Genial!</h2>
+            <p>¡Has completado el dominó! ¿Jugamos otra vez?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="playAgainBtn">🔄 Otra Vez</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            document.documentElement.classList.toggle('dark', event.matches);
+        });
+
+        // Phoneme data
+        const phonemeData = {
+            r: [
+                { icon: '🥕', word: 'zanahoria' },
+                { icon: '🍐', word: 'pera' },
+                { icon: '⭐', word: 'estrella' },
+                { icon: '🦜', word: 'loro' },
+                { icon: '🌺', word: 'flor' },
+                { icon: '🚪', word: 'puerta' },
+                { icon: '🎺', word: 'trompeta' },
+                { icon: '👑', word: 'corona' }
+            ],
+            rr: [
+                { icon: '🐕', word: 'perro' },
+                { icon: '🚗', word: 'carro' },
+                { icon: '🔔', word: 'torre' },
+                { icon: '🦊', word: 'zorro' },
+                { icon: '🎸', word: 'guitarra' },
+                { icon: '🍇', word: 'gorra' },
+                { icon: '🏃', word: 'correr' },
+                { icon: '⛰️', word: 'tierra' }
+            ],
+            s: [
+                { icon: '☀️', word: 'sol' },
+                { icon: '🏠', word: 'casa' },
+                { icon: '🐻', word: 'oso' },
+                { icon: '🪑', word: 'silla' },
+                { icon: '🧀', word: 'queso' },
+                { icon: '💃', word: 'salsa' },
+                { icon: '🎭', word: 'payaso' },
+                { icon: '🌵', word: 'cactus' }
+            ],
+            l: [
+                { icon: '🌙', word: 'luna' },
+                { icon: '📚', word: 'libro' },
+                { icon: '🦁', word: 'león' },
+                { icon: '✏️', word: 'lápiz' },
+                { icon: '🍋', word: 'limón' },
+                { icon: '🐌', word: 'caracol' },
+                { icon: '🏀', word: 'balón' },
+                { icon: '🌴', word: 'palmera' }
+            ],
+            k: [
+                { icon: '🏠', word: 'casa' },
+                { icon: '🐄', word: 'vaca' },
+                { icon: '🍫', word: 'chocolate' },
+                { icon: '🎃', word: 'calabaza' },
+                { icon: '🦷', word: 'boca' },
+                { icon: '🐿️', word: 'ardilla' },
+                { icon: '🥛', word: 'leche' },
+                { icon: '🧥', word: 'chaqueta' }
+            ],
+            g: [
+                { icon: '🐱', word: 'gato' },
+                { icon: '🐢', word: 'tortuga' },
+                { icon: '🌻', word: 'girasol' },
+                { icon: '🧤', word: 'guante' },
+                { icon: '💧', word: 'gota' },
+                { icon: '🦅', word: 'águila' },
+                { icon: '🐛', word: 'gusano' },
+                { icon: '🎮', word: 'juego' }
+            ]
+        };
+
+        // Game state
+        let currentPhoneme = 'r';
+        let score = 0;
+        let placedTiles = []; // { tile, x, y, orientation, endPoints }
+        let handTiles = [];
+        let draggedTile = null;
+        let draggedElement = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        const CELL_SIZE = window.innerWidth <= 450 ? 45 : 55;
+        const TILE_LONG = CELL_SIZE * 2;
+        const TILE_SHORT = CELL_SIZE;
+
+        const placedTilesContainer = document.getElementById('placedTiles');
+        const handTilesContainer = document.getElementById('handTiles');
+        const phonemeSelect = document.getElementById('phonemeSelect');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const speakBtn = document.getElementById('speakBtn');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const messageEl = document.getElementById('message');
+        const currentPhonemeEl = document.getElementById('currentPhoneme');
+        const winModal = document.getElementById('winModal');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function getItems(phoneme) {
+            if (phoneme === 'mixed') {
+                const allItems = [];
+                Object.values(phonemeData).forEach(items => {
+                    allItems.push(...items.slice(0, 2));
+                });
+                return shuffle(allItems).slice(0, 8);
+            }
+            return phonemeData[phoneme] || phonemeData.r;
+        }
+
+        function createDominoes(items) {
+            const dominoes = [];
+            const shuffledItems = shuffle(items);
+
+            // Create chain of dominoes
+            for (let i = 0; i < shuffledItems.length; i++) {
+                const left = shuffledItems[i];
+                const right = shuffledItems[(i + 1) % shuffledItems.length];
+                dominoes.push({
+                    left,
+                    right,
+                    id: i,
+                    isDouble: left.word === right.word
+                });
+            }
+
+            // Add a few doubles
+            const extraDoubles = shuffledItems.slice(0, 2).map((item, idx) => ({
+                left: item,
+                right: item,
+                id: shuffledItems.length + idx,
+                isDouble: true
+            }));
+
+            return shuffle([...dominoes, ...extraDoubles]).slice(0, 7);
+        }
+
+        function createDominoElement(domino, orientation = 'horizontal') {
+            const el = document.createElement('div');
+            el.className = `domino ${orientation}`;
+            el.dataset.id = domino.id;
+            el.innerHTML = `
+                <div class="domino-body">
+                    <div class="domino-half" data-word="${domino.left.word}">
+                        <span class="domino-icon">${domino.left.icon}</span>
+                        <span class="domino-word">${domino.left.word}</span>
+                    </div>
+                    <div class="domino-half" data-word="${domino.right.word}">
+                        <span class="domino-icon">${domino.right.icon}</span>
+                        <span class="domino-word">${domino.right.word}</span>
+                    </div>
+                </div>
+            `;
+            return el;
+        }
+
+        function createHandTile(domino) {
+            const el = createDominoElement(domino, 'horizontal');
+            el.addEventListener('mousedown', startDrag);
+            el.addEventListener('touchstart', startDrag, { passive: false });
+            return el;
+        }
+
+        function startDrag(e) {
+            e.preventDefault();
+            const el = e.currentTarget;
+            if (el.classList.contains('placed')) return;
+
+            const tileId = parseInt(el.dataset.id);
+            draggedTile = handTiles.find(t => t.id === tileId);
+            draggedElement = el;
+            el.classList.add('dragging');
+
+            const rect = el.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            dragOffset.x = clientX - rect.left;
+            dragOffset.y = clientY - rect.top;
+
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function onDrag(e) {
+            if (!draggedElement) return;
+            e.preventDefault();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            draggedElement.style.position = 'fixed';
+            draggedElement.style.left = (clientX - dragOffset.x) + 'px';
+            draggedElement.style.top = (clientY - dragOffset.y) + 'px';
+            draggedElement.style.zIndex = '1000';
+        }
+
+        function endDrag(e) {
+            if (!draggedElement || !draggedTile) return;
+
+            const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+
+            const boardRect = placedTilesContainer.getBoundingClientRect();
+            const isOverBoard =
+                clientX >= boardRect.left &&
+                clientX <= boardRect.right &&
+                clientY >= boardRect.top &&
+                clientY <= boardRect.bottom;
+
+            if (isOverBoard) {
+                const dropX = clientX - boardRect.left;
+                const dropY = clientY - boardRect.top;
+                tryPlaceTile(draggedTile, dropX, dropY);
+            }
+
+            draggedElement.classList.remove('dragging');
+            draggedElement.style.position = '';
+            draggedElement.style.left = '';
+            draggedElement.style.top = '';
+            draggedElement.style.zIndex = '';
+
+            draggedTile = null;
+            draggedElement = null;
+
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('touchend', endDrag);
+        }
+
+        function findOpenEndPoints() {
+            if (placedTiles.length === 0) return [];
+
+            const endPoints = [];
+
+            placedTiles.forEach(placed => {
+                // Each placed tile has two ends
+                placed.ends.forEach(end => {
+                    // Check if this end is connected to another tile
+                    let isConnected = false;
+                    placedTiles.forEach(other => {
+                        if (other.tile.id === placed.tile.id) return;
+                        other.ends.forEach(otherEnd => {
+                            if (Math.abs(end.x - otherEnd.x) < 5 && Math.abs(end.y - otherEnd.y) < 5) {
+                                isConnected = true;
+                            }
+                        });
+                    });
+
+                    if (!isConnected) {
+                        endPoints.push({
+                            x: end.x,
+                            y: end.y,
+                            word: end.word,
+                            direction: end.direction,
+                            parentTile: placed
+                        });
+                    }
+                });
+            });
+
+            return endPoints;
+        }
+
+        function tryPlaceTile(tile, dropX, dropY) {
+            // First tile - place in center
+            if (placedTiles.length === 0) {
+                const centerX = placedTilesContainer.offsetWidth / 2 - TILE_LONG / 2;
+                const centerY = 100;
+                placeTileAt(tile, centerX, centerY, 'horizontal');
+                return;
+            }
+
+            // Find open endpoints
+            const openEnds = findOpenEndPoints();
+
+            // Find closest endpoint that matches
+            let bestMatch = null;
+            let bestDist = Infinity;
+
+            openEnds.forEach(end => {
+                const dist = Math.sqrt(Math.pow(dropX - end.x, 2) + Math.pow(dropY - end.y, 2));
+
+                // Check if tile can connect (either side)
+                const canConnectLeft = tile.left.word === end.word;
+                const canConnectRight = tile.right.word === end.word;
+
+                if ((canConnectLeft || canConnectRight) && dist < bestDist && dist < 100) {
+                    bestDist = dist;
+                    bestMatch = {
+                        end,
+                        connectWithLeft: canConnectLeft,
+                        connectWithRight: canConnectRight
+                    };
+                }
+            });
+
+            if (bestMatch) {
+                // Calculate position based on connection direction
+                let x, y, orientation;
+                const end = bestMatch.end;
+
+                // Determine if this should be a double (vertical) or regular (horizontal)
+                const isDouble = tile.isDouble;
+
+                if (end.direction === 'right') {
+                    if (isDouble) {
+                        orientation = 'vertical';
+                        x = end.x;
+                        y = end.y - TILE_SHORT / 2;
+                    } else {
+                        orientation = 'horizontal';
+                        x = end.x;
+                        y = end.y - TILE_SHORT / 2;
+                    }
+                } else if (end.direction === 'left') {
+                    if (isDouble) {
+                        orientation = 'vertical';
+                        x = end.x - TILE_SHORT;
+                        y = end.y - TILE_SHORT / 2;
+                    } else {
+                        orientation = 'horizontal';
+                        x = end.x - TILE_LONG;
+                        y = end.y - TILE_SHORT / 2;
+                    }
+                } else if (end.direction === 'down') {
+                    if (isDouble) {
+                        orientation = 'horizontal';
+                        x = end.x - TILE_SHORT / 2;
+                        y = end.y;
+                    } else {
+                        orientation = 'vertical';
+                        x = end.x - TILE_SHORT / 2;
+                        y = end.y;
+                    }
+                } else if (end.direction === 'up') {
+                    if (isDouble) {
+                        orientation = 'horizontal';
+                        x = end.x - TILE_SHORT / 2;
+                        y = end.y - TILE_SHORT;
+                    } else {
+                        orientation = 'vertical';
+                        x = end.x - TILE_SHORT / 2;
+                        y = end.y - TILE_LONG;
+                    }
+                }
+
+                // Flip tile if needed
+                if (bestMatch.connectWithRight && !bestMatch.connectWithLeft) {
+                    const temp = tile.left;
+                    tile.left = tile.right;
+                    tile.right = temp;
+                }
+
+                placeTileAt(tile, x, y, orientation);
+            } else {
+                showMessage('❌ No coincide', false);
+            }
+        }
+
+        function placeTileAt(tile, x, y, orientation) {
+            // Remove from hand
+            handTiles = handTiles.filter(t => t.id !== tile.id);
+
+            // Remove hand element
+            const handEl = handTilesContainer.querySelector(`[data-id="${tile.id}"]`);
+            if (handEl) handEl.remove();
+
+            // Create placed element
+            const el = createDominoElement(tile, orientation);
+            el.classList.add('placed');
+            el.style.position = 'absolute';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            placedTilesContainer.appendChild(el);
+
+            // Calculate end points
+            const ends = [];
+            if (orientation === 'horizontal') {
+                ends.push({
+                    x: x,
+                    y: y + TILE_SHORT / 2,
+                    word: tile.left.word,
+                    direction: 'left'
+                });
+                ends.push({
+                    x: x + TILE_LONG,
+                    y: y + TILE_SHORT / 2,
+                    word: tile.right.word,
+                    direction: 'right'
+                });
+            } else {
+                ends.push({
+                    x: x + TILE_SHORT / 2,
+                    y: y,
+                    word: tile.left.word,
+                    direction: 'up'
+                });
+                ends.push({
+                    x: x + TILE_SHORT / 2,
+                    y: y + TILE_LONG,
+                    word: tile.right.word,
+                    direction: 'down'
+                });
+            }
+
+            placedTiles.push({ tile, x, y, orientation, ends });
+
+            score += 10;
+            updateScore();
+
+            speakWord(tile.left.word);
+            if (tile.left.word !== tile.right.word) {
+                setTimeout(() => speakWord(tile.right.word), 600);
+            }
+
+            showMessage('✓ ¡Bien!', true);
+            checkWin();
+        }
+
+        function updateScore() {
+            scoreDisplay.textContent = `⭐ ${score}`;
+        }
+
+        function showMessage(text, isSuccess = false) {
+            messageEl.textContent = text;
+            messageEl.className = 'message' + (isSuccess ? ' success' : '');
+            setTimeout(() => {
+                messageEl.classList.add('hidden');
+            }, 1000);
+        }
+
+        function checkWin() {
+            if (handTiles.length === 0) {
+                setTimeout(() => {
+                    winModal.classList.remove('hidden');
+                }, 600);
+            }
+        }
+
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.75;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakAllPlaced() {
+            let delay = 0;
+            placedTiles.forEach(placed => {
+                setTimeout(() => speakWord(placed.tile.left.word), delay);
+                delay += 700;
+                if (placed.tile.left.word !== placed.tile.right.word) {
+                    setTimeout(() => speakWord(placed.tile.right.word), delay);
+                    delay += 700;
+                }
+            });
+        }
+
+        function initGame() {
+            currentPhoneme = phonemeSelect.value;
+            currentPhonemeEl.textContent = `/${currentPhoneme.toUpperCase()}/`;
+
+            placedTiles = [];
+            const items = getItems(currentPhoneme);
+            const dominoes = createDominoes(items);
+
+            handTiles = dominoes;
+
+            placedTilesContainer.innerHTML = '';
+            handTilesContainer.innerHTML = '';
+
+            handTiles.forEach(tile => {
+                const el = createHandTile(tile);
+                handTilesContainer.appendChild(el);
+            });
+
+            winModal.classList.add('hidden');
+        }
+
+        // Event listeners
+        phonemeSelect.addEventListener('change', initGame);
+        newGameBtn.addEventListener('click', initGame);
+        speakBtn.addEventListener('click', speakAllPlaced);
+        playAgainBtn.addEventListener('click', () => {
+            winModal.classList.add('hidden');
+            initGame();
+        });
+
+        // Initialize
+        initGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "id_taller": "inf_1_obj_003a",
+  "codigo": "1º INFANTIL obj.003a",
+  "nombre": "Discriminación auditiva de fonemas no parecidos",
+  "modulo": "procesos_perceptivos_auditivos_input_auditivo",
+  "objetivo_clinico": [
+    "atencion_auditiva",
+    "discriminacion_fonemica",
+    "asociacion_sonido_respuesta"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "repetir_estimulo_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_reaccion_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "seleccion_auditiva",
+    "estimulo_modelo": "audio_fonema_corto",
+    "instruccion": "Escucha el sonido y marca la opción correcta.",
+    "num_opciones": {
+      "base": 3,
+      "min": 2,
+      "max": 4
+    },
+    "tiempo_max_respuesta_ms": 7000
+  },
+  "regla_distractores": {
+    "fuente": "banco_datos.clasificaciones.fonetica.no_similares",
+    "criterio": "los distractores deben tener bajo solapamiento fonético/articulatorio con el fonema modelo"
+  },
+  "ejemplo_no_similares": {
+    "modelo": "a",
+    "permitidos": ["s", "p"],
+    "prohibidos": ["e", "o"]
+  }
+}

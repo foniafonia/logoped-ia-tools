@@ -1,0 +1,24 @@
+:root { --bg:#f7f8fa; --ink:#1d2430; --line:#d9dee8; --ok:#28b463; --err:#f5b7b1; }
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);font-family:"Baloo 2",sans-serif;color:var(--ink)}
+.screen{min-height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;gap:1rem;padding:1rem}
+.semantic-zone{display:grid;gap:.8rem;justify-items:center}
+.image-card{width:min(320px,86vw);height:min(220px,42vh);background:#fff;border:2px solid var(--line);border-radius:22px;display:grid;place-items:center;overflow:hidden}
+.image-card img{max-width:100%;max-height:100%;object-fit:contain}
+.emoji{font-size:clamp(4.6rem,12vw,7rem)}
+.repeat-btn{min-width:min(420px,92vw);min-height:80px;border:3px solid #bad4f7;border-radius:22px;background:#eaf3ff;color:#1f5faa;font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:800;cursor:pointer}
+.build-zone{min-height:94px;background:#fff;border:2px dashed #bfcddd;border-radius:18px;padding:.7rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.slot{min-height:56px;min-width:84px;border:2px dashed #d4dde8;border-radius:12px;display:grid;place-items:center;color:#8a99ad;font-weight:700;padding:.4rem .7rem}
+.build-word{min-height:56px;padding:.4rem .8rem;background:#e8f7ee;border:2px solid #9ed6b3;border-radius:12px;font-size:1.5rem;font-weight:800}
+.options-zone{display:grid;grid-template-columns:repeat(3,minmax(90px,1fr));gap:.9rem;align-content:center}
+.word-btn{min-height:112px;border:3px solid var(--line);border-radius:18px;background:#fff;font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:800;cursor:pointer}
+.word-btn.used{opacity:.45;cursor:not-allowed}
+.word-btn.shake{background:#fdecea;border-color:var(--err);animation:shake .3s ease}
+.feedback-zone{display:flex;justify-content:center;align-items:center;position:relative;min-height:72px}
+.face{font-size:clamp(2.1rem,4.8vw,3rem);z-index:1}
+.pulse{position:absolute;width:62px;height:62px;border-radius:999px;opacity:0}
+.pulse.ok{background:rgba(40,180,99,.25);animation:pop .42s ease}.pulse.err{background:rgba(245,183,177,.35);animation:pop .42s ease}
+.hidden{display:none}
+@keyframes pop{0%{transform:scale(.6);opacity:.4}100%{transform:scale(2.4);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media (max-width:700px){.options-zone{grid-template-columns:1fr}}

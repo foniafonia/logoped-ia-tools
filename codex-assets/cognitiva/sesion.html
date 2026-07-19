@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Sesión</title>
+  <link rel="stylesheet" href="./src/app.css?v=8" />
+</head>
+<body data-page="sesion">
+  <main class="wrap">
+    <section class="card">
+      <div class="head">
+        <h1 id="sesionName">¡Hola! 👋</h1>
+        <button id="btnSalir" class="btn btn-danger" type="button">Salir</button>
+      </div>
+      <p class="muted">Pulsa la casilla azul para continuar.</p>
+      <div id="pathSesion" class="path"></div>
+    </section>
+  </main>
+
+  <div id="celebrate" class="celebrate hidden">
+    <div class="box">
+      <h2>¡Muy bien! 🎉</h2>
+      <p>Has completado un ejercicio nuevo.</p>
+    </div>
+  </div>
+
+  <script src="./src/app.js?v=8" defer></script>
+</body>
+</html>

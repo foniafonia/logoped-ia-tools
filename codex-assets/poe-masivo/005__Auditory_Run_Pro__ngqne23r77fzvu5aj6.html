@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Auditory Run Pro - Temple Runner</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Orbitron', monospace;
+        overflow: hidden;
+        background: #000;
+        color: white;
+    }
+
+    .game-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .ui-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 100;
+    }
+
+    .ui-element {
+        pointer-events: auto;
+    }
+
+    .stats-panel {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(100, 255, 218, 0.3);
+        border-radius: 12px;
+        padding: 15px;
+        color: white;
+        min-width: 200px;
+        font-size: 14px;
+    }
+
+    .controls-panel {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        border-radius: 12px;
+        padding: 15px;
+        color: white;
+        max-width: 250px;
+        font-size: 12px;
+    }
+
+    .word-hud {
+        position: absolute;
+        bottom: 20px;
+        right: 30px;
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #64FFDA;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        color: white;
+        display: none;
+        z-index: 120;
+        max-width: 250px;
+    }
+
+    .word-display {
+        font-size: 32px;
+        font-weight: bold;
+        color: #FFD700;
+        margin: 10px 0;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+
+    .speed-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(100, 255, 218, 0.9);
+        color: #000;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-size: 24px;
+        font-weight: bold;
+        display: none;
+        z-index: 130;
+        animation: pulse 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .start-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        z-index: 200;
+    }
+
+    .game-title {
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(45px, #64FFDA, #1DE9B6, #00BCD4);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 3s ease-in-out infinite;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes shimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .btn {
+        background: linear-gradient(45deg, #4ECDC4, #44A08D);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+    }
+
+    #gameCanvas {
+        display: block;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="game-container">
+
+<canvas id="gameCanvas"></canvas>
+
+angelscript
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <!-- Stats Panel -->
+        <div class="stats-panel ui-element">
+            <h3 style="text-align: center; margin-bottom: 10px; color: #64FFDA;">📊 STATS</h3>
+            <div class="stat-row">
+                <span>🏆 Score:</span>
+                <span style="color: #FFD700; font-weight: bold;" id="score">0</span>
+            </div>
+            <div class="stat-row">
+                <span>📈 Level:</span>
+                <span style="color: #00FF00; font-weight: bold;" id="level">1</span>
+            </div>
+            <div class="stat-row">
+                <span>✅ Correct:</span>
+                <span style="color: #00FF88; font-weight: bold;" id="correct">0</span>
+            </div>
+            <div class="stat-row">
+                <span>❌ Wrong:</span>
+                <span style="color: #FF6B6B; font-weight: bold;" id="incorrect">0</span>
+            </div>
+            <div class="stat-row">
+                <span>🎯 Accuracy:</span>
+                <span style="color: #4ECDC4; font-weight: bold;" id="accuracy">0%</span>
+            </div>
+            <div class="stat-row">
+                <span>⚡ Speed:</span>
+                <span style="color: #64FFDA; font-weight: bold;" id="speedDisplay">1.0x</span>
+            </div>
+            <div class="stat-row">
+                <span>❤️ Lives:</span>
+                <span style="color: #FF69B4; font-weight: bold;" id="lives">3</span>
+            </div>
+        </div>
+        
+        <!-- Controls Panel -->
+        <div class="controls-panel ui-element">
+            <h3 style="text-align: center; margin-bottom: 10px; color: #FF6B6B;">🎮 CONTROLS</h3>
+            <div style="line-height: 1.6;">
+                <div>⬆️ Jump: W, ↑, Space</div>
+                <div>⬇️ Slide: S, ↓</div>
+                <div>⬅️ Left: A, ←</div>
+                <div>➡️ Right: D, →</div>
+                <div style="margin-top: 10px; color: #64FFDA; font-size: 10px;">
+                    🎵 Run to the correct word platform
+                </div>
+            </div>
+        </div>
+
+        <!-- Word HUD -->
+        <div class="word-hud" id="wordHud">
+            <div style="font-size: 14px; color: #64FFDA;">🎵 Listen:</div>
+            <div class="word-display" id="wordDisplay">palabra</div>
+            <div style="font-size: 12px; color: #64FFDA; margin-top: 10px;">Find the correct platform!</div>
+        </div>
+
+        <!-- Speed Indicator -->
+        <div class="speed-indicator" id="speedIndicator">
+            🚀 SPEED UP!
+        </div>
+    </div>
+    
+    <!-- Start Screen -->
+    <div class="start-screen ui-element" id="startScreen">
+        <h1 class="game-title">🏃‍♂️ AUDITORY RUN PRO</h1>
+        <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem; color: #64FFDA;">Temple Runner + Audio Training</h2>
+        <p style="font-size: 1rem; margin-bottom: 2rem; max-width: 500px; line-height: 1.6;">
+            ¡Corre por el templo mientras entrenas tu discriminación auditiva!
+        </p>
+        <button class="btn" id="startBtn">🚀 INICIAR JUEGO</button>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    console.log('🎮 Cargando Auditory Run Pro...');
+
+    // EXPANDED Game data - MUCHAS MÁS PALABRAS
+    const wordPairs = {
+        'b-f': [
+            ['bobo', 'fofo'], ['boca', 'foca'], ['base', 'fase'], ['balda', 'falda'],
+            ['bata', 'fata'], ['bicho', 'ficho'], ['baba', 'faba'], ['veo', 'feo'],
+            ['beso', 'feso'], ['bola', 'fola'], ['bueno', 'fueno'], ['burla', 'furla'],
+            ['cabra', 'cafra'], ['sobre', 'sofre'], ['saber', 'safer'], ['tubo', 'tufo'],
+            ['lobo', 'lofo'], ['rabo', 'rafo'], ['cubo', 'cufo'], ['robo', 'rofo']
+        ],
+        'b-p': [
+            ['boca', 'poca'], ['beso', 'peso'], ['bolo', 'polo'], ['velo', 'pelo'],
+            ['vino', 'pino'], ['vez', 'pez'], ['basta', 'pasta'], ['besa', 'pesa'],
+            ['bobo', 'popo'], ['burla', 'purla'], ['bata', 'pata'], ['bote', 'pote'],
+            ['barra', 'parra'], ['bala', 'pala'], ['bico', 'pico'], ['bulto', 'pulto'],
+            ['cabo', 'capo'], ['rabo', 'rapo'], ['tubo', 'tupo'], ['soba', 'sopa']
+        ],
+        'b-d': [
+            ['bata', 'data'], ['bicho', 'dicho'], ['baño', 'daño'], ['bote', 'dote'],
+            ['beber', 'deber'], ['baña', 'daña'], ['bota', 'dota'], ['bebo', 'dedo'],
+            ['bola', 'dola'], ['beso', 'deso'], ['boca', 'doca'], ['bueno', 'dueno'],
+            ['sobre', 'sodre'], ['saber', 'sader'], ['cabra', 'cadra'], ['libro', 'lidro'],
+            ['habla', 'hadla'], ['tabla', 'tadla'], ['dobla', 'dodla'], ['robo', 'rodo']
+        ],
+        'd-t': [
+            ['dé', 'té'], ['dos', 'tos'], ['duna', 'tuna'], ['domo', 'tomo'],
+            ['día', 'tía'], ['deja', 'teja'], ['daba', 'taba'], ['domar', 'tomar'],
+            ['dado', 'tado'], ['doca', 'toca'], ['doro', 'toro'], ['dapa', 'tapa'],
+            ['modo', 'moto'], ['nada', 'nata'], ['toda', 'tota'], ['vida', 'vita'],
+            ['lado', 'lato'], ['codo', 'coto'], ['seda', 'seta'], ['cada', 'cata']
+        ],
+        'g-c': [
+            ['goma', 'coma'], ['gato', 'cato'], ['gasa', 'casa'], ['gama', 'cama'],
+            ['gorro', 'corro'], ['gola', 'cola'], ['gorro', 'corro'], ['goza', 'coza'],
+            ['lago', 'laco'], ['raga', 'raca'], ['siga', 'sica'], ['paga', 'paca'],
+            ['hago', 'haco'], ['jugo', 'juco'], ['lugo', 'luco'], ['mago', 'maco']
+        ],
+        'l-r': [
+            ['loma', 'roma'], ['loro', 'roro'], ['lata', 'rata'], ['loca', 'roca'],
+            ['luna', 'runa'], ['lama', 'rama'], ['liso', 'riso'], ['leal', 'real'],
+            ['polo', 'poro'], ['cola', 'cora'], ['mala', 'mara'], ['pala', 'para'],
+            ['sala', 'sara'], ['tala', 'tara'], ['bala', 'bara'], ['gala', 'gara']
+        ],
+        'm-n': [
+            ['mata', 'nata'], ['mano', 'nano'], ['masa', 'nasa'], ['mudo', 'nudo'],
+            ['mapa', 'napa'], ['mimo', 'nino'], ['mama', 'nana'], ['mola', 'nola'],
+            ['cama', 'cana'], ['lama', 'lana'], ['rama', 'rana'], ['toma', 'tona'],
+            ['lima', 'lina'], ['suma', 'suna'], ['goma', 'gona'], ['roma', 'rona']
+        ]
+    };
+
+    // Game variables
+    let scene, camera, renderer, gameInitialized = false;
+    let player, obstacles = [], collectibles = [], wordObjects = [];
+    let currentLane = 0, gameSpeed = 0.12, isGameRunning = false;
+    let score = 0, level = 1, correctAnswers = 0, incorrectAnswers = 0;
+    let currentWordPair = null, targetWord = '';
+    let speechSynth = window.speechSynthesis;
+    let speedMultiplier = 1.0;
+    let playerLives = 3; // Sistema de 3 vidas
+    let isInvulnerable = false; // Para evitar múltiples hits rápidos
+    
+    // 🔄 PLATAFORMA GIRATORIA SYSTEM - FIXED VERSION
+    let bridgeRotation = 0; // Current bridge rotation angle
+    let nextTurnDistance = 50; // Distance to next turn (much closer)
+    let isInTurn = false; // Currently in a turn
+    let turnDirection = 0; // Current turn direction
+    
+    // ⚡ POWER-UP SYSTEM
+    let lightningBolts = 0; // Accumulated lightning bolts
+    let extraLives = 0; // Extra lives collected
+
+    // Initialize game
+    async function initGame() {
+        try {
+            console.log('Initializing 3D engine...');
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('gameCanvas'),
+                antialias: true,
+                alpha: false
+            });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x87CEEB); // Beautiful blue sky
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            await setupScene();
+            await createPlayer();
+            
+            setupEventListeners();
+            animate();
+            
+            gameInitialized = true;
+            console.log('✅ Auditory Run Pro ready!');
+            
+        } catch (error) {
+            console.error('❌ Initialization error:', error);
+        }
+    }
+
+    async function setupScene() {
+        // EPIC TEMPLE RUN LIGHTING (Golden sunset atmosphere)
+        scene.fog = new THREE.Fog(0xFF8C69, 30, 150);
+        
+        const ambientLight = new THREE.AmbientLight(0xFF8C00, 0.4);
+        scene.add(ambientLight);
+
+        // Golden sunset directional light
+        const sunLight = new THREE.DirectionalLight(0xFFD700, 1.5);
+        sunLight.position.set(100, 80, 30);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.width = 4096;
+        sunLight.shadow.mapSize.height = 4096;
+        sunLight.shadow.camera.near = 0.1;
+        sunLight.shadow.camera.far = 200;
+        sunLight.shadow.camera.left = -50;
+        sunLight.shadow.camera.right = 50;
+        sunLight.shadow.camera.top = 50;
+        sunLight.shadow.camera.bottom = -50;
+        scene.add(sunLight);
+
+        // Additional atmospheric lights
+        const orangeLight = new THREE.PointLight(0xFF6B35, 0.8, 50);
+        orangeLight.position.set(0, 20, -10);
+        scene.add(orangeLight);
+
+        const warmLight = new THREE.PointLight(0xFFB347, 0.6, 80);
+        warmLight.position.set(-20, 15, 0);
+        scene.add(warmLight);
+
+        // ELEVATED GOLDEN BRIDGE (Temple Run style)
+        createElevatedBridge();
+        
+        // MASSIVE STONE PILLARS
+        createMassivePillars();
+        
+        // CLOUD LAYER beneath bridge
+        createCloudLayer();
+        
+        // BACKGROUND MOUNTAINS
+        createBackgroundMountains();
+        
+        // ATMOSPHERIC PARTICLES
+        createAtmosphericParticles();
+    }
+
+    function createElevatedBridge() {
+        const bridgeHeight = 12;
+        
+        // Main bridge structure (golden stone)
+        const bridgeGeometry = new THREE.BoxGeometry(18, 2, 800);
+        const bridgeMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xDAA520,
+            emissive: 0x332200,
+            emissiveIntensity: 0.1
+        });
+        const bridge = new THREE.Mesh(bridgeGeometry, bridgeMaterial);
+        bridge.position.set(0, bridgeHeight, 0);
+        bridge.receiveShadow = true;
+        bridge.castShadow = true;
+        scene.add(bridge);
+
+        // Golden stone texture on top
+        const topGeometry = new THREE.BoxGeometry(18, 0.5, 800);
+        const topMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xFFD700,
+            emissive: 0x443300,
+            emissiveIntensity: 0.2
+        });
+        const bridgeTop = new THREE.Mesh(topGeometry, topMaterial);
+        bridgeTop.position.set(0, bridgeHeight + 1.25, 0);
+        bridgeTop.receiveShadow = true;
+        scene.add(bridgeTop);
+
+        // Individual stone blocks pattern (MOVING FLOOR)
+        for (let z = -400; z < 400; z += 8) {
+            for (let x = -7; x <= 7; x += 3.5) {
+                const stoneGeometry = new THREE.BoxGeometry(3, 0.3, 6);
+                const stoneMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xB8860B + Math.random() * 0x111111
+                });
+                const stone = new THREE.Mesh(stoneGeometry, stoneMaterial);
+                stone.position.set(x, bridgeHeight + 1.4, z);
+                stone.castShadow = true;
+                stone.userData = { isMovingFloor: true }; // Mark for movement
+                scene.add(stone);
+                bridgeStones.push(stone);
+            }
+        }
+
+        // Bridge railings (ornate stone)
+        const railingHeight = 4;
+        for (let side of [-1, 1]) {
+            const railingGeometry = new THREE.BoxGeometry(1.5, railingHeight, 800);
+            const railingMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
+            const railing = new THREE.Mesh(railingGeometry, railingMaterial);
+            railing.position.set(side * 10, bridgeHeight + railingHeight/2, 0);
+            railing.castShadow = true;
+            scene.add(railing);
+
+            // Railing decorative posts
+            for (let z = -400; z < 400; z += 15) {
+                const postGeometry = new THREE.BoxGeometry(2, railingHeight + 1, 2);
+                const postMaterial = new THREE.MeshLambertMaterial({ color: 0x696969 });
+                const post = new THREE.Mesh(postGeometry, postMaterial);
+                post.position.set(side * 10, bridgeHeight + railingHeight/2, z);
+                post.castShadow = true;
+                scene.add(post);
+
+                // Decorative caps
+                const capGeometry = new THREE.BoxGeometry(2.5, 0.8, 2.5);
+                const capMaterial = new THREE.MeshLambertMaterial({ color: 0xDAA520 });
+                const cap = new THREE.Mesh(capGeometry, capMaterial);
+                cap.position.set(side * 10, bridgeHeight + railingHeight + 0.5, z);
+                cap.castShadow = true;
+                scene.add(cap);
+            }
+        }
+
+        // Lane markings (carved into golden stone)
+        for (let i = -1; i <= 1; i++) {
+            if (i !== 0) {
+                const lineGeometry = new THREE.BoxGeometry(0.2, 0.1, 800);
+                const lineMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                line.position.set(i * 5.5, bridgeHeight + 1.6, 0);
+                scene.add(line);
+            }
+        }
+
+        // Update player position to bridge level
+        if (player) {
+            player.object.position.y = bridgeHeight + 2;
+        }
+    }
+
+    function createMassivePillars() {
+        for (let z = 0; z < 600; z += 40) {
+            createDetailedPillar(-20, z);
+            createDetailedPillar(20, z);
+        }
+    }
+
+    function createDetailedPillar(x, z) {
+        const pillarGroup = new THREE.Group();
+        const bridgeHeight = 12;
+        
+        // Main massive pillar (reaching from clouds to bridge level)
+        const pillarGeometry = new THREE.BoxGeometry(4, 30, 4);
+        const pillarMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0x8B7355,
+            emissive: 0x221100,
+            emissiveIntensity: 0.05
+        });
+        const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+        pillar.position.y = bridgeHeight;
+        pillar.castShadow = true;
+        pillarGroup.add(pillar);
+
+        // Ornate capital (top decoration)
+        const capitalGeometry = new THREE.BoxGeometry(5.5, 3, 5.5);
+        const capitalMaterial = new THREE.MeshLambertMaterial({ color: 0xDAA520 });
+        const capital = new THREE.Mesh(capitalGeometry, capitalMaterial);
+        capital.position.y = bridgeHeight + 16.5;
+        capital.castShadow = true;
+        pillarGroup.add(capital);
+
+        // Multiple decorative bands
+        for (let i = 0; i < 4; i++) {
+            const bandGeometry = new THREE.BoxGeometry(4.5, 0.8, 4.5);
+            const bandMaterial = new THREE.MeshLambertMaterial({ color: 0xB8860B });
+            const band = new THREE.Mesh(bandGeometry, bandMaterial);
+            band.position.y = bridgeHeight - 10 + i * 6;
+            pillarGroup.add(band);
+        }
+
+        // Temple Run signature flames/torches
+        if (z % 80 === 0) {
+            const flameGeometry = new THREE.SphereGeometry(1.2, 12, 12);
+            const flameMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFF4500,
+                emissive: 0xFF6B35,
+                emissiveIntensity: 0.8
+            });
+            const flame = new THREE.Mesh(flameGeometry, flameMaterial);
+            flame.position.y = bridgeHeight + 20;
+            pillarGroup.add(flame);
+
+            // Torch light effect
+            const torchLight = new THREE.PointLight(0xFF4500, 2, 25);
+            torchLight.position.copy(flame.position);
+            pillarGroup.add(torchLight);
+
+            // Flickering animation
+            let flicker = 0;
+            function animateFlame() {
+                flicker += 0.1;
+                torchLight.intensity = 1.5 + Math.sin(flicker) * 0.5;
+                flame.scale.setScalar(1 + Math.sin(flicker * 2) * 0.1);
+                requestAnimationFrame(animateFlame);
+            }
+            animateFlame();
+        }
+
+        // Temple hieroglyphs/decorations
+        const decorGeometry = new THREE.BoxGeometry(0.3, 2, 3.5);
+        const decorMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+        for (let i = 0; i < 4; i++) {
+            const decor = new THREE.Mesh(decorGeometry, decorMaterial);
+            decor.position.set(
+                i % 2 === 0 ? 2.1 : -2.1, 
+                bridgeHeight - 5 + Math.floor(i/2) * 8,
+                0
+            );
+            decor.rotation.y = i % 2 === 0 ? 0 : Math.PI;
+            pillarGroup.add(decor);
+        }
+
+        pillarGroup.position.set(x, 0, -z);
+        scene.add(pillarGroup);
+    }
+
+    function createCloudLayer() {
+        // Dense cloud layer beneath the bridge (Temple Run signature)
+        for (let i = 0; i < 50; i++) {
+            const cloudGeometry = new THREE.SphereGeometry(
+                6 + Math.random() * 8, 
+                8, 8
+            );
+            const cloudMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFFFFFF,
+                transparent: true,
+                opacity: 0.8 + Math.random() * 0.2
+            });
+            const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+            
+            cloud.position.set(
+                (Math.random() - 0.5) * 150,
+                -2 - Math.random() * 8,
+                (Math.random() - 0.5) * 400
+            );
+            
+            cloud.scale.set(
+                1 + Math.random() * 0.5,
+                0.6 + Math.random() * 0.4,
+                1 + Math.random() * 0.5
+            );
+            
+            scene.add(cloud);
+
+            // Animate clouds slowly
+            let cloudTime = Math.random() * Math.PI * 2;
+            function animateCloud() {
+                cloudTime += 0.005;
+                cloud.position.y += Math.sin(cloudTime) * 0.01;
+                cloud.rotation.y += 0.001;
+                requestAnimationFrame(animateCloud);
+            }
+            animateCloud();
+        }
+    }
+
+    // Global arrays for moving background elements
+    let movingMountains = [];
+    let movingClouds = [];
+
+    function createBackgroundMountains() {
+        // MOVING distant mountains silhouettes 
+        for (let i = 0; i < 25; i++) {
+            const mountainGeometry = new THREE.ConeGeometry(
+                12 + Math.random() * 15, 
+                20 + Math.random() * 25, 
+                8
+            );
+            const mountainMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x2F4F4F,
+                transparent: true,
+                opacity: 0.3 + Math.random() * 0.3
+            });
+            const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
+            
+            mountain.position.set(
+                (Math.random() - 0.5) * 400,
+                -15 + Math.random() * 15,
+                -150 - Math.random() * 200
+            );
+            
+            mountain.userData = { isMovingBackground: true };
+            scene.add(mountain);
+            movingMountains.push(mountain);
+        }
+
+        // MOVING side cliffs and rock formations
+        for (let side of [-1, 1]) {
+            for (let z = -200; z < 600; z += 30) {
+                const cliffGroup = new THREE.Group();
+                
+                // Main cliff face
+                const cliffGeometry = new THREE.BoxGeometry(
+                    8 + Math.random() * 6,
+                    15 + Math.random() * 10,
+                    20 + Math.random() * 15
+                );
+                const cliffMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x8B4513,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const cliff = new THREE.Mesh(cliffGeometry, cliffMaterial);
+                cliff.position.y = 5;
+                cliffGroup.add(cliff);
+
+                // Add some vegetation
+                if (Math.random() > 0.7) {
+                    const treeGeometry = new THREE.ConeGeometry(2, 8, 8);
+                    const treeMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                    const tree = new THREE.Mesh(treeGeometry, treeMaterial);
+                    tree.position.set(
+                        Math.random() * 4 - 2,
+                        12,
+                        Math.random() * 8 - 4
+                    );
+                    cliffGroup.add(tree);
+                }
+
+                cliffGroup.position.set(side * (50 + Math.random() * 20), 0, z);
+                cliffGroup.userData = { isMovingBackground: true };
+                scene.add(cliffGroup);
+                movingMountains.push(cliffGroup);
+            }
+        }
+    }
+
+    function createAtmosphericParticles() {
+        // Floating golden particles in the air
+        for (let i = 0; i < 100; i++) {
+            const particleGeometry = new THREE.SphereGeometry(0.05, 4, 4);
+            const particleMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFFD700,
+                emissive: 0x664400,
+                emissiveIntensity: 0.5,
+                transparent: true,
+                opacity: 0.7
+            });
+            const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+            
+            particle.position.set(
+                (Math.random() - 0.5) * 60,
+                5 + Math.random() * 15,
+                (Math.random() - 0.5) * 200
+            );
+            
+            scene.add(particle);
+
+            // Animate particles
+            let particleTime = Math.random() * Math.PI * 2;
+            function animateParticle() {
+                particleTime += 0.02;
+                particle.position.y += Math.sin(particleTime) * 0.02;
+                particle.position.x += Math.cos(particleTime * 0.5) * 0.01;
+                requestAnimationFrame(animateParticle);
+            }
+            animateParticle();
+        }
+    }
+
+    function createTempleColumn(x, z) {
+        const columnGroup = new THREE.Group();
+        
+        // Main column
+        const columnGeometry = new THREE.CylinderGeometry(1.5, 2, 15, 8);
+        const columnMaterial = new THREE.MeshLambertMaterial({ color: 0xDAA520 });
+        const column = new THREE.Mesh(columnGeometry, columnMaterial);
+        column.position.y = 7.5;
+        column.castShadow = true;
+        columnGroup.add(column);
+
+        // Column capital
+        const capitalGeometry = new THREE.CylinderGeometry(2.2, 1.8, 2, 8);
+        const capital = new THREE.Mesh(capitalGeometry, columnMaterial);
+        capital.position.y = 16;
+        capital.castShadow = true;
+        columnGroup.add(capital);
+
+        // Orange decorative spheres (like in the image)
+        const sphereGeometry = new THREE.SphereGeometry(0.6, 12, 12);
+        const sphereMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xFF8C00,
+            emissive: 0x442200,
+            emissiveIntensity: 0.3
+        });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.y = 18;
+        columnGroup.add(sphere);
+
+        columnGroup.position.set(x, 0, -z);
+        scene.add(columnGroup);
+    }
+
+    async function createPlayer() {
+        const playerGroup = new THREE.Group();
+        
+        // Body (cyan/turquoise like in the image)
+        const bodyGeometry = new THREE.BoxGeometry(1, 3, 1);
+        const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x40E0D0 });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.position.y = 2;
+        body.castShadow = true;
+        playerGroup.add(body);
+
+        // Head (beige/skin color)
+        const headGeometry = new THREE.SphereGeometry(0.6, 16, 16);
+        const headMaterial = new THREE.MeshLambertMaterial({ color: 0xF5DEB3 });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.y = 4;
+        head.castShadow = true;
+        playerGroup.add(head);
+
+        // Arms (for running animation)
+        const armGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
+        const armMaterial = new THREE.MeshLambertMaterial({ color: 0xF5DEB3 });
+        
+        const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+        leftArm.position.set(-1, 2.5, 0);
+        leftArm.castShadow = true;
+        playerGroup.add(leftArm);
+
+        const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+        rightArm.position.set(1, 2.5, 0);
+        rightArm.castShadow = true;
+        playerGroup.add(rightArm);
+
+        // Legs (for running animation)
+        const legGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
+        const legMaterial = new THREE.MeshLambertMaterial({ color: 0x40E0D0 });
+        
+        const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+        leftLeg.position.set(-0.3, 0.5, 0);
+        leftLeg.castShadow = true;
+        playerGroup.add(leftLeg);
+
+        const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+        rightLeg.position.set(0.3, 0.5, 0);
+        rightLeg.castShadow = true;
+        playerGroup.add(rightLeg);
+
+        playerGroup.position.set(0, 14, 5); // Position on elevated bridge
+        scene.add(playerGroup);
+        
+        player = {
+            object: playerGroup,
+            body: body,
+            head: head,
+            leftArm: leftArm,
+            rightArm: rightArm,
+            leftLeg: leftLeg,
+            rightLeg: rightLeg,
+            targetX: 0,
+            targetY: 14, // Bridge level
+            isJumping: false,
+            isSliding: false,
+            runTime: 0
+        };
+
+        // Position camera for elevated view
+        camera.position.set(0, 20, 18);
+        camera.lookAt(0, 14, 0);
+    }
+
+    function setupEventListeners() {
+        document.addEventListener('keydown', handleKeyPress);
+        
+        document.getElementById('startBtn').onclick = startGame;
+        
+        window.addEventListener('resize', onWindowResize);
+    }
+
+    function handleKeyPress(event) {
+        if (!isGameRunning) return;
+        
+        switch(event.code) {
+            case 'KeyW':
+            case 'ArrowUp':
+            case 'Space':
+                jump();
+                event.preventDefault();
+                break;
+            case 'KeyS':
+            case 'ArrowDown':
+                slide();
+                event.preventDefault();
+                break;
+            case 'KeyA':
+            case 'ArrowLeft':
+                moveLeft();
+                event.preventDefault();
+                break;
+            case 'KeyD':
+            case 'ArrowRight':
+                moveRight();
+                event.preventDefault();
+                break;
+            case 'KeyE': // ⚡ Emergency lightning bolt use
+                useLightningBolt();
+                event.preventDefault();
+                break;
+        }
+    }
+
+    function moveLeft() {
+        if (currentLane > -1) {
+            currentLane--;
+            player.targetX = currentLane * 8;
+        }
+    }
+
+    function moveRight() {
+        if (currentLane < 1) {
+            currentLane++;
+            player.targetX = currentLane * 8;
+        }
+    }
+
+    function jump() {
+        if (!player.isJumping && !player.isSliding) {
+            player.isJumping = true;
+            
+            const jumpHeight = 6;
+            const jumpDuration = 800;
+            const startTime = performance.now();
+            const bridgeLevel = 14;
+            
+            function animateJump() {
+                const elapsed = performance.now() - startTime;
+                const progress = Math.min(elapsed / jumpDuration, 1);
+                
+                const height = jumpHeight * Math.sin(progress * Math.PI);
+                player.targetY = bridgeLevel + height;
+                
+                if (progress < 1 && player.isJumping) {
+                    requestAnimationFrame(animateJump);
+                } else {
+                    player.targetY = bridgeLevel;
+                    player.isJumping = false;
+                }
+            }
+            
+            animateJump();
+        }
+    }
+
+    function slide() {
+        if (!player.isJumping && !player.isSliding) {
+            player.isSliding = true;
+            const bridgeLevel = 14;
+            
+            player.object.scale.y = 0.6;
+            player.targetY = bridgeLevel - 1;
+            
+            setTimeout(() => {
+                if (player && player.isSliding) {
+                    player.object.scale.y = 1;
+                    player.targetY = bridgeLevel;
+                    player.isSliding = false;
+                }
+            }, 600);
+        }
+    }
+
+    function startGame() {
+        if (!gameInitialized) return;
+
+        console.log('🚀 Starting Auditory Run Pro');
+
+        // Reset state
+        score = 0;
+        level = 1;
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        currentLane = 0;
+        gameSpeed = 0.12;
+        speedMultiplier = 1.0;
+        isGameRunning = true;
+        playerLives = 3; // Reset lives
+        isInvulnerable = false;
+        
+        clearGameObjects();
+        
+        // Reset player to bridge level
+        if (player) {
+            player.object.position.set(0, 14, 5);
+            player.targetX = 0;
+            player.targetY = 14;
+            player.isJumping = false;
+            player.isSliding = false;
+            currentLane = 0;
+        }
+
+        // Create evil demons chasing the player
+        createChasingDemons();
+        
+        // Start spawning obstacles
+        setTimeout(() => {
+            if (isGameRunning) spawnRandomObstacles();
+        }, 5000);
+        
+        // Start background music
+        setTimeout(() => {
+            if (isGameRunning) playBackgroundMusic();
+        }, 1000);
+        
+        // Hide start screen
+        document.getElementById('startScreen').style.display = 'none';
+        
+        // Start word challenges
+        setTimeout(startWordChallenge, 3000);
+        
+        updateUI();
+    }
+
+    function clearGameObjects() {
+        obstacles.forEach(obs => scene.remove(obs));
+        collectibles.forEach(col => scene.remove(col));
+        wordObjects.forEach(word => scene.remove(word));
+        
+        obstacles = [];
+        collectibles = [];
+        wordObjects = [];
+    }
+
+    function startWordChallenge() {
+        if (!isGameRunning) return;
+        
+        // Select random word pair
+        const categories = Object.keys(wordPairs);
+        const category = categories[Math.floor(Math.random() * categories.length)];
+        const pairs = wordPairs[category];
+        currentWordPair = pairs[Math.floor(Math.random() * pairs.length)];
+        
+        targetWord = Math.random() > 0.5 ? currentWordPair[0] : currentWordPair[1];
+        
+        console.log('🎵 Target word:', targetWord);
+        
+        showWordHUD(targetWord);
+        speakWord(targetWord);
+        createWordPlatforms(currentWordPair, targetWord);
+        
+        // Schedule next challenge - MUCH FASTER now!
+        setTimeout(() => {
+            if (isGameRunning) {
+                hideWordHUD();
+                setTimeout(startWordChallenge, 3000); // Reduced from 8000ms to 3000ms
+            }
+        }, 3000); // Reduced from 5000ms to 3000ms
+    }
+
+    function showWordHUD(word) {
+        document.getElementById('wordDisplay').textContent = word;
+        document.getElementById('wordHud').style.display = 'block';
+    }
+
+    function hideWordHUD() {
+        document.getElementById('wordHud').style.display = 'none';
+    }
+
+    function createWordPlatforms(pair, targetWord) {
+        const lanes = [-1, 1]; // Use side lanes only
+        const shuffledPair = [...pair].sort(() => Math.random() - 0.5);
+        
+        shuffledPair.forEach((word, index) => {
+            const lane = lanes[index];
+            const isCorrect = word === targetWord;
+            
+            const platformGroup = new THREE.Group();
+            
+            // 🟢 BOTH PLATFORMS GREEN - DIFFICULTY INCREASED!
+            const platformGeometry = new THREE.CylinderGeometry(3, 3, 1, 16);
+            const platformMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x32CD32, // ALWAYS GREEN now!
+                emissive: 0x002200,
+                emissiveIntensity: 0.3
+            });
+            
+            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+            platform.position.y = 0.5;
+            platform.castShadow = true;
+            platformGroup.add(platform);
+            
+            // Word text
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 256;
+            canvas.height = 128;
+            
+            // Background
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Text
+            context.fillStyle = '#000000';
+            context.font = 'bold 48px Arial';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText(word, canvas.width/2, canvas.height/2);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ 
+                map: texture,
+                transparent: true
+            });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.scale.set(6, 3, 1);
+            sprite.position.y = 2.5;
+            platformGroup.add(sprite);
+            
+            // Position platform at bridge level
+            platformGroup.position.set(lane * 8, 14, -40);
+            platformGroup.userData = { 
+                word: word, 
+                isCorrect: isCorrect, 
+                collected: false
+            };
+            
+            scene.add(platformGroup);
+            wordObjects.push(platformGroup);
+        });
+    }
+
+    function speakWord(word) {
+        try {
+            if (speechSynth.speaking) {
+                speechSynth.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            speechSynth.speak(utterance);
+            
+        } catch (error) {
+            console.warn('⚠️ Speech synthesis error:', error);
+        }
+    }
+
+    // 👹 SUPER AGGRESSIVE DEMONS SYSTEM - Always visible and threatening!
+    let demons = [];
+    function createChasingDemons() {
+        // Clear existing demons
+        demons.forEach(demon => scene.remove(demon));
+        demons = [];
+        
+        console.log('🚨 Creating AGGRESSIVE demons behind player...');
+        
+        for (let i = 0; i < 5; i++) { // MORE DEMONS!
+            const demonGroup = new THREE.Group();
+            
+            // MASSIVE Evil demon body (dark red/black)
+            const bodyGeometry = new THREE.BoxGeometry(2, 5, 2);
+            const bodyMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x8B0000,
+                emissive: 0x660000,
+                emissiveIntensity: 0.5
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 3;
+            body.castShadow = true;
+            demonGroup.add(body);
+
+            // LARGER Demon head with GLOWING effects
+            const headGeometry = new THREE.SphereGeometry(1.2, 16, 16);
+            const headMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x444444,
+                emissive: 0x440000,
+                emissiveIntensity: 0.6
+            });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 6.5;
+            head.castShadow = true;
+            demonGroup.add(head);
+
+            // MASSIVE Glowing red eyes
+            const eyeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+            const eyeMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFF0000,
+                emissive: 0xFF0000,
+                emissiveIntensity: 1.5,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.4, 6.8, 0.8);
+            demonGroup.add(leftEye);
+
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.4, 6.8, 0.8);
+            demonGroup.add(rightEye);
+
+            // RED AURA around demon
+            const auraGeometry = new THREE.SphereGeometry(3, 12, 12);
+            const auraMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFF0000,
+                emissive: 0xFF0000,
+                emissiveIntensity: 0.3,
+                transparent: true,
+                opacity: 0.2
+            });
+            const aura = new THREE.Mesh(auraGeometry, auraMaterial);
+            aura.position.y = 4;
+            demonGroup.add(aura);
+
+            // LONGER and more menacing arms
+            const armGeometry = new THREE.BoxGeometry(0.8, 4, 0.8);
+            const armMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x660000,
+                emissive: 0x330000,
+                emissiveIntensity: 0.3
+            });
+            
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-1.8, 3.5, 0);
+            leftArm.rotation.z = 0.4;
+            leftArm.rotation.x = -0.2;
+            leftArm.castShadow = true;
+            demonGroup.add(leftArm);
+
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(1.8, 3.5, 0);
+            rightArm.rotation.z = -0.4;
+            rightArm.rotation.x = -0.2;
+            rightArm.castShadow = true;
+            demonGroup.add(rightArm);
+
+            // SHARP CLAWS on hands
+            for (let hand of [-1, 1]) {
+                for (let claw = 0; claw < 3; claw++) {
+                    const clawGeometry = new THREE.ConeGeometry(0.1, 0.8, 6);
+                    const clawMaterial = new THREE.MeshLambertMaterial({ 
+                        color: 0xFFFFFF,
+                        emissive: 0x666666,
+                        emissiveIntensity: 0.5
+                    });
+                    const clawMesh = new THREE.Mesh(clawGeometry, clawMaterial);
+                    clawMesh.position.set(
+                        hand * 2.2, 
+                        1.5, 
+                        0.3 + (claw - 1) * 0.3
+                    );
+                    clawMesh.rotation.x = Math.PI; // Point down
+                    demonGroup.add(clawMesh);
+                }
+            }
+
+            // RED LIGHT emanating from demon
+            const demonLight = new THREE.PointLight(0xFF0000, 3, 25);
+            demonLight.position.set(0, 5, 0);
+            demonGroup.add(demonLight);
+
+            // Position demons MUCH CLOSER and VISIBLE behind player
+            demonGroup.position.set(
+                (i - 2) * 6, // Spread them out
+                14, 
+                25 + i * 8 // CLOSER behind player but visible
+            );
+            
+            // Make demons EVEN LARGER and more threatening
+            demonGroup.scale.setScalar(2.0);
+            
+            // Store animation data
+            demonGroup.userData = { 
+                baseY: 14,
+                animOffset: i * 0.8,
+                aggressionLevel: 1.0,
+                leftArm: leftArm,
+                rightArm: rightArm,
+                leftEye: leftEye,
+                rightEye: rightEye,
+                aura: aura
+            };
+            
+            scene.add(demonGroup);
+            demons.push(demonGroup);
+            
+            console.log(`👹 MEGA DEMON ${i + 1} created at:`, demonGroup.position);
+        }
+        
+        console.log(`✅ ${demons.length} AGGRESSIVE demons spawned and ready to hunt!`);
+    }
+
+    // 🎵 BACKGROUND MUSIC SYSTEM
+    function playBackgroundMusic() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Temple Run style background melody
+            const notes = [
+                { freq: 261.63, time: 0.5 }, // C
+                { freq: 293.66, time: 0.5 }, // D  
+                { freq: 329.63, time: 0.5 }, // E
+                { freq: 261.63, time: 0.5 }, // C
+                { freq: 392.00, time: 1.0 }, // G
+                { freq: 349.23, time: 1.0 }, // F
+            ];
+            
+            let noteIndex = 0;
+            let startTime = audioContext.currentTime;
+            
+            function playNextNote() {
+                if (!isGameRunning) return;
+                
+                const note = notes[noteIndex % notes.length];
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(note.freq, startTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.05, startTime); // Very soft volume
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + note.time);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + note.time);
+                
+                startTime += note.time;
+                noteIndex++;
+                
+                setTimeout(() => {
+                    if (isGameRunning) playNextNote();
+                }, note.time * 1000);
+            }
+            
+            playNextNote();
+        } catch (error) {
+            console.warn('Background music not supported');
+        }
+    }
+
+    // Spawn random obstacles including LIGHTNING POWER-UPS and HIGH OBSTACLES
+    function spawnRandomObstacles() {
+        if (!isGameRunning) return;
+        
+        // Sometimes spawn power-ups instead of obstacles
+        if (Math.random() < 0.15) {
+            spawnLightningPowerUp();
+        } else {
+            const obstacleTypes = ['barrier', 'spikes', 'fire', 'highBarrier'];
+            const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            const lane = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+            
+            let obstacle;
+            
+            if (type === 'barrier') {
+                // Stone barrier (FIXED)
+                obstacle = new THREE.Mesh(
+                    new THREE.BoxGeometry(3, 5, 1),
+                    new THREE.MeshLambertMaterial({ color: 0x696969 })
+                );
+                obstacle.position.set(lane * 8, 16.5, -60);
+                
+            } else if (type === 'spikes') {
+                // FIXED DEADLY SPIKES - positioned correctly on bridge
+                const spikeGroup = new THREE.Group();
+                for (let i = 0; i < 5; i++) {
+                    const spike = new THREE.Mesh(
+                        new THREE.ConeGeometry(0.4, 4, 8),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x444444,
+                            emissive: 0x222222,
+                            emissiveIntensity: 0.3
+                        })
+                    );
+                    spike.position.set((i - 2) * 1.2, 16, 0); // ON BRIDGE LEVEL
+                    spike.castShadow = true;
+                    spikeGroup.add(spike);
+                }
+                spikeGroup.position.set(lane * 8, 0, -60);
+                obstacle = spikeGroup;
+                
+            } else if (type === 'fire') {
+                // FIXED Fire trap - positioned correctly
+                const fireGroup = new THREE.Group();
+                
+                // Base
+                const base = new THREE.Mesh(
+                    new THREE.CylinderGeometry(2.5, 2.5, 0.8, 16),
+                    new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                );
+                base.position.y = 14.4;
+                fireGroup.add(base);
+                
+                // Fire effect  
+                const fire = new THREE.Mesh(
+                    new THREE.SphereGeometry(2, 10, 10),
+                    new THREE.MeshLambertMaterial({ 
+                        color: 0xFF4500,
+                        emissive: 0xFF6B35,
+                        emissiveIntensity: 0.9,
+                        transparent: true,
+                        opacity: 0.8
+                    })
+                );
+                fire.position.y = 16.5;
+                fireGroup.add(fire);
+                
+                // Fire light
+                const fireLight = new THREE.PointLight(0xFF4500, 3, 20);
+                fireLight.position.copy(fire.position);
+                fireGroup.add(fireLight);
+                
+                fireGroup.position.set(lane * 8, 0, -60);
+                obstacle = fireGroup;
+                
+            } else if (type === 'highBarrier') {
+                // NEW: HIGH BARRIER that requires sliding
+                const highBarrierGroup = new THREE.Group();
+                
+                // Support posts
+                for (let side of [-1, 1]) {
+                    const post = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, 8, 0.5),
+                        new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                    );
+                    post.position.set(side * 2.5, 18, 0);
+                    post.castShadow = true;
+                    highBarrierGroup.add(post);
+                }
+                
+                // Horizontal barrier (high up)
+                const barrier = new THREE.Mesh(
+                    new THREE.BoxGeometry(6, 0.8, 1),
+                    new THREE.MeshLambertMaterial({ 
+                        color: 0x8B4513,
+                        emissive: 0x221100,
+                        emissiveIntensity: 0.2
+                    })
+                );
+                barrier.position.set(0, 21, 0);
+                barrier.castShadow = true;
+                highBarrierGroup.add(barrier);
+                
+                highBarrierGroup.position.set(lane * 8, 0, -60);
+                obstacle = highBarrierGroup;
+            }
+            
+            obstacle.userData = { type: type };
+            obstacle.castShadow = true;
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+        }
+        
+        // Schedule next obstacle
+        setTimeout(() => {
+            if (isGameRunning) spawnRandomObstacles();
+        }, 2000 + Math.random() * 3000);
+    }
+
+    // ⚡ LIGHTNING POWER-UP - Speed combo boost
+    function spawnLightningPowerUp() {
+        const lane = Math.floor(Math.random() * 3) - 1;
+        const lightningGroup = new THREE.Group();
+        
+        // Lightning bolt shape
+        const lightningGeometry = new THREE.BoxGeometry(1, 4, 0.3);
+        const lightningMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xFFFF00,
+            emissive: 0xFFFF00,
+            emissiveIntensity: 0.8
+        });
+        const lightning = new THREE.Mesh(lightningGeometry, lightningMaterial);
+        lightning.position.y = 16;
+        lightningGroup.add(lightning);
+        
+        // Electrical effect
+        const sparkleGeometry = new THREE.SphereGeometry(0.3, 8, 8);
+        const sparkleMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0x00FFFF,
+            emissive: 0x00FFFF,
+            emissiveIntensity: 1,
+            transparent: true,
+            opacity: 0.7
+        });
+        
+        for (let i = 0; i < 6; i++) {
+            const sparkle = new THREE.Mesh(sparkleGeometry, sparkleMaterial);
+            sparkle.position.set(
+                (Math.random() - 0.5) * 3,
+                15 + Math.random() * 3,
+                (Math.random() - 0.5) * 2
+            );
+            lightningGroup.add(sparkle);
+        }
+        
+        // Bright light
+        const lightningLight = new THREE.PointLight(0xFFFF00, 4, 15);
+        lightningLight.position.set(0, 16, 0);
+        lightningGroup.add(lightningLight);
+        
+        lightningGroup.position.set(lane * 8, 0, -60);
+        lightningGroup.userData = { type: 'lightning', isPowerUp: true };
+        
+        scene.add(lightningGroup);
+        collectibles.push(lightningGroup);
+    }
+
+    // Global arrays for moving floor elements
+    let bridgeStones = [];
+    let movingPillars = [];
+
+    function updateGame() {
+        if (!isGameRunning) return;
+
+        // 🏃‍♂️ RUNNING ANIMATION
+        if (player && !player.isJumping && !player.isSliding) {
+            player.runTime += 0.3;
+            
+            // Arms swing
+            player.leftArm.rotation.z = Math.sin(player.runTime) * 0.5;
+            player.rightArm.rotation.z = -Math.sin(player.runTime) * 0.5;
+            
+            // Legs movement
+            player.leftLeg.rotation.x = Math.sin(player.runTime + Math.PI) * 0.3;
+            player.rightLeg.rotation.x = Math.sin(player.runTime) * 0.3;
+            
+            // Body bob
+            player.body.position.y = 2 + Math.sin(player.runTime * 2) * 0.1;
+            player.head.position.y = 4 + Math.sin(player.runTime * 2) * 0.1;
+        }
+
+        // Smooth player movement
+        if (player) {
+            player.object.position.x += (player.targetX - player.object.position.x) * 0.12;
+            player.object.position.y += (player.targetY - player.object.position.y) * 0.12;
+            
+            // Camera follows player with infinite running effect
+            camera.position.x += (player.object.position.x - camera.position.x) * 0.1;
+            camera.position.z = player.object.position.z + 13;
+        }
+
+        // 🔄 SUPER PLATAFORMA GIRATORIA SYSTEM - MUCH MORE VISIBLE!
+        if (player && player.object.position.z > nextTurnDistance && !isInTurn) {
+            isInTurn = true;
+            turnDirection = Math.random() > 0.5 ? 1 : -1;
+            const turnAmount = 45 * turnDirection; // Fixed 45 degree turns
+            
+            console.log(`🔄 BRIDGE TURNING ${turnDirection > 0 ? 'RIGHT ➡️' : 'LEFT ⬅️'} by 45°`);
+            
+            // IMMEDIATE VISIBLE TURN - much more dramatic
+            bridgeRotation += turnAmount * (Math.PI / 180);
+            
+            // Apply rotation to ALL objects immediately for visibility
+            scene.children.forEach(child => {
+                if (child.userData && child.userData.isMovingFloor) {
+                    const tempX = child.position.x;
+                    const tempZ = child.position.z;
+                    const angle = turnAmount * (Math.PI / 180);
+                    
+                    child.position.x = tempX * Math.cos(angle) - tempZ * Math.sin(angle);
+                    child.position.z = tempX * Math.sin(angle) + tempZ * Math.cos(angle);
+                }
+            });
+            
+            // Schedule next turn much sooner
+            nextTurnDistance = player.object.position.z + 30 + Math.random() * 20;
+            isInTurn = false;
+            
+            console.log(`✅ TURN COMPLETE! Next turn at: ${nextTurnDistance}`);
+        }
+
+        // 🌊 SUPER FAST INFINITE GROUND MOVEMENT - RESTORED TILE EFFECT!
+        bridgeStones.forEach(stone => {
+            // FAST MOVEMENT for speed sensation
+            stone.position.z += gameSpeed * 1.5; // 50% faster for dramatic effect
+            
+            // Apply bridge rotation gradually
+            if (isInTurn) {
+                const rotSpeed = 0.001;
+                const distance = Math.sqrt(stone.position.x * stone.position.x + stone.position.z * stone.position.z);
+                const currentAngle = Math.atan2(stone.position.z, stone.position.x);
+                const newAngle = currentAngle + rotSpeed;
+                stone.position.x = Math.cos(newAngle) * distance;
+                stone.position.z = Math.sin(newAngle) * distance;
+            }
+            
+            // Reset position when too far ahead for PERFECT infinite effect
+            if (stone.position.z > player.object.position.z + 40) {
+                stone.position.z -= 800; // Reset far behind immediately
+                
+                // Maintain rotation when resetting
+                if (Math.abs(bridgeRotation) > 0.1) {
+                    const distance = Math.sqrt(stone.position.x * stone.position.x + stone.position.z * stone.position.z);
+                    const angle = Math.atan2(stone.position.z, stone.position.x) + bridgeRotation;
+                    stone.position.x = Math.cos(angle) * distance;
+                    stone.position.z = Math.sin(angle) * distance;
+                }
+            }
+        });
+
+        // 🏔️ MOVING BACKGROUND SCENERY for infinite movement sensation
+        movingMountains.forEach(mountain => {
+            mountain.position.z += gameSpeed * 0.3; // Slower for background parallax
+            
+            // Reset background elements when too far ahead
+            if (mountain.position.z > player.object.position.z + 100) {
+                mountain.position.z -= 1000;
+            }
+        });
+        
+        // Update speed multiplier
+        speedMultiplier = 1 + (gameSpeed - 0.12) * 3;
+        
+        // INFINITE WORLD MOVEMENT - Move everything towards player
+        
+        // Move word platforms
+        wordObjects.forEach((wordObj, index) => {
+            wordObj.position.z += gameSpeed;
+            wordObj.rotation.y += 0.01;
+            
+            if (!wordObj.userData.collected && checkCollision(wordObj, player.object)) {
+                wordObj.userData.collected = true;
+                
+                if (wordObj.userData.isCorrect) {
+                    correctAnswers++;
+                    score += (200 * level);
+                    
+                    // Speed boost for correct answers
+                    gameSpeed += 0.005;
+                    showSpeedBoost();
+                    createSuccessEffect(wordObj.position);
+                    
+                    // 🔄 BRIDGE TURN when correct answer!
+                    triggerCorrectAnswerTurn();
+                    
+                    // ⚡ Gain lightning bolt and chance for extra life
+                    lightningBolts++;
+                    if (Math.random() < 0.2) { // 20% chance
+                        extraLives++;
+                        playerLives++;
+                        console.log(`❤️ EXTRA LIFE gained! Total lives: ${playerLives}`);
+                    }
+                    
+                    console.log(`✅ Correct word: ${wordObj.userData.word}, ⚡ Lightning: ${lightningBolts}`);
+                } else {
+                    incorrectAnswers++;
+                    score = Math.max(0, score - 100);
+                    createErrorEffect(wordObj.position);
+                    console.log('❌ Wrong word:', wordObj.userData.word);
+                }
+                
+                // Remove platform
+                scene.remove(wordObj);
+                wordObjects.splice(index, 1);
+                updateUI();
+            }
+            
+            if (wordObj.position.z > player.object.position.z + 20) {
+                scene.remove(wordObj);
+                wordObjects.splice(index, 1);
+            }
+        });
+        
+        // Move obstacles
+        obstacles.forEach((obstacle, index) => {
+            obstacle.position.z += gameSpeed;
+            
+            // Check collision with player
+            if (!isInvulnerable && checkCollision(obstacle, player.object)) {
+                // Check if player avoided obstacle
+                const type = obstacle.userData.type;
+                let avoided = false;
+                
+                if (type === 'barrier' && player.isJumping) {
+                    avoided = true; // Jumped over barrier - safe
+                } else if (type === 'spikes' && player.isJumping) {
+                    avoided = true; // Jumped over spikes - safe  
+                } else if (type === 'fire' && player.isSliding) {
+                    avoided = true; // Slid under fire - safe
+                }
+                
+                if (!avoided) {
+                    // Hit obstacle - lose life and slow down
+                    hitObstacle(obstacle.position);
+                    obstacle.userData.hit = true; // Mark as hit to avoid multiple hits
+                }
+            }
+            
+            if (obstacle.position.z > player.object.position.z + 20) {
+                scene.remove(obstacle);
+                obstacles.splice(index, 1);
+                if (!obstacle.userData.hit) {
+                    score += 50; // Bonus for avoiding obstacle
+                }
+            }
+        });
+        
+        // 👹 SUPER AGGRESSIVE DEMONS - Get closer when player slows down!
+        demons.forEach((demon, index) => {
+            const userData = demon.userData;
+            
+            // AGGRESSION LEVEL based on game speed (slower = more aggressive)
+            const speedRatio = gameSpeed / 0.12; // Normal speed ratio
+            userData.aggressionLevel = Math.max(0.5, 2.0 - speedRatio); // Higher when slower
+            
+            // BASE DISTANCE - gets smaller when player is slow
+            const baseDistance = 15 - (userData.aggressionLevel - 1.0) * 8; // Closer when aggressive
+            const targetZ = player.object.position.z + baseDistance + index * 4;
+            
+            // MOVEMENT SPEED - faster when more aggressive
+            const moveSpeed = 0.05 + userData.aggressionLevel * 0.03;
+            demon.position.z += (targetZ - demon.position.z) * moveSpeed;
+            
+            // MENACING ANIMATIONS - more intense when aggressive
+            const time = performance.now() * 0.005 + index;
+            const intensity = userData.aggressionLevel;
+            
+            // Vertical bobbing - more when aggressive
+            demon.position.y = userData.baseY + Math.sin(time * 3 * intensity) * (0.8 * intensity);
+            
+            // Menacing rotation
+            demon.rotation.y = Math.sin(time * 2) * (0.3 * intensity);
+            demon.rotation.x = Math.sin(time * 1.5) * (0.1 * intensity);
+            
+            // ARM MOVEMENTS - threatening gestures
+            userData.leftArm.rotation.z = 0.4 + Math.sin(time * 4) * (0.3 * intensity);
+            userData.rightArm.rotation.z = -0.4 - Math.sin(time * 4) * (0.3 * intensity);
+            userData.leftArm.rotation.x = -0.2 - Math.sin(time * 3) * (0.2 * intensity);
+            userData.rightArm.rotation.x = -0.2 - Math.sin(time * 3) * (0.2 * intensity);
+            
+            // EYE GLOW - brighter when aggressive
+            userData.leftEye.material.emissiveIntensity = 1.5 + intensity * 0.5;
+            userData.rightEye.material.emissiveIntensity = 1.5 + intensity * 0.5;
+            
+            // AURA INTENSITY - pulsing red when aggressive
+            userData.aura.material.opacity = 0.2 + Math.sin(time * 6) * (0.2 * intensity);
+            userData.aura.scale.setScalar(1 + Math.sin(time * 4) * (0.3 * intensity));
+            
+            // SCALE - grow when aggressive
+            const scaleMultiplier = 2.0 + (intensity - 1.0) * 0.5;
+            demon.scale.setScalar(scaleMultiplier);
+            
+            // SOUND EFFECTS when very aggressive
+            if (userData.aggressionLevel > 1.7 && Math.random() < 0.02) {
+                playTone(100 + Math.random() * 50, 0.2); // Demon growl
+            }
+            
+            // CLOSER GAME OVER DISTANCE when aggressive
+            const gameOverDistance = 8 - (userData.aggressionLevel - 1.0) * 3;
+            if (demon.position.z < player.object.position.z + gameOverDistance) {
+                console.log(`👹 Demon ${index + 1} caught player! Aggression: ${userData.aggressionLevel.toFixed(2)}`);
+                gameOver();
+                return;
+            }
+            
+            // Visual feedback when demons get really close
+            if (demon.position.z < player.object.position.z + 12) {
+                // Screen red tint effect
+                const redIntensity = Math.max(0, (12 - (demon.position.z - player.object.position.z)) / 12);
+                if (redIntensity > 0.5) {
+                    // Flash screen red briefly
+                    document.body.style.filter = `hue-rotate(${redIntensity * 30}deg) brightness(${1 + redIntensity * 0.2})`;
+                    setTimeout(() => {
+                        document.body.style.filter = '';
+                    }, 100);
+                }
+            }
+        });
+        
+        // Infinite speed increase
+        gameSpeed += 0.0002;
+        
+        // Progress
+        const newLevel = Math.floor(score / 2000) + 1;
+        if (newLevel > level) {
+            level = newLevel;
+            score += 500;
+        }
+        
+        updateUI();
+    }
+
+    function gameOver() {
+        isGameRunning = false;
+        const accuracy = correctAnswers + incorrectAnswers > 0 ? 
+            ((correctAnswers / (correctAnswers + incorrectAnswers)) * 100).toFixed(1) : 0;
+        
+        setTimeout(() => {
+            alert(`👹 GAME OVER!\n\n🏆 Final Score: ${score.toLocaleString()}\n📈 Level: ${level}\n🎯 Accuracy: ${accuracy}%\n✅ Correct Words: ${correctAnswers}\n❌ Wrong Words: ${incorrectAnswers}`);
+            location.reload();
+        }, 100);
+    }
+
+    function checkCollision(obj1, obj2) {
+        const distance = obj1.position.distanceTo(obj2.position);
+        return distance < 4;
+    }
+
+    function showSpeedBoost() {
+        const indicator = document.getElementById('speedIndicator');
+        indicator.style.display = 'block';
+        
+        setTimeout(() => {
+            indicator.style.display = 'none';
+        }, 1000);
+    }
+
+    // ✅ SUCCESS EFFECT - Green explosion when correct
+    function createSuccessEffect(position) {
+        for (let i = 0; i < 15; i++) {
+            const particle = new THREE.Mesh(
+                new THREE.SphereGeometry(0.3, 8, 8),
+                new THREE.MeshLambertMaterial({ 
+                    color: 0x00FF00,
+                    emissive: 0x00FF00,
+                    emissiveIntensity: 0.5,
+                    transparent: true,
+                    opacity: 0.8
+                })
+            );
+            
+            particle.position.copy(position);
+            particle.position.add(new THREE.Vector3(
+                (Math.random() - 0.5) * 8,
+                Math.random() * 6,
+                (Math.random() - 0.5) * 8
+            ));
+            
+            scene.add(particle);
+            
+            // Animate particle explosion
+            let life = 1.0;
+            const velocity = new THREE.Vector3(
+                (Math.random() - 0.5) * 0.3,
+                Math.random() * 0.2,
+                (Math.random() - 0.5) * 0.3
+            );
+            
+            function animateParticle() {
+                life -= 0.02;
+                particle.position.add(velocity);
+                particle.material.opacity = life;
+                particle.scale.setScalar(life);
+                
+                if (life > 0) {
+                    requestAnimationFrame(animateParticle);
+                } else {
+                    scene.remove(particle);
+                }
+            }
+            animateParticle();
+        }
+        
+        // Success sound effect
+        playTone(523, 0.1); // C note
+        setTimeout(() => playTone(659, 0.1), 100); // E note
+        setTimeout(() => playTone(784, 0.2), 200); // G note
+    }
+
+    // ❌ ERROR EFFECT - Red explosion when wrong
+    function createErrorEffect(position) {
+        for (let i = 0; i < 10; i++) {
+            const particle = new THREE.Mesh(
+                new THREE.BoxGeometry(0.4, 0.4, 0.4),
+                new THREE.MeshLambertMaterial({ 
+                    color: 0xFF0000,
+                    emissive: 0xFF0000,
+                    emissiveIntensity: 0.6,
+                    transparent: true,
+                    opacity: 0.9
+                })
+            );
+            
+            particle.position.copy(position);
+            particle.position.add(new THREE.Vector3(
+                (Math.random() - 0.5) * 6,
+                Math.random() * 4,
+                (Math.random() - 0.5) * 6
+            ));
+            
+            scene.add(particle);
+            
+            // Animate particle fall
+            let life = 1.0;
+            const velocity = new THREE.Vector3(
+                (Math.random() - 0.5) * 0.2,
+                -Math.random() * 0.1,
+                (Math.random() - 0.5) * 0.2
+            );
+            
+            function animateParticle() {
+                life -= 0.03;
+                particle.position.add(velocity);
+                particle.material.opacity = life;
+                particle.rotation.x += 0.1;
+                particle.rotation.y += 0.1;
+                
+                if (life > 0) {
+                    requestAnimationFrame(animateParticle);
+                } else {
+                    scene.remove(particle);
+                }
+            }
+            animateParticle();
+        }
+        
+        // Error sound effect
+        playTone(220, 0.3); // Low buzz
+    }
+
+    // Sound generation
+    function playTone(frequency, duration) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        } catch (error) {
+            console.warn('Audio not supported');
+        }
+    }
+
+    // 💥 HIT OBSTACLE SYSTEM - Loses life and slows down  
+    function hitObstacle(position) {
+        if (isInvulnerable) return;
+        
+        // Lose one life
+        playerLives--;
+        console.log(`💔 Hit obstacle! Lives remaining: ${playerLives}`);
+        
+        // Slow down dramatically
+        gameSpeed = Math.max(0.08, gameSpeed - 0.04);
+        
+        // Screen shake effect
+        camera.position.y += Math.random() * 2 - 1;
+        camera.position.x += Math.random() * 2 - 1;
+        
+        // Red damage effect
+        createDamageEffect(position);
+        
+        // Flash player red
+        if (player) {
+            player.body.material.color.setHex(0xFF0000);
+            player.head.material.color.setHex(0xFF6666);
+            
+            setTimeout(() => {
+                player.body.material.color.setHex(0x40E0D0);
+                player.head.material.color.setHex(0xF5DEB3);
+            }, 300);
+        }
+        
+        // Become invulnerable briefly
+        isInvulnerable = true;
+        setTimeout(() => {
+            isInvulnerable = false;
+        }, 1500);
+        
+        // Damage sound
+        playTone(150, 0.5); // Deep damage sound
+        
+        // Check for game over
+        if (playerLives <= 0) {
+            setTimeout(() => {
+                gameOver();
+            }, 500);
+        }
+        
+        updateUI();
+    }
+
+    // 💥 DAMAGE EFFECT - Orange/yellow explosion when hit
+    function createDamageEffect(position) {
+        for (let i = 0; i < 20; i++) {
+            const particle = new THREE.Mesh(
+                new THREE.SphereGeometry(0.4, 6, 6),
+                new THREE.MeshLambertMaterial({ 
+                    color: 0xFFA500,
+                    emissive: 0xFF6B00,
+                    emissiveIntensity: 0.7,
+                    transparent: true,
+                    opacity: 0.9
+                })
+            );
+            
+            particle.position.copy(position);
+            particle.position.add(new THREE.Vector3(
+                (Math.random() - 0.5) * 10,
+                Math.random() * 8,
+                (Math.random() - 0.5) * 10
+            ));
+            
+            scene.add(particle);
+            
+            // Animate damage particles
+            let life = 1.0;
+            const velocity = new THREE.Vector3(
+                (Math.random() - 0.5) * 0.4,
+                Math.random() * 0.3,
+                (Math.random() - 0.5) * 0.4
+            );
+            
+            function animateParticle() {
+                life -= 0.025;
+                particle.position.add(velocity);
+                velocity.y -= 0.01; // Gravity
+                particle.material.opacity = life;
+                particle.scale.setScalar(life * 1.5);
+                
+                if (life > 0) {
+                    requestAnimationFrame(animateParticle);
+                } else {
+                    scene.remove(particle);
+                }
+            }
+            animateParticle();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('score').textContent = score.toLocaleString();
+        document.getElementById('level').textContent = level;
+        document.getElementById('correct').textContent = correctAnswers;
+        document.getElementById('incorrect').textContent = incorrectAnswers;
+        document.getElementById('speedDisplay').textContent = speedMultiplier.toFixed(1) + 'x';
+        document.getElementById('lives').textContent = playerLives;
+        
+        // Change lives color based on remaining lives
+        const livesElement = document.getElementById('lives');
+        if (playerLives <= 1) {
+            livesElement.style.color = '#FF0000'; // Red when critical
+        } else if (playerLives <= 2) {
+            livesElement.style.color = '#FFA500'; // Orange when low
+        } else {
+            livesElement.style.color = '#FF69B4'; // Pink when healthy
+        }
+        
+        const total = correctAnswers + incorrectAnswers;
+        const accuracy = total > 0 ? ((correctAnswers / total) * 100).toFixed(1) : 0;
+        document.getElementById('accuracy').textContent = accuracy + '%';
+    }
+
+    function onWindowResize() {
+        if (camera && renderer) {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        updateGame();
+        if (renderer && scene && camera) {
+            renderer.render(scene, camera);
+        }
+    }
+
+    // 🔄 BRIDGE TURN when correct answer! - FIXED ROTATION
+    function triggerCorrectAnswerTurn() {
+        if (!isInTurn) {
+            isInTurn = true;
+            turnDirection = Math.random() > 0.5 ? 1 : -1;
+            const turnAmount = 45 * turnDirection; // LARGER turn for visibility
+            
+            console.log(`🎯 CORRECT ANSWER TURN ${turnDirection > 0 ? 'RIGHT ➡️' : 'LEFT ⬅️'} by 45°`);
+            
+            bridgeRotation += turnAmount * (Math.PI / 180);
+            
+            // Apply rotation to ALL bridge elements IMMEDIATELY
+            bridgeStones.forEach(stone => {
+                const tempX = stone.position.x;
+                const tempZ = stone.position.z;
+                const angle = turnAmount * (Math.PI / 180);
+                
+                stone.position.x = tempX * Math.cos(angle) - tempZ * Math.sin(angle);
+                stone.position.z = tempX * Math.sin(angle) + tempZ * Math.cos(angle);
+            });
+            
+            // Also apply to ALL other bridge elements
+            scene.children.forEach(child => {
+                if (child.userData && child.userData.isMovingFloor) {
+                    const tempX = child.position.x;
+                    const tempZ = child.position.z;
+                    const angle = turnAmount * (Math.PI / 180);
+                    
+                    child.position.x = tempX * Math.cos(angle) - tempZ * Math.sin(angle);
+                    child.position.z = tempX * Math.sin(angle) + tempZ * Math.cos(angle);
+                }
+            });
+            
+            setTimeout(() => { isInTurn = false; }, 300);
+            
+            console.log(`✅ CORRECT ANSWER TURN COMPLETE! Bridge rotated ${turnAmount}°`);
+        }
+    }
+
+    // ⚡ USE LIGHTNING BOLT for emergency speed boost
+    function useLightningBolt() {
+        if (lightningBolts > 0) {
+            lightningBolts--;
+            gameSpeed += 0.02;
+            
+            document.getElementById('speedIndicator').innerHTML = '⚡ LIGHTNING BOOST!';
+            showSpeedBoost();
+            
+            playTone(800, 0.2);
+            setTimeout(() => playTone(1000, 0.3), 200);
+            
+            console.log(`⚡ Lightning bolt used! Remaining: ${lightningBolts}`);
+            updateUI();
+        }
+    }
+
+    // 💚 EXTRA LIFE POWER-UP spawning
+    function spawnExtraLifePowerUp() {
+        const lane = Math.floor(Math.random() * 3) - 1;
+        const lifeGroup = new THREE.Group();
+        
+        const heartGeometry = new THREE.SphereGeometry(1, 12, 12);
+        const heartMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xFF69B4,
+            emissive: 0xFF1493,
+            emissiveIntensity: 0.8
+        });
+        const heart = new THREE.Mesh(heartGeometry, heartMaterial);
+        heart.position.y = 16;
+        lifeGroup.add(heart);
+        
+        const healLight = new THREE.PointLight(0xFF69B4, 4, 15);
+        healLight.position.set(0, 16, 0);
+        lifeGroup.add(healLight);
+        
+        lifeGroup.position.set(lane * 8, 0, -60);
+        lifeGroup.userData = { type: 'extraLife', isPowerUp: true };
+        
+        scene.add(lifeGroup);
+        collectibles.push(lifeGroup);
+    }
+
+    // Initialize when page loads
+    initGame();
+</script>
+
+</body>
+
+</html>

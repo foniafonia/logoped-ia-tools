@@ -1,0 +1,53 @@
+{
+  "id_taller": "pri_ort_bv_cloze_001",
+  "codigo": "ORT-BV-CLOZE-001",
+  "nombre": "Ortografía arbitraria y reglada. Vocabulario palabras B-V (Procedimiento Cloze)",
+  "modulo": "ortografia_arbitraria_y_reglada",
+  "objetivo_clinico": [
+    "entrenamiento_ortografia_arbitraria",
+    "consolidacion_lexico_ortografico",
+    "aplicacion_de_reglas_en_contexto"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "mostrar_error_en_rojo_y_vibracion": true,
+      "borrado_automatico_del_error": true,
+      "pista_auditiva_por_speech": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "procedimiento_cloze_binario",
+    "opciones_binarias": ["B", "V"],
+    "flujo": "seleccionar_hueco_luego_elegir_letra",
+    "tiempo_max_respuesta_ms": 20000
+  },
+  "banco_items": [
+    {
+      "id_item": "bv_001",
+      "texto_base": "El a_ion volaba muy _ajo.",
+      "huecos": [
+        { "indice": 0, "respuesta": "V", "palabra": "avion", "pista": "Recuerda, avion se escribe con V." },
+        { "indice": 1, "respuesta": "B", "palabra": "bajo", "pista": "Recuerda, bajo se escribe con B." }
+      ]
+    },
+    {
+      "id_item": "bv_002",
+      "texto_base": "El _arco es de color _erde.",
+      "huecos": [
+        { "indice": 0, "respuesta": "B", "palabra": "barco", "pista": "Recuerda, barco se escribe con B." },
+        { "indice": 1, "respuesta": "V", "palabra": "verde", "pista": "Recuerda, verde se escribe con V." }
+      ]
+    },
+    {
+      "id_item": "bv_003",
+      "texto_base": "La _aca _ebe agua fresca.",
+      "huecos": [
+        { "indice": 0, "respuesta": "V", "palabra": "vaca", "pista": "Recuerda, vaca se escribe con V." },
+        { "indice": 1, "respuesta": "B", "palabra": "bebe", "pista": "Recuerda, bebe se escribe con B." }
+      ]
+    }
+  ]
+}
