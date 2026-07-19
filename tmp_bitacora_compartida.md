@@ -787,3 +787,8 @@ Bloqueos:
 - Este repo es publico; Codex ha evitado subir bases de conocimiento, entregas skill o documentacion potencialmente sensible sin revision.
 - La landing de la rama no sera el enlace publico final de GitHub Pages hasta que se mergee/promocione a `main`.
 Estado: [PARA_CODEX HECHO]
+
+Actualizacion Codex:
+✅ PR abierto: https://github.com/foniafonia/logoped-ia-tools/pull/1
+✅ PR mergeable/clean.
+✅ Se procede a mergear a `main` para que GitHub Pages pueda servir `LANDING_TODO_LOGOPED_IA.html` como enlace publico de reunion.
