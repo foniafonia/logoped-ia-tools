@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Logoped-IA · Centro de Todo</title>
+<title>Logoped-IA · Panel de Demostración</title>
 <style>
   :root{
     --bg:#0d1117; --bg2:#111a24; --card:#161f2b; --card2:#1b2634; --card3:#212d3d;
     --ink:#e9eef5; --muted:#93a1b3; --line:#26313f;
     --green:#22c55e; --green-d:#16a34a; --gold:#eab308; --purple:#8b5cf6;
-    --blue:#38bdf8; --pink:#f472b6; --red:#f87171; --slate:#64748b;
+    --blue:#38bdf8; --pink:#f472b6; --amber:#f59e0b; --slate:#64748b;
     --shadow:0 10px 30px rgba(0,0,0,.35);
   }
   @media (prefers-color-scheme: light){
@@ -20,54 +20,56 @@
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:1120px;margin:0 auto;padding:24px 18px 90px}
-  header.hero{padding:28px 24px;border-radius:20px;background:
+  .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 90px}
+  header.hero{padding:26px 22px;border-radius:20px;background:
     radial-gradient(1000px 260px at 8% -30%, rgba(34,197,94,.20), transparent 60%),
     radial-gradient(800px 260px at 108% -10%, rgba(234,179,8,.15), transparent 55%),
     var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
   .logo{display:inline-flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.4px}
-  .logo .mark{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:19px;
+  .logo .mark{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:18px;
     background:linear-gradient(135deg,var(--green),var(--gold));color:#0b1220;font-weight:900}
-  h1{font-size:clamp(23px,3.6vw,34px);margin:14px 0 6px;line-height:1.12}
+  h1{font-size:clamp(22px,3.4vw,32px);margin:13px 0 6px;line-height:1.14}
   .sub{color:var(--muted);max-width:720px;font-size:15px}
-  .hint{margin-top:14px;font-size:13px;color:var(--muted)}
+  .hint{margin-top:12px;font-size:12.5px;color:var(--muted)}
   .hint b{color:var(--ink)}
-  .controls{position:sticky;top:0;z-index:9;margin:22px 0 8px;padding:11px;border-radius:14px;
-    background:color-mix(in srgb,var(--card) 90%,transparent);border:1px solid var(--line);backdrop-filter:blur(8px);
-    display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-  #q{flex:1;min-width:220px;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px}
+  .controls{position:sticky;top:0;z-index:9;margin:20px 0 8px;padding:10px;border-radius:14px;
+    background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);backdrop-filter:blur(8px);
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  #q{flex:1;min-width:200px;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px}
   #q::placeholder{color:var(--muted)}
   .toolbtn{cursor:pointer;font-size:13px;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--muted);font-weight:600}
-  .count{color:var(--muted);font-size:12.5px;margin-left:auto;white-space:nowrap}
-  .sec{margin:26px 0 6px}
-  .sec-h{display:flex;align-items:center;gap:10px;margin:0 2px 12px;font-size:13px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .toolbtn.on{background:linear-gradient(135deg,var(--green),var(--green-d));color:#06210f;border-color:transparent}
+  .count{color:var(--muted);font-size:12px;margin-left:auto;white-space:nowrap}
+  .sec{margin:24px 0 6px}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:0 2px 12px;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:800}
   .sec-h .bar{height:1px;flex:1;background:var(--line)}
-  .boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+  .boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:13px}
   .box{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;align-self:start}
   .box.open{border-color:color-mix(in srgb,var(--green) 45%,var(--line))}
-  .box-head{display:flex;align-items:center;gap:11px;padding:15px 15px;cursor:pointer;user-select:none}
-  .box-emoji{font-size:22px;line-height:1}
+  .box-head{display:flex;align-items:center;gap:11px;padding:14px 14px;cursor:pointer;user-select:none}
+  .box-emoji{font-size:21px;line-height:1}
   .box-tt{flex:1;min-width:0}
-  .box-tt h3{margin:0;font-size:16.5px}
-  .box-tt p{margin:2px 0 0;font-size:12.8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .box-n{font-size:11.5px;color:var(--muted);background:var(--card3);border-radius:999px;padding:3px 9px;font-weight:700}
-  .chev{color:var(--muted);transition:transform .18s;font-size:13px}
+  .box-tt h3{margin:0;font-size:16px}
+  .box-tt p{margin:2px 0 0;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .box-n{font-size:11px;color:var(--muted);background:var(--card3);border-radius:999px;padding:3px 8px;font-weight:700}
+  .chev{color:var(--muted);transition:transform .18s;font-size:12px}
   .box.open .chev{transform:rotate(90deg)}
-  .box-body{display:none;padding:0 13px 13px}
+  .box-body{display:none;padding:0 12px 12px}
   .box.open .box-body{display:block}
-  .item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);margin-top:8px}
-  .item:hover{border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
-  .item .k{font-size:10.5px;font-weight:800;letter-spacing:.4px;padding:3px 7px;border-radius:6px;white-space:nowrap}
-  .k.live{color:#052e12;background:var(--green)} .k.play{color:#04212f;background:var(--blue)}
-  .k.repo{color:#eae6ff;background:var(--purple)} .k.video{color:#3a0f27;background:var(--pink)}
-  .k.artifact{color:#2a1a02;background:var(--gold)} .k.doc{color:#fff;background:var(--slate)}
-  .k.local{color:#2a1a02;background:#d6a919} .k.soon{color:var(--muted);background:transparent;border:1px solid var(--line)}
+  .item{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:10px;border:1px solid var(--line);background:var(--card2);margin-top:8px}
+  .item.primary{background:color-mix(in srgb,var(--green) 12%,var(--card2));border-color:color-mix(in srgb,var(--green) 45%,var(--line))}
+  .item:hover{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}
+  .item .k{font-size:10px;font-weight:800;letter-spacing:.2px;padding:4px 7px;border-radius:6px;white-space:nowrap}
+  .k.verlive{color:#052e12;background:var(--green)} .k.verjuego{color:#04212f;background:var(--blue)}
+  .k.verdoc{color:#fff;background:var(--slate)} .k.vervideo{color:#3a0f27;background:var(--pink)}
+  .k.verart{color:#2a1a02;background:var(--gold)} .k.repo{color:#cbd5e1;background:transparent;border:1px solid var(--line)}
+  .k.pending{color:#2a1a02;background:var(--amber)} .k.cantera{color:var(--muted);background:transparent;border:1px dashed var(--line)}
   .item .nm{flex:1;font-size:13.5px;min-width:0}
-  .item .nm small{display:block;color:var(--muted);font-size:11.5px}
+  .item .nm small{display:block;color:var(--muted);font-size:11.5px;white-space:normal}
   .item .arrow{color:var(--muted);font-size:12px}
-  .item.dead{cursor:default}
+  .item.dead{opacity:.9}
   .empty{display:none;color:var(--muted);text-align:center;padding:40px}
-  footer{margin-top:36px;padding:18px 20px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer{margin-top:34px;padding:16px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:12.5px}
   footer b{color:var(--ink)}
 </style>
 </head>
@@ -76,170 +78,212 @@
 
   <header class="hero">
     <div class="logo"><span class="mark">L</span> LOGOPED-IA</div>
-    <h1>Centro de Todo · el trabajo entero, ordenado por cajas</h1>
-    <p class="sub">Cada caja es un proyecto. Ábrela y dentro tienes todo lo suyo: repo, versión en vivo, juego jugable, vídeo, artefacto o documento. Reúne el trabajo hecho con <b>Claude</b> y <b>Codex</b>, más los repos y artefactos de tu cuenta.</p>
-    <div class="hint">👉 <b>Haz clic en una caja para abrirla.</b> Usa el buscador para saltar a cualquier cosa. Tipos: <b style="color:var(--green)">EN VIVO</b> · <b style="color:var(--blue)">JUGABLE</b> · <b style="color:var(--purple)">REPO</b> · <b style="color:var(--pink)">VÍDEO</b> · <b style="color:var(--gold)">ARTEFACTO</b> · <b style="color:var(--slate)">DOC</b>.</div>
+    <h1>Panel de demostración · pincha y velo funcionando</h1>
+    <p class="sub">Pensado para enseñar desde el móvil delante de un comprador. Cada caja lleva un enlace principal <b>VER</b> que abre el producto, la demo o el juego. El código va como secundario. Lo que aún no tiene demo aparece como <b>PENDIENTE DE PUBLICAR</b> con su plan.</p>
+    <div class="hint">👉 <b>Clic en la caja</b> para abrirla. <span style="color:var(--green)">■ EN VIVO</span> · <span style="color:var(--blue)">■ VER JUEGO/DEMO</span> · <span style="color:var(--gold)">■ ARTEFACTO</span> · <span style="color:var(--slate)">■ DOC</span> · <span style="color:var(--amber)">■ PENDIENTE PUBLICAR</span> · <span style="color:var(--muted)">▫ CÓDIGO</span>. Botón <b>Solo VER ahora</b> = oculta lo pendiente.</div>
   </header>
 
   <div class="controls">
-    <input id="q" type="search" placeholder="Buscar proyecto, juego, repo, vídeo…" autocomplete="off">
+    <input id="q" type="search" placeholder="Buscar juego, herramienta, demo…" autocomplete="off">
+    <span class="toolbtn" id="onlyLive">Solo VER ahora</span>
     <span class="toolbtn" id="expandAll">Abrir todo</span>
-    <span class="toolbtn" id="collapseAll">Cerrar todo</span>
     <span class="count" id="count"></span>
   </div>
 
   <div id="board"></div>
-  <div class="empty" id="empty">Nada coincide con tu búsqueda.</div>
+  <div class="empty" id="empty">Nada coincide.</div>
 
   <footer>
-    <b>Cómo se mantiene.</b> Repo índice: <b>foniafonia/logoped-ia-tools</b> · web pública por GitHub Pages. Los repos privados abren desde GitHub estando logueado. Bitácora de coordinación Claude+Codex: <b>tmp_bitacora_compartida.md</b>. Si falta algo, se añade como una caja o un ítem más.
+    <b>Panel de demostración Logoped-IA / Colmenia.</b> Índice: <b>foniafonia/logoped-ia-tools</b> · publicado por GitHub Pages. Estáticos servidos en <b>foniafonia.github.io/logoped-ia-tools/</b>. URLs EN VIVO verificadas 200. Lo <span style="color:var(--amber)">PENDIENTE</span> lleva plan de publicación (GitHub Pages / Vercel / Netlify / Railway). No se publica nada personal ni sensible sin revisión.
   </footer>
 </div>
 
 <script>
 const GH="https://github.com/foniafonia/";
-/* kind: live | play | repo | video | artifact | doc | local | soon */
+const PG="https://foniafonia.github.io/logoped-ia-tools/";
+/* k: verlive | verjuego | verdoc | vervideo | verart | repo | pending | cantera */
 const SECTIONS=[
- {title:"Producto principal · Academia", boxes:[
-   {emoji:"🐝", name:"Academia / Colmenia", desc:"La membresía · 2 versiones usables", items:[
-     {nm:"⭐ Colmenia — Renovación visual + Stripe (la avanzada de ahora)", sub:"rama codex/renovacion-visual · checkout Stripe + webhooks + radar + feedback IA + corregir-ejercicio", k:"live", url:"https://academia-logoped-ia-git-codex-renov-139c35-foniafonias-projects.vercel.app/"},
-     {nm:"Academia — producción (estable, anterior)", sub:"rama main · Next.js 16 + Supabase · sin Stripe todavía", k:"live", url:"https://academia-logoped-ia.vercel.app/"},
-     {nm:"Repo academia-logoped-ia", sub:"privado · Next.js 16, Supabase, bcrypt, OpenAI+Anthropic", k:"repo", url:GH+"academia-logoped-ia"},
-     {nm:"Concepto visual · concept-boveda", sub:"variante visual (en rama codex/renovacion-visual)", k:"repo", url:GH+"academia-logoped-ia/tree/codex/renovacion-visual/src/app/concept-boveda"},
-     {nm:"⚠️ Concepto visual · concept-vivo-b", sub:"mejora visual — NO subida a GitHub, solo en tu localhost. Hay que hacer push para no perderla", k:"local", url:""},
-     {nm:"Colmenia — Qué falta para vender", sub:"artefacto de estado", k:"artifact", url:"https://claude.ai/code/artifact/7d1f5bd1-00ca-48f0-8763-cd2baf53b0da"},
-     {nm:"Prueba de nivel / Examen", sub:"repo del examen (Railway)", k:"repo", url:GH+"logoped-ia-examen"},
-     {nm:"Laboratorio Logoped-IA (landing)", sub:"repo público", k:"repo", url:GH+"laboratorio-logoped-ia-landing"},
+
+ {title:"1 · Producto principal · Academia / Colmenia", boxes:[
+   {emoji:"🐝", name:"Academia / Colmenia", desc:"La membresía · AUDITADA · 2 versiones en vivo", items:[
+     {p:1, nm:"VER · Colmenia (renovación + Stripe)", sub:"la avanzada de ahora · requiere login · Next.js+Supabase · checkout Stripe en código", k:"verlive", url:"https://academia-logoped-ia-git-codex-renov-139c35-foniafonias-projects.vercel.app/"},
+     {nm:"VER · Academia producción (estable)", sub:"rama main · sin Stripe · requiere login", k:"verlive", url:"https://academia-logoped-ia.vercel.app/"},
+     {nm:"✅ Stripe checkout REAL (auditado)", sub:"/api/stripe/checkout crea suscripción (customer + price_data €/mes) + /portal + /webhooks. Falta: claves Stripe en Vercel + pasar a producción", k:"pending", url:""},
+     {nm:"⚠️ concept-vivo-b (mejora visual)", sub:"LOCAL PENDIENTE · solo en tu localhost:3000 · plan: hacer push a rama y desplegar preview Vercel", k:"pending", url:""},
+     {nm:"Colmenia — Qué falta para vender", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/7d1f5bd1-00ca-48f0-8763-cd2baf53b0da"},
+     {nm:"Código", sub:"repo privado academia-logoped-ia", k:"repo", url:GH+"academia-logoped-ia"},
+   ]},
+   {emoji:"📝", name:"Prueba de nivel (examen)", desc:"Quiz de nivel · Flask + Postgres", items:[
+     {p:1, nm:"PENDIENTE DE DEPLOY", sub:"app Flask+Postgres · plan: desplegar en Railway (Procfile+gunicorn ya listos) y pegar la URL", k:"pending", url:""},
+     {nm:"Código", sub:"repo logoped-ia-examen", k:"repo", url:GH+"logoped-ia-examen"},
    ]},
  ]},
 
- {title:"Mundos y juegos clínicos", boxes:[
-   {emoji:"🌳", name:"FonoMundos", desc:"App Vite+Supabase · 5 ramas (main/contenido/diseño/plataforma)", items:[
-     {nm:"Repo fonomundos", sub:"público · Vite + Supabase · desplegado en Vercel", k:"repo", url:GH+"fonomundos"},
-     {nm:"Vídeo explicativo", sub:"NO está en el repo — pásame el enlace y lo pongo", k:"soon", url:""},
-     {nm:"FonoMundo Bosque — jugable", sub:"prototipo jugable", k:"play", url:"codex-assets/fonomundos/fonomundo-bosque/index.html"},
-     {nm:"FonoMundos — modo historia", sub:"jugable", k:"play", url:"codex-assets/fonomundos/modo-historia.html"},
-     {nm:"Comparador de voces", sub:"herramienta (en el repo)", k:"repo", url:GH+"fonomundos/blob/main/public/comparador-voces.html"},
-     {nm:"Test de voces", sub:"herramienta (en el repo)", k:"repo", url:GH+"fonomundos/blob/main/public/test-voces.html"},
-     {nm:"Diagnóstico FonoMundos", sub:"documento .docx", k:"doc", url:GH+"fonomundos/blob/main/FONOMUNDOS_DIAGNOSTICO.docx"},
+ {title:"2 · Mundos y juegos clínicos (casi todo EN VIVO)", boxes:[
+   {emoji:"🌳", name:"FonoMundos", desc:"Plataforma troncal · EN VIVO", items:[
+     {p:1, nm:"VER · FonoMundos", sub:"verificado 200 · Vite+Supabase", k:"verlive", url:"https://fonomundos.vercel.app"},
+     {nm:"VER · FonoMundos WOW", sub:"variante WOW · verificado 200", k:"verlive", url:"https://fonomundos-wow-public.vercel.app"},
+     {nm:"VER · FonoMundo Bosque", sub:"mundo jugable", k:"verjuego", url:PG+"codex-assets/fonomundos/fonomundo-bosque/index.html"},
+     {nm:"VER · Modo Historia", sub:"jugable", k:"verjuego", url:PG+"codex-assets/fonomundos/modo-historia.html"},
+     {nm:"Vídeo explicativo", sub:"NO está en el repo — pásame el enlace del vídeo y lo pongo", k:"pending", url:""},
+     {nm:"Código", sub:"repo fonomundos", k:"repo", url:GH+"fonomundos"},
    ]},
-   {emoji:"🎣", name:"FonoSuika", desc:"Juego tipo Suika + demo en vídeo", items:[
-     {nm:"FonoSuika — jugable", sub:"prototipo (physics)", k:"play", url:"codex-assets/fonosuika/index.html"},
-     {nm:"FonoSuika — demo en vídeo", sub:"grabación de la demo", k:"video", url:"codex-assets/fonosuika/demo.mp4"},
+   {emoji:"🏃", name:"Sónica Runner", desc:"Runner de discriminación auditiva · EN VIVO", items:[
+     {p:1, nm:"VER · Sónica Runner", sub:"verificado 200 · pares mínimos, dificultad adaptativa", k:"verlive", url:"https://sonica-runner.vercel.app"},
+     {nm:"Código", sub:"repo privado sonica-runner", k:"repo", url:GH+"sonica-runner"},
    ]},
-   {emoji:"🍽️", name:"FonoMesa", desc:"Laboratorio FonoMesa", items:[
-     {nm:"Repo fonomesa-lab", sub:"privado", k:"repo", url:GH+"fonomesa-lab"},
+   {emoji:"✋", name:"Juegos por gestos / cámara", desc:"Cámara + gesto · todos EN VIVO", items:[
+     {p:1, nm:"VER · Constructor de Sílabas en el Aire", sub:"200 · requiere cámara", k:"verlive", url:"https://constructor-silabas-aire.vercel.app"},
+     {nm:"VER · Puzzle Agarre en el Aire", sub:"200 · cámara + fallback táctil", k:"verlive", url:"https://puzzle-agarre-aire.vercel.app"},
+     {nm:"VER · Lengua Runner (gestos)", sub:"200", k:"verlive", url:"https://logopedizado-gestos-juego.vercel.app"},
+     {nm:"VER · Kig & Find", sub:"200 · atención visual + lenguaje", k:"verlive", url:"https://kig-find-interactivo.vercel.app"},
+     {nm:"VER · Conciencia Fonológica y Léxica", sub:"200", k:"verlive", url:"https://conciencia-fonologica-lexica-juego.vercel.app"},
    ]},
-   {emoji:"🏃", name:"Sónica Runner", desc:"Juego de carrera fonológica", items:[
-     {nm:"Repo sonica-runner", sub:"privado", k:"repo", url:GH+"sonica-runner"},
+   {emoji:"🍽️", name:"FonoMesa Lab", desc:"Mesa físico-digital · móvil como cámara · EN VIVO", items:[
+     {p:1, nm:"VER · FonoMesa Lab", sub:"200 · mando móvil, QR, eventos", k:"verlive", url:"https://fonomesa-lab.vercel.app"},
+     {nm:"Código", sub:"repo privado fonomesa-lab", k:"repo", url:GH+"fonomesa-lab"},
    ]},
-   {emoji:"📖", name:"LectoViva", desc:"Lectura viva v2", items:[
-     {nm:"Repo lectoviva-v2", sub:"público", k:"repo", url:GH+"lectoviva-v2"},
+   {emoji:"🎣", name:"FonoSuika", desc:"Juego tipo Suika · jugable + vídeo", items:[
+     {p:1, nm:"VER · FonoSuika (jugable)", sub:"prototipo physics", k:"verjuego", url:PG+"codex-assets/fonosuika/index.html"},
+     {nm:"VER · Demo en vídeo", sub:"grabación de la demo", k:"vervideo", url:PG+"codex-assets/fonosuika/demo.mp4"},
    ]},
-   {emoji:"🧩", name:"Suite clínica (POE)", desc:"Juegos integrados en la Suite", items:[
-     {nm:"Suite POE — 10 juegos", sub:"lectoescritura, fonología, karaoke tartamudez…", k:"play", url:"codex-assets/suite-poe/"},
-     {nm:"Karaoke Tartamudez (TerapiaFlu)", sub:"jugable", k:"play", url:"codex-assets/suite-poe/karaoke-tartamudez/index.html"},
+   {emoji:"🕵️", name:"Misión Perfiles / Maleta", desc:"Casos con informe + métricas · EN VIVO", items:[
+     {p:1, nm:"VER · Misión Perfiles (Detective)", sub:"200 · 10 personajes, 15 casos, informe descargable", k:"verlive", url:PG+"mision-perfiles-nuevo.html"},
+     {nm:"VER · Resuelve los casos / Maleta", sub:"jugable", k:"verjuego", url:PG+"index.html"},
+   ]},
+   {emoji:"🎬", name:"CineMundos", desc:"Gemelo técnico de FonoMundos (Phaser)", items:[
+     {p:1, nm:"VER · Informe de avance", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049"},
+     {nm:"PENDIENTE DE DEPLOY", sub:"Vite+React+Phaser+Supabase · plan: desplegar preview en Vercel (tiene rama gh-pages)", k:"pending", url:""},
+     {nm:"Código", sub:"repo privado cinemundos", k:"repo", url:GH+"cinemundos"},
+   ]},
+ ]},
+
+ {title:"3 · Juegos y actividades (estáticos, ya en vivo por Pages)", boxes:[
+   {emoji:"🧩", name:"Suite clínica (POE) · 10 juegos", desc:"Todos jugables por GitHub Pages", items:[
+     {p:1, nm:"VER · Letra Crush", sub:"lectoescritura", k:"verjuego", url:PG+"codex-assets/suite-poe/letra-crush/index.html"},
+     {nm:"VER · Encuentra el Nuevo", sub:"fonología", k:"verjuego", url:PG+"codex-assets/suite-poe/encuentra-el-nuevo/index.html"},
+     {nm:"VER · LetraPang (demo)", sub:"lectoescritura", k:"verjuego", url:PG+"codex-assets/suite-poe/letrapang-demo/index.html"},
+     {nm:"VER · LetraBlaster (demo)", sub:"lectoescritura", k:"verjuego", url:PG+"codex-assets/suite-poe/letrablaster-demo/index.html"},
+     {nm:"VER · Lupas y Linternas", sub:"atención visual / Detective de Palabras", k:"verjuego", url:PG+"codex-assets/suite-poe/lupas%20y%20linternas/index.html"},
+     {nm:"VER · Karaoke Tartamudez (TerapiaFlu)", sub:"fluidez", k:"verjuego", url:PG+"codex-assets/suite-poe/karaoke-tartamudez/index.html"},
+     {nm:"VER · S / Z", sub:"articulación / discriminación", k:"verjuego", url:PG+"codex-assets/suite-poe/s-y-z/index.html"},
+     {nm:"VER · 194RRR (nave de la erre)", sub:"vibrante /r/", k:"verjuego", url:PG+"codex-assets/suite-poe/194RRR/index.html"},
    ]},
    {emoji:"🧠", name:"Cognitiva", desc:"14 talleres por objetivo de curso", items:[
-     {nm:"Cognitiva — índice de talleres", sub:"conciencia fonológica, ruta fonológica, ortografía…", k:"play", url:"codex-assets/cognitiva/index.html"},
-     {nm:"Informe de estado (revisión)", sub:"doc", k:"doc", url:"codex-assets/cognitiva/ESTADO_PARA_REVISION.md"},
+     {p:1, nm:"VER · Cognitiva (índice)", sub:"conciencia fonológica, ruta fonológica, ortografía…", k:"verjuego", url:PG+"codex-assets/cognitiva/index.html"},
    ]},
-   {emoji:"🖼️", name:"ARAIA · iSecuencias", desc:"Secuencias con pictogramas ARASAAC", items:[
-     {nm:"Repo araia", sub:"público", k:"repo", url:GH+"araia"},
+   {emoji:"📓", name:"Rubi-IA (cuaderno)", desc:"Grafomotricidad terapéutica imprimible", items:[
+     {p:1, nm:"VER · Rubi-IA", sub:"cuaderno interactivo, exporta PDF/A4", k:"verjuego", url:PG+"codex-assets/rubi-ia/index.html"},
    ]},
-   {emoji:"📓", name:"Rubi-IA", desc:"Cuaderno Rubi-IA v2", items:[
-     {nm:"Rubi-IA — jugable", sub:"cuaderno interactivo", k:"play", url:"codex-assets/rubi-ia/index.html"},
+   {emoji:"🔣", name:"SAAC · ARASAAC · PECS", desc:"Comunicación aumentativa", items:[
+     {p:1, nm:"VER · Landing SAAC/ARASAAC/PECS", sub:"prototipos", k:"verjuego", url:PG+"codex-assets/saac/landing-saac-arasaac-pecs.html"},
+     {nm:"ARAIA · iSecuencias", sub:"PENDIENTE · Flask+Pages · plan: publicar catálogo en GitHub Pages (workflow ya existe)", k:"pending", url:""},
    ]},
-   {emoji:"🔣", name:"SAAC · ARASAAC · PECS", desc:"Prototipos de comunicación aumentativa", items:[
-     {nm:"Landing SAAC/ARASAAC/PECS", sub:"jugable", k:"play", url:"codex-assets/saac/landing-saac-arasaac-pecs.html"},
+   {emoji:"❤️", name:"Querer Quest + Logopod", desc:"Querer Quest ya jugable por Pages", items:[
+     {p:1, nm:"VER · Querer Quest (verbo querer)", sub:"morfosintaxis · en suite-poe", k:"verjuego", url:PG+"codex-assets/suite-poe/verbo-querer-quest/index.html"},
+     {nm:"Logopod — entrenador", sub:"PENDIENTE · estático en repo valencia · plan: publicar en GitHub Pages", k:"pending", url:""},
+     {nm:"Código", sub:"repo valencia-nadina-ia-logopedia-codex", k:"repo", url:GH+"valencia-nadina-ia-logopedia-codex"},
    ]},
-   {emoji:"🕵️", name:"Misión Perfiles / Maleta", desc:"Juegos de casos (en este repo)", items:[
-     {nm:"Misión Perfiles — Detective del Colegio", sub:"jugable", k:"play", url:"mision-perfiles-nuevo.html"},
-     {nm:"Resuelve los casos / Maleta", sub:"jugable", k:"play", url:"index.html"},
+   {emoji:"🦍", name:"DonkeyFon", desc:"Juego POE · ya jugable por Pages", items:[
+     {p:1, nm:"VER · DonkeyFon", sub:"atención · en suite-poe", k:"verjuego", url:PG+"codex-assets/suite-poe/donkeyfon/index.html"},
+     {nm:"Versión tipo Donkey Kong (rama codex)", sub:"PENDIENTE · otra versión en rama codex de juegoslogopedos · plan: publicar en Pages", k:"pending", url:""},
+     {nm:"Código", sub:"repo juegoslogopedos", k:"repo", url:GH+"juegoslogopedos"},
    ]},
-   {emoji:"🎮", name:"Otros juegos", desc:"Prototipos y juegos sueltos", items:[
-     {nm:"Juegoslogopedos", sub:"repo privado", k:"repo", url:GH+"juegoslogopedos"},
-     {nm:"Imagine Juego", sub:"repo público", k:"repo", url:GH+"imagine-juego"},
-     {nm:"Lleno / Vacío (TEACCH)", sub:"repo público", k:"repo", url:GH+"lleno-vacio-teacch"},
-     {nm:"Logopedia Generador", sub:"repo público", k:"repo", url:GH+"logopedia-generador"},
+   {emoji:"📖", name:"Lectura / dislexia", desc:"Herramientas adaptativas", items:[
+     {p:1, nm:"VER · LectoViva v2", sub:"EN VIVO · GitHub Pages", k:"verlive", url:"https://foniafonia.github.io/lectoviva-v2/"},
+     {nm:"AdaPro Plus", sub:"PENDIENTE · estático · plan: publicar en GitHub Pages", k:"pending", url:""},
+     {nm:"AdaPro Personal", sub:"PENDIENTE · estático · plan: publicar en GitHub Pages", k:"pending", url:""},
+     {nm:"Código AdaPro", sub:"repo adapro-plus", k:"repo", url:GH+"adapro-plus"},
+   ]},
+   {emoji:"🎲", name:"AAC + otros juegos", desc:"Tableros y prototipos", items:[
+     {p:1, nm:"Imagine — Comunicación Visual", sub:"PENDIENTE · el HTML está en README.md · plan: renombrar a index.html + GitHub Pages", k:"pending", url:""},
+     {nm:"Logopedia Generador", sub:"PENDIENTE · genera fichas IA (single-file) · plan: GitHub Pages", k:"pending", url:""},
+     {nm:"Lleno / Vacío (TEACCH)", sub:"PENDIENTE · estático · plan: GitHub Pages", k:"pending", url:""},
+     {nm:"Código", sub:"repos imagine-juego / logopedia-generador / lleno-vacio-teacch", k:"repo", url:GH+"imagine-juego"},
    ]},
  ]},
 
- {title:"Herramientas clínicas y evaluación", boxes:[
-   {emoji:"📡", name:"Radar clínico", desc:"Radar de materiales / clínico digital", items:[
-     {nm:"Radar de Materiales — landing", sub:"jugable (en este repo)", k:"play", url:"radar-materiales-landing.html"},
-     {nm:"Repo radar-clinico-digital", sub:"público", k:"repo", url:GH+"radar-clinico-digital"},
+ {title:"4 · Herramientas y evaluación", boxes:[
+   {emoji:"⌚", name:"Voz + FoniaWatch (wearable)", desc:"Análisis vocal + reloj · demo EN VIVO", items:[
+     {p:1, nm:"VER · FoniaWatch Rehab", sub:"200 · demo", k:"verlive", url:"https://foniawatch-rehab-demo.vercel.app"},
+     {nm:"Código", sub:"repo vocalclinic-demo (web + watchOS + qr-sonoro)", k:"repo", url:GH+"vocalclinic-demo"},
    ]},
-   {emoji:"🗣️", name:"Voz · VocalClinic / VocalTrack", desc:"Evaluación e intervención de voz", items:[
-     {nm:"VocalClinic demo", sub:"repo público", k:"repo", url:GH+"vocalclinic-demo"},
-     {nm:"VocalTrack", sub:"repo privado", k:"repo", url:GH+"vocaltrack"},
+   {emoji:"🎚️", name:"VocalTrack", desc:"Análisis acústico (F0, jitter, shimmer)", items:[
+     {p:1, nm:"PENDIENTE DE DEPLOY", sub:"backend Python/FastAPI · plan: desplegar en Railway/Render y pegar URL", k:"pending", url:""},
+     {nm:"Código", sub:"repo privado vocaltrack", k:"repo", url:GH+"vocaltrack"},
    ]},
    {emoji:"👂", name:"Cribado adultos", desc:"Comunicación en adultos", items:[
-     {nm:"Cribado de comunicación en adultos", sub:"herramienta (en este repo)", k:"play", url:"evaluacion-comunicacion-adultos-pc.html"},
+     {p:1, nm:"VER · Cribado de comunicación en adultos", sub:"herramienta", k:"verjuego", url:PG+"evaluacion-comunicacion-adultos-pc.html"},
    ]},
-   {emoji:"💬", name:"Chatbot familias", desc:"Asistente para familias", items:[
-     {nm:"Repo chatbot_familias_logopedia", sub:"privado", k:"repo", url:GH+"chatbot_familias_logopedia"},
+   {emoji:"📡", name:"Radar de materiales", desc:"Descubrir/filtrar materiales", items:[
+     {p:1, nm:"VER · Radar de Materiales", sub:"landing", k:"verjuego", url:PG+"radar-materiales-landing.html"},
+     {nm:"radar-clinico-digital", sub:"repo VACÍO (sin commits) — nada que enseñar", k:"cantera", url:""},
    ]},
-   {emoji:"🧰", name:"AdaPro", desc:"Adaptación de materiales", items:[
-     {nm:"AdaPro Plus", sub:"repo público", k:"repo", url:GH+"adapro-plus"},
-     {nm:"AdaPro Personal", sub:"repo público", k:"repo", url:GH+"adapro-personal"},
-   ]},
-   {emoji:"🗃️", name:"POE masivo (cantera)", desc:"55 recursos + 17 descartes — por podar", items:[
-     {nm:"POE masivo — 55 HTML", sub:"cantera, revisar y separar", k:"local", url:"codex-assets/poe-masivo/"},
-     {nm:"POE descartados — 17", sub:"no-referencia", k:"local", url:"codex-assets/poe-descartados/"},
+   {emoji:"💬", name:"Chatbot familias", desc:"RAG + Telegram + panel editorial", items:[
+     {p:1, nm:"PENDIENTE DE DEPLOY", sub:"FastAPI+OpenAI+BM25+Telegram · plan: desplegar backend en Railway + demo pública limpia (sin datos)", k:"pending", url:""},
+     {nm:"Código", sub:"repo privado chatbot_familias_logopedia", k:"repo", url:GH+"chatbot_familias_logopedia"},
    ]},
  ]},
 
- {title:"Formación, negocio y difusión", boxes:[
-   {emoji:"🎬", name:"Curso IA", desc:"Curso de IA para logopedas", items:[
-     {nm:"Repo curso-logoped-ia", sub:"privado", k:"repo", url:GH+"curso-logoped-ia"},
-     {nm:"Curso online (Replit)", sub:"repo público", k:"repo", url:GH+"CURSO-ONLINE-REPLIT"},
+ {title:"5 · Formación, negocio y difusión", boxes:[
+   {emoji:"🎓", name:"Curso IA / plataforma", desc:"Monorepo · web EN VIVO", items:[
+     {p:1, nm:"VER · Logoped Web", sub:"200 · front del producto", k:"verlive", url:"https://logoped-web.vercel.app"},
+     {nm:"API v2 (logoped-api-v2)", sub:"200 · backend", k:"verlive", url:"https://logoped-api-v2.vercel.app"},
+     {nm:"Código (monorepo)", sub:"logoped-ia = curso-logoped-ia = CURSO-ONLINE-REPLIT (mismo código) · Stripe+Supabase", k:"repo", url:GH+"logoped-ia"},
    ]},
-   {emoji:"🎙️", name:"ElevenLabs · reunión/pitch", desc:"Material para la reunión con ElevenLabs", items:[
-     {nm:"Repo elevenlabs-pitch", sub:"público", k:"repo", url:GH+"elevenlabs-pitch"},
+   {emoji:"🏙️", name:"Colmena Melilla UPE", desc:"Despliegue EN VIVO", items:[
+     {p:1, nm:"VER · Colmena Melilla UPE", sub:"verificado 200", k:"verlive", url:"https://colmena-melilla-upe.vercel.app"},
    ]},
-   {emoji:"📍", name:"Landings territoriales", desc:"Presencia por zonas/eventos", items:[
-     {nm:"Extremadura", sub:"repo", k:"repo", url:GH+"extremadura-landing"},
-     {nm:"Zona Centro — IA y familia", sub:"repo", k:"repo", url:GH+"zonacentro-ia-familia"},
-     {nm:"Valencia Codex (live)", sub:"repo", k:"repo", url:GH+"valenciacodex-live"},
-     {nm:"Valencia Nadina IA (Codex)", sub:"repo privado", k:"repo", url:GH+"valencia-nadina-ia-logopedia-codex"},
-     {nm:"AELFA landing", sub:"repo", k:"repo", url:GH+"aelfa-landing"},
+   {emoji:"🎙️", name:"ElevenLabs · pitch", desc:"Deck voz IA como capa clínica", items:[
+     {p:1, nm:"PENDIENTE DE PUBLICAR", sub:"deck 7 slides estático · plan: publicar en GitHub Pages para enseñarlo", k:"pending", url:""},
+     {nm:"Código", sub:"repo elevenlabs-pitch", k:"repo", url:GH+"elevenlabs-pitch"},
    ]},
-   {emoji:"🌐", name:"Portfolio / Web", desc:"Web personal y portfolio", items:[
-     {nm:"joseaserraf.github.io", sub:"web", k:"repo", url:GH+"joseaserraf.github.io"},
-     {nm:"Portfolio", sub:"repo", k:"repo", url:GH+"portfolio"},
+   {emoji:"🏛️", name:"Propuestas formativas", desc:"AELFA · Extremadura · Valencia · Melilla", items:[
+     {p:1, nm:"PENDIENTE DE PUBLICAR (decks)", sub:"AELFA, COLOGEX-Extremadura, Zona Centro/Melilla, Valencia · estáticos · plan: publicar cada deck en GitHub Pages", k:"pending", url:""},
+     {nm:"Código AELFA", sub:"rama codex/aelfa-landing-final", k:"repo", url:GH+"aelfa-landing/tree/codex/aelfa-landing-final"},
+     {nm:"Código Extremadura", sub:"repo extremadura-landing", k:"repo", url:GH+"extremadura-landing"},
+     {nm:"Código Zona Centro / Melilla", sub:"repo zonacentro-ia-familia", k:"repo", url:GH+"zonacentro-ia-familia"},
    ]},
-   {emoji:"🗂️", name:"Inventario y coordinación", desc:"El orden entre bambalinas", items:[
-     {nm:"Inventario WorkIA (hoy)", sub:"repo privado, últimísimo", k:"repo", url:GH+"logoped-ia-inventario-workia"},
-     {nm:"Bitácora Claude + Codex", sub:"doc (este repo)", k:"doc", url:"tmp_bitacora_compartida.md"},
-     {nm:"Docs de inventario", sub:"mapa/estrategia (revisar privacidad)", k:"doc", url:"codex-assets/docs/"},
+   {emoji:"🌐", name:"Portfolio / Web", desc:"Web personal · EN VIVO", items:[
+     {p:1, nm:"VER · Portfolio", sub:"GitHub Pages · estética terminal", k:"verlive", url:"https://foniafonia.github.io/portfolio/"},
    ]},
  ]},
 
- {title:"Personal · fuera de logopedia", boxes:[
-   {emoji:"🎞️", name:"CineMundos", desc:"Proyecto de cine/vídeo", items:[
-     {nm:"Repo cinemundos", sub:"privado", k:"repo", url:GH+"cinemundos"},
-     {nm:"CineMundos — Informe de avance", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049"},
+ {title:"6 · Inventario, coordinación y cantera", boxes:[
+   {emoji:"🗂️", name:"Inventario Workia (socio)", desc:"Entrega curada + docs estratégicos", items:[
+     {p:1, nm:"VER · Inventario estratégico", sub:"doc (revisar privacidad antes de difundir)", k:"verdoc", url:PG+"codex-assets/docs/INVENTARIO_ESTRATEGICO_ACADEMIA_2026.md"},
+     {nm:"VER · Mapa de prototipos", sub:"doc", k:"verdoc", url:PG+"codex-assets/docs/MAPA_ACADEMIA_PROTOTIPOS_2026.md"},
+     {nm:"Código", sub:"repo privado logoped-ia-inventario-workia", k:"repo", url:GH+"logoped-ia-inventario-workia"},
    ]},
+   {emoji:"🗃️", name:"POE masivo (CANTERA)", desc:"55 recursos + 17 descartes — por cribar", items:[
+     {p:1, nm:"CANTERA — 55 HTML por cribar", sub:"revisar y separar; hay off-topic (toldos, Melilla) a descartar", k:"cantera", url:GH+"logoped-ia-tools/tree/main/codex-assets/poe-masivo"},
+     {nm:"Descartados — 17", sub:"no-referencia", k:"cantera", url:GH+"logoped-ia-tools/tree/main/codex-assets/poe-descartados"},
+   ]},
+   {emoji:"📓", name:"Coordinación Claude + Codex", desc:"Bitácora compartida", items:[
+     {p:1, nm:"VER · Bitácora", sub:"doc", k:"verdoc", url:GH+"logoped-ia-tools/blob/main/tmp_bitacora_compartida.md"},
+   ]},
+ ]},
+
+ {title:"7 · Personal · fuera de logopedia", boxes:[
    {emoji:"🕎", name:"Torá · Januká", desc:"Proyectos personales / estudio", items:[
-     {nm:"La Película de Januká — jugable", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/e77d5f22-15e9-4d01-a645-e339263a5935"},
-     {nm:"Juego de Januká — Detective", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/9626945a-f9d4-4a51-8c7b-b733408a58b4"},
-     {nm:"Januká en profundidad — Guía", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/2bee3f96-c844-43dc-a7cb-996973d377c6"},
-     {nm:"Propuesta Januká", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/bb52008f-1551-4d8a-831a-21fcef5b3f0c"},
-     {nm:"El aceite es del Rab", sub:"artefacto", k:"artifact", url:"https://claude.ai/code/artifact/59f3bbbe-f4e7-4239-916f-22f43b51a697"},
-     {nm:"Torá para Abraham", sub:"repo", k:"repo", url:GH+"torah-para-abraham"},
+     {p:1, nm:"VER · La Película de Januká", sub:"artefacto jugable", k:"verart", url:"https://claude.ai/code/artifact/e77d5f22-15e9-4d01-a645-e339263a5935"},
+     {nm:"VER · Juego de Januká (Detective)", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/9626945a-f9d4-4a51-8c7b-b733408a58b4"},
+     {nm:"VER · Januká en profundidad (guía)", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/2bee3f96-c844-43dc-a7cb-996973d377c6"},
+     {nm:"Torá para Abraham", sub:"PENDIENTE · estático · plan: GitHub Pages", k:"pending", url:""},
    ]},
  ]},
+
 ];
 
-const KLBL={live:"EN VIVO",play:"JUGABLE",repo:"REPO",video:"VÍDEO",artifact:"ARTEFACTO",doc:"DOC",local:"LOCAL",soon:"PRÓX."};
+const KLBL={verlive:"EN VIVO",verjuego:"VER",verdoc:"VER DOC",vervideo:"VER VÍDEO",verart:"VER",repo:"CÓDIGO",pending:"PENDIENTE",cantera:"CANTERA"};
 const board=document.getElementById('board');
 const qEl=document.getElementById('q');
 const emptyEl=document.getElementById('empty');
 const countEl=document.getElementById('count');
+let onlyLive=false;
 
-let totalBoxes=0,totalItems=0;
-SECTIONS.forEach(s=>{totalBoxes+=s.boxes.length;s.boxes.forEach(b=>totalItems+=b.items.length)});
+let totalBoxes=0,totalItems=0,liveItems=0;
+SECTIONS.forEach(s=>{totalBoxes+=s.boxes.length;s.boxes.forEach(b=>b.items.forEach(i=>{totalItems++;if(i.url&&i.k!=='repo')liveItems++;}))});
 
 function itemHTML(it){
   const ext=/^https?:/.test(it.url);
@@ -247,41 +291,43 @@ function itemHTML(it){
   const dead=!it.url;
   const tag=`<span class="k ${it.k}">${KLBL[it.k]||it.k}</span>`;
   const nm=`<span class="nm">${it.nm}${it.sub?`<small>${it.sub}</small>`:''}</span>`;
-  if(dead) return `<div class="item dead">${tag}${nm}<span class="arrow">—</span></div>`;
-  return `<a class="item" href="${it.url}" ${tgt}>${tag}${nm}<span class="arrow">↗</span></a>`;
-}
-function boxHTML(b,si,bi){
-  const items=b.items.map(itemHTML).join('');
-  return `<div class="box" data-si="${si}" data-bi="${bi}">
-    <div class="box-head" onclick="this.parentNode.classList.toggle('open')">
-      <span class="box-emoji">${b.emoji}</span>
-      <span class="box-tt"><h3>${b.name}</h3><p>${b.desc}</p></span>
-      <span class="box-n">${b.items.length}</span>
-      <span class="chev">▶</span>
-    </div>
-    <div class="box-body">${items}</div>
-  </div>`;
+  const cls='item'+(it.p?' primary':'')+(dead?' dead':'');
+  if(dead) return `<div class="${cls}">${tag}${nm}<span class="arrow">▢</span></div>`;
+  return `<a class="${cls}" href="${it.url}" ${tgt}>${tag}${nm}<span class="arrow">↗</span></a>`;
 }
 function render(){
   const q=qEl.value.trim().toLowerCase();
   let shown=0;
-  board.innerHTML=SECTIONS.map((s,si)=>{
-    const boxes=s.boxes.map((b,bi)=>{
+  board.innerHTML=SECTIONS.map(s=>{
+    const boxes=s.boxes.map(b=>{
       const hay=(b.name+' '+b.desc+' '+b.items.map(i=>i.nm+' '+(i.sub||'')).join(' ')).toLowerCase();
       if(q && !hay.includes(q)) return '';
+      let items=b.items;
+      if(onlyLive) items=items.filter(i=>i.url && i.k.startsWith('ver'));
+      if(!items.length) return '';
       shown++;
-      return boxHTML(b,si,bi);
+      const body=items.map(itemHTML).join('');
+      const verN=b.items.filter(i=>i.url&&i.k.startsWith('ver')).length;
+      return `<div class="box">
+        <div class="box-head" onclick="this.parentNode.classList.toggle('open')">
+          <span class="box-emoji">${b.emoji}</span>
+          <span class="box-tt"><h3>${b.name}</h3><p>${b.desc}</p></span>
+          <span class="box-n">${verN?('▶ '+verN):'…'}</span>
+          <span class="chev">▶</span>
+        </div>
+        <div class="box-body">${body}</div>
+      </div>`;
     }).join('');
     if(!boxes) return '';
     return `<section class="sec"><div class="sec-h">${s.title}<span class="bar"></span></div><div class="boxes">${boxes}</div></section>`;
   }).join('');
   emptyEl.style.display=shown?'none':'block';
-  countEl.textContent=`${totalBoxes} cajas · ${totalItems} elementos`;
+  countEl.textContent=`${totalBoxes} cajas · ${liveItems} enlaces "VER"`;
   if(q){ document.querySelectorAll('.box').forEach(x=>x.classList.add('open')); }
 }
 qEl.addEventListener('input',render);
+document.getElementById('onlyLive').onclick=(e)=>{onlyLive=!onlyLive;e.target.classList.toggle('on',onlyLive);render();};
 document.getElementById('expandAll').onclick=()=>document.querySelectorAll('.box').forEach(x=>x.classList.add('open'));
-document.getElementById('collapseAll').onclick=()=>document.querySelectorAll('.box').forEach(x=>x.classList.remove('open'));
 render();
 </script>
 </body>
