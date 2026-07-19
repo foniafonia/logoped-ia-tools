@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Erre que Erre & Ese que Ese - Libro Interactivo</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Comic+Neue:wght@700&display=swap">
+
+<style>
+
+:root{
+
+--primary-color:#FF6B6B;
+
+--secondary-color:#4ECDC4;
+
+--accent-color:#FFE66D;
+
+--purple:#6C63FF;
+
+--dark-bg:#0F1022;
+
+--card-dark:#1D2142;
+
+--light-bg:#FFF5E6;
+
+--text-dark:#1B1B2F;
+
+--success:#2FBF71;
+
+--warning:#F4A261;
+
+--danger:#E63946;
+
+--info:#3A86FF;
+
+}
+
+apache
+    *{box-sizing:border-box}
+
+    body{
+        font-family:'Fredoka',sans-serif;
+        min-height:100vh;
+        color:var(--text-dark);
+        background:
+            radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.25), transparent 60%),
+            radial-gradient(1000px 500px at 90% 20%, rgba(255,255,255,0.18), transparent 60%),
+            linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    }
+
+    .dark body{
+        color:#F2F3F7;
+        background:
+            radial-gradient(900px 500px at 10% 10%, rgba(255,255,255,0.06), transparent 60%),
+            radial-gradient(900px 500px at 90% 20%, rgba(255,255,255,0.04), transparent 60%),
+            linear-gradient(135deg,#0F1022 0%,#1A1A2E 100%);
+    }
+
+    .app-shell{
+        max-width:1200px;
+        margin:0 auto;
+        padding:2rem 1.25rem 6rem;
+    }
+
+    .hero{
+        text-align:center;
+        margin-bottom:2rem;
+    }
+
+    .brand-chip{
+        display:inline-flex;
+        align-items:center;
+        gap:0.5rem;
+        padding:0.4rem 0.9rem;
+        border-radius:999px;
+        background:rgba(255,255,255,0.22);
+        color:white;
+        font-weight:600;
+        letter-spacing:0.02em;
+        box-shadow:0 6px 20px rgba(0,0,0,0.15);
+        backdrop-filter:blur(8px);
+    }
+
+    .page-title{
+        font-family:'Comic Neue',cursive;
+        font-size:3rem;
+        color:white;
+        margin-top:0.8rem;
+        text-shadow:0 6px 16px rgba(0,0,0,0.35);
+    }
+
+    @media (max-width:640px){
+        .page-title{font-size:2.2rem}
+    }
+
+    .glass-panel{
+        background:rgba(255,255,255,0.18);
+        border:1px solid rgba(255,255,255,0.25);
+        border-radius:24px;
+        padding:1rem;
+        backdrop-filter:blur(12px);
+        box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .dark .glass-panel{
+        background:rgba(18,22,44,0.65);
+        border:1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Visualizador */
+    .visualizer-panel{
+        margin:1.5rem 0 2rem;
+        padding:1rem;
+    }
+    .viz-header{
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        justify-content:space-between;
+        gap:0.8rem;
+        margin-bottom:0.8rem;
+    }
+    .viz-title{
+        font-size:1.2rem;
+        font-weight:700;
+        color:white;
+        text-shadow:0 4px 12px rgba(0,0,0,0.35);
+    }
+    .viz-controls{
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.5rem;
+    }
+    .viz-btn{
+        border:none;
+        border-radius:999px;
+        padding:0.4rem 0.9rem;
+        font-weight:700;
+        font-size:0.85rem;
+        cursor:pointer;
+        background:rgba(255,255,255,0.9);
+        color:#2b2b3a;
+        box-shadow:0 4px 10px rgba(0,0,0,0.12);
+        transition:all 0.2s ease;
+    }
+    .dark .viz-btn{background:#2B315A;color:white}
+    .viz-btn.active{
+        background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);
+        color:white;
+    }
+    .viz-status{
+        font-size:0.85rem;
+        font-weight:600;
+        color:white;
+        opacity:0.9;
+    }
+    .viz-canvas-wrap{
+        background:rgba(0,0,0,0.25);
+        border:1px solid rgba(255,255,255,0.2);
+        border-radius:18px;
+        padding:0.6rem;
+    }
+    .viz-canvas{
+        width:100%;
+        height:220px;
+        display:block;
+        border-radius:12px;
+        background:#0b0f1f;
+    }
+    .viz-canvas.hidden{display:none}
+
+    @media (max-width:640px){
+        .viz-canvas{height:180px}
+    }
+
+    /* Tabs principales */
+    .main-tabs{
+        display:flex;
+        justify-content:center;
+        gap:0.75rem;
+        margin:1.5rem 0 2rem;
+        flex-wrap:wrap;
+    }
+
+    .main-tab{
+        padding:0.75rem 1.5rem;
+        border-radius:999px;
+        border:none;
+        cursor:pointer;
+        font-weight:700;
+        font-size:1rem;
+        background:rgba(255,255,255,0.85);
+        color:#2b2b3a;
+        box-shadow:0 6px 14px rgba(0,0,0,0.15);
+        transition:all 0.25s ease;
+    }
+
+    .dark .main-tab{
+        background:#2B315A;
+        color:white;
+    }
+
+    .main-tab:hover{
+        transform:translateY(-2px);
+    }
+
+    .main-tab.active{
+        background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);
+        color:white;
+        box-shadow:0 10px 20px rgba(255,107,107,0.35);
+    }
+
+    /* Nav de páginas */
+    .page-nav{
+        display:flex;
+        justify-content:center;
+        gap:0.6rem;
+        margin:1.25rem 0 2rem;
+        flex-wrap:wrap;
+    }
+
+    .page-btn{
+        padding:0.65rem 1.1rem;
+        background:white;
+        border:none;
+        border-radius:999px;
+        font-weight:600;
+        cursor:pointer;
+        transition:all 0.25s ease;
+        box-shadow:0 4px 10px rgba(0,0,0,0.12);
+        font-size:0.9rem;
+    }
+
+    .dark .page-btn{background:#2D3561;color:white}
+
+    .page-btn:hover{
+        transform:translateY(-2px);
+        box-shadow:0 8px 16px rgba(0,0,0,0.18);
+    }
+
+    .page-btn.active{
+        background:linear-gradient(135deg,#6C63FF 0%,#4ECDC4 100%);
+        color:white;
+    }
+
+    /* Secciones */
+    .section-header{
+        background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);
+        color:white;
+        padding:0.9rem 1rem;
+        border-radius:16px;
+        font-size:1.6rem;
+        font-weight:700;
+        text-align:center;
+        margin-bottom:1.2rem;
+        box-shadow:0 8px 18px rgba(255,107,107,0.35);
+    }
+
+    .section-header.alt{
+        background:linear-gradient(135deg,#6C63FF 0%,#4ECDC4 100%);
+        box-shadow:0 8px 18px rgba(78,205,196,0.35);
+    }
+
+    .grid-words{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+        gap:1rem;
+    }
+
+    .grid-logotomas{
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:1rem;
+    }
+
+    @media (max-width:1024px){
+        .grid-logotomas{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width:640px){
+        .grid-logotomas{grid-template-columns:repeat(2,1fr)}
+    }
+
+    /* Cards */
+    .word-card, .tongue-twister-card, .pair-card{
+        background:rgba(255,255,255,0.92);
+        border-radius:18px;
+        padding:1rem;
+        box-shadow:0 8px 18px rgba(0,0,0,0.12);
+        transition:all 0.25s ease;
+        cursor:pointer;
+        position:relative;
+        overflow:visible;
+        border:1px solid rgba(255,255,255,0.6);
+    }
+
+    .dark .word-card, .dark .tongue-twister-card, .dark .pair-card{
+        background:#1F244A;
+        color:white;
+        border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .word-card:hover, .tongue-twister-card:hover, .pair-card:hover{
+        transform:translateY(-4px) scale(1.01);
+        box-shadow:0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .word-text{
+        font-size:1.5rem;
+        font-weight:700;
+        text-align:center;
+    }
+
+    .tongue-twister-card{
+        padding:1.8rem;
+        border-radius:22px;
+    }
+
+    .tongue-twister-number{
+        font-size:1.1rem;
+        font-weight:700;
+        color:var(--primary-color);
+        margin-bottom:0.6rem;
+    }
+
+    .tongue-twister-text{
+        font-size:1.25rem;
+        line-height:1.7;
+        font-weight:500;
+    }
+
+    .pair-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+        gap:1rem;
+    }
+
+    .pair-title{
+        font-weight:700;
+        font-size:1.1rem;
+        margin-bottom:0.5rem;
+        color:var(--purple);
+    }
+
+    .pair-words{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:0.75rem;
+        font-size:1.4rem;
+        font-weight:700;
+    }
+
+    .vs-badge{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:0.2rem 0.6rem;
+        border-radius:999px;
+        background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);
+        color:white;
+        font-size:0.75rem;
+        font-weight:700;
+    }
+
+    .separator{
+        color:#999;
+        font-size:0.9em;
+        margin:0 2px;
+    }
+
+    /* Letras destacadas */
+    .phoneme-letter{
+        display:inline-block;
+        color:var(--primary-color);
+        font-weight:800;
+        font-size:1.25em;
+        animation:pulse-letter 1.5s ease-in-out infinite;
+        text-shadow:0 0 12px rgba(255,107,107,0.6);
+        transition:all 0.3s ease;
+    }
+
+    .phoneme-letter:hover{
+        transform:scale(1.3) rotate(4deg);
+        color:#FF3838;
+        text-shadow:0 0 22px rgba(255,107,107,0.85);
+    }
+
+    @keyframes pulse-letter{
+        0%,100%{transform:scale(1)}
+        50%{transform:scale(1.12)}
+    }
+
+    @keyframes rainbow{
+        0%{color:#FF6B6B}
+        25%{color:#4ECDC4}
+        50%{color:#FFE66D}
+        75%{color:#95E1D3}
+        100%{color:#FF6B6B}
+    }
+
+    .rainbow-mode .phoneme-letter{
+        animation:rainbow 2s linear infinite, pulse-letter 1.5s ease-in-out infinite;
+    }
+
+    /* Pelota */
+    .soccer-ball{
+        position:absolute;
+        width:30px;height:30px;
+        top:-38px;right:-10px;
+        font-size:30px;
+        animation:ball-bounce 0.5s ease-in-out infinite, ball-move-rtl 3s linear infinite;
+        z-index:10;
+        filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    @keyframes ball-bounce{
+        0%,100%{transform:translateY(0) rotate(0deg)}
+        50%{transform:translateY(-10px) rotate(180deg)}
+    }
+    @keyframes ball-move-rtl{
+        0%{right:-10px}
+        100%{right:calc(100% + 10px)}
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn{
+        from{opacity:0;transform:translateY(16px)}
+        to{opacity:1;transform:translateY(0)}
+    }
+    @keyframes slideIn{
+        from{transform:translateX(-100%);opacity:0}
+        to{transform:translateX(0);opacity:1}
+    }
+
+    .fade-in{animation:fadeIn 0.6s ease-out forwards;opacity:0}
+    .slide-in{animation:slideIn 0.6s ease-out forwards;opacity:0}
+
+    .karaoke-mode{
+        background:linear-gradient(90deg,#333 0%,#333 50%,var(--primary-color) 50%,var(--primary-color) 100%);
+        background-size:200% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        -webkit-text-fill-color:transparent;
+        animation:karaoke-ltr 3s linear infinite;
+    }
+
+    .karaoke-rtl-mode{
+        background:linear-gradient(90deg,var(--primary-color) 0%,var(--primary-color) 50%,#333 50%,#333 100%);
+        background-size:200% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        -webkit-text-fill-color:transparent;
+        animation:karaoke-rtl 3s linear infinite;
+    }
+
+    @keyframes karaoke-ltr{
+        0%{background-position:-100% 0}
+        100%{background-position:200% 0}
+    }
+    @keyframes karaoke-rtl{
+        0%{background-position:200% 0}
+        100%{background-position:-100% 0}
+    }
+
+    /* Floating Controls */
+    .floating-controls{
+        position:fixed;
+        bottom:26px;right:26px;
+        z-index:1000;
+        transition:all 0.3s ease;
+    }
+
+    .toggle-btn{
+        width:62px;height:62px;
+        border-radius:50%;
+        border:none;
+        background:linear-gradient(135deg,#6C63FF 0%,#4ECDC4 100%);
+        color:white;
+        cursor:pointer;
+        font-size:1.8rem;
+        box-shadow:0 6px 18px rgba(108,99,255,0.4);
+        transition:all 0.3s ease;
+        display:flex;align-items:center;justify-content:center;
+    }
+    .toggle-btn:hover{transform:scale(1.07)}
+
+    .control-menu{
+        position:absolute;
+        bottom:75px;right:0;
+        background:white;
+        border-radius:20px;
+        padding:14px;
+        box-shadow:0 10px 32px rgba(0,0,0,0.2);
+        min-width:240px;
+        opacity:0;visibility:hidden;
+        transform:translateY(10px);
+        transition:all 0.25s ease;
+    }
+    .dark .control-menu{background:#232A56;color:white}
+
+    .control-menu.visible{
+        opacity:1;visibility:visible;transform:translateY(0);
+    }
+
+    .control-option{
+        display:flex;align-items:center;gap:12px;
+        padding:10px;border-radius:12px;
+        cursor:pointer;transition:all 0.2s ease;
+        font-size:0.95rem;font-weight:600;
+    }
+    .control-option:hover{background:rgba(102,126,234,0.15);transform:translateX(-3px)}
+    .control-option.active{
+        background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);
+        color:white;
+    }
+    .control-option .icon{font-size:1.3rem;min-width:24px;text-align:center}
+
+    .control-divider{
+        height:1px;background:rgba(0,0,0,0.1);margin:8px 0;
+    }
+    .dark .control-divider{background:rgba(255,255,255,0.1)}
+
+    @media (max-width:768px){
+        .floating-controls{bottom:18px;right:18px}
+        .toggle-btn{width:56px;height:56px;font-size:1.6rem}
+        .control-menu{min-width:210px}
+    }
+
+    .page-content{display:none}
+    .page-content.active{display:block}
+
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    /* Controles de grabación por item */
+    .item-controls{
+        margin-top:0.8rem;
+        display:flex;
+        flex-direction:column;
+        gap:0.5rem;
+    }
+
+    .control-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.4rem;
+        justify-content:center;
+    }
+
+    .mini-btn{
+        border:none;
+        border-radius:999px;
+        padding:0.35rem 0.7rem;
+        font-weight:700;
+        font-size:0.85rem;
+        cursor:pointer;
+        box-shadow:0 4px 10px rgba(0,0,0,0.12);
+        transition:all 0.2s ease;
+        background:white;
+        color:#2b2b3a;
+    }
+
+    .dark .mini-btn{
+        background:#2B315A;
+        color:white;
+    }
+
+    .mini-btn:hover{transform:translateY(-2px)}
+    .mini-btn:disabled{
+        opacity:0.55;
+        cursor:not-allowed;
+        transform:none;
+    }
+
+    .record-btn{background:linear-gradient(135deg,#FF6B6B 0%,#FF3838 100%);color:white}
+    .stop-btn{background:linear-gradient(135deg,#6C63FF 0%,#4ECDC4 100%);color:white}
+    .play-btn{background:linear-gradient(135deg,#3A86FF 0%,#4ECDC4 100%);color:white}
+    .save-btn{background:linear-gradient(135deg,#2FBF71 0%,#95E1D3 100%);color:white}
+    .good-btn{background:linear-gradient(135deg,#2FBF71 0%,#95E1D3 100%);color:white}
+    .retry-btn{background:linear-gradient(135deg,#F4A261 0%,#FF6B6B 100%);color:white}
+
+    .status-badge{
+        display:inline-flex;
+        align-items:center;
+        gap:0.35rem;
+        padding:0.25rem 0.6rem;
+        border-radius:999px;
+        font-size:0.75rem;
+        font-weight:700;
+        background:rgba(0,0,0,0.08);
+        color:#2b2b3a;
+    }
+    .dark .status-badge{background:rgba(255,255,255,0.12);color:white}
+
+    .status-recording{background:rgba(255,56,56,0.15);color:#C1121F}
+    .status-ready{background:rgba(47,191,113,0.18);color:#1B7A44}
+    .status-processing{background:rgba(58,134,255,0.18);color:#1D4ED8}
+    .status-unavailable{background:rgba(230,57,70,0.18);color:#B91C1C}
+    .status-good{background:rgba(47,191,113,0.18);color:#1B7A44}
+    .status-retry{background:rgba(244,162,97,0.22);color:#9A3412}
+
+    .item-good{
+        border:2px solid rgba(47,191,113,0.6);
+        box-shadow:0 10px 24px rgba(47,191,113,0.25);
+    }
+    .item-retry{
+        border:2px solid rgba(244,162,97,0.6);
+        box-shadow:0 10px 24px rgba(244,162,97,0.25);
+    }
+
+    /* Avisos */
+    .notice{
+        position:fixed;
+        top:18px;left:50%;
+        transform:translateX(-50%);
+        background:rgba(0,0,0,0.75);
+        color:white;
+        padding:0.6rem 1rem;
+        border-radius:999px;
+        font-weight:700;
+        font-size:0.9rem;
+        z-index:1200;
+        box-shadow:0 8px 20px rgba(0,0,0,0.3);
+        opacity:0;
+        pointer-events:none;
+        transition:opacity 0.25s ease;
+    }
+    .notice.visible{opacity:1}
+</style>
+
+</head>
+
+<body>
+
+<div class="notice" id="notice"></div>
+
+angelscript
+<div class="app-shell">
+    <div class="hero">
+        <div class="brand-chip">✨ Libro Interactivo Premium</div>
+        <h1 class="page-title">⚽ Erre que Erre & 🐍 Ese que Ese</h1>
+    </div>
+
+    <!-- Visualizador de audio -->
+    <div class="glass-panel visualizer-panel">
+        <div class="viz-header">
+            <div class="viz-title">🎧 Visualizador en tiempo real</div>
+            <div class="viz-controls">
+                <button class="viz-btn active" onclick="setVizMode('wave')" data-viz="wave">Onda</button>
+                <button class="viz-btn" onclick="setVizMode('bars')" data-viz="bars">Barras</button>
+                <button class="viz-btn" onclick="setVizMode('spectrogram')" data-viz="spectrogram">Espectrograma</button>
+                <button class="viz-btn" onclick="setVizMode('phoneme')" data-viz="phoneme">Fonemas S/Z</button>
+            </div>
+            <div class="viz-status" id="vizStatus">Listo para grabar</div>
+        </div>
+        <div class="viz-canvas-wrap">
+            <canvas id="vizCanvas" class="viz-canvas" aria-label="Visualización de audio"></canvas>
+            <canvas id="spectroCanvas" class="viz-canvas hidden" aria-label="Espectrograma"></canvas>
+            <canvas id="phonemeCanvas" class="viz-canvas hidden" aria-label="Indicador S/Z"></canvas>
+        </div>
+    </div>
+
+    <!-- Tabs RR / S / S-Z -->
+    <div class="main-tabs">
+        <button class="main-tab active" onclick="showTab('rr')">RR (Erre)</button>
+        <button class="main-tab" onclick="showTab('s')">S (Ese)</button>
+        <button class="main-tab" onclick="showTab('sz')">S/Z (Generalización)</button>
+    </div>
+
+    <!-- TAB RR -->
+    <div id="tab-rr" class="tab-content active glass-panel">
+        <div class="page-nav">
+            <button class="page-btn active" onclick="showPage('rr',1)">Palabras</button>
+            <button class="page-btn" onclick="showPage('rr',2)">Logotomas R</button>
+            <button class="page-btn" onclick="showPage('rr',3)">RR Intermedia</button>
+            <button class="page-btn" onclick="showPage('rr',4)">Logotomas RR</button>
+            <button class="page-btn" onclick="showPage('rr',5)">R Final</button>
+            <button class="page-btn" onclick="showPage('rr',6)">Frases</button>
+            <button class="page-btn" onclick="showPage('rr',7)">Adivinanzas</button>
+            <button class="page-btn" onclick="showPage('rr',8)">Trabalenguas</button>
+        </div>
+
+        <div id="rr-page-1" class="page-content active">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">R</span>A
+                </div>
+                <div class="grid-words" id="rr-section-ra"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">R</span>E
+                </div>
+                <div class="grid-words" id="rr-section-re"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">R</span>I
+                </div>
+                <div class="grid-words" id="rr-section-ri"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">R</span>O
+                </div>
+                <div class="grid-words" id="rr-section-ro"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">R</span>U
+                </div>
+                <div class="grid-words" id="rr-section-ru"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-2" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Logotomas</div>
+                <div class="grid-logotomas" id="rr-section-logotomas"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-3" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="phoneme-letter" style="font-size:2rem;">RR</span> intermedia
+                </div>
+                <div class="grid-words" id="rr-section-rr-intermedia"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-4" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">
+                    Logotomas con <span class="phoneme-letter" style="font-size:2rem;">RR</span>
+                </div>
+                <div class="grid-logotomas" id="rr-section-logotomas-rr"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-5" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="phoneme-letter" style="font-size:2rem;">R</span> final
+                </div>
+                <div class="grid-words" id="rr-section-r-final"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-6" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Frases con <span class="phoneme-letter" style="font-size:2rem;">R</span> y <span class="phoneme-letter" style="font-size:2rem;">RR</span>
+                </div>
+                <div id="rr-section-frases"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-7" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Adivinanzas con <span class="phoneme-letter" style="font-size:2rem;">R</span> y <span class="phoneme-letter" style="font-size:2rem;">RR</span>
+                </div>
+                <div id="rr-section-adivinanzas"></div>
+            </div>
+        </div>
+
+        <div id="rr-page-8" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Trabalenguas</div>
+                <div id="rr-section-trabalenguas"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB S -->
+    <div id="tab-s" class="tab-content glass-panel">
+        <div class="page-nav">
+            <button class="page-btn active" onclick="showPage('s',1)">Palabras</button>
+            <button class="page-btn" onclick="showPage('s',2)">Logotomas S</button>
+            <button class="page-btn" onclick="showPage('s',3)">S Intermedia</button>
+            <button class="page-btn" onclick="showPage('s',4)">Logotomas SS</button>
+            <button class="page-btn" onclick="showPage('s',5)">S Final</button>
+            <button class="page-btn" onclick="showPage('s',6)">Frases</button>
+            <button class="page-btn" onclick="showPage('s',7)">Adivinanzas</button>
+            <button class="page-btn" onclick="showPage('s',8)">Trabalenguas</button>
+        </div>
+
+        <div id="s-page-1" class="page-content active">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">S</span>A
+                </div>
+                <div class="grid-words" id="s-section-sa"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">S</span>E
+                </div>
+                <div class="grid-words" id="s-section-se"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">S</span>I
+                </div>
+                <div class="grid-words" id="s-section-si"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">S</span>O
+                </div>
+                <div class="grid-words" id="s-section-so"></div>
+            </div>
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="phoneme-letter" style="font-size:2rem;">S</span>U
+                </div>
+                <div class="grid-words" id="s-section-su"></div>
+            </div>
+        </div>
+
+        <div id="s-page-2" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Logotomas</div>
+                <div class="grid-logotomas" id="s-section-logotomas"></div>
+            </div>
+        </div>
+
+        <div id="s-page-3" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="phoneme-letter" style="font-size:2rem;">S</span> intermedia
+                </div>
+                <div class="grid-words" id="s-section-s-intermedia"></div>
+            </div>
+        </div>
+
+        <div id="s-page-4" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">
+                    Logotomas con <span class="phoneme-letter" style="font-size:2rem;">SS</span>
+                </div>
+                <div class="grid-logotomas" id="s-section-logotomas-ss"></div>
+            </div>
+        </div>
+
+        <div id="s-page-5" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="phoneme-letter" style="font-size:2rem;">S</span> final
+                </div>
+                <div class="grid-words" id="s-section-s-final"></div>
+            </div>
+        </div>
+
+        <div id="s-page-6" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Frases con <span class="phoneme-letter" style="font-size:2rem;">S</span>
+                </div>
+                <div id="s-section-frases"></div>
+            </div>
+        </div>
+
+        <div id="s-page-7" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Adivinanzas con <span class="phoneme-letter" style="font-size:2rem;">S</span>
+                </div>
+                <div id="s-section-adivinanzas"></div>
+            </div>
+        </div>
+
+        <div id="s-page-8" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Trabalenguas</div>
+                <div id="s-section-trabalenguas"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB S/Z -->
+    <div id="tab-sz" class="tab-content glass-panel">
+        <div class="page-nav">
+            <button class="page-btn active" onclick="showPage('sz',1)">Pares mínimos</button>
+            <button class="page-btn" onclick="showPage('sz',2)">Sílabas</button>
+            <button class="page-btn" onclick="showPage('sz',3)">Palabras</button>
+        </div>
+
+        <div id="sz-page-1" class="page-content active">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Pares mínimos S/Z</div>
+                <div class="pair-grid" id="sz-section-pares"></div>
+            </div>
+        </div>
+
+        <div id="sz-page-2" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">Sílabas S/Z</div>
+                <div class="pair-grid" id="sz-section-silabas"></div>
+            </div>
+        </div>
+
+        <div id="sz-page-3" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header alt">Palabras S/Z</div>
+                <div class="pair-grid" id="sz-section-palabras"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Controles flotantes -->
+<div class="floating-controls" id="floatingControls">
+    <div class="control-menu" id="controlMenu">
+        <div class="control-option active" onclick="setMode('normal')" data-mode="normal">
+            <span class="icon">📄</span><span>Normal</span>
+        </div>
+        <div class="control-option" onclick="setMode('word-by-word')" data-mode="word-by-word">
+            <span class="icon">📝</span><span>Palabra por palabra</span>
+        </div>
+        <div class="control-option" onclick="setMode('slide')" data-mode="slide">
+            <span class="icon">➡️</span><span>Barrido</span>
+        </div>
+        <div class="control-option" onclick="setMode('karaoke')" data-mode="karaoke">
+            <span class="icon">🎤</span><span>Karaoke →</span>
+        </div>
+        <div class="control-option" onclick="setMode('karaoke-rtl')" data-mode="karaoke-rtl">
+            <span class="icon">🎵</span><span>Karaoke ←</span>
+        </div>
+        <div class="control-option" onclick="setMode('soccer')" data-mode="soccer">
+            <span class="icon">⚽</span><span>Pelota de fútbol</span>
+        </div>
+        <div class="control-divider"></div>
+        <div class="control-option" onclick="toggleRainbow()" id="rainbowOption">
+            <span class="icon">🌈</span><span>Arcoíris</span>
+        </div>
+        <div class="control-option" onclick="resetView()">
+            <span class="icon">🔄</span><span>Reiniciar</span>
+        </div>
+    </div>
+    <button class="toggle-btn" onclick="toggleControls()" title="Modos de visualización">🎮</button>
+</div>
+
+<script>
+    // =========================
+    // DATOS RR
+    // =========================
+    const wordsDataRR = {
+        ra: ["Rábano","rabia","rabieta","rabo","racha","racimo","ración","radio","ráfaga","raíz","rama","ramillete","ramo","Ramón","rampa","rana","rancho","rape","rapidez","rápido","raqueta","raro","rascar","raspa","rato","ratón","ratonera","ravioli","raya","rayo","raza","razón"],
+        re: ["Real","realidad","rebaja","rebanada","rebaño","rebelde","rebotar","rebuzno","recado","recambio","receta","recibir","recibo","recitar","reclamar","recoger","recordar","recuperar","redacción","redondo","refrán","regadera","regalo","regar","régimen","regla","regordete","regular","reina","reja","relajación","relámpago","relato","relevo","relieve","religión","religioso","rellenar","reloj","relojería","relojero","remar","remedio","remo","remojar","remolacha","remolcar","remolque","rendija","rendirse","renglón","reno","reñir","reparar","repartir","repaso","repetir","repisa","reportaje","reportero","repostería","reptil","república","repuesto","requesón","resbalar","rescate","reservado","residuo","resina","respaldo","respirar","responder","respuesta","resta","restaurante","resuelve","retal","retirado","reúma","reunión","revés","revista","revoltoso","revolver","rey","rezar"],
+        ri: ["Ribera","rico","ridículo","rienda","riesgo","rifa","rifle","rígido","rima","rincón","rinde","rinoceronte","riña","riñón","río","risa","risueño","ritmo","rizar"],
+        ro: ["Robar","roble","robo","robot","robusto","roca","rociar","rocío","rodaballo","rodado","rodaja","rodear","rodeo","rodilla","roer","rojo","rollizo","Roma","romano","romántico","romería","romero","rompecabezas","rompeolas","romper","ron","roncar","ronda","rondalla","ropa","ropero","roquefort","rosa","rosal","rosaleda","rosca","rosquilla","roto","rotulador","roza"],
+        ru: ["Rubeola","rubí","rubia","rublo","rudimento","rueda","rugby","rugir","ruido","ruidoso","ruín","ruina","ruiseñor","ruleta","rumbo","rumiante","rumor","rural","Rusia","rústico","rutina"]
+    };
+
+    const logotomasRR = [
+        "raba","rebe","ribi","robo","rubu",
+        "raca","reque","riqui","roco","rucu",
+        "racha","reche","richi","rocho","ruchu",
+        "rada","rede","ridi","rodo","rudu",
+        "rafa","refe","rifi","rofo","rufu",
+        "raga","regue","rigui","rogo","rugu",
+        "raja","reje","riji","rojo","ruju",
+        "rala","rele","rili","rolo","rulu",
+        "ralla","relle","rilli","rollo","rullu",
+        "rama","reme","rimi","romo","rumu",
+        "rana","rene","rini","rono","runu",
+        "raña","reñe","riñi","roño","ruñu",
+        "rapa","repe","ripi","ropo","rupu",
+        "rara","rere","riri","roro","ruru",
+        "rasa","rese","risi","roso","rusu",
+        "rata","rete","riti","roto","rutu",
+        "raya","reye","riyi","royo","ruyu",
+        "raza","rece","rici","rozo","ruzu"
+    ];
+
+    const rrIntermediaData = [
+        "Aburrido","ahorro","alrededor","arrancar","arreglar","arriba","arroyo","arroz","arruga","arruinar","aterriza",
+        "Barra","barraca","barre","barricada","barriga","barril","barrio","barrizal","barro","barrote","becerro","berrea","birrete","borra","borrasca","borrego","borroso","burro",
+        "Cacharro","carreta","carretera","carril","carro","carromato","carroza","carruaje","carrusel","cencerro","cerrado","cerrojo","chorro","cierra","corral","corre","correcto",
+        "Desarrollo","desenredar","derrite","derrocha","derrota",
+        "Enredado","enrejado","Enrique","enrollar","enroscar","errata","erre","error",
+        "Forrado","forraje","forro",
+        "Garra","garrafa","garrotazo","garrote","gorrión","gorro","guerra",
+        "Herradura","herramienta","herrero","hierro","honrado","horrible",
+        "Incorrecto","irregular",
+        "Jarra","jarrón",
+        "Macarrones","marrano","marrón","matorral","mirra","morro",
+        "Navarra",
+        "Parra","párrafo","parroquia","perro","porra","porrazo","porrón","puerro",
+        "Serrucho","sierra","sonrisa",
+        "Tarragona","tarro","terraza","terremoto","terreno","terrible","tierra","torre","torreón","turrón",
+        "Zamarra","zorro","zurra"
+    ];
+
+    const rFinalData = [
+        "Mar","par","lar","car","bar","pajar","pinar","telar","lagar","azúcar","calamar","colocar",
+        "Por","valor","calor","dolor","pudor","vapor","sudor","olor","hedor","mayor","sopor","señor","tenedor","comedor","ganador",
+        "Sur","abur",
+        "Ser","ver","coser","tener","comer","saber","caer","amanecer","anochecer",
+        "Ir","sir","mir","venir","teñir","pedir","vivir"
+    ];
+
+    const logotomasRRData = [
+        "barra","berre","birri","borro","burru",
+        "carra","cerre","cirri","corro","curru",
+        "charra","cherre","chirri","chorro","churru",
+        "darra","derre","dirri","dorro","durru",
+        "farra","ferre","firri","forro","furru",
+        "garra","gerre","girri","gorro","gurru",
+        "jarra","jerre","jirri","jorro","jurru",
+        "larra","lerre","lirri","lorro","lurru",
+        "marra","merre","mirri","morro","murru",
+        "narra","nerre","nirri","norro","nurru",
+        "ñarra","ñerre","ñirri","ñorro","ñurru",
+        "parra","perre","pirri","porro","purru",
+        "quarra","querre","quirri","qorro","qurru",
+        "rarra","rerre","rirri","rorro","rurru",
+        "sarra","serre","sirri","sorro","surru",
+        "tarra","terre","tirri","torro","turru",
+        "varra","verre","virri","vorro","vurru",
+        "zarra","zerre","zirri","zorro","zurru"
+    ];
+
+    const frasesRR = [
+        "El ratón corre rápido por el rincón.",
+        "Rosa riega las rosas rojas del jardín.",
+        "El perro marrón corre por la carretera.",
+        "Ramón tiene un regalo rojo y redondo.",
+        "Mi burro come berros en el arroyo.",
+        "La tierra roja es rica en hierro.",
+        "El carro arranca con un ruido raro.",
+        "Roberto repara la barrera rota.",
+        "El tarro de arroz está en el armario.",
+        "La rama del árbol roza la torre.",
+        "Ricardo arrastra el carrito por la arena.",
+        "El barril rueda por la rampa.",
+        "Raquel arranca raíces del terreno.",
+        "El loro se esconde detrás de la roca.",
+        "Los ratones corren alrededor del granero.",
+        "El río recorre las tierras verdes.",
+        "Rita revuelve el arroz con las verduras.",
+        "La carrera de carros termina en la pista.",
+        "El burro rebuzna ruidosamente cerca del río.",
+        "Roberto recorre el sendero con su perro.",
+        "El serrucho corta la madera rápido.",
+        "La carretera atraviesa la sierra.",
+        "Enrique enrosca el tornillo en la pared.",
+        "El gorro rojo está en la terraza.",
+        "La guitarra resuena en la habitación.",
+        "Rodrigo recoge ramas del suelo.",
+        "Los niños ruedan por la hierba.",
+        "El loro repite las palabras con gracia.",
+        "La ardilla recoge nueces para el invierno.",
+        "Raúl repara el radiador del coche."
+    ];
+
+    const adivinanzasRR = [
+        "Tiene raíces que nadie ve, es más alto que los árboles. Arriba, arriba va, y jamás crecerá. ¿Qué es? (La montaña)",
+        "Corro y corro sin parar, por el río voy a dar. Nunca me puedo cansar. ¿Qué soy? (El agua del río)",
+        "Rojo por fuera, blanco por dentro, con puntitos negros en el centro. ¿Qué es? (La fresa)",
+        "Con el perro y el gato soy terrible, pero cuando río me vuelvo amable. ¿Quién soy? (La erre)",
+        "Tiene corona pero no es rey, tiene rayas pero no es cebra. ¿Qué es? (La piña)",
+        "Redondo, redondo, barril sin fondo. Rueda que te rueda por el suelo. ¿Qué es? (El aro)",
+        "Treinta y dos sierras blancas en un viejo comedor, y una vieja parlanchina que las mueve alrededor. ¿Qué es? (La boca)",
+        "Ronda que te ronda, rueda que te rueda, en el parque me encuentras y los niños juegan. ¿Qué soy? (El carrusel)",
+        "Rápido corro por la carretera, llevo cuatro ruedas y un motor que ronronea. ¿Qué soy? (El carro)",
+        "Teje su tela en un rincón, atrapa moscas sin usar las manos. ¿Quién es? (La araña)",
+        "Verde fue mi nacimiento, amarillo mi vivir, y ahora me visten de rojo para hacerme morir. ¿Qué es? (El pimiento rojo)",
+        "Con mi cara roja alegro la huerta, y por dentro guardo semillas despiertas. ¿Qué soy? (El tomate)",
+        "Ladro y ladro sin parar, muevo la cola al jugar, soy el mejor amigo que puedes encontrar. ¿Quién soy? (El perro)",
+        "Sobre la tierra y bajo el cielo, ruedo y ruedo sin tener piernas. ¿Qué soy? (La rueda)",
+        "Con orejas largas y rabo corto, rebuzno fuerte en el corral, llevo carga de un lugar a otro. ¿Quién soy? (El burro)",
+        "Por un camino largo y estrecho va caminando un bicho, y al nombrar su nombre ya te lo he dicho. ¿Qué es? (La vaca)",
+        "Viste de chaleco rojo, sin ser frío ni calor, brinca y brinca por el campo, sin ser jugador. ¿Quién es? (El petirrojo)",
+        "De tierra soy y tierra volveré, pero mientras vivo en el barro estaré. ¿Qué soy? (El ladrillo)",
+        "Rueda sin llantas, tambor sin cuero, reloj sin manecillas. ¿Qué es? (El barril)",
+        "Cuatro torres con cuatro rincones, cuatro ramas y mil ramones. ¿Qué es? (El árbol)"
+    ];
+
+    const trabalenguasRR = [
+        "El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha robado.",
+        "La clase está desorganizada, ¿quién la reorganizará? El reorganizador que la reorganice buen reorganizador será.",
+        "Corro y corro yo en el corro. Si en el corro caigo me rompo el morro.",
+        "Rabia, rabina tiene una piña con erre de riña y eñe de niña.",
+        "Rabia, rabiña, que tengo una piña, con siete piñones y tú no los comes.",
+        "El perro de San Roque no tiene cola, porque se la ha mordido la caracola.",
+        "Rosa Rosales cortó una rosa, ¡qué roja la rosa de Rosa Rosales!",
+        "Un burro comía berros y un perro se los robó, el burro lanzó un rebuzno y el perro al barro cayó.",
+        "Un carro cargado de rocas iba por la carretera haciendo carric, carrac, carric, carrac.",
+        "Rosa Rizo reza ruso, ruso reza Rosa Rizo.",
+        "Recia la rajada rueda, rueda rugiendo rudamente rauda rauda rueda rugiendo rudamente la rajada rueda.",
+        "Parra tenía una perra. Guerra tenía una parra. La perra de Parra subió a la parra de Guerra.",
+        "Un podador podaba una parra, otro podador que por allí pasaba le preguntó: ¿Qué podas, podador?",
+        "El cielo está emborregado, ¿quién lo desemborregará? El desemborregador que lo desemborregue buen desemborregador será.",
+        "Rasquín era un rascón que rascaba en una risca, rasca que rasca acabó con el risco.",
+        "Tan caro es ese carro que por caro no compro el carro.",
+        "Tres raras ratas, dos ratones y un robot enrarecieron recientemente de repente.",
+        "Un burro comía berros y un zorro lo estaba viendo. El burro lanzó un rebuzno y el zorro al barro cayó."
+    ];
+
+    // =========================
+    // DATOS S
+    // =========================
+    const wordsDataS = {
+        sa: ["Sábana","saco","sal","sala","salero","salto","saludo","sandía","sapo","sartén","sábado","salario","salsa","salmón","salvia","satélite","savana","sabor"],
+        se: ["Seco","seda","segar","seguir","segunda","semilla","señora","señor","senda","sentido","semana","semáforo","serpiente","servir","sesión","seta","secreto","seguro"],
+        si: ["Silla","silbar","silbido","silencio","sirena","símbolo","simple","simio","sincero","siete","sigo","sino","silvestre","sirva","sílaba","síntoma"],
+        so: ["Sol","sopa","sombra","sonar","sonrisa","sonido","sombrero","soplar","sorbo","sorteo","sordo","sorpresa","socorro","solar","soldado","soñar"],
+        su: ["Suma","subir","sudor","suelo","sueño","suerte","sujeto","susurro","susto","súper","súbito","surtido","surf","sutileza","suave","sucio"]
+    };
+
+    const logotomasS = [
+        "saba","sebe","sibi","sobo","subu",
+        "saca","seque","siqui","soco","sucu",
+        "sacha","seche","sichi","socho","suchu",
+        "sada","sede","sidi","sodo","sudu",
+        "safa","sefe","sifi","sofo","sufu",
+        "saga","segue","sigui","sogo","sugu",
+        "saja","seje","siji","sojo","suju",
+        "sala","sele","sili","solo","sulu",
+        "salla","selle","silli","sollo","sullu",
+        "sama","seme","simi","somo","sumu"
+    ];
+
+    const sIntermediaData = [
+        "casa","mesa","vaso","queso","camisa","paseo","risa","rosa","peso","piso","besar",
+        "paso","guiso","silla","cosa","musa","masa","misión","visita","cosido","rosario",
+        "tasa","losa","sábana","fresa","masaje","bosque","asilo","asado","visera","pésimo"
+    ];
+
+    const logotomasSS = [
+        "assa","esse","issi","osso","ussu",
+        "lassa","lesse","lissi","losso","lussu",
+        "massa","messe","missi","mosso","mussu",
+        "passa","pesse","pissi","posso","pussu"
+    ];
+
+    const sFinalData = [
+        "mes","dos","tres","lunes","martes","miércoles","jueves","viernes",
+        "avés","gris","autos","cactus","autobús","lápices","sofás","campos",
+        "jardines","robots","atlas","túneles","comés","tenés","querés"
+    ];
+
+    const frasesS = [
+        "Sofía salta sobre la soga en el salón.",
+        "El sol se asoma sobre las montañas.",
+        "Sara sirve sopa sabrosa en su casa.",
+        "El sapo se esconde tras la rosa.",
+        "Sergio sopla su silbato en el parque.",
+        "La semilla crece en la maceta.",
+        "Susana suma seis saltos seguidos.",
+        "El susurro suena suave en el bosque.",
+        "La serpiente se desliza sobre la arena.",
+        "El sombrero de Sofía es azul.",
+        "Sandra pasea con su perro en la tarde.",
+        "El vaso se cayó sobre la mesa.",
+        "El músico toca su saxofón con pasión.",
+        "El sastre cose seis sacos azules.",
+        "Se oyen pasos silenciosos en la sala.",
+        "El sol sale temprano en verano.",
+        "La brisa suave refresca la siesta.",
+        "Sara escribe su receta en la libreta.",
+        "El cisne se mueve con elegancia en el lago.",
+        "Santiago sueña con ser surfista."
+    ];
+
+    const adivinanzasS = [
+        "Soy redonda y brillo en el cielo, salgo de día y doy calor. ¿Qué soy? (El sol)",
+        "Subo y bajo sin cansarme, siempre en el reloj me verás. ¿Qué soy? (El segundero)",
+        "Se viste de espuma blanca, y en el mar suele bailar. ¿Qué es? (La ola)",
+        "Con S empiezo y con S termino, guardo dulces en mi interior. ¿Qué soy? (El saco)",
+        "Silba sin boca y sopla sin manos. ¿Qué es? (El viento)",
+        "Soy suave, soy sutil, me pones en la cama para dormir. ¿Qué soy? (La sábana)",
+        "Tengo seis caras y ruedo al jugar. ¿Qué soy? (El dado)",
+        "Sube y baja por la ventana, si la subes se ve el sol. ¿Qué soy? (La persiana)",
+        "Soy serpiente sin escamas, me haces nudo en el zapato. ¿Qué soy? (El cordón)",
+        "Si me rompes, sigo sonando. ¿Qué soy? (El silencio)"
+    ];
+
+    const trabalenguasS = [
+        "Siete serias serpientes salen del sauce.",
+        "Si Susana supiera silbar, silbaría sin cesar.",
+        "Susi salsa seis soles sobre el suelo.",
+        "El sastre cose seis sacos y se cansa.",
+        "Sapo soso sopla sin pausa su silbato.",
+        "Sofía se sienta sola bajo el sauce.",
+        "Santi sube siete veces sin sudar.",
+        "Susi susurra suave sobre la sopa.",
+        "Seis cisnes suaves surcan el lago.",
+        "Si Sergio sigue silbando, todos sonríen."
+    ];
+
+    // =========================
+    // DATOS S/Z
+    // =========================
+    const szPairs = [
+        ["casa","caza"],["seda","zeda"],["suma","zuma"],["sala","zala"],
+        ["sopa","zopa"],["saco","zaco"],["seno","zeno"],["sello","zello"],
+        ["silla","zilla"],["siete","ziete"],["suma","zuma"],["sabor","zabor"]
+    ];
+
+    const szSyllables = [
+        ["sa","za"],["se","ze"],["si","zi"],["so","zo"],["su","zu"],
+        ["asa","aza"],["ese","eze"],["isi","izi"],["oso","ozo"],["usu","uzu"]
+    ];
+
+    const szWords = [
+        ["casa","caza"],["sierra","zebra"],["sabor","zorro"],["suma","zumo"],
+        ["sopa","zapato"],["seda","zeta"],["siete","zinc"],["sapo","zorro"],
+        ["sala","zanja"],["sol","zoológico"],["silla","zebra"],["sauce","zanahoria"]
+    ];
+
+    // =========================
+    // ESTADO
+    // =========================
+    let currentMode = 'normal';
+    let rainbowMode = false;
+    let currentTab = 'rr';
+
+    const recordings = new Map(); // id -> { blob, url, mimeType }
+    const evalStatus = new Map(); // id -> 'good' | 'retry' | null
+
+    const recordingState = {
+        active: false,
+        currentId: null,
+        mediaRecorder: null,
+        chunks: [],
+        stream: null,
+        stopPromise: null,
+        resolveStop: null
+    };
+
+    const recordingSupported = !!(window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+
+    // =========================
+    // VISUALIZADOR
+    // =========================
+    let audioCtx = null;
+    let analyser = null;
+    let sourceNode = null;
+    let timeData = null;
+    let freqData = null;
+    let vizMode = 'wave';
+    let vizRAF = null;
+
+    const vizCanvas = document.getElementById('vizCanvas');
+    const spectroCanvas = document.getElementById('spectroCanvas');
+    const phonemeCanvas = document.getElementById('phonemeCanvas');
+    const vizStatus = document.getElementById('vizStatus');
+
+    function setVizMode(mode){
+        vizMode = mode;
+        document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.querySelector(`.viz-btn[data-viz="${mode}"]`);
+        if (btn) btn.classList.add('active');
+
+        vizCanvas.classList.add('hidden');
+        spectroCanvas.classList.add('hidden');
+        phonemeCanvas.classList.add('hidden');
+
+        if (mode === 'spectrogram') spectroCanvas.classList.remove('hidden');
+        else if (mode === 'phoneme') phonemeCanvas.classList.remove('hidden');
+        else vizCanvas.classList.remove('hidden');
+
+        clearViz();
+    }
+
+    function initAudioAnalyzer(stream){
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+        if (sourceNode) {
+            try { sourceNode.disconnect(); } catch(e){}
+        }
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.8;
+
+        sourceNode = audioCtx.createMediaStreamSource(stream);
+        sourceNode.connect(analyser);
+
+        timeData = new Uint8Array(analyser.fftSize);
+        freqData = new Uint8Array(analyser.frequencyBinCount);
+    }
+
+    function resizeCanvas(canvas){
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const rect = canvas.getBoundingClientRect();
+        const w = Math.max(1, Math.floor(rect.width * dpr));
+        const h = Math.max(1, Math.floor(rect.height * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+            canvas.width = w;
+            canvas.height = h;
+        }
+    }
+
+    function clearViz(){
+        [vizCanvas, spectroCanvas, phonemeCanvas].forEach(c => {
+            resizeCanvas(c);
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#0b0f1f';
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.font = `${Math.max(12, Math.floor(c.height * 0.07))}px Fredoka, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText(recordingState.active ? 'Escuchando...' : 'Sin grabación activa', c.width / 2, c.height / 2);
+        });
+    }
+
+    function startVisualizer(){
+        if (!analyser || !recordingState.active) return;
+
+        if (vizRAF) cancelAnimationFrame(vizRAF);
+
+        const draw = () => {
+            if (!recordingState.active || !analyser) {
+                clearViz();
+                return;
+            }
+
+            if (vizMode === 'wave') drawWaveform();
+            else if (vizMode === 'bars') drawBars();
+            else if (vizMode === 'spectrogram') drawSpectrogram();
+            else drawPhonemeMeter();
+
+            vizRAF = requestAnimationFrame(draw);
+        };
+
+        draw();
+    }
+
+    function stopVisualizer(){
+        if (vizRAF) {
+            cancelAnimationFrame(vizRAF);
+            vizRAF = null;
+        }
+        clearViz();
+    }
+
+    function drawWaveform(){
+        resizeCanvas(vizCanvas);
+        const ctx = vizCanvas.getContext('2d');
+        const w = vizCanvas.width;
+        const h = vizCanvas.height;
+
+        analyser.getByteTimeDomainData(timeData);
+
+        ctx.fillStyle = '#0b0f1f';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.lineWidth = Math.max(2, Math.floor(h * 0.01));
+        ctx.strokeStyle = '#4ECDC4';
+        ctx.beginPath();
+
+        const slice = w / timeData.length;
+        let x = 0;
+        for (let i = 0; i < timeData.length; i++) {
+            const v = timeData[i] / 128.0;
+            const y = v * (h / 2);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            x += slice;
+        }
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+    }
+
+    function drawBars(){
+        resizeCanvas(vizCanvas);
+        const ctx = vizCanvas.getContext('2d');
+        const w = vizCanvas.width;
+        const h = vizCanvas.height;
+
+        analyser.getByteFrequencyData(freqData);
+
+        ctx.fillStyle = '#0b0f1f';
+        ctx.fillRect(0, 0, w, h);
+
+        const barCount = 64;
+        const step = Math.floor(freqData.length / barCount);
+        const barWidth = w / barCount;
+
+        for (let i = 0; i < barCount; i++) {
+            const val = freqData[i * step] / 255;
+            const barHeight = val * (h * 0.9);
+            const x = i * barWidth;
+            const y = h - barHeight;
+
+            const grad = ctx.createLinearGradient(0, y, 0, h);
+            grad.addColorStop(0, '#FFE66D');
+            grad.addColorStop(1, '#FF6B6B');
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(x + barWidth * 0.15, y, barWidth * 0.7, barHeight);
+        }
+    }
+
+    function drawSpectrogram(){
+        resizeCanvas(spectroCanvas);
+        const ctx = spectroCanvas.getContext('2d');
+        const w = spectroCanvas.width;
+        const h = spectroCanvas.height;
+
+        analyser.getByteFrequencyData(freqData);
+
+        ctx.drawImage(spectroCanvas, -1, 0, w, h);
+
+        for (let y = 0; y < h; y++) {
+            const index = Math.floor((y / h) * freqData.length);
+            const value = freqData[index] / 255;
+            const hue = 200 - value * 200;
+            ctx.fillStyle = `hsl(${hue}, 90%, ${30 + value * 50}%)`;
+            ctx.fillRect(w - 1, h - y, 1, 1);
+        }
+    }
+
+    function drawPhonemeMeter(){
+        resizeCanvas(phonemeCanvas);
+        const ctx = phonemeCanvas.getContext('2d');
+        const w = phonemeCanvas.width;
+        const h = phonemeCanvas.height;
+
+        analyser.getByteFrequencyData(freqData);
+        analyser.getByteTimeDomainData(timeData);
+
+        ctx.fillStyle = '#0b0f1f';
+        ctx.fillRect(0, 0, w, h);
+
+        // Energía por bandas
+        const sampleRate = audioCtx ? audioCtx.sampleRate : 44100;
+        const binHz = (sampleRate / 2) / freqData.length;
+
+        let low = 0, mid = 0, high = 0, total = 0;
+        for (let i = 0; i < freqData.length; i++) {
+            const hz = i * binHz;
+            const v = freqData[i] / 255;
+            if (hz <= 300) low += v;
+            else if (hz <= 2000) mid += v;
+            else if (hz <= 8000) high += v;
+            total += v;
+        }
+        total = Math.max(total, 1e-6);
+
+        const lowRatio = low / total;
+        const highRatio = high / total;
+
+        // Zero Crossing Rate (ruido/aspereza)
+        let crossings = 0;
+        let prev = (timeData[0] - 128) / 128;
+        for (let i = 1; i < timeData.length; i++) {
+            const cur = (timeData[i] - 128) / 128;
+            if (prev === 0) { prev = cur; continue; }
+            if (cur === 0) { continue; }
+            if ((prev > 0 && cur < 0) || (prev < 0 && cur > 0)) crossings++;
+            prev = cur;
+        }
+        const zcr = crossings / (timeData.length - 1);
+        const zcrNorm = Math.min(1, Math.max(0, (zcr - 0.03) / 0.17));
+
+        // RMS
+        let sumSq = 0;
+        for (let i = 0; i < timeData.length; i++) {
+            const v = (timeData[i] - 128) / 128;
+            sumSq += v * v;
+        }
+        const rms = Math.sqrt(sumSq / timeData.length);
+        const energyNorm = Math.min(1, Math.max(0, (rms - 0.01) / 0.25));
+
+        // Heurística S vs Z
+        const voiceRatio = Math.min(1, Math.max(0, (lowRatio - 0.02) / 0.18));
+
+        let sScore = highRatio * (1 - voiceRatio * 0.8) * (0.4 + 0.6 * zcrNorm);
+        let zScore = highRatio * (0.4 + 0.6 * voiceRatio) * (0.8 - 0.4 * zcrNorm);
+
+        const sum = sScore + zScore + 1e-6;
+        sScore /= sum;
+        zScore /= sum;
+
+        const confidence = Math.min(1, Math.max(0, highRatio * 1.2)) * (0.4 + 0.6 * energyNorm);
+        const blur = Math.min(1, Math.max(0, 1 - confidence));
+
+        // Dibujo del círculo
+        const cx = w / 2;
+        const cy = h / 2;
+        const radius = Math.min(w, h) * 0.22;
+
+        // Fondo suave
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * 1.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Mezcla de color
+        const sCol = { r: 255, g: 230, b: 109 }; // amarillo
+        const zCol = { r: 58, g: 134, b: 255 };  // azul
+        const mix = {
+            r: Math.round(sCol.r * sScore + zCol.r * zScore),
+            g: Math.round(sCol.g * sScore + zCol.g * zScore),
+            b: Math.round(sCol.b * sScore + zCol.b * zScore)
+        };
+
+        const fillAlpha = 0.2 + 0.8 * confidence;
+        ctx.fillStyle = `rgba(${mix.r}, ${mix.g}, ${mix.b}, ${fillAlpha})`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.lineWidth = Math.max(2, Math.floor(h * 0.01));
+        ctx.strokeStyle = `rgba(${mix.r}, ${mix.g}, ${mix.b}, 0.9)`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Etiquetas S y Z
+        ctx.font = `${Math.max(14, Math.floor(h * 0.08))}px Fredoka, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,230,109,0.9)';
+        ctx.fillText('S', cx - radius * 1.7, cy + 6);
+        ctx.fillStyle = 'rgba(58,134,255,0.9)';
+        ctx.fillText('Z', cx + radius * 1.7, cy + 6);
+
+        // Puntos "emborronado"
+        const maxDots = 70;
+        const dots = Math.floor(blur * maxDots);
+
+        for (let i = 0; i < dots; i++) {
+            const useS = Math.random() < sScore;
+            const color = useS ? 'rgba(255,230,109,0.9)' : 'rgba(58,134,255,0.9)';
+            const angle = Math.random() * Math.PI * 2;
+            const dist = radius * 1.6 + Math.random() * radius * 1.6;
+            const x = cx + Math.cos(angle) * dist;
+            const y = cy + Math.sin(angle) * dist;
+            const size = 2 + Math.random() * 3;
+
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Texto de ayuda
+        ctx.font = `${Math.max(12, Math.floor(h * 0.06))}px Fredoka, sans-serif`;
+        ctx.fillStyle = 'rgba(255,255,255,0.65)';
+        ctx.textAlign = 'center';
+        ctx.fillText('Indicador S/Z (estimación)', cx, h - Math.max(14, h * 0.07));
+    }
+
+    window.addEventListener('resize', () => {
+        clearViz();
+    });
+
+    // =========================
+    // UTILIDADES DE TEXTO
+    // =========================
+    function processText(text, phoneme){
+        const letter = phoneme.toLowerCase();
+        const regex = new RegExp(`\\b([\\p{L}]*${letter}{1,2}[\\p{L}]*)\\b`, 'giu');
+
+        return text.replace(regex, (match) => {
+            const lowerMatch = match.toLowerCase();
+
+            if (letter === 'r') {
+                const rrIndex = lowerMatch.indexOf('rr');
+                if (rrIndex !== -1) {
+                    const before = match.substring(0, rrIndex);
+                    const rr = match.substring(rrIndex, rrIndex + 2);
+                    const after = match.substring(rrIndex + 2);
+                    return `${before}<span class="phoneme-letter">${rr.toUpperCase()}</span>${after}`;
+                } else if (lowerMatch.charAt(0) === 'r') {
+                    const r = match.charAt(0);
+                    const rest = match.substring(1);
+                    return `<span class="phoneme-letter">${r.toUpperCase()}</span>${rest}`;
+                }
+            }
+
+            if (letter === 's') {
+                const ssIndex = lowerMatch.indexOf('ss');
+                if (ssIndex !== -1) {
+                    const before = match.substring(0, ssIndex);
+                    const ss = match.substring(ssIndex, ssIndex + 2);
+                    const after = match.substring(ssIndex + 2);
+                    return `${before}<span class="phoneme-letter">${ss.toUpperCase()}</span>${after}`;
+                } else {
+                    const sIndex = lowerMatch.indexOf('s');
+                    if (sIndex !== -1) {
+                        const before = match.substring(0, sIndex);
+                        const s = match.substring(sIndex, sIndex + 1);
+                        const after = match.substring(sIndex + 1);
+                        return `${before}<span class="phoneme-letter">${s.toUpperCase()}</span>${after}`;
+                    }
+                }
+            }
+
+            return match;
+        });
+    }
+
+    function processWord(word, phoneme){
+        const lowerWord = word.toLowerCase();
+        const letter = phoneme.toLowerCase();
+
+        if (letter === 'r') {
+            const rrIndex = lowerWord.indexOf('rr');
+            if (rrIndex !== -1) {
+                const before = word.substring(0, rrIndex);
+                const after = word.substring(rrIndex + 2);
+                return `${before}<span class="separator">-</span><span class="phoneme-letter">RR</span><span class="separator">-</span>${after}`;
+            } else if (lowerWord.charAt(0) === 'r') {
+                const secondChar = word.charAt(1);
+                const remaining = word.substring(2);
+                return `<span class="phoneme-letter">R</span><span class="separator">-</span>${secondChar.toUpperCase()}<span class="separator">-</span>${remaining}`;
+            } else if (lowerWord.charAt(lowerWord.length - 1) === 'r') {
+                const beforeR = word.substring(0, word.length - 1);
+                const r = word.charAt(word.length - 1);
+                return `${beforeR}<span class="separator">-</span><span class="phoneme-letter">${r.toUpperCase()}</span>`;
+            }
+            return word;
+        }
+
+        if (letter === 's') {
+            const ssIndex = lowerWord.indexOf('ss');
+            if (ssIndex !== -1) {
+                const before = word.substring(0, ssIndex);
+                const after = word.substring(ssIndex + 2);
+                return `${before}<span class="separator">-</span><span class="phoneme-letter">SS</span><span class="separator">-</span>${after}`;
+            } else if (lowerWord.charAt(0) === 's') {
+                const secondChar = word.charAt(1);
+                const remaining = word.substring(2);
+                return `<span class="phoneme-letter">S</span><span class="separator">-</span>${secondChar.toUpperCase()}<span class="separator">-</span>${remaining}`;
+            } else if (lowerWord.charAt(lowerWord.length - 1) === 's') {
+                const beforeS = word.substring(0, word.length - 1);
+                const s = word.charAt(word.length - 1);
+                return `${beforeS}<span class="separator">-</span><span class="phoneme-letter">${s.toUpperCase()}</span>`;
+            } else {
+                const sIndex = lowerWord.indexOf('s');
+                if (sIndex !== -1) {
+                    const before = word.substring(0, sIndex);
+                    const after = word.substring(sIndex + 1);
+                    return `${before}<span class="separator">-</span><span class="phoneme-letter">S</span><span class="separator">-</span>${after}`;
+                }
+            }
+            return word;
+        }
+
+        return word;
+    }
+
+    function highlightSZ(word){
+        return word
+            .replace(/s/gi, match => `<span class="phoneme-letter">${match.toUpperCase()}</span>`)
+            .replace(/z/gi, match => `<span class="phoneme-letter">${match.toUpperCase()}</span>`);
+    }
+
+    function makeControlsHTML(id){
+        return `
+            <div class="item-controls" data-item-id="${id}">
+                <div class="control-row">
+                    <button class="mini-btn record-btn" data-action="record">⏺️ Grabar</button>
+                    <button class="mini-btn stop-btn" data-action="stop" disabled>⏹️ Parar</button>
+                    <button class="mini-btn play-btn" data-action="play" disabled>▶️ Reproducir</button>
+                    <button class="mini-btn save-btn" data-action="save" disabled>⬇️ Descargar</button>
+                </div>
+                <div class="control-row">
+                    <button class="mini-btn good-btn" data-action="good">✅ Buena</button>
+                    <button class="mini-btn retry-btn" data-action="retry">🔁 Corregir</button>
+                    <span class="status-badge rec-status" data-role="rec-status">Sin grabación</span>
+                    <span class="status-badge eval-status" data-role="eval-status">Sin evaluar</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function createWordCard(word, index, phoneme, id){
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.innerHTML = `
+            <div class="word-text">${processWord(word, phoneme)}</div>
+            ${makeControlsHTML(id)}
+        `;
+        card.style.animationDelay = `${index * 0.08}s`;
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(1.06)';
+            setTimeout(() => { card.style.transform = ''; }, 250);
+        });
+        return card;
+    }
+
+    function createTextCard(text, index, phoneme, label, icon, id){
+        const card = document.createElement('div');
+        card.className = 'tongue-twister-card';
+        card.innerHTML = `
+            <div class="tongue-twister-number">${icon ? icon + ' ' : ''}${label} ${index + 1}</div>
+            <div class="tongue-twister-text">${processText(text, phoneme)}</div>
+            ${makeControlsHTML(id)}
+        `;
+        card.style.animationDelay = `${index * 0.08}s`;
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(1.02)';
+            setTimeout(() => { card.style.transform = ''; }, 250);
+        });
+        return card;
+    }
+
+    function createPairCard(pair, index, id){
+        const card = document.createElement('div');
+        card.className = 'pair-card';
+        card.innerHTML = `
+            <div class="pair-title">Par ${index + 1}</div>
+            <div class="pair-words">
+                <span>${highlightSZ(pair[0])}</span>
+                <span class="vs-badge">VS</span>
+                <span>${highlightSZ(pair[1])}</span>
+            </div>
+            ${makeControlsHTML(id)}
+        `;
+        return card;
+    }
+
+    // =========================
+    // RENDER RR
+    // =========================
+    function renderRR(){
+        const sections = {
+            'rr-section-ra': {data: wordsDataRR.ra, key:'ra'},
+            'rr-section-re': {data: wordsDataRR.re, key:'re'},
+            'rr-section-ri': {data: wordsDataRR.ri, key:'ri'},
+            'rr-section-ro': {data: wordsDataRR.ro, key:'ro'},
+            'rr-section-ru': {data: wordsDataRR.ru, key:'ru'}
+        };
+
+        Object.keys(sections).forEach(id => {
+            const section = document.getElementById(id);
+            section.innerHTML = '';
+            sections[id].data.forEach((word, index) => {
+                const itemId = `rr-${sections[id].key}-${index}`;
+                section.appendChild(createWordCard(word, index, 'r', itemId));
+            });
+        });
+
+        const logotomas = document.getElementById('rr-section-logotomas');
+        logotomas.innerHTML = '';
+        logotomasRR.forEach((word, index) => {
+            const itemId = `rr-logotomas-${index}`;
+            logotomas.appendChild(createWordCard(word, index, 'r', itemId));
+        });
+
+        const rrInter = document.getElementById('rr-section-rr-intermedia');
+        rrInter.innerHTML = '';
+        rrIntermediaData.forEach((word, index) => {
+            const itemId = `rr-intermedia-${index}`;
+            rrInter.appendChild(createWordCard(word, index, 'r', itemId));
+        });
+
+        const logotomasRRs = document.getElementById('rr-section-logotomas-rr');
+        logotomasRRs.innerHTML = '';
+        logotomasRRData.forEach((word, index) => {
+            const itemId = `rr-logotomas-rr-${index}`;
+            logotomasRRs.appendChild(createWordCard(word, index, 'r', itemId));
+        });
+
+        const rFinal = document.getElementById('rr-section-r-final');
+        rFinal.innerHTML = '';
+        rFinalData.forEach((word, index) => {
+            const itemId = `rr-final-${index}`;
+            rFinal.appendChild(createWordCard(word, index, 'r', itemId));
+        });
+
+        const frases = document.getElementById('rr-section-frases');
+        frases.innerHTML = '';
+        frasesRR.forEach((text, index) => {
+            const itemId = `rr-frase-${index}`;
+            frases.appendChild(createTextCard(text, index, 'r', 'Frase', '💬', itemId));
+        });
+
+        const adivs = document.getElementById('rr-section-adivinanzas');
+        adivs.innerHTML = '';
+        adivinanzasRR.forEach((text, index) => {
+            const itemId = `rr-adivinanza-${index}`;
+            adivs.appendChild(createTextCard(text, index, 'r', 'Adivinanza', '🤔', itemId));
+        });
+
+        const trabal = document.getElementById('rr-section-trabalenguas');
+        trabal.innerHTML = '';
+        trabalenguasRR.forEach((text, index) => {
+            const itemId = `rr-trabalenguas-${index}`;
+            trabal.appendChild(createTextCard(text, index, 'r', 'Trabalenguas', '⚡', itemId));
+        });
+
+        applyRecordingStatesToVisible();
+    }
+
+    // =========================
+    // RENDER S
+    // =========================
+    function renderS(){
+        const sections = {
+            's-section-sa': {data: wordsDataS.sa, key:'sa'},
+            's-section-se': {data: wordsDataS.se, key:'se'},
+            's-section-si': {data: wordsDataS.si, key:'si'},
+            's-section-so': {data: wordsDataS.so, key:'so'},
+            's-section-su': {data: wordsDataS.su, key:'su'}
+        };
+
+        Object.keys(sections).forEach(id => {
+            const section = document.getElementById(id);
+            section.innerHTML = '';
+            sections[id].data.forEach((word, index) => {
+                const itemId = `s-${sections[id].key}-${index}`;
+                section.appendChild(createWordCard(word, index, 's', itemId));
+            });
+        });
+
+        const logotomas = document.getElementById('s-section-logotomas');
+        logotomas.innerHTML = '';
+        logotomasS.forEach((word, index) => {
+            const itemId = `s-logotomas-${index}`;
+            logotomas.appendChild(createWordCard(word, index, 's', itemId));
+        });
+
+        const sInter = document.getElementById('s-section-s-intermedia');
+        sInter.innerHTML = '';
+        sIntermediaData.forEach((word, index) => {
+            const itemId = `s-intermedia-${index}`;
+            sInter.appendChild(createWordCard(word, index, 's', itemId));
+        });
+
+        const logotomasSSs = document.getElementById('s-section-logotomas-ss');
+        logotomasSSs.innerHTML = '';
+        logotomasSS.forEach((word, index) => {
+            const itemId = `s-logotomas-ss-${index}`;
+            logotomasSSs.appendChild(createWordCard(word, index, 's', itemId));
+        });
+
+        const sFinal = document.getElementById('s-section-s-final');
+        sFinal.innerHTML = '';
+        sFinalData.forEach((word, index) => {
+            const itemId = `s-final-${index}`;
+            sFinal.appendChild(createWordCard(word, index, 's', itemId));
+        });
+
+        const frases = document.getElementById('s-section-frases');
+        frases.innerHTML = '';
+        frasesS.forEach((text, index) => {
+            const itemId = `s-frase-${index}`;
+            frases.appendChild(createTextCard(text, index, 's', 'Frase', '💬', itemId));
+        });
+
+        const adivs = document.getElementById('s-section-adivinanzas');
+        adivs.innerHTML = '';
+        adivinanzasS.forEach((text, index) => {
+            const itemId = `s-adivinanza-${index}`;
+            adivs.appendChild(createTextCard(text, index, 's', 'Adivinanza', '🤔', itemId));
+        });
+
+        const trabal = document.getElementById('s-section-trabalenguas');
+        trabal.innerHTML = '';
+        trabalenguasS.forEach((text, index) => {
+            const itemId = `s-trabalenguas-${index}`;
+            trabal.appendChild(createTextCard(text, index, 's', 'Trabalenguas', '⚡', itemId));
+        });
+
+        applyRecordingStatesToVisible();
+    }
+
+    // =========================
+    // RENDER S/Z
+    // =========================
+    function renderSZ(){
+        const pares = document.getElementById('sz-section-pares');
+        pares.innerHTML = '';
+        szPairs.forEach((pair, index) => {
+            const itemId = `sz-pares-${index}`;
+            pares.appendChild(createPairCard(pair, index, itemId));
+        });
+
+        const silabas = document.getElementById('sz-section-silabas');
+        silabas.innerHTML = '';
+        szSyllables.forEach((pair, index) => {
+            const itemId = `sz-silabas-${index}`;
+            silabas.appendChild(createPairCard(pair, index, itemId));
+        });
+
+        const palabras = document.getElementById('sz-section-palabras');
+        palabras.innerHTML = '';
+        szWords.forEach((pair, index) => {
+            const itemId = `sz-palabras-${index}`;
+            palabras.appendChild(createPairCard(pair, index, itemId));
+        });
+
+        applyRecordingStatesToVisible();
+    }
+
+    // =========================
+    // NAVEGACIÓN
+    // =========================
+    function showTab(tab){
+        currentTab = tab;
+        document.querySelectorAll('.main-tab').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.main-tab[onclick="showTab('${tab}')"]`).classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(`tab-${tab}`).classList.add('active');
+
+        resetView();
+    }
+
+    function showPage(tab, pageNum){
+        document.querySelectorAll(`#tab-${tab} .page-btn`).forEach((btn, i) => {
+            btn.classList.toggle('active', i + 1 === pageNum);
+        });
+
+        document.querySelectorAll(`#tab-${tab} .page-content`).forEach((page, i) => {
+            page.classList.toggle('active', i + 1 === pageNum);
+        });
+
+        resetView();
+    }
+
+    // =========================
+    // MODOS
+    // =========================
+    function setMode(mode){
+        currentMode = mode;
+
+        document.querySelectorAll('.control-option[data-mode]').forEach(opt => opt.classList.remove('active'));
+        const activeOption = document.querySelector(`.control-option[data-mode="${mode}"]`);
+        if (activeOption) activeOption.classList.add('active');
+
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card, .tab-content.active .page-content.active .pair-card');
+
+        cards.forEach(card => {
+            card.classList.remove('fade-in','slide-in','karaoke-mode');
+            card.style.opacity = '1';
+            const existingBall = card.querySelector('.soccer-ball');
+            if (existingBall) existingBall.remove();
+            const wordText = card.querySelector('.word-text, .tongue-twister-text');
+            if (wordText) wordText.classList.remove('karaoke-mode','karaoke-rtl-mode');
+        });
+
+        if (mode === 'word-by-word') playWordByWord();
+        else if (mode === 'slide') playSlide();
+        else if (mode === 'karaoke') playKaraoke();
+        else if (mode === 'karaoke-rtl') playKaraokeRTL();
+        else if (mode === 'soccer') playSoccer();
+    }
+
+    function playWordByWord(){
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card, .tab-content.active .page-content.active .pair-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            setTimeout(() => card.classList.add('fade-in'), index * 180);
+        });
+    }
+
+    function playSlide(){
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card, .tab-content.active .page-content.active .pair-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            setTimeout(() => card.classList.add('slide-in'), index * 140);
+        });
+    }
+
+    function playKaraoke(){
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                const wordText = card.querySelector('.word-text, .tongue-twister-text');
+                if (wordText) wordText.classList.add('karaoke-mode');
+            }, index * 420);
+        });
+    }
+
+    function playKaraokeRTL(){
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                const wordText = card.querySelector('.word-text, .tongue-twister-text');
+                if (wordText) wordText.classList.add('karaoke-rtl-mode');
+            }, index * 420);
+        });
+    }
+
+    function playSoccer(){
+        const cards = document.querySelectorAll('.tab-content.active .page-content.active .word-card, .tab-content.active .page-content.active .tongue-twister-card, .tab-content.active .page-content.active .pair-card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                const ball = document.createElement('div');
+                ball.className = 'soccer-ball';
+                ball.textContent = '⚽';
+                card.appendChild(ball);
+                setTimeout(() => ball.remove(), 3500);
+            }, index * 420);
+        });
+    }
+
+    function toggleRainbow(){
+        rainbowMode = !rainbowMode;
+        const container = document.querySelector('.tab-content.active .page-content.active');
+        const option = document.getElementById('rainbowOption');
+
+        if (rainbowMode) {
+            container.classList.add('rainbow-mode');
+            option.classList.add('active');
+        } else {
+            container.classList.remove('rainbow-mode');
+            option.classList.remove('active');
+        }
+    }
+
+    function toggleControls(){
+        document.getElementById('controlMenu').classList.toggle('visible');
+    }
+
+    function resetView(){
+        if (currentTab === 'rr') renderRR();
+        if (currentTab === 's') renderS();
+        if (currentTab === 'sz') renderSZ();
+
+        rainbowMode = false;
+        document.querySelectorAll('.page-content').forEach(c => c.classList.remove('rainbow-mode'));
+        document.getElementById('rainbowOption').classList.remove('active');
+
+        currentMode = 'normal';
+        document.querySelectorAll('.control-option[data-mode]').forEach(opt => opt.classList.remove('active'));
+        document.querySelector('.control-option[data-mode="normal"]').classList.add('active');
+    }
+
+    // =========================
+    // GRABACIÓN
+    // =========================
+    function showNotice(text, ms = 2200){
+        const n = document.getElementById('notice');
+        n.textContent = text;
+        n.classList.add('visible');
+        setTimeout(() => n.classList.remove('visible'), ms);
+    }
+
+    function escapeId(id){
+        return window.CSS && CSS.escape ? CSS.escape(id) : id.replace(/[^a-zA-Z0-9_-]/g, '\\$&');
+    }
+
+    function updateRecStatus(ctrl, text, className){
+        const badge = ctrl.querySelector('[data-role="rec-status"]');
+        if (!badge) return;
+        badge.className = `status-badge rec-status ${className || ''}`.trim();
+        badge.textContent = text;
+    }
+
+    function updateEvalStatus(ctrl, status){
+        const badge = ctrl.querySelector('[data-role="eval-status"]');
+        if (!badge) return;
+        if (status === 'good') {
+            badge.className = 'status-badge eval-status status-good';
+            badge.textContent = '✅ Buena';
+        } else if (status === 'retry') {
+            badge.className = 'status-badge eval-status status-retry';
+            badge.textContent = '🔁 Corregir';
+        } else {
+            badge.className = 'status-badge eval-status';
+            badge.textContent = 'Sin evaluar';
+        }
+    }
+
+    function updateControlsForElement(ctrl, rec, evalStat, isCurrentRecording){
+        const recordBtn = ctrl.querySelector('[data-action="record"]');
+        const stopBtn = ctrl.querySelector('[data-action="stop"]');
+        const playBtn = ctrl.querySelector('[data-action="play"]');
+        const saveBtn = ctrl.querySelector('[data-action="save"]');
+
+        if (!recordingSupported) {
+            if (recordBtn) recordBtn.disabled = true;
+            if (stopBtn) stopBtn.disabled = true;
+            if (playBtn) playBtn.disabled = true;
+            if (saveBtn) saveBtn.disabled = true;
+            updateRecStatus(ctrl, 'Grabación no disponible', 'status-unavailable');
+            return;
+        }
+
+        if (recordingState.active) {
+            recordBtn.disabled = !isCurrentRecording;
+            stopBtn.disabled = !isCurrentRecording;
+        } else {
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+
+        if (rec) {
+            playBtn.disabled = false;
+            saveBtn.disabled = false;
+            if (!recordingState.active || !isCurrentRecording) {
+                updateRecStatus(ctrl, 'Grabación lista', 'status-ready');
+            }
+        } else {
+            playBtn.disabled = true;
+            saveBtn.disabled = true;
+            if (!recordingState.active || !isCurrentRecording) {
+                updateRecStatus(ctrl, 'Sin grabación', '');
+            }
+        }
+
+        updateEvalStatus(ctrl, evalStat);
+    }
+
+    function applyRecordingStatesToVisible(){
+        document.querySelectorAll('.item-controls').forEach(ctrl => {
+            const id = ctrl.dataset.itemId;
+            const rec = recordings.get(id);
+            const evalStat = evalStatus.get(id) || null;
+            const isCurrent = recordingState.active && recordingState.currentId === id;
+            updateControlsForElement(ctrl, rec, evalStat, isCurrent);
+
+            const card = ctrl.closest('.word-card, .tongue-twister-card, .pair-card');
+            if (card) {
+                card.classList.toggle('item-good', evalStat === 'good');
+                card.classList.toggle('item-retry', evalStat === 'retry');
+            }
+        });
+    }
+
+    async function startRecording(id){
+        if (!recordingSupported) {
+            showNotice('Grabación no disponible en este navegador');
+            return;
+        }
+
+        if (recordingState.active) {
+            await stopRecording();
+        }
+
+        let stream = recordingState.stream;
+        if (!stream) {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                recordingState.stream = stream;
+            } catch (err) {
+                showNotice('Permiso de micrófono denegado');
+                return;
+            }
+        }
+
+        initAudioAnalyzer(stream);
+
+        const mr = new MediaRecorder(stream);
+        recordingState.active = true;
+        recordingState.currentId = id;
+        recordingState.mediaRecorder = mr;
+        recordingState.chunks = [];
+        recordingState.stopPromise = new Promise(resolve => recordingState.resolveStop = resolve);
+
+        mr.ondataavailable = e => {
+            if (e.data && e.data.size > 0) recordingState.chunks.push(e.data);
+        };
+
+        mr.onstop = () => {
+            const chunks = recordingState.chunks;
+            const currentId = id;
+            if (chunks && chunks.length) {
+                const blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+                const prev = recordings.get(currentId);
+                if (prev && prev.url) URL.revokeObjectURL(prev.url);
+                const url = URL.createObjectURL(blob);
+                recordings.set(currentId, { blob, url, mimeType: mr.mimeType || 'audio/webm' });
+            }
+
+            recordingState.active = false;
+            recordingState.currentId = null;
+            recordingState.mediaRecorder = null;
+            recordingState.chunks = [];
+
+            if (recordingState.resolveStop) {
+                recordingState.resolveStop();
+                recordingState.resolveStop = null;
+            }
+
+            vizStatus.textContent = 'Grabación detenida';
+            stopVisualizer();
+            applyRecordingStatesToVisible();
+        };
+
+        mr.start();
+        const ctrl = document.querySelector(`.item-controls[data-item-id="${escapeId(id)}"]`);
+        if (ctrl) updateRecStatus(ctrl, 'Grabando...', 'status-recording');
+        vizStatus.textContent = 'Grabando... visualizando audio';
+        applyRecordingStatesToVisible();
+        startVisualizer();
+    }
+
+    async function stopRecording(){
+        if (!recordingState.active || !recordingState.mediaRecorder) return;
+        const mr = recordingState.mediaRecorder;
+        const id = recordingState.currentId;
+
+        const ctrl = document.querySelector(`.item-controls[data-item-id="${escapeId(id)}"]`);
+        if (ctrl) updateRecStatus(ctrl, 'Procesando...', 'status-processing');
+
+        try {
+            mr.stop();
+        } catch (e) {}
+
+        if (recordingState.stopPromise) {
+            await recordingState.stopPromise;
+        }
+    }
+
+    function playRecording(id){
+        const rec = recordings.get(id);
+        if (!rec) {
+            showNotice('No hay grabación para este ítem');
+            return;
+        }
+        const audio = new Audio(rec.url);
+        audio.play().catch(() => showNotice('No se pudo reproducir el audio'));
+    }
+
+    function saveRecording(id){
+        const rec = recordings.get(id);
+        if (!rec) {
+            showNotice('No hay grabación para descargar');
+            return;
+        }
+        const a = document.createElement('a');
+        a.href = rec.url;
+        a.download = `grabacion-${id}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+
+    function setEvaluation(id, status){
+        evalStatus.set(id, status);
+        const ctrl = document.querySelector(`.item-controls[data-item-id="${escapeId(id)}"]`);
+        if (ctrl) {
+            updateEvalStatus(ctrl, status);
+            const card = ctrl.closest('.word-card, .tongue-twister-card, .pair-card');
+            if (card) {
+                card.classList.toggle('item-good', status === 'good');
+                card.classList.toggle('item-retry', status === 'retry');
+            }
+        }
+    }
+
+    // =========================
+    // EVENTOS DE CONTROLES POR ÍTEM
+    // =========================
+    document.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-action]');
+        if (!btn) return;
+
+        event.stopPropagation();
+
+        const ctrl = btn.closest('.item-controls');
+        if (!ctrl) return;
+
+        const id = ctrl.dataset.itemId;
+        const action = btn.dataset.action;
+
+        if (action === 'record') await startRecording(id);
+        if (action === 'stop') await stopRecording();
+        if (action === 'play') playRecording(id);
+        if (action === 'save') saveRecording(id);
+        if (action === 'good') setEvaluation(id, 'good');
+        if (action === 'retry') setEvaluation(id, 'retry');
+    });
+
+    // Dark mode
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        if (event.matches) document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+    });
+
+    // cerrar menú al hacer clic fuera
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('controlMenu');
+        const controls = document.getElementById('floatingControls');
+        if (!controls.contains(event.target)) menu.classList.remove('visible');
+    });
+
+    // Init
+    renderRR();
+    renderS();
+    renderSZ();
+    clearViz();
+
+    if (!recordingSupported) {
+        showNotice('Tu navegador no soporta grabación de audio');
+        vizStatus.textContent = 'Grabación no soportada';
+    }
+</script>
+
+</body>
+
+</html>

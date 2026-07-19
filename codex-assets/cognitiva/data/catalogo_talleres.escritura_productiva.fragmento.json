@@ -1,0 +1,44 @@
+{
+  "id_taller": "pri_2_3_escritura_productiva_001",
+  "codigo": "EP-PLAN-EJEC-001",
+  "nombre": "Escritura productiva por secuenciacion y nexos temporales",
+  "modulo": "procesos_semanticos_escritura_creativa",
+  "objetivo_clinico": [
+    "planificacion_ejecutiva",
+    "flexibilidad_cognitiva",
+    "estructuracion_temporal_narrativa"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "fases_bloqueadas": true,
+    "registro_tiempos_por_fase": true,
+    "tratamiento_error_planificacion": {
+      "vibracion_visual": true,
+      "reinicio_orden": true
+    },
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_planificacion_ms",
+      "tiempo_ejecucion_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "secuenciacion_y_redaccion_guiada",
+    "fase_1": "ordenar_vinetas_en_secuencia_logica",
+    "fase_2": "asignar_nexos_y_redactar_frases"
+  },
+  "banco_historias": [
+    {
+      "id_historia": "hist_001",
+      "titulo": "De semilla a flor",
+      "vinetas": [
+        { "id": "v1", "orden_correcto": 1, "emoji": "🌱", "descripcion": "Sembrar la semilla" },
+        { "id": "v2", "orden_correcto": 2, "emoji": "💧", "descripcion": "Regar la planta" },
+        { "id": "v3", "orden_correcto": 3, "emoji": "🌸", "descripcion": "Recoger la flor" }
+      ],
+      "nexos": ["Al principio,", "Después,", "Finalmente,"]
+    }
+  ]
+}

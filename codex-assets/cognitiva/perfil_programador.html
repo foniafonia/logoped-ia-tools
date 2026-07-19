@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil Programador · Generador Cognitiva</title>
+  <style>
+    body{font-family:Manrope,system-ui,sans-serif;background:#f5f7fb;margin:0;padding:20px;color:#1f2730}
+    .card{max-width:960px;margin:0 auto;background:#fff;border:1px solid #d6dfeb;border-radius:14px;padding:16px}
+    h1{margin:0 0 12px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{font-weight:700;font-size:14px}
+    input,select,textarea{width:100%;padding:10px;border:1px solid #c8d3e2;border-radius:10px;font:inherit}
+    .full{grid-column:1/-1}
+    .row{margin-bottom:10px}
+    .section{margin-top:14px;padding-top:10px;border-top:1px solid #e3e9f2}
+    .hidden{display:none}
+    button{padding:11px 14px;border-radius:10px;border:1px solid #8eb7ea;background:#eaf3ff;color:#1f5faa;font-weight:800;cursor:pointer}
+    .hint{font-size:12px;color:#4a5f77}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Generador de Contenidos <a href="./index.html" style="font-size:13px;font-weight:400;color:#5b6f86;margin-left:12px">← Volver al portal</a></h1>
+    <div class="grid">
+      <div class="row">
+        <label for="modulo">Módulo</label>
+        <select id="modulo">
+          <optgroup label="Procesos Cognitivos">
+            <option value="perceptivo_visual">Perceptivo-visual</option>
+            <option value="perceptivo_auditivo">Perceptivo-auditivo</option>
+            <option value="conciencia_fonologica">Conciencia fonológica</option>
+            <option value="ruta_fonologica">Ruta fonológica</option>
+            <option value="ruta_lexica">Ruta léxica</option>
+            <option value="procesos_sintacticos">Procesos sintácticos</option>
+            <option value="procesos_semanticos">Procesos semánticos</option>
+          </optgroup>
+          <optgroup label="Herramientas Cognitiva">
+            <option value="eficiencia_lectora">Eficiencia lectora</option>
+            <option value="ortografia_cloze">Ortografía cloze</option>
+            <option value="escritura_productiva">Escritura productiva</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="row">
+        <label for="id_taller">ID Taller</label>
+        <input id="id_taller" placeholder="ej: inf_2_obj_017b" />
+      </div>
+      <div class="row">
+        <label for="nivel_educativo">Nivel educativo</label>
+        <input id="nivel_educativo" placeholder="ej: 2º PRIMARIA" />
+      </div>
+      <div class="row">
+        <label for="edad_recomendada">Edad recomendada</label>
+        <input id="edad_recomendada" placeholder="ej: 7-8" />
+      </div>
+      <div class="row full">
+        <label for="modalidad_estimulo">Modalidad estímulo</label>
+        <select id="modalidad_estimulo">
+          <option value="visual">visual</option>
+          <option value="auditivo">auditivo</option>
+          <option value="multimodal">multimodal</option>
+        </select>
+      </div>
+    </div>
+
+    <section id="fields_ruta_lexica" class="section hidden">
+      <h3>Ruta léxica</h3>
+      <div class="grid">
+        <div class="row"><label>palabra_objetivo</label><input id="rl_palabra_objetivo" /></div>
+        <div class="row"><label>imagen_placeholder (emoji o URL)</label><input id="rl_imagen_placeholder" /></div>
+        <div class="row"><label>distractor_similitud</label><input id="rl_distractor_similitud" /></div>
+        <div class="row"><label>distractor_contraste</label><input id="rl_distractor_contraste" /></div>
+      </div>
+    </section>
+
+    <section id="fields_conciencia_fonologica" class="section hidden">
+      <h3>Conciencia fonológica</h3>
+      <div class="grid">
+        <div class="row"><label>palabra_objetivo</label><input id="cf_palabra_objetivo" /></div>
+        <div class="row"><label>pista_auditiva_tts</label><input id="cf_pista_auditiva_tts" /></div>
+        <div class="row full"><label>silabas_array (coma)</label><input id="cf_silabas_array" placeholder="TO,MA,TE" /></div>
+        <div class="row full"><label>orden_correcto_array (coma)</label><input id="cf_orden_correcto_array" placeholder="TE,MA,TO" /></div>
+      </div>
+    </section>
+
+    <section id="fields_ortografia_cloze" class="section hidden">
+      <h3>Ortografía cloze</h3>
+      <div class="grid">
+        <div class="row full"><label>frase_base</label><input id="oc_frase_base" placeholder="El a_ion volaba muy _ajo." /></div>
+        <div class="row"><label>opciones_correctas (coma)</label><input id="oc_opciones_correctas" placeholder="V,B" /></div>
+        <div class="row"><label>distractores (coma)</label><input id="oc_distractores" placeholder="B,V" /></div>
+        <div class="row full"><label>regla_ortografica_tts</label><input id="oc_regla_ortografica_tts" /></div>
+      </div>
+    </section>
+
+    <div class="section">
+      <button id="btnGenerar">Generar Taller (descargar JSON)</button>
+      <p class="hint">El JSON se descargará automáticamente. No se muestra en pantalla.</p>
+    </div>
+  </main>
+
+  <script src="./src/generador_contenidos.js" defer></script>
+</body>
+</html>

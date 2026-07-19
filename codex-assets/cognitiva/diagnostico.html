@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Diagnóstico inicial</title>
+  <link rel="stylesheet" href="./src/app.css?v=8" />
+</head>
+<body data-page="diagnostico">
+  <div id="pinRoot" class="pin-block card hidden">
+    <h2 id="pinTitle">PIN</h2>
+    <p class="muted">Si es el primer uso, este PIN quedará guardado.</p>
+    <div class="pin-row">
+      <input id="pinInput" maxlength="4" inputmode="numeric" placeholder="0000" />
+      <button id="pinBtn" class="btn" type="button">Entrar</button>
+    </div>
+    <div style="margin-top:8px">
+      <button id="pinResetBtn" class="btn btn-danger" type="button">Reiniciar PIN</button>
+    </div>
+    <div id="pinMsg" class="muted" style="margin-top:8px"></div>
+  </div>
+
+  <main id="appRoot" class="wrap hidden">
+    <div id="diagRoot"></div>
+  </main>
+
+  <script src="./src/app.js?v=8" defer></script>
+</body>
+</html>

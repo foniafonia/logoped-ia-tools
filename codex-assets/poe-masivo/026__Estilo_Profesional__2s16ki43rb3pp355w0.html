@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Automatizado — Pipeline Clínico</title>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: #ffffff;
+      --soft: #f0ebe3;
+      --text: #1f2933;
+      --muted: #56606b;
+      --border: #e0d8cc;
+      --accent: #2f7a72;
+      --accent-strong: #25635d;
+      --warn: #c48a1f;
+      --error: #c04848;
+      --success: #2f8f5d;
+      --shadow-sm: 0 6px 20px rgba(0,0,0,0.06);
+      --shadow-md: 0 12px 32px rgba(0,0,0,0.12);
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 18%, rgba(47,122,114,0.06), transparent 28%),
+                  radial-gradient(circle at 80% 0%, rgba(190,163,130,0.08), transparent 32%),
+                  var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+    header {
+      padding: 1.5rem 1.2rem;
+      background: linear-gradient(135deg, #f6efe5, #f2e7db);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .max {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      letter-spacing: -0.01em;
+    }
+    .sub {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+    .controls {
+      padding: 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+    textarea, input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.8rem 0.9rem;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    textarea:focus, input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47,122,114,0.12);
+    }
+    textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+    .row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.16s ease, opacity 0.12s ease;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .primary {
+      background: linear-gradient(135deg, var(--accent-strong), #3b756c);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(47,122,114,0.22);
+    }
+    .primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(47,122,114,0.24); }
+    .ghost {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .ghost:hover { box-shadow: var(--shadow-sm); }
+    .danger {
+      background: #fff5f5;
+      border: 1px solid #f0c7c7;
+      color: var(--error);
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .s-pend { background: #f4f1ea; color: var(--muted); border: 1px solid var(--border); }
+    .s-run  { background: #e7f3f0; color: var(--accent-strong); border: 1px solid rgba(47,122,114,0.3); }
+    .s-done { background: #e8f6ee; color: var(--success); border: 1px solid rgba(47,122,114,0.3); }
+    .s-fail { background: #fdeceb; color: var(--error); border: 1px solid rgba(192,72,72,0.25); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .step-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .step-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .step-sub {
+      margin: 0.1rem 0 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+    .output {
+      margin-top: 0.75rem;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 0.9rem;
+      white-space: pre-wrap;
+      min-height: 72px;
+      color: var(--text);
+      font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+      font-size: 0.95rem;
+    }
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.35rem 0 0.4rem;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+    .hint {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0.3rem 0 0;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    @media (max-width: 720px) {
+      .row { flex-direction: column; align-items: stretch; }
+      .flex-between { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="max flex-between">
+      <div>
+        <h1>Sistema Automatizado de Razonamiento Clínico</h1>
+        <p class="sub">Pega el informe, corre el pipeline (simulado) y revisa cada etapa.</p>
+      </div>
+      <button class="ghost" onclick="window.open(window.location.href, '_blank')">Abrir en pestaña nueva ↗</button>
+    </div>
+  </header>
+
+  <main class="max" style="padding: 1.5rem 1.1rem 2.5rem;">
+    <div class="grid" style="grid-template-columns: 1fr;">
+
+      <div class="controls">
+        <div class="grid" style="grid-template-columns: 1fr; gap: 0.75rem;">
+          <div>
+            <label for="informe">Informe clínico (pega aquí el texto completo)</label>
+            <textarea id="informe" placeholder="Pega el informe..."></textarea>
+          </div>
+          <div class="row">
+            <div style="flex: 1 1 220px;">
+              <label for="modo">Modo</label>
+              <select id="modo">
+                <option value="sim">Simulación rápida (sin IA real)</option>
+                <option value="api">API personalizada (requiere implementar fetch)</option>
+              </select>
+              <p class="hint">La simulación genera salidas de ejemplo; no es diagnóstico real.</p>
+            </div>
+            <div style="flex: 1 1 220px;" id="api-fields" hidden>
+              <label for="endpoint">Endpoint API</label>
+              <input id="endpoint" placeholder="https://tu-endpoint" />
+              <label for="token" style="margin-top: 0.4rem;">API Key / Bearer</label>
+              <input id="token" placeholder="sk-..." />
+              <p class="hint">Debes completar y adaptar la llamada fetch en el código.</p>
+            </div>
+          </div>
+          <div class="row">
+            <button class="primary" id="runBtn">Ejecutar pipeline</button>
+            <button class="ghost" id="resetBtn">Reset</button>
+            <button class="ghost" id="copyBtn">Copiar todo</button>
+            <button class="ghost" id="downloadBtn">Descargar .txt</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex-between">
+          <div>
+            <strong>Progreso</strong>
+            <p class="hint" id="progressText">Pendiente</p>
+          </div>
+          <div class="pill" id="summaryPill">0/6 completados</div>
+        </div>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div id="stepsContainer" class="grid" style="grid-template-columns: 1fr; gap: 0.9rem;"></div>
+
+      <div class="card" id="finalCard" hidden>
+        <div class="step-head">
+          <div>
+            <h3 class="step-title">Salida consolidada</h3>
+            <p class="step-sub">Concatenación de todas las etapas.</p>
+          </div>
+          <span class="status s-done">Listo</span>
+        </div>
+        <div class="output" id="finalOutput"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const steps = [
+      { id: 'p1', title: 'Prompt 1 — Extracción', desc: 'Variables y procesos sin interpretar.' },
+      { id: 'p2', title: 'Prompt 2 — Hipótesis funcionales', desc: 'Explicaciones mecanicistas.' },
+      { id: 'p3', title: 'Prompt 3 — Decisión negativa', desc: 'Qué NO hacer y riesgos.' },
+      { id: 'p4', title: 'Prompt 4 — Plan de intervención', desc: 'Objetivos con mecanismo y variable.' },
+      { id: 'p5', title: 'Prompt 5 — Tareas', desc: 'Tareas por objetivo, sin infantilizar.' },
+      { id: 'pf', title: 'Prompt Final — Ejercicios completos', desc: 'Material listo para sesión.' },
+    ];
+
+    const container = document.getElementById('stepsContainer');
+
+    function createStepCard(step) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.id = `card-${step.id}`;
+      card.innerHTML = `
+        <div class="step-head">
+          <div>
+            <h3 class="step-title">${step.title}</h3>
+            <p class="step-sub">${step.desc}</p>
+          </div>
+          <span class="status s-pend" id="status-${step.id}">Pendiente</span>
+        </div>
+        <div class="output" id="out-${step.id}">—</div>
+      `;
+      return card;
+    }
+
+    steps.forEach(s => container.appendChild(createStepCard(s)));
+
+    const runBtn = document.getElementById('runBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const modoSelect = document.getElementById('modo');
+    const apiFields = document.getElementById('api-fields');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const summaryPill = document.getElementById('summaryPill');
+    const finalCard = document.getElementById('finalCard');
+    const finalOutput = document.getElementById('finalOutput');
+
+    modoSelect.addEventListener('change', () => {
+      apiFields.hidden = modoSelect.value !== 'api';
+    });
+
+    function excerpt(text, n = 220) {
+      return text.length > n ? text.slice(0, n) + '…' : text;
+    }
+
+    // Simulaciones ligeras
+    function fakeOutputs(report) {
+      const ex = excerpt(report);
+      return {
+        p1: `Variables clave extraídas:\n- Contexto: ${ex}\n- Procesos preservados: decodificación, precisión.\n- Procesos sensibles: velocidad bajo tiempo.\n- Límites: no inferir cognición global.`,
+        p2: `Hipótesis funcionales:\n1) Acceso léxico ralentizado bajo presión temporal.\n2) Control ejecutivo costo-velocidad.\n3) Ruta subléxica eficiente pero lenta en no familiares.`,
+        p3: `No aplicar:\n- Reeducar fonología ya preservada.\n- Protocolos de dislexia inespecíficos.\nRiesgos: sobreintervención, infantilización, fatiga.`,
+        p4: `Objetivos (máx 3):\n1) Acceso léxico ↦ tiempo limitado ↦ +ppm sin errores.\n2) Velocidad–precisión ↦ dictado cronometrado.\n3) Ruta subléxica ↦ pseudopalabras con ventana fija.\nCada uno con variable, tarea, criterio de alta.`,
+        p5: `Tareas por objetivo (5 c/u):\n- Listados temporizados, señal de inicio, bloques de 60s.\n- Dictados con tiempo fijo, sin corrección en ejecución.\n- Pseudopalabras legales con inicio <2s y progresión.`,
+        pf: `Ejercicios completos:\n1) Lectura léxica 60s con 50 palabras alta frecuencia.\n2) Dictado 10 frases/10s con criterio ≤1 error.\n3) Pseudopalabras 24 ítems, señal "YA", inicio <2s.\nIncluye variantes de progresión/regresión y criterios.`,
+      };
+    }
+
+    async function runPipeline() {
+      const report = document.getElementById('informe').value.trim();
+      if (!report) {
+        alert('Pega el informe antes de ejecutar.');
+        return;
+      }
+      const sim = modoSelect.value === 'sim';
+      disableUI(true);
+      resetStatuses();
+      finalCard.hidden = true;
+      finalOutput.textContent = '';
+      const fake = sim ? fakeOutputs(report) : null;
+
+      let completed = 0;
+      for (const step of steps) {
+        setStatus(step.id, 'run');
+        setOutput(step.id, 'Procesando...');
+        updateProgress(completed, steps.length);
+        // Simulated delay
+        await new Promise(r => setTimeout(r, 500 + Math.random() * 400));
+
+        if (sim) {
+          setOutput(step.id, fake[step.id]);
+        } else {
+          // Placeholder for real API call
+          setOutput(step.id, '⚠️ Implementa aquí la llamada a tu LLM (fetch) con el prompt correspondiente.');
+        }
+        setStatus(step.id, 'done');
+        completed += 1;
+        updateProgress(completed, steps.length);
+      }
+
+      // Consolidate
+      const all = steps.map(s => `## ${s.title}\n${document.getElementById('out-'+s.id).textContent}`).join('\n\n');
+      finalOutput.textContent = all;
+      finalCard.hidden = false;
+      progressText.textContent = 'Pipeline completado';
+      disableUI(false);
+    }
+
+    function setStatus(id, state) {
+      const el = document.getElementById('status-' + id);
+      el.className = 'status ' + {
+        pend: 's-pend',
+        run: 's-run',
+        done: 's-done',
+        fail: 's-fail'
+      }[state];
+      el.textContent = {
+        pend: 'Pendiente',
+        run: 'Procesando…',
+        done: 'Listo',
+        fail: 'Error'
+      }[state];
+    }
+
+    function setOutput(id, text) {
+      document.getElementById('out-' + id).textContent = text;
+    }
+
+    function resetStatuses() {
+      steps.forEach(s => {
+        setStatus(s.id, 'pend');
+        setOutput(s.id, '—');
+      });
+      progressText.textContent = 'Pendiente';
+      updateProgress(0, steps.length);
+      summaryPill.textContent = `0/${steps.length} completados`;
+    }
+
+    function updateProgress(done, total) {
+      const pct = Math.round((done / total) * 100);
+      progressBar.style.width = pct + '%';
+      summaryPill.textContent = `${done}/${total} completados`;
+      progressText.textContent = done === 0 ? 'Pendiente' : `${pct}%`;
+    }
+
+    function disableUI(disabled) {
+      runBtn.disabled = disabled;
+      resetBtn.disabled = disabled;
+      copyBtn.disabled = disabled;
+      downloadBtn.disabled = disabled;
+      modoSelect.disabled = disabled;
+      document.getElementById('informe').disabled = disabled;
+    }
+
+    runBtn.addEventListener('click', runPipeline);
+    resetBtn.addEventListener('click', () => {
+      document.getElementById('informe').value = '';
+      resetStatuses();
+      finalCard.hidden = true;
+      finalOutput.textContent = '';
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const all = finalOutput.textContent.trim() || steps.map(s => document.getElementById('out-'+s.id).textContent).join('\n\n');
+      if (!all) { alert('Nada que copiar.'); return; }
+      navigator.clipboard.writeText(all).then(() => {
+        copyBtn.textContent = 'Copiado ✓';
+        setTimeout(() => copyBtn.textContent = 'Copiar todo', 1200);
+      });
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const all = finalOutput.textContent.trim() || steps.map(s => `## ${s.title}\n${document.getElementById('out-'+s.id).textContent}`).join('\n\n');
+      if (!all) { alert('Nada que descargar.'); return; }
+      const blob = new Blob([all], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pipeline-clinico.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Pre-fill demo text for quick try
+    document.getElementById('informe').placeholder = 'Ej.: Informe PROLEXIA/Reddu: conciencia fonológica dentro de rango, precisión lectora y ortográfica adecuadas; velocidad lectora inferior a lo esperable bajo restricción temporal; dictado correcto sin presión, cae precisión con tiempo; RAN funcional con leve reducción de velocidad...';
+
+  </script>
+</body>
+</html>

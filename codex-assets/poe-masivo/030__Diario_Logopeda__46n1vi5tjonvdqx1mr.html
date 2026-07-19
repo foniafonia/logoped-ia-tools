@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LogoCalc Pro · Calculadora de Costes para Logopedas</title>
+<style>
+    :root{
+        --primary:#0D6E6E;
+        --primary-2:#2A9D8F;
+        --bg:#F7F9FB;
+        --surface:#FFFFFF;
+        --surface-2:#F1F5F7;
+        --border:#DDE5EA;
+        --text:#1E2A33;
+        --muted:#5B6B78;
+        --shadow:0 6px 18px rgba(0,0,0,0.06);
+        --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+        background:var(--bg);
+        color:var(--text);
+    }
+    .container{
+        max-width:1180px;
+        margin:0 auto;
+        padding:20px 16px 60px;
+    }
+    header{
+        text-align:center;
+        margin:10px 0 18px;
+    }
+    .logo{
+        display:inline-flex;
+        align-items:center;
+        gap:12px;
+        font-weight:700;
+        font-size:26px;
+    }
+    .logo-badge{
+        width:44px;height:44px;border-radius:12px;
+        background:linear-gradient(135deg,var(--primary),var(--primary-2));
+        display:grid;place-items:center;color:#fff;font-weight:700;
+        box-shadow:var(--shadow);
+    }
+    .subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+
+    /* Tabs */
+    .tabs{
+        display:flex;
+        gap:10px;
+        background:var(--surface-2);
+        padding:10px;
+        border-radius:16px;
+        border:1px solid var(--border);
+        overflow-x:auto;
+        margin-bottom:16px;
+    }
+    .tab{
+        flex:1; min-width:140px;
+        border:none; background:transparent; color:var(--muted);
+        padding:10px 12px; border-radius:12px;
+        font-weight:600; cursor:pointer;
+        transition:.2s;
+        white-space:nowrap;
+    }
+    .tab:hover{background:var(--surface); color:var(--text)}
+    .tab.active{background:var(--surface); color:var(--primary); box-shadow:var(--shadow)}
+
+    /* Layout */
+    .grid-2{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:16px;
+    }
+    .grid-1{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+
+    .card{
+        background:var(--surface);
+        border:1px solid var(--border);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        overflow:hidden;
+    }
+    .card-header{
+        background:var(--surface-2);
+        padding:14px 18px;
+        border-bottom:1px solid var(--border);
+        font-weight:700;
+        font-size:14px;
+        text-transform:uppercase;
+        letter-spacing:.04em;
+        color:var(--muted);
+        display:flex; align-items:center; gap:8px;
+    }
+    .card-body{padding:16px 18px}
+    .form-group{margin-bottom:14px}
+    .form-group:last-child{margin-bottom:0}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="number"], input[type="date"], select{
+        width:100%; padding:10px 12px; border-radius:10px;
+        border:1.5px solid var(--border); font-size:16px; background:#fff;
+    }
+    input:focus,select:focus{outline:none;border-color:var(--primary)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:600px){.row{grid-template-columns:1fr}}
+
+    .pill-group{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .pill{
+        border:2px solid var(--border);
+        border-radius:12px; padding:10px; text-align:center; cursor:pointer;
+        font-weight:700; background:#fff; color:var(--text);
+    }
+    .pill.active{background:var(--primary); color:#fff; border-color:var(--primary)}
+    .pill span{display:block; font-size:12px; font-weight:500; opacity:.85}
+
+    .suffix{position:relative}
+    .suffix input{padding-right:40px}
+    .suffix::after{
+        content:attr(data-suffix);
+        position:absolute; right:12px; top:50%; transform:translateY(-50%);
+        color:var(--muted); font-size:13px;
+    }
+
+    .btn-primary{
+        width:100%; padding:14px 16px; border:none; border-radius:12px;
+        background:linear-gradient(135deg,var(--primary),var(--primary-2));
+        color:#fff; font-weight:700; cursor:pointer; font-size:16px;
+    }
+    .btn-inline{
+        padding:10px 12px; border-radius:10px; border:1.5px solid var(--border);
+        background:#fff; cursor:pointer; font-weight:600;
+    }
+    .btn-row{display:flex; gap:10px; flex-wrap:wrap}
+
+    /* Resultados */
+    .result-main{
+        background:linear-gradient(135deg,var(--primary),var(--primary-2));
+        color:#fff; text-align:center; padding:26px 16px;
+    }
+    .result-main .value{
+        font-size:42px; font-weight:800; letter-spacing:-0.02em;
+    }
+    .result-grid{
+        display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border);
+    }
+    .result-item{
+        background:#fff; padding:16px; text-align:center;
+    }
+    .result-item .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .result-item .value{font-weight:700;font-size:18px}
+    .breakdown{padding:16px 18px; border-top:1px solid var(--border)}
+    .breakdown-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;font-weight:700}
+    .line{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border)}
+    .line:last-child{border-bottom:none}
+    .muted{color:var(--muted); font-size:12px}
+
+    /* Tables */
+    .table-wrap{overflow-x:auto}
+    table{width:100%; border-collapse:collapse; font-size:13px}
+    th,td{padding:8px 10px; border-bottom:1px solid var(--border)}
+    th{background:var(--surface-2); text-transform:uppercase; font-size:11px; color:var(--muted); letter-spacing:.04em}
+    .text-right{text-align:right}
+
+    .hidden{display:none !important}
+
+    footer{
+        text-align:center; color:var(--muted); font-size:12px; margin-top:20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <div class="logo-badge">🌍</div>
+            LogoCalc Pro
+        </div>
+        <div class="subtitle">Calculadora exhaustiva de costes reales para logopedas en España</div>
+    </header>
+
+    <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="config">⚙️ Configuración</button>
+        <button class="tab" data-tab="gastos">💰 Gastos</button>
+        <button class="tab" data-tab="ausencias">📅 Ausencias</button>
+        <button class="tab" data-tab="ingresos">📈 Ingresos Extra</button>
+        <button class="tab" data-tab="resultados">📊 Resultados</button>
+        <button class="tab" data-tab="diario">🗓️ Diario</button>
+    </div>
+
+    <!-- CONFIGURACIÓN -->
+    <section data-tab="config" class="grid-2">
+        <div class="card">
+            <div class="card-header">➕ Configuración de Clínica</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Nº de profesionales que comparten local</label>
+                    <input type="number" id="numProf" value="1" min="1" max="20" data-calc />
+                </div>
+                <div class="form-group">
+                    <label>Duración estándar de sesión</label>
+                    <div class="pill-group">
+                        <button class="pill" data-duration="30">30 <span>min</span></button>
+                        <button class="pill active" data-duration="45">45 <span>min</span></button>
+                        <button class="pill" data-duration="60">60 <span>min</span></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sesiones máximas por día (por profesional)</label>
+                    <input type="number" id="maxSessionsDay" value="8" min="1" max="25" data-calc />
+                </div>
+                <div class="form-group">
+                    <label>Horas que el local está abierto al día</label>
+                    <div class="suffix" data-suffix="h">
+                        <input type="number" id="hoursOpen" value="9" min="1" max="16" data-calc />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">🗓️ Calendario Laboral Anual</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Días laborables por semana</label>
+                        <input type="number" id="daysWeek" value="5" min="1" max="7" data-calc />
+                    </div>
+                    <div class="form-group">
+                        <label>Semanas al año (52 máx)</label>
+                        <input type="number" id="weeksYear" value="52" min="1" max="52" data-calc />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Días no laborables</label>
+                    <div class="row">
+                        <div class="suffix" data-suffix="días">
+                            <input type="number" id="vacations" value="22" min="0" data-calc />
+                        </div>
+                        <div class="suffix" data-suffix="días">
+                            <input type="number" id="holidays" value="14" min="0" data-calc />
+                        </div>
+                        <div class="suffix" data-suffix="días">
+                            <input type="number" id="training" value="5" min="0" data-calc />
+                        </div>
+                        <div class="suffix" data-suffix="días">
+                            <input type="number" id="sick" value="5" min="0" data-calc />
+                        </div>
+                        <div class="suffix" data-suffix="días">
+                            <input type="number" id="otherDays" value="3" min="0" data-calc />
+                        </div>
+                    </div>
+                </div>
+                <div class="muted">Vacaciones · Festivos · Formación · Bajas propias · Otros</div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+            <div class="card-header">💶 Objetivo Económico Personal</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Sueldo NETO mensual deseado</label>
+                        <div class="suffix" data-suffix="€/mes">
+                            <input type="number" id="netMonthly" value="2000" min="0" data-calc />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Equivale a sueldo anual neto</label>
+                        <div class="suffix" data-suffix="€/año">
+                            <input type="number" id="netAnnual" value="24000" min="0" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Ingresos extra mensuales (otros)</label>
+                        <div class="suffix" data-suffix="€">
+                            <input type="number" id="extraMonthly" value="0" min="0" data-calc />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ingresos netos a cubrir con sesiones</label>
+                        <div class="suffix" data-suffix="€">
+                            <input type="number" id="neededMonthly" value="2000" min="0" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+            <div class="card-body">
+                <button class="btn-primary" onclick="switchTab('gastos')">Continuar a Gastos →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- GASTOS -->
+    <section data-tab="gastos" class="grid-2 hidden">
+        <div class="card">
+            <div class="card-header">🏢 Gastos Compartidos (mensuales)</div>
+            <div class="card-body">
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Alquiler del local</label>
+                    <input type="number" id="rent" value="650" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Suministros (luz, agua, internet)</label>
+                    <input type="number" id="utilities" value="180" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Seguros</label>
+                    <input type="number" id="insurance" value="60" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Marketing / Publicidad</label>
+                    <input type="number" id="marketing" value="80" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Limpieza / Mantenimiento</label>
+                    <input type="number" id="cleaning" value="70" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Coste empleados total (salarios + SS)</label>
+                    <input type="number" id="staff" value="1400" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Otros gastos compartidos</label>
+                    <input type="number" id="otherShared" value="0" min="0" data-calc />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">👤 Gastos Individuales (mensuales)</div>
+            <div class="card-body">
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Cuota de autónomos</label>
+                    <input type="number" id="autonomo" value="320" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Colegiación / seguro RC</label>
+                    <input type="number" id="collegiate" value="20" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Software / gestión / plataformas</label>
+                    <input type="number" id="software" value="30" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Formación continua</label>
+                    <input type="number" id="trainingCost" value="40" min="0" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="€">
+                    <label>Otros gastos individuales</label>
+                    <input type="number" id="otherInd" value="0" min="0" data-calc />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUSENCIAS -->
+    <section data-tab="ausencias" class="grid-2 hidden">
+        <div class="card">
+            <div class="card-header">📅 Ausencias de pacientes</div>
+            <div class="card-body">
+                <div class="form-group suffix" data-suffix="%">
+                    <label>Faltas injustificadas (no-show)</label>
+                    <input type="number" id="noShowRate" value="15" min="0" max="100" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="%">
+                    <label>Cancelaciones con aviso</label>
+                    <input type="number" id="cancelRate" value="10" min="0" max="100" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="%">
+                    <label>Porcentaje de ausencias recuperadas</label>
+                    <input type="number" id="recoveryRate" value="40" min="0" max="100" data-calc />
+                </div>
+                <div class="form-group suffix" data-suffix="%">
+                    <label>Porcentaje de no-show cobrado</label>
+                    <input type="number" id="chargeRate" value="20" min="0" max="100" data-calc />
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">ℹ️ Nota</div>
+            <div class="card-body">
+                <p class="muted">
+                    Estos porcentajes ajustan las sesiones reales, las recuperadas y las cobradas.
+                    Se aplican sobre la capacidad anual calculada en la pestaña Configuración.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- INGRESOS EXTRA -->
+    <section data-tab="ingresos" class="grid-1 hidden">
+        <div class="card">
+            <div class="card-header">📈 Ingresos Extra</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group suffix" data-suffix="€">
+                        <label>Ingresos extra mensuales</label>
+                        <input type="number" id="extraMonthly2" value="0" min="0" data-calc />
+                    </div>
+                    <div class="form-group suffix" data-suffix="€">
+                        <label>Ingresos extra anuales</label>
+                        <input type="number" id="extraAnnual" value="0" min="0" readonly />
+                    </div>
+                </div>
+                <p class="muted">Si tienes otros ingresos, se descontarán del objetivo neto mensual.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section data-tab="resultados" class="grid-2 hidden">
+        <div class="card" style="grid-column:1/-1">
+            <div id="resultsBox">
+                <div class="result-main">
+                    <div>Precio recomendado por sesión</div>
+                    <div class="value">—</div>
+                    <div class="muted">Introduce datos y se calculará automáticamente</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">✅ Acciones</div>
+            <div class="card-body">
+                <button class="btn-primary" onclick="calc()">Recalcular</button>
+                <button class="btn-inline" style="margin-top:10px;width:100%" onclick="switchTab('diario')">Ir al Diario</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIARIO -->
+    <section data-tab="diario" class="grid-2 hidden">
+        <div class="card">
+            <div class="card-header">🗓️ Entrada diaria</div>
+            <div class="card-body">
+                <div id="diaryError" class="muted" style="color:#B91C1C;display:none;margin-bottom:8px"></div>
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" id="dDate" />
+                </div>
+                <div class="form-group">
+                    <label>Sesiones pautadas</label>
+                    <input type="number" id="dPlanned" value="0" min="0" />
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Asistidas</label>
+                        <input type="number" id="dAttended" value="0" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Justificadas</label>
+                        <input type="number" id="dJustified" value="0" min="0" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Injustificadas (no-show)</label>
+                        <input type="number" id="dNoShow" value="0" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>No-show cobradas</label>
+                        <input type="number" id="dCharged" value="0" min="0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Recuperadas con aviso</label>
+                    <input type="number" id="dRecovered" value="0" min="0" />
+                </div>
+                <button class="btn-primary" onclick="addDiary()">Añadir al diario</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">📊 Resumen acumulativo</div>
+            <div class="card-body" id="diarySummary"></div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+            <div class="card-header">📄 Listado diario</div>
+            <div class="card-body">
+                <div class="table-wrap">
+                    <table id="diaryTable">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th><th>Pautadas</th><th>Asistidas</th><th>Justificadas</th>
+                                <th>No-show</th><th>Cobradas</th><th>Recup.</th><th>% Asist</th><th>% No-show</th><th class="text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">📆 Resumen semanal</div>
+            <div class="card-body">
+                <div class="table-wrap">
+                    <table id="weeklyTable"><thead>
+                        <tr><th>Semana</th><th>Días</th><th>Pautadas</th><th>Asistidas</th><th>% Asist</th><th>No-show</th><th>% No-show</th><th>Cobradas</th><th>Recup.</th></tr>
+                    </thead><tbody></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">🗓️ Resumen mensual</div>
+            <div class="card-body">
+                <div class="table-wrap">
+                    <table id="monthlyTable"><thead>
+                        <tr><th>Mes</th><th>Días</th><th>Pautadas</th><th>Asistidas</th><th>% Asist</th><th>No-show</th><th>% No-show</th><th>Cobradas</th><th>Recup.</th></tr>
+                    </thead><tbody></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+            <div class="card-header">📅 Resumen anual</div>
+            <div class="card-body">
+                <div class="table-wrap">
+                    <table id="annualTable"><thead>
+                        <tr><th>Año</th><th>Días</th><th>Pautadas</th><th>Asistidas</th><th>% Asist</th><th>No-show</th><th>% No-show</th><th>Cobradas</th><th>Recup.</th></tr>
+                    </thead><tbody></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1">
+            <div class="card-header">⬇️ Exportar / Importar</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Formato de exportación</label>
+                        <select id="exportFormat">
+                            <option value="csv">CSV</option>
+                            <option value="json">JSON</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Modo de importación</label>
+                        <select id="importMode">
+                            <option value="merge">Añadir / combinar</option>
+                            <option value="replace">Reemplazar todo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-inline" onclick="exportDiary()">Exportar</button>
+                    <button class="btn-inline" onclick="triggerImport()">Importar</button>
+                    <input type="file" id="importFile" accept=".csv,.json" style="display:none" />
+                </div>
+                <div class="muted">Sin backend ni almacenamiento local.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        LogoCalc Pro · Herramienta orientativa para profesionales de la logopedia en España<br/>
+        Los cálculos son aproximados y deben ajustarse a cada situación particular
+    </footer>
+</div>
+
+<script>
+    // Tabs
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('[data-tab]');
+
+    function switchTab(name){
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+        sections.forEach(s => s.classList.toggle('hidden', s.dataset.tab !== name));
+        if(name === 'resultados') calc();
+    }
+    tabs.forEach(t => t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+    // Duration pills
+    let duration = 45;
+    document.querySelectorAll('.pill').forEach(p=>{
+        p.addEventListener('click', ()=>{
+            document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+            p.classList.add('active');
+            duration = parseInt(p.dataset.duration,10);
+            calc();
+        });
+    });
+
+    // Helpers
+    const fCur = n => n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+    const fNum = n => n.toLocaleString('es-ES',{maximumFractionDigits:0});
+    const fPct = n => n.toLocaleString('es-ES',{minimumFractionDigits:1,maximumFractionDigits:1})+' %';
+
+    // Sync extra inputs
+    const extraMonthly = document.getElementById('extraMonthly');
+    const extraMonthly2 = document.getElementById('extraMonthly2');
+
+    function syncExtra(){
+        extraMonthly2.value = extraMonthly.value;
+        document.getElementById('extraAnnual').value = (+extraMonthly.value*12).toFixed(0);
+    }
+    extraMonthly.addEventListener('input', syncExtra);
+    extraMonthly2.addEventListener('input', ()=>{
+        extraMonthly.value = extraMonthly2.value;
+        document.getElementById('extraAnnual').value = (+extraMonthly2.value*12).toFixed(0);
+        calc();
+    });
+
+    // Auto calc
+    document.querySelectorAll('[data-calc]').forEach(i=>i.addEventListener('input', calc));
+
+    function calc(){
+        // Config
+        const numProf = Math.max(1, +document.getElementById('numProf').value);
+        const maxSessionsDay = +document.getElementById('maxSessionsDay').value;
+        const hoursOpen = +document.getElementById('hoursOpen').value;
+        const daysWeek = +document.getElementById('daysWeek').value;
+        const weeksYear = +document.getElementById('weeksYear').value;
+        const nonWork = (+document.getElementById('vacations').value)+(+document.getElementById('holidays').value)+(+document.getElementById('training').value)+(+document.getElementById('sick').value)+(+document.getElementById('otherDays').value);
+
+        const maxByHours = Math.floor((hoursOpen*60)/duration);
+        const sessionsDay = Math.max(0, Math.min(maxSessionsDay, maxByHours));
+        const workingDaysYear = Math.max(0, (daysWeek*weeksYear) - nonWork);
+        const capacityYear = sessionsDay * workingDaysYear;
+
+        // Gastos shared
+        const rent = +document.getElementById('rent').value;
+        const utilities = +document.getElementById('utilities').value;
+        const insurance = +document.getElementById('insurance').value;
+        const marketing = +document.getElementById('marketing').value;
+        const cleaning = +document.getElementById('cleaning').value;
+        const staff = +document.getElementById('staff').value;
+        const otherShared = +document.getElementById('otherShared').value;
+        const sharedMonthly = rent+utilities+insurance+marketing+cleaning+staff+otherShared;
+
+        // Gastos individual
+        const autonomo = +document.getElementById('autonomo').value;
+        const collegiate = +document.getElementById('collegiate').value;
+        const software = +document.getElementById('software').value;
+        const trainingCost = +document.getElementById('trainingCost').value;
+        const otherInd = +document.getElementById('otherInd').value;
+        const individualMonthly = autonomo+collegiate+software+trainingCost+otherInd;
+
+        const monthlyCost = (sharedMonthly/numProf) + individualMonthly;
+        const annualCost = monthlyCost * 12;
+
+        // Ausencias
+        const noShowRate = +document.getElementById('noShowRate').value / 100;
+        const cancelRate = +document.getElementById('cancelRate').value / 100;
+        const recoveryRate = +document.getElementById('recoveryRate').value / 100;
+        const chargeRate = +document.getElementById('chargeRate').value / 100;
+
+        const noShow = capacityYear * noShowRate;
+        const cancel = capacityYear * cancelRate;
+        const absent = noShow + cancel;
+        const recovered = absent * recoveryRate;
+        const attended = Math.max(0, capacityYear - absent + recovered);
+        const charged = noShow * chargeRate;
+        const billable = Math.max(1, attended + charged);
+
+        // Ingresos
+        const netMonthly = +document.getElementById('netMonthly').value;
+        const extra = +document.getElementById('extraMonthly').value;
+        const netNeedMonthly = Math.max(0, netMonthly - extra);
+        document.getElementById('netAnnual').value = Math.round(netMonthly*12);
+        document.getElementById('neededMonthly').value = Math.round(netNeedMonthly);
+
+        const netNeedAnnual = netNeedMonthly * 12;
+
+        // Precio recomendado
+        const price = (annualCost + netNeedAnnual) / billable;
+        const priceMin = annualCost / billable;
+        const priceHour = price * (60/duration);
+
+        const resultsHTML = `
+            <div class="result-main">
+                <div>Precio recomendado por sesión</div>
+                <div class="value">${fCur(price)}</div>
+                <div class="muted">Sesión de ${duration} min · ${fCur(priceHour)}/hora</div>
+            </div>
+            <div class="result-grid">
+                <div class="result-item">
+                    <div class="label">Precio mínimo (costes)</div>
+                    <div class="value">${fCur(priceMin)}</div>
+                </div>
+                <div class="result-item">
+                    <div class="label">Sesiones reales/año</div>
+                    <div class="value">${fNum(attended)}</div>
+                </div>
+                <div class="result-item">
+                    <div class="label">Sesiones facturables/año</div>
+                    <div class="value">${fNum(billable)}</div>
+                </div>
+                <div class="result-item">
+                    <div class="label">Capacidad anual</div>
+                    <div class="value">${fNum(capacityYear)}</div>
+                </div>
+            </div>
+            <div class="breakdown">
+                <div class="breakdown-title">Desglose mensual (por profesional)</div>
+                <div class="line"><span>Costes compartidos (tu parte)</span><strong>${fCur(sharedMonthly/numProf)}</strong></div>
+                <div class="line"><span>Costes individuales</span><strong>${fCur(individualMonthly)}</strong></div>
+                <div class="line"><span>Coste mensual total</span><strong>${fCur(monthlyCost)}</strong></div>
+                <div class="line"><span>Objetivo neto mensual</span><strong>${fCur(netNeedMonthly)}</strong></div>
+                <div class="line"><span>Ingresos objetivo/mes</span><strong>${fCur(monthlyCost+netNeedMonthly)}</strong></div>
+            </div>
+            <div class="breakdown">
+                <div class="breakdown-title">Ausencias y recuperación</div>
+                <div class="line"><span>No-show</span><strong>${fNum(noShow)}</strong></div>
+                <div class="line"><span>Cancelaciones con aviso</span><strong>${fNum(cancel)}</strong></div>
+                <div class="line"><span>Recuperadas</span><strong>${fNum(recovered)}</strong></div>
+                <div class="line"><span>No-show cobradas</span><strong>${fNum(charged)}</strong></div>
+                <div class="line"><span>% asistencia real</span><strong>${fPct(capacityYear? (attended/capacityYear*100):0)}</strong></div>
+            </div>
+        `;
+        document.getElementById('resultsBox').innerHTML = resultsHTML;
+    }
+    calc();
+
+    // Diario
+    const diary = [];
+
+    function todayISO(){
+        const d=new Date();
+        return d.toISOString().slice(0,10);
+    }
+    document.getElementById('dDate').value = todayISO();
+
+    function addDiary(){
+        const entry = {
+            date: document.getElementById('dDate').value,
+            planned: +document.getElementById('dPlanned').value,
+            attended: +document.getElementById('dAttended').value,
+            justified: +document.getElementById('dJustified').value,
+            noshow: +document.getElementById('dNoShow').value,
+            charged: +document.getElementById('dCharged').value,
+            recovered: +document.getElementById('dRecovered').value
+        };
+
+        const err = [];
+        if(!entry.date) err.push('La fecha es obligatoria.');
+        if(entry.planned < entry.attended + entry.justified + entry.noshow) err.push('Pautadas ≥ asistidas + justificadas + no-show.');
+        if(entry.charged > entry.noshow) err.push('No-show cobradas no puede superar no-show.');
+
+        const box = document.getElementById('diaryError');
+        if(err.length){
+            box.style.display='block';
+            box.textContent = err.join(' ');
+            return;
+        }
+        box.style.display='none';
+        diary.push(entry);
+        renderDiary();
+    }
+
+    function delDiary(i){
+        diary.splice(i,1);
+        renderDiary();
+    }
+
+    function totals(list){
+        return list.reduce((a,e)=>{
+            a.planned+=e.planned; a.attended+=e.attended; a.justified+=e.justified;
+            a.noshow+=e.noshow; a.charged+=e.charged; a.recovered+=e.recovered; return a;
+        },{planned:0,attended:0,justified:0,noshow:0,charged:0,recovered:0});
+    }
+    function uniqDays(list){ return new Set(list.map(e=>e.date)).size; }
+
+    function renderDiary(){
+        // Summary
+        const t = totals(diary);
+        const days = uniqDays(diary);
+        const attPct = t.planned? (t.attended/t.planned*100):0;
+        const noPct = t.planned? (t.noshow/t.planned*100):0;
+
+        document.getElementById('diarySummary').innerHTML = `
+            <div class="row">
+                <div><strong>Días:</strong> ${fNum(days)}</div>
+                <div><strong>Pautadas:</strong> ${fNum(t.planned)}</div>
+            </div>
+            <div class="row" style="margin-top:6px">
+                <div><strong>Asistidas:</strong> ${fNum(t.attended)} (${fPct(attPct)})</div>
+                <div><strong>No-show:</strong> ${fNum(t.noshow)} (${fPct(noPct)})</div>
+            </div>
+            <div class="row" style="margin-top:6px">
+                <div><strong>Justificadas:</strong> ${fNum(t.justified)}</div>
+                <div><strong>Cobradas:</strong> ${fNum(t.charged)}</div>
+            </div>
+            <div style="margin-top:6px"><strong>Recuperadas:</strong> ${fNum(t.recovered)}</div>
+        `;
+
+        // Daily table
+        const tbody = document.querySelector('#diaryTable tbody');
+        if(!diary.length){
+            tbody.innerHTML = '<tr><td colspan="10" class="text-right">Sin registros</td></tr>';
+        }else{
+            tbody.innerHTML = diary.map((e,i)=>{
+                const a = e.planned? (e.attended/e.planned*100):0;
+                const n = e.planned? (e.noshow/e.planned*100):0;
+                return `
+                    <tr>
+                        <td>${e.date}</td><td>${fNum(e.planned)}</td><td>${fNum(e.attended)}</td>
+                        <td>${fNum(e.justified)}</td><td>${fNum(e.noshow)}</td><td>${fNum(e.charged)}</td>
+                        <td>${fNum(e.recovered)}</td><td>${fPct(a)}</td><td>${fPct(n)}</td>
+                        <td class="text-right"><button class="btn-inline" onclick="delDiary(${i})">Eliminar</button></td>
+                    </tr>`;
+            }).join('');
+        }
+
+        renderGroups();
+    }
+
+    function groupBy(fn){
+        const m = new Map();
+        diary.forEach(e=>{
+            const k = fn(e);
+            if(!m.has(k)) m.set(k,[]);
+            m.get(k).push(e);
+        });
+        return m;
+    }
+
+    function isoWeek(dateStr){
+        const d = new Date(dateStr+'T00:00:00');
+        const dayNum = (d.getDay()+6)%7;
+        d.setDate(d.getDate()-dayNum+3);
+        const firstThu = new Date(d.getFullYear(),0,4);
+        return 1 + Math.round((d-firstThu)/(7*24*60*60*1000));
+    }
+
+    function renderGroupTable(tableId, map){
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if(map.size===0){
+            tbody.innerHTML = '<tr><td colspan="9" class="text-right">Sin registros</td></tr>';
+            return;
+        }
+        let rows='';
+        for(const [k,list] of map){
+            const t=totals(list);
+            const days=uniqDays(list);
+            const a=t.planned? (t.attended/t.planned*100):0;
+            const n=t.planned? (t.noshow/t.planned*100):0;
+            rows+=`
+                <tr>
+                    <td>${k}</td><td>${fNum(days)}</td><td>${fNum(t.planned)}</td><td>${fNum(t.attended)}</td>
+                    <td>${fPct(a)}</td><td>${fNum(t.noshow)}</td><td>${fPct(n)}</td><td>${fNum(t.charged)}</td><td>${fNum(t.recovered)}</td>
+                </tr>`;
+        }
+        tbody.innerHTML=rows;
+    }
+
+    function renderGroups(){
+        const weekly = groupBy(e=>{
+            const y = new Date(e.date+'T00:00:00').getFullYear();
+            const w = isoWeek(e.date);
+            return `${y}-W${String(w).padStart(2,'0')}`;
+        });
+        const monthly = groupBy(e=>e.date.slice(0,7));
+        const annual = groupBy(e=>e.date.slice(0,4));
+        renderGroupTable('weeklyTable', weekly);
+        renderGroupTable('monthlyTable', monthly);
+        renderGroupTable('annualTable', annual);
+    }
+
+    // Export / Import
+    function exportDiary(){
+        const fmt = document.getElementById('exportFormat').value;
+        if(fmt==='json'){
+            const data = JSON.stringify({entries:diary},null,2);
+            download(data,'diario-logocalc.json','application/json');
+        }else{
+            const header='date,planned,attended,justified,noshow,charged,recovered';
+            const rows = diary.map(e=>[e.date,e.planned,e.attended,e.justified,e.noshow,e.charged,e.recovered].join(','));
+            download([header,...rows].join('\n'),'diario-logocalc.csv','text/csv');
+        }
+    }
+    function download(content, filename, type){
+        const blob = new Blob([content],{type});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+    function triggerImport(){ document.getElementById('importFile').click(); }
+    document.getElementById('importFile').addEventListener('change',e=>{
+        const file=e.target.files[0]; if(!file) return;
+        const reader=new FileReader();
+        reader.onload=()=>{
+            try{
+                const mode=document.getElementById('importMode').value;
+                const data = parseImport(file.name, reader.result);
+                if(mode==='replace') diary.length=0;
+                diary.push(...data);
+                renderDiary();
+            }catch(err){ alert('Error al importar: '+err.message); }
+            e.target.value='';
+        };
+        reader.readAsText(file);
+    });
+
+    function parseImport(name, text){
+        if(name.toLowerCase().endsWith('.json')){
+            const obj = JSON.parse(text);
+            const arr = Array.isArray(obj)? obj : obj.entries;
+            if(!Array.isArray(arr)) throw new Error('JSON inválido.');
+            return arr.map(normalize).filter(validEntry);
+        }
+        // CSV
+        const lines = text.trim().split(/\r?\n/);
+        const head = lines.shift().split(',').map(h=>h.trim().toLowerCase());
+        const idx = k => head.indexOf(k);
+        return lines.map(line=>{
+            const c=line.split(',').map(x=>x.trim());
+            return normalize({
+                date: c[idx('date')],
+                planned: +c[idx('planned')],
+                attended: +c[idx('attended')],
+                justified: +c[idx('justified')],
+                noshow: +c[idx('noshow')],
+                charged: +c[idx('charged')],
+                recovered: +c[idx('recovered')]
+            });
+        }).filter(validEntry);
+    }
+    function normalize(e){
+        return {
+            date: e.date||'',
+            planned: +e.planned||0,
+            attended: +e.attended||0,
+            justified: +e.justified||0,
+            noshow: +e.noshow||0,
+            charged: +e.charged||0,
+            recovered: +e.recovered||0
+        };
+    }
+    function validEntry(e){
+        if(!e.date) return false;
+        if(e.planned < e.attended+e.justified+e.noshow) return false;
+        if(e.charged > e.noshow) return false;
+        return true;
+    }
+
+    // init
+    renderDiary();
+</script>
+</body>
+</html>

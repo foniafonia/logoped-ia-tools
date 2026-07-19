@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🏘️ Explora el Real de Melilla - Juego Educativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; overflow: hidden; touch-action: none; background: #87CEEB; }
+        .title-font { font-family: 'Fredoka One', cursive; }
+        #game-container { position: relative; width: 100vw; height: 100vh; }
+
+        #welcome-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B6B 50%, #6BCB77 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.8);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+            pointer-events: auto;
+            opacity: 0.7;
+        }
+        .control-btn:active { transform: scale(0.9); }
+
+        #mobile-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            pointer-events: auto;
+        }
+
+        #score-panel {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            pointer-events: auto;
+            border: 3px solid #FFD93D;
+        }
+
+        #location-indicator {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 10px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            pointer-events: auto;
+            text-align: center;
+            border: 3px solid #6BCB77;
+        }
+
+        #mini-map {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            border: 3px solid #6BCB77;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        #stars-container {
+            position: absolute;
+            top: 80px;
+            right: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            width: 120px;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .star { font-size: 22px; opacity: 0.3; transition: all 0.5s; }
+        .star.earned { opacity: 1; animation: starEarned 0.5s ease-out; }
+
+        @keyframes starEarned {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.5) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .bounce { animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float { animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .sparkle { animation: sparkle 1.5s ease-in-out infinite; }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .location-popup {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 95%;
+            width: 450px;
+            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 6px solid;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Mini-games styles */
+        .minigame-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            border: 3px solid #5a67d8;
+        }
+
+        .memory-card:hover { transform: scale(1.05); }
+        .memory-card.flipped {
+            background: white;
+            border-color: #48bb78;
+        }
+        .memory-card.matched {
+            background: #c6f6d5;
+            border-color: #38a169;
+            animation: matchPulse 0.5s;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .quiz-option {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .quiz-option:hover { border-color: #667eea; background: #f0f4ff; }
+        .quiz-option.correct { background: #c6f6d5; border-color: #38a169; }
+        .quiz-option.wrong { background: #fed7d7; border-color: #e53e3e; }
+
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .puzzle-piece {
+            aspect-ratio: 1;
+            background: #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .puzzle-piece:hover { transform: rotate(15deg); }
+
+        .rainbow-border {
+            background: linear-gradient(90deg, #FF6B6B, #FFD93D, #6BCB77, #4ECDC4, #9B59B6, #FF6B6B);
+            background-size: 400% 100%;
+            animation: rainbowMove 3s linear infinite;
+        }
+
+        @keyframes rainbowMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        .speaking-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f5e9;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .speaking-indicator .waves {
+            display: flex;
+            gap: 3px;
+        }
+
+        .speaking-indicator .wave {
+            width: 4px;
+            height: 15px;
+            background: #4caf50;
+            border-radius: 2px;
+            animation: wave 0.5s ease-in-out infinite;
+        }
+
+        .speaking-indicator .wave:nth-child(2) { animation-delay: 0.1s; }
+        .speaking-indicator .wave:nth-child(3) { animation-delay: 0.2s; }
+        .speaking-indicator .wave:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 18px; }
+        }
+
+        #voice-toggle {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: white;
+            border: 3px solid #9b59b6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen with Custom Image -->
+    <div id="welcome-screen" style="background: url('https://pfst.cf2.poecdn.net/base/image/55c61e6c0b8dcde65b533b74eaab5eeeaf63f059e220dbbb9b0fe9396302284d?w=1024&h=1024') center center / cover no-repeat;">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div class="text-center text-white p-6 relative z-10 flex flex-col items-center justify-end h-full pb-10">
+            <button onclick="startGame()" class="bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 text-white px-10 py-5 rounded-full text-2xl font-bold hover:scale-110 transition-transform shadow-2xl title-font animate-pulse border-4 border-white">
+                🎮 ¡JUGAR AHORA!
+            </button>
+            <p class="mt-4 text-lg font-bold drop-shadow-lg">⬆️⬇️⬅️➡️ Usa las flechas del teclado</p>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container">
+        <div id="ui-overlay" class="hidden">
+            <!-- Score Panel -->
+            <div id="score-panel">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">⭐</span>
+                    <div>
+                        <div class="text-xs text-gray-500">PUNTOS</div>
+                        <div class="title-font text-2xl text-purple-600" id="score-display">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Indicator -->
+            <div id="location-indicator">
+                <div class="text-xl mb-1" id="current-emoji">🚶</div>
+                <div class="title-font text-lg" id="current-location">Explorando...</div>
+            </div>
+
+            <!-- Mini Map -->
+            <div id="mini-map">
+                <canvas id="mini-map-canvas"></canvas>
+            </div>
+
+            <!-- Stars Progress -->
+            <div id="stars-container">
+                <span class="star" data-location="hospital">⭐</span>
+                <span class="star" data-location="escuela">⭐</span>
+                <span class="star" data-location="mercado">⭐</span>
+                <span class="star" data-location="iglesia">⭐</span>
+                <span class="star" data-location="centro">⭐</span>
+                <span class="star" data-location="cafeteria">⭐</span>
+                <span class="star" data-location="parque">⭐</span>
+            </div>
+
+            <!-- Voice Toggle -->
+            <button id="voice-toggle" onclick="toggleVoice()">🔊</button>
+
+            <!-- Mobile Controls (smaller for PC) -->
+            <div id="mobile-controls">
+                <div class="grid grid-cols-3 gap-1">
+                    <div></div>
+                    <button class="control-btn bg-green-400" onmousedown="startMove('up')" onmouseup="stopMove('up')" ontouchstart="startMove('up')" ontouchend="stopMove('up')">⬆️</button>
+                    <div></div>
+                    <button class="control-btn bg-blue-400" onmousedown="startMove('left')" onmouseup="stopMove('left')" ontouchstart="startMove('left')" ontouchend="stopMove('left')">⬅️</button>
+                    <div class="control-btn bg-yellow-400 text-sm">👧</div>
+                    <button class="control-btn bg-blue-400" onmousedown="startMove('right')" onmouseup="stopMove('right')" ontouchstart="startMove('right')" ontouchend="stopMove('right')">➡️</button>
+                    <div></div>
+                    <button class="control-btn bg-green-400" onmousedown="startMove('down')" onmouseup="stopMove('down')" ontouchstart="startMove('down')" ontouchend="stopMove('down')">⬇️</button>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Popup with Minigame -->
+    <div id="location-popup" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden" style="display:none;">
+        <div class="location-popup" id="popup-content"></div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebration-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="rainbow-border rounded-3xl p-2">
+            <div class="bg-white rounded-2xl p-6 text-center max-w-sm">
+                <div class="text-6xl mb-3">🎉</div>
+                <h2 class="title-font text-3xl text-purple-600 mb-3">¡FELICIDADES!</h2>
+                <p class="text-lg mb-3">¡Has visitado todos los lugares!</p>
+                <div class="flex justify-center gap-1 text-3xl mb-4">⭐⭐⭐⭐⭐⭐⭐</div>
+                <div class="text-2xl title-font text-green-500 mb-4" id="final-score">0 puntos</div>
+                <button onclick="restartGame()" class="bg-green-500 text-white px-6 py-3 rounded-full text-lg font-bold">
+                    🔄 ¡Jugar otra vez!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let scene, camera, renderer, player;
+        let gameStarted = false;
+        let keys = { up: false, down: false, left: false, right: false };
+        let moveSpeed = 0.2;
+        let visitedLocations = new Set();
+        let currentNearLocation = null;
+        let totalScore = 0;
+        let voiceEnabled = true;
+
+        // Voice synthesis
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+
+        function speak(text) {
+            if (!voiceEnabled) return;
+
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.4; // Higher pitch for child-like voice
+            utterance.volume = 1;
+
+            // Try to find a female Spanish voice
+            const voices = speechSynthesis.getVoices();
+            const spanishVoice = voices.find(v => v.lang.includes('es') && v.name.toLowerCase().includes('female')) ||
+                                 voices.find(v => v.lang.includes('es')) ||
+                                 voices[0];
+            if (spanishVoice) utterance.voice = spanishVoice;
+
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            document.getElementById('voice-toggle').textContent = voiceEnabled ? '🔊' : '🔇';
+            if (voiceEnabled) {
+                speak('¡Voz activada!');
+            } else {
+                speechSynthesis.cancel();
+            }
+        }
+
+        // Load voices
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
+
+        // Image URLs for buildings
+        const buildingImages = {
+            hospital: "https://pfst.cf2.poecdn.net/base/image/e54bf2bd1b6fecb4a78c49b5e22430023eeb2396cf52db6efe7130c7d41701f5?w=1024&h=1024",
+            escuela: "https://pfst.cf2.poecdn.net/base/image/008578c1a37e24f2cdf795e7c49cc366451155eb98fdb5bdb2aea46d04583467?w=1024&h=1024"
+        };
+
+        // Location data with minigames
+        const locations = {
+            hospital: {
+                name: "El Hospital",
+                emoji: "🏥",
+                color: 0xE74C3C,
+                position: { x: -40, z: -40 },
+                description: "¡Aquí nos curan los médicos y enfermeras!",
+                borderColor: "#E74C3C",
+                minigame: "quiz",
+                quizData: {
+                    question: "¿Quién trabaja en el hospital?",
+                    options: ["🍳 Cocinero", "👨‍⚕️ Médico", "🚒 Bombero", "👷 Constructor"],
+                    correct: 1
+                },
+                hasImage: true
+            },
+            escuela: {
+                name: "La Escuela",
+                emoji: "🏫",
+                color: 0x3498DB,
+                position: { x: 40, z: -40 },
+                description: "¡Aquí aprendemos y jugamos con los amigos!",
+                borderColor: "#3498DB",
+                minigame: "memory",
+                memoryItems: ["📚", "✏️", "🎨", "📐"],
+                hasImage: true
+            },
+            mercado: {
+                name: "El Supermercado",
+                emoji: "🛒",
+                color: 0xE91E63,
+                position: { x: -40, z: 0 },
+                description: "¡Aquí compramos frutas y verduras!",
+                borderColor: "#E91E63",
+                minigame: "quiz",
+                quizData: {
+                    question: "¿Qué fruta es roja?",
+                    options: ["🍌 Plátano", "🍊 Naranja", "🍎 Manzana", "🍇 Uvas"],
+                    correct: 2
+                }
+            },
+            iglesia: {
+                name: "La Iglesia",
+                emoji: "⛪",
+                color: 0x9C27B0,
+                position: { x: 40, z: 0 },
+                description: "¡Un lugar bonito con campanas!",
+                borderColor: "#9C27B0",
+                minigame: "puzzle",
+                puzzleEmoji: "⛪"
+            },
+            centro: {
+                name: "El Centro Comercial",
+                emoji: "🏪",
+                color: 0x2196F3,
+                position: { x: 0, z: -50 },
+                description: "¡Hay muchas tiendas!",
+                borderColor: "#2196F3",
+                minigame: "memory",
+                memoryItems: ["👗", "👟", "🧸", "🎮"]
+            },
+            cafeteria: {
+                name: "La Cafetería",
+                emoji: "☕",
+                color: 0x795548,
+                position: { x: -40, z: 40 },
+                description: "¡Aquí tomamos zumo y churros!",
+                borderColor: "#795548",
+                minigame: "quiz",
+                quizData: {
+                    question: "¿Qué bebemos en la cafetería?",
+                    options: ["🧃 Zumo", "🧴 Champú", "🎨 Pintura", "📝 Papel"],
+                    correct: 0
+                }
+            },
+            parque: {
+                name: "El Parque",
+                emoji: "🎡",
+                color: 0x8BC34A,
+                position: { x: 40, z: 40 },
+                description: "¡El parque con columpios y toboganes!",
+                borderColor: "#8BC34A",
+                minigame: "puzzle",
+                puzzleEmoji: "🎠"
+            }
+        };
+
+        // Sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                if (type === 'discover') {
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.4);
+                } else if (type === 'correct') {
+                    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(1108, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } else if (type === 'complete') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+                        osc.frequency.setValueAtTime(freq, audioContext.currentTime + i * 0.15);
+                        gain.gain.setValueAtTime(0.2, audioContext.currentTime + i * 0.15);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.15 + 0.3);
+                        osc.start(audioContext.currentTime + i * 0.15);
+                        osc.stop(audioContext.currentTime + i * 0.15 + 0.3);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        function init3DScene() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+
+            document.getElementById('game-container').insertBefore(renderer.domElement, document.getElementById('ui-overlay'));
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xfffacd, 0.8);
+            sunLight.position.set(50, 100, 50);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
+
+            createWorld();
+            createPlayer();
+
+            camera.position.set(0, 40, 60);
+            camera.lookAt(0, 0, 0);
+
+            animate();
+        }
+
+        function createWorld() {
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x7CCD7C });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Roads
+            createRoads();
+
+            // Buildings
+            createHospital();
+            createEscuela();
+            createMercado();
+            createIglesia();
+            createCentroComercial();
+            createCafeteria();
+            createParque();
+
+            // Decorations
+            createTrees();
+            createClouds();
+            createSun();
+        }
+
+        function createRoads() {
+            const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+            const markingMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+
+            // Main roads
+            const road1 = new THREE.Mesh(new THREE.PlaneGeometry(200, 8), roadMaterial);
+            road1.rotation.x = -Math.PI / 2;
+            road1.position.y = 0.01;
+            scene.add(road1);
+
+            const road2 = new THREE.Mesh(new THREE.PlaneGeometry(8, 200), roadMaterial);
+            road2.rotation.x = -Math.PI / 2;
+            road2.position.y = 0.01;
+            scene.add(road2);
+
+            // Road markings
+            for (let i = -90; i < 90; i += 8) {
+                const marking = new THREE.Mesh(new THREE.PlaneGeometry(4, 0.5), markingMaterial);
+                marking.rotation.x = -Math.PI / 2;
+                marking.position.set(i, 0.02, 0);
+                scene.add(marking);
+
+                const marking2 = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 4), markingMaterial);
+                marking2.rotation.x = -Math.PI / 2;
+                marking2.position.set(0, 0.02, i);
+                scene.add(marking2);
+            }
+        }
+
+        // HOSPITAL - Image-based building
+        function createHospital() {
+            const group = new THREE.Group();
+            const pos = locations.hospital.position;
+
+            // Load and display hospital image as a billboard/sprite
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(buildingImages.hospital, (texture) => {
+                const aspectRatio = 1; // Assuming square image
+                const height = 18;
+                const width = height * aspectRatio;
+
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                });
+                const geometry = new THREE.PlaneGeometry(width, height);
+                const billboard = new THREE.Mesh(geometry, material);
+                billboard.position.y = height / 2;
+                group.add(billboard);
+            });
+
+            // Add a base/platform
+            const base = new THREE.Mesh(
+                new THREE.BoxGeometry(16, 0.5, 10),
+                new THREE.MeshLambertMaterial({ color: 0xE74C3C })
+            );
+            base.position.y = 0.25;
+            group.add(base);
+
+            // Sign above
+            addBuildingSign(group, "🏥", 20);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // ESCUELA - Image-based building
+        function createEscuela() {
+            const group = new THREE.Group();
+            const pos = locations.escuela.position;
+
+            // Load and display school image as a billboard/sprite
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(buildingImages.escuela, (texture) => {
+                const aspectRatio = 1; // Assuming square image
+                const height = 18;
+                const width = height * aspectRatio;
+
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                });
+                const geometry = new THREE.PlaneGeometry(width, height);
+                const billboard = new THREE.Mesh(geometry, material);
+                billboard.position.y = height / 2;
+                group.add(billboard);
+            });
+
+            // Add a base/platform
+            const base = new THREE.Mesh(
+                new THREE.BoxGeometry(16, 0.5, 10),
+                new THREE.MeshLambertMaterial({ color: 0x3498DB })
+            );
+            base.position.y = 0.25;
+            group.add(base);
+
+            // Sign above
+            addBuildingSign(group, "🏫", 20);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // MERCADO - Supermarket with shopping carts
+        function createMercado() {
+            const group = new THREE.Group();
+            const pos = locations.mercado.position;
+
+            // Main building - larger
+            const building = new THREE.Mesh(
+                new THREE.BoxGeometry(18, 8, 14),
+                new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+            );
+            building.position.y = 4;
+            building.castShadow = true;
+            group.add(building);
+
+            // Red facade
+            const facade = new THREE.Mesh(
+                new THREE.BoxGeometry(18.5, 3, 0.5),
+                new THREE.MeshLambertMaterial({ color: 0xE91E63 })
+            );
+            facade.position.set(0, 7, 7.2);
+            group.add(facade);
+
+            // Automatic doors (glass)
+            const doors = new THREE.Mesh(
+                new THREE.BoxGeometry(6, 5, 0.3),
+                new THREE.MeshLambertMaterial({ color: 0xADD8E6, transparent: true, opacity: 0.5 })
+            );
+            doors.position.set(0, 2.5, 7.1);
+            group.add(doors);
+
+            // Shopping carts
+            for (let i = 0; i < 3; i++) {
+                const cart = new THREE.Mesh(
+                    new THREE.BoxGeometry(1, 1, 1.5),
+                    new THREE.MeshLambertMaterial({ color: 0xCCCCCC })
+                );
+                cart.position.set(-6 + i * 2, 0.5, 10);
+                group.add(cart);
+            }
+
+            // Parking lot
+            const parking = new THREE.Mesh(
+                new THREE.PlaneGeometry(20, 10),
+                new THREE.MeshLambertMaterial({ color: 0x555555 })
+            );
+            parking.rotation.x = -Math.PI / 2;
+            parking.position.set(0, 0.01, 14);
+            group.add(parking);
+
+            addBuildingSign(group, "🛒", 12);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // IGLESIA - Church with bell tower
+        function createIglesia() {
+            const group = new THREE.Group();
+            const pos = locations.iglesia.position;
+
+            // Main building
+            const building = new THREE.Mesh(
+                new THREE.BoxGeometry(12, 10, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFAF0E6 })
+            );
+            building.position.y = 5;
+            building.castShadow = true;
+            group.add(building);
+
+            // Bell tower
+            const tower = new THREE.Mesh(
+                new THREE.BoxGeometry(5, 18, 5),
+                new THREE.MeshLambertMaterial({ color: 0xFAF0E6 })
+            );
+            tower.position.set(0, 9, -4);
+            group.add(tower);
+
+            // Tower roof (pointed)
+            const towerRoof = new THREE.Mesh(
+                new THREE.ConeGeometry(4, 6, 4),
+                new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+            );
+            towerRoof.position.set(0, 21, -4);
+            group.add(towerRoof);
+
+            // Cross on top
+            const crossV = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 4, 0.5),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            crossV.position.set(0, 26, -4);
+            group.add(crossV);
+
+            const crossH = new THREE.Mesh(
+                new THREE.BoxGeometry(2, 0.5, 0.5),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            crossH.position.set(0, 27, -4);
+            group.add(crossH);
+
+            // Arched door
+            const door = new THREE.Mesh(
+                new THREE.BoxGeometry(3, 5, 0.5),
+                new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+            );
+            door.position.set(0, 2.5, 8.2);
+            group.add(door);
+
+            // Stained glass window (circular)
+            const window = new THREE.Mesh(
+                new THREE.CircleGeometry(2, 32),
+                new THREE.MeshLambertMaterial({ color: 0x9932CC })
+            );
+            window.position.set(0, 7, 8.1);
+            group.add(window);
+
+            // Bell
+            const bell = new THREE.Mesh(
+                new THREE.SphereGeometry(1, 16, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            bell.position.set(0, 15, -4);
+            group.add(bell);
+
+            addBuildingSign(group, "⛪", 28);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // CENTRO COMERCIAL - Shopping mall
+        function createCentroComercial() {
+            const group = new THREE.Group();
+            const pos = locations.centro.position;
+
+            // Large building
+            const building = new THREE.Mesh(
+                new THREE.BoxGeometry(25, 12, 15),
+                new THREE.MeshLambertMaterial({ color: 0xE0E0E0 })
+            );
+            building.position.y = 6;
+            building.castShadow = true;
+            group.add(building);
+
+            // Blue glass facade
+            const facade = new THREE.Mesh(
+                new THREE.BoxGeometry(26, 10, 0.5),
+                new THREE.MeshLambertMaterial({ color: 0x4169E1, transparent: true, opacity: 0.7 })
+            );
+            facade.position.set(0, 6, 7.7);
+            group.add(facade);
+
+            // Entrance canopy
+            const canopy = new THREE.Mesh(
+                new THREE.BoxGeometry(10, 0.5, 5),
+                new THREE.MeshLambertMaterial({ color: 0x2196F3 })
+            );
+            canopy.position.set(0, 4, 10);
+            group.add(canopy);
+
+            // Multiple store fronts
+            for (let i = -2; i <= 2; i++) {
+                const storeFront = new THREE.Mesh(
+                    new THREE.BoxGeometry(4, 6, 0.3),
+                    new THREE.MeshLambertMaterial({ color: [0xFF6B6B, 0x4ECDC4, 0xFFD93D, 0x9B59B6, 0x3498DB][i + 2] })
+                );
+                storeFront.position.set(i * 5, 3, 7.6);
+                group.add(storeFront);
+            }
+
+            addBuildingSign(group, "🏪", 16);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // CAFETERIA - Coffee shop with outdoor seating
+        function createCafeteria() {
+            const group = new THREE.Group();
+            const pos = locations.cafeteria.position;
+
+            // Main building
+            const building = new THREE.Mesh(
+                new THREE.BoxGeometry(10, 7, 8),
+                new THREE.MeshLambertMaterial({ color: 0xDEB887 })
+            );
+            building.position.y = 3.5;
+            building.castShadow = true;
+            group.add(building);
+
+            // Awning
+            const awning = new THREE.Mesh(
+                new THREE.BoxGeometry(12, 0.3, 4),
+                new THREE.MeshLambertMaterial({ color: 0x8B0000 })
+            );
+            awning.position.set(0, 5, 6);
+            group.add(awning);
+
+            // Outdoor tables
+            for (let i = -1; i <= 1; i++) {
+                // Table
+                const table = new THREE.Mesh(
+                    new THREE.CylinderGeometry(1.2, 1.2, 0.1, 16),
+                    new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                );
+                table.position.set(i * 4, 1.5, 8);
+                group.add(table);
+
+                // Table leg
+                const leg = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.1, 0.1, 1.5),
+                    new THREE.MeshLambertMaterial({ color: 0x888888 })
+                );
+                leg.position.set(i * 4, 0.75, 8);
+                group.add(leg);
+
+                // Chairs
+                for (let c = 0; c < 2; c++) {
+                    const chair = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.8, 1, 0.8),
+                        new THREE.MeshLambertMaterial({ color: 0x8B0000 })
+                    );
+                    chair.position.set(i * 4 + (c === 0 ? -1.5 : 1.5), 0.5, 8);
+                    group.add(chair);
+                }
+            }
+
+            // Coffee cup sign
+            const cupSign = new THREE.Mesh(
+                new THREE.CylinderGeometry(1, 0.8, 2),
+                new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+            );
+            cupSign.position.set(6, 6, 0);
+            group.add(cupSign);
+
+            addBuildingSign(group, "☕", 10);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        // PARQUE - Large park with attractions
+        function createParque() {
+            const group = new THREE.Group();
+            const pos = locations.parque.position;
+
+            // Park ground (grass)
+            const parkGround = new THREE.Mesh(
+                new THREE.CircleGeometry(25, 32),
+                new THREE.MeshLambertMaterial({ color: 0x228B22 })
+            );
+            parkGround.rotation.x = -Math.PI / 2;
+            parkGround.position.y = 0.02;
+            group.add(parkGround);
+
+            // Playground area
+            const playgroundBase = new THREE.Mesh(
+                new THREE.PlaneGeometry(15, 15),
+                new THREE.MeshLambertMaterial({ color: 0xDEB887 })
+            );
+            playgroundBase.rotation.x = -Math.PI / 2;
+            playgroundBase.position.set(-8, 0.03, 0);
+            group.add(playgroundBase);
+
+            // SWINGS
+            createSwings(group, -12, 0);
+
+            // SLIDE
+            createSlide(group, -5, -5);
+
+            // SEESAW
+            createSeesaw(group, -5, 5);
+
+            // FERRIS WHEEL (small)
+            createFerrisWheel(group, 10, 0);
+
+            // MERRY-GO-ROUND
+            createMerryGoRound(group, 8, 10);
+
+            // Benches
+            for (let i = 0; i < 3; i++) {
+                const bench = new THREE.Mesh(
+                    new THREE.BoxGeometry(3, 0.8, 1),
+                    new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                );
+                bench.position.set(15, 0.4, -10 + i * 10);
+                group.add(bench);
+            }
+
+            // Fountain in center
+            const fountain = new THREE.Mesh(
+                new THREE.CylinderGeometry(3, 4, 1, 16),
+                new THREE.MeshLambertMaterial({ color: 0x888888 })
+            );
+            fountain.position.set(0, 0.5, -10);
+            group.add(fountain);
+
+            const water = new THREE.Mesh(
+                new THREE.CylinderGeometry(2.5, 2.5, 0.5, 16),
+                new THREE.MeshLambertMaterial({ color: 0x4169E1 })
+            );
+            water.position.set(0, 0.8, -10);
+            group.add(water);
+
+            // Paths
+            const pathMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
+            const path1 = new THREE.Mesh(new THREE.PlaneGeometry(3, 20), pathMaterial);
+            path1.rotation.x = -Math.PI / 2;
+            path1.position.set(0, 0.025, 5);
+            group.add(path1);
+
+            addBuildingSign(group, "🎡", 20);
+
+            group.position.set(pos.x, 0, pos.z);
+            scene.add(group);
+        }
+
+        function createSwings(parent, x, z) {
+            // Frame
+            const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6B6B });
+
+            const leftPole = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 5), frameMaterial);
+            leftPole.position.set(x - 2, 2.5, z);
+            parent.add(leftPole);
+
+            const rightPole = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 5), frameMaterial);
+            rightPole.position.set(x + 2, 2.5, z);
+            parent.add(rightPole);
+
+            const topBar = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 5), frameMaterial);
+            topBar.rotation.z = Math.PI / 2;
+            topBar.position.set(x, 5, z);
+            parent.add(topBar);
+
+            // Swings
+            for (let i = -1; i <= 1; i += 2) {
+                const chain = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03, 0.03, 3),
+                    new THREE.MeshLambertMaterial({ color: 0x888888 })
+                );
+                chain.position.set(x + i, 3.5, z);
+                parent.add(chain);
+
+                const seat = new THREE.Mesh(
+                    new THREE.BoxGeometry(1, 0.1, 0.5),
+                    new THREE.MeshLambertMaterial({ color: 0x000000 })
+                );
+                seat.position.set(x + i, 2, z);
+                parent.add(seat);
+            }
+        }
+
+        function createSlide(parent, x, z) {
+            // Slide structure
+            const slideMaterial = new THREE.MeshLambertMaterial({ color: 0x4ECDC4 });
+
+            // Platform
+            const platform = new THREE.Mesh(new THREE.BoxGeometry(2, 0.2, 2), slideMaterial);
+            platform.position.set(x, 3, z);
+            parent.add(platform);
+
+            // Slide surface
+            const slide = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 5), slideMaterial);
+            slide.rotation.x = Math.PI / 6;
+            slide.position.set(x, 1.5, z + 2.5);
+            parent.add(slide);
+
+            // Ladder
+            const ladder = new THREE.Mesh(new THREE.BoxGeometry(0.5, 3, 0.3), new THREE.MeshLambertMaterial({ color: 0x888888 }));
+            ladder.position.set(x, 1.5, z - 1);
+            parent.add(ladder);
+        }
+
+        function createSeesaw(parent, x, z) {
+            // Base
+            const base = new THREE.Mesh(
+                new THREE.ConeGeometry(0.5, 1, 8),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            base.position.set(x, 0.5, z);
+            parent.add(base);
+
+            // Board
+            const board = new THREE.Mesh(
+                new THREE.BoxGeometry(5, 0.2, 0.8),
+                new THREE.MeshLambertMaterial({ color: 0x9B59B6 })
+            );
+            board.position.set(x, 1, z);
+            board.rotation.z = 0.1;
+            parent.add(board);
+
+            // Handles
+            for (let i = -1; i <= 1; i += 2) {
+                const handle = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.1, 0.1, 0.8),
+                    new THREE.MeshLambertMaterial({ color: 0x888888 })
+                );
+                handle.position.set(x + i * 2, 1.5, z);
+                parent.add(handle);
+            }
+        }
+
+        function createFerrisWheel(parent, x, z) {
+            // Main wheel
+            const wheelMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6B6B });
+
+            // Outer ring
+            const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(6, 0.3, 8, 24),
+                wheelMaterial
+            );
+            ring.position.set(x, 7, z);
+            ring.rotation.x = Math.PI / 2;
+            parent.add(ring);
+
+            // Spokes
+            for (let i = 0; i < 8; i++) {
+                const spoke = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.1, 0.1, 12),
+                    wheelMaterial
+                );
+                spoke.position.set(x, 7, z);
+                spoke.rotation.x = Math.PI / 2;
+                spoke.rotation.z = (i / 8) * Math.PI;
+                parent.add(spoke);
+            }
+
+            // Cabins
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const cabin = new THREE.Mesh(
+                    new THREE.BoxGeometry(1.5, 2, 1.5),
+                    new THREE.MeshLambertMaterial({ color: [0x4ECDC4, 0xFFD93D, 0x9B59B6, 0x3498DB, 0xFF6B6B, 0x2ECC71, 0xE74C3C, 0x1ABC9C][i] })
+                );
+                cabin.position.set(
+                    x + Math.cos(angle) * 6,
+                    7 + Math.sin(angle) * 6,
+                    z
+                );
+                parent.add(cabin);
+            }
+
+            // Support structure
+            const support1 = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.3, 0.5, 8),
+                new THREE.MeshLambertMaterial({ color: 0x888888 })
+            );
+            support1.position.set(x - 3, 4, z);
+            support1.rotation.z = 0.3;
+            parent.add(support1);
+
+            const support2 = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.3, 0.5, 8),
+                new THREE.MeshLambertMaterial({ color: 0x888888 })
+            );
+            support2.position.set(x + 3, 4, z);
+            support2.rotation.z = -0.3;
+            parent.add(support2);
+        }
+
+        function createMerryGoRound(parent, x, z) {
+            // Base
+            const base = new THREE.Mesh(
+                new THREE.CylinderGeometry(4, 4, 0.5, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            base.position.set(x, 0.25, z);
+            parent.add(base);
+
+            // Platform
+            const platform = new THREE.Mesh(
+                new THREE.CylinderGeometry(3.5, 3.5, 0.3, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFF69B4 })
+            );
+            platform.position.set(x, 0.65, z);
+            parent.add(platform);
+
+            // Center pole
+            const pole = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.3, 0.3, 4),
+                new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+            );
+            pole.position.set(x, 2.5, z);
+            parent.add(pole);
+
+            // Roof
+            const roof = new THREE.Mesh(
+                new THREE.ConeGeometry(4, 2, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFF69B4 })
+            );
+            roof.position.set(x, 5, z);
+            parent.add(roof);
+
+            // Horses/animals
+            const animalColors = [0xFFFFFF, 0xD4A574, 0x8B4513, 0xE8E8E8];
+            for (let i = 0; i < 4; i++) {
+                const angle = (i / 4) * Math.PI * 2;
+                const horse = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.8, 1.5, 2),
+                    new THREE.MeshLambertMaterial({ color: animalColors[i] })
+                );
+                horse.position.set(
+                    x + Math.cos(angle) * 2.5,
+                    1.5,
+                    z + Math.sin(angle) * 2.5
+                );
+                horse.rotation.y = angle + Math.PI / 2;
+                parent.add(horse);
+            }
+        }
+
+        function addBuildingSign(group, emoji, height) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(64, 64, 60, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = '70px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, 64, 64);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const sign = new THREE.Mesh(
+                new THREE.PlaneGeometry(4, 4),
+                new THREE.MeshBasicMaterial({ map: texture, transparent: true })
+            );
+            sign.position.y = height;
+            group.add(sign);
+
+            group.userData.sign = sign;
+            group.userData.signBaseY = height;
+        }
+
+        function createTrees() {
+            for (let i = 0; i < 40; i++) {
+                const x = (Math.random() - 0.5) * 180;
+                const z = (Math.random() - 0.5) * 180;
+
+                // Avoid roads and buildings
+                if (Math.abs(x) < 8 || Math.abs(z) < 8) continue;
+                let tooClose = false;
+                for (const loc of Object.values(locations)) {
+                    const dist = Math.sqrt(Math.pow(x - loc.position.x, 2) + Math.pow(z - loc.position.z, 2));
+                    if (dist < 20) { tooClose = true; break; }
+                }
+                if (tooClose) continue;
+
+                const treeGroup = new THREE.Group();
+
+                const trunk = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.5, 0.7, 3),
+                    new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                );
+                trunk.position.y = 1.5;
+                treeGroup.add(trunk);
+
+                const leaves = new THREE.Mesh(
+                    new THREE.SphereGeometry(2.5, 8, 8),
+                    new THREE.MeshLambertMaterial({ color: 0x228B22 })
+                );
+                leaves.position.y = 4.5;
+                treeGroup.add(leaves);
+
+                treeGroup.position.set(x, 0, z);
+                scene.add(treeGroup);
+            }
+        }
+
+        function createClouds() {
+            for (let i = 0; i < 10; i++) {
+                const cloudGroup = new THREE.Group();
+                for (let j = 0; j < 5; j++) {
+                    const puff = new THREE.Mesh(
+                        new THREE.SphereGeometry(3 + Math.random() * 2, 8, 8),
+                        new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                    );
+                    puff.position.set(
+                        (Math.random() - 0.5) * 8,
+                        (Math.random() - 0.5) * 2,
+                        (Math.random() - 0.5) * 4
+                    );
+                    cloudGroup.add(puff);
+                }
+                cloudGroup.position.set(
+                    (Math.random() - 0.5) * 150,
+                    50 + Math.random() * 20,
+                    (Math.random() - 0.5) * 150
+                );
+                cloudGroup.userData.speed = 0.03 + Math.random() * 0.02;
+                scene.add(cloudGroup);
+            }
+        }
+
+        function createSun() {
+            const sun = new THREE.Mesh(
+                new THREE.SphereGeometry(8, 32, 32),
+                new THREE.MeshBasicMaterial({ color: 0xFFD700 })
+            );
+            sun.position.set(60, 80, -60);
+            scene.add(sun);
+        }
+
+        function createPlayer() {
+            const group = new THREE.Group();
+
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.6, 0.8, 2, 8),
+                new THREE.MeshLambertMaterial({ color: 0xFF6B6B })
+            );
+            body.position.y = 2;
+            group.add(body);
+
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.8, 16, 16),
+                new THREE.MeshLambertMaterial({ color: 0xFFDBAC })
+            );
+            head.position.y = 3.8;
+            group.add(head);
+
+            // Hair with pigtails
+            const hair = new THREE.Mesh(
+                new THREE.SphereGeometry(0.85, 16, 16),
+                new THREE.MeshLambertMaterial({ color: 0x4A3728 })
+            );
+            hair.position.y = 4.1;
+            hair.scale.y = 0.8;
+            group.add(hair);
+
+            // Pigtails
+            const pigtail1 = new THREE.Mesh(
+                new THREE.SphereGeometry(0.35),
+                new THREE.MeshLambertMaterial({ color: 0x4A3728 })
+            );
+            pigtail1.position.set(-0.8, 3.8, 0);
+            group.add(pigtail1);
+
+            const pigtail2 = new THREE.Mesh(
+                new THREE.SphereGeometry(0.35),
+                new THREE.MeshLambertMaterial({ color: 0x4A3728 })
+            );
+            pigtail2.position.set(0.8, 3.8, 0);
+            group.add(pigtail2);
+
+            // Eyes
+            const eyeGeometry = new THREE.SphereGeometry(0.15);
+            const eyeMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.25, 3.9, 0.7);
+            group.add(leftEye);
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.25, 3.9, 0.7);
+            group.add(rightEye);
+
+            // Smile
+            const smile = new THREE.Mesh(
+                new THREE.TorusGeometry(0.2, 0.05, 8, 8, Math.PI),
+                new THREE.MeshLambertMaterial({ color: 0xFF6B6B })
+            );
+            smile.position.set(0, 3.5, 0.7);
+            smile.rotation.x = Math.PI;
+            group.add(smile);
+
+            // Legs
+            const legMaterial = new THREE.MeshLambertMaterial({ color: 0x3498DB });
+            const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 1.2), legMaterial);
+            leftLeg.position.set(-0.3, 0.6, 0);
+            group.add(leftLeg);
+            const rightLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 1.2), legMaterial);
+            rightLeg.position.set(0.3, 0.6, 0);
+            group.add(rightLeg);
+
+            // Shoes
+            const shoeMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+            const leftShoe = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.6), shoeMaterial);
+            leftShoe.position.set(-0.3, 0.1, 0.1);
+            group.add(leftShoe);
+            const rightShoe = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.6), shoeMaterial);
+            rightShoe.position.set(0.3, 0.1, 0.1);
+            group.add(rightShoe);
+
+            player = group;
+            scene.add(player);
+        }
+
+        function startGame() {
+            if (audioContext.state === 'suspended') audioContext.resume();
+
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('ui-overlay').classList.remove('hidden');
+
+            if (!gameStarted) {
+                init3DScene();
+                setupControls();
+                initMiniMap();
+                gameStarted = true;
+
+                setTimeout(() => {
+                    speak('¡Hola! Soy tu guía. Usa las flechas para explorar el barrio del Real de Melilla. ¡Acércate a los edificios para jugar y ganar puntos!');
+                }, 500);
+            }
+        }
+
+        function setupControls() {
+            window.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowUp': case 'w': case 'W': keys.up = true; e.preventDefault(); break;
+                    case 'ArrowDown': case 's': case 'S': keys.down = true; e.preventDefault(); break;
+                    case 'ArrowLeft': case 'a': case 'A': keys.left = true; e.preventDefault(); break;
+                    case 'ArrowRight': case 'd': case 'D': keys.right = true; e.preventDefault(); break;
+                }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                switch(e.key) {
+                    case 'ArrowUp': case 'w': case 'W': keys.up = false; break;
+                    case 'ArrowDown': case 's': case 'S': keys.down = false; break;
+                    case 'ArrowLeft': case 'a': case 'A': keys.left = false; break;
+                    case 'ArrowRight': case 'd': case 'D': keys.right = false; break;
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (camera && renderer) {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            });
+        }
+
+        function startMove(dir) { keys[dir] = true; }
+        function stopMove(dir) { keys[dir] = false; }
+
+        function updatePlayer() {
+            if (!player) return;
+
+            let moved = false;
+            if (keys.up) { player.position.z -= moveSpeed; player.rotation.y = 0; moved = true; }
+            if (keys.down) { player.position.z += moveSpeed; player.rotation.y = Math.PI; moved = true; }
+            if (keys.left) { player.position.x -= moveSpeed; player.rotation.y = Math.PI / 2; moved = true; }
+            if (keys.right) { player.position.x += moveSpeed; player.rotation.y = -Math.PI / 2; moved = true; }
+
+            // Bounds
+            player.position.x = Math.max(-90, Math.min(90, player.position.x));
+            player.position.z = Math.max(-90, Math.min(90, player.position.z));
+
+            // Walking animation
+            if (moved) {
+                player.position.y = Math.abs(Math.sin(Date.now() * 0.01)) * 0.3;
+            } else {
+                player.position.y = 0;
+            }
+
+            // Camera follow
+            camera.position.x = player.position.x;
+            camera.position.z = player.position.z + 60;
+            camera.lookAt(player.position.x, 0, player.position.z);
+
+            checkLocationProximity();
+            updateMiniMap();
+        }
+
+        function checkLocationProximity() {
+            let nearest = null;
+            let nearestDist = Infinity;
+
+            Object.entries(locations).forEach(([key, loc]) => {
+                const dist = Math.sqrt(
+                    Math.pow(player.position.x - loc.position.x, 2) +
+                    Math.pow(player.position.z - loc.position.z, 2)
+                );
+                if (dist < 15 && dist < nearestDist) {
+                    nearest = key;
+                    nearestDist = dist;
+                }
+            });
+
+            if (nearest !== currentNearLocation) {
+                currentNearLocation = nearest;
+                updateLocationIndicator(nearest);
+            }
+        }
+
+        function updateLocationIndicator(locId) {
+            const emoji = document.getElementById('current-emoji');
+            const name = document.getElementById('current-location');
+
+            if (locId && locations[locId]) {
+                const loc = locations[locId];
+                emoji.textContent = loc.emoji;
+                name.textContent = loc.name;
+
+                if (!visitedLocations.has(locId)) {
+                    showLocationPopup(locId);
+                }
+            } else {
+                emoji.textContent = '🚶';
+                name.textContent = 'Explorando...';
+            }
+        }
+
+        function showLocationPopup(locId) {
+            const loc = locations[locId];
+            if (!loc) return;
+
+            playSound('discover');
+
+            const popup = document.getElementById('location-popup');
+            const content = document.getElementById('popup-content');
+
+            content.style.borderColor = loc.borderColor;
+
+            let minigameHTML = '';
+            if (loc.minigame === 'quiz') {
+                minigameHTML = createQuizHTML(locId, loc.quizData);
+            } else if (loc.minigame === 'memory') {
+                minigameHTML = createMemoryHTML(locId, loc.memoryItems);
+            } else if (loc.minigame === 'puzzle') {
+                minigameHTML = createPuzzleHTML(locId, loc.puzzleEmoji);
+            }
+
+            content.innerHTML = `
+                <div class="speaking-indicator" id="speaking-${locId}">
+                    <span>🎙️</span>
+                    <div class="waves">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                    </div>
+                </div>
+                <div class="text-5xl mb-3">${loc.emoji}</div>
+                <h2 class="title-font text-2xl mb-2" style="color: ${loc.borderColor};">${loc.name}</h2>
+                <p class="text-lg mb-3 text-gray-700">${loc.description}</p>
+                <div class="minigame-container">
+                    <p class="font-bold text-gray-800 mb-3">🎮 ¡Juega y gana puntos!</p>
+                    ${minigameHTML}
+                </div>
+                <button onclick="closeLocationPopup('${locId}')" class="mt-3 bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-bold">
+                    Cerrar ✕
+                </button>
+            `;
+
+            popup.classList.remove('hidden');
+            popup.style.display = 'flex';
+            popup.style.alignItems = 'center';
+            popup.style.justifyContent = 'center';
+
+            // Voice narration
+            speak(`¡Bienvenido a ${loc.name}! ${loc.description} ¡Juega el minijuego para ganar puntos!`);
+
+            // Mark as visited
+            if (!visitedLocations.has(locId)) {
+                visitedLocations.add(locId);
+                const star = document.querySelector(`.star[data-location="${locId}"]`);
+                if (star) star.classList.add('earned');
+            }
+        }
+
+        function createQuizHTML(locId, data) {
+            return `
+                <p class="text-lg font-bold text-purple-600 mb-3">${data.question}</p>
+                <div id="quiz-options-${locId}">
+                    ${data.options.map((opt, i) => `
+                        <div class="quiz-option" onclick="checkQuizAnswer('${locId}', ${i}, ${data.correct})">
+                            ${opt}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="quiz-result-${locId}" class="hidden text-xl font-bold mt-3"></div>
+            `;
+        }
+
+        function checkQuizAnswer(locId, selected, correct) {
+            const options = document.querySelectorAll(`#quiz-options-${locId} .quiz-option`);
+            const result = document.getElementById(`quiz-result-${locId}`);
+
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === correct) {
+                    opt.classList.add('correct');
+                } else if (i === selected) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (selected === correct) {
+                playSound('correct');
+                result.innerHTML = '🎉 ¡Correcto! +50 puntos';
+                result.style.color = '#38a169';
+                addScore(50);
+                speak('¡Muy bien! ¡Respuesta correcta! Has ganado cincuenta puntos.');
+            } else {
+                playSound('wrong');
+                result.innerHTML = '😅 ¡Casi! +10 puntos';
+                result.style.color = '#e53e3e';
+                addScore(10);
+                speak('¡Casi! La respuesta correcta está marcada en verde. Has ganado diez puntos por intentarlo.');
+            }
+            result.classList.remove('hidden');
+        }
+
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        function createMemoryHTML(locId, items) {
+            const pairs = [...items, ...items];
+            memoryCards = pairs.sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+
+            return `
+                <p class="text-sm text-gray-600 mb-2">¡Encuentra las parejas!</p>
+                <div class="memory-grid" id="memory-grid-${locId}">
+                    ${memoryCards.map((item, i) => `
+                        <div class="memory-card" data-index="${i}" data-value="${item}" onclick="flipCard(this, '${locId}')">
+                            ❓
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="memory-result-${locId}" class="hidden text-xl font-bold mt-3"></div>
+            `;
+        }
+
+        function flipCard(card, locId) {
+            if (flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+            card.classList.add('flipped');
+            card.textContent = card.dataset.value;
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                setTimeout(() => checkMemoryMatch(locId), 600);
+            }
+        }
+
+        function checkMemoryMatch(locId) {
+            const [card1, card2] = flippedCards;
+
+            if (card1.dataset.value === card2.dataset.value) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                playSound('correct');
+
+                if (matchedPairs === 4) {
+                    const result = document.getElementById(`memory-result-${locId}`);
+                    result.innerHTML = '🎉 ¡Todas las parejas! +100 puntos';
+                    result.style.color = '#38a169';
+                    result.classList.remove('hidden');
+                    addScore(100);
+                    speak('¡Fantástico! ¡Has encontrado todas las parejas! Cien puntos para ti.');
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '❓';
+                card2.textContent = '❓';
+            }
+
+            flippedCards = [];
+        }
+
+        let puzzleRotations = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        function createPuzzleHTML(locId, emoji) {
+            puzzleRotations = Array(9).fill(0).map(() => Math.floor(Math.random() * 4) * 90);
+            // Make sure at least some are rotated
+            puzzleRotations[0] = 90;
+            puzzleRotations[4] = 180;
+            puzzleRotations[8] = 270;
+
+            return `
+                <p class="text-sm text-gray-600 mb-2">¡Gira las piezas para ordenar!</p>
+                <div class="puzzle-grid" id="puzzle-grid-${locId}">
+                    ${puzzleRotations.map((rot, i) => `
+                        <div class="puzzle-piece" data-index="${i}" style="transform: rotate(${rot}deg);" onclick="rotatePuzzlePiece(this, '${locId}')">
+                            ${emoji}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="puzzle-result-${locId}" class="hidden text-xl font-bold mt-3"></div>
+            `;
+        }
+
+        function rotatePuzzlePiece(piece, locId) {
+            const index = parseInt(piece.dataset.index);
+            puzzleRotations[index] = (puzzleRotations[index] + 90) % 360;
+            piece.style.transform = `rotate(${puzzleRotations[index]}deg)`;
+
+            // Check if all are at 0
+            if (puzzleRotations.every(r => r === 0)) {
+                playSound('correct');
+                const result = document.getElementById(`puzzle-result-${locId}`);
+                result.innerHTML = '🎉 ¡Puzzle completo! +75 puntos';
+                result.style.color = '#38a169';
+                result.classList.remove('hidden');
+                addScore(75);
+                speak('¡Excelente! ¡Has completado el puzzle! Setenta y cinco puntos.');
+            }
+        }
+
+        function addScore(points) {
+            totalScore += points;
+            document.getElementById('score-display').textContent = totalScore;
+        }
+
+        function closeLocationPopup(locId) {
+            const popup = document.getElementById('location-popup');
+            popup.classList.add('hidden');
+            popup.style.display = 'none';
+            speechSynthesis.cancel();
+
+            // Check completion
+            if (visitedLocations.size === 7) {
+                setTimeout(() => {
+                    playSound('complete');
+                    document.getElementById('final-score').textContent = totalScore + ' puntos';
+                    document.getElementById('celebration-modal').classList.remove('hidden');
+                    speak('¡Felicidades! ¡Has visitado todos los lugares del barrio del Real de Melilla! Tu puntuación final es ' + totalScore + ' puntos. ¡Eres un gran explorador!');
+                }, 500);
+            }
+        }
+
+        function restartGame() {
+            visitedLocations.clear();
+            totalScore = 0;
+            document.getElementById('score-display').textContent = '0';
+            document.getElementById('celebration-modal').classList.add('hidden');
+            document.querySelectorAll('.star').forEach(s => s.classList.remove('earned'));
+            if (player) player.position.set(0, 0, 0);
+            speak('¡Vamos a explorar otra vez! Busca todos los lugares del barrio.');
+        }
+
+        function initMiniMap() {
+            const canvas = document.getElementById('mini-map-canvas');
+            canvas.width = 120;
+            canvas.height = 120;
+            updateMiniMap();
+        }
+
+        function updateMiniMap() {
+            const canvas = document.getElementById('mini-map-canvas');
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#E8F5E9';
+            ctx.fillRect(0, 0, 120, 120);
+
+            // Roads
+            ctx.fillStyle = '#666';
+            ctx.fillRect(0, 56, 120, 8);
+            ctx.fillRect(56, 0, 8, 120);
+
+            // Locations
+            Object.entries(locations).forEach(([key, loc]) => {
+                const x = (loc.position.x + 90) * (120 / 180);
+                const y = (loc.position.z + 90) * (120 / 180);
+                ctx.fillStyle = visitedLocations.has(key) ? '#FFD700' : '#' + loc.color.toString(16).padStart(6, '0');
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Player
+            if (player) {
+                const px = (player.position.x + 90) * (120 / 180);
+                const py = (player.position.z + 90) * (120 / 180);
+                ctx.fillStyle = '#FF6B6B';
+                ctx.beginPath();
+                ctx.arc(px, py, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.016;
+
+            updatePlayer();
+
+            // Animate clouds
+            scene.traverse(obj => {
+                if (obj.userData && obj.userData.speed) {
+                    obj.position.x += obj.userData.speed;
+                    if (obj.position.x > 100) obj.position.x = -100;
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Touch handling
+        document.addEventListener('touchend', () => {
+            keys.up = keys.down = keys.left = keys.right = false;
+        });
+
+        // Popup background click
+        document.getElementById('location-popup').addEventListener('click', (e) => {
+            if (e.target.id === 'location-popup') {
+                const popup = document.getElementById('location-popup');
+                popup.classList.add('hidden');
+                popup.style.display = 'none';
+                speechSynthesis.cancel();
+            }
+        });
+    </script>
+</body>
+</html>

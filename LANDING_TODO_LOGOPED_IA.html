@@ -104,7 +104,7 @@
   <footer>
     <b>Coordinación Claude + Codex.</b> Este archivo es el índice maestro. La bitácora operativa compartida está en
     <span class="path">tmp_bitacora_compartida.md</span> (mismo repo). Regla: antes de trabajar, leer la bitácora; al terminar algo relevante, registrar
-    <i>Hecho / Siguiente paso / Bloqueos</i>. Los items <span class="b local">EN LOCAL</span> y <span class="b cantera">CANTERA</span> necesitan que el usuario suba esos archivos al repo para que ambos agentes los alcancen.
+    <i>Hecho / Siguiente paso / Bloqueos</i>. Los items <span class="b local">EN LOCAL</span> aún viven en el Mac o localhost; la <span class="b cantera">CANTERA</span> puede estar ya subida como HTML para probar o seguir pendiente de poda.
   </footer>
 </div>
 
@@ -145,7 +145,7 @@ const ITEMS = [
    desc:"Prototipo completo sin copyright: 10 personajes y 15 casos propios, avatares DiceBear (MIT), estética cuaderno escolar. Mecánica perfil→caso→sospechoso→feedback clínico.",
    tags:["evaluación","narrativa"], links:[
      {t:"Abrir aquí",u:"mision-perfiles-nuevo.html",p:1},
-     {t:"GitHub Pages",u:"https://foniafonia.github.io/maleta-resuelve-casos/mision-perfiles-nuevo.html",p:0}]},
+     {t:"GitHub Pages",u:"https://foniafonia.github.io/logoped-ia-tools/mision-perfiles-nuevo.html",p:0}]},
   {cat:"Juegos", emoji:"🧳", title:"Resuelve los casos / Maleta", status:"repo",
    desc:"Actividad interactiva con niveles, panel profesional, demo e informe clínico. Assets de 31 páginas incluidos.",
    tags:["casos","informe"], links:[{t:"Abrir aquí",u:"index.html",p:1}]},
@@ -211,7 +211,227 @@ const ITEMS = [
    tags:["coordinación"], links:[{t:"Abrir bitácora",u:"tmp_bitacora_compartida.md",p:1}]},
 ];
 
-const CATS = ["Todos","Membresía","Suite","Juegos","ARAIA","Beta","Curso","Cantera","Docs","Infra"];
+// ---- MIGRACION CODEX 2026-07-19 ----
+// Todo este bloque apunta a URLs publicas o a archivos que ya se han subido a este repo.
+const CODEX_EXTRA_ITEMS = [
+  {cat:"Juegos", emoji:"🌍", title:"FonoMundos", status:"live",
+   desc:"Mundo principal de juegos logopedicos. Incluye version publica en Vercel y repositorio de codigo.",
+   tags:["Vercel","GitHub","mundo"], links:[
+     {t:"Abrir en vivo",u:"https://fonomundos.vercel.app",p:1},
+     {t:"Repo",u:"https://github.com/foniafonia/fonomundos",p:0}]},
+  {cat:"Juegos", emoji:"📖", title:"FonoMundos — Modo historia", status:"repo",
+   desc:"Variante narrativa separada del FonoMundo principal. Importante: es un enlace distinto y no debe confundirse con el juego base.",
+   tags:["historia","narrativa"], links:[{t:"Abrir copia repo",u:"codex-assets/fonomundos/modo-historia.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/fonomundos/public/modo-historia.html"},
+  {cat:"Juegos", emoji:"🌲", title:"FonoMundo Bosque", status:"repo",
+   desc:"Escena local del universo FonoMundos rescatada al repo para que pueda revisarse desde la landing.",
+   tags:["FonoMundos","escena"], links:[{t:"Abrir copia repo",u:"codex-assets/fonomundos/fonomundo-bosque/index.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/fonomundos/public/fonomundo-bosque/index.html"},
+  {cat:"Juegos", emoji:"✨", title:"FonoMundos WOW Public", status:"live",
+   desc:"Version publica wow/prototipo visual del universo FonoMundos desplegada en Vercel.",
+   tags:["Vercel","publico"], links:[{t:"Abrir en vivo",u:"https://fonomundos-wow-public.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🎵", title:"Sonica Runner", status:"live",
+   desc:"Runner sonoro/logopedico publicado en Vercel. Candidato claro a vitrina de juegos.",
+   tags:["runner","Vercel"], links:[{t:"Abrir en vivo",u:"https://sonica-runner.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🔎", title:"Kig & Find interactivo", status:"live",
+   desc:"Juego interactivo de busqueda/discriminacion visual con despliegue publico.",
+   tags:["busqueda","Vercel"], links:[{t:"Abrir en vivo",u:"https://kig-find-interactivo.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🧠", title:"Conciencia fonologica lexica", status:"live",
+   desc:"Juego especifico de conciencia fonologica/lexica listo para revisar en navegador.",
+   tags:["fonologia","lexico"], links:[{t:"Abrir en vivo",u:"https://conciencia-fonologica-lexica-juego.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🧱", title:"Constructor de silabas Aire", status:"live",
+   desc:"Prototipo de construccion silabica alojado en Vercel.",
+   tags:["silabas","lectoescritura"], links:[{t:"Abrir en vivo",u:"https://constructor-silabas-aire.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🧩", title:"Puzzle Agarre Aire", status:"live",
+   desc:"Juego/prototipo motor o de praxias finas alojado en Vercel.",
+   tags:["puzzle","Vercel"], links:[{t:"Abrir en vivo",u:"https://puzzle-agarre-aire.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"👅", title:"Lengua Runner / Gestos", status:"live",
+   desc:"Juego de gestos/logopedia desplegado como Logopedizado Gestos.",
+   tags:["gestos","runner"], links:[{t:"Abrir en vivo",u:"https://logopedizado-gestos-juego.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"🃏", title:"FonoMesa Lab", status:"live",
+   desc:"Laboratorio de juego de mesa/logopedia publicado en Vercel.",
+   tags:["mesa","lab"], links:[{t:"Abrir en vivo",u:"https://fonomesa-lab.vercel.app",p:1}]},
+  {cat:"Juegos", emoji:"📚", title:"LectoViva v2", status:"live",
+   desc:"Recurso de lectoescritura publicado en GitHub Pages y con repo propio.",
+   tags:["lectoescritura","GitHub Pages"], links:[
+     {t:"Abrir en vivo",u:"https://foniafonia.github.io/lectoviva-v2/",p:1},
+     {t:"Repo",u:"https://github.com/foniafonia/lectoviva-v2",p:0}]},
+  {cat:"Juegos", emoji:"🍉", title:"FonoSuika", status:"repo",
+   desc:"Prototipo tipo Suika/gameplay fisico rescatado desde local al repo canonico.",
+   tags:["juego","repo"], links:[
+     {t:"Abrir juego",u:"codex-assets/fonosuika/index.html",p:1},
+     {t:"Ver demo mp4",u:"codex-assets/fonosuika/demo.mp4",p:0}]},
+  {cat:"Herramientas", emoji:"⌚", title:"FoniaWatch Rehab Demo", status:"live",
+   desc:"Demo tipo rehabilitacion/seguimiento con interfaz watch, publicada en Vercel.",
+   tags:["rehab","Vercel"], links:[{t:"Abrir en vivo",u:"https://foniawatch-rehab-demo.vercel.app",p:1}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva 2026", status:"repo",
+   desc:"Prototipo cognitivo/clinico rescatado al repo. Incluye vistas y recursos estaticos para revision rapida.",
+   tags:["cognitiva","repo"], links:[{t:"Abrir copia repo",u:"codex-assets/cognitiva/index.html",p:1}]},
+  {cat:"Herramientas", emoji:"💎", title:"Rubi-IA", status:"repo",
+   desc:"Cuaderno Rubi-IA v2 rescatado desde local al repo. Es una herramienta distinta de Mision Perfiles.",
+   tags:["Rubi-IA","cuaderno"], links:[{t:"Abrir copia repo",u:"codex-assets/rubi-ia/index.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/cuaderno-rub-ia-v2/index.html"},
+  {cat:"Herramientas", emoji:"🧾", title:"Anamnesis IA", status:"local",
+   desc:"Herramienta local de anamnesis IA localizada, pendiente de empaquetar/subir al repo si no contiene datos sensibles.",
+   tags:["anamnesis","revision"], links:[], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/anamnesis ia/index.html"},
+  {cat:"Herramientas", emoji:"🌐", title:"Logoped Web", status:"live",
+   desc:"Frontend web general de Logoped-IA desplegado en Vercel.",
+   tags:["web","Vercel"], links:[{t:"Abrir en vivo",u:"https://logoped-web.vercel.app",p:1}]},
+  {cat:"Infra", emoji:"🔌", title:"Logoped API v2", status:"live",
+   desc:"API/backend publico localizado durante el inventario. Revisar endpoints utiles antes de integrarlo en Academia.",
+   tags:["API","Vercel"], links:[{t:"Abrir API",u:"https://logoped-api-v2.vercel.app",p:1}]},
+  {cat:"Infra", emoji:"🐝", title:"Colmena Melilla UPE", status:"live",
+   desc:"Prototipo/landing Colmena Melilla publicado en Vercel. Entra en la familia Colmena aunque no sea juego clinico puro.",
+   tags:["Colmena","Melilla"], links:[{t:"Abrir en vivo",u:"https://colmena-melilla-upe.vercel.app",p:1}]},
+  {cat:"ARAIA", emoji:"🧩", title:"SAAC / ARASAAC / PECS — Landing", status:"repo",
+   desc:"Hub local de prototipos SAAC copiado al repo: banco de pictogramas, secuenciador visual y tablero PECS.",
+   tags:["SAAC","ARASAAC","PECS"], links:[
+     {t:"Abrir landing",u:"codex-assets/saac/landing-saac-arasaac-pecs.html",p:1},
+     {t:"Banco pictogramas",u:"codex-assets/saac/banco-pictogramas.html",p:0},
+     {t:"Secuenciador",u:"codex-assets/saac/secuenciador-visual.html",p:0},
+     {t:"Tablero PECS",u:"codex-assets/saac/tablero-pecs.html",p:0}]},
+  {cat:"Curso", emoji:"🎓", title:"Curso GPT/logopedia para membresia", status:"local",
+   desc:"Linea de curso de IA/GPT para logopedia mencionada por el usuario. Hay que consolidar modelos, presentaciones, videos e imagenes antes de publicarlo.",
+   tags:["curso","GPT","membresia"], links:[], path:"buscar en membresia / curso IA / materiales de formacion"},
+  {cat:"Docs", emoji:"🧭", title:"Inventario estrategico Academia 2026", status:"repo",
+   desc:"MD migrado desde Codex con mapa de productos, areas, estados y narrativa para socios tecnologicos.",
+   tags:["inventario","socios"], links:[{t:"Abrir MD",u:"codex-assets/docs/INVENTARIO_ESTRATEGICO_ACADEMIA_2026.md",p:1}]},
+  {cat:"Docs", emoji:"🗺️", title:"Mapa Academia Prototipos 2026", status:"repo",
+   desc:"MD operativo con clasificacion por areas y cajon desastre inicial.",
+   tags:["mapa","prototipos"], links:[{t:"Abrir MD",u:"codex-assets/docs/MAPA_ACADEMIA_PROTOTIPOS_2026.md",p:1}]},
+  {cat:"Docs", emoji:"🤝", title:"Mensaje socios tecnologicos", status:"repo",
+   desc:"Comunicacion sintesis para explicar volumen, fechas y potencia del ecosistema sin entrar en detalle sensible.",
+   tags:["socios","comunicacion"], links:[{t:"Abrir MD",u:"codex-assets/docs/MENSAJE_SOCIOS_TECNOLOGICOS_ACADEMIA.md",p:1}]},
+  {cat:"Infra", emoji:"🚢", title:"Netlify local / Supabase", status:"local",
+   desc:"Carpeta local con netlify.toml y guia DEPLOY_NETLIFY_SUPABASE. Pendiente de decidir si entra en este repo o solo como infraestructura.",
+   tags:["Netlify","Supabase"], links:[], path:"/Users/joseaserraf/Documents/New project 5/repo/DEPLOY_NETLIFY_SUPABASE.md"},
+  {cat:"Infra", emoji:"🧰", title:"JELOU Skill Logopedia", status:"local",
+   desc:"Entrega local de skill/base para logopedia. Revisar antes de publicar por posible contenido de configuracion.",
+   tags:["skill","base conocimiento"], links:[], path:"/Users/joseaserraf/Desktop/JELOU_SKILL_LOGOPEDIA_ENTREGA/00_LEEME_ENTREGA.md"},
+  {cat:"Infra", emoji:"🧠", title:"Base conocimiento chatbot logopedia", status:"local",
+   desc:"Base local de conocimiento para chatbot. Muy util para Academia, pero debe revisarse antes de subir a repo publico.",
+   tags:["chatbot","conocimiento"], links:[], path:"/Users/joseaserraf/Desktop/BASE_CONOCIMIENTO_LOGOPEDIA_CHATBOT/README.md"}
+];
+
+const SUITE_POE_ITEMS = [
+  ["194RRR","194RRR","Juego/recurso POE de articulacion o lectura recuperado desde Suite Membresia."],
+  ["donkeyfon","DonkeyFon","Juego POE de la Suite, recuperado desde el contenedor local."],
+  ["encuentra-el-nuevo","Encuentra el Nuevo","Discriminacion fonologica dentro de la Suite."],
+  ["karaoke-tartamudez","TerapiaFlu Karaoke Tartamudez","Recurso POE de fluidez con karaoke/ritmo, cronometro y trabajo de disfluencias."],
+  ["letra-crush","Letra Crush","Juego de lectoescritura de la Suite."],
+  ["letrablaster-demo","LetraBlaster demo","Demo de lectoescritura tipo arcade."],
+  ["letrapang-demo","LetraPang demo","Demo de lectoescritura tipo arcade."],
+  ["lupas y linternas","Lupas y Linternas","Juego visual/atencional de la Suite."],
+  ["s-y-z","S y Z","Recurso especifico de discriminacion/articulacion S-Z."],
+  ["verbo-querer-quest","Verbo Querer Quest","Juego gramatical centrado en el verbo querer."]
+].map(([slug,title,desc]) => ({
+  cat:"Suite", emoji:"🎮", title:`Suite POE — ${title}`, status:"repo",
+  desc, tags:["Suite","POE","repo"],
+  links:[{t:"Abrir copia repo",u:`codex-assets/suite-poe/${slug}/index.html`,p:1}],
+  path:`/Users/joseaserraf/Desktop/Logoped-IA Suite Membresia/POE/${slug}/index.html`
+}));
+
+const POE_MASIVO_FILES = [
+  "001__Bingo_educativo__lvqeckh5hcqxeht67g.html",
+  "002__Propuesta_Fonia__nopnpevcguieur19xk.html",
+  "003__Taller_Voz__nn9ynou1awzmqzoc68.html",
+  "004__App_Disgrafia__mvht8kd5kesz89q715.html",
+  "005__Auditory_Run_Pro__ngqne23r77fzvu5aj6.html",
+  "006__App_réplica__n830qn0h34ocbvczcx.html",
+  "007__Generador_secuencias__n844wna1eb3m503616.html",
+  "008__App_Equito_Israel__p73s76sr7y4vprf7ck.html",
+  "009__Psicomotricidad__pa2kgxiond1wv5hqmf.html",
+  "010__Web_JuegosLogopedos__mzu0p5kcvj8yjgdx2b.html",
+  "011__directorgeneral_innovación__rd3tao7ao0vugqy8dd.html",
+  "012__Pac-Man_Logopedia__s657w8nyf87fzwqzen.html",
+  "013__Fönia_Tiempo_Trabajado__syrtijy6utoixev5zl.html",
+  "014__Chatbot_Logopédico_agosto_2025_da_fallos__t7tszpsmnkh1pi2ss6.html",
+  "015__Código_Habilidades_Sociales__t7i7kbfm6ufya13cwz.html",
+  "016__Evaluación_Social__spn3issm2ikud3bpab.html",
+  "017__Escala_Tartamudez_Infantil__x5mit7olndok7bgq91.html",
+  "018__Barrio_Melilla_Juego__13mthzgx8wopjvuvlj.html",
+  "019__Sílaba_UNO__1b600ieijmltso6vtm.html",
+  "020__Slot_Educativo_Premium__2p47q9s8ykgjmupvhj.html",
+  "021__Revision_codex_laberinto_logopedia__2wrnw39yp43ztl2h5w.html",
+  "022__Informe_Visual_Pro__2wsbgi3f6nkv7lsj5d.html",
+  "023__Logopedia_Integral_Web__2y9c3cmauzzii6sp8m.html",
+  "024__ponencia_coloan__2q2rgxb9mw17qi7b4g.html",
+  "025__ponencia_murcia__2ranpep5fiin8jdh0n.html",
+  "026__Estilo_Profesional__2s16ki43rb3pp355w0.html",
+  "027__Ruleta_Morfosintaxis__33ae9jp1x82p4dcifx.html",
+  "028__Calculadora_logopedia_precisa__4a3s2uuwnrec3e7ebo.html",
+  "029__Calculadora_Logopedia_Profesional__49skuerbvo5sfaw73e.html",
+  "030__Diario_Logopeda__46n1vi5tjonvdqx1mr.html",
+  "031__Coste_Sesión_Logopeda__45jyh72cwl3ntz0spr.html",
+  "032__Juego_Visual__3sc0gk0739sabv61wx.html",
+  "033__Templo_Logopedia__3kueh0xt6qje628dbx.html",
+  "034__Erre_S_Pro__3gq18d3t0i4vsr4218.html",
+  "035__kaboom__57oojoskvp4i31tki7.html",
+  "036__Sistema_Entrenamiento_Vocal__697ietfgriyvj84iyf.html",
+  "037__App_Dislexia__qv7ddx3hcfks4if1hd.html",
+  "038__ClinicPro_HTML__tkm1wthsack4uuipfm.html",
+  "039__DiagnostIA_Pro__2q6rqdxmh3xcihx39y.html",
+  "040__El_templo_logopedia__15dwr830zjbbn5ioeo.html",
+  "041__Evaluación_Logopédica_App__ttqzi3s2oa2n687of2.html",
+  "042__Guía_Familiar_Rutinas__t7gyk24i27aszhbbrw.html",
+  "043__Judería_Melilla_Game__2zths54i82iq60i8b7.html",
+  "044__Judería_Melilla_Gamificada__2zootzcrzia6xe0i17.html",
+  "045__Juegoslogopedos2025__qg7exu31xosjcoobhd.html",
+  "046__Karaoke_ritmo__ngr0e7amaoqz8kedzu.html",
+  "047__Landing_Page__ofoflinmu5q0knhgdb.html",
+  "048__Logopedia_Domino_Juego__2qwa5takdmxzu77sds.html",
+  "049__Morfosintaxis_Videojuego__2cdoyk6m8yxd60at9f.html",
+  "050__PDF_Interactivo__otoej7wx80azmnfmkg.html",
+  "051__Prompt_Perfecto_Accesibilidad__42belnrpn3ih5kfv52.html",
+  "052__Ruleta_Landing__s7h4n1t4anymi7mor1.html",
+  "053__Ruleta_Morfosintaxis__33ahq76ng744101qq1.html",
+  "054__Visualizador_Onda_Audio__3dsg7p6wwznteafk0e.html",
+  "055__Web_toldos_asher__rihct2498rsy4th7ru.html"
+];
+
+const POE_DESCARTADOS_FILES = [
+  "Animales_Revueltos__36ooivrhjqxkt2l6pg.html",
+  "Análisis_disgrafía__4m9d74o0qx8dd2y75t.html",
+  "Coste_Sesión_Logopeda__45jyh72cwl3ntz0spr.html",
+  "Diario_Logopeda__46n1vi5tjonvdqx1mr.html",
+  "Editando_Templerunlogopeda__5y0hk04rcg3qhu8nzz.html",
+  "Error_Poe__4b4smk0wfnpq051oi6.html",
+  "Judería_Melilla_Gamificada__2zootzcrzia6xe0i17.html",
+  "Juego_Morfosintaxis__36v5lpofp10rolbuvo.html",
+  "Juego_Sigmatismo_IA__3yvfvl4g3kpkkpttfz.html",
+  "Juego_educativo__36imvw1jzd7vn2dito.html",
+  "Libro_RR_Divertido__=80oc95k9gya6636sz.html",
+  "Prompt_Perfecto_Accesibilidad__42belnrpn3ih5kfv52.html",
+  "Ruleta_Morfosintaxis__33ae9jp1x82p4dcifx.html",
+  "Ruleta_Morfosintaxis__33ahq76ng744101qq1.html",
+  "Sistema_Entrenamiento_Vocal__697cj6at0zpkfiellj.html",
+  "Templo_Logopedia__3aw7f9az4f9sw54854.html",
+  "Testdetartamudez__3gl3b26e8zg730qokj.html"
+];
+
+function poeTitle(file){
+  return file
+    .replace(/^\d+__/, "")
+    .replace(/__[a-z0-9=]+\.html$/i, "")
+    .replace(/_/g, " ")
+    .trim();
+}
+
+ITEMS.push(
+  ...CODEX_EXTRA_ITEMS,
+  ...SUITE_POE_ITEMS,
+  ...POE_MASIVO_FILES.map((file, idx) => ({
+    cat:"Cantera", emoji:"🧪", title:`POE masivo ${String(idx+1).padStart(2,"0")} — ${poeTitle(file)}`, status:"repo",
+    desc:"HTML individual del lote POE masivo. Esta subido al repo para abrirlo, probarlo y decidir despues si se queda, se remezcla o se descarta.",
+    tags:["POE masivo","cantera","HTML"],
+    links:[{t:"Abrir HTML",u:`codex-assets/poe-masivo/${file}`,p:1}]
+  })),
+  ...POE_DESCARTADOS_FILES.map((file, idx) => ({
+    cat:"Cantera", emoji:"🗂️", title:`POE descartado ${String(idx+1).padStart(2,"0")} — ${poeTitle(file)}`, status:"repo",
+    desc:"HTML del lote descartados/no-referencia. Conservado como cantera para no perder trabajo antes de la reunion.",
+    tags:["descartado","POE","HTML"],
+    links:[{t:"Abrir HTML",u:`codex-assets/poe-descartados/${file}`,p:1}]
+  }))
+);
+
+const CATS = ["Todos","Membresía","Suite","Juegos","Herramientas","ARAIA","Beta","Curso","Cantera","Docs","Infra"];
 const board = document.getElementById('board');
 const filtersEl = document.getElementById('filters');
 const qEl = document.getElementById('q');

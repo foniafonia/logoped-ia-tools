@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Mis pacientes</title>
+  <link rel="stylesheet" href="./src/app.css?v=8" />
+</head>
+<body data-page="index">
+  <div id="pinRoot" class="pin-block card hidden">
+    <h2 id="pinTitle">PIN</h2>
+    <p class="muted">Si es el primer uso, este PIN quedará guardado.</p>
+    <div class="pin-row">
+      <input id="pinInput" maxlength="4" inputmode="numeric" placeholder="0000" />
+      <button id="pinBtn" class="btn" type="button">Entrar</button>
+    </div>
+    <div style="margin-top:8px">
+      <button id="pinResetBtn" class="btn btn-danger" type="button">Reiniciar PIN</button>
+    </div>
+    <div id="pinMsg" class="muted" style="margin-top:8px"></div>
+  </div>
+
+  <main id="appRoot" class="wrap hidden">
+    <section class="head">
+      <h1>Cognitiva</h1>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnNewPaciente" class="btn" type="button">＋ Nuevo paciente</button>
+        <button id="btnBackup" class="btn" type="button">⬇️ Copia de seguridad</button>
+        <button id="btnRestore" class="btn" type="button">⬆️ Restaurar</button>
+        <input id="fileRestore" type="file" accept="application/json,.json" style="display:none" />
+      </div>
+    </section>
+    <section id="patientsGrid" class="grid"></section>
+  </main>
+
+  <script src="./src/app.js?v=8" defer></script>
+</body>
+</html>

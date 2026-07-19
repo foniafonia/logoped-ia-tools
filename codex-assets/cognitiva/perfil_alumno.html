@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil Alumno · Cognitiva</title>
+  <style>
+    body{font-family:Manrope,system-ui,sans-serif;background:#f5f7fb;margin:0;padding:20px;color:#1f2730}
+    .card{max-width:980px;margin:0 auto;background:#fff;border:1px solid #d6dfeb;border-radius:14px;padding:16px}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .mapa{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+    .arrow{color:#9ab0c8;font-weight:700}
+    .casilla{border:1px solid #d8e3f1;border-radius:12px;padding:10px 12px;min-width:170px}
+    .casilla .code{font-size:12px;color:#6a7d94}
+    .casilla .name{font-weight:800}
+    .superado{background:#eaf8ef;border-color:#9bd4b0;color:#145a35}
+    .activo{background:#eaf3ff;border-color:#8fb8ea;color:#1f5faa;cursor:pointer;animation:pulse 1.2s infinite}
+    .bloqueado{background:#f0f3f7;border-color:#d8e0ea;color:#7b8ea6}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,95,170,.35)}70%{box-shadow:0 0 0 10px rgba(31,95,170,0)}100%{box-shadow:0 0 0 0 rgba(31,95,170,0)}}
+    .msg{margin-top:12px;color:#60758d;font-size:13px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="head">
+      <h1>Cuaderno del Alumno</h1>
+      <a href="./index.html" style="font-size:13px;color:#5b6f86">← Volver al portal</a>
+    </div>
+    <div id="meta" class="msg"></div>
+    <div id="mapa" class="mapa"></div>
+    <div id="status" class="msg"></div>
+  </main>
+
+  <script>
+    (function(){
+      const NOMBRES = {
+        obj001a: 'Letras', obj003a: 'Sonidos', obj006a: 'Vocales',
+        obj015j: 'Sílabas directas', obj015t: 'Sílabas inversas',
+        obj017b: 'Palabras', obj020p: 'Frases', obj031a: 'Comprensión',
+        obj041a: 'Inferencias', obj008a: 'Conciencia fonológica',
+        eficiencia: 'Lectura eficiente', escritura: 'Escritura',
+        lenguaje: 'Lenguaje abstracto', ortografia: 'Ortografía'
+      };
+
+      const MAP = {
+        obj001a:'alumno_obj001a.html',obj003a:'alumno_obj003a.html',obj006a:'alumno_obj006a_007a_012a.html',
+        obj015j:'alumno_obj015j.html',obj015t:'alumno_obj015t.html',obj017b:'alumno_obj017b.html',obj020p:'alumno_obj020p.html',
+        obj031a:'alumno_obj031a.html',obj041a:'alumno_obj041a.html',obj008a:'alumno_conciencia_fonologica_obj008a.html',
+        eficiencia:'alumno_eficiencia_lectora_obj003a_004a.html',escritura:'alumno_escritura_productiva.html',
+        lenguaje:'alumno_lenguaje_abstracto.html',ortografia:'alumno_ortografia_bv_cloze.html'
+      };
+
+      const p = new URLSearchParams(window.location.search);
+      const profileId = p.get('alumno') || '';
+      const cuadernos = JSON.parse(localStorage.getItem('cognitiva_cuadernos') || '[]')
+        .filter((c) => c.profileId === profileId)
+        .sort((a,b) => (b.fecha_asignacion || '').localeCompare(a.fecha_asignacion || ''));
+
+      const meta = document.getElementById('meta');
+      const mapa = document.getElementById('mapa');
+      const status = document.getElementById('status');
+
+      if (!profileId) {
+        status.textContent = 'Falta profileId del alumno en la URL.';
+        return;
+      }
+
+      const activo = cuadernos.find((c) => c.estado !== 'completado') || cuadernos[0] || null;
+      if (!activo) {
+        status.textContent = 'El Tutor no ha asignado ningún cuaderno todavía.';
+        return;
+      }
+
+      const talleres = (activo.talleres || []).slice().sort((a,b) => a.orden - b.orden);
+      meta.textContent = `Alumno: ${profileId} · Cuaderno: ${activo.nombre}`;
+
+      let activeIndex = talleres.findIndex((t) => !t.superado);
+      if (activeIndex < 0) activeIndex = talleres.length - 1;
+
+      function render() {
+        mapa.innerHTML = '';
+        talleres.forEach((t, idx) => {
+          const div = document.createElement('div');
+          const nombre = NOMBRES[t.id_taller] || t.id_taller;
+          const icon = t.superado ? '✅' : (idx === activeIndex ? '🔵' : '🔒');
+          const cls = t.superado ? 'superado' : (idx === activeIndex ? 'activo' : 'bloqueado');
+          div.className = `casilla ${cls}`;
+          div.innerHTML = `<div class="name">${icon} ${nombre}</div><div class="code">${t.id_taller}</div>`;
+
+          if (!t.superado && idx === activeIndex) {
+            div.addEventListener('click', () => {
+              const url = MAP[t.id_taller];
+              if (!url) {
+                alert(`No hay pantalla para ${t.id_taller}`);
+                return;
+              }
+              location.href = `${url}?alumno=${encodeURIComponent(profileId)}`;
+            });
+          }
+          mapa.appendChild(div);
+
+          if (idx < talleres.length - 1) {
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow';
+            arrow.textContent = '→';
+            mapa.appendChild(arrow);
+          }
+        });
+
+        const completados = talleres.filter((t) => t.superado).length;
+        status.textContent = `Progreso: ${completados}/${talleres.length} talleres superados.`;
+      }
+
+      window.addEventListener('focus', render);
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Skills Adventure - Niveles Progresivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-fast': 'pulse 1s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'flash': 'flash 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #5D5CDE' },
+                            '100%': { boxShadow: '0 0 20px #5D5CDE, 0 0 30px #5D5CDE' },
+                        },
+                        flash: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.3' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        .game-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--tw-gradient-stops));
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .click-circle {
+            cursor: pointer;
+            transition: all 0.2s;
+            animation: pulse 2s infinite;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .click-circle:hover {
+            transform: scale(1.1);
+        }
+        .draggable {
+            cursor: move;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .drop-zone {
+            border: 3px dashed #ccc;
+            transition: all 0.3s ease;
+        }
+        .drop-zone.drag-over {
+            border-color: #5D5CDE;
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+        .pattern-button {
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .pattern-button:active {
+            transform: scale(0.95);
+        }
+        .trace-area {
+            position: relative;
+            touch-action: none;
+        }
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        .progress-hold {
+            transition: width 0.1s linear;
+        }
+        .swipe-area {
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .number-button {
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .number-button:active {
+            transform: scale(0.9);
+        }
+        .rotate-shape {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-purple-900 min-h-screen">
+    
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape w-16 h-16 bg-yellow-300 rounded-full" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+        <div class="shape w-12 h-12 bg-pink-300 rounded-full" style="left: 80%; top: 10%; animation-delay: 1s;"></div>
+        <div class="shape w-20 h-20 bg-green-300 rounded-full" style="left: 70%; top: 70%; animation-delay: 2s;"></div>
+        <div class="shape w-8 h-8 bg-purple-300 rounded-full" style="left: 20%; top: 80%; animation-delay: 3s;"></div>
+    </div>
+
+    <div class="relative z-10">
+        <!-- Main Menu -->
+        <div id="mainMenu" class="container mx-auto p-4">
+            <!-- Header -->
+            <div class="text-center mb-8 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-2xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-bounce-slow" style="font-family: 'Fredoka One', cursive;">
+                    🎯 Motor Skills Adventure
+                </h1>
+                <p class="text-xl md:text-2xl mb-2">¡Ejercita tu psicomotricidad fina jugando!</p>
+                <p class="text-lg md:text-xl opacity-90 flex items-center justify-center gap-2">
+                    <span>✨</span> Juegos educativos con 5 niveles cada uno <span>✨</span>
+                </p>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                    <div class="text-3xl mb-2">🏆</div>
+                    <div class="text-2xl font-bold text-yellow-600" id="totalPoints">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Puntos</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <div class="text-2xl font-bold text-yellow-500" id="totalStars">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Estrellas</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                    <div class="text-3xl mb-2">🎯</div>
+                    <div class="text-2xl font-bold text-blue-600" id="currentLevel">1</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Nivel Global</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                    <div class="text-3xl mb-2">🔥</div>
+                    <div class="text-2xl font-bold text-red-500" id="streak">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Racha</div>
+                </div>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Precisión Click -->
+                <div class="game-card from-blue-400 to-blue-600 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('precision')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-pulse">🎯</div>
+                        <h3 class="text-xl font-bold mb-2">Precisión Click</h3>
+                        <p class="text-sm opacity-90 mb-4">5 rondas de círculos cada vez más rápidos</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrastra y Suelta -->
+                <div class="game-card from-purple-400 to-pink-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('dragdrop')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-wiggle">🎮</div>
+                        <h3 class="text-xl font-bold mb-2">Arrastra y Suelta</h3>
+                        <p class="text-sm opacity-90 mb-4">5 niveles con más objetos cada vez</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sigue el Patrón -->
+                <div class="game-card from-green-400 to-emerald-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('pattern')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-bounce">🧠</div>
+                        <h3 class="text-xl font-bold mb-2">Sigue el Patrón</h3>
+                        <p class="text-sm opacity-90 mb-4">Secuencias de memoria progresivas</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pellizcar y Sostener -->
+                <div class="game-card from-orange-400 to-red-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('pinch')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-pulse-fast">✋</div>
+                        <h3 class="text-xl font-bold mb-2">Pellizcar y Sostener</h3>
+                        <p class="text-sm opacity-90 mb-4">Mantén presionado tiempos más largos</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trazado de Formas -->
+                <div class="game-card from-teal-400 to-cyan-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('tracing')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-float">✏️</div>
+                        <h3 class="text-xl font-bold mb-2">Trazado de Formas</h3>
+                        <p class="text-sm opacity-90 mb-4">Formas más complejas por nivel</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deslizar Direccional -->
+                <div class="game-card from-indigo-400 to-purple-600 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('swipe')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-wiggle">↗️</div>
+                        <h3 class="text-xl font-bold mb-2">Deslizar Direccional</h3>
+                        <p class="text-sm opacity-90 mb-4">Más direcciones y velocidad</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secuencia Rápida -->
+                <div class="game-card from-lime-400 to-green-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('sequence')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-bounce">⚡</div>
+                        <h3 class="text-xl font-bold mb-2">Secuencia Rápida</h3>
+                        <p class="text-sm opacity-90 mb-4">Más números cada nivel</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rotar y Alinear -->
+                <div class="game-card from-amber-400 to-orange-500 rounded-3xl p-6 text-white cursor-pointer shadow-xl" onclick="startGame('rotate')">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-pulse">🔄</div>
+                        <h3 class="text-xl font-bold mb-2">Rotar y Alinear</h3>
+                        <p class="text-sm opacity-90 mb-4">Más formas y rotaciones complejas</p>
+                        <div class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full text-sm font-semibold transition-all">
+                            ¡Jugar Ahora!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievement Panel -->
+            <div class="mt-8 bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-xl">
+                <h3 class="text-2xl font-bold text-center mb-4 text-gray-800 dark:text-white">🏆 Logros Recientes</h3>
+                <div id="achievementList" class="text-center text-gray-500 dark:text-gray-400 py-8">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <p>¡Completa niveles para desbloquear logros!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Container -->
+        <div id="gameContainer" class="hidden container mx-auto p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
+                <!-- Game Header -->
+                <div id="gameHeader" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <button onclick="backToMenu()" class="bg-white bg-opacity-20 hover:bg-opacity-30 p-2 rounded-full transition-all">
+                            ← Volver
+                        </button>
+                        <h2 id="gameTitle" class="text-xl md:text-2xl font-bold">🎯 Juego</h2>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                                ⏱️ <span id="gameTimer">45</span>s
+                            </div>
+                            <div class="bg-purple-500 px-3 py-1 rounded-full text-sm">
+                                🎯 <span id="gameScore">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-sm opacity-90" id="gameStats">
+                        <span id="roundInfo">Preparando...</span>
+                    </div>
+                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-2">
+                        <div id="progressBar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Game Area -->
+                <div class="p-8 text-center">
+                    <div id="gameInstructions">
+                        <h3 id="instructionTitle" class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">¡Preparado!</h3>
+                        <p id="instructionText" class="text-lg text-gray-600 dark:text-gray-300 mb-6">Completa 5 rondas con dificultad creciente</p>
+                        
+                        <button onclick="startCurrentGame()" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full text-xl font-bold hover:from-blue-600 hover:to-purple-700 transition-all animate-glow">
+                            ¡Empezar!
+                        </button>
+                    </div>
+
+                    <div id="gameArea" class="hidden relative bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-8 min-h-96">
+                        <!-- Game content will appear here -->
+                    </div>
+
+                    <div id="gameResults" class="hidden">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">¡Juego Completado!</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-xl">
+                                <div class="text-2xl font-bold text-blue-600" id="finalScore">0</div>
+                                <div class="text-sm text-blue-500">Puntuación Total</div>
+                            </div>
+                            <div class="bg-green-100 dark:bg-green-900 p-4 rounded-xl">
+                                <div class="text-2xl font-bold text-green-600" id="roundsCompleted">0</div>
+                                <div class="text-sm text-green-500">Rondas Completadas</div>
+                            </div>
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-xl">
+                                <div class="text-2xl font-bold text-yellow-600" id="finalStars">3</div>
+                                <div class="text-sm text-yellow-500">Estrellas Ganadas</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-4">
+                            <button onclick="restartCurrentGame()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full font-bold hover:from-green-600 hover:to-emerald-700 transition-all">
+                                Jugar Otra Vez
+                            </button>
+                            <button onclick="backToMenu()" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">
+                                Menú Principal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Game State
+        let gameData = {
+            points: 0,
+            stars: 0,
+            level: 1,
+            streak: 0,
+            currentGame: null,
+            gameActive: false,
+            timer: 45,
+            score: 0,
+            currentRound: 1,
+            totalRounds: 5,
+            timerInterval: null
+        };
+
+        // Game configurations with progressive difficulty
+        let games = {
+            precision: {
+                title: '🎯 Precisión Click',
+                instruction: '¡Haz clic en los círculos que aparecen! Cada ronda será más rápida.',
+                getRoundGoal: (round) => 3 + round * 2,
+                getSpawnRate: (round) => Math.max(400, 1200 - round * 150),
+                getCircleSize: (round) => Math.max(25, 55 - round * 5),
+                getLifetime: (round) => Math.max(800, 2200 - round * 250)
+            },
+            dragdrop: {
+                title: '🎮 Arrastra y Suelta',
+                instruction: '¡Arrastra objetos a sus contenedores! Más objetos cada ronda.',
+                getItemCount: (round) => 3 + round
+            },
+            pattern: {
+                title: '🧠 Sigue el Patrón',
+                instruction: '¡Memoriza y repite secuencias! Más colores cada ronda.',
+                getSequenceLength: (round) => 2 + round,
+                getRequiredSequences: (round) => 2 + Math.floor(round / 2)
+            },
+            pinch: {
+                title: '✋ Pellizcar y Sostener',
+                instruction: '¡Mantén presionado para llenar barras! Más tiempo cada ronda.',
+                getTargetCount: (round) => 2 + round,
+                getRequiredTime: (round) => 1500 + round * 500
+            },
+            tracing: {
+                title: '✏️ Trazado de Formas',
+                instruction: '¡Traza las formas punteadas! Más formas cada ronda.',
+                getShapeCount: (round) => 1 + round
+            },
+            swipe: {
+                title: '↗️ Deslizar Direccional',
+                instruction: '¡Desliza en la dirección correcta! Más direcciones cada ronda.',
+                getSwipeCount: (round) => 4 + round * 2,
+                getDirectionsCount: (round) => Math.min(8, 4 + round)
+            },
+            sequence: {
+                title: '⚡ Secuencia Rápida',
+                instruction: '¡Toca números en orden! Más números cada ronda.',
+                getMaxNumber: (round) => 4 + round * 2
+            },
+            rotate: {
+                title: '🔄 Rotar y Alinear',
+                instruction: '¡Rota formas para alinearlas! Más formas cada ronda.',
+                getShapeCount: (round) => 2 + round
+            }
+        };
+
+        // Current game data
+        let currentGameData = {
+            intervals: [],
+            elements: [],
+            roundComplete: false
+        };
+
+        // Initialize
+        function init() {
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalPoints').textContent = gameData.points;
+            document.getElementById('totalStars').textContent = gameData.stars;
+            document.getElementById('currentLevel').textContent = gameData.level;
+            document.getElementById('streak').textContent = gameData.streak;
+        }
+
+        // Utility functions for touch/mouse compatibility
+        function getEventPos(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function addTouchMouseEvents(element, onStart, onMove, onEnd) {
+            element.addEventListener('mousedown', onStart);
+            element.addEventListener('mousemove', onMove);
+            element.addEventListener('mouseup', onEnd);
+            element.addEventListener('touchstart', onStart, { passive: false });
+            element.addEventListener('touchmove', onMove, { passive: false });
+            element.addEventListener('touchend', onEnd, { passive: false });
+        }
+
+        // Main game navigation
+        function startGame(gameType) {
+            gameData.currentGame = gameType;
+            gameData.gameActive = false;
+            gameData.timer = 45;
+            gameData.score = 0;
+            gameData.currentRound = 1;
+            
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
+            
+            setupGameUI(gameType);
+        }
+
+        function setupGameUI(gameType) {
+            const game = games[gameType];
+            document.getElementById('gameTitle').textContent = game.title;
+            document.getElementById('instructionTitle').textContent = game.title;
+            document.getElementById('instructionText').textContent = game.instruction;
+            
+            // Update header color based on game
+            const header = document.getElementById('gameHeader');
+            const colors = {
+                precision: 'from-blue-500 to-blue-700',
+                dragdrop: 'from-purple-500 to-pink-600',
+                pattern: 'from-green-500 to-emerald-600',
+                pinch: 'from-orange-500 to-red-600',
+                tracing: 'from-teal-500 to-cyan-600',
+                swipe: 'from-indigo-500 to-purple-700',
+                sequence: 'from-lime-500 to-green-600',
+                rotate: 'from-amber-500 to-orange-600'
+            };
+            header.className = `bg-gradient-to-r ${colors[gameType]} text-white p-6`;
+            
+            document.getElementById('gameInstructions').style.display = 'block';
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameResults').style.display = 'none';
+            
+            updateGameUI();
+        }
+
+        function startCurrentGame() {
+            gameData.gameActive = true;
+            gameData.timer = 45;
+            gameData.score = 0;
+            gameData.currentRound = 1;
+            
+            document.getElementById('gameInstructions').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            
+            // Start timer
+            gameData.timerInterval = setInterval(() => {
+                gameData.timer--;
+                updateGameUI();
+                
+                if (gameData.timer <= 0) {
+                    endCurrentGame();
+                }
+            }, 1000);
+            
+            // Start first round
+            startGameRound();
+        }
+
+        function startGameRound() {
+            if (!gameData.gameActive) return;
+            
+            currentGameData.roundComplete = false;
+            updateGameUI();
+            
+            // Clear previous intervals and elements
+            currentGameData.intervals.forEach(clearInterval);
+            currentGameData.intervals = [];
+            
+            // Start specific game round
+            switch(gameData.currentGame) {
+                case 'precision': startPrecisionRound(); break;
+                case 'dragdrop': startDragDropRound(); break;
+                case 'pattern': startPatternRound(); break;
+                case 'pinch': startPinchRound(); break;
+                case 'tracing': startTracingRound(); break;
+                case 'swipe': startSwipeRound(); break;
+                case 'sequence': startSequenceRound(); break;
+                case 'rotate': startRotateRound(); break;
+            }
+        }
+
+        function completeGameRound() {
+            if (currentGameData.roundComplete) return;
+            currentGameData.roundComplete = true;
+            
+            // Award points for completing round
+            const bonusPoints = gameData.currentRound * 2;
+            gameData.score += bonusPoints;
+            updateGameUI();
+            
+            // Show round complete message
+            const gameArea = document.getElementById('gameArea');
+            const roundCompleteDiv = document.createElement('div');
+            roundCompleteDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            roundCompleteDiv.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center shadow-2xl">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-2xl font-bold mb-2 text-gray-800 dark:text-white">¡Ronda ${gameData.currentRound} Completada!</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">+${bonusPoints} puntos de bonificación</p>
+                    <div class="text-lg font-bold text-blue-600">Preparando siguiente ronda...</div>
+                </div>
+            `;
+            document.body.appendChild(roundCompleteDiv);
+            
+            setTimeout(() => {
+                roundCompleteDiv.remove();
+                gameData.currentRound++;
+                
+                if (gameData.currentRound > gameData.totalRounds) {
+                    endCurrentGame();
+                } else {
+                    startGameRound();
+                }
+            }, 2000);
+        }
+
+        function updateGameUI() {
+            document.getElementById('gameTimer').textContent = gameData.timer;
+            document.getElementById('gameScore').textContent = gameData.score;
+            document.getElementById('roundInfo').textContent = `Ronda ${gameData.currentRound}/${gameData.totalRounds} - Puntos: ${gameData.score}`;
+            
+            // Update progress bar
+            const progress = ((gameData.currentRound - 1) / gameData.totalRounds) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function endCurrentGame() {
+            gameData.gameActive = false;
+            
+            // Clear timer
+            if (gameData.timerInterval) {
+                clearInterval(gameData.timerInterval);
+                gameData.timerInterval = null;
+            }
+            
+            // Clear game intervals
+            currentGameData.intervals.forEach(clearInterval);
+            currentGameData.intervals = [];
+            
+            // Calculate results
+            const roundsCompleted = Math.min(gameData.currentRound - 1, gameData.totalRounds);
+            const stars = Math.min(3, Math.floor(roundsCompleted * 3 / gameData.totalRounds) + 1);
+            const bonusPoints = stars * 50;
+            
+            // Update global stats
+            gameData.points += gameData.score + bonusPoints;
+            gameData.stars += stars;
+            
+            if (roundsCompleted >= 4) {
+                gameData.streak++;
+            } else {
+                gameData.streak = 0;
+            }
+            
+            if (gameData.points >= gameData.level * 500) {
+                gameData.level++;
+            }
+            
+            // Show results
+            document.getElementById('finalScore').textContent = gameData.score + bonusPoints;
+            document.getElementById('roundsCompleted').textContent = `${roundsCompleted}/${gameData.totalRounds}`;
+            document.getElementById('finalStars').textContent = stars;
+            
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameResults').style.display = 'block';
+        }
+
+        function restartCurrentGame() {
+            setupGameUI(gameData.currentGame);
+        }
+
+        function backToMenu() {
+            gameData.gameActive = false;
+            
+            if (gameData.timerInterval) {
+                clearInterval(gameData.timerInterval);
+                gameData.timerInterval = null;
+            }
+            
+            currentGameData.intervals.forEach(clearInterval);
+            currentGameData.intervals = [];
+            
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('gameContainer').style.display = 'none';
+            updateStats();
+        }
+
+        // Game Implementations
+        function startPrecisionRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.precision;
+            const roundGoal = game.getRoundGoal(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - ¡Haz clic en ${roundGoal} círculos!
+                </div>
+                <div class="text-center mb-4">
+                    <div class="bg-blue-100 dark:bg-blue-900 px-4 py-2 rounded-lg inline-block">
+                        Objetivos: <span id="targets">0</span> / ${roundGoal}
+                    </div>
+                </div>
+            `;
+            
+            let targets = 0;
+            const spawnRate = game.getSpawnRate(gameData.currentRound);
+            const circleSize = game.getCircleSize(gameData.currentRound);
+            const lifetime = game.getLifetime(gameData.currentRound);
+            
+            const spawnInterval = setInterval(() => {
+                if (!gameData.gameActive || currentGameData.roundComplete) {
+                    clearInterval(spawnInterval);
+                    return;
+                }
+                
+                const circle = document.createElement('div');
+                const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const x = Math.random() * (gameArea.clientWidth - circleSize);
+                const y = Math.random() * (gameArea.clientHeight - circleSize - 100) + 100;
+                
+                circle.className = `click-circle absolute rounded-full ${color}`;
+                circle.style.width = circleSize + 'px';
+                circle.style.height = circleSize + 'px';
+                circle.style.left = x + 'px';
+                circle.style.top = y + 'px';
+                
+                const hitCircle = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    targets++;
+                    gameData.score++;
+                    document.getElementById('targets').textContent = targets;
+                    circle.innerHTML = '<div class="w-full h-full flex items-center justify-center text-white font-bold text-xs">+1</div>';
+                    
+                    if (targets >= roundGoal) {
+                        completeGameRound();
+                    }
+                    
+                    setTimeout(() => {
+                        if (circle.parentNode) circle.remove();
+                    }, 200);
+                };
+                
+                circle.addEventListener('click', hitCircle);
+                circle.addEventListener('touchstart', hitCircle, { passive: false });
+                
+                gameArea.appendChild(circle);
+                
+                setTimeout(() => {
+                    if (circle.parentNode) circle.remove();
+                }, lifetime);
+            }, spawnRate);
+            
+            currentGameData.intervals.push(spawnInterval);
+        }
+
+        function startDragDropRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.dragdrop;
+            const itemCount = game.getItemCount(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - ¡Arrastra ${itemCount} objetos a sus contenedores!
+                </div>
+                <div class="grid grid-cols-2 gap-8 h-full">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-gray-700 dark:text-gray-300">Objetos</h4>
+                        <div id="dragItems" class="space-y-2"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-gray-700 dark:text-gray-300">Contenedores</h4>
+                        <div id="dropZones" class="space-y-2"></div>
+                    </div>
+                </div>
+            `;
+            
+            const allItems = [
+                { id: 'apple', emoji: '🍎', target: 'fruits' },
+                { id: 'car', emoji: '🚗', target: 'vehicles' },
+                { id: 'banana', emoji: '🍌', target: 'fruits' },
+                { id: 'plane', emoji: '✈️', target: 'vehicles' },
+                { id: 'orange', emoji: '🍊', target: 'fruits' },
+                { id: 'bike', emoji: '🚲', target: 'vehicles' },
+                { id: 'cat', emoji: '🐱', target: 'animals' },
+                { id: 'dog', emoji: '🐶', target: 'animals' },
+                { id: 'ball', emoji: '⚽', target: 'toys' },
+                { id: 'doll', emoji: '🪆', target: 'toys' },
+                { id: 'grapes', emoji: '🍇', target: 'fruits' },
+                { id: 'train', emoji: '🚂', target: 'vehicles' }
+            ];
+            
+            const items = allItems.slice(0, itemCount);
+            let completed = 0;
+            
+            const zones = [
+                { id: 'fruits', name: 'Frutas', emoji: '🍎' },
+                { id: 'vehicles', name: 'Vehículos', emoji: '🚗' },
+                { id: 'animals', name: 'Animales', emoji: '🐱' },
+                { id: 'toys', name: 'Juguetes', emoji: '⚽' }
+            ];
+            
+            // Create draggable items
+            const dragContainer = document.getElementById('dragItems');
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'draggable bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg text-center cursor-move';
+                div.innerHTML = `<div class="text-3xl">${item.emoji}</div>`;
+                div.dataset.target = item.target;
+                
+                let isDragging = false;
+                let startPos = { x: 0, y: 0 };
+                
+                addTouchMouseEvents(div,
+                    (e) => {
+                        e.preventDefault();
+                        isDragging = true;
+                        const pos = getEventPos(e);
+                        startPos = pos;
+                        div.style.zIndex = '1000';
+                        div.style.transform = 'scale(1.1)';
+                    },
+                    (e) => {
+                        if (!isDragging) return;
+                        e.preventDefault();
+                        const pos = getEventPos(e);
+                        const currentPos = {
+                            x: pos.x - startPos.x,
+                            y: pos.y - startPos.y
+                        };
+                        div.style.transform = `translate(${currentPos.x}px, ${currentPos.y}px) scale(1.1)`;
+                    },
+                    (e) => {
+                        if (!isDragging) return;
+                        e.preventDefault();
+                        isDragging = false;
+                        div.style.zIndex = '';
+                        div.style.transform = '';
+                        
+                        const pos = getEventPos(e);
+                        const dropZone = document.elementFromPoint(pos.x, pos.y);
+                        if (dropZone && dropZone.dataset.zone === div.dataset.target) {
+                            completed++;
+                            gameData.score++;
+                            div.style.opacity = '0.5';
+                            div.style.pointerEvents = 'none';
+                            
+                            if (completed >= itemCount) {
+                                setTimeout(() => completeGameRound(), 1000);
+                            }
+                        }
+                    }
+                );
+                
+                dragContainer.appendChild(div);
+            });
+            
+            // Create drop zones
+            const dropContainer = document.getElementById('dropZones');
+            zones.forEach(zone => {
+                const div = document.createElement('div');
+                div.className = 'drop-zone bg-gray-100 dark:bg-gray-600 p-6 rounded-lg text-center min-h-24';
+                div.innerHTML = `<div class="text-2xl mb-2">${zone.emoji}</div><div class="font-semibold">${zone.name}</div>`;
+                div.dataset.zone = zone.id;
+                dropContainer.appendChild(div);
+            });
+        }
+
+        function startPatternRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.pattern;
+            const sequenceLength = game.getSequenceLength(gameData.currentRound);
+            const requiredSequences = game.getRequiredSequences(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - Secuencias de ${sequenceLength} colores (${requiredSequences} correctas)
+                </div>
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-4">
+                    <button class="pattern-button bg-red-500 text-white p-8 rounded-lg text-xl font-bold" data-color="red">🔴</button>
+                    <button class="pattern-button bg-blue-500 text-white p-8 rounded-lg text-xl font-bold" data-color="blue">🔵</button>
+                    <button class="pattern-button bg-green-500 text-white p-8 rounded-lg text-xl font-bold" data-color="green">🟢</button>
+                    <button class="pattern-button bg-yellow-500 text-white p-8 rounded-lg text-xl font-bold" data-color="yellow">🟡</button>
+                </div>
+                <div class="text-center mb-4">
+                    <div class="bg-green-100 dark:bg-green-900 px-4 py-2 rounded-lg inline-block">
+                        Correctas: <span id="correctSequences">0</span> / ${requiredSequences}
+                    </div>
+                </div>
+                <button id="startPattern" class="bg-purple-500 text-white px-6 py-3 rounded-lg font-bold">Mostrar Secuencia</button>
+            `;
+            
+            let sequence = [];
+            let userSequence = [];
+            let showing = false;
+            let correctSequences = 0;
+            
+            function showSequence() {
+                showing = true;
+                userSequence = [];
+                sequence = [];
+                
+                const colors = ['red', 'blue', 'green', 'yellow'];
+                for (let i = 0; i < sequenceLength; i++) {
+                    sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+                }
+                
+                let index = 0;
+                const showNext = () => {
+                    if (index >= sequence.length) {
+                        showing = false;
+                        return;
+                    }
+                    
+                    const color = sequence[index];
+                    const btn = document.querySelector(`[data-color="${color}"]`);
+                    btn.style.opacity = '0.3';
+                    setTimeout(() => btn.style.opacity = '1', 300);
+                    
+                    index++;
+                    setTimeout(showNext, 600);
+                };
+                
+                setTimeout(showNext, 500);
+            }
+            
+            document.getElementById('startPattern').onclick = showSequence;
+            
+            document.querySelectorAll('.pattern-button').forEach(btn => {
+                const clickHandler = () => {
+                    if (showing) return;
+                    
+                    const color = btn.dataset.color;
+                    userSequence.push(color);
+                    
+                    btn.style.opacity = '0.5';
+                    setTimeout(() => btn.style.opacity = '1', 200);
+                    
+                    if (userSequence.length === sequence.length) {
+                        if (JSON.stringify(userSequence) === JSON.stringify(sequence)) {
+                            correctSequences++;
+                            gameData.score += 2;
+                            document.getElementById('correctSequences').textContent = correctSequences;
+                            
+                            if (correctSequences >= requiredSequences) {
+                                setTimeout(() => completeGameRound(), 1000);
+                            } else {
+                                setTimeout(() => {
+                                    userSequence = [];
+                                    showSequence();
+                                }, 1000);
+                            }
+                        } else {
+                            userSequence = [];
+                            btn.style.backgroundColor = '#ef4444';
+                            setTimeout(() => {
+                                btn.style.backgroundColor = '';
+                            }, 500);
+                        }
+                    }
+                };
+                
+                btn.addEventListener('click', clickHandler);
+                btn.addEventListener('touchstart', clickHandler, { passive: false });
+            });
+            
+            // Auto-start first sequence
+            setTimeout(showSequence, 1000);
+        }
+
+        function startPinchRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.pinch;
+            const targetCount = game.getTargetCount(gameData.currentRound);
+            const requiredTime = game.getRequiredTime(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - Completa ${targetCount} barras (${requiredTime/1000}s cada una)
+                </div>
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <div id="holdButton" class="bg-blue-500 text-white w-32 h-32 rounded-full flex items-center justify-center text-lg font-bold cursor-pointer select-none mx-auto transition-all">
+                            MANTENER
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6">
+                        <div id="progressBarHold" class="bg-gradient-to-r from-blue-500 to-green-500 h-6 rounded-full transition-all duration-75" style="width: 0%"></div>
+                    </div>
+                    <div class="text-center text-lg font-bold">
+                        Completados: <span id="holdCompleted">0</span> / ${targetCount}
+                    </div>
+                </div>
+            `;
+            
+            let progress = 0;
+            let holding = false;
+            let completed = 0;
+            let holdInterval, decreaseInterval;
+            
+            const button = document.getElementById('holdButton');
+            const progressBar = document.getElementById('progressBarHold');
+            
+            const startHold = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                holding = true;
+                button.style.backgroundColor = '#10b981';
+                button.style.transform = 'scale(0.95)';
+                
+                clearInterval(decreaseInterval);
+                
+                holdInterval = setInterval(() => {
+                    if (holding && gameData.gameActive) {
+                        progress += 100 / (requiredTime / 50); // 50ms intervals
+                        progressBar.style.width = Math.min(100, progress) + '%';
+                        
+                        if (progress >= 100) {
+                            completed++;
+                            gameData.score += 3;
+                            document.getElementById('holdCompleted').textContent = completed;
+                            progress = 0;
+                            progressBar.style.width = '0%';
+                            
+                            button.style.backgroundColor = '#22c55e';
+                            setTimeout(() => {
+                                button.style.backgroundColor = '#3b82f6';
+                            }, 300);
+                            
+                            if (completed >= targetCount) {
+                                clearInterval(holdInterval);
+                                button.textContent = '¡COMPLETADO!';
+                                button.style.backgroundColor = '#22c55e';
+                                button.style.pointerEvents = 'none';
+                                setTimeout(() => completeGameRound(), 1500);
+                                return;
+                            }
+                        }
+                    }
+                }, 50);
+            };
+            
+            const endHold = (e) => {
+                e.preventDefault();
+                holding = false;
+                button.style.backgroundColor = '#3b82f6';
+                button.style.transform = 'scale(1)';
+                clearInterval(holdInterval);
+                
+                decreaseInterval = setInterval(() => {
+                    if (!holding && progress > 0) {
+                        progress -= 1;
+                        progressBar.style.width = Math.max(0, progress) + '%';
+                    } else if (progress <= 0) {
+                        clearInterval(decreaseInterval);
+                    }
+                }, 50);
+            };
+            
+            addTouchMouseEvents(button, startHold, () => {}, endHold);
+        }
+
+        function startTracingRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.tracing;
+            const shapeCount = game.getShapeCount(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - Traza ${shapeCount} formas punteadas
+                </div>
+                <canvas id="traceCanvas" class="trace-area border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 mx-auto" width="500" height="350"></canvas>
+                <div class="mt-4 text-center text-lg font-bold">
+                    Formas completadas: <span id="tracedShapes">0</span> / ${shapeCount}
+                </div>
+            `;
+            
+            const canvas = document.getElementById('traceCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            let drawing = false;
+            let currentPath = [];
+            let completedPaths = 0;
+            
+            // Draw guides based on round
+            drawTracingGuides(ctx, shapeCount);
+            
+            let isDrawing = false;
+            
+            const startDraw = (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                drawing = true;
+                const rect = canvas.getBoundingClientRect();
+                const pos = getEventPos(e);
+                const x = pos.x - rect.left;
+                const y = pos.y - rect.top;
+                
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                currentPath = [{ x, y }];
+            };
+            
+            const draw = (e) => {
+                if (!isDrawing) return;
+                e.preventDefault();
+                
+                const rect = canvas.getBoundingClientRect();
+                const pos = getEventPos(e);
+                const x = pos.x - rect.left;
+                const y = pos.y - rect.top;
+                
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                
+                currentPath.push({ x, y });
+            };
+            
+            const endDraw = (e) => {
+                if (!isDrawing) return;
+                e.preventDefault();
+                isDrawing = false;
+                drawing = false;
+                
+                if (currentPath.length > 20) {
+                    completedPaths++;
+                    gameData.score += 2;
+                    document.getElementById('tracedShapes').textContent = completedPaths;
+                    
+                    if (completedPaths >= shapeCount) {
+                        ctx.fillStyle = '#22c55e';
+                        ctx.font = 'bold 24px Arial';
+                        ctx.fillText('¡RONDA COMPLETADA!', 150, 175);
+                        setTimeout(() => completeGameRound(), 1500);
+                    }
+                }
+            };
+            
+            addTouchMouseEvents(canvas, startDraw, draw, endDraw);
+        }
+
+        function drawTracingGuides(ctx, shapeCount) {
+            ctx.strokeStyle = '#d1d5db';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([10, 5]);
+            
+            const shapes = [
+                () => { // Circle
+                    ctx.beginPath();
+                    ctx.arc(120, 120, 50, 0, 2 * Math.PI);
+                    ctx.stroke();
+                },
+                () => { // Triangle
+                    ctx.beginPath();
+                    ctx.moveTo(350, 70);
+                    ctx.lineTo(400, 170);
+                    ctx.lineTo(300, 170);
+                    ctx.closePath();
+                    ctx.stroke();
+                },
+                () => { // Square
+                    ctx.beginPath();
+                    ctx.rect(200, 80, 100, 100);
+                    ctx.stroke();
+                },
+                () => { // Star
+                    ctx.beginPath();
+                    const centerX = 120, centerY = 280;
+                    for (let i = 0; i < 10; i++) {
+                        const radius = i % 2 === 0 ? 40 : 20;
+                        const angle = (i * Math.PI) / 5;
+                        const x = centerX + Math.cos(angle) * radius;
+                        const y = centerY + Math.sin(angle) * radius;
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                },
+                () => { // Heart
+                    ctx.beginPath();
+                    const x = 350, y = 280;
+                    ctx.moveTo(x, y);
+                    ctx.bezierCurveTo(x, y - 30, x - 30, y - 30, x - 30, y);
+                    ctx.bezierCurveTo(x - 30, y + 15, x, y + 30, x, y + 50);
+                    ctx.bezierCurveTo(x, y + 30, x + 30, y + 15, x + 30, y);
+                    ctx.bezierCurveTo(x + 30, y - 30, x, y - 30, x, y);
+                    ctx.stroke();
+                }
+            ];
+            
+            for (let i = 0; i < Math.min(shapeCount, shapes.length); i++) {
+                shapes[i]();
+            }
+            
+            ctx.setLineDash([]);
+        }
+
+        function startSwipeRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.swipe;
+            const swipeCount = game.getSwipeCount(gameData.currentRound);
+            const directionsCount = game.getDirectionsCount(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - ${swipeCount} deslizamientos correctos
+                </div>
+                <div class="swipe-area bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg p-8 mx-auto max-w-md h-64 flex items-center justify-center border-4 border-dashed border-gray-400">
+                    <div id="swipeArrow" class="text-8xl animate-bounce">⬆️</div>
+                </div>
+                <div class="mt-4 text-center text-lg font-bold">
+                    Completados: <span id="swipeCompleted">0</span> / ${swipeCount}
+                </div>
+            `;
+            
+            let completed = 0;
+            let currentDirection = '';
+            
+            const arrows = ['⬆️', '⬇️', '⬅️', '➡️', '↗️', '↘️', '↙️', '↖️'];
+            const directions = ['up', 'down', 'left', 'right', 'up-right', 'down-right', 'down-left', 'up-left'];
+            
+            function newDirection() {
+                const index = Math.floor(Math.random() * directionsCount);
+                currentDirection = directions[index];
+                document.getElementById('swipeArrow').textContent = arrows[index];
+            }
+            
+            newDirection();
+            
+            const swipeArea = document.querySelector('.swipe-area');
+            let startPos = null;
+            
+            const swipeStart = (e) => {
+                e.preventDefault();
+                const pos = getEventPos(e);
+                startPos = pos;
+                swipeArea.style.transform = 'scale(0.95)';
+            };
+            
+            const swipeEnd = (e) => {
+                if (!startPos) return;
+                e.preventDefault();
+                swipeArea.style.transform = 'scale(1)';
+                
+                const pos = getEventPos(e);
+                const deltaX = pos.x - startPos.x;
+                const deltaY = pos.y - startPos.y;
+                const minSwipeDistance = 50;
+                
+                let swipeDirection = null;
+                
+                if (Math.abs(deltaX) > minSwipeDistance || Math.abs(deltaY) > minSwipeDistance) {
+                    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                    
+                    if (angle >= -22.5 && angle < 22.5) swipeDirection = 'right';
+                    else if (angle >= 22.5 && angle < 67.5) swipeDirection = 'down-right';
+                    else if (angle >= 67.5 && angle < 112.5) swipeDirection = 'down';
+                    else if (angle >= 112.5 && angle < 157.5) swipeDirection = 'down-left';
+                    else if (angle >= 157.5 || angle < -157.5) swipeDirection = 'left';
+                    else if (angle >= -157.5 && angle < -112.5) swipeDirection = 'up-left';
+                    else if (angle >= -112.5 && angle < -67.5) swipeDirection = 'up';
+                    else if (angle >= -67.5 && angle < -22.5) swipeDirection = 'up-right';
+                }
+                
+                if (swipeDirection === currentDirection) {
+                    completed++;
+                    gameData.score += 2;
+                    document.getElementById('swipeCompleted').textContent = completed;
+                    
+                    swipeArea.style.backgroundColor = '#22c55e';
+                    setTimeout(() => {
+                        swipeArea.style.backgroundColor = '';
+                        if (completed < swipeCount) {
+                            newDirection();
+                        } else {
+                            setTimeout(() => completeGameRound(), 1000);
+                        }
+                    }, 500);
+                } else {
+                    swipeArea.style.backgroundColor = '#ef4444';
+                    setTimeout(() => swipeArea.style.backgroundColor = '', 500);
+                }
+                
+                startPos = null;
+            };
+            
+            addTouchMouseEvents(swipeArea, swipeStart, () => {}, swipeEnd);
+        }
+
+        function startSequenceRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.sequence;
+            const maxNumber = game.getMaxNumber(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - Números del 1 al ${maxNumber} en orden
+                </div>
+                <div id="numberGrid" class="grid grid-cols-4 gap-3 max-w-lg mx-auto">
+                </div>
+                <div class="mt-4 text-center text-lg font-bold">
+                    Siguiente número: <span id="nextNumber">1</span>
+                </div>
+            `;
+            
+            let nextNumber = 1;
+            const numbers = [];
+            
+            for (let i = 1; i <= maxNumber; i++) {
+                numbers.push(i);
+            }
+            numbers.sort(() => Math.random() - 0.5);
+            
+            const grid = document.getElementById('numberGrid');
+            numbers.forEach(num => {
+                const button = document.createElement('button');
+                button.className = 'number-button bg-gradient-to-r from-blue-500 to-purple-600 text-white w-16 h-16 rounded-lg text-xl font-bold shadow-lg transition-all';
+                button.textContent = num;
+                button.dataset.number = num;
+                
+                const clickHandler = (e) => {
+                    e.preventDefault();
+                    const clickedNum = parseInt(button.dataset.number);
+                    
+                    if (clickedNum === nextNumber) {
+                        button.style.background = 'linear-gradient(45deg, #22c55e, #16a34a)';
+                        button.style.pointerEvents = 'none';
+                        button.style.transform = 'scale(0.9)';
+                        nextNumber++;
+                        gameData.score++;
+                        
+                        document.getElementById('nextNumber').textContent = nextNumber > maxNumber ? '¡Completado!' : nextNumber;
+                        
+                        if (nextNumber > maxNumber) {
+                            grid.style.opacity = '0.7';
+                            setTimeout(() => completeGameRound(), 1500);
+                        }
+                    } else {
+                        button.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+                        setTimeout(() => {
+                            button.style.background = 'linear-gradient(45deg, #3b82f6, #8b5cf6)';
+                        }, 500);
+                    }
+                };
+                
+                button.addEventListener('click', clickHandler);
+                button.addEventListener('touchstart', clickHandler, { passive: false });
+                
+                grid.appendChild(button);
+            });
+        }
+
+        function startRotateRound() {
+            const gameArea = document.getElementById('gameArea');
+            const game = games.rotate;
+            const shapeCount = game.getShapeCount(gameData.currentRound);
+            
+            gameArea.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+                    Ronda ${gameData.currentRound} - Rota ${shapeCount} formas para coincidir
+                </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold mb-4 text-gray-700 dark:text-gray-300">Patrón</h4>
+                        <div id="targetPattern" class="space-y-3"></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold mb-4 text-gray-700 dark:text-gray-300">Tu turno</h4>
+                        <div id="rotateShapes" class="space-y-3"></div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center text-lg font-bold">
+                    Completados: <span id="rotateCompleted">0</span> / ${shapeCount}
+                </div>
+            `;
+            
+            let completed = 0;
+            const shapes = [];
+            
+            const shapeTypes = ['triangle', 'arrow', 'diamond', 'star', 'heart'];
+            const rotations = [0, 45, 90, 135, 180, 225, 270, 315];
+            
+            for (let i = 0; i < shapeCount; i++) {
+                shapes.push({
+                    type: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
+                    rotation: 0,
+                    target: rotations[Math.floor(Math.random() * rotations.length)]
+                });
+            }
+            
+            const targetContainer = document.getElementById('targetPattern');
+            const shapesContainer = document.getElementById('rotateShapes');
+            
+            shapes.forEach((shape, index) => {
+                // Target pattern
+                const targetDiv = document.createElement('div');
+                targetDiv.className = 'w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto mb-3 flex items-center justify-center text-white text-2xl rounded-lg shadow-lg';
+                targetDiv.style.transform = `rotate(${shape.target}deg)`;
+                targetDiv.textContent = getShapeEmoji(shape.type);
+                targetContainer.appendChild(targetDiv);
+                
+                // Rotatable shape
+                const shapeDiv = document.createElement('div');
+                shapeDiv.className = 'rotate-shape w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 mx-auto mb-3 flex items-center justify-center text-white text-2xl rounded-lg shadow-lg';
+                shapeDiv.textContent = getShapeEmoji(shape.type);
+                shapeDiv.dataset.index = index;
+                
+                const rotateHandler = (e) => {
+                    e.preventDefault();
+                    shape.rotation = (shape.rotation + 45) % 360;
+                    shapeDiv.style.transform = `rotate(${shape.rotation}deg)`;
+                    
+                    if (shape.rotation === shape.target) {
+                        shapeDiv.style.background = 'linear-gradient(45deg, #22c55e, #16a34a)';
+                        shapeDiv.style.pointerEvents = 'none';
+                        completed++;
+                        gameData.score += 2;
+                        document.getElementById('rotateCompleted').textContent = completed;
+                        
+                        if (completed >= shapeCount) {
+                            setTimeout(() => completeGameRound(), 1000);
+                        }
+                    }
+                };
+                
+                shapeDiv.addEventListener('click', rotateHandler);
+                shapeDiv.addEventListener('touchstart', rotateHandler, { passive: false });
+                
+                shapesContainer.appendChild(shapeDiv);
+            });
+        }
+
+        function getShapeEmoji(type) {
+            const emojis = {
+                triangle: '🔺',
+                arrow: '➤',
+                diamond: '💎',
+                star: '⭐',
+                heart: '❤️'
+            };
+            return emojis[type] || '⬜';
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

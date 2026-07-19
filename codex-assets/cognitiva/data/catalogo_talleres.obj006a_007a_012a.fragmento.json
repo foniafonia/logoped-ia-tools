@@ -1,0 +1,47 @@
+{
+  "id_taller": "inf_1_obj_006a_007a_012a",
+  "codigo": "1º INFANTIL obj.006a-007a-012a",
+  "nombre": "Asociación fonema-grafema 'a' en mayúscula",
+  "modulo": "integracion_multisensorial_auditivo_visual",
+  "objetivo_clinico": [
+    "transcodificacion_fonema_grafema",
+    "automatizacion_asociacion_directa_sonido_simbolo",
+    "atencion_auditiva_y_discriminacion_visual"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "reproducir_audio_automatico_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_reaccion_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "asociacion_fonema_grafema",
+    "estimulo_modelo": "audio_fonema_a",
+    "respuesta_esperada": "grafema_A_mayuscula",
+    "num_opciones": {
+      "base": 3,
+      "min": 2,
+      "max": 4
+    },
+    "boton_repeticion_audio": true,
+    "tiempo_max_respuesta_ms": 7000
+  },
+  "regla_distractores": {
+    "fuente": "banco_datos.clasificaciones.visual.no_similares_mayusculas",
+    "criterio": "distractores en mayúscula sin similitud perceptiva con 'A'"
+  },
+  "ejemplo_no_similares": {
+    "modelo": "A",
+    "permitidos": ["O", "I", "M", "P"],
+    "prohibidos": ["R", "H"]
+  }
+}

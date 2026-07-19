@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogoCalc Pro · Calculadora de Costes para Logopedas</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0D6E6E;
+            --primary-dark: #095555;
+            --primary-light: #E8F4F4;
+            --accent: #2A9D8F;
+            --bg: #F8FAFB;
+            --surface: #FFFFFF;
+            --surface-alt: #F1F5F7;
+            --text: #1A2B3C;
+            --text-muted: #5A6B7C;
+            --border: #D8E0E5;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        .dark {
+            --primary: #3DB8B8;
+            --primary-dark: #2A9D9D;
+            --primary-light: #1A3A3A;
+            --accent: #4ECDC4;
+            --bg: #0F1419;
+            --surface: #1A2128;
+            --surface-alt: #232D36;
+            --text: #E8EEF2;
+            --text-muted: #8A9AAA;
+            --border: #2D3A45;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 800px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-alt);
+        }
+
+        .card-header h2 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h2 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        input[type="number"]::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-suffix {
+            position: relative;
+        }
+
+        .input-suffix input {
+            padding-right: 40px;
+        }
+
+        .input-suffix::after {
+            content: attr(data-suffix);
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .duration-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .duration-btn {
+            padding: 14px 10px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .duration-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .duration-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .duration-btn span {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 16px 24px;
+            margin-top: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: white;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .results-panel {
+            grid-column: 1 / -1;
+        }
+
+        @media (min-width: 801px) {
+            .results-panel {
+                grid-column: 2;
+                grid-row: 1 / 3;
+            }
+        }
+
+        .result-main {
+            text-align: center;
+            padding: 32px 22px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+        }
+
+        .result-main-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .result-main-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .result-main-duration {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+        }
+
+        .result-item {
+            background: var(--surface);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .result-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+        }
+
+        .result-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .result-value.positive {
+            color: var(--success);
+        }
+
+        .result-value.warning {
+            color: var(--warning);
+        }
+
+        .result-subtext {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .breakdown-section {
+            padding: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .breakdown-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-row.highlight {
+            background: var(--primary-light);
+            margin: 0 -22px;
+            padding: 12px 22px;
+            border-radius: 0;
+        }
+
+        .breakdown-label {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .breakdown-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .equilibrium-bar {
+            margin-top: 16px;
+            background: var(--surface-alt);
+            border-radius: 20px;
+            height: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .equilibrium-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--accent) 100%);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            fill: var(--border);
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+        }
+
+        .info-tooltip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: help;
+            margin-left: 4px;
+        }
+
+        .shared-badge, .individual-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .shared-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .individual-badge {
+            background: #FEF3C7;
+            color: #B45309;
+        }
+
+        .dark .individual-badge {
+            background: #422006;
+            color: #FCD34D;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .calculating .result-main-value {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <h1>LogoCalc Pro</h1>
+            </div>
+            <p class="subtitle">Calculadora profesional de costes para logopedas en España</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Costes Fijos -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2V9h-2V7h4v10z"/></svg>
+                        Costes Fijos Mensuales
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Nº de profesionales en clínica <span class="info-tooltip" title="Logopedas que comparten los costes fijos del local">?</span></label>
+                        <input type="number" id="numProfessionals" value="1" min="1" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Alquiler del local <span class="shared-badge">compartido</span></label>
+                        <div class="input-suffix" data-suffix="€">
+                            <input type="number" id="rent" value="650" min="0" step="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Otros gastos fijos (suministros, seguros...) <span class="shared-badge">compartido</span></label>
+                        <div class="input-suffix" data-suffix="€">
+                            <input type="number" id="fixed" value="355" min="0" step="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuota de autónomos <span class="individual-badge">individual</span></label>
+                        <div class="input-suffix" data-suffix="€">
+                            <input type="number" id="autonomo" value="320" min="0" step="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Coste empleados total (salarios + SS) <span class="shared-badge">compartido</span></label>
+                        <div class="input-suffix" data-suffix="€">
+                            <input type="number" id="staff" value="1400" min="0" step="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de Resultados -->
+            <div class="card results-panel" id="resultsPanel">
+                <div id="resultsContent">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm3-6c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/></svg>
+                        <p>Introduce tus datos y pulsa<br><strong>Calcular coste real</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capacidad y Agenda -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
+                        Capacidad de Agenda
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Duración de sesión</label>
+                        <div class="duration-selector">
+                            <button type="button" class="duration-btn" data-duration="30" onclick="setDuration(30)">
+                                30<span>minutos</span>
+                            </button>
+                            <button type="button" class="duration-btn active" data-duration="45" onclick="setDuration(45)">
+                                45<span>minutos</span>
+                            </button>
+                            <button type="button" class="duration-btn" data-duration="60" onclick="setDuration(60)">
+                                60<span>minutos</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div>
+                            <label>Sesiones por día</label>
+                            <input type="number" id="spd" value="8" min="1" max="20">
+                        </div>
+                        <div>
+                            <label>Días por semana</label>
+                            <input type="number" id="dps" value="5" min="1" max="7">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Semanas laborales al año</label>
+                        <input type="number" id="weeks" value="46" min="1" max="52">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Faltas y Objetivo -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                        Faltas y Objetivo
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group form-row">
+                        <div>
+                            <label>Porcentaje de faltas <span class="info-tooltip" title="Promedio de citas canceladas o no presentadas">?</span></label>
+                            <div class="input-suffix" data-suffix="%">
+                                <input type="number" id="noshow" value="15" min="0" max="100" step="1">
+                            </div>
+                        </div>
+                        <div>
+                            <label>Faltas recuperadas <span class="info-tooltip" title="Porcentaje de faltas que se recuperan">?</span></label>
+                            <div class="input-suffix" data-suffix="%">
+                                <input type="number" id="recover" value="40" min="0" max="100" step="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Sueldo neto mensual deseado</label>
+                        <div class="input-suffix" data-suffix="€">
+                            <input type="number" id="salary" value="1800" min="0" step="100">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-calculate" onclick="calc()">
+                        Calcular coste real
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Herramienta orientativa para profesionales de la logopedia en España · Los cálculos son aproximados
+        </footer>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        let sessionDuration = 45;
+
+        function setDuration(minutes) {
+            sessionDuration = minutes;
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.duration) === minutes);
+            });
+        }
+
+        function formatCurrency(value) {
+            return value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        }
+
+        function formatNumber(value) {
+            return value.toLocaleString('es-ES', { maximumFractionDigits: 0 });
+        }
+
+        function calc() {
+            // Obtener valores de inputs
+            const numProf = Math.max(1, +document.getElementById('numProfessionals').value);
+            const rentTotal = +document.getElementById('rent').value;
+            const fixedTotal = +document.getElementById('fixed').value;
+            const aut = +document.getElementById('autonomo').value;
+            const staffTotal = +document.getElementById('staff').value;
+            const spd = +document.getElementById('spd').value;
+            const dps = +document.getElementById('dps').value;
+            const weeks = +document.getElementById('weeks').value;
+            const ns = +document.getElementById('noshow').value / 100; // Convertir de % a decimal
+            const rec = +document.getElementById('recover').value / 100; // Convertir de % a decimal
+            const sal = +document.getElementById('salary').value;
+
+            // Costes compartidos divididos entre profesionales
+            const rent = rentTotal / numProf;
+            const fixed = fixedTotal / numProf;
+            const staff = staffTotal / numProf;
+
+            // CÁLCULOS ORIGINALES EXACTOS (aplicados por profesional)
+            const annualCosts = (rent + fixed + aut + staff) * 12;
+            const totalSessions = spd * dps * weeks;
+            const lost = totalSessions * ns;
+            const realSessions = totalSessions - lost + (lost * rec);
+            const costPerSession = annualCosts / realSessions;
+            const incomePerSession = (sal * 12) / realSessions;
+            const recommended = costPerSession + incomePerSession;
+
+            // CÁLCULOS ADICIONALES
+            const monthlyCosts = rent + fixed + aut + staff;
+            const monthlyCostsTotal = rentTotal + fixedTotal + (aut * numProf) + staffTotal;
+            const monthlyRealSessions = realSessions / 12;
+            const monthlyBreakeven = monthlyCosts / recommended;
+            const annualBreakeven = annualCosts / recommended;
+
+            // Precio por hora equivalente
+            const pricePerHour = recommended * (60 / sessionDuration);
+
+            // Margen respecto al punto de equilibrio
+            const occupancyRate = (monthlyBreakeven / (spd * dps * 4.33)) * 100;
+
+            // Texto según número de profesionales
+            const profText = numProf > 1 ? ` (${numProf} profesionales)` : '';
+            const profNote = numProf > 1 ? `<div class="result-main-duration">Costes compartidos entre ${numProf} profesionales</div>` : '';
+
+            // Generar HTML de resultados
+            const resultsHTML = `
+                <div class="fade-in">
+                    <div class="result-main">
+                        <div class="result-main-label">Precio recomendado por sesión</div>
+                        <div class="result-main-value">${formatCurrency(recommended)}</div>
+                        <div class="result-main-duration">Sesión de ${sessionDuration} minutos · ${formatCurrency(pricePerHour)}/hora</div>
+                        ${profNote}
+                    </div>
+
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-label">Coste real/sesión</div>
+                            <div class="result-value">${formatCurrency(costPerSession)}</div>
+                            <div class="result-subtext">Sin beneficio</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Beneficio/sesión</div>
+                            <div class="result-value positive">${formatCurrency(incomePerSession)}</div>
+                            <div class="result-subtext">Para tu sueldo</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Sesiones reales/año</div>
+                            <div class="result-value">${formatNumber(realSessions)}</div>
+                            <div class="result-subtext">Por profesional</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Sesiones reales/mes</div>
+                            <div class="result-value">${formatNumber(monthlyRealSessions)}</div>
+                            <div class="result-subtext">Por profesional</div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <div class="breakdown-title">📊 Desglose Mensual (por profesional)</div>
+                        ${numProf > 1 ? `
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Costes compartidos (tu parte)</span>
+                            <span class="breakdown-value">${formatCurrency(rent + fixed + staff)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Cuota autónomos (individual)</span>
+                            <span class="breakdown-value">${formatCurrency(aut)}</span>
+                        </div>
+                        ` : ''}
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Costes fijos totales${numProf > 1 ? ' (tu parte)' : ''}</span>
+                            <span class="breakdown-value">${formatCurrency(monthlyCosts)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Ingresos objetivo</span>
+                            <span class="breakdown-value">${formatCurrency(monthlyCosts + sal)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Tu sueldo neto</span>
+                            <span class="breakdown-value">${formatCurrency(sal)}</span>
+                        </div>
+                    </div>
+
+                    ${numProf > 1 ? `
+                    <div class="breakdown-section">
+                        <div class="breakdown-title">🏥 Datos Globales de la Clínica</div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Costes mensuales totales</span>
+                            <span class="breakdown-value">${formatCurrency(monthlyCostsTotal)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Sesiones totales/mes (todos)</span>
+                            <span class="breakdown-value">${formatNumber(monthlyRealSessions * numProf)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Ingresos objetivo clínica</span>
+                            <span class="breakdown-value">${formatCurrency((monthlyCosts + sal) * numProf)}</span>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="breakdown-section">
+                        <div class="breakdown-title">📈 Desglose Anual (por profesional)</div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Costes fijos totales${numProf > 1 ? ' (tu parte)' : ''}</span>
+                            <span class="breakdown-value">${formatCurrency(annualCosts)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Ingresos objetivo</span>
+                            <span class="breakdown-value">${formatCurrency(annualCosts + sal * 12)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Tu sueldo neto anual</span>
+                            <span class="breakdown-value">${formatCurrency(sal * 12)}</span>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <div class="breakdown-title">⚖️ Punto de Equilibrio</div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Sesiones mínimas/mes para cubrir costes</span>
+                            <span class="breakdown-value">${Math.ceil(monthlyCosts / recommended)}</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Sesiones mínimas/año para cubrir costes</span>
+                            <span class="breakdown-value">${Math.ceil(annualCosts / recommended)}</span>
+                        </div>
+                        <div class="breakdown-row highlight">
+                            <span class="breakdown-label">Ocupación mínima necesaria</span>
+                            <span class="breakdown-value ${occupancyRate > 80 ? 'warning' : ''}">${Math.min(100, occupancyRate).toFixed(1)}%</span>
+                        </div>
+                        <div class="equilibrium-bar">
+                            <div class="equilibrium-fill" style="width: ${Math.min(100, occupancyRate)}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultsContent').innerHTML = resultsHTML;
+        }
+
+        // Calcular al cargar
+        document.addEventListener('DOMContentLoaded', calc);
+    </script>
+</body>
+</html>

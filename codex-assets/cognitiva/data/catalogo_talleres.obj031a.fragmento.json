@@ -1,0 +1,56 @@
+{
+  "id_taller": "pri_1_obj_031a",
+  "codigo": "1º PRIMARIA obj.031a",
+  "nombre": "Lectura comprensiva de frases y textos simples para la identificación de información y memorización de datos",
+  "modulo": "procesos_semanticos_comprension_lectora",
+  "objetivo_clinico": [
+    "procesamiento_semantico",
+    "busqueda_de_informacion_literal",
+    "memorizacion_de_datos_relevantes"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "speech_synthesis_activo_por_defecto": false,
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "eliminar_un_distractor_en_primer_error": true,
+      "resaltar_frase_clave_en_texto": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "pregunta_literal_sobre_texto",
+    "estimulo_visual": "texto_corto",
+    "estimulo_auditivo": "desactivado",
+    "num_opciones": { "base": 3, "min": 2, "max": 3 },
+    "tiempo_max_respuesta_ms": 18000
+  },
+  "banco_textos": [
+    {
+      "id_item": "cmp_001",
+      "titulo": "El coche de Ana",
+      "lineas": [
+        "Ana tiene un coche rojo.",
+        "Cada mañana va al colegio con su hermano.",
+        "Después del cole, aparca el coche en casa."
+      ],
+      "pregunta": "¿De qué color es el coche de Ana?",
+      "opciones": ["Rojo", "Verde", "Azul"],
+      "respuesta_correcta": "Rojo",
+      "frase_clave": "Ana tiene un coche rojo."
+    },
+    {
+      "id_item": "cmp_002",
+      "titulo": "El perro de Luis",
+      "lineas": [
+        "Luis tiene un perro pequeño que se llama Nico.",
+        "Nico duerme en una cama azul junto a la ventana.",
+        "Por la tarde, Luis juega a la pelota con Nico."
+      ],
+      "pregunta": "¿Cómo se llama el perro de Luis?",
+      "opciones": ["Toby", "Nico", "Lolo"],
+      "respuesta_correcta": "Nico",
+      "frase_clave": "Luis tiene un perro pequeño que se llama Nico."
+    }
+  ]
+}

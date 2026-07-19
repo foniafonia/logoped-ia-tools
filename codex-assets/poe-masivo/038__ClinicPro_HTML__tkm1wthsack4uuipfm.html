@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🏥 ClinicPro -- Gestión Clínica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/idb-keyval.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <style>
+    .tab-content{display:none} .tab-content.active{display:block}
+    .tab-button.active{background:linear-gradient(135deg,#5D5CDE,#8B5CF6);color:#fff;box-shadow:0 4px 12px rgba(93,92,222,.3)}
+    .glass{background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2)}
+    .dark .glass{background:rgba(31,41,55,.92);border:1px solid rgba(75,85,99,.25)}
+    .scroll-slim::-webkit-scrollbar{width:8px;height:8px} .scroll-slim::-webkit-scrollbar-thumb{background:#c3c7d0;border-radius:6px}
+    .modal{display:none} .modal.active{display:flex}
+    .dot{width:10px;height:10px;border-radius:9999px}
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 min-h-screen">
+
+<!-- HEADER -->
+<header class="glass sticky top-0 z-40 border-b border-gray-200 dark:border-gray-700">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">🏥 ClinicPro</h1>
+      <span id="env-badge" class="text-xs px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200">OFFLINE listo</span>
+    </div>
+    <div class="flex items-center gap-2 text-sm">
+      <span id="today"></span>
+      <button id="btnBackup" class="ml-2 bg-gray-900 dark:bg-white dark:text-gray-900 text-white px-3 py-1 rounded-lg">💾 Copia</button>
+      <label for="restoreFile" class="cursor-pointer bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-lg">📦 Restaurar</label>
+      <input id="restoreFile" type="file" accept="application/json" class="hidden" />
+      <button id="btnSeed" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-1 rounded-lg">🔄 Demo</button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+  <div class="flex gap-2 overflow-x-auto bg-white dark:bg-gray-800 p-2 rounded-xl shadow">
+    <button class="tab-button active px-4 py-2 rounded-lg" data-tab="dashboard">📊 Dashboard</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="pacientes">👥 Pacientes</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="agenda">📅 Agenda</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="historias">📋 Historias</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="terapias">🏃‍♂️ Terapias</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="bonos">🎫 Bonos</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="facturacion">💰 Facturación</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="calendario">🗓️ Calendario</button>
+    <button class="tab-button px-4 py-2 rounded-lg" data-tab="ajustes">⚙️ Ajustes</button>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="tab-content active">
+    <div class="grid lg:grid-cols-4 gap-4">
+      <div class="glass p-4 rounded-xl">
+        <div class="flex items-center gap-3"><div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">👥</div>
+          <div><p class="text-sm text-gray-500">Pacientes</p><p id="statPatients" class="text-2xl font-bold">0</p></div>
+        </div>
+      </div>
+      <div class="glass p-4 rounded-xl">
+        <div class="flex items-center gap-3"><div class="p-2 bg-green-100 dark:bg-green-900 rounded">📅</div>
+          <div><p class="text-sm text-gray-500">Citas hoy</p><p id="statToday" class="text-2xl font-bold">0</p></div>
+        </div>
+      </div>
+      <div class="glass p-4 rounded-xl">
+        <div class="flex items-center gap-3"><div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">💰</div>
+          <div><p class="text-sm text-gray-500">Pendiente de cobro</p><p id="statPending" class="text-2xl font-bold">0€</p></div>
+        </div>
+      </div>
+      <div class="glass p-4 rounded-xl">
+        <div class="flex items-center gap-3"><div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">🎫</div>
+          <div><p class="text-sm text-gray-500">Bonos activos</p><p id="statBonos" class="text-2xl font-bold">0</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6 mt-6">
+      <div class="glass p-6 rounded-xl lg:col-span-2">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold">Ingresos (últimos 6 meses)</h3>
+          <button id="btnRefreshChart" class="text-sm px-3 py-1 rounded bg-gray-200 dark:bg-gray-700">↻</button>
+        </div>
+        <canvas id="revChart" height="120"></canvas>
+      </div>
+      <div class="glass p-6 rounded-xl">
+        <h3 class="text-lg font-semibold mb-3">Acciones rápidas</h3>
+        <div class="space-y-3">
+          <button class="w-full px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 to-purple-600" data-open="modalPaciente">➕ Nuevo paciente</button>
+          <button class="w-full px-4 py-2 rounded-lg text-white bg-gradient-to-r from-emerald-500 to-teal-600" data-open="modalCita">📅 Nueva cita</button>
+          <button class="w-full px-4 py-2 rounded-lg text-white bg-gradient-to-r from-amber-500 to-orange-600" data-open="modalFactura">💸 Nueva factura</button>
+          <button id="btnReporte" class="w-full px-4 py-2 rounded-lg text-white bg-gradient-to-r from-purple-500 to-pink-600">📊 Reporte mensual</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass p-6 rounded-xl mt-6">
+      <h3 class="text-lg font-semibold mb-4">Citas de hoy</h3>
+      <div id="todayList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- PACIENTES -->
+  <section id="pacientes" class="tab-content">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <h2 class="text-2xl font-bold">Pacientes</h2>
+      <div class="flex gap-2">
+        <input id="qPac" class="px-3 py-2 rounded-lg border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Buscar nombre, email o teléfono" />
+        <button class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 to-purple-600" data-open="modalPaciente">➕ Nuevo</button>
+      </div>
+    </div>
+    <div id="gridPac" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- AGENDA -->
+  <section id="agenda" class="tab-content">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <h2 class="text-2xl font-bold">Agenda</h2>
+      <div class="flex gap-2 items-center">
+        <select id="fApt" class="px-3 py-2 rounded-lg border dark:border-gray-700 dark:bg-gray-800 text-base">
+          <option value="all">Todas</option>
+          <option value="today">Hoy</option>
+          <option value="week">Semana</option>
+          <option value="pending">Pendientes</option>
+        </select>
+        <button class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-emerald-500 to-teal-600" data-open="modalCita">➕ Nueva</button>
+      </div>
+    </div>
+    <div id="gridApt" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+  </section>
+
+  <!-- HISTORIAS -->
+  <section id="historias" class="tab-content">
+    <div class="flex items-center justify-between mb-4"><h2 class="text-2xl font-bold">Historias clínicas</h2>
+      <button id="btnNuevaHistoria" class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600">➕ Nueva</button>
+    </div>
+    <div id="listaHistorias" class="space-y-4"></div>
+  </section>
+
+  <!-- TERAPIAS -->
+  <section id="terapias" class="tab-content">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold">Terapias</h2>
+      <button id="btnNuevaTerapia" class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-sky-500 to-blue-600">➕ Nueva</button>
+    </div>
+    <div id="gridTer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </section>
+
+  <!-- BONOS -->
+  <section id="bonos" class="tab-content">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold">Bonos</h2>
+      <button id="btnNuevoBono" class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-amber-500 to-orange-600">➕ Nuevo</button>
+    </div>
+    <div id="gridBono" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </section>
+
+  <!-- FACTURACIÓN -->
+  <section id="facturacion" class="tab-content">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <h2 class="text-2xl font-bold">Facturación</h2>
+      <div class="flex gap-2 items-center">
+        <select id="fInv" class="px-3 py-2 rounded-lg border dark:border-gray-700 dark:bg-gray-800 text-base">
+          <option value="all">Todas</option>
+          <option value="pending">Pendientes</option>
+          <option value="paid">Pagadas</option>
+        </select>
+        <button class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-amber-500 to-orange-600" data-open="modalFactura">➕ Nueva</button>
+      </div>
+    </div>
+    <div id="gridInv" class="grid md:grid-cols-2 gap-4"></div>
+  </section>
+
+  <!-- CALENDARIO -->
+  <section id="calendario" class="tab-content">
+    <div class="glass p-6 rounded-xl">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-2xl font-bold">Calendario</h2>
+        <div class="flex items-center gap-2">
+          <button id="calPrev" class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700">◀</button>
+          <span id="calTitle" class="font-semibold"></span>
+          <button id="calNext" class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700">▶</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-7 text-center font-semibold text-sm mb-2">
+        <div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div>D</div>
+      </div>
+      <div id="calGrid" class="grid grid-cols-7 gap-2"></div>
+    </div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section id="ajustes" class="tab-content">
+    <h2 class="text-2xl font-bold mb-4">Ajustes del centro</h2>
+    <div class="glass p-6 rounded-xl grid md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="font-semibold mb-2">Datos de facturación</h3>
+        <div class="space-y-2">
+          <input id="cfgNombre" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Nombre de la clínica" />
+          <input id="cfgNif" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="NIF/CIF" />
+          <input id="cfgDir" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Dirección" />
+          <input id="cfgCiudad" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Ciudad" />
+          <input id="cfgCP" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="C.P." />
+          <input id="cfgTlf" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Teléfono" />
+          <input id="cfgEmail" type="email" class="w-full px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Email" />
+        </div>
+        <button id="btnSaveCfg" class="mt-3 px-4 py-2 rounded bg-gray-900 text-white dark:bg-white dark:text-gray-900">💾 Guardar</button>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">Exportación</h3>
+        <p class="text-sm text-gray-500 mb-2">Exporta/importa toda la base de datos en JSON para copias o migraciones.</p>
+        <button id="btnExport" class="px-4 py-2 rounded bg-emerald-600 text-white">⬇️ Exportar JSON</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODALES -->
+<div id="modalPaciente" class="modal fixed inset-0 bg-black/60 items-center justify-center p-4 z-50">
+  <div class="glass p-6 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto scroll-slim">
+    <h3 class="text-lg font-semibold mb-4" id="mpTitle">Nuevo paciente</h3>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <input id="mpNombre" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Nombre*" />
+      <input id="mpApellidos" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Apellidos*" />
+      <input id="mpTelefono" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Teléfono" />
+      <input id="mpEmail" type="email" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Email" />
+      <input id="mpFNac" type="date" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" />
+      <input id="mpId" type="hidden" />
+      <textarea id="mpNotas" rows="3" class="sm:col-span-2 px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Notas"></textarea>
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button data-close class="flex-1 px-4 py-2 rounded bg-gray-500 text-white">Cancelar</button>
+      <button id="mpSave" class="flex-1 px-4 py-2 rounded bg-gradient-to-r from-blue-500 to-purple-600 text-white">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalCita" class="modal fixed inset-0 bg-black/60 items-center justify-center p-4 z-50">
+  <div class="glass p-6 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto scroll-slim">
+    <h3 class="text-lg font-semibold mb-4" id="mcTitle">Nueva cita</h3>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <select id="mcPaciente" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base"></select>
+      <select id="mcTerapia" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base"></select>
+      <input id="mcFecha" type="date" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" />
+      <input id="mcHora" type="time" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" />
+      <input id="mcDur" type="number" min="10" step="5" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Duración (min)" />
+      <select id="mcEstado" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base"><option value="pendiente">pendiente</option><option value="realizado">realizado</option><option value="cancelado">cancelado</option></select>
+      <input id="mcUrgente" type="checkbox" class="mr-2" /><label for="mcUrgente" class="self-center">Urgente</label>
+      <input id="mcId" type="hidden" />
+      <input id="mcMotivo" class="sm:col-span-2 px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Motivo" />
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button data-close class="flex-1 px-4 py-2 rounded bg-gray-500 text-white">Cancelar</button>
+      <button id="mcSave" class="flex-1 px-4 py-2 rounded bg-gradient-to-r from-emerald-500 to-teal-600 text-white">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalFactura" class="modal fixed inset-0 bg-black/60 items-center justify-center p-4 z-50">
+  <div class="glass p-6 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto scroll-slim">
+    <h3 class="text-lg font-semibold mb-4" id="mfTitle">Nueva factura</h3>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <select id="mfPaciente" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base"></select>
+      <input id="mfFecha" type="date" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" />
+      <input id="mfConcepto" class="sm:col-span-2 px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Concepto" />
+      <input id="mfImporte" type="number" step="0.01" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base" placeholder="Importe (EUR)" />
+      <select id="mfMetodo" class="px-3 py-2 rounded border dark:border-gray-700 dark:bg-gray-800 text-base"><option>efectivo</option><option>tarjeta</option><option>transferencia</option><option>domiciliación</option></select>
+      <label class="flex gap-2 items-center"><input id="mfPagado" type="checkbox"/> <span>Pagado</span></label>
+      <input id="mfId" type="hidden" />
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button data-close class="flex-1 px-4 py-2 rounded bg-gray-500 text-white">Cancelar</button>
+      <button id="mfSave" class="flex-1 px-4 py-2 rounded bg-gradient-to-r from-amber-500 to-orange-600 text-white">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toasts" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+<script>
+(() => {
+  const { DateTime } = luxon;
+  const db = {
+    get: (k) => idbKeyval.get(k),
+    set: (k,v) => idbKeyval.set(k,v),
+    del: (k) => idbKeyval.del(k),
+    keys: () => idbKeyval.keys(),
+  };
+  const K = {
+    patients: 'patients', appointments: 'appointments', invoices: 'invoices', therapies: 'therapies', bonos: 'bonos', historias: 'historias', cfg:'config'
+  };
+  const qs = (s, el=document)=>el.querySelector(s);
+  const qsa = (s, el=document)=>[...el.querySelectorAll(s)];
+  const formatEur = (n)=> new Intl.NumberFormat('es-ES',{style:'currency', currency:'EUR'}).format(n||0);
+  const toast = (msg,type='info')=>{
+    const el = document.createElement('div');
+    const bg = type==='success'?'bg-emerald-600':type==='error'?'bg-rose-600':type==='info'?'bg-gray-900':'bg-indigo-600';
+    el.className = `${bg} text-white px-4 py-2 rounded-lg shadow transition transform translate-x-full`;
+    el.textContent = msg; qs('#toasts').appendChild(el);
+    setTimeout(()=>el.classList.remove('translate-x-full'),50);
+    setTimeout(()=>{ el.classList.add('translate-x-full'); setTimeout(()=>el.remove(),300); },3000);
+  };
+  const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+  // Custom confirm dialog
+  const showConfirmDialog = (message, onConfirm) => {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+        <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+        <div class="flex justify-end space-x-3">
+          <button class="cancel-btn px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Cancelar</button>
+          <button class="confirm-btn px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded">Confirmar</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.cancel-btn').onclick = () => modal.remove();
+    modal.querySelector('.confirm-btn').onclick = () => {
+      modal.remove();
+      onConfirm();
+    };
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
+  };
+
+  const showPromptDialog = (message, defaultValue = '', onConfirm) => {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+        <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+        <input type="text" value="${defaultValue}" class="w-full px-3 py-2 border rounded mb-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-base" />
+        <div class="flex justify-end space-x-3">
+          <button class="cancel-btn px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Cancelar</button>
+          <button class="confirm-btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded">OK</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    const input = modal.querySelector('input');
+    input.focus();
+    input.select();
+    
+    const confirm = () => {
+      const value = input.value.trim();
+      modal.remove();
+      onConfirm(value);
+    };
+    
+    modal.querySelector('.cancel-btn').onclick = () => modal.remove();
+    modal.querySelector('.confirm-btn').onclick = confirm;
+    input.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') confirm();
+      if (e.key === 'Escape') modal.remove();
+    });
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
+  };
+
+  const showAlert = (message) => {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+        <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+        <div class="flex justify-end">
+          <button class="ok-btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded">OK</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.ok-btn').onclick = () => modal.remove();
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
+  };
+
+  // ---------- STATE ----------
+  let state = { patients:[], appointments:[], invoices:[], therapies:[], bonos:[], historias:[], cfg:{} };
+
+  async function loadAll(){
+    for (const key of Object.values(K)){
+      state[key] = (await db.get(key)) || (key==='cfg'?{}:[]);
+    }
+  }
+  async function save(key){ await db.set(key, state[key]); }
+  async function saveAll(){ for (const key of Object.values(K)){ await save(key); } }
+
+  // ---------- UI HELPERS ----------
+  function setToday(){ qs('#today').textContent = DateTime.now().setLocale('es').toFormat('cccc, d LLLL yyyy'); }
+  function switchTab(id){ qsa('.tab-content').forEach(e=>e.classList.remove('active')); qs('#'+id).classList.add('active'); qsa('.tab-button').forEach(b=>b.classList.remove('active')); qsa(`.tab-button[data-tab="${id}"]`).forEach(b=>b.classList.add('active')); render(id); }
+  function openModal(id){ const el = qs('#'+id); if(!el) return; el.classList.add('active'); }
+  function closeModals(){ qsa('.modal').forEach(m=>m.classList.remove('active')); }
+
+  // ---------- RENDERERS ----------
+  function renderDashboard(){
+    const todayISO = DateTime.now().toISODate();
+    const todayCount = state.appointments.filter(a=>DateTime.fromISO(a.start).toISODate()===todayISO).length;
+    const pending = state.invoices.filter(i=>!i.paid).reduce((s,i)=>s+Number(i.amount||0),0);
+    const bonosActivos = state.bonos.filter(b=>b.active && DateTime.fromISO(b.expires)>=DateTime.now()).length;
+    qs('#statPatients').textContent = state.patients.length;
+    qs('#statToday').textContent = todayCount;
+    qs('#statPending').textContent = formatEur(pending);
+    qs('#statBonos').textContent = bonosActivos;
+
+    // Citas de hoy
+    const cont = qs('#todayList');
+    const hoy = state.appointments.filter(a=>DateTime.fromISO(a.start).toISODate()===todayISO).sort((a,b)=>a.start.localeCompare(b.start));
+    if(hoy.length===0){ cont.innerHTML = '<p class="text-gray-500 text-center col-span-full py-8">No hay citas hoy</p>'; return; }
+    cont.innerHTML = hoy.slice(0,12).map(a=>{
+      const p = state.patients.find(x=>x.id===a.patientId);
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between items-start mb-1">
+          <h4 class="font-semibold text-sm">${p?`${p.name} ${p.surname}`:'(paciente eliminado)'}</h4>
+          <span class="px-2 py-0.5 rounded text-xs ${a.status==='pendiente'?'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200':a.status==='realizado'?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200':'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200'}">${a.status}</span>
+        </div>
+        <div class="text-xs text-gray-500">${DateTime.fromISO(a.start).setLocale('es').toFormat('HH:mm')} · ${a.reason||''}</div>
+        ${a.urgent?'<span class="inline-block mt-2 bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded">URGENTE</span>':''}
+      </div>`
+    }).join('');
+
+    drawRevenueChart();
+  }
+
+  let revChart;
+  function drawRevenueChart(){
+    const ctx = qs('#revChart'); if(!ctx) return;
+    if(revChart){ revChart.destroy(); }
+    const map = new Map();
+    state.invoices.filter(i=>i.paid).forEach(i=>{
+      const d = DateTime.fromISO(i.date).toFormat('yyyy-MM');
+      map.set(d, (map.get(d)||0) + Number(i.amount||0));
+    });
+    const labels = [...map.keys()].sort().slice(-6);
+    const data = labels.map(k=>map.get(k));
+    revChart = new Chart(ctx, { type:'line', data:{ labels: labels.map(m=>{
+      const [y,mm] = m.split('-'); return DateTime.fromObject({year:+y, month:+mm}).setLocale('es').toFormat('LLL yyyy');
+    }), datasets:[{ label:'Ingresos (EUR)', data, borderColor:'#5D5CDE', backgroundColor:'rgba(93,92,222,.12)', borderWidth:3, fill:true, tension:.35 }]}, options:{ plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true, ticks:{ callback:v=>formatEur(v) } } } } });
+  }
+
+  function renderPacientes(){
+    const q = qs('#qPac').value?.toLowerCase?.()||'';
+    const list = state.patients.filter(p=> `${p.name} ${p.surname}`.toLowerCase().includes(q) || (p.email||'').toLowerCase().includes(q) || (p.phone||'').includes(q) );
+    const el = qs('#gridPac');
+    if(list.length===0){ el.innerHTML='<p class="text-gray-500 text-center col-span-full py-8">Sin resultados</p>'; return; }
+    el.innerHTML = list.map(p=>{
+      const age = p.birth? DateTime.now().diff(DateTime.fromISO(p.birth), 'years').years|0 : '-';
+      const recent = state.appointments.filter(a=>a.patientId===p.id && DateTime.fromISO(a.start) > DateTime.now().minus({days:30})).length;
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between mb-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold">${(p.name||'?')[0]}${(p.surname||'?')[0]}</div>
+            <div>
+              <div class="font-semibold">${p.name||''} ${p.surname||''}</div>
+              <div class="text-xs text-gray-500">${age} años</div>
+            </div>
+          </div>
+          <span class="dot ${p.active!==false?'bg-emerald-500':'bg-gray-400'}"></span>
+        </div>
+        <div class="text-sm space-y-1">
+          ${p.phone?`<div>📞 ${p.phone}</div>`:''}
+          ${p.email?`<div>📧 ${p.email}</div>`:''}
+          <div>📅 ${recent} citas/30d</div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button class="flex-1 px-3 py-2 rounded bg-gradient-to-r from-blue-500 to-purple-600 text-white" data-edit-p="${p.id}">Editar</button>
+          <button class="px-3 py-2 rounded bg-rose-600 text-white" data-del-p="${p.id}">🗑️</button>
+          <button class="px-3 py-2 rounded bg-emerald-600 text-white" data-new-apt="${p.id}">📅</button>
+        </div>
+      </div>`
+    }).join('');
+  }
+
+  function renderAgenda(){
+    const v = qs('#fApt').value;
+    const now = DateTime.now();
+    let list = [...state.appointments];
+    if(v==='today') list = list.filter(a=>DateTime.fromISO(a.start).hasSame(now,'day'));
+    if(v==='week') list = list.filter(a=>DateTime.fromISO(a.start) >= now.startOf('week'));
+    if(v==='pending') list = list.filter(a=>a.status==='pendiente');
+    list.sort((a,b)=>a.start.localeCompare(b.start)).reverse();
+    const el = qs('#gridApt');
+    if(list.length===0){ el.innerHTML='<p class="text-gray-500 text-center col-span-full py-8">No hay citas</p>'; return; }
+    el.innerHTML = list.map(a=>{
+      const p = state.patients.find(x=>x.id===a.patientId);
+      const t = state.therapies.find(x=>x.id===a.therapyId);
+      const badge = a.status==='pendiente'?'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200':a.status==='realizado'?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200':'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200';
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between mb-2">
+          <div class="font-semibold">${p?`${p.name} ${p.surname}`:'(paciente)'}</div>
+          <span class="px-2 py-0.5 rounded text-xs ${badge}">${a.status}</span>
+        </div>
+        <div class="text-sm space-y-1">
+          <div>📅 ${DateTime.fromISO(a.start).setLocale('es').toFormat('dd/LL/yyyy HH:mm')} -- ${a.duration||45} min</div>
+          ${t?`<div>🏃‍♂️ ${t.name}</div>`:''}
+          ${a.reason?`<div>📝 ${a.reason}</div>`:''}
+        </div>
+        <div class="flex gap-2 mt-3">
+          ${a.status==='pendiente'?`<button class="flex-1 px-3 py-2 rounded bg-emerald-600 text-white" data-done="${a.id}">Completar</button>
+          <button class="px-3 py-2 rounded bg-rose-600 text-white" data-cancel="${a.id}">Cancelar</button>`:``}
+          <button class="flex-1 px-3 py-2 rounded bg-blue-600 text-white" data-edit-a="${a.id}">Editar</button>
+        </div>
+      </div>`
+    }).join('');
+  }
+
+  function renderHistorias(){
+    const wrap = qs('#listaHistorias');
+    if(state.historias.length===0){ wrap.innerHTML='<p class="text-gray-500">Aún no hay historias clínicas.</p>'; return; }
+    wrap.innerHTML = state.historias.sort((a,b)=>b.created.localeCompare(a.created)).map(h=>{
+      const p = state.patients.find(x=>x.id===h.patientId);
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between mb-2"><div class="font-semibold">${p?`${p.name} ${p.surname}`:'(paciente)'} · ${h.mainDx||'--'}</div>
+        <div class="text-xs text-gray-500">${DateTime.fromISO(h.created).setLocale('es').toFormat('dd LLL yyyy')}</div></div>
+        <div class="grid md:grid-cols-2 gap-3 text-sm">
+          <div><span class="font-semibold">Antecedentes:</span> ${h.history||'-'}</div>
+          <div><span class="font-semibold">Tratamiento:</span> ${h.treatment||'-'}</div>
+          <div class="md:col-span-2"><span class="font-semibold">Observaciones:</span> ${h.notes||'-'}</div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button class="px-3 py-2 rounded bg-blue-600 text-white" data-edit-h="${h.id}">Editar</button>
+          <button class="px-3 py-2 rounded bg-rose-600 text-white" data-del-h="${h.id}">Eliminar</button>
+        </div>
+      </div>`
+    }).join('');
+  }
+
+  function renderTerapias(){
+    const wrap = qs('#gridTer');
+    if(state.therapies.length===0){ wrap.innerHTML='<p class="text-gray-500">No hay terapias.</p>'; return; }
+    wrap.innerHTML = state.therapies.map(t=>{
+      const ap = state.appointments.filter(a=>a.therapyId===t.id).length;
+      const rev = state.invoices.filter(i=>i.paid && (i.concept||'').includes(t.name)).reduce((s,i)=>s+Number(i.amount||0),0);
+      return `<div class="glass p-5 rounded-xl">
+        <div class="flex items-start justify-between mb-2">
+          <div class="flex items-center gap-3"><div class="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold" style="background:#5D5CDE">🏃‍♂️</div>
+          <div><div class="font-semibold">${t.name}</div><div class="text-xs text-gray-500">${t.duration} min</div></div></div>
+          <span class="dot ${t.active!==false?'bg-emerald-500':'bg-gray-400'}"></span>
+        </div>
+        <p class="text-sm text-gray-500 mb-3">${t.desc||''}</p>
+        <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+          <div><div class="text-xl font-bold">${formatEur(t.price)}</div><div class="text-xs text-gray-500">Precio sesión</div></div>
+          <div><div class="text-xl font-bold">${ap}</div><div class="text-xs text-gray-500">Citas</div></div>
+        </div>
+        <div class="mb-3"><div class="text-lg font-semibold">${formatEur(rev)}</div><div class="text-xs text-gray-500">Ingresos totales</div></div>
+        <div class="flex gap-2"><button class="flex-1 px-3 py-2 rounded bg-blue-600 text-white" data-edit-t="${t.id}">Editar</button><button class="px-3 py-2 rounded bg-rose-600 text-white" data-del-t="${t.id}">Eliminar</button></div>
+      </div>`
+    }).join('');
+  }
+
+  function renderBonos(){
+    const wrap = qs('#gridBono');
+    if(state.bonos.length===0){ wrap.innerHTML='<p class="text-gray-500">No hay bonos.</p>'; return; }
+    wrap.innerHTML = state.bonos.map(b=>{
+      const p = state.patients.find(x=>x.id===b.patientId);
+      const t = state.therapies.find(x=>x.id===b.therapyId);
+      const perc = (b.used/b.qty)*100;
+      const expired = DateTime.fromISO(b.expires) < DateTime.now();
+      const status = b.active && !expired ? 'Activo' : expired? 'Vencido' : 'Agotado';
+      const statusBg = b.active && !expired ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' : 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200';
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between mb-1">
+          <div class="font-semibold">${p?`${p.name} ${p.surname}`:'(paciente)'}</div>
+          <span class="px-2 py-0.5 rounded text-xs ${statusBg}">${status}</span>
+        </div>
+        <div class="text-sm space-y-1 mb-3">
+          <div>🏃‍♂️ ${t?t.name:'--'}</div>
+          <div>💰 ${formatEur(b.total)}</div>
+          <div>📅 Vence: ${DateTime.fromISO(b.expires).toFormat('dd/LL/yyyy')}</div>
+        </div>
+        <div class="mb-3">
+          <div class="flex justify-between text-sm"><span>Sesiones</span><span>${b.used}/${b.qty}</span></div>
+          <div class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"><div class="h-2 rounded bg-gradient-to-r from-blue-500 to-purple-600" style="width:${perc}%"></div></div>
+        </div>
+        <div class="flex gap-2">
+          ${b.active && !expired?`<button class="flex-1 px-3 py-2 rounded bg-emerald-600 text-white" data-use-b="${b.id}">Usar sesión</button>`:''}
+          <button class="px-3 py-2 rounded bg-blue-600 text-white" data-edit-b="${b.id}">Editar</button>
+        </div>
+      </div>`
+    }).join('');
+  }
+
+  function renderFacturacion(){
+    const v = qs('#fInv').value;
+    let list = [...state.invoices];
+    if(v==='pending') list = list.filter(i=>!i.paid);
+    if(v==='paid') list = list.filter(i=>i.paid);
+    list.sort((a,b)=>b.date.localeCompare(a.date));
+    const wrap = qs('#gridInv');
+    if(list.length===0){ wrap.innerHTML='<p class="text-gray-500 text-center col-span-full py-8">No hay facturas</p>'; return; }
+    wrap.innerHTML = list.map(i=>{
+      const p = state.patients.find(x=>x.id===i.patientId);
+      const badge = i.paid?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200':'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200';
+      return `<div class="glass p-4 rounded-xl">
+        <div class="flex justify-between mb-2"><div class="font-semibold">${p?`${p.name} ${p.surname}`:'(paciente)'}</div><span class="px-2 py-0.5 rounded text-xs ${badge}">${i.paid?'Pagada':'Pendiente'}</span></div>
+        <div class="text-sm space-y-1 mb-3">
+          <div>📄 ${i.concept||'--'}</div>
+          <div>📅 ${DateTime.fromISO(i.date).toFormat('dd/LL/yyyy')}</div>
+          <div>💳 ${i.method||'--'}</div>
+        </div>
+        <div class="text-2xl font-bold mb-3">${formatEur(i.amount)}</div>
+        <div class="flex gap-2">
+          ${!i.paid?`<button class="flex-1 px-3 py-2 rounded bg-emerald-600 text-white" data-pay="${i.id}">Marcar pagada</button>`:''}
+          <button class="px-3 py-2 rounded bg-blue-600 text-white" data-pdf="${i.id}">📄 PDF</button>
+        </div>
+      </div>`
+    }).join('');
+  }
+
+  // ---------- CALENDAR ----------
+  let calCursor = DateTime.now();
+  function renderCalendario(){
+    qs('#calTitle').textContent = calCursor.setLocale('es').toFormat('LLLL yyyy');
+    const grid = qs('#calGrid'); grid.innerHTML='';
+    const first = calCursor.startOf('month');
+    const offset = (first.weekday+6)%7; // make Monday=0
+    for(let i=0;i<offset;i++){ grid.appendChild(document.createElement('div')); }
+    const days = first.daysInMonth;
+    for(let d=1; d<=days; d++){
+      const box = document.createElement('div');
+      box.className = 'border dark:border-gray-700 rounded p-2 min-h-[80px] flex flex-col';
+      const date = first.set({day:d});
+      const items = state.appointments.filter(a=>DateTime.fromISO(a.start).hasSame(date,'day'));
+      box.innerHTML = `<div class="text-xs font-semibold mb-1">${d}</div>` + items.slice(0,3).map(a=>{
+        const p = state.patients.find(x=>x.id===a.patientId);
+        return `<div class="text-[11px] truncate">${DateTime.fromISO(a.start).toFormat('HH:mm')} · ${p?p.name:'--'}</div>`
+      }).join('') + (items.length>3?`<div class="text-[10px] text-gray-500">+${items.length-3} más</div>`:'');
+      grid.appendChild(box);
+    }
+  }
+
+  // ---------- MODAL POPULATION ----------
+  function fillSelect(el, list, map){ el.innerHTML = list.map(o=>`<option value="${o.id}">${map(o)}</option>`).join(''); }
+  function openPacienteModal(p){
+    qs('#mpTitle').textContent = p? 'Editar paciente':'Nuevo paciente';
+    qs('#mpId').value = p?.id||'';
+    qs('#mpNombre').value = p?.name||'';
+    qs('#mpApellidos').value = p?.surname||'';
+    qs('#mpTelefono').value = p?.phone||'';
+    qs('#mpEmail').value = p?.email||'';
+    qs('#mpFNac').value = p?.birth||'';
+    qs('#mpNotas').value = p?.notes||'';
+    openModal('modalPaciente');
+  }
+  function openCitaModal(a){
+    qs('#mcTitle').textContent = a? 'Editar cita':'Nueva cita';
+    fillSelect(qs('#mcPaciente'), state.patients, p=>`${p.name} ${p.surname}`);
+    fillSelect(qs('#mcTerapia'), state.therapies, t=>t.name);
+    qs('#mcId').value = a?.id||'';
+    qs('#mcPaciente').value = a?.patientId||state.patients[0]?.id||'';
+    qs('#mcTerapia').value = a?.therapyId||state.therapies[0]?.id||'';
+    const dt = a? DateTime.fromISO(a.start) : DateTime.now().plus({hours:1});
+    qs('#mcFecha').value = dt.toISODate();
+    qs('#mcHora').value = dt.toFormat('HH:mm');
+    qs('#mcDur').value = a?.duration||45;
+    qs('#mcEstado').value = a?.status||'pendiente';
+    qs('#mcUrgente').checked = !!a?.urgent;
+    qs('#mcMotivo').value = a?.reason||'';
+    openModal('modalCita');
+  }
+  function openFacturaModal(i){
+    qs('#mfTitle').textContent = i? 'Editar factura':'Nueva factura';
+    fillSelect(qs('#mfPaciente'), state.patients, p=>`${p.name} ${p.surname}`);
+    qs('#mfId').value = i?.id||'';
+    qs('#mfPaciente').value = i?.patientId||state.patients[0]?.id||'';
+    qs('#mfFecha').value = i? i.date : DateTime.now().toISODate();
+    qs('#mfConcepto').value = i?.concept||'';
+    qs('#mfImporte').value = i?.amount||'';
+    qs('#mfMetodo').value = i?.method||'efectivo';
+    qs('#mfPagado').checked = !!i?.paid;
+    openModal('modalFactura');
+  }
+
+  // ---------- CRUD HANDLERS ----------
+  function upsert(list, obj, idField='id'){
+    const idx = list.findIndex(x=>x[idField]===obj[idField]);
+    if(idx>=0) list[idx]=obj; else list.push(obj);
+  }
+
+  // Patients
+  qs('#mpSave').addEventListener('click', async ()=>{
+    const id = qs('#mpId').value || uid();
+    const name = qs('#mpNombre').value.trim();
+    const surname = qs('#mpApellidos').value.trim();
+    if(!name||!surname){ toast('Nombre y apellidos son obligatorios','error'); return; }
+    const p = { id, name, surname, phone: qs('#mpTelefono').value.trim(), email: qs('#mpEmail').value.trim(), birth: qs('#mpFNac').value||null, notes: qs('#mpNotas').value.trim(), active:true, created: DateTime.now().toISO() };
+    upsert(state.patients, p); await save(K.patients); closeModals(); toast('Paciente guardado','success'); render('pacientes'); render('dashboard');
+  });
+
+  // Appointments
+  qs('#mcSave').addEventListener('click', async ()=>{
+    const id = qs('#mcId').value || uid();
+    const patientId = qs('#mcPaciente').value; if(!patientId){ toast('Selecciona paciente','error'); return; }
+    const therapyId = qs('#mcTerapia').value;
+    const fecha = qs('#mcFecha').value; const hora = qs('#mcHora').value; if(!fecha||!hora){ toast('Fecha y hora obligatorias','error'); return; }
+    const start = DateTime.fromISO(`${fecha}T${hora}`);
+    const a = { id, patientId, therapyId, start: start.toISO(), duration: Number(qs('#mcDur').value||45), status: qs('#mcEstado').value, urgent: qs('#mcUrgente').checked, reason: qs('#mcMotivo').value.trim(), created: DateTime.now().toISO() };
+    upsert(state.appointments, a); await save(K.appointments); closeModals(); toast('Cita guardada','success'); render('agenda'); render('dashboard'); render('calendario');
+  });
+
+  // Invoices
+  qs('#mfSave').addEventListener('click', async ()=>{
+    const id = qs('#mfId').value || uid();
+    const patientId = qs('#mfPaciente').value; if(!patientId){ toast('Selecciona paciente','error'); return; }
+    const inv = { id, patientId, date: qs('#mfFecha').value || DateTime.now().toISODate(), concept: qs('#mfConcepto').value.trim(), amount: Number(qs('#mfImporte').value||0), method: qs('#mfMetodo').value, paid: qs('#mfPagado').checked, created: DateTime.now().toISO() };
+    if(!inv.concept||inv.amount<=0){ toast('Concepto e importe válidos','error'); return; }
+    upsert(state.invoices, inv); await save(K.invoices); closeModals(); toast('Factura guardada','success'); render('facturacion'); render('dashboard');
+  });
+
+  // Global click handlers (edit/delete/pay/pdf/etc.)
+  document.addEventListener('click', async (e)=>{
+    const t = e.target;
+    if(t.matches('[data-open]')){ 
+      e.preventDefault();
+      openModal(t.dataset.open); 
+    }
+    if(t.matches('[data-close], .modal')){ 
+      if(t.classList.contains('modal')){ if(e.target!==t) return; } 
+      closeModals(); 
+    }
+
+    if(t.matches('[data-edit-p]')){ 
+      e.preventDefault();
+      const p = state.patients.find(x=>x.id===t.dataset.editP); 
+      openPacienteModal(p); 
+    }
+    if(t.matches('[data-del-p]')){ 
+      e.preventDefault();
+      const id=t.dataset.delP; 
+      showConfirmDialog('¿Eliminar paciente? Esto no borra sus facturas ni citas.', async () => {
+        state.patients=state.patients.filter(x=>x.id!==id); 
+        await save(K.patients); 
+        toast('Paciente eliminado'); 
+        render('pacientes'); 
+      });
+    }
+    if(t.matches('[data-new-apt]')){ 
+      e.preventDefault();
+      const p = state.patients.find(x=>x.id===t.dataset.newApt); 
+      openCitaModal({ patientId:p.id }); 
+    }
+
+    if(t.matches('[data-edit-a]')){ 
+      e.preventDefault();
+      const a = state.appointments.find(x=>x.id===t.dataset.editA); 
+      openCitaModal(a); 
+    }
+    if(t.matches('[data-done]')){ 
+      e.preventDefault();
+      const a = state.appointments.find(x=>x.id===t.dataset.done); 
+      a.status='realizado'; 
+      await save(K.appointments); 
+      toast('Cita marcada como realizada','success'); 
+      render('agenda'); 
+      render('dashboard'); 
+    }
+    if(t.matches('[data-cancel]')){ 
+      e.preventDefault();
+      const a = state.appointments.find(x=>x.id===t.dataset.cancel); 
+      a.status='cancelado'; 
+      await save(K.appointments); 
+      toast('Cita cancelada'); 
+      render('agenda'); 
+      render('dashboard'); 
+    }
+
+    if(t.matches('[data-edit-t]')){ 
+      e.preventDefault();
+      const id=t.dataset.editT; 
+      const it=state.therapies.find(x=>x.id===id); 
+      showPromptDialog('Nombre', it.name, (name) => {
+        if(!name) return;
+        showPromptDialog('Precio', it.price, (priceStr) => {
+          const price = Number(priceStr);
+          if(isNaN(price)) return;
+          showPromptDialog('Duración (min)', it.duration, (durationStr) => {
+            const duration = Number(durationStr);
+            if(isNaN(duration)) return;
+            showPromptDialog('Descripción', it.desc||'', async (desc) => {
+              it.name=name; it.price=price; it.duration=duration; it.desc=desc; 
+              await save(K.therapies); 
+              render('terapias');
+            });
+          });
+        });
+      });
+    }
+    if(t.matches('[data-del-t]')){ 
+      e.preventDefault();
+      const id=t.dataset.delT; 
+      showConfirmDialog('¿Eliminar terapia?', async () => {
+        state.therapies=state.therapies.filter(x=>x.id!==id); 
+        await save(K.therapies); 
+        render('terapias'); 
+      });
+    }
+
+    if(t.matches('[data-edit-b]')){ 
+      e.preventDefault();
+      const b=state.bonos.find(x=>x.id===t.dataset.editB); 
+      showPromptDialog('Sesiones usadas', b.used, async (usedStr) => {
+        const used = Number(usedStr);
+        if(isNaN(used)) return;
+        b.used=Math.min(used,b.qty); 
+        b.active=b.used<b.qty; 
+        await save(K.bonos); 
+        render('bonos'); 
+        render('dashboard');
+      });
+    }
+    if(t.matches('[data-use-b]')){ 
+      e.preventDefault();
+      const b=state.bonos.find(x=>x.id===t.dataset.useB); 
+      if(b.used<b.qty){ 
+        b.used++; 
+        if(b.used>=b.qty) b.active=false; 
+        await save(K.bonos); 
+        toast('Sesión descontada','success'); 
+        render('bonos'); 
+        render('dashboard'); 
+      }
+    }
+
+    if(t.matches('[data-pay]')){ 
+      e.preventDefault();
+      const i=state.invoices.find(x=>x.id===t.dataset.pay); 
+      i.paid=true; 
+      await save(K.invoices); 
+      toast('Factura marcada como pagada','success'); 
+      render('facturacion'); 
+      render('dashboard'); 
+    }
+    if(t.matches('[data-pdf]')){ 
+      e.preventDefault();
+      const i=state.invoices.find(x=>x.id===t.dataset.pdf); 
+      pdfFactura(i); 
+    }
+
+    if(t.matches('[data-edit-h]')){ 
+      e.preventDefault();
+      const h=state.historias.find(x=>x.id===t.dataset.editH); 
+      nuevaHistoria(h); 
+    }
+    if(t.matches('[data-del-h]')){ 
+      e.preventDefault();
+      const id=t.dataset.delH; 
+      showConfirmDialog('¿Eliminar historia?', async () => {
+        state.historias=state.historias.filter(x=>x.id!==id); 
+        await save(K.historias); 
+        render('historias'); 
+      });
+    }
+  });
+
+  // Filters / search
+  qs('#qPac').addEventListener('input', ()=>render('pacientes'));
+  qs('#fApt').addEventListener('change', ()=>render('agenda'));
+  qs('#fInv').addEventListener('change', ()=>render('facturacion'));
+
+  // Calendar nav
+  qs('#calPrev').addEventListener('click', ()=>{ calCursor = calCursor.minus({months:1}); render('calendario'); });
+  qs('#calNext').addEventListener('click', ()=>{ calCursor = calCursor.plus({months:1}); render('calendario'); });
+
+  // Nueva historia
+  qs('#btnNuevaHistoria').addEventListener('click', ()=>nuevaHistoria());
+  function nuevaHistoria(h){
+    const pList = state.patients.map(x=>`${x.id} -- ${x.name} ${x.surname}`).join('\n');
+    showPromptDialog(`ID de paciente (elige uno de la lista):\n${pList}`, h?.patientId||state.patients[0]?.id||'', (p) => {
+      if(!p) return;
+      showPromptDialog('Diagnóstico principal', h?.mainDx||'', (mainDx) => {
+        if(mainDx===null) return;
+        showPromptDialog('Antecedentes', h?.history||'', (history) => {
+          if(history===null) return;
+          showPromptDialog('Tratamiento', h?.treatment||'', (treatment) => {
+            if(treatment===null) return;
+            showPromptDialog('Observaciones', h?.notes||'', async (notes) => {
+              if(notes===null) return;
+              const obj = { id: h?.id||uid(), patientId:p, mainDx, history, treatment, notes, created: h?.created||DateTime.now().toISO() };
+              upsert(state.historias, obj); 
+              await save(K.historias);
+              toast('Historia guardada','success'); 
+              render('historias');
+            });
+          });
+        });
+      });
+    });
+  }
+
+  // Terapia y Bono rápidos
+  qs('#btnNuevaTerapia').addEventListener('click', ()=>{
+    showPromptDialog('Nombre de la terapia', '', (name) => {
+      if(!name) return;
+      showPromptDialog('Precio (EUR)', '', (priceStr) => {
+        const price = Number(priceStr);
+        if(!(price>0)) { toast('Precio inválido','error'); return; }
+        showPromptDialog('Duración (min)', '45', (durationStr) => {
+          const duration = Number(durationStr);
+          showPromptDialog('Descripción', '', async (desc) => {
+            state.therapies.push({ id:uid(), name, price, duration, desc, active:true }); 
+            await save(K.therapies); 
+            render('terapias');
+          });
+        });
+      });
+    });
+  });
+
+  qs('#btnNuevoBono').addEventListener('click', ()=>{
+    if(state.patients.length===0||state.therapies.length===0) { toast('Necesitas pacientes y terapias','error'); return; }
+    const pList = state.patients.map(p=>`${p.id} -- ${p.name} ${p.surname}`).join('\n');
+    showPromptDialog(`Paciente ID:\n${pList}`, '', (pid) => {
+      if(!pid) return;
+      const tList = state.therapies.map(t=>`${t.id} -- ${t.name}`).join('\n');
+      showPromptDialog(`Terapia ID:\n${tList}`, '', (tid) => {
+        if(!tid) return;
+        showPromptDialog('Sesiones (5/10/15)', '10', async (qtyStr) => {
+          const qty = Number(qtyStr);
+          const t = state.therapies.find(x=>x.id===tid); 
+          if(!t) return;
+          const total = t.price*qty*0.9; // 10% descuento
+          const expires = DateTime.now().plus({months:3}).toISODate();
+          state.bonos.push({ id:uid(), patientId:pid, therapyId:tid, qty, used:0, total, expires, active:true }); 
+          await save(K.bonos); 
+          render('bonos'); 
+          render('dashboard');
+        });
+      });
+    });
+  });
+
+  // Reporte mensual simple
+  qs('#btnReporte').addEventListener('click', ()=>{
+    const start = DateTime.now().startOf('month');
+    const citas = state.appointments.filter(a=>a.status==='realizado' && DateTime.fromISO(a.start)>=start).length;
+    const ingresos = state.invoices.filter(i=>i.paid && DateTime.fromISO(i.date)>=start).reduce((s,i)=>s+Number(i.amount||0),0);
+    const pendiente = state.invoices.filter(i=>!i.paid).reduce((s,i)=>s+Number(i.amount||0),0);
+    showAlert(`Reporte del mes\n\nCitas realizadas: ${citas}\nIngresos: ${formatEur(ingresos)}\nPendiente: ${formatEur(pendiente)}`);
+  });
+
+  // Config / Backup / Restore / Export
+  async function loadCfg(){ const c=state.cfg||{}; ['Nombre','Nif','Dir','Ciudad','CP','Tlf','Email'].forEach(k=>{ const id='cfg'+k; if(qs('#'+id)) qs('#'+id).value=c[id]||''; }); }
+  qs('#btnSaveCfg').addEventListener('click', async ()=>{ const c={}; ['Nombre','Nif','Dir','Ciudad','CP','Tlf','Email'].forEach(k=>c['cfg'+k]=qs('#cfg'+k).value.trim()); state.cfg=c; await save(K.cfg); toast('Ajustes guardados','success'); });
+
+  // Backup JSON (toda la DB)
+  qs('#btnExport').addEventListener('click', async ()=>{
+    const payload = JSON.stringify(state, null, 2);
+    const blob = new Blob([payload], {type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `clinicpro-backup-${Date.now()}.json`; a.click(); URL.revokeObjectURL(a.href);
+  });
+  qs('#btnBackup').addEventListener('click', ()=>qs('#btnExport').click());
+
+  // Restore JSON
+  qs('#restoreFile').addEventListener('change', async (e)=>{
+    const file = e.target.files[0]; if(!file) return;
+    try{
+      const txt = await file.text(); const data = JSON.parse(txt);
+      Object.assign(state, data);
+      await saveAll(); toast('Restaurado correctamente','success'); renderAll(); loadCfg();
+    }catch(err){ console.error(err); toast('Archivo no válido','error'); }
+  });
+
+  // Seed demo
+  qs('#btnSeed').addEventListener('click', async ()=>{ await seedDemo(); toast('Datos demo generados','success'); renderAll(); });
+
+  // PDF factura (jsPDF)
+  function pdfFactura(inv){
+    const { jsPDF } = window.jspdf; const doc = new jsPDF();
+    const cfg = state.cfg||{}; const p = state.patients.find(x=>x.id===inv.patientId);
+    doc.setFontSize(16); doc.text('Factura', 105, 20, {align:'center'});
+    doc.setFontSize(10);
+    doc.text(`${cfg.cfgNombre||'Clínica'}\n${cfg.cfgDir||''}\n${cfg.cfgCP||''} ${cfg.cfgCiudad||''}\nNIF: ${cfg.cfgNif||''}\nTel: ${cfg.cfgTlf||''} · ${cfg.cfgEmail||''}`, 14, 30);
+    doc.text(`Paciente:\n${p?`${p.name} ${p.surname}`:'--'}\n${p?.email||''}\n${p?.phone||''}`, 150, 30, {align:'right'});
+    doc.line(14, 58, 196, 58);
+    doc.text(`Fecha: ${DateTime.fromISO(inv.date).toFormat('dd/LL/yyyy')}`, 14, 66);
+    doc.text(`Concepto: ${inv.concept}`, 14, 74);
+    doc.text(`Método: ${inv.method}`, 14, 82);
+    doc.setFontSize(14); doc.text(`Importe: ${formatEur(inv.amount)}`, 14, 96);
+    doc.setFontSize(10); doc.text(`Estado: ${inv.paid?'PAGADA':'PENDIENTE'}`, 14, 104);
+    doc.save(`factura-${inv.id}.pdf`);
+  }
+
+  // Seed demo data
+  async function seedDemo(){
+    state.patients=[]; state.appointments=[]; state.invoices=[]; state.therapies=[]; state.bonos=[]; state.historias=[];
+    const nombres=['Ana','Carlos','María','José','Laura','Miguel','Elena','David','Sofía','Raúl','Carmen','Javier','Lucía','Antonio','Isabel'];
+    const apellidos=['García','Rodríguez','López','Martínez','González','Pérez','Sánchez','Ramírez','Cruz','Flores','Gómez','Díaz','Ruiz','Hernández','Jiménez'];
+    for(let i=0;i<40;i++){
+      const name = nombres[(Math.random()*nombres.length)|0];
+      const surname = apellidos[(Math.random()*apellidos.length)|0];
+      state.patients.push({ id:uid(), name, surname, phone:`6${(Math.random()*90000000+10000000)|0}`, email:`${name.toLowerCase()}.${surname.toLowerCase()}@mail.com`, birth: DateTime.now().minus({years: 10+(Math.random()*50|0)}).toISODate(), notes: Math.random()>.7?'Historial de lesiones deportivas':'' , active:true, created: DateTime.now().toISO() });
+    }
+    const tnames=['Fisioterapia','Masaje','Rehabilitación','Osteopatía','Pilates','Terapia Manual'];
+    tnames.forEach((n,i)=> state.therapies.push({ id:uid(), name:n, price:35+10*i, duration:[30,45,60][i%3], desc:`Sesión de ${n.toLowerCase()}`, active:true }));
+    for(let i=0;i<100;i++){
+      const p = state.patients[(Math.random()*state.patients.length)|0];
+      const t = state.therapies[(Math.random()*state.therapies.length)|0];
+      const start = DateTime.now().plus({days:(Math.random()*30|0)-15, hours:(9+(Math.random()*8|0)), minutes:[0,30][(Math.random()*2|0)]});
+      state.appointments.push({ id:uid(), patientId:p.id, therapyId:t.id, start:start.toISO(), duration:[30,45,60][(Math.random()*3|0)], status:['pendiente','realizado','cancelado'][(Math.random()*3|0)], urgent:Math.random()>.9, reason:['Dolor lumbar','Rehabilitación rodilla','Contractura cervical','Lesión deportiva','Primera consulta','Revisión'][(Math.random()*6|0)], created: DateTime.now().toISO() });
+    }
+    for(let i=0;i<70;i++){
+      const p = state.patients[(Math.random()*state.patients.length)|0];
+      const t = state.therapies[(Math.random()*state.therapies.length)|0];
+      const d = DateTime.now().minus({days:(Math.random()*90|0)}).toISODate();
+      state.invoices.push({ id:uid(), patientId:p.id, date:d, concept:`Sesión de ${t.name}`, amount:t.price + (Math.random()>.8?10:0), method:['efectivo','tarjeta','transferencia'][(Math.random()*3|0)], paid: Math.random()>.3, created: DateTime.now().toISO() });
+    }
+    for(let i=0;i<25;i++){
+      const p = state.patients[(Math.random()*state.patients.length)|0];
+      const t = state.therapies[(Math.random()*state.therapies.length)|0];
+      const qty = [5,10,15][(Math.random()*3|0)]; const used = (Math.random()*qty|0);
+      state.bonos.push({ id:uid(), patientId:p.id, therapyId:t.id, qty, used, total:t.price*qty*0.9, expires: DateTime.now().plus({days: (Math.random()*120|0)}).toISODate(), active: used<qty });
+    }
+    for(let i=0;i<20;i++){
+      const p = state.patients[(Math.random()*state.patients.length)|0];
+      state.historias.push({ id:uid(), patientId:p.id, mainDx:['Lumbalgia crónica','Cervicalgia','Gonalgia','Epicondilitis','Contractura muscular'][(Math.random()*5|0)], history:'Sin antecedentes relevantes', treatment:'Fisioterapia y ejercicios', notes:'Paciente colaborador, sigue indicaciones', created: DateTime.now().minus({days:(Math.random()*365|0)}).toISO() });
+    }
+    await saveAll();
+  }
+
+  // RENDER DISPATCHER
+  function render(id){
+    if(id==='dashboard') renderDashboard();
+    if(id==='pacientes') renderPacientes();
+    if(id==='agenda') renderAgenda();
+    if(id==='historias') renderHistorias();
+    if(id==='terapias') renderTerapias();
+    if(id==='bonos') renderBonos();
+    if(id==='facturacion') renderFacturacion();
+    if(id==='calendario') renderCalendario();
+    if(id==='ajustes') loadCfg();
+  }
+  function renderAll(){ ['dashboard','pacientes','agenda','historias','terapias','bonos','facturacion','calendario'].forEach(render); }
+
+  // INIT
+  (async function init(){
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=> document.documentElement.classList.toggle('dark', e.matches));
+    setToday();
+    await loadAll();
+    if(state.patients.length===0) { await seedDemo(); }
+    renderAll(); loadCfg();
+
+    // tabs
+    qsa('.tab-button').forEach(b=> b.addEventListener('click', ()=> switchTab(b.dataset.tab)) );
+
+    // open modals from quick buttons
+    qsa('[data-open="modalPaciente"]').forEach(b=> b.addEventListener('click', ()=> openPacienteModal()));
+    qsa('[data-open="modalCita"]').forEach(b=> b.addEventListener('click', ()=> openCitaModal()));
+    qsa('[data-open="modalFactura"]').forEach(b=> b.addEventListener('click', ()=> openFacturaModal()));
+
+    // Refresh chart button
+    qs('#btnRefreshChart').addEventListener('click', drawRevenueChart);
+  })();
+})();
+</script>
+</body>
+</html>

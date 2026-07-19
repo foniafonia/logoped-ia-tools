@@ -1,0 +1,55 @@
+{
+  "id_taller": "inf_3_obj_020p",
+  "codigo": "3º INFANTIL obj.020p",
+  "nombre": "Lectoescritura de frases s-m-l-p-d-n-t-f-ñ en sílabas directas mayúsculas",
+  "modulo": "sistema_sintactico_frases",
+  "objetivo_clinico": [
+    "procesamiento_sintactico",
+    "ordenacion_de_palabras",
+    "comprension_global_oracional"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "vibracion_visual_en_error": true,
+      "repetir_palabra_objetivo_en_error": true,
+      "registro_error_paso": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "ordenacion_sintactica",
+    "estimulo_semantico": "imagen",
+    "estimulo_auditivo": "frase_completa",
+    "respuesta_esperada": "orden_correcto_de_palabras",
+    "num_palabras_frase": { "min": 3, "max": 5 },
+    "tiempo_max_respuesta_ms": 12000
+  },
+  "banco_frases": [
+    {
+      "id_item": "fr_001",
+      "frase_objetivo": ["EL", "SAPO", "SALTA"],
+      "texto": "EL SAPO SALTA",
+      "audio_text": "El sapo salta",
+      "imagen_url": null,
+      "imagen_placeholder": "🐸"
+    },
+    {
+      "id_item": "fr_002",
+      "frase_objetivo": ["LA", "MESA", "ROTA"],
+      "texto": "LA MESA ROTA",
+      "audio_text": "La mesa rota",
+      "imagen_url": null,
+      "imagen_placeholder": "🪑"
+    },
+    {
+      "id_item": "fr_003",
+      "frase_objetivo": ["EL", "PATO", "NADA"],
+      "texto": "EL PATO NADA",
+      "audio_text": "El pato nada",
+      "imagen_url": null,
+      "imagen_placeholder": "🦆"
+    }
+  ]
+}

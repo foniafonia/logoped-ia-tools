@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Valoración de Tartamudez Infantil - EvalTart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-primary text-white rounded-lg p-2">
+                        <i class="fas fa-comments text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">EvalTart</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Escala de Valoración de Tartamudez Infantil</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Versión 2.1</span>
+                    <button id="showReport" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-chart-line mr-2"></i>Ver Informe
+                    </button>
+                    <button id="generatePDF" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-file-pdf mr-2"></i>Generar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 mb-2">
+                <span>Progreso del formulario</span>
+                <span id="progressText">0% completado</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <form id="evaluationForm" class="space-y-8">
+            <!-- Sección 1: Datos de Identificación -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Datos de Identificación</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nombre completo *</label>
+                        <input type="text" name="nombre" required class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fecha de nacimiento *</label>
+                        <input type="date" name="fechaNacimiento" required class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sexo *</label>
+                        <select name="sexo" required class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="">Seleccionar</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="femenino">Femenino</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Edad actual</label>
+                        <input type="number" name="edad" min="3" max="12" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" readonly>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fecha de evaluación *</label>
+                        <input type="date" name="fechaEvaluacion" required class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Evaluador *</label>
+                        <input type="text" name="evaluador" required class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Información Básica</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">¿Antecedentes familiares de tartamudez?</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="antecedentesFamiliares" value="si" class="text-primary focus:ring-primary">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Sí</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="antecedentesFamiliares" value="no" class="text-primary focus:ring-primary">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">No</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="antecedentesFamiliares" value="noSabe" class="text-primary focus:ring-primary">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">No sabe</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Edad de inicio de la tartamudez (años)</label>
+                            <input type="number" name="edadInicio" min="1" max="12" step="0.5" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 2: Evaluación Cuantitativa de Disfluencias -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Evaluación Cuantitativa de Disfluencias</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Instrucciones para la evaluación
+                        </h3>
+                        <p class="text-blue-800 dark:text-blue-200 text-sm">
+                            Observe al niño durante 5-10 minutos de conversación espontánea y complete los siguientes campos con datos objetivos.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-chart-line mr-2 text-primary"></i>
+                                Frecuencia de Disfluencias
+                            </h3>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                ¿Cuántas repeticiones o bloqueos observa por cada 100 palabras? *
+                                <span class="text-xs text-gray-500 block mt-1">Ejemplo: Si en 50 palabras hay 3 disfluencias, serían 6 por 100 palabras</span>
+                            </label>
+                            <input type="number" name="disfluenciasPor100" min="0" max="50" required 
+                                   class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-clock mr-2 text-primary"></i>
+                                Duración de Episodios
+                            </h3>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Duración del episodio más largo (segundos) *
+                                <span class="text-xs text-gray-500 block mt-1">Tiempo del bloqueo o repetición más prolongada observada</span>
+                            </label>
+                            <input type="number" name="duracionMaxima" min="0" max="30" step="0.5" required 
+                                   class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-face-grimace mr-2 text-primary"></i>
+                                Tensión Muscular Facial
+                            </h3>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                                ¿Hay tensión muscular facial visible al hablar? *
+                            </label>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+                                    <input type="radio" name="tensionFacial" value="si" required class="text-primary focus:ring-primary">
+                                    <span class="ml-3 text-gray-700 dark:text-gray-300">
+                                        <strong>Sí</strong> - Se observa tensión en músculos faciales, cuello o mandíbula
+                                    </span>
+                                </label>
+                                <label class="flex items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+                                    <input type="radio" name="tensionFacial" value="no" required class="text-primary focus:ring-primary">
+                                    <span class="ml-3 text-gray-700 dark:text-gray-300">
+                                        <strong>No</strong> - No se observa tensión muscular visible
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-user-slash mr-2 text-primary"></i>
+                                Evitación Social
+                            </h3>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                                ¿Evita situaciones sociales por temor a tartamudear? *
+                                <span class="text-xs text-gray-500 block mt-1">Basado en observación directa y reporte de padres</span>
+                            </label>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-600 rounded">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">1 - Nunca evita</span>
+                                    <input type="radio" name="evitacionSocial" value="1" required class="text-primary focus:ring-primary">
+                                </div>
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-600 rounded">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">2 - Raramente evita</span>
+                                    <input type="radio" name="evitacionSocial" value="2" required class="text-primary focus:ring-primary">
+                                </div>
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-600 rounded">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">3 - A veces evita</span>
+                                    <input type="radio" name="evitacionSocial" value="3" required class="text-primary focus:ring-primary">
+                                </div>
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-600 rounded">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">4 - Frecuentemente evita</span>
+                                    <input type="radio" name="evitacionSocial" value="4" required class="text-primary focus:ring-primary">
+                                </div>
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-600 rounded">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">5 - Siempre evita</span>
+                                    <input type="radio" name="evitacionSocial" value="5" required class="text-primary focus:ring-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 3: Evaluación del Habla Interactiva -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Evaluación del Habla Interactiva</h2>
+                </div>
+                
+                <div class="space-y-8">
+                    <!-- Panel de Control de Evaluación -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">
+                                <i class="fas fa-microphone mr-2"></i>
+                                Panel de Control de Evaluación
+                            </h3>
+                            <div class="flex items-center space-x-4">
+                                <div id="timer" class="text-2xl font-bold text-blue-900 dark:text-blue-100">00:00</div>
+                                <button type="button" id="startTimer" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">
+                                    <i class="fas fa-play mr-2"></i>Iniciar
+                                </button>
+                                <button type="button" id="pauseTimer" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium">
+                                    <i class="fas fa-pause mr-2"></i>Pausar
+                                </button>
+                                <button type="button" id="stopTimer" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium">
+                                    <i class="fas fa-stop mr-2"></i>Detener
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Palabras totales</label>
+                                <input type="number" id="totalWords" min="0" class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary bg-white dark:bg-gray-600 text-gray-900 dark:text-white">
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Disfluencias contadas</label>
+                                <input type="number" id="disfluenciasCount" min="0" class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary bg-white dark:bg-gray-600 text-gray-900 dark:text-white">
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resultado (%)</label>
+                                <input type="text" id="percentageResult" readonly class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-500 text-gray-900 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actividades de Evaluación -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Habla Espontánea -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-comments mr-2 text-primary"></i>
+                                Habla Espontánea
+                            </h3>
+                            <div class="space-y-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    Propicie conversación natural con estas preguntas:
+                                </p>
+                                <div class="space-y-2 text-sm">
+                                    <div class="p-3 bg-white dark:bg-gray-600 rounded border-l-4 border-primary">
+                                        <strong>• ¿Cuéntame sobre tu juguete favorito?</strong>
+                                    </div>
+                                    <div class="p-3 bg-white dark:bg-gray-600 rounded border-l-4 border-primary">
+                                        <strong>• ¿Qué hiciste ayer en el colegio?</strong>
+                                    </div>
+                                    <div class="p-3 bg-white dark:bg-gray-600 rounded border-l-4 border-primary">
+                                        <strong>• ¿Cuál es tu comida favorita?</strong>
+                                    </div>
+                                    <div class="p-3 bg-white dark:bg-gray-600 rounded border-l-4 border-primary">
+                                        <strong>• ¿Tienes mascotas? Cuéntame sobre ellas</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Descripción de Imágenes -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-images mr-2 text-primary"></i>
+                                Descripción de Imágenes
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800 dark:to-green-900 p-4 rounded-lg text-center cursor-pointer hover:shadow-md transition-shadow" onclick="selectImage('parque')">
+                                    <div class="text-4xl mb-2">🏞️</div>
+                                    <p class="text-sm font-medium text-green-800 dark:text-green-200">Parque</p>
+                                    <p class="text-xs text-green-600 dark:text-green-300">Niños jugando</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-900 p-4 rounded-lg text-center cursor-pointer hover:shadow-md transition-shadow" onclick="selectImage('cocina')">
+                                    <div class="text-4xl mb-2">🍳</div>
+                                    <p class="text-sm font-medium text-blue-800 dark:text-blue-200">Cocina</p>
+                                    <p class="text-xs text-blue-600 dark:text-blue-300">Familia cocinando</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-800 dark:to-yellow-900 p-4 rounded-lg text-center cursor-pointer hover:shadow-md transition-shadow" onclick="selectImage('escuela')">
+                                    <div class="text-4xl mb-2">🏫</div>
+                                    <p class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Escuela</p>
+                                    <p class="text-xs text-yellow-600 dark:text-yellow-300">Día de clases</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-800 dark:to-purple-900 p-4 rounded-lg text-center cursor-pointer hover:shadow-md transition-shadow" onclick="selectImage('cumpleanos')">
+                                    <div class="text-4xl mb-2">🎂</div>
+                                    <p class="text-sm font-medium text-purple-800 dark:text-purple-200">Cumpleaños</p>
+                                    <p class="text-xs text-purple-600 dark:text-purple-300">Fiesta</p>
+                                </div>
+                            </div>
+                            <div id="selectedImage" class="mt-4 p-3 bg-white dark:bg-gray-600 rounded-lg hidden">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Imagen seleccionada: <span id="imageSelected" class="font-semibold"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Herramientas de Marcado en Tiempo Real -->
+                    <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg border border-red-200 dark:border-red-800">
+                        <h3 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-4">
+                            <i class="fas fa-marker mr-2"></i>
+                            Marcado de Disfluencias en Tiempo Real
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                            <button type="button" class="disfluencia-btn bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="repeticion-sonidos">
+                                <i class="fas fa-redo mb-1"></i><br>
+                                Rep. Sonidos<br>
+                                <span class="count">0</span>
+                            </button>
+                            <button type="button" class="disfluencia-btn bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="repeticion-silabas">
+                                <i class="fas fa-repeat mb-1"></i><br>
+                                Rep. Sílabas<br>
+                                <span class="count">0</span>
+                            </button>
+                            <button type="button" class="disfluencia-btn bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="repeticion-palabras">
+                                <i class="fas fa-retweet mb-1"></i><br>
+                                Rep. Palabras<br>
+                                <span class="count">0</span>
+                            </button>
+                            <button type="button" class="disfluencia-btn bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="prolongaciones">
+                                <i class="fas fa-arrows-alt-h mb-1"></i><br>
+                                Prolongaciones<br>
+                                <span class="count">0</span>
+                            </button>
+                            <button type="button" class="disfluencia-btn bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="bloqueos">
+                                <i class="fas fa-square mb-1"></i><br>
+                                Bloqueos<br>
+                                <span class="count">0</span>
+                            </button>
+                            <button type="button" class="disfluencia-btn bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg text-sm font-medium transition-colors" data-type="pausas">
+                                <i class="fas fa-pause mb-1"></i><br>
+                                Pausas<br>
+                                <span class="count">0</span>
+                            </button>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button type="button" id="resetCounters" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">
+                                <i class="fas fa-undo mr-2"></i>Reiniciar Contadores
+                            </button>
+                            <div class="text-sm text-gray-600 dark:text-gray-300">
+                                Total disfluencias: <span id="totalDisfluencias" class="font-bold text-red-600 dark:text-red-400">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actividad de Lectura -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                        <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100 mb-4">
+                            <i class="fas fa-book-open mr-2"></i>
+                            Actividad de Lectura
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-indigo-800 dark:text-indigo-200 mb-3">Seleccione texto según la edad:</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border cursor-pointer hover:bg-indigo-50 dark:hover:bg-gray-600 transition-colors" onclick="selectText('3-5')">
+                                        <strong class="text-indigo-700 dark:text-indigo-300">3-5 años:</strong>
+                                        <p class="text-sm mt-1">"El gato come. El perro ladra. La casa es grande."</p>
+                                    </div>
+                                    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border cursor-pointer hover:bg-indigo-50 dark:hover:bg-gray-600 transition-colors" onclick="selectText('6-8')">
+                                        <strong class="text-indigo-700 dark:text-indigo-300">6-8 años:</strong>
+                                        <p class="text-sm mt-1">"María va al parque con su mamá. Ven flores rojas y pájaros cantando en los árboles."</p>
+                                    </div>
+                                    <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border cursor-pointer hover:bg-indigo-50 dark:hover:bg-gray-600 transition-colors" onclick="selectText('9-12')">
+                                        <strong class="text-indigo-700 dark:text-indigo-300">9-12 años:</strong>
+                                        <p class="text-sm mt-1">"Durante las vacaciones de verano, los niños exploraron la misteriosa cueva que habían descubierto cerca del lago."</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-indigo-800 dark:text-indigo-200 mb-3">Texto seleccionado:</h4>
+                                <div id="selectedText" class="p-4 bg-white dark:bg-gray-700 rounded-lg border min-h-24 text-lg leading-relaxed">
+                                    <span class="text-gray-500 dark:text-gray-400 italic">Seleccione un texto para la actividad de lectura...</span>
+                                </div>
+                                <div class="mt-4 grid grid-cols-2 gap-3">
+                                    <div class="text-center">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tiempo de lectura</label>
+                                        <div id="readingTime" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">--:--</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Errores marcados</label>
+                                        <div id="readingErrors" class="text-xl font-bold text-red-600 dark:text-red-400">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen de la Sesión -->
+                    <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            <i class="fas fa-clipboard-list mr-2"></i>
+                            Resumen de la Sesión de Evaluación
+                        </h3>
+                        <textarea name="resumenSesion" rows="4" 
+                                  class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-600 text-gray-900 dark:text-white"
+                                  placeholder="Resuma las observaciones durante la evaluación del habla, comportamiento del niño, cooperación, patrones observados, etc."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 4: Observación Complementaria -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Observación Complementaria</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tipos de Disfluencias Observadas</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="repeticionSonidos" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Repetición de sonidos (p-p-papá)</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="repeticionSilabas" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Repetición de sílabas (pa-pa-papá)</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="repeticionPalabras" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Repetición de palabras</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="prolongaciones" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Prolongaciones (ssssol)</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="bloqueos" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Bloqueos (silencio tenso)</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <input type="checkbox" name="tiposDisfluencias" value="pausasInapropiadas" class="text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Pausas inapropiadas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Comportamientos Secundarios Observados</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="movimientosCabeza" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Movimientos de cabeza</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="parpadeoExcesivo" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Parpadeo excesivo</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="movimientosManos" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Movimientos de manos</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="evitaPalabras" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Evita ciertas palabras</span>
+                                </label>
+                            </div>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="cambiaRitmo" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Cambia el ritmo del habla</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="frustracion" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Muestra frustración visible</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="concienciaProblema" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Es consciente del problema</span>
+                                </label>
+                                <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <input type="checkbox" name="comportamientos" value="retiraOjos" class="text-primary focus:ring-primary rounded">
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Retira la mirada al hablar</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                        <h3 class="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            Notas adicionales de observación
+                        </h3>
+                        <textarea name="notasObservacion" rows="3" 
+                                  class="w-full px-4 py-2 text-base border border-yellow-300 dark:border-yellow-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" 
+                                  placeholder="Describa cualquier comportamiento específico, contexto o situaciones particulares observadas..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 4: Escala de Severidad -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Escala de Severidad (SSI-4 Adaptada)</h2>
+                </div>
+                
+                <div class="space-y-8">
+                    <!-- Frecuencia -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Frecuencia de Disfluencias</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">1 - Muy infrecuente (0-2% de palabras)</span>
+                                <input type="radio" name="frecuencia" value="1" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">2 - Infrecuente (3-5% de palabras)</span>
+                                <input type="radio" name="frecuencia" value="2" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">3 - Moderada (6-10% de palabras)</span>
+                                <input type="radio" name="frecuencia" value="3" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">4 - Frecuente (11-20% de palabras)</span>
+                                <input type="radio" name="frecuencia" value="4" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">5 - Muy frecuente (>20% de palabras)</span>
+                                <input type="radio" name="frecuencia" value="5" class="text-primary focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Duración -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Duración de las Disfluencias</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">1 - Muy breve (instantánea)</span>
+                                <input type="radio" name="duracion" value="1" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">2 - Breve (medio segundo)</span>
+                                <input type="radio" name="duracion" value="2" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">3 - Moderada (1 segundo)</span>
+                                <input type="radio" name="duracion" value="3" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">4 - Larga (2-5 segundos)</span>
+                                <input type="radio" name="duracion" value="4" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">5 - Muy larga (>5 segundos)</span>
+                                <input type="radio" name="duracion" value="5" class="text-primary focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comportamientos Secundarios -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Comportamientos Secundarios</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">1 - Ninguno observable</span>
+                                <input type="radio" name="comportamientosSecundarios" value="1" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">2 - Mínimos, apenas perceptibles</span>
+                                <input type="radio" name="comportamientosSecundarios" value="2" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">3 - Moderados, claramente observables</span>
+                                <input type="radio" name="comportamientosSecundarios" value="3" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">4 - Severos, distraen del mensaje</span>
+                                <input type="radio" name="comportamientosSecundarios" value="4" class="text-primary focus:ring-primary">
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span class="text-gray-700 dark:text-gray-300">5 - Muy severos, dominan la comunicación</span>
+                                <input type="radio" name="comportamientosSecundarios" value="5" class="text-primary focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 5: Impacto Emocional y Social -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Impacto Emocional y Social</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Nivel de Ansiedad al Hablar</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Muy baja</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="ansiedadHablar" value="1" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">1</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Baja</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="ansiedadHablar" value="2" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">2</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Moderada</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="ansiedadHablar" value="3" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">3</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Alta</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="ansiedadHablar" value="4" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">4</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Muy alta</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="ansiedadHablar" value="5" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Evitación de Situaciones</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Nunca evita</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="evitacionSituaciones" value="1" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">1</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Raramente evita</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="evitacionSituaciones" value="2" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">2</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">A veces evita</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="evitacionSituaciones" value="3" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">3</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Frecuentemente evita</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="evitacionSituaciones" value="4" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">4</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Siempre evita</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="evitacionSituaciones" value="5" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Conciencia del Problema</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Sin conciencia</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="concienciaProblema" value="1" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">1</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Mínima conciencia</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="concienciaProblema" value="2" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">2</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Conciencia moderada</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="concienciaProblema" value="3" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">3</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Alta conciencia</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="concienciaProblema" value="4" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">4</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Muy alta conciencia</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="concienciaProblema" value="5" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Impacto en Relaciones Sociales</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Sin impacto</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="impactoSocial" value="1" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">1</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Impacto mínimo</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="impactoSocial" value="2" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">2</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Impacto moderado</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="impactoSocial" value="3" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">3</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Impacto significativo</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="impactoSocial" value="4" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">4</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Impacto severo</span>
+                                    <div class="flex space-x-2">
+                                        <input type="radio" name="impactoSocial" value="5" class="text-primary focus:ring-primary">
+                                        <span class="text-sm">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 6: Observaciones Clínicas -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 form-section">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">6</div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Observaciones Clínicas</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Observaciones adicionales del evaluador</label>
+                        <textarea name="observacionesClinicas" rows="4" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Incluya cualquier observación relevante sobre el comportamiento, actitud, cooperación, etc."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recomendaciones iniciales</label>
+                        <textarea name="recomendaciones" rows="4" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Recomendaciones para el tratamiento, frecuencia de sesiones, involucración familiar, etc."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Próximos pasos</label>
+                        <textarea name="proximosPasos" rows="3" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Plan de seguimiento, reevaluaciones, derivaciones, etc."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resultado de la Evaluación -->
+            <section id="resultSection" class="bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl shadow-lg p-6 hidden">
+                <h2 class="text-xl font-bold mb-4">Resultado de la Evaluación</h2>
+                <div id="resultContent" class="space-y-4">
+                    <!-- El contenido se llenará dinámicamente -->
+                </div>
+            </section>
+        </form>
+    </main>
+
+    <!-- Modal de Informe -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        <i class="fas fa-file-medical mr-2 text-primary"></i>
+                        Informe de Evaluación
+                    </h2>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div id="modalContent" class="space-y-6">
+                    <!-- El contenido se llenará dinámicamente -->
+                </div>
+                
+                <div class="mt-8 flex justify-end space-x-4">
+                    <button id="printReport" class="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-print mr-2"></i>Imprimir Informe
+                    </button>
+                    <button id="downloadPDF" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-download mr-2"></i>Descargar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let formData = {};
+        
+        // Función para calcular la edad
+        function calculateAge() {
+            const birthDate = document.querySelector('input[name="fechaNacimiento"]').value;
+            const ageInput = document.querySelector('input[name="edad"]');
+            
+            if (birthDate) {
+                const birth = new Date(birthDate);
+                const today = new Date();
+                let age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+                
+                ageInput.value = age;
+            }
+        }
+
+        // Función para calcular progreso
+        function updateProgress() {
+            const sections = document.querySelectorAll('.form-section');
+            let totalFields = 0;
+            let completedFields = 0;
+
+            sections.forEach(section => {
+                const inputs = section.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    totalFields++;
+                    if (input.type === 'radio' || input.type === 'checkbox') {
+                        const name = input.name;
+                        if (document.querySelector(`input[name="${name}"]:checked`)) {
+                            completedFields++;
+                        }
+                    } else if (input.value.trim() !== '') {
+                        completedFields++;
+                    }
+                });
+            });
+
+            const progress = Math.round((completedFields / totalFields) * 100);
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${progress}% completado`;
+
+            // Mostrar resultado si está más del 80% completo
+            if (progress >= 80) {
+                calculateResult();
+            }
+        }
+
+        // Función para calcular el resultado usando algoritmo fusionado
+        function calculateResult() {
+            // Obtener datos cuantitativos directos (del segundo código)
+            const disfluenciasPor100 = parseInt(document.querySelector('input[name="disfluenciasPor100"]')?.value || 0);
+            const duracionMaxima = parseFloat(document.querySelector('input[name="duracionMaxima"]')?.value || 0);
+            const tensionFacial = document.querySelector('input[name="tensionFacial"]:checked')?.value;
+            const evitacionSocial = parseInt(document.querySelector('input[name="evitacionSocial"]:checked')?.value || 0);
+            
+            // Obtener datos tradicionales SSI-4 
+            const frecuencia = parseInt(document.querySelector('input[name="frecuencia"]:checked')?.value || 0);
+            const duracion = parseInt(document.querySelector('input[name="duracion"]:checked')?.value || 0);
+            const comportamientosSecundarios = parseInt(document.querySelector('input[name="comportamientosSecundarios"]:checked')?.value || 0);
+            
+            // Calcular puntuación usando algoritmo fusionado
+            let puntuacionDirecta = disfluenciasPor100 + duracionMaxima;
+            if (tensionFacial === "si") {
+                puntuacionDirecta += 3;
+            }
+            puntuacionDirecta += evitacionSocial;
+            
+            // Calcular puntuación SSI-4 tradicional
+            const totalSSI = frecuencia + duracion + comportamientosSecundarios;
+            
+            // Determinar severidad usando el algoritmo directo (más preciso)
+            let severidad = '';
+            let color = '';
+            let descripcion = '';
+            
+            if (puntuacionDirecta <= 7) {
+                severidad = 'Leve';
+                color = 'text-green-400';
+                descripcion = 'La tartamudez tiene un impacto mínimo en la comunicación diaria.';
+            } else if (puntuacionDirecta <= 15) {
+                severidad = 'Moderada';
+                color = 'text-yellow-400';
+                descripcion = 'La tartamudez interfiere ocasionalmente con la comunicación.';
+            } else {
+                severidad = 'Grave';
+                color = 'text-red-400';
+                descripcion = 'La tartamudez tiene un impacto significativo en la comunicación y bienestar.';
+            }
+
+            // Obtener impacto emocional para análisis complementario
+            const ansiedadHablar = parseInt(document.querySelector('input[name="ansiedadHablar"]:checked')?.value || 0);
+            const evitacionSituaciones = parseInt(document.querySelector('input[name="evitacionSituaciones"]:checked')?.value || 0);
+            const concienciaProblema = parseInt(document.querySelector('input[name="concienciaProblema"]:checked')?.value || 0);
+            const impactoSocial = parseInt(document.querySelector('input[name="impactoSocial"]:checked')?.value || 0);
+            
+            const promedioEmocional = ((ansiedadHablar + evitacionSituaciones + concienciaProblema + impactoSocial) / 4).toFixed(1);
+
+            const resultSection = document.getElementById('resultSection');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">Puntuación Directa</h3>
+                        <p class="text-2xl font-bold">${puntuacionDirecta}</p>
+                        <p class="text-sm opacity-80 mt-1">Algoritmo cuantitativo</p>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">Severidad</h3>
+                        <p class="text-2xl font-bold ${color}">${severidad}</p>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">SSI-4 Tradicional</h3>
+                        <p class="text-2xl font-bold">${totalSSI}/15</p>
+                        <p class="text-sm opacity-80 mt-1">Referencia clínica</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white/10 rounded-lg p-4 mt-4">
+                    <h3 class="font-semibold mb-3">Análisis Detallado</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p><strong>Frecuencia:</strong> ${disfluenciasPor100} disfluencias/100 palabras</p>
+                            <p><strong>Duración máxima:</strong> ${duracionMaxima} segundos</p>
+                            <p><strong>Tensión facial:</strong> ${tensionFacial === 'si' ? 'Presente (+3 pts)' : 'Ausente'}</p>
+                            <p><strong>Evitación social:</strong> ${evitacionSocial}/5</p>
+                        </div>
+                        <div>
+                            <p><strong>Impacto emocional promedio:</strong> ${promedioEmocional}/5</p>
+                            <p><strong>Puntuación total:</strong> ${puntuacionDirecta} puntos</p>
+                            <p class="mt-2 italic">${descripcion}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white/20 rounded-lg p-4 mt-4">
+                    <h3 class="font-semibold mb-2">Interpretación Clínica</h3>
+                    <div class="text-sm space-y-2">
+                        ${puntuacionDirecta <= 7 ? 
+                            '<p>✅ <strong>Intervención mínima:</strong> Monitoreo y técnicas de fluidez básicas.</p>' :
+                            puntuacionDirecta <= 15 ?
+                            '<p>⚠️ <strong>Intervención moderada:</strong> Terapia logopédica regular recomendada.</p>' :
+                            '<p>🚨 <strong>Intervención intensiva:</strong> Terapia logopédica urgente y seguimiento multidisciplinar.</p>'
+                        }
+                        ${promedioEmocional >= 3.5 ? 
+                            '<p>🔍 <strong>Nota:</strong> El impacto emocional elevado requiere atención especial en el abordaje terapéutico.</p>' : ''
+                        }
+                    </div>
+                </div>
+            `;
+            
+            resultSection.classList.remove('hidden');
+        }
+
+        // Función para generar PDF
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            // Configuración del PDF
+            pdf.setFont('helvetica');
+            
+            // Título
+            pdf.setFontSize(16);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('ESCALA DE VALORACIÓN DE TARTAMUDEZ INFANTIL', 20, 25);
+            pdf.text('(EvalTart - Versión 2.1)', 20, 35);
+            
+            // Información del paciente
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('DATOS DEL PACIENTE', 20, 50);
+            pdf.setFont('helvetica', 'normal');
+            
+            const nombre = document.querySelector('input[name="nombre"]').value || 'No especificado';
+            const edad = document.querySelector('input[name="edad"]').value || 'No especificado';
+            const sexo = document.querySelector('select[name="sexo"]').value || 'No especificado';
+            const fechaEvaluacion = document.querySelector('input[name="fechaEvaluacion"]').value || 'No especificado';
+            const evaluador = document.querySelector('input[name="evaluador"]').value || 'No especificado';
+            
+            pdf.text(`Nombre: ${nombre}`, 20, 60);
+            pdf.text(`Edad: ${edad} años`, 20, 70);
+            pdf.text(`Sexo: ${sexo}`, 20, 80);
+            pdf.text(`Fecha de evaluación: ${fechaEvaluacion}`, 20, 90);
+            pdf.text(`Evaluador: ${evaluador}`, 20, 100);
+            
+            // Resultados de la evaluación cuantitativa
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('EVALUACIÓN CUANTITATIVA', 20, 120);
+            pdf.setFont('helvetica', 'normal');
+            
+            const disfluenciasPor100 = document.querySelector('input[name="disfluenciasPor100"]')?.value || 'No evaluado';
+            const duracionMaxima = document.querySelector('input[name="duracionMaxima"]')?.value || 'No evaluado';
+            const tensionFacial = document.querySelector('input[name="tensionFacial"]:checked')?.value || 'No evaluado';
+            const evitacionSocial = document.querySelector('input[name="evitacionSocial"]:checked')?.value || 'No evaluado';
+            
+            pdf.text(`Disfluencias por 100 palabras: ${disfluenciasPor100}`, 20, 130);
+            pdf.text(`Duración episodio más largo: ${duracionMaxima} segundos`, 20, 140);
+            pdf.text(`Tensión muscular facial: ${tensionFacial === 'si' ? 'Presente' : 'Ausente'}`, 20, 150);
+            pdf.text(`Evitación social: ${evitacionSocial}/5`, 20, 160);
+            
+            // Calcular puntuación directa
+            let puntuacionDirecta = parseInt(disfluenciasPor100 || 0) + parseFloat(duracionMaxima || 0);
+            if (tensionFacial === 'si') puntuacionDirecta += 3;
+            puntuacionDirecta += parseInt(evitacionSocial || 0);
+            
+            pdf.text(`Puntuación directa total: ${puntuacionDirecta}`, 20, 170);
+            
+            // Severidad usando algoritmo fusionado
+            let severidad = '';
+            if (puntuacionDirecta <= 7) severidad = 'Leve';
+            else if (puntuacionDirecta <= 15) severidad = 'Moderada';
+            else severidad = 'Grave';
+            
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`SEVERIDAD: ${severidad}`, 20, 185);
+            
+            // SSI-4 Tradicional
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('EVALUACIÓN SSI-4 TRADICIONAL', 20, 205);
+            pdf.setFont('helvetica', 'normal');
+            
+            const frecuencia = document.querySelector('input[name="frecuencia"]:checked')?.value || 'No evaluado';
+            const duracion = document.querySelector('input[name="duracion"]:checked')?.value || 'No evaluado';
+            const comportamientosSecundarios = document.querySelector('input[name="comportamientosSecundarios"]:checked')?.value || 'No evaluado';
+            
+            pdf.text(`Frecuencia: ${frecuencia}/5`, 20, 215);
+            pdf.text(`Duración: ${duracion}/5`, 20, 225);
+            pdf.text(`Comportamientos secundarios: ${comportamientosSecundarios}/5`, 20, 235);
+            
+            const totalSSI = parseInt(frecuencia || 0) + parseInt(duracion || 0) + parseInt(comportamientosSecundarios || 0);
+            pdf.text(`Puntuación SSI-4: ${totalSSI}/15`, 20, 245);
+            
+            // Impacto emocional y social
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('IMPACTO EMOCIONAL Y SOCIAL', 20, 195);
+            pdf.setFont('helvetica', 'normal');
+            
+            const ansiedadHablar = document.querySelector('input[name="ansiedadHablar"]:checked')?.value || 'No evaluado';
+            const evitacionSituaciones = document.querySelector('input[name="evitacionSituaciones"]:checked')?.value || 'No evaluado';
+            const concienciaProblema = document.querySelector('input[name="concienciaProblema"]:checked')?.value || 'No evaluado';
+            const impactoSocial = document.querySelector('input[name="impactoSocial"]:checked')?.value || 'No evaluado';
+            
+            pdf.text(`Ansiedad al hablar: ${ansiedadHablar}/5`, 20, 205);
+            pdf.text(`Evitación de situaciones: ${evitacionSituaciones}/5`, 20, 215);
+            pdf.text(`Conciencia del problema: ${concienciaProblema}/5`, 20, 225);
+            pdf.text(`Impacto en relaciones sociales: ${impactoSocial}/5`, 20, 235);
+            
+            // Nueva página para observaciones
+            pdf.addPage();
+            
+            // Observaciones clínicas
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('OBSERVACIONES CLÍNICAS', 20, 25);
+            pdf.setFont('helvetica', 'normal');
+            
+            const observacionesClinicas = document.querySelector('textarea[name="observacionesClinicas"]').value || 'Sin observaciones registradas';
+            const recomendaciones = document.querySelector('textarea[name="recomendaciones"]').value || 'Sin recomendaciones registradas';
+            const proximosPasos = document.querySelector('textarea[name="proximosPasos"]').value || 'Sin próximos pasos registrados';
+            
+            // Dividir texto largo en líneas
+            const splitText = (text, maxWidth) => {
+                return pdf.splitTextToSize(text, maxWidth);
+            };
+            
+            let currentY = 35;
+            
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Observaciones:', 20, currentY);
+            currentY += 10;
+            pdf.setFont('helvetica', 'normal');
+            const obsLines = splitText(observacionesClinicas, 170);
+            pdf.text(obsLines, 20, currentY);
+            currentY += obsLines.length * 5 + 10;
+            
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Recomendaciones:', 20, currentY);
+            currentY += 10;
+            pdf.setFont('helvetica', 'normal');
+            const recLines = splitText(recomendaciones, 170);
+            pdf.text(recLines, 20, currentY);
+            currentY += recLines.length * 5 + 10;
+            
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Próximos pasos:', 20, currentY);
+            currentY += 10;
+            pdf.setFont('helvetica', 'normal');
+            const nextLines = splitText(proximosPasos, 170);
+            pdf.text(nextLines, 20, currentY);
+            
+            // Pie de página
+            const today = new Date().toLocaleDateString('es-ES');
+            pdf.setFontSize(8);
+            pdf.text(`Informe generado el ${today} por EvalTart v2.1`, 20, 280);
+            
+            // Guardar el PDF
+            const nombrePaciente = nombre.replace(/\s+/g, '_') || 'Paciente';
+            pdf.save(`EvalTart_${nombrePaciente}_${fechaEvaluacion || today.replace(/\//g, '-')}.pdf`);
+        }
+
+        // Variables para cronómetro y herramientas interactivas
+        let timerInterval;
+        let timerSeconds = 0;
+        let timerRunning = false;
+        let disfluenciaCounts = {};
+        let readingTimerStart = null;
+        
+        // Funciones del cronómetro
+        function startTimer() {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+                document.getElementById('startTimer').disabled = true;
+                document.getElementById('pauseTimer').disabled = false;
+                document.getElementById('stopTimer').disabled = false;
+            }
+        }
+        
+        function pauseTimer() {
+            if (timerRunning) {
+                timerRunning = false;
+                clearInterval(timerInterval);
+                document.getElementById('startTimer').disabled = false;
+                document.getElementById('pauseTimer').disabled = true;
+            }
+        }
+        
+        function stopTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 0;
+            updateTimerDisplay();
+            document.getElementById('startTimer').disabled = false;
+            document.getElementById('pauseTimer').disabled = true;
+            document.getElementById('stopTimer').disabled = true;
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Funciones para selección de imágenes y textos
+        function selectImage(imageType) {
+            const imageNames = {
+                'parque': 'Parque - Niños jugando',
+                'cocina': 'Cocina - Familia cocinando', 
+                'escuela': 'Escuela - Día de clases',
+                'cumpleanos': 'Cumpleaños - Fiesta'
+            };
+            
+            document.getElementById('selectedImage').classList.remove('hidden');
+            document.getElementById('imageSelected').textContent = imageNames[imageType];
+            
+            // Marcar visualmente la imagen seleccionada
+            document.querySelectorAll('[onclick*="selectImage"]').forEach(img => {
+                img.classList.remove('ring-4', 'ring-primary');
+            });
+            event.target.closest('[onclick*="selectImage"]').classList.add('ring-4', 'ring-primary');
+        }
+        
+        function selectText(ageGroup) {
+            const texts = {
+                '3-5': 'El gato come. El perro ladra. La casa es grande.',
+                '6-8': 'María va al parque con su mamá. Ven flores rojas y pájaros cantando en los árboles.',
+                '9-12': 'Durante las vacaciones de verano, los niños exploraron la misteriosa cueva que habían descubierto cerca del lago.'
+            };
+            
+            document.getElementById('selectedText').innerHTML = `
+                <div class="text-lg leading-relaxed">${texts[ageGroup]}</div>
+                <div class="mt-3 flex justify-between">
+                    <button type="button" onclick="startReadingTimer()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm">
+                        <i class="fas fa-play mr-1"></i>Iniciar Lectura
+                    </button>
+                    <button type="button" onclick="stopReadingTimer()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm">
+                        <i class="fas fa-stop mr-1"></i>Finalizar
+                    </button>
+                    <button type="button" onclick="markReadingError()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded text-sm">
+                        <i class="fas fa-exclamation mr-1"></i>Marcar Error
+                    </button>
+                </div>
+            `;
+            
+            // Marcar visualmente el texto seleccionado
+            document.querySelectorAll('[onclick*="selectText"]').forEach(text => {
+                text.classList.remove('ring-2', 'ring-indigo-500');
+            });
+            event.target.closest('[onclick*="selectText"]').classList.add('ring-2', 'ring-indigo-500');
+        }
+        
+        // Funciones para cronómetro de lectura
+        function startReadingTimer() {
+            readingTimerStart = Date.now();
+            document.getElementById('readingTime').textContent = '00:00';
+            document.getElementById('readingErrors').textContent = '0';
+            
+            // Actualizar cronómetro cada segundo
+            const readingInterval = setInterval(() => {
+                if (readingTimerStart) {
+                    const elapsed = Math.floor((Date.now() - readingTimerStart) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('readingTime').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    clearInterval(readingInterval);
+                }
+            }, 1000);
+        }
+        
+        function stopReadingTimer() {
+            readingTimerStart = null;
+        }
+        
+        function markReadingError() {
+            const currentErrors = parseInt(document.getElementById('readingErrors').textContent);
+            document.getElementById('readingErrors').textContent = currentErrors + 1;
+        }
+        
+        // Funciones para marcado de disfluencias
+        function initializeDisfluenciaCounters() {
+            document.querySelectorAll('.disfluencia-btn').forEach(btn => {
+                const type = btn.dataset.type;
+                disfluenciaCounts[type] = 0;
+                
+                btn.addEventListener('click', () => {
+                    disfluenciaCounts[type]++;
+                    btn.querySelector('.count').textContent = disfluenciaCounts[type];
+                    updateTotalDisfluencias();
+                    updatePercentageCalculation();
+                });
+            });
+        }
+        
+        function updateTotalDisfluencias() {
+            const total = Object.values(disfluenciaCounts).reduce((sum, count) => sum + count, 0);
+            document.getElementById('totalDisfluencias').textContent = total;
+            document.getElementById('disfluenciasCount').value = total;
+        }
+        
+        function resetCounters() {
+            Object.keys(disfluenciaCounts).forEach(type => {
+                disfluenciaCounts[type] = 0;
+                document.querySelector(`[data-type="${type}"] .count`).textContent = '0';
+            });
+            updateTotalDisfluencias();
+        }
+        
+        function updatePercentageCalculation() {
+            const totalWords = parseInt(document.getElementById('totalWords').value) || 0;
+            const totalDisfluencias = parseInt(document.getElementById('disfluenciasCount').value) || 0;
+            
+            if (totalWords > 0) {
+                const percentage = ((totalDisfluencias / totalWords) * 100).toFixed(2);
+                document.getElementById('percentageResult').value = `${percentage}%`;
+                
+                // Actualizar campo de disfluencias por 100 palabras
+                const per100 = Math.round((totalDisfluencias / totalWords) * 100);
+                document.querySelector('input[name="disfluenciasPor100"]').value = per100;
+            }
+        }
+        
+        // Función para mostrar modal de informe
+        function showReportModal() {
+            calculateResult(); // Asegurar que los resultados estén actualizados
+            
+            const modal = document.getElementById('reportModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Generar contenido del informe
+            const nombre = document.querySelector('input[name="nombre"]').value || 'No especificado';
+            const edad = document.querySelector('input[name="edad"]').value || 'No especificado';
+            const sexo = document.querySelector('select[name="sexo"]').value || 'No especificado';
+            const fechaEvaluacion = document.querySelector('input[name="fechaEvaluacion"]').value || 'No especificado';
+            const evaluador = document.querySelector('input[name="evaluador"]').value || 'No especificado';
+            
+            // Obtener datos para el resumen
+            const disfluenciasPor100 = document.querySelector('input[name="disfluenciasPor100"]')?.value || '0';
+            const duracionMaxima = document.querySelector('input[name="duracionMaxima"]')?.value || '0';
+            const tensionFacial = document.querySelector('input[name="tensionFacial"]:checked')?.value || 'No evaluado';
+            const evitacionSocial = document.querySelector('input[name="evitacionSocial"]:checked')?.value || '0';
+            
+            // Calcular severidad
+            let puntuacionDirecta = parseInt(disfluenciasPor100) + parseFloat(duracionMaxima);
+            if (tensionFacial === 'si') puntuacionDirecta += 3;
+            puntuacionDirecta += parseInt(evitacionSocial);
+            
+            let severidad = '';
+            if (puntuacionDirecta <= 7) severidad = 'Leve';
+            else if (puntuacionDirecta <= 15) severidad = 'Moderada';
+            else severidad = 'Grave';
+            
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Datos del Paciente -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Datos del Paciente</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><strong>Nombre:</strong> ${nombre}</div>
+                            <div><strong>Edad:</strong> ${edad} años</div>
+                            <div><strong>Sexo:</strong> ${sexo}</div>
+                            <div><strong>Fecha de evaluación:</strong> ${fechaEvaluacion}</div>
+                            <div><strong>Evaluador:</strong> ${evaluador}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Resultados Principales -->
+                    <div class="bg-gradient-to-r from-primary/10 to-purple-600/10 dark:from-primary/20 dark:to-purple-600/20 p-6 rounded-lg border">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Resultados de la Evaluación</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-primary">${puntuacionDirecta}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Puntuación Directa</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold ${severidad === 'Leve' ? 'text-green-600' : severidad === 'Moderada' ? 'text-yellow-600' : 'text-red-600'}">${severidad}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Severidad</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-secondary">${disfluenciasPor100}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Disfluencias/100 palabras</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalles de la Evaluación -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-3">Evaluación Cuantitativa</h4>
+                            <div class="space-y-2 text-sm">
+                                <div>Disfluencias por 100 palabras: <strong>${disfluenciasPor100}</strong></div>
+                                <div>Duración máxima: <strong>${duracionMaxima} segundos</strong></div>
+                                <div>Tensión facial: <strong>${tensionFacial === 'si' ? 'Presente' : 'Ausente'}</strong></div>
+                                <div>Evitación social: <strong>${evitacionSocial}/5</strong></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-3">Recomendación Clínica</h4>
+                            <div class="text-sm">
+                                ${puntuacionDirecta <= 7 ? 
+                                    '<div class="text-green-700 dark:text-green-300">✅ <strong>Intervención mínima:</strong> Monitoreo y técnicas de fluidez básicas.</div>' :
+                                    puntuacionDirecta <= 15 ?
+                                    '<div class="text-yellow-700 dark:text-yellow-300">⚠️ <strong>Intervención moderada:</strong> Terapia logopédica regular recomendada.</div>' :
+                                    '<div class="text-red-700 dark:text-red-300">🚨 <strong>Intervención intensiva:</strong> Terapia logopédica urgente y seguimiento multidisciplinar.</div>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Observaciones -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                        <h4 class="font-bold text-gray-900 dark:text-white mb-3">Observaciones y Recomendaciones</h4>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <strong>Resumen de sesión:</strong> 
+                                ${document.querySelector('textarea[name="resumenSesion"]')?.value || 'No registrado'}
+                            </div>
+                            <div>
+                                <strong>Observaciones clínicas:</strong> 
+                                ${document.querySelector('textarea[name="observacionesClinicas"]')?.value || 'No registradas'}
+                            </div>
+                            <div>
+                                <strong>Recomendaciones:</strong> 
+                                ${document.querySelector('textarea[name="recomendaciones"]')?.value || 'No registradas'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+        
+        function printReport() {
+            const modalContent = document.getElementById('modalContent').innerHTML;
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Informe de Evaluación - EvalTart</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .bg-gray-50 { background-color: #f9fafb; }
+                        .bg-gradient-to-r { background: linear-gradient(to right, #5D5CDE20, #7C3AED20); }
+                        .text-3xl { font-size: 1.875rem; }
+                        .font-bold { font-weight: bold; }
+                        .text-center { text-align: center; }
+                        .grid { display: grid; }
+                        .grid-cols-1 { grid-template-columns: 1fr; }
+                        .grid-cols-2 { grid-template-columns: 1fr 1fr; }
+                        .grid-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+                        .gap-6 { gap: 1.5rem; }
+                        .gap-4 { gap: 1rem; }
+                        .p-6 { padding: 1.5rem; }
+                        .mb-4 { margin-bottom: 1rem; }
+                        .mb-3 { margin-bottom: 0.75rem; }
+                        .space-y-6 > * + * { margin-top: 1.5rem; }
+                        .space-y-3 > * + * { margin-top: 0.75rem; }
+                        .space-y-2 > * + * { margin-top: 0.5rem; }
+                        .rounded-lg { border-radius: 0.5rem; border: 1px solid #e5e7eb; }
+                        .text-primary { color: #5D5CDE; }
+                        .text-green-600 { color: #059669; }
+                        .text-yellow-600 { color: #d97706; }
+                        .text-red-600 { color: #dc2626; }
+                        .text-secondary { color: #10B981; }
+                        @media print {
+                            .bg-gray-50 { background-color: #f9fafb !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1 style="text-align: center; color: #5D5CDE; margin-bottom: 2rem;">
+                        📋 Informe de Evaluación - EvalTart v2.1
+                    </h1>
+                    ${modalContent}
+                    <div style="margin-top: 2rem; text-align: center; font-size: 0.875rem; color: #6b7280;">
+                        Informe generado el ${new Date().toLocaleDateString('es-ES')} por EvalTart v2.1
+                    </div>
+                </body>
+                </html>

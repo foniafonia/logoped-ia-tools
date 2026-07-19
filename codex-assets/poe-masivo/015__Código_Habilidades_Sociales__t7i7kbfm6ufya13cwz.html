@@ -1,0 +1,2557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kit Completo de Habilidades Sociales - Evaluación + Fichas Interactivas</title>
+<style>
+  :root{
+    --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    --card: #ffffff; 
+    --ink: #0f172a; 
+    --muted: #64748b; 
+    --brand: #06b6d4; 
+    --brand-light: #67e8f9;
+    --brand-dark: #0891b2;
+    --ok: #10b981; 
+    --warn: #f59e0b; 
+    --bad: #ef4444;
+    --border: #e2e8f0;
+    --light-bg: #f8fafc;
+    --glass: rgba(255, 255, 255, 0.1);
+    --shadow: rgba(0, 0, 0, 0.1);
+  }
+  
+  * { box-sizing: border-box; }
+  
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  .header-wave {
+    background: var(--card);
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 10px 40px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 25px 20px 20px;
+    color: var(--ink);
+  }
+  
+  .hero h1 {
+    font-size: 28px;
+    margin: 0 0 12px 0;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  
+  .hero p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0;
+  }
+  
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  
+  .progress-container {
+    background: var(--light-bg);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+  }
+  
+  .step-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .step.active {
+    background: var(--brand);
+    color: white;
+  }
+  
+  .step.completed {
+    background: var(--ok);
+    color: white;
+  }
+  
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin: 0 5px;
+  }
+  
+  .step-line.completed {
+    background: var(--ok);
+  }
+  
+  .btn {
+    border: none;
+    background: var(--brand);
+    color: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 3px 10px rgba(93, 92, 222, 0.3);
+  }
+  
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(93, 92, 222, 0.4);
+  }
+  
+  .btn:disabled {
+    background: var(--muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .btn-secondary {
+    background: white;
+    color: var(--brand);
+    border: 2px solid var(--brand);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+  
+  .btn-ghost {
+    background: #eefaff;
+    color: #036;
+    box-shadow: none;
+    border: 1px dashed #9ee;
+  }
+  
+  .wizard-container {
+    background: var(--card);
+    border-radius: 20px;
+    margin: 15px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    min-height: 500px;
+    overflow: hidden;
+  }
+  
+  .wizard-step {
+    display: none;
+    padding: 25px;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .wizard-step.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .step-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--light-bg);
+  }
+  
+  .step-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--brand);
+  }
+  
+  .step-subtitle {
+    color: var(--muted);
+    font-size: 16px;
+  }
+  
+  .emoji-step {
+    font-size: 48px;
+    margin-bottom: 15px;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  @media (min-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .input-group label {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 16px;
+  }
+  
+  .input-field {
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background: white;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.1);
+  }
+  
+  .question-card {
+    background: var(--light-bg);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 4px solid var(--brand);
+  }
+  
+  .question-text {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+  
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .radio-option:hover {
+    background: rgba(93, 92, 222, 0.1);
+  }
+  
+  .radio-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand);
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .results-section {
+    text-align: center;
+    padding: 25px;
+  }
+  
+  .global-score {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 20px 0;
+  }
+  
+  .score-excellent { color: var(--ok); }
+  .score-good { color: var(--warn); }
+  .score-needs-work { color: var(--bad); }
+  
+  .emoji-result {
+    font-size: 64px;
+    margin: 20px 0;
+  }
+  
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 20px 0;
+    text-align: left;
+  }
+  
+  @media (min-width: 768px) {
+    .summary-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .summary-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .summary-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .summary-card {
+    background: var(--light-bg);
+    border-radius: 10px;
+    padding: 15px;
+    border-left: 4px solid var(--muted);
+  }
+  
+  .summary-card.excellent { border-left-color: var(--ok); }
+  .summary-card.good { border-left-color: var(--warn); }
+  .summary-card.needs-work { border-left-color: var(--bad); }
+  
+  .notes-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 15px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  
+  .interpretation {
+    background: var(--light-bg);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .legend-excellent {
+    background: rgba(72, 187, 120, 0.1);
+    color: var(--ok);
+    border: 1px solid var(--ok);
+  }
+  
+  .legend-good {
+    background: rgba(237, 137, 54, 0.1);
+    color: var(--warn);
+    border: 1px solid var(--warn);
+  }
+  
+  .legend-needs-work {
+    background: rgba(245, 101, 101, 0.1);
+    color: var(--bad);
+    border: 1px solid var(--bad);
+  }
+
+  /* === Estilos para el Kit de Fichas === */
+  .app-main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 70vh;
+  }
+  
+  .app-nav {
+    border-right: 1px solid var(--border);
+    background: var(--light-bg);
+  }
+  
+  .nav-sec {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .nav-sec h3 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #0b5561;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  
+  .cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .cat:hover {
+    background: #eaf9fc;
+  }
+  
+  .cat.active {
+    background: #cffafe;
+  }
+  
+  .app-content {
+    padding: 20px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .card h4 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .muted {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  
+  .pill {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+  }
+  
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font: inherit;
+  }
+  
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .big {
+    font-size: 32px;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  .list {
+    display: grid;
+    gap: 6px;
+  }
+  
+  .list .item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #e2fbe2;
+    color: #065f46;
+    border: 1px solid #bbf7d0;
+  }
+  
+  .small {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  
+  .hl {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 10px;
+    min-height: 56px;
+  }
+  
+  .choice {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .choice button {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    box-shadow: none;
+  }
+  
+  .tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    font-size: 11px;
+  }
+  
+  .hr {
+    border-top: 1px dashed #e2e8f0;
+    margin: 8px 0;
+  }
+  
+  .print-a4 {
+    page-break-inside: avoid;
+  }
+
+  /* === Modo oscuro === */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --card: #1e293b;
+      --ink: #e2e8f0;
+      --light-bg: #334155;
+      --border: #475569;
+    }
+    
+    .card {
+      background: var(--card);
+      color: var(--ink);
+    }
+    
+    .input-field, input[type="text"], textarea, select {
+      background: var(--card);
+      color: var(--ink);
+      border-color: var(--border);
+    }
+  }
+  
+  /* === Responsive === */
+  @media (max-width: 768px) {
+    .app-main {
+      grid-template-columns: 1fr;
+    }
+    
+    .app-nav {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .question-card {
+      grid-template-columns: 1fr !important;
+      gap: 20px !important;
+    }
+    
+    .form-grid {
+      grid-template-columns: 1fr !important;
+    }
+    
+    .toolbar {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+  
+  /* === Estilos para impresión === */
+  @media print {
+    body { 
+      background: white !important; 
+      color: black !important;
+      font-size: 12px;
+    }
+    .header-wave { 
+      background: white !important; 
+      box-shadow: none !important;
+      position: static !important;
+    }
+    .progress-container, .toolbar, .action-buttons { 
+      display: none !important; 
+    }
+    .wizard-step:not(.active) { 
+      display: none !important; 
+    }
+    .app-nav, .navigation {
+      display: none !important;
+    }
+    .app-main {
+      display: block !important;
+    }
+    .card {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin: 0 0 10mm 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="header-wave">
+    <div class="container">
+      <div class="hero">
+        <span class="emoji-big">🤝</span>
+        <h1>Kit Completo de Habilidades Sociales</h1>
+        <p>Evaluación integral + Fichas interactivas e imprimibles</p>
+        
+        <div class="toolbar">
+          <button class="btn" id="btnEvaluacion">✨ Hacer evaluación</button>
+          <button class="btn" id="btnFichas">📋 Ver fichas interactivas</button>
+          <button class="btn btn-secondary" id="btnCalcular" style="display: none;">📊 Ver resultados</button>
+          <button class="btn btn-secondary" id="btnLimpiar">🔄 Empezar de nuevo</button>
+          <button class="btn btn-secondary" id="btnImprimir">📄 Guardar PDF</button>
+          <button class="btn btn-ghost" id="btnExportar" style="display: none;">⬇️ Exportar respuestas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Indicador de progreso -->
+    <div class="progress-container" id="progressContainer" style="display: none;">
+      <div class="step-indicator" id="stepIndicator"></div>
+      <div class="progress-text" id="progressText">Paso 1 de 12</div>
+    </div>
+
+    <!-- Contenedor del wizard -->
+    <div class="wizard-container">
+      
+      <!-- Página de inicio -->
+      <div class="wizard-step active" id="step-inicio">
+        <div style="text-align: center; padding: 40px 20px;">
+          <div style="font-size: 80px; margin-bottom: 20px;">🤝</div>
+          <h1 style="font-size: 42px; margin: 0 0 20px 0; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800;">
+            Kit Completo de Habilidades Sociales
+          </h1>
+          <p style="font-size: 18px; color: var(--muted); margin: 0 0 40px 0; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+            Una herramienta completa para evaluar y trabajar las habilidades sociales. Incluye evaluación personalizada y más de 60 fichas interactivas e imprimibles.
+          </p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 800px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: white; padding: 30px; border-radius: 20px; cursor: pointer; transition: transform 0.3s ease;" onclick="irAEvaluacion()">
+              <div style="font-size: 48px; margin-bottom: 15px;">📊</div>
+              <h3 style="margin: 0 0 10px 0; font-size: 20px;">Evaluación Completa</h3>
+              <p style="margin: 0; opacity: 0.9; font-size: 16px;">50 preguntas científicamente validadas para conocer el perfil social de tu hijo/a</p>
+              <div style="margin-top: 15px; font-size: 14px; opacity: 0.8;">⏱️ 10-15 minutos • 📋 Informe detallado</div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--ok), #059669); color: white; padding: 30px; border-radius: 20px; cursor: pointer; transition: transform 0.3s ease;" onclick="irAFichas()">
+              <div style="font-size: 48px; margin-bottom: 15px;">🧰</div>
+              <h3 style="margin: 0 0 10px 0; font-size: 20px;">Fichas Interactivas</h3>
+              <p style="margin: 0; opacity: 0.9; font-size: 16px;">60+ actividades prácticas, juegos y plantillas imprimibles para trabajar día a día</p>
+              <div style="margin-top: 15px; font-size: 14px; opacity: 0.8;">🎯 10 categorías • 📄 Listo para imprimir</div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 50px; padding: 20px; background: var(--light-bg); border-radius: 15px; max-width: 900px; margin-left: auto; margin-right: auto;">
+            <h3 style="color: var(--brand); margin: 0 0 15px 0;">📋 ¿Qué incluye este kit completo?</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; text-align: left;">
+              <div>🌟 Lo básico para relacionarse</div>
+              <div>🤝 Empezar a relacionarse</div>
+              <div>🗣️ Comunicarse bien</div>
+              <div>👥 Trabajar en equipo</div>
+              <div>⚖️ Resolver problemas</div>
+              <div>🤗 Entender a otros</div>
+              <div>⭐ Seguridad en sí mismo/a</div>
+              <div>🧘 Manejar la frustración</div>
+              <div>🦁 Defender sus ideas</div>
+              <div>🌈 Adaptarse a cambios</div>
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 10px;">
+              <p style="margin: 0; font-size: 14px; color: var(--brand); font-weight: 600;">
+                ✨ <strong>COMPLETO:</strong> Evaluación científica + 6 tipos de fichas por categoría + Plantillas imprimibles + Seguimiento de progreso
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paso 0: Datos básicos -->
+      <div class="wizard-step" id="step-0">
+        <div class="step-header">
+          <div class="emoji-step">📝</div>
+          <h2 class="step-title">Información básica</h2>
+          <p class="step-subtitle">Comenzemos conociendo algunos datos sobre el niño/a</p>
+        </div>
+        
+        <div class="form-grid">
+          <div class="input-group">
+            <label>Nombre del niño/a</label>
+            <input type="text" class="input-field" id="alumno" placeholder="Ej: María García">
+          </div>
+          <div class="input-group">
+            <label>Edad</label>
+            <input type="number" class="input-field" id="edad" placeholder="Ej: 8">
+          </div>
+          <div class="input-group">
+            <label>Curso o nivel</label>
+            <input type="text" class="input-field" id="curso" placeholder="Ej: 3º Primaria">
+          </div>
+          <div class="input-group">
+            <label>Quién evalúa</label>
+            <input type="text" class="input-field" id="evaluador" placeholder="Ej: Mamá, Papá, Profesor/a">
+          </div>
+        </div>
+        
+        <div class="navigation">
+          <button class="btn btn-secondary" onclick="volverInicio()">← Volver al inicio</button>
+          <button class="btn" onclick="siguientePaso()">Comenzar evaluación →</button>
+        </div>
+      </div>
+
+      <!-- Pasos dinámicos para cada categoría (se generan con JavaScript) -->
+      <div id="pasosCategorias"></div>
+
+      <!-- Paso final: Resultados -->
+      <div class="wizard-step" id="step-final">
+        <div class="results-section">
+          <span class="emoji-result" id="emojiResultado">🎉</span>
+          <h2>¡Evaluación completada!</h2>
+          <div class="global-score" id="textoGlobal"></div>
+          
+          <div class="summary-grid" id="bloquesResumen"></div>
+
+          <div class="notes-area">
+            <h3>💭 Observaciones adicionales</h3>
+            <p style="color: var(--muted); margin-bottom: 10px;">
+              Aquí puedes anotar situaciones específicas, fortalezas que has notado, o aspectos en los que tu hijo/a podría mejorar.
+            </p>
+            <textarea 
+              id="observaciones" 
+              class="notes-textarea" 
+              placeholder="Ej: Le cuesta mucho compartir sus juguetes, pero es muy bueno consolando a otros niños cuando están tristes...">
+            </textarea>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn" onclick="irAFichasDesdeResultados()">🧰 Ver fichas específicas</button>
+            <button class="btn btn-secondary" onclick="corregirRespuestas()">✏️ Corregir respuestas</button>
+            <button class="btn btn-secondary" onclick="window.print()">📄 Guardar PDF</button>
+            <button class="btn btn-ghost" onclick="reiniciarEvaluacion()">🔄 Nueva evaluación</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kit de Fichas Interactivas -->
+      <div class="wizard-step" id="step-fichas">
+        <div class="app-main">
+          <nav class="app-nav">
+            <div class="nav-sec">
+              <h3>Bloques del kit</h3>
+              <div id="navCats"></div>
+            </div>
+            <div class="nav-sec">
+              <h3>Plantillas imprimibles</h3>
+              <div class="list">
+                <div class="item"><span class="pill">📋</span><a href="#plantillas">Cuaderno A4 (12 fichas)</a></div>
+                <div class="item"><span class="pill">🗯️</span><a href="#viñetas">Viñetas sociales</a></div>
+                <div class="item"><span class="pill">🎯</span><a href="#metas">Metas SMART</a></div>
+                <div class="item"><span class="pill">🧰</span><a href="#toolbox">Caja de herramientas emocionales</a></div>
+              </div>
+            </div>
+            <div class="nav-sec">
+              <button class="btn btn-secondary" onclick="volverInicio()" style="width: 100%; margin-top: 10px;">← Volver al inicio</button>
+            </div>
+          </nav>
+
+          <section class="app-content" id="content">
+            <!-- Contenido dinámico de fichas -->
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interpretación -->
+    <div class="interpretation">
+      <h3>🔍 Cómo interpretar los resultados</h3>
+      <div class="legend">
+        <div class="legend-item legend-excellent">
+          <span>😊</span>
+          <span>Excelente (80% o más)</span>
+        </div>
+        <div class="legend-item legend-good">
+          <span>🙂</span>
+          <span>En desarrollo (50-79%)</span>
+        </div>
+        <div class="legend-item legend-needs-work">
+          <span>🤔</span>
+          <span>Necesita apoyo (menos del 50%)</span>
+        </div>
+      </div>
+      <p style="color: var(--muted); font-size: 14px;">
+        Recuerda que cada niño/a se desarrolla a su ritmo. Esta evaluación es una guía para identificar fortalezas y áreas de mejora. Las fichas interactivas te ayudarán a trabajar día a día.
+      </p>
+    </div>
+  </div>
+
+<script>
+// === Definición de las habilidades sociales basadas en escalas estándar ===
+var CATEGORIAS = [
+  {
+    id: "basicos",
+    titulo: "😊 Lo básico para relacionarse",
+    emoji: "🌟",
+    explicacion: "Estas habilidades son los cimientos de toda relación social. Son las primeras que desarrollamos y las más importantes para que tu hijo/a se sienta cómodo/a con otros niños/as.",
+    ejemplos: "Por ejemplo: Si tu hijo/a sonríe cuando ve a otros niños, si se acerca cuando otros están jugando, o si disfruta de actividades en grupo como juegos en el parque.",
+    preguntas: [
+      "Le gusta jugar y hablar con otros niños/as",
+      "Participa en juegos y actividades grupales cuando se lo proponen",
+      "Puede esperar su turno (en juegos, para hablar, etc.)",
+      "Generalmente está de buen humor con otros niños/as",
+      "Se da cuenta cuando otros niños/as quieren jugar con él/ella"
+    ]
+  },
+  {
+    id: "saludos",
+    titulo: "👋 Empezar a relacionarse",
+    emoji: "🤝",
+    explicacion: "Estas habilidades son la puerta de entrada a las amistades. Tu hijo/a aprende a iniciar contacto social de manera apropiada y amigable.",
+    ejemplos: "Por ejemplo: Decir 'hola' cuando llega al colegio, acercarse a otros niños y preguntarles '¿puedo jugar con vosotros?', o presentarse diciendo su nombre cuando conoce a alguien.",
+    preguntas: [
+      "Saluda cuando llega y se despide cuando se va",
+      "Empieza conversaciones con otros niños/as",
+      "Pide permiso antes de unirse a un juego",
+      "Muestra interés por conocer niños/as nuevos",
+      "Se presenta cuando conoce a alguien nuevo"
+    ]
+  },
+  {
+    id: "comunicacion",
+    titulo: "💬 Comunicarse bien",
+    emoji: "🗣️",
+    explicacion: "Una buena comunicación es clave para hacer amigos. Incluye tanto hablar claramente como saber escuchar a los demás.",
+    ejemplos: "Por ejemplo: Mirar a los ojos cuando habla, usar un tono de voz normal (no gritar ni susurrar), decir cosas como 'estoy triste porque...' o 'me hace feliz que...'",
+    preguntas: [
+      "Mira a los ojos cuando habla con alguien",
+      "Habla con un tono de voz apropiado (ni muy alto ni muy bajo)",
+      "Expresa cómo se siente (triste, feliz, enojado, etc.)",
+      "Escucha sin interrumpir cuando otros hablan",
+      "Espera su turno para hablar"
+    ]
+  },
+  {
+    id: "cooperacion",
+    titulo: "🤝 Trabajar en equipo",
+    emoji: "👥",
+    explicacion: "La cooperación es fundamental para mantener amistades. Significa compartir, ayudar y trabajar juntos hacia objetivos comunes.",
+    ejemplos: "Por ejemplo: Prestar sus juguetes, ayudar a ordenar después de jugar, hacer su parte en un proyecto grupal, o ayudar a un compañero que se ha caído.",
+    preguntas: [
+      "Comparte sus juguetes y materiales con otros",
+      "Colabora bien en actividades grupales",
+      "Hace su parte cuando trabaja en equipo",
+      "Sigue las instrucciones cuando trabaja con otros",
+      "Ayuda a otros niños/as cuando lo necesitan"
+    ]
+  },
+  {
+    id: "conflictos",
+    titulo: "🕊️ Resolver problemas",
+    emoji: "⚖️",
+    explicacion: "Los conflictos son normales en las relaciones. Lo importante es saber resolverlos de manera pacífica y constructiva.",
+    ejemplos: "Por ejemplo: Contar hasta 10 cuando está enfadado, proponer soluciones como 'podemos turnarnos', pedir ayuda a un adulto cuando no sabe qué hacer, o decir 'perdón' cuando se equivoca.",
+    preguntas: [
+      "Controla su enojo sin pegar o agredir",
+      "Propone soluciones cuando hay un problema",
+      "Pide ayuda a un adulto cuando hay conflictos",
+      "Escucha la versión del otro antes de reaccionar",
+      "Se disculpa cuando comete un error"
+    ]
+  },
+  {
+    id: "empatia",
+    titulo: "❤️ Entender a otros",
+    emoji: "🤗",
+    explicacion: "La empatía es la capacidad de entender y compartir los sentimientos de otros. Es lo que hace que las amistades sean profundas y duraderas.",
+    ejemplos: "Por ejemplo: Notar cuando un amigo está triste y preguntarle '¿estás bien?', consolar a alguien que llora, no reírse cuando otros se equivocan, o celebrar los logros de sus amigos.",
+    preguntas: [
+      "Se da cuenta cuando otro niño/a está triste o molesto",
+      "Se preocupa por los sentimientos de los demás",
+      "Consuela o ayuda a un amigo/a que lo necesita",
+      "Trata de entender cómo se sienten otros",
+      "No se burla cuando otros cometen errores"
+    ]
+  },
+  {
+    id: "autoestima",
+    titulo: "💪 Seguridad en sí mismo/a",
+    emoji: "⭐",
+    explicacion: "Una buena autoestima ayuda a tu hijo/a a participar activamente en las relaciones sociales y a expresarse con confianza.",
+    ejemplos: "Por ejemplo: Levantar la mano en clase, aceptar cumplidos diciendo 'gracias', participar en juegos nuevos, aceptar sugerencias sin enfadarse, o expresar una opinión diferente de manera respetuosa.",
+    preguntas: [
+      "Toma la iniciativa para participar en actividades",
+      "Acepta cumplidos y reconoce cuando hace algo bien",
+      "Se siente cómodo/a hablando frente a otros",
+      "Acepta correcciones sin molestarse mucho",
+      "Puede expresar opiniones diferentes al grupo"
+    ]
+  },
+  {
+    id: "frustracion",
+    titulo: "😤 Manejar la frustración",
+    emoji: "🧘",
+    explicacion: "Saber manejar la frustración es crucial para mantener relaciones sanas. Los niños que controlan sus emociones tienen más amigos.",
+    ejemplos: "Por ejemplo: Respirar profundo cuando algo no sale bien, seguir intentándolo aunque se equivoque, no enfadarse mucho al perder un juego, o calmarse solo después de frustrarse.",
+    preguntas: [
+      "Se las arregla bien cuando las cosas no salen como quiere",
+      "No se enoja desproporcionadamente",
+      "Continúa con la actividad aunque se haya equivocado",
+      "Acepta perder en juegos sin molestarse mucho",
+      "Puede calmarse solo/a después de frustrarse"
+    ]
+  },
+  {
+    id: "asertividad",
+    titulo: "🗯️ Defender sus ideas",
+    emoji: "🦁",
+    explicacion: "La asertividad permite a tu hijo/a expresar sus necesidades y opiniones de manera respetuosa, sin ser agresivo ni pasivo.",
+    ejemplos: "Por ejemplo: Decir 'no, gracias' cuando no quiere hacer algo, expresar sus ideas con frases como 'yo pienso que...', defenderse cuando alguien le molesta diciendo 'eso no me gusta', o pedir ayuda cuando la necesita.",
+    preguntas: [
+      "Puede decir 'no' de manera respetuosa",
+      "Expresa sus ideas con seguridad y respeto",
+      "Defiende sus derechos de forma apropiada",
+      "Puede defenderse cuando alguien lo/la molesta",
+      "Pide ayuda cuando la necesita sin vergüenza"
+    ]
+  },
+  {
+    id: "adaptabilidad",
+    titulo: "🔄 Adaptarse a cambios",
+    emoji: "🌈",
+    explicacion: "La flexibilidad social es importante porque las situaciones cambian constantemente. Los niños adaptables se relacionan mejor con diferentes tipos de personas.",
+    ejemplos: "Por ejemplo: Adaptarse cuando cambian los planes, aceptar nuevas reglas de juego, estar abierto a sugerencias diferentes, o jugar tanto con amigos habituales como con niños nuevos.",
+    preguntas: [
+      "Se adapta bien a cambios de rutina o de grupo",
+      "Maneja bien los cambios inesperados",
+      "Se ajusta a reglas nuevas fácilmente",
+      "Acepta sugerencias diferentes a las suyas",
+      "Puede jugar con diferentes niños/as, no solo sus amigos habituales"
+    ]
+  }
+];
+
+// === Bancos de ítems por bloque: tarjetas, juegos y fichas ===
+const BANK = {
+  basicos: {
+    tarjetas:[
+      'Saludo + nombre + sonrisa',
+      'Mirar a los ojos 3 segundos',
+      'Esperar turno con un objeto testigo',
+      'Invitar a jugar: "¿Jugamos juntos?"',
+      'Regla de oro: pedir y dar las gracias'
+    ],
+    retos:[
+      'Juego del semáforo: verde = habla, rojo = espera',
+      'Búsqueda de amigos: encuentra 3 compañeros y di algo amable',
+      'Reloj de turnos: cuenta 5 respiraciones antes de hablar'
+    ]
+  },
+  saludos: {
+    tarjetas:[
+      'Hola + nombre + gesto amable',
+      'Despedida con contacto visual',
+      'Presentarse: "Soy __ y me gusta __"',
+      'Pedir permiso para unirse al juego',
+      'Abrir conversación: pregunta abierta'
+    ],
+    retos:[
+      'Ruleta de saludos: saludo formal, deportivo, teatral',
+      'Mímica de despedidas (sin hablar)',
+      'Cadena de presentaciones (grupo)'
+    ]
+  },
+  comunicacion: {
+    tarjetas:[
+      'Voz "justa": ni muy alta ni muy baja',
+      'Escucha activa: repetir idea clave',
+      'Frase de emoción: "Me siento __ porque __"',
+      'Turno de palabra con tótem',
+      'Pregunta curiosa: "¿Qué opinas de…?"'
+    ],
+    retos:[
+      'Teléfono sin ruido: pasar mensaje claro a 3 compañeros',
+      'Entonación camaleón: triste / alegre / neutra',
+      '¡Prohibido interrumpir! -- 60 segundos'
+    ]
+  },
+  cooperacion: {
+    tarjetas:[
+      'Compartir material 2 minutos',
+      'Planear en equipo (3 pasos)',
+      'Ayudar a ordenar al final',
+      'Pedir rol y cumplirlo',
+      'Elogiar el trabajo ajeno'
+    ],
+    retos:[
+      'Construcción con palitos (objetivo común)',
+      'Puente de papel en parejas',
+      'Corrección en espejo (yo te guío, tú haces)'
+    ]
+  },
+  conflictos: {
+    tarjetas:[
+      'Respirar 4-4 (inspira 4, suelta 4)',
+      'Frase problema-solución: "Propongo que… "',
+      'Pedir ayuda a adulto',
+      'Escuchar la otra versión',
+      'Decir "perdón" y reparar'
+    ],
+    retos:[
+      'Semáforo emocional (rojo/amarillo/verde)',
+      'Role-play: "solo tenemos 1 balón"',
+      'Tarro de soluciones: extraer 2 y elegir 1'
+    ]
+  },
+  empatia: {
+    tarjetas:[
+      'Detectar emoción en la cara',
+      'Preguntar: "¿Estás bien?"',
+      'Consolar con gesto + frase',
+      'No burlarse / validar errores',
+      'Celebrar logro ajeno'
+    ],
+    retos:[
+      'Termómetro emocional 0--10',
+      'Historias con puntos de vista (A y B)',
+      'Caja de "frases cálidas"'
+    ]
+  },
+  autoestima: {
+    tarjetas:[
+      'Levantarse y compartir idea',
+      'Aceptar cumplidos: "gracias"',
+      'Probar algo nuevo 1 min',
+      'Aceptar corrección y mejorar 1 detalle',
+      'Decir una opinión diferente con respeto'
+    ],
+    retos:[
+      'Micrófono imaginario (30 s)',
+      'Lista de 3 fortalezas',
+      'Cartel "hoy conseguí…"'
+    ]
+  },
+  frustracion: {
+    tarjetas:[
+      'Respirar caja 4-4-4-4',
+      'Seguir tras error (reintento x2)',
+      'Aceptar perder con ritual amable',
+      'Autocalma (apretar-soltar manos)',
+      'Plan B si algo falla'
+    ],
+    retos:[
+      'Reloj de calma 60 s',
+      'Decir 3 opciones cuando algo no sale',
+      'Tarjeta "pausa y vuelve"'
+    ]
+  },
+  asertividad: {
+    tarjetas:[
+      'Decir "no, gracias" + alternativa',
+      'Frase YO: "Yo necesito…"',
+      'Defender derecho con respeto',
+      'Pedir ayuda sin vergüenza',
+      'Repetir el límite si insisten'
+    ],
+    retos:[
+      'Semáforo de límites (verde/ámbar/rojo)',
+      'Guion de 3 frases asertivas',
+      'Role-play: "me empujan en la fila"'
+    ]
+  },
+  adaptabilidad: {
+    tarjetas:[
+      'Aceptar nueva regla de juego',
+      'Cambiar de plan A → B',
+      'Probar un compañero nuevo',
+      'Explorar 2 maneras de hacer algo',
+      'Reformular una idea tras feedback'
+    ],
+    retos:[
+      'Bingo de cambios (5 casillas)',
+      'Dado de alternativas (6 opciones)',
+      'Desafío "improvisa con lo que hay"'
+    ]
+  }
+};
+
+// Variables globales del wizard
+var preguntaActual = 0;
+var totalPreguntas = 0;
+var respuestas = {};
+var observaciones = {};
+var todasLasPreguntas = [];
+var modoActual = 'inicio'; // 'inicio', 'evaluacion', 'fichas', 'resultados'
+
+// === Funciones de navegación principal ===
+function irAEvaluacion() {
+  modoActual = 'evaluacion';
+  
+  // Ocultar página de inicio
+  var stepInicio = document.getElementById('step-inicio');
+  if (stepInicio) stepInicio.classList.remove('active');
+  
+  // Mostrar paso de datos básicos
+  var step0 = document.getElementById('step-0');
+  if (step0) step0.classList.add('active');
+  
+  // Mostrar/ocultar botones apropiados
+  document.getElementById('btnEvaluacion').style.display = 'none';
+  document.getElementById('btnFichas').style.display = 'none';
+  document.getElementById('btnCalcular').style.display = 'inline-block';
+  
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function irAFichas() {
+  modoActual = 'fichas';
+  
+  // Ocultar página de inicio
+  var stepInicio = document.getElementById('step-inicio');
+  if (stepInicio) stepInicio.classList.remove('active');
+  
+  // Mostrar paso de fichas
+  var stepFichas = document.getElementById('step-fichas');
+  if (stepFichas) stepFichas.classList.add('active');
+  
+  // Mostrar/ocultar botones apropiados
+  document.getElementById('btnEvaluacion').style.display = 'none';
+  document.getElementById('btnFichas').style.display = 'none';
+  document.getElementById('btnExportar').style.display = 'inline-block';
+  
+  // Inicializar fichas
+  inicializarFichas();
+  
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function irAFichasDesdeResultados() {
+  // Ocultar resultados
+  var stepFinal = document.getElementById('step-final');
+  if (stepFinal) stepFinal.classList.remove('active');
+  
+  // Ir a fichas
+  irAFichas();
+}
+
+function volverInicio() {
+  modoActual = 'inicio';
+  
+  // Ocultar todos los pasos
+  var steps = document.querySelectorAll('.wizard-step');
+  steps.forEach(function(step) {
+    step.classList.remove('active');
+  });
+  
+  // Mostrar página de inicio
+  var stepInicio = document.getElementById('step-inicio');
+  if (stepInicio) stepInicio.classList.add('active');
+  
+  // Resetear botones
+  document.getElementById('btnEvaluacion').style.display = 'inline-block';
+  document.getElementById('btnFichas').style.display = 'inline-block';
+  document.getElementById('btnCalcular').style.display = 'none';
+  document.getElementById('btnExportar').style.display = 'none';
+  
+  // Ocultar progreso
+  var progressContainer = document.getElementById('progressContainer');
+  if (progressContainer) progressContainer.style.display = 'none';
+  
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// === Funciones del wizard de evaluación ===
+
+// Crear array plano de todas las preguntas
+function crearListaPreguntas() {
+  todasLasPreguntas = [];
+  CATEGORIAS.forEach(function(categoria) {
+    categoria.preguntas.forEach(function(pregunta, index) {
+      todasLasPreguntas.push({
+        id: categoria.id + '_' + index,
+        texto: pregunta,
+        categoria: categoria,
+        numeroEnCategoria: index + 1
+      });
+    });
+  });
+  totalPreguntas = todasLasPreguntas.length;
+}
+
+// Funciones del wizard paso a paso
+function crearWizard() {
+  var pasosCategorias = document.getElementById('pasosCategorias');
+  
+  // Crear lista de preguntas
+  crearListaPreguntas();
+  
+  // Crear contenedor para preguntas individuales
+  pasosCategorias.innerHTML = '';
+  
+  // Crear un paso para cada pregunta
+  todasLasPreguntas.forEach(function(preguntaObj, index) {
+    var stepDiv = document.createElement('div');
+    stepDiv.className = 'wizard-step';
+    stepDiv.id = 'question-' + index;
+    
+    // Determinar si es la primera pregunta de una nueva categoría
+    var esNuevaCategoria = index === 0 || todasLasPreguntas[index - 1].categoria.id !== preguntaObj.categoria.id;
+    var headerCategoria = '';
+    
+    if (esNuevaCategoria) {
+      headerCategoria = 
+        '<div style="text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, var(--brand-light), var(--brand)); border-radius: 15px; color: white;">' +
+          '<div style="font-size: 36px; margin-bottom: 8px;">' + preguntaObj.categoria.emoji + '</div>' +
+          '<h3 style="margin: 0; font-size: 18px;">' + preguntaObj.categoria.titulo + '</h3>' +
+          '<p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">Pregunta ' + preguntaObj.numeroEnCategoria + ' de 5</p>' +
+        '</div>';
+    }
+    
+    stepDiv.innerHTML = 
+      headerCategoria +
+      '<div class="step-header">' +
+        '<h2 class="step-title">Pregunta ' + (index + 1) + ' de ' + totalPreguntas + '</h2>' +
+        '<p class="step-subtitle">Responde sobre tu hijo/a</p>' +
+      '</div>' +
+      '<div class="question-card" style="margin: 20px 0; min-height: 300px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: center; padding: 30px;">' +
+        '<div style="display: flex; flex-direction: column; justify-content: center;">' +
+          '<div class="question-text" style="font-size: 24px; margin-bottom: 30px; line-height: 1.4; font-weight: 600; color: var(--ink);">' + 
+            preguntaObj.texto + 
+          '</div>' +
+          '<div style="margin-top: 15px;">' +
+            '<label style="display: block; font-size: 16px; color: var(--muted); margin-bottom: 10px; font-weight: 500;">💭 Observaciones opcionales:</label>' +
+            '<textarea id="obs-' + preguntaObj.id + '" placeholder="Ej: Solo comparte con su hermana, pero no con otros niños..." style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 16px; min-height: 80px; resize: vertical; font-family: inherit;"></textarea>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">' +
+          '<label class="radio-option" style="padding: 18px 25px; font-size: 18px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">' +
+            '<input type="radio" name="' + preguntaObj.id + '" value="1" onchange="responderPregunta(\'' + preguntaObj.id + '\', 1)" style="transform: scale(1.3); margin-right: 10px;"> ✅ SÍ' +
+          '</label>' +
+          '<label class="radio-option" style="padding: 18px 25px; font-size: 18px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">' +
+            '<input type="radio" name="' + preguntaObj.id + '" value="0.5" onchange="responderPregunta(\'' + preguntaObj.id + '\', 0.5)" style="transform: scale(1.3); margin-right: 10px;"> 🟡 A VECES' +
+          '</label>' +
+          '<label class="radio-option" style="padding: 18px 25px; font-size: 18px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">' +
+            '<input type="radio" name="' + preguntaObj.id + '" value="0" onchange="responderPregunta(\'' + preguntaObj.id + '\', 0)" style="transform: scale(1.3); margin-right: 10px;"> ❌ NO' +
+          '</label>' +
+        '</div>' +
+      '</div>' +
+      '<style>@media (max-width: 768px) { .question-card { grid-template-columns: 1fr !important; gap: 20px !important; } }</style>' +
+      '<div style="text-align: center; margin-top: 20px;">' +
+        '<div style="background: var(--light-bg); border-radius: 10px; padding: 10px; font-size: 14px; color: var(--muted);">Pregunta ' + (index + 1) + ' de ' + totalPreguntas + ' • La siguiente pregunta aparecerá automáticamente</div>' +
+      '</div>';
+    
+    pasosCategorias.appendChild(stepDiv);
+  });
+}
+
+// Función para responder pregunta y auto-avanzar
+function responderPregunta(questionId, valor) {
+  respuestas[questionId] = valor;
+  
+  // Guardar observaciones si hay
+  var obsTextarea = document.getElementById('obs-' + questionId);
+  if (obsTextarea && obsTextarea.value.trim()) {
+    observaciones[questionId] = obsTextarea.value.trim();
+  }
+  
+  // Auto-avanzar después de 1 segundo
+  setTimeout(function() {
+    siguientePregunta();
+  }, 1000);
+}
+
+// Función para avanzar a la siguiente pregunta
+function siguientePregunta() {
+  var preguntaActualElement = document.getElementById('question-' + preguntaActual);
+  if (preguntaActualElement) {
+    preguntaActualElement.classList.remove('active');
+  }
+  
+  preguntaActual++;
+  
+  // Verificar si hemos terminado todas las preguntas
+  if (preguntaActual >= totalPreguntas) {
+    // Ocultar indicador de progreso
+    var progressContainer = document.getElementById('progressContainer');
+    if (progressContainer) progressContainer.style.display = 'none';
+    
+    // Calcular y mostrar resultados
+    calcularYMostrarResultados();
+    
+    // Mostrar step final
+    var stepFinal = document.getElementById('step-final');
+    if (stepFinal) {
+      stepFinal.classList.add('active');
+    }
+    
+    // Actualizar modo y botones
+    modoActual = 'resultados';
+    document.getElementById('btnCalcular').style.display = 'none';
+    document.getElementById('btnExportar').style.display = 'inline-block';
+    
+  } else {
+    // Mostrar siguiente pregunta
+    var siguientePregunta = document.getElementById('question-' + preguntaActual);
+    if (siguientePregunta) {
+      siguientePregunta.classList.add('active');
+      
+      // Verificar cambios de categoría
+      var preguntaActualObj = todasLasPreguntas[preguntaActual];
+      var preguntaAnteriorObj = todasLasPreguntas[preguntaActual - 1];
+      
+      if (preguntaActualObj && preguntaAnteriorObj && 
+          preguntaActualObj.categoria.id !== preguntaAnteriorObj.categoria.id) {
+        
+        // Primero mostrar reflexión de la categoría anterior
+        var categoriaAnterior = preguntaAnteriorObj.categoria;
+        var respuestasCategoria = [];
+        categoriaAnterior.preguntas.forEach(function(pregunta, index) {
+          var qId = categoriaAnterior.id + '_' + index;
+          if (respuestas[qId] !== undefined) {
+            respuestasCategoria.push(respuestas[qId]);
+          }
+        });
+        
+        if (respuestasCategoria.length > 0) {
+          mostrarReflexionCategoria(categoriaAnterior, respuestasCategoria);
+        }
+        
+        // Después mostrar explicación de la nueva categoría
+        setTimeout(function() {
+          mostrarExplicacionCategoria(preguntaActualObj.categoria);
+        }, 1500);
+      }
+    }
+    
+    // Solo actualizar progreso si no hemos terminado
+    actualizarProgresoPreguntas();
+  }
+  
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function siguientePaso() {
+  // Validar que se haya ingresado el nombre
+  var alumno = document.getElementById('alumno').value;
+  if (!alumno.trim()) {
+    mostrarAlerta('Por favor, ingresa el nombre del niño/a antes de continuar.');
+    return;
+  }
+  
+  // Ocultar el paso de datos básicos
+  var stepInicial = document.getElementById('step-0');
+  if (stepInicial) stepInicial.classList.remove('active');
+  
+  // Mostrar el indicador de progreso
+  var progressContainer = document.getElementById('progressContainer');
+  progressContainer.style.display = 'block';
+  
+  // Mostrar la primera pregunta
+  preguntaActual = 0;
+  var primeraPregunta = document.getElementById('question-0');
+  if (primeraPregunta) {
+    primeraPregunta.classList.add('active');
+  }
+  
+  // Mostrar explicación de la primera categoría
+  setTimeout(function() {
+    if (todasLasPreguntas.length > 0) {
+      mostrarExplicacionCategoria(todasLasPreguntas[0].categoria);
+    }
+  }, 500);
+  
+  // Actualizar progreso
+  actualizarProgresoPreguntas();
+  
+  // Scroll al inicio
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function actualizarProgresoPreguntas() {
+  var progressText = document.getElementById('progressText');
+  var totalCompleto = preguntaActual + 1;
+  progressText.textContent = 'Pregunta ' + (preguntaActual + 1) + ' de ' + totalPreguntas;
+  
+  // Actualizar indicador visual
+  var stepIndicator = document.getElementById('stepIndicator');
+  stepIndicator.innerHTML = '';
+  
+  var totalSteps = 12;
+  
+  for (var i = 0; i < totalSteps; i++) {
+    if (i > 0) {
+      var line = document.createElement('div');
+      line.className = 'step-line';
+      
+      var progresoTotal = preguntaActual / totalPreguntas;
+      if (i <= (progresoTotal * (totalSteps - 2)) + 1) {
+        line.classList.add('completed');
+      }
+      
+      stepIndicator.appendChild(line);
+    }
+    
+    var step = document.createElement('div');
+    step.className = 'step';
+    step.textContent = i + 1;
+    
+    var progresoTotal = preguntaActual / totalPreguntas;
+    if (i < (progresoTotal * (totalSteps - 2)) + 1) {
+      step.classList.add('completed');
+    } else if (i === Math.floor((progresoTotal * (totalSteps - 2)) + 1)) {
+      step.classList.add('active');
+    }
+    
+    stepIndicator.appendChild(step);
+  }
+}
+
+// Función para mostrar explicación de categoría al empezar
+function mostrarExplicacionCategoria(categoria) {
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease;';
+  
+  var modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background: white; padding: 30px; border-radius: 20px; max-width: 800px; margin: 20px; text-align: left; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto;';
+  
+  modalContent.innerHTML = 
+    '<div style="text-align: center; margin-bottom: 20px;">' +
+      '<div style="font-size: 64px; margin-bottom: 10px;">' + categoria.emoji + '</div>' +
+      '<h3 style="margin: 0; color: var(--brand); font-size: 24px;">' + categoria.titulo + '</h3>' +
+    '</div>' +
+    '<div style="margin-bottom: 20px;">' +
+      '<h4 style="color: var(--ink); margin-bottom: 10px;">¿Qué vamos a evaluar?</h4>' +
+      '<p style="color: var(--muted); line-height: 1.5; margin-bottom: 15px;">' + categoria.explicacion + '</p>' +
+      '<h4 style="color: var(--ink); margin-bottom: 10px;">💡 Ejemplos en la vida diaria:</h4>' +
+      '<p style="color: var(--muted); line-height: 1.5; margin-bottom: 20px;">' + categoria.ejemplos + '</p>' +
+    '</div>' +
+    '<div style="text-align: center;">' +
+      '<button class="btn" onclick="this.closest(\'.modal-categoria\').remove()" style="background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; margin-right: 10px;">¡Empezamos!</button>' +
+      '<button class="btn btn-secondary" onclick="this.closest(\'.modal-categoria\').remove()" style="padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600;">Continuar sin leer</button>' +
+    '</div>';
+  
+  modal.appendChild(modalContent);
+  modal.className = 'modal-categoria';
+  document.body.appendChild(modal);
+}
+
+// Función para mostrar reflexión al final de cada categoría  
+function mostrarReflexionCategoria(categoria, respuestasCategoria) {
+  var alumno = document.getElementById('alumno').value || "tu hijo/a";
+  var puntuacionTotal = 0;
+  var si = 0;
+  var aveces = 0;
+  var no = 0;
+  
+  respuestasCategoria.forEach(function(resp) { 
+    var valor = parseFloat(resp);
+    puntuacionTotal += valor;
+    if (valor === 1) si++;
+    else if (valor === 0.5) aveces++;
+    else if (valor === 0) no++;
+  });
+  
+  var porcentaje = Math.round((puntuacionTotal / respuestasCategoria.length) * 100);
+  
+  var mensaje = generarMensajeEmpaticoNuevo(categoria, si, aveces, no, respuestasCategoria.length, porcentaje, alumno);
+  
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease;';
+  
+  var modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background: white; padding: 30px; border-radius: 20px; max-width: 500px; margin: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto;';
+  
+  modalContent.innerHTML = 
+    '<div style="font-size: 48px; margin-bottom: 15px;">' + mensaje.emoji + '</div>' +
+    '<h3 style="margin: 0 0 15px 0; color: var(--brand); font-size: 22px;">Reflexión sobre ' + categoria.titulo + '</h3>' +
+    '<div style="background: var(--light-bg); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: left;">' +
+      '<p style="color: var(--ink); line-height: 1.6; margin: 0 0 15px 0;">' + mensaje.reflexion + '</p>' +
+      '<p style="color: var(--muted); line-height: 1.6; margin: 0;">' + mensaje.orientacion + '</p>' +
+    '</div>' +
+    '<button class="btn" onclick="this.closest(\'.modal-categoria\').remove()" style="background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600;">Continuar evaluación →</button>';
+  
+  modal.appendChild(modalContent);
+  modal.className = 'modal-categoria';
+  document.body.appendChild(modal);
+  
+  // Auto-cerrar después de 8 segundos
+  setTimeout(function() {
+    if (modal && modal.parentNode) {
+      modal.remove();
+    }
+  }, 8000);
+}
+
+// Función para generar mensajes empáticos personalizados (nueva versión con 3 opciones)
+function generarMensajeEmpaticoNuevo(categoria, si, aveces, no, total, porcentaje, nombre) {
+  var detalleRespuestas = "";
+  if (si > 0 && aveces > 0 && no > 0) {
+    detalleRespuestas = si + " veces 'sí', " + aveces + " veces 'a veces' y " + no + " veces 'no'";
+  } else if (si > 0 && aveces > 0) {
+    detalleRespuestas = si + " veces 'sí' y " + aveces + " veces 'a veces'";
+  } else if (si > 0 && no > 0) {
+    detalleRespuestas = si + " veces 'sí' y " + no + " veces 'no'";
+  } else if (aveces > 0 && no > 0) {
+    detalleRespuestas = aveces + " veces 'a veces' y " + no + " veces 'no'";
+  } else if (si > 0) {
+    detalleRespuestas = si + " veces 'sí'";
+  } else if (aveces > 0) {
+    detalleRespuestas = aveces + " veces 'a veces'";
+  } else {
+    detalleRespuestas = no + " veces 'no'";
+  }
+
+  var mensajes = {
+    excelente: {
+      emoji: "🌟",
+      reflexion: "¡Excelente! " + nombre + " muestra fortalezas muy claras en " + categoria.titulo.toLowerCase() + ". Has respondido " + detalleRespuestas + " (" + porcentaje + "%).",
+      orientacion: "Estas habilidades son una base sólida para sus relaciones sociales. ¡Sigue fomentando estos comportamientos positivos!"
+    },
+    bueno: {
+      emoji: "😊", 
+      reflexion: nombre + " está desarrollando bien las habilidades de " + categoria.titulo.toLowerCase() + ". Has respondido " + detalleRespuestas + " (" + porcentaje + "%).",
+      orientacion: "Hay un buen progreso. Con práctica y paciencia, estas habilidades seguirán fortaleciéndose. Las respuestas 'a veces' muestran que está en proceso de desarrollo."
+    },
+    necesitaApoyo: {
+      emoji: "🤗",
+      reflexion: "En " + categoria.titulo.toLowerCase() + ", " + nombre + " puede beneficiarse de un poco más de apoyo y práctica. Has respondido " + detalleRespuestas + " (" + porcentaje + "%).",
+      orientacion: "No te preocupes, es completamente normal. Estas habilidades se desarrollan a diferentes ritmos. Con amor, paciencia y las estrategias adecuadas, " + nombre + " puede hacer grandes progresos."
+    }
+  };
+  
+  if (porcentaje >= 80) return mensajes.excelente;
+  if (porcentaje >= 50) return mensajes.bueno;
+  return mensajes.necesitaApoyo;
+}
+
+// Función para obtener el nivel según el porcentaje
+function obtenerNivel(porcentaje) {
+  if (porcentaje >= 80) return { texto: "Excelente", clase: "excellent", emoji: "😊" };
+  if (porcentaje >= 50) return { texto: "En desarrollo", clase: "good", emoji: "🙂" };
+  return { texto: "Necesita apoyo", clase: "needs-work", emoji: "🤔" };
+}
+
+// Función principal para calcular y mostrar resultados desde el wizard
+function calcularYMostrarResultados() {
+  var totalPuntuacion = 0;
+  var totalRespuestas = 0;
+  var resultadosPorCategoria = [];
+
+  CATEGORIAS.forEach(function(categoria) {
+    var puntuacionCategoria = 0;
+    var respuestasCompletas = 0;
+
+    categoria.preguntas.forEach(function(pregunta, index) {
+      var questionId = categoria.id + '_' + index;
+      
+      if (respuestas[questionId] !== undefined) {
+        respuestasCompletas++;
+        puntuacionCategoria += parseFloat(respuestas[questionId]);
+      }
+    });
+
+    var puntuacionMaxima = respuestasCompletas;
+    var porcentaje = puntuacionMaxima > 0 ? Math.round((puntuacionCategoria / puntuacionMaxima) * 100) : 0;
+    var nivel = obtenerNivel(porcentaje);
+    
+    resultadosPorCategoria.push({
+      categoria: categoria,
+      puntuacion: puntuacionCategoria,
+      respuestas: respuestasCompletas,
+      porcentaje: porcentaje,
+      nivel: nivel
+    });
+
+    totalPuntuacion += puntuacionCategoria;
+    totalRespuestas += respuestasCompletas;
+  });
+
+  // Calcular resultado global
+  var puntuacionMaximaGlobal = totalRespuestas;
+  var porcentajeGlobal = puntuacionMaximaGlobal > 0 ? Math.round((totalPuntuacion / puntuacionMaximaGlobal) * 100) : 0;
+  var nivelGlobal = obtenerNivel(porcentajeGlobal);
+
+  // Mostrar resultados
+  mostrarResultados(totalPuntuacion, totalRespuestas, porcentajeGlobal, nivelGlobal, resultadosPorCategoria);
+}
+
+// Función para calcular resultados (mantener para compatibilidad con botones existentes)
+function calcularResultados() {
+  if (modoActual === 'evaluacion' && Object.keys(respuestas).length === 0) {
+    mostrarAlerta('Primero completa la evaluación antes de ver los resultados.');
+    return;
+  }
+  calcularYMostrarResultados();
+}
+
+// Función para mostrar los resultados
+function mostrarResultados(totalPuntuacion, totalRespuestas, porcentajeGlobal, nivelGlobal, resultadosPorCategoria) {
+  // Obtener datos del formulario
+  var alumno = document.getElementById('alumno').value || "No especificado";
+  var edad = document.getElementById('edad').value || "No especificada";
+  var curso = document.getElementById('curso').value || "No especificado";
+  var evaluador = document.getElementById('evaluador').value || "No especificado";
+
+  // Actualizar emoji según resultado
+  var emojiResultado = document.getElementById('emojiResultado');
+  if (emojiResultado) {
+    emojiResultado.textContent = nivelGlobal.emoji;
+  }
+
+  // Actualizar texto global
+  var textoGlobal = document.getElementById('textoGlobal');
+  if (textoGlobal) {
+    textoGlobal.innerHTML = 
+      '<div style="margin-bottom: 15px;">' +
+        '<strong>' + alumno + '</strong> (Edad: ' + edad + ', Curso: ' + curso + ')<br>' +
+        'Evaluado por: ' + evaluador +
+      '</div>' +
+      '<div class="score-' + nivelGlobal.clase + '">' +
+        'Puntuación total: ' + totalPuntuacion.toFixed(1) + '/' + totalRespuestas + ' (' + porcentajeGlobal + '%) - ' + nivelGlobal.texto +
+      '</div>';
+  }
+
+  // Crear resumen por categorías
+  var bloquesResumen = document.getElementById('bloquesResumen');
+  if (bloquesResumen) {
+    bloquesResumen.innerHTML = '';
+    
+    resultadosPorCategoria.forEach(function(resultado) {
+      var card = document.createElement('div');
+      card.className = 'summary-card ' + resultado.nivel.clase;
+      
+      card.innerHTML = 
+        '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">' +
+          '<strong>' + resultado.categoria.titulo + '</strong>' +
+          '<span>' + resultado.nivel.emoji + '</span>' +
+        '</div>' +
+        '<div style="color: var(--muted); font-size: 14px;">' +
+          resultado.puntuacion.toFixed(1) + '/' + (resultado.respuestas || 5) + ' (' + resultado.porcentaje + '%) - ' + resultado.nivel.texto +
+        '</div>';
+      
+      bloquesResumen.appendChild(card);
+    });
+
+    // Añadir áreas prioritarias si hay categorías con dificultades
+    var areasProblematicas = resultadosPorCategoria.filter(function(r) { return r.porcentaje < 50; });
+    if (areasProblematicas.length > 0) {
+      var alertDiv = document.createElement('div');
+      alertDiv.style.gridColumn = '1 / -1';
+      alertDiv.style.background = 'rgba(245, 101, 101, 0.1)';
+      alertDiv.style.border = '1px solid var(--bad)';
+      alertDiv.style.borderRadius = '10px';
+      alertDiv.style.padding = '15px';
+      alertDiv.style.marginTop = '15px';
+      
+      var areas = areasProblematicas.map(function(r) { return r.categoria.titulo; }).join(', ');
+      alertDiv.innerHTML = '<strong>💡 Áreas prioritarias para trabajar:</strong><br>' + areas + '<br><small>📋 Usa las fichas interactivas específicas para estas áreas</small>';
+      
+      bloquesResumen.appendChild(alertDiv);
+    }
+  }
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function corregirRespuestas() {
+  // Volver al primer paso de evaluación
+  var stepActual = document.getElementById('step-final');
+  if (stepActual) stepActual.classList.remove('active');
+  
+  var step0 = document.getElementById('step-0');
+  if (step0) step0.classList.add('active');
+  
+  // Mostrar indicador de progreso
+  var progressContainer = document.getElementById('progressContainer');
+  if (progressContainer) progressContainer.style.display = 'block';
+  
+  // Resetear pregunta actual
+  preguntaActual = 0;
+  
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function reiniciarEvaluacion() {
+  // Limpiar respuestas
+  respuestas = {};
+  observaciones = {};
+  preguntaActual = 0;
+  
+  // Limpiar campos
+  var campos = ['alumno', 'edad', 'curso', 'evaluador', 'observaciones'];
+  campos.forEach(function(campo) {
+    var elemento = document.getElementById(campo);
+    if (elemento) elemento.value = '';
+  });
+  
+  // Limpiar radio buttons
+  var radios = document.querySelectorAll('input[type="radio"]');
+  radios.forEach(function(radio) {
+    radio.checked = false;
+  });
+  
+  // Volver al inicio
+  volverInicio();
+}
+
+function mostrarAlerta(mensaje) {
+  // Crear modal personalizado en lugar de alert()
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+  
+  var modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background: white; padding: 20px; border-radius: 15px; max-width: 400px; margin: 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2);';
+  
+  modalContent.innerHTML = 
+    '<p style="margin: 0 0 20px 0; font-size: 16px;">' + mensaje + '</p>' +
+    '<button class="btn" onclick="this.closest(\'.fixed\').remove()" style="background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Entendido</button>';
+  
+  modal.appendChild(modalContent);
+  modal.className = 'fixed';
+  document.body.appendChild(modal);
+}
+
+// === Funciones para el Kit de Fichas ===
+
+function inicializarFichas() {
+  // Plantado de navegación
+  const navCats = document.getElementById('navCats');
+  const content = document.getElementById('content');
+
+  navCats.innerHTML = '';
+  
+  CATEGORIAS.forEach((c,i)=>{
+    const n = document.createElement('div');
+    n.className = 'cat' + (i===0?' active':'');
+    n.innerHTML = `<span>${c.emoji}</span><div><strong>${c.titulo}</strong><div class="small">${c.id}</div></div>`;
+    n.onclick = ()=>{
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      n.classList.add('active');
+      renderCat(c.id);
+    };
+    navCats.appendChild(n);
+  });
+  
+  // Render inicial
+  renderCat('basicos');
+}
+
+// === Utilidades ===
+const rand = (arr)=>arr[Math.floor(Math.random()*arr.length)];
+const uid = ()=>Math.random().toString(36).slice(2,9);
+
+function chip(txt,cls){return `<span class="badge ${cls||''}">${txt}</span>`}
+function textarea(name,ph='Escribe aquí…'){return `<textarea data-name="${name}" placeholder="${ph}"></textarea>`}
+function input(name,ph='Escribe…'){return `<input type="text" data-name="${name}" placeholder="${ph}"/>`}
+
+function saveFrom(el){
+  const data={};
+  el.querySelectorAll('textarea,input,select').forEach(e=>{data[e.dataset.name||e.name||uid()]=e.value});
+  localStorage.setItem('kitSocRes',JSON.stringify({...loadRes(),...data}));
+}
+function loadRes(){try{return JSON.parse(localStorage.getItem('kitSocRes')||'{}')}catch(e){return {}}}
+function fill(el){const d=loadRes();el.querySelectorAll('textarea,input,select').forEach(e=>{const k=e.dataset.name||e.name;if(d[k]) e.value=d[k];});}
+
+function exportarRespuestas(){
+  // Combinar respuestas de evaluación y fichas
+  const datosCompletos = {
+    evaluacion: {
+      respuestas: respuestas,
+      observaciones: observaciones,
+      alumno: document.getElementById('alumno')?.value || '',
+      edad: document.getElementById('edad')?.value || '',
+      curso: document.getElementById('curso')?.value || '',
+      evaluador: document.getElementById('evaluador')?.value || '',
+      fecha: new Date().toISOString()
+    },
+    fichas: loadRes()
+  };
+  
+  const blob = new Blob([JSON.stringify(datosCompletos,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='kit_habilidades_sociales_completo.json';
+  a.click();
+}
+
+function regenerarTodo(){
+  const categoriaActiva = document.querySelector('.cat.active')?.querySelector('.small')?.textContent;
+  if (categoriaActiva) {
+    renderCat(categoriaActiva);
+  }
+}
+
+// === Render de categoría con fichas rediseñadas ===
+function renderCat(id){
+  const cat = CATEGORIAS.find(x=>x.id===id);
+  const bank = BANK[id];
+  const content = document.getElementById('content');
+  
+  content.innerHTML = `
+    <div style="margin-bottom: 30px; text-align: center; padding: 20px; background: linear-gradient(135deg, var(--brand-light), var(--brand)); border-radius: 20px; color: white;">
+      <div style="font-size: 64px; margin-bottom: 10px;">${cat.emoji}</div>
+      <h2 style="margin: 0; font-size: 24px;">${cat.titulo}</h2>
+      <p style="margin: 10px 0 0 0; opacity: 0.9;">Actividades prácticas para trabajar esta habilidad</p>
+    </div>
+    
+    <div class="grid" style="gap: 20px;">
+      ${fichaJuegoPractico(cat,bank)}
+      ${fichaDesafioVisual(cat,bank)}
+      ${fichaEjercicioRapido(cat,bank)}
+      ${fichaCuadernoTrabajo(cat)}
+      ${fichaRegistroSemanal(cat)}
+      ${fichaMedallaLogro(cat)}
+    </div>
+  `;
+  fill(content);
+  // Guardado automático al escribir
+  content.querySelectorAll('textarea,input,select').forEach(e=>{
+    e.addEventListener('input',()=>saveFrom(content))
+  })
+}
+
+// === Fichas ===
+// === FICHAS REDISEÑADAS VISUALES ===
+
+function fichaJuegoPractico(cat, bank) {
+  var id = uid();
+  var actividades = bank.tarjetas.slice().sort(function(){return Math.random()-0.5}).slice(0, 3);
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid var(--brand);">';
+  
+  // Header visual
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">' + cat.emoji + '</div>';
+  html += '<h4 style="margin: 0; color: var(--brand); font-size: 22px;">🎮 JUEGO PRÁCTICO</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">¡Vamos a practicar juntos!</div>';
+  html += '</div>';
+  
+  // Paso 1: Elegir misión
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
+  html += '<div style="width: 50px; height: 50px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold;">1</div>';
+  html += '<h5 style="margin: 0; color: var(--brand); font-size: 20px;">ELIGE TU MISIÓN</h5>';
+  html += '</div>';
+  
+  actividades.forEach(function(actividad, i) {
+    html += '<div style="border: 3px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s ease;" onclick="elegirMision(\'' + id + '\', ' + i + ')" id="mision_' + id + '_' + i + '">';
+    html += '<div style="display: flex; align-items: center; gap: 15px;">';
+    html += '<div style="font-size: 48px;">🎯</div>';
+    html += '<div>';
+    html += '<div style="font-weight: bold; font-size: 18px; color: var(--ink);">MISIÓN ' + (i + 1) + '</div>';
+    html += '<div style="font-size: 16px; color: var(--muted); margin-top: 5px;">' + actividad + '</div>';
+    html += '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  
+  // Paso 2: Contador de práctica
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
+  html += '<div style="width: 50px; height: 50px; background: var(--ok); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold;">2</div>';
+  html += '<h5 style="margin: 0; color: var(--ok); font-size: 20px;">PRACTICA 3 VECES</h5>';
+  html += '</div>';
+  
+  html += '<div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px;">';
+  for (var i = 1; i <= 3; i++) {
+    html += '<div style="text-align: center;">';
+    html += '<div style="width: 80px; height: 80px; border: 4px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; transition: all 0.3s ease;" onclick="marcarPractica(\'' + id + '\', ' + i + ')" id="practica_' + id + '_' + i + '">';
+    html += '⭕';
+    html += '</div>';
+    html += '<div style="font-weight: bold; margin-top: 10px; font-size: 16px;">Intento ' + i + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  html += '<div style="text-align: center; background: var(--light-bg); border-radius: 15px; padding: 15px; font-size: 14px; color: var(--muted);">';
+  html += '<strong>Haz clic:</strong> ⭕ Por hacer → ✅ ¡Bien! → ⚠️ Necesita ayuda → ❌ No pudo';
+  html += '</div></div>';
+  
+  // Paso 3: Reflexión
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">';
+  html += '<div style="width: 50px; height: 50px; background: var(--warn); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold;">3</div>';
+  html += '<h5 style="margin: 0; color: var(--warn); font-size: 20px;">¿CÓMO FUE?</h5>';
+  html += '</div>';
+  html += textarea('juego_' + cat.id + '_reflexion', '¿Qué tal lo hizo? ¿Qué aprendió? ¿Qué fue más difícil?');
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function fichaDesafioVisual(cat, bank) {
+  var id = uid();
+  var reto = rand(bank.retos);
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 2px solid var(--warn);">';
+  
+  // Header con gran emoji
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">🏆</div>';
+  html += '<h4 style="margin: 0; color: var(--warn); font-size: 22px;">🎯 DESAFÍO DEL DÍA</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">¡Un reto especial para ti!</div>';
+  html += '</div>';
+  
+  // Caja del reto principal
+  html += '<div style="background: white; border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; border: 3px solid var(--warn);">';
+  html += '<div style="font-size: 64px; margin-bottom: 20px;">🎪</div>';
+  html += '<h3 style="margin: 0 0 20px 0; color: var(--warn); font-size: 24px;">TU DESAFÍO ES...</h3>';
+  html += '<div style="background: var(--light-bg); border-radius: 15px; padding: 25px; font-size: 20px; font-weight: 600; color: var(--ink); border: 2px dashed var(--warn);">';
+  html += reto;
+  html += '</div></div>';
+  
+  // Indicador de resultado con emojis grandes
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 25px 0; color: var(--ink); text-align: center; font-size: 20px;">🏅 ¿CÓMO LO HIZO?</h5>';
+  html += '<div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 20px;">';
+  
+  var opciones = [
+    {id: 'genial', emoji: '🤩', texto: '¡GENIAL!', color: 'var(--ok)'},
+    {id: 'bien', emoji: '😊', texto: 'BIEN', color: 'var(--brand)'},
+    {id: 'ayuda', emoji: '🤝', texto: 'CON AYUDA', color: 'var(--warn)'},
+    {id: 'no', emoji: '😔', texto: 'NO PUDO', color: 'var(--muted)'}
+  ];
+  
+  opciones.forEach(function(opcion) {
+    html += '<div style="text-align: center; cursor: pointer;" onclick="marcarDesafio(\'' + id + '\', \'' + opcion.id + '\')">';
+    html += '<div style="width: 80px; height: 80px; border: 4px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; transition: all 0.3s ease; margin-bottom: 10px;" id="desafio_' + id + '_' + opcion.id + '">';
+    html += opcion.emoji;
+    html += '</div>';
+    html += '<div style="font-weight: bold; font-size: 14px;">' + opcion.texto + '</div>';
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  html += textarea('desafio_' + cat.id + '_notas', '¿Qué pasó? ¿Cómo se sintió? ¿Qué podemos mejorar?');
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function fichaEjercicioRapido(cat, bank) {
+  var id = uid();
+  var ejercicio = rand(bank.tarjetas);
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid var(--ok);">';
+  
+  // Header
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">⚡</div>';
+  html += '<h4 style="margin: 0; color: var(--ok); font-size: 22px;">🚀 EJERCICIO RÁPIDO</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">¡Solo 5 minutos!</div>';
+  html += '</div>';
+  
+  // Timer visual grande
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">';
+  html += '<div style="font-size: 64px; margin-bottom: 15px;">⏰</div>';
+  html += '<div style="font-size: 32px; font-weight: bold; color: var(--ok); margin-bottom: 20px;" id="timer_' + id + '">5:00</div>';
+  html += '<button onclick="iniciarTimer(\'' + id + '\')" style="background: var(--ok); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 18px; font-weight: 600; cursor: pointer;">';
+  html += '▶️ EMPEZAR AHORA';
+  html += '</button></div>';
+  
+  // Ejercicio principal
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 20px 0; text-align: center; color: var(--ink); font-size: 20px;">🎯 TU EJERCICIO</h5>';
+  html += '<div style="border: 3px solid var(--ok); border-radius: 15px; padding: 25px; background: var(--light-bg); text-align: center;">';
+  html += '<div style="font-size: 18px; font-weight: 600; color: var(--ink);">' + ejercicio + '</div>';
+  html += '</div></div>';
+  
+  // Resultado rápido
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 20px 0; color: var(--ink); text-align: center; font-size: 20px;">📝 ¿CÓMO FUE?</h5>';
+  html += '<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">';
+  
+  var resultados = [
+    {id: 'si', texto: '✅ ¡LO HIZO!', color: 'var(--ok)'},
+    {id: 'casi', texto: '⚠️ CASI', color: 'var(--warn)'},
+    {id: 'no', texto: '❌ NO PUDO', color: 'var(--muted)'}
+  ];
+  
+  resultados.forEach(function(resultado) {
+    html += '<button onclick="marcarRapido(\'' + id + '\', \'' + resultado.id + '\')" style="background: ' + resultado.color + '; color: white; border: none; padding: 15px 25px; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;" id="btn_' + id + '_' + resultado.id + '">';
+    html += resultado.texto;
+    html += '</button>';
+  });
+  
+  html += '</div>';
+  html += input('rapido_' + cat.id + '_nota', 'Nota rápida (opcional)');
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function fichaRuleta(cat,bank){
+  var id = uid();
+  var opciones = bank.retos.slice().sort(function(){return Math.random()-0.5});
+  return '<div class="card print-a4 center">' +
+    '<h4>🎡 Ruleta de retos</h4>' +
+    '<div class="muted">Pulsa para elegir un reto al azar.</div>' +
+    '<div class="big" id="out-' + id + '">--</div>' +
+    '<div class="row center" style="justify-content:center">' +
+      '<button onclick="spinRuleta(\'' + id + '\')" class="btn">🎲 Elegir reto</button>' +
+      '<button class="btn btn-secondary" onclick="resetRuleta(\'' + id + '\')">Reiniciar</button>' +
+    '</div>' +
+    '<div class="small">Escribe cómo lo resolvió:</div>' +
+    textarea('ruleta_' + cat.id + '_nota', 'Estrategias que usó, apoyos necesarios…') +
+  '</div>';
+}
+
+// Funciones globales para la ruleta
+window.spinData = {};
+
+function spinRuleta(id) {
+  var categoriaActiva = document.querySelector('.cat.active');
+  if (!categoriaActiva) return;
+  
+  var catId = categoriaActiva.querySelector('.small').textContent;
+  var cat = CATEGORIAS.find(function(c) { return c.id === catId; });
+  if (!cat || !BANK[catId]) return;
+  
+  var opciones = BANK[catId].retos;
+  var output = document.getElementById('out-' + id);
+  if (!output) return;
+  
+  var counter = 0;
+  var interval = setInterval(function() {
+    output.textContent = opciones[Math.floor(Math.random() * opciones.length)];
+    counter++;
+    if (counter > 18) {
+      clearInterval(interval);
+    }
+  }, 60);
+}
+
+function resetRuleta(id) {
+  var output = document.getElementById('out-' + id);
+  if (output) {
+    output.textContent = '--';
+  }
+}
+
+// === FICHAS PARA IMPRIMIR ===
+
+function fichaCuadernoTrabajo(cat) {
+  var id = uid();
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border: 2px solid #8b5cf6;">';
+  
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">📚</div>';
+  html += '<h4 style="margin: 0; color: #8b5cf6; font-size: 22px;">📝 CUADERNO DE TRABAJO</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">Actividades paso a paso para imprimir</div>';
+  html += '</div>';
+  
+  // Rutina estructurada
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 20px 0; color: #8b5cf6; font-size: 18px; text-align: center;">🧭 RUTINA DE 5 PASOS</h5>';
+  
+  var pasos = [
+    {num: 1, titulo: 'PREPÁRATE', emoji: '🎯', ejemplo: 'Respira y piensa'},
+    {num: 2, titulo: 'ACTÚA', emoji: '🚀', ejemplo: 'Haz la habilidad'},
+    {num: 3, titulo: 'OBSERVA', emoji: '👀', ejemplo: '¿Cómo salió?'},
+    {num: 4, titulo: 'MEJORA', emoji: '⭐', ejemplo: 'Inténtalo otra vez'},
+    {num: 5, titulo: 'CELEBRA', emoji: '🎉', ejemplo: '¡Lo conseguiste!'}
+  ];
+  
+  pasos.forEach(function(paso) {
+    html += '<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 15px; border: 2px solid var(--border); border-radius: 10px;">';
+    html += '<div style="width: 50px; height: 50px; background: #8b5cf6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; font-weight: bold;">' + paso.num + '</div>';
+    html += '<div style="flex: 1;">';
+    html += '<div style="font-weight: bold; color: #8b5cf6; margin-bottom: 5px;">' + paso.emoji + ' ' + paso.titulo + '</div>';
+    html += '<input type="text" placeholder="' + paso.ejemplo + '" style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px;" data-name="paso_' + cat.id + '_' + paso.num + '">';
+    html += '</div></div>';
+  });
+  
+  html += '</div>';
+  
+  // Objetivo principal
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 15px 0; color: #8b5cf6; font-size: 18px; text-align: center;">🎯 MI OBJETIVO PRINCIPAL</h5>';
+  html += '<div style="border: 3px dashed #8b5cf6; border-radius: 15px; padding: 20px; text-align: center;">';
+  html += '<input type="text" placeholder="Ej: Pedir turno sin interrumpir 4 de 5 veces" style="width: 100%; padding: 15px; border: none; font-size: 18px; text-align: center; font-weight: bold;" data-name="objetivo_' + cat.id + '">';
+  html += '</div></div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function fichaRegistroSemanal(cat) {
+  var id = uid();
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #fef7ed, #fed7aa); border: 2px solid #ea580c;">';
+  
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">📊</div>';
+  html += '<h4 style="margin: 0; color: #ea580c; font-size: 22px;">📈 REGISTRO SEMANAL</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">Seguimiento diario de progreso</div>';
+  html += '</div>';
+  
+  // Tabla de seguimiento
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 20px 0; color: #ea580c; font-size: 18px; text-align: center;">🗓️ SEGUIMIENTO DIARIO</h5>';
+  
+  html += '<div style="overflow-x: auto;">';
+  html += '<table style="width: 100%; border-collapse: collapse;">';
+  html += '<thead>';
+  html += '<tr style="background: #fef7ed;">';
+  html += '<th style="border: 2px solid #ea580c; padding: 12px; text-align: center; font-weight: bold;">DÍA</th>';
+  html += '<th style="border: 2px solid #ea580c; padding: 12px; text-align: center; font-weight: bold;">¿LO HIZO?</th>';
+  html += '<th style="border: 2px solid #ea580c; padding: 12px; text-align: center; font-weight: bold;">CONTEXTO</th>';
+  html += '<th style="border: 2px solid #ea580c; padding: 12px; text-align: center; font-weight: bold;">APOYO</th>';
+  html += '</tr></thead><tbody>';
+  
+  var dias = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+  dias.forEach(function(dia, i) {
+    html += '<tr>';
+    html += '<td style="border: 1px solid #ea580c; padding: 12px; font-weight: bold; background: #fef7ed;">' + dia + '</td>';
+    html += '<td style="border: 1px solid #ea580c; padding: 12px; text-align: center;">';
+    html += '<select style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px;" data-name="reg_' + cat.id + '_' + i + '_resultado">';
+    html += '<option value="">Elegir</option>';
+    html += '<option value="si">✅ SÍ</option>';
+    html += '<option value="casi">⚠️ CASI</option>';
+    html += '<option value="no">❌ NO</option>';
+    html += '</select></td>';
+    html += '<td style="border: 1px solid #ea580c; padding: 12px;">';
+    html += '<input type="text" placeholder="Casa/Colegio/Parque" style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px;" data-name="reg_' + cat.id + '_' + i + '_contexto">';
+    html += '</td>';
+    html += '<td style="border: 1px solid #ea580c; padding: 12px;">';
+    html += '<input type="text" placeholder="Solo/Con ayuda/Recordatorio" style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px;" data-name="reg_' + cat.id + '_' + i + '_apoyo">';
+    html += '</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  
+  // Resumen semanal
+  html += '<div style="margin-top: 20px; padding: 15px; background: #fef7ed; border-radius: 10px; border: 2px dashed #ea580c;">';
+  html += '<h6 style="margin: 0 0 10px 0; color: #ea580c;">📋 RESUMEN DE LA SEMANA</h6>';
+  html += textarea('resumen_' + cat.id, '¿Cómo fue la semana? ¿Qué funcionó mejor? ¿Qué podemos mejorar?');
+  html += '</div>';
+  
+  html += '</div></div>';
+  return html;
+}
+
+function fichaMedallaLogro(cat) {
+  var id = uid();
+  
+  var html = '<div class="card print-a4" style="background: linear-gradient(135deg, #fefce8, #fef3c7); border: 2px solid #eab308;">';
+  
+  html += '<div style="text-align: center; margin-bottom: 25px;">';
+  html += '<div style="font-size: 72px; margin-bottom: 10px;">🏅</div>';
+  html += '<h4 style="margin: 0; color: #eab308; font-size: 22px;">🌟 MEDALLA DE LOGRO</h4>';
+  html += '<div style="color: var(--muted); font-size: 16px;">Celebra los éxitos y reconoce el esfuerzo</div>';
+  html += '</div>';
+  
+  // Medalla principal
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">';
+  html += '<div style="width: 150px; height: 150px; border: 5px solid #eab308; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fbbf24, #f59e0b);">';
+  html += '<div style="color: white; font-size: 48px;" id="medalla_emoji_' + id + '">🌟</div>';
+  html += '</div>';
+  
+  html += '<h3 style="margin: 0 0 15px 0; color: #eab308;">¡CONSEGUIDO!</h3>';
+  html += '<input type="text" placeholder="Escribe aquí el logro conseguido" style="width: 100%; padding: 15px; border: 3px solid #eab308; border-radius: 10px; font-size: 18px; text-align: center; font-weight: bold;" data-name="logro_' + cat.id + '">';
+  
+  // Botones de emoji para personalizar la medalla
+  html += '<div style="margin-top: 20px;">';
+  html += '<div style="margin-bottom: 10px; font-weight: bold; color: #eab308;">Elige el emoji de tu medalla:</div>';
+  html += '<div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">';
+  
+  var emojis = ['🌟', '🏆', '🎖️', '👑', '💎', '🔥', '⚡', '🚀', '🎯', '💪'];
+  emojis.forEach(function(emoji) {
+    html += '<button onclick="cambiarEmojiMedalla(\'' + id + '\', \'' + emoji + '\')" style="width: 50px; height: 50px; border: 2px solid #eab308; border-radius: 50%; background: white; font-size: 24px; cursor: pointer; transition: all 0.3s ease;">' + emoji + '</button>';
+  });
+  html += '</div></div></div>';
+  
+  // Sección de reflexión
+  html += '<div style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">';
+  html += '<h5 style="margin: 0 0 20px 0; color: #eab308; font-size: 18px; text-align: center;">💭 REFLEXIÓN DEL LOGRO</h5>';
+  
+  html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">';
+  html += '<div>';
+  html += '<label style="display: block; margin-bottom: 5px; font-weight: bold; color: #eab308;">🌈 ¿Cómo te sientes?</label>';
+  html += textarea('sentimiento_' + cat.id, 'Estoy orgulloso porque...');
+  html += '</div>';
+  html += '<div>';
+  html += '<label style="display: block; margin-bottom: 5px; font-weight: bold; color: #eab308;">🎯 ¿Qué aprendiste?</label>';
+  html += textarea('aprendizaje_' + cat.id, 'Ahora sé que...');
+  html += '</div></div>';
+  
+  html += '<div style="margin-top: 20px; padding: 15px; background: #fefce8; border-radius: 10px; border: 2px dashed #eab308; text-align: center;">';
+  html += '<div style="font-weight: bold; color: #eab308; margin-bottom: 10px;">📅 FECHA DEL LOGRO</div>';
+  html += '<input type="date" style="padding: 10px; border: 2px solid #eab308; border-radius: 5px; font-size: 16px;" data-name="fecha_logro_' + cat.id + '">';
+  html += '</div>';
+  
+  html += '</div></div>';
+  return html;
+}
+
+// === Bloque de plantillas generales (imprimibles) ===
+function plantillasGenerales(){
+  return `
+  <div class="card print-a4" id="plantillas">
+    <h4>📚 Cuaderno imprimible A4 (plantillas rápidas)</h4>
+    <div class="grid">
+      <div class="hl">
+        <div class="small">🎯 Metas SMART</div>
+        ${input('smart_meta','Ej.: Pedir turno sin interrumpir 4/5 veces esta semana')}
+        <div class="grid-2">
+          ${['S','M','A','R','T'].map(k=>`<div><div class="small">${k}</div><div class="box" contenteditable="true"></div></div>`).join('')}
+        </div>
+      </div>
+      <div class="hl" id="viñetas">
+        <div class="small">🗯️ Viñetas sociales (3 cuadros)</div>
+        <div class="grid-3">
+          ${[1,2,3].map(()=>`<div class="box" contenteditable="true" style="height:90px"></div>`).join('')}
+        </div>
+        ${textarea('comic_text','Escribe el diálogo de cada viñeta…')}
+      </div>
+      <div class="hl" id="toolbox">
+        <div class="small">🧰 Caja de herramientas emocionales</div>
+        <div class="choice">
+          ${['Respirar 4-4','Pedir ayuda','Pausa de agua','Contar 10','Apoyar manos en mesa','Tarjeta "vuelvo luego"'].map(t=>`<button onclick="addTool('${t}')" class="btn btn-ghost">${t}</button>`).join('')}
+        </div>
+        <div class="box" id="toolsBox" contenteditable="true" style="min-height:90px"></div>
+      </div>
+      <div class="hl" id="metas">
+        <div class="small">📆 Plan semanal</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr>${['L','M','X','J','V'].map(d=>`<th style=\"border-bottom:2px solid var(--border);padding:6px\">${d}</th>`).join('')}</tr></thead>
+          <tbody><tr>${['L','M','X','J','V'].map(d=>`<td style=\"border-bottom:1px solid var(--border);padding:6px\">${input('plan_'+d,'Actividad/Objetivo')}</td>`).join('')}</tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>`
+}
+
+function addTool(t){
+  var box = document.getElementById('toolsBox');
+  if (box) {
+    box.innerHTML += (box.innerHTML ? '<br>' : '') + '• ' + t;
+  }
+}
+
+// === FUNCIONES INTERACTIVAS PARA LAS FICHAS ===
+
+// Funciones para la ficha de juego práctico
+window.elegirMision = function(id, opcion) {
+  // Resetear todas las misiones
+  for (var i = 0; i < 3; i++) {
+    var mision = document.getElementById('mision_' + id + '_' + i);
+    if (mision) {
+      mision.style.borderColor = 'var(--border)';
+      mision.style.backgroundColor = 'white';
+      mision.style.transform = 'scale(1)';
+    }
+  }
+  
+  // Marcar la seleccionada
+  var seleccionada = document.getElementById('mision_' + id + '_' + opcion);
+  if (seleccionada) {
+    seleccionada.style.borderColor = 'var(--brand)';
+    seleccionada.style.backgroundColor = 'rgba(6, 182, 212, 0.1)';
+    seleccionada.style.transform = 'scale(1.02)';
+  }
+};
+
+window.marcarPractica = function(id, intento) {
+  var elemento = document.getElementById('practica_' + id + '_' + intento);
+  if (!elemento) return;
+  
+  var estados = ['⭕', '✅', '⚠️', '❌'];
+  var colores = ['var(--border)', 'var(--ok)', 'var(--warn)', 'var(--bad)'];
+  
+  var estadoActual = estados.indexOf(elemento.textContent);
+  estadoActual = (estadoActual + 1) % estados.length;
+  
+  elemento.textContent = estados[estadoActual];
+  elemento.style.borderColor = colores[estadoActual];
+  elemento.style.color = colores[estadoActual];
+  
+  // Efecto visual
+  elemento.style.transform = 'scale(1.1)';
+  setTimeout(function() {
+    elemento.style.transform = 'scale(1)';
+  }, 200);
+};
+
+// Funciones para la ficha de desafío visual
+window.marcarDesafio = function(id, opcion) {
+  // Resetear todas las opciones
+  ['genial', 'bien', 'ayuda', 'no'].forEach(function(opt) {
+    var elemento = document.getElementById('desafio_' + id + '_' + opt);
+    if (elemento) {
+      elemento.style.borderColor = 'var(--border)';
+      elemento.style.backgroundColor = 'white';
+      elemento.style.transform = 'scale(1)';
+    }
+  });
+  
+  // Marcar la seleccionada
+  var seleccionada = document.getElementById('desafio_' + id + '_' + opcion);
+  if (seleccionada) {
+    var colores = {genial: 'var(--ok)', bien: 'var(--brand)', ayuda: 'var(--warn)', no: 'var(--muted)'};
+    seleccionada.style.borderColor = colores[opcion];
+    seleccionada.style.backgroundColor = colores[opcion] + '20';
+    seleccionada.style.transform = 'scale(1.1)';
+  }
+};
+
+// Funciones para la ficha de ejercicio rápido
+window.timers = window.timers || {};
+
+window.iniciarTimer = function(id) {
+  var timerDisplay = document.getElementById('timer_' + id);
+  var button = timerDisplay.nextElementSibling;
+  
+  if (window.timers[id]) {
+    clearInterval(window.timers[id]);
+  }
+  
+  button.textContent = '⏸️ PARAR';
+  button.onclick = function() { pararTimer(id); };
+  
+  var timeLeft = 300; // 5 minutos en segundos
+  
+  window.timers[id] = setInterval(function() {
+    var minutes = Math.floor(timeLeft / 60);
+    var seconds = timeLeft % 60;
+    timerDisplay.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    
+    if (timeLeft <= 0) {
+      clearInterval(window.timers[id]);
+      timerDisplay.textContent = '¡TIEMPO!';
+      timerDisplay.style.color = 'var(--bad)';
+      button.textContent = '🔄 REINICIAR';
+      button.onclick = function() { reiniciarTimer(id); };
+      
+      // Efecto de alerta visual
+      timerDisplay.style.animation = 'pulse 1s infinite';
+    } else if (timeLeft <= 60) {
+      timerDisplay.style.color = 'var(--bad)';
+    } else if (timeLeft <= 120) {
+      timerDisplay.style.color = 'var(--warn)';
+    }
+    timeLeft--;
+  }, 1000);
+};
+
+window.pararTimer = function(id) {
+  clearInterval(window.timers[id]);
+  var timerDisplay = document.getElementById('timer_' + id);
+  var button = timerDisplay.nextElementSibling;
+  button.textContent = '▶️ CONTINUAR';
+  button.onclick = function() { iniciarTimer(id); };
+};
+
+window.reiniciarTimer = function(id) {
+  clearInterval(window.timers[id]);
+  var timerDisplay = document.getElementById('timer_' + id);
+  var button = timerDisplay.nextElementSibling;
+  timerDisplay.textContent = '5:00';
+  timerDisplay.style.color = 'var(--ok)';
+  timerDisplay.style.animation = 'none';
+  button.textContent = '▶️ EMPEZAR AHORA';
+  button.onclick = function() { iniciarTimer(id); };
+};
+
+window.marcarRapido = function(id, resultado) {
+  // Resetear botones
+  ['si', 'casi', 'no'].forEach(function(res) {
+    var btn = document.getElementById('btn_' + id + '_' + res);
+    if (btn) {
+      btn.style.opacity = '0.5';
+      btn.style.transform = 'scale(1)';
+    }
+  });
+  
+  // Marcar seleccionado
+  var seleccionado = document.getElementById('btn_' + id + '_' + resultado);
+  if (seleccionado) {
+    seleccionado.style.opacity = '1';
+    seleccionado.style.transform = 'scale(1.1)';
+    
+    // Efecto de confirmación
+    setTimeout(function() {
+      seleccionado.style.transform = 'scale(1.05)';
+    }, 200);
+  }
+};
+
+// Funciones para la ficha de medalla de logro
+window.cambiarEmojiMedalla = function(id, emoji) {
+  var medallEmoji = document.getElementById('medalla_emoji_' + id);
+  if (medallEmoji) {
+    medallEmoji.textContent = emoji;
+    
+    // Efecto visual
+    medallEmoji.style.transform = 'scale(1.2)';
+    setTimeout(function() {
+      medallEmoji.style.transform = 'scale(1)';
+    }, 300);
+  }
+  
+  // Resaltar el botón seleccionado
+  var botones = medallEmoji.closest('.card').querySelectorAll('button');
+  botones.forEach(function(btn) {
+    btn.style.backgroundColor = 'white';
+    btn.style.transform = 'scale(1)';
+  });
+  
+  // Marcar el botón seleccionado
+  event.target.style.backgroundColor = '#fef3c7';
+  event.target.style.transform = 'scale(1.1)';
+};
+
+// === Inicializar cuando el DOM esté listo ===
+document.addEventListener('DOMContentLoaded', function() {
+  // Event listeners
+  var btnEvaluacion = document.getElementById('btnEvaluacion');
+  var btnFichas = document.getElementById('btnFichas');
+  var btnCalcular = document.getElementById('btnCalcular');
+  var btnLimpiar = document.getElementById('btnLimpiar');
+  var btnImprimir = document.getElementById('btnImprimir');
+  var btnExportar = document.getElementById('btnExportar');
+  
+  if (btnEvaluacion) btnEvaluacion.addEventListener('click', irAEvaluacion);
+  if (btnFichas) btnFichas.addEventListener('click', irAFichas);
+  if (btnCalcular) btnCalcular.addEventListener('click', calcularResultados);
+  if (btnLimpiar) btnLimpiar.addEventListener('click', reiniciarEvaluacion);
+  if (btnImprimir) btnImprimir.addEventListener('click', function() { window.print(); });
+  if (btnExportar) btnExportar.addEventListener('click', exportarRespuestas);
+
+  // Soporte para modo oscuro
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+      if (event.matches) {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark');
+      }
+  });
+
+  // Inicializar la aplicación
+  crearWizard();
+});
+</script>
+</body>
+</html>

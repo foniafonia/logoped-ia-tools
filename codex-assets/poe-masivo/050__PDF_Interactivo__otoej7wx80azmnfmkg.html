@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formamos Frases - Juego Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49C5'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .word-option {
+            transition: all 0.3s ease;
+        }
+
+        .word-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(93, 92, 222, 0.3);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .animate-shake { animation: shake 0.5s ease-in-out; }
+
+        @keyframes starPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-star-pop { animation: starPop 0.6s ease-out; }
+
+        .floating-star {
+            position: absolute;
+            font-size: 2rem;
+            color: #FFD700;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { transform: translateY(-50px) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0); opacity: 0; }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .mode-active {
+            background: #5D5CDE !important;
+            color: white !important;
+            border-color: #5D5CDE !important;
+        }
+
+        .equipped {
+            border-color: #10B981 !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-purple-900 transition-colors duration-300">
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50"></div>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl">🎯</div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Formamos Frases</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Juego de Morfosintaxis</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Avatar Mini -->
+                    <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-lg" id="mini-avatar">👤</div>
+                    
+                    <!-- Monedas -->
+                    <div class="bg-yellow-500 text-white px-3 py-2 rounded-full font-bold flex items-center space-x-1">
+                        <span>⭐</span>
+                        <span id="star-currency">25</span>
+                    </div>
+                    
+                    <!-- Puntuación -->
+                    <div class="bg-primary text-white px-3 py-2 rounded-full font-bold flex items-center space-x-1">
+                        <span>🏆</span>
+                        <span id="score">0</span>
+                    </div>
+                    
+                    <!-- Botones de Navegación -->
+                    <div class="flex items-center space-x-1">
+                        <button id="settings-btn" class="text-gray-600 dark:text-gray-300 hover:text-primary p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" title="Configuración">
+                            ⚙️
+                        </button>
+                        <button id="stats-btn" class="text-gray-600 dark:text-gray-300 hover:text-primary p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" title="Estadísticas">
+                            📊
+                        </button>
+                        <button id="avatar-btn" class="text-gray-600 dark:text-gray-300 hover:text-primary p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" title="Avatar">
+                            👤
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de Progreso -->
+            <div class="mt-3 flex items-center justify-between">
+                <div class="text-sm text-gray-600 dark:text-gray-300">
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">30</span>
+                </div>
+                <div class="flex-1 mx-4">
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <span class="text-yellow-500 text-lg" id="star1">⭐</span>
+                    <span class="text-yellow-500 text-lg opacity-30" id="star2">⭐</span>
+                    <span class="text-yellow-500 text-lg opacity-30" id="star3">⭐</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen">
+            <div class="glass-effect rounded-3xl p-8 mb-8 text-center">
+                <div class="text-6xl mb-4">🎮</div>
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">¡Bienvenido!</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+                    Completa las frases eligiendo la palabra correcta.<br>
+                    ¡Gana estrellas por cada respuesta correcta!
+                </p>
+                
+                <!-- Estadísticas Rápidas -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-green-500" id="home-aciertos">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Aciertos</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-red-500" id="home-errores">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Errores</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-primary" id="home-precision">0%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Precisión</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-yellow-500" id="home-nivel">Nuevo</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Nivel</div>
+                    </div>
+                </div>
+                
+                <button id="start-btn" class="bg-primary hover:bg-primary-dark text-white text-xl font-bold py-4 px-8 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    🚀 ¡Comenzar Juego!
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Juego -->
+        <div id="game-screen" class="hidden">
+            <div class="glass-effect rounded-3xl p-8 mb-8 text-center">
+                <div class="text-4xl mb-4" id="question-emoji">🤔</div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6" id="question-text">
+                    Para cortar los vegetales uso un...
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="options-container">
+                <!-- Opciones dinámicas -->
+            </div>
+
+            <div class="flex justify-center">
+                <button id="next-btn" class="hidden bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition-all duration-300">
+                    Siguiente ➡️
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Resultados -->
+        <div id="results-screen" class="hidden">
+            <div class="glass-effect rounded-3xl p-8 text-center">
+                <div class="text-6xl mb-4" id="result-emoji">🎉</div>
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" id="result-title">¡Felicitaciones!</h2>
+                
+                <!-- Estadísticas Detalladas -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-primary" id="final-puntos">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Puntos</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-green-500" id="final-aciertos">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Aciertos</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-red-500" id="final-errores">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Errores</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-yellow-500" id="final-precision">0%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Precisión</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center mb-6" id="final-stars"></div>
+                
+                <div class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 mb-6">
+                    <p class="text-yellow-800 dark:text-yellow-200 font-bold">
+                        ¡Ganaste <span id="earned-stars">0</span> estrellas! ⭐
+                    </p>
+                </div>
+                
+                <button id="play-again-btn" class="bg-primary hover:bg-primary-dark text-white text-xl font-bold py-4 px-8 rounded-full transition-all duration-300 shadow-lg">
+                    🔄 Jugar de Nuevo
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel de Configuración -->
+        <div id="settings-screen" class="hidden">
+            <div class="glass-effect rounded-3xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white">⚙️ Panel de Control</h2>
+                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-2xl">❌</button>
+                </div>
+                
+                <!-- Modo de Juego -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🎮 Modo de Juego</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button class="mode-option mode-active p-4 rounded-lg border-2 transition-all" data-mode="word-image">
+                            <div class="text-2xl mb-2">🔤🖼️</div>
+                            <div class="font-bold">Palabra + Imagen</div>
+                            <div class="text-sm opacity-80">Texto con emoji</div>
+                        </button>
+                        <button class="mode-option bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 transition-all" data-mode="word">
+                            <div class="text-2xl mb-2">🔤</div>
+                            <div class="font-bold">Solo Palabra</div>
+                            <div class="text-sm opacity-80">Solo texto</div>
+                        </button>
+                        <button class="mode-option bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 transition-all" data-mode="image">
+                            <div class="text-2xl mb-2">🖼️</div>
+                            <div class="font-bold">Solo Imagen</div>
+                            <div class="text-sm opacity-80">Solo emoji</div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Orden de Preguntas -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🔀 Orden de Preguntas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button id="order-random" class="bg-green-500 text-white p-4 rounded-lg transition-all">
+                            <div class="text-2xl mb-2">🔀</div>
+                            <div class="font-bold">Aleatorio</div>
+                            <div class="text-sm opacity-80">Orden mezclado</div>
+                        </button>
+                        <button id="order-sequential" class="bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 transition-all">
+                            <div class="text-2xl mb-2">📋</div>
+                            <div class="font-bold">Secuencial</div>
+                            <div class="text-sm opacity-80">Orden original</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dificultad -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">⚡ Nivel de Dificultad</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button class="difficulty-option bg-green-500 text-white p-4 rounded-lg border-2 border-green-500 transition-all" data-difficulty="easy">
+                            <div class="text-2xl mb-2">😊</div>
+                            <div class="font-bold">Fácil</div>
+                            <div class="text-sm opacity-80">Sin límite de tiempo</div>
+                        </button>
+                        <button class="difficulty-option bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 transition-all" data-difficulty="medium">
+                            <div class="text-2xl mb-2">🤔</div>
+                            <div class="font-bold">Medio</div>
+                            <div class="text-sm opacity-80">30 segundos</div>
+                        </button>
+                        <button class="difficulty-option bg-white dark:bg-gray-700 text-gray-800 dark:text-white p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 transition-all" data-difficulty="hard">
+                            <div class="text-2xl mb-2">😤</div>
+                            <div class="font-bold">Difícil</div>
+                            <div class="text-sm opacity-80">15 segundos</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Efectos de Sonido -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🔊 Efectos de Sonido</h3>
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-4">
+                        <div>
+                            <div class="font-bold text-gray-800 dark:text-white">Sonidos del Juego</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-300">Activar efectos de acierto y error</div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="sound-toggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Estadísticas -->
+        <div id="stats-screen" class="hidden">
+            <div class="glass-effect rounded-3xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white">📊 Estadísticas</h2>
+                    <button id="close-stats" class="text-gray-500 hover:text-gray-700 text-2xl">❌</button>
+                </div>
+                
+                <!-- Resumen General -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-3xl font-bold text-green-500 mb-2" id="stats-aciertos">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Total Aciertos</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-3xl font-bold text-red-500 mb-2" id="stats-errores">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Total Errores</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-3xl font-bold text-primary mb-2" id="stats-precision">0%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Precisión</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 text-center">
+                        <div class="text-3xl font-bold text-yellow-500 mb-2" id="stats-estrellas">25</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Estrellas</div>
+                    </div>
+                </div>
+
+                <!-- Progreso de Nivel -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🏆 Progreso de Nivel</h3>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Nivel Actual</span>
+                        <span class="text-sm font-bold text-primary" id="nivel-actual">Principiante</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4">
+                        <div class="bg-gradient-to-r from-primary to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 25%" id="barra-nivel"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center text-sm">
+                        <div>
+                            <div class="font-bold">Principiante</div>
+                            <div class="text-gray-600 dark:text-gray-300">0-60%</div>
+                        </div>
+                        <div>
+                            <div class="font-bold">Intermedio</div>
+                            <div class="text-gray-600 dark:text-gray-300">61-80%</div>
+                        </div>
+                        <div>
+                            <div class="font-bold">Experto</div>
+                            <div class="text-gray-600 dark:text-gray-300">81-100%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparación Global -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🌍 Comparación Global</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Tu posición global</span>
+                            <span class="font-bold text-primary" id="posicion-global">#750 de 1,200</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Percentil</span>
+                            <span class="font-bold text-green-500" id="percentil">38%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">Promedio global</span>
+                            <span class="font-bold text-gray-800 dark:text-white">72%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historial -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 dark:bg-green-900 rounded-lg p-6">
+                        <h3 class="text-lg font-bold text-green-800 dark:text-green-200 mb-4">✅ Últimos Aciertos</h3>
+                        <div id="lista-aciertos" class="space-y-2 max-h-40 overflow-y-auto">
+                            <div class="text-sm text-gray-500">No hay aciertos aún</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-red-50 dark:bg-red-900 rounded-lg p-6">
+                        <h3 class="text-lg font-bold text-red-800 dark:text-red-200 mb-4">❌ Últimos Errores</h3>
+                        <div id="lista-errores" class="space-y-2 max-h-40 overflow-y-auto">
+                            <div class="text-sm text-gray-500">No hay errores aún</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor de Avatar -->
+        <div id="avatar-screen" class="hidden">
+            <div class="glass-effect rounded-3xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white">👤 Personalizar Avatar</h2>
+                    <button id="close-avatar" class="text-gray-500 hover:text-gray-700 text-2xl">❌</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Preview del Avatar -->
+                    <div class="text-center">
+                        <div class="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-xl p-8 mb-6">
+                            <div class="text-9xl mb-4" id="avatar-preview">👤</div>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Mi Avatar</h3>
+                            <div class="text-sm text-gray-600 dark:text-gray-300" id="avatar-desc">Avatar básico</div>
+                        </div>
+                        
+                        <div class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 mb-4">
+                            <p class="text-yellow-800 dark:text-yellow-200 font-bold">
+                                💰 Tienes <span id="avatar-stars">25</span> estrellas
+                            </p>
+                        </div>
+                        
+                        <button id="reset-avatar-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-all">
+                            🔄 Resetear Avatar
+                        </button>
+                    </div>
+
+                    <!-- Tienda -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6">🛍️ Tienda de Items</h3>
+                        
+                        <!-- Caras -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4">😊 Expresiones</h4>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button class="avatar-item equipped bg-white dark:bg-gray-700 p-3 rounded-lg border-2 transition-all" data-type="face" data-item="0" data-cost="0" data-emoji="😊" data-name="Sonrisa básica">
+                                    <div class="text-3xl mb-1">😊</div>
+                                    <div class="text-xs font-bold">Básica</div>
+                                    <div class="text-xs text-green-500">✓ EQUIPADO</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="face" data-item="1" data-cost="5" data-emoji="😄" data-name="Súper feliz">
+                                    <div class="text-3xl mb-1">😄</div>
+                                    <div class="text-xs font-bold">Feliz</div>
+                                    <div class="text-xs text-yellow-500">5⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="face" data-item="2" data-cost="8" data-emoji="🤓" data-name="Intelectual">
+                                    <div class="text-3xl mb-1">🤓</div>
+                                    <div class="text-xs font-bold">Nerd</div>
+                                    <div class="text-xs text-yellow-500">8⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="face" data-item="3" data-cost="10" data-emoji="😎" data-name="Cool">
+                                    <div class="text-3xl mb-1">😎</div>
+                                    <div class="text-xs font-bold">Cool</div>
+                                    <div class="text-xs text-yellow-500">10⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="face" data-item="4" data-cost="15" data-emoji="🤩" data-name="Estrella">
+                                    <div class="text-3xl mb-1">🤩</div>
+                                    <div class="text-xs font-bold">Estrella</div>
+                                    <div class="text-xs text-yellow-500">15⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="face" data-item="5" data-cost="20" data-emoji="😉" data-name="Guiño">
+                                    <div class="text-3xl mb-1">😉</div>
+                                    <div class="text-xs font-bold">Guiño</div>
+                                    <div class="text-xs text-yellow-500">20⭐</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sombreros -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4">🎩 Sombreros</h4>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="0" data-cost="0" data-emoji="👤" data-name="Sin sombrero">
+                                    <div class="text-3xl mb-1">🚫</div>
+                                    <div class="text-xs font-bold">Ninguno</div>
+                                    <div class="text-xs text-green-500">GRATIS</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="1" data-cost="7" data-emoji="🎩" data-name="Sombrero elegante">
+                                    <div class="text-3xl mb-1">🎩</div>
+                                    <div class="text-xs font-bold">Elegante</div>
+                                    <div class="text-xs text-yellow-500">7⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="2" data-cost="12" data-emoji="👑" data-name="Corona real">
+                                    <div class="text-3xl mb-1">👑</div>
+                                    <div class="text-xs font-bold">Corona</div>
+                                    <div class="text-xs text-yellow-500">12⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="3" data-cost="15" data-emoji="🧢" data-name="Gorra deportiva">
+                                    <div class="text-3xl mb-1">🧢</div>
+                                    <div class="text-xs font-bold">Gorra</div>
+                                    <div class="text-xs text-yellow-500">15⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="4" data-cost="25" data-emoji="🎭" data-name="Máscara teatral">
+                                    <div class="text-3xl mb-1">🎭</div>
+                                    <div class="text-xs font-bold">Teatro</div>
+                                    <div class="text-xs text-yellow-500">25⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="hat" data-item="5" data-cost="30" data-emoji="🏴‍☠️" data-name="Pirata">
+                                    <div class="text-3xl mb-1">🏴‍☠️</div>
+                                    <div class="text-xs font-bold">Pirata</div>
+                                    <div class="text-xs text-yellow-500">30⭐</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Especiales -->
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4">✨ Avatares Especiales</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="special" data-item="1" data-cost="40" data-emoji="🦸" data-name="Superhéroe">
+                                    <div class="text-3xl mb-1">🦸</div>
+                                    <div class="text-xs font-bold">Superhéroe</div>
+                                    <div class="text-xs text-yellow-500">40⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="special" data-item="2" data-cost="50" data-emoji="🤖" data-name="Robot">
+                                    <div class="text-3xl mb-1">🤖</div>
+                                    <div class="text-xs font-bold">Robot</div>
+                                    <div class="text-xs text-yellow-500">50⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="special" data-item="3" data-cost="60" data-emoji="👽" data-name="Alien">
+                                    <div class="text-3xl mb-1">👽</div>
+                                    <div class="text-xs font-bold">Alien</div>
+                                    <div class="text-xs text-yellow-500">60⭐</div>
+                                </button>
+                                <button class="avatar-item bg-white dark:bg-gray-700 p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-primary transition-all" data-type="special" data-item="4" data-cost="100" data-emoji="🦄" data-name="Unicornio legendario">
+                                    <div class="text-3xl mb-1">🦄</div>
+                                    <div class="text-xs font-bold">Legendario</div>
+                                    <div class="text-xs text-yellow-500">100⭐</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuración modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Datos de las preguntas (COMPLETAS del PDF)
+        const questions = [
+            { question: "Para cortar los vegetales uso un...", options: ["casa", "taza", "mesa", "cuchillo", "castillo", "martillo"], correct: 3, emoji: "🔪" },
+            { question: "Para abrigarme necesito una...", options: ["maleta", "raqueta", "chaqueta", "cebolla", "olla", "argolla"], correct: 2, emoji: "🧥" },
+            { question: "En el dedo llevo una...", options: ["maleta", "raqueta", "chaqueta", "cebolla", "olla", "argolla"], correct: 5, emoji: "💍" },
+            { question: "María toma té en una...", options: ["casa", "taza", "mesa", "cuchillo", "castillo", "martillo"], correct: 1, emoji: "☕" },
+            { question: "Luisa se alimenta con una...", options: ["pelota", "bota", "gaviota", "foca", "sopa", "copa"], correct: 4, emoji: "🥄" },
+            { question: "Carlos encontró un...", options: ["toro", "loro", "tesoro", "tortuga", "lechuga", "oruga"], correct: 2, emoji: "💰" },
+            { question: "Para la ensalada necesito una...", options: ["toro", "loro", "tesoro", "tortuga", "lechuga", "oruga"], correct: 4, emoji: "🥬" },
+            { question: "Martín juega con una...", options: ["pelota", "bota", "gaviota", "foca", "sopa", "copa"], correct: 0, emoji: "⚽" },
+            { question: "Para descansar necesito una...", options: ["zorro", "gorro", "perro", "cama", "rama", "rana"], correct: 3, emoji: "🛏️" },
+            { question: "La comida se sirve en un...", options: ["pato", "gato", "plato", "oreja", "oveja", "abeja"], correct: 2, emoji: "🍽️" },
+            { question: "En la granja hay una...", options: ["pato", "gato", "plato", "oreja", "oveja", "abeja"], correct: 4, emoji: "🐑" },
+            { question: "Diego se cubre su cabeza con un...", options: ["zorro", "gorro", "perro", "cama", "rama", "rana"], correct: 1, emoji: "🎩" },
+            { question: "Fernando toca la guitarra con la...", options: ["bota", "bata", "gota", "moto", "mano", "mono"], correct: 4, emoji: "🎸" },
+            { question: "Después del baño uso una...", options: ["bota", "bata", "gota", "moto", "mano", "mono"], correct: 1, emoji: "🛁" },
+            { question: "Para hacer ejercicio uso una...", options: ["bota", "bata", "gota", "moto", "mano", "mono"], correct: 3, emoji: "🏃" },
+            { question: "Para comer uso la...", options: ["boca", "foca", "bota", "mesa", "pera", "pesa"], correct: 0, emoji: "👄" },
+            { question: "A Tomás le gusta el jugo de...", options: ["pipa", "piña", "pila", "candado", "helado", "dado"], correct: 1, emoji: "🍍" },
+            { question: "En la puerta hay un...", options: ["pipa", "piña", "pila", "candado", "helado", "dado"], correct: 3, emoji: "🔒" },
+            { question: "José quita las arrugas de la ropa con la...", options: ["plancha", "planta", "plata", "ojo", "ocho", "oso"], correct: 0, emoji: "👔" },
+            { question: "Daniel duerme con un...", options: ["plancha", "planta", "plata", "ojo", "ocho", "oso"], correct: 5, emoji: "🧸" },
+            { question: "Cristina peina su...", options: ["camello", "cabello", "caballo", "lobo", "loro", "topo"], correct: 1, emoji: "👱‍♀️" },
+            { question: "En el bosque aúlla el...", options: ["camello", "cabello", "caballo", "lobo", "loro", "topo"], correct: 3, emoji: "🐺" },
+            { question: "Fernando toca la...", options: ["manzana", "ventana", "campana", "gatos", "patos", "zapatos"], correct: 2, emoji: "🔔" },
+            { question: "Para caminar uso unos...", options: ["manzana", "ventana", "campana", "gatos", "patos", "zapatos"], correct: 5, emoji: "👟" },
+            { question: "En las mañanas Sofía come...", options: ["fuego", "huevo", "lego", "escuela", "muela", "abuela"], correct: 1, emoji: "🥚" },
+            { question: "Cecilia y Juan van a la...", options: ["fuego", "huevo", "lego", "escuela", "muela", "abuela"], correct: 3, emoji: "🏫" },
+            { question: "A José no le gusta dormir en su...", options: ["laguna", "luna", "cuna", "cuento", "puente", "viento"], correct: 2, emoji: "👶" },
+            { question: "En las noches mamá lee un...", options: ["laguna", "luna", "cuna", "cuento", "puente", "viento"], correct: 3, emoji: "📖" },
+            { question: "En las manos uso unos...", options: ["lentes", "guantes", "fuentes", "iguana", "lana", "manzana"], correct: 1, emoji: "🧤" },
+            { question: "Gustavo recoge las hojas con el...", options: ["sol", "gol", "col", "rastrillo", "cerillo", "cuchillo"], correct: 3, emoji: "🍂" }
+        ];
+
+        // Estado del juego
+        const game = {
+            currentIndex: 0,
+            score: 0,
+            selectedAnswer: -1,
+            gameQuestions: [],
+            gameMode: 'word-image',
+            isRandom: true,
+            difficulty: 'easy',
+            soundEnabled: true,
+            correctAnswers: [],
+            incorrectAnswers: [],
+            starCurrency: 25,
+            avatar: { face: 0, hat: 0, special: 0, current: '😊', description: 'Sonrisa básica' },
+            screen: 'start'
+        };
+
+        // Funciones de utilidad
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function playSound(type) {
+            if (!game.soundEnabled) return;
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                if (type === 'correct') {
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } else if (type === 'incorrect') {
+                    oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(196, audioContext.currentTime + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.4);
+                }
+            } catch (e) {
+                console.log('Audio no disponible');
+            }
+        }
+
+        function createStars() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.className = 'floating-star';
+                    star.textContent = '⭐';
+                    star.style.left = Math.random() * window.innerWidth + 'px';
+                    star.style.top = Math.random() * 100 + 200 + 'px';
+                    document.body.appendChild(star);
+                    
+                    setTimeout(() => {
+                        if (document.body.contains(star)) {
+                            document.body.removeChild(star);
+                        }
+                    }, 2000);
+                }, i * 100);
+            }
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    container.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        if (container.contains(confetti)) {
+                            container.removeChild(confetti);
+                        }
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+
+        // Funciones de navegación
+        function showScreen(screenName) {
+            ['start', 'game', 'results', 'settings', 'stats', 'avatar'].forEach(name => {
+                document.getElementById(name + '-screen').classList.add('hidden');
+            });
+            document.getElementById(screenName + '-screen').classList.remove('hidden');
+            game.screen = screenName;
+            
+            if (screenName === 'start') updateHomeStats();
+            else if (screenName === 'stats') updateStatsScreen();
+            else if (screenName === 'avatar') updateAvatarShop();
+        }
+
+        // Funciones de estadísticas
+        function updateHomeStats() {
+            const correct = game.correctAnswers.length;
+            const incorrect = game.incorrectAnswers.length;
+            const total = correct + incorrect;
+            const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const level = accuracy > 80 ? 'Experto' : accuracy > 60 ? 'Intermedio' : total > 0 ? 'Principiante' : 'Nuevo';
+
+            document.getElementById('home-aciertos').textContent = correct;
+            document.getElementById('home-errores').textContent = incorrect;
+            document.getElementById('home-precision').textContent = accuracy + '%';
+            document.getElementById('home-nivel').textContent = level;
+        }
+
+        function updateStatsScreen() {
+            const correct = game.correctAnswers.length;
+            const incorrect = game.incorrectAnswers.length;
+            const total = correct + incorrect;
+            const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const level = accuracy > 80 ? 'Experto' : accuracy > 60 ? 'Intermedio' : 'Principiante';
+
+            document.getElementById('stats-aciertos').textContent = correct;
+            document.getElementById('stats-errores').textContent = incorrect;
+            document.getElementById('stats-precision').textContent = accuracy + '%';
+            document.getElementById('stats-estrellas').textContent = game.starCurrency;
+            document.getElementById('nivel-actual').textContent = level;
+            document.getElementById('barra-nivel').style.width = Math.min(accuracy, 100) + '%';
+
+            // Posición simulada
+            const position = Math.max(1, 1200 - Math.floor(accuracy * 10));
+            const percentile = Math.round((1 - position / 1200) * 100);
+            document.getElementById('posicion-global').textContent = `#${position} de 1,200`;
+            document.getElementById('percentil').textContent = percentile + '%';
+
+            updateAnswerLists();
+        }
+
+        function updateAnswerLists() {
+            const correctList = document.getElementById('lista-aciertos');
+            const incorrectList = document.getElementById('lista-errores');
+
+            correctList.innerHTML = '';
+            incorrectList.innerHTML = '';
+
+            if (game.correctAnswers.length > 0) {
+                game.correctAnswers.slice(-5).reverse().forEach(answer => {
+                    const item = document.createElement('div');
+                    item.className = 'text-sm text-green-700 dark:text-green-300 p-2 bg-green-100 dark:bg-green-800 rounded mb-2';
+                    item.innerHTML = `<div class="font-bold">${answer.question.substring(0, 30)}...</div><div class="text-xs">✓ ${answer.answer}</div>`;
+                    correctList.appendChild(item);
+                });
+            } else {
+                correctList.innerHTML = '<div class="text-sm text-gray-500">No hay aciertos aún</div>';
+            }
+
+            if (game.incorrectAnswers.length > 0) {
+                game.incorrectAnswers.slice(-5).reverse().forEach(answer => {
+                    const item = document.createElement('div');
+                    item.className = 'text-sm text-red-700 dark:text-red-300 p-2 bg-red-100 dark:bg-red-800 rounded mb-2';
+                    item.innerHTML = `<div class="font-bold">${answer.question.substring(0, 30)}...</div><div class="text-xs">✗ ${answer.yourAnswer}</div><div class="text-xs text-green-600">✓ ${answer.correctAnswer}</div>`;
+                    incorrectList.appendChild(item);
+                });
+            } else {
+                incorrectList.innerHTML = '<div class="text-sm text-gray-500">No hay errores aún</div>';
+            }
+        }
+
+        // Funciones de avatar
+        function updateAvatar() {
+            let currentEmoji = '😊';
+            let description = 'Sonrisa básica';
+
+            // Prioridad: special > hat > face
+            if (game.avatar.special > 0) {
+                const specials = ['', '🦸', '🤖', '👽', '🦄'];
+                const names = ['', 'Superhéroe', 'Robot', 'Alien', 'Unicornio legendario'];
+                currentEmoji = specials[game.avatar.special];
+                description = names[game.avatar.special];
+            } else if (game.avatar.hat > 0) {
+                const hats = ['', '🎩', '👑', '🧢', '🎭', '🏴‍☠️'];
+                const names = ['', 'Sombrero elegante', 'Corona real', 'Gorra deportiva', 'Máscara teatral', 'Pirata'];
+                currentEmoji = hats[game.avatar.hat];
+                description = names[game.avatar.hat];
+            } else {
+                const faces = ['😊', '😄', '🤓', '😎', '🤩', '😉'];
+                const names = ['Sonrisa básica', 'Súper feliz', 'Intelectual', 'Cool', 'Estrella', 'Guiño'];
+                currentEmoji = faces[game.avatar.face];
+                description = names[game.avatar.face];
+            }
+
+            game.avatar.current = currentEmoji;
+            game.avatar.description = description;
+
+            // Actualizar displays
+            document.getElementById('avatar-preview').textContent = currentEmoji;
+            document.getElementById('mini-avatar').textContent = currentEmoji;
+            document.getElementById('avatar-desc').textContent = description;
+        }
+
+        function updateAvatarShop() {
+            document.getElementById('avatar-stars').textContent = game.starCurrency;
+            
+            document.querySelectorAll('.avatar-item').forEach(btn => {
+                const type = btn.dataset.type;
+                const item = parseInt(btn.dataset.item);
+                const cost = parseInt(btn.dataset.cost);
+                
+                btn.classList.remove('equipped', 'opacity-50');
+                btn.disabled = false;
+                
+                if (game.avatar[type] === item) {
+                    btn.classList.add('equipped');
+                    btn.querySelector('.text-xs:last-child').textContent = '✓ EQUIPADO';
+                    btn.querySelector('.text-xs:last-child').className = 'text-xs text-green-600 font-bold';
+                } else {
+                    const priceEl = btn.querySelector('.text-xs:last-child');
+                    if (cost === 0) {
+                        priceEl.textContent = 'GRATIS';
+                        priceEl.className = 'text-xs text-green-500';
+                    } else {
+                        priceEl.textContent = cost + '⭐';
+                        priceEl.className = 'text-xs text-yellow-500';
+                    }
+                    
+                    if (cost > game.starCurrency) {
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50');
+                    }
+                }
+            });
+        }
+
+        function buyAvatarItem(type, item, cost) {
+            if (cost > game.starCurrency || game.avatar[type] === item) return;
+            
+            game.starCurrency -= cost;
+            game.avatar[type] = item;
+            
+            // Resetear otros tipos si es especial
+            if (type === 'special' && item > 0) {
+                game.avatar.face = 0;
+                game.avatar.hat = 0;
+            } else if (type === 'hat' && item > 0) {
+                game.avatar.special = 0;
+            } else if (type === 'face' && item > 0) {
+                game.avatar.special = 0;
+            }
+            
+            updateAvatar();
+            updateAvatarShop();
+            document.getElementById('star-currency').textContent = game.starCurrency;
+            createStars();
+            playSound('correct');
+        }
+
+        function resetAvatar() {
+            game.avatar = { face: 0, hat: 0, special: 0 };
+            updateAvatar();
+            updateAvatarShop();
+        }
+
+        // Funciones del juego principal
+        function prepareGame() {
+            game.gameQuestions = game.isRandom ? shuffleArray(questions) : [...questions];
+        }
+
+        function startGame() {
+            game.currentIndex = 0;
+            game.score = 0;
+            game.selectedAnswer = -1;
+            prepareGame();
+            showScreen('game');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (game.currentIndex >= game.gameQuestions.length) {
+                endGame();
+                return;
+            }
+
+            game.selectedAnswer = -1;
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const question = game.gameQuestions[game.currentIndex];
+            
+            // Mostrar según modo
+            if (game.gameMode === 'word') {
+                document.getElementById('question-text').textContent = question.question;
+                document.getElementById('question-emoji').style.display = 'none';
+            } else if (game.gameMode === 'image') {
+                document.getElementById('question-text').textContent = '¿Cuál es la palabra correcta?';
+                document.getElementById('question-emoji').textContent = question.emoji;
+                document.getElementById('question-emoji').style.display = 'block';
+            } else {
+                document.getElementById('question-text').textContent = question.question;
+                document.getElementById('question-emoji').textContent = question.emoji;
+                document.getElementById('question-emoji').style.display = 'block';
+            }
+            
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = game.currentIndex + 1;
+            const progress = ((game.currentIndex + 1) / game.gameQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            // Crear opciones
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'word-option bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-4 rounded-xl font-bold text-lg shadow-lg border-2 border-transparent hover:border-primary transition-all duration-300';
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(index));
+                container.appendChild(button);
+            });
+        }
+
+        function selectAnswer(answerIndex) {
+            if (game.selectedAnswer !== -1) return;
+            
+            game.selectedAnswer = answerIndex;
+            const question = game.gameQuestions[game.currentIndex];
+            const options = document.getElementById('options-container').children;
+            
+            Array.from(options).forEach((option, index) => {
+                option.disabled = true;
+                if (index === question.correct) {
+                    option.classList.add('bg-green-500', 'text-white');
+                    option.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-white');
+                } else if (index === answerIndex && answerIndex !== question.correct) {
+                    option.classList.add('bg-red-500', 'text-white');
+                    option.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-white');
+                }
+            });
+
+            if (answerIndex === question.correct) {
+                processCorrect();
+            } else {
+                processIncorrect();
+            }
+
+            setTimeout(() => {
+                document.getElementById('next-btn').classList.remove('hidden');
+            }, 1500);
+        }
+
+        function processCorrect() {
+            const question = game.gameQuestions[game.currentIndex];
+            
+            game.correctAnswers.push({
+                question: question.question,
+                answer: question.options[question.correct],
+                timestamp: Date.now()
+            });
+            
+            game.score += 100;
+            game.starCurrency += 3;
+            document.getElementById('score').textContent = game.score;
+            document.getElementById('star-currency').textContent = game.starCurrency;
+            
+            // Activar estrellas de nivel
+            const starsPerLevel = Math.ceil(game.gameQuestions.length / 3);
+            const starLevel = Math.floor(game.currentIndex / starsPerLevel);
+            if (starLevel < 3) {
+                const starEl = document.getElementById(`star${starLevel + 1}`);
+                if (starEl && starEl.classList.contains('opacity-30')) {
+                    starEl.classList.remove('opacity-30');
+                    starEl.classList.add('animate-star-pop');
+                    setTimeout(() => starEl.classList.remove('animate-star-pop'), 600);
+                }
+            }
+
+            playSound('correct');
+            createStars();
+        }
+
+        function processIncorrect() {
+            const question = game.gameQuestions[game.currentIndex];
+            
+            game.incorrectAnswers.push({
+                question: question.question,
+                yourAnswer: question.options[game.selectedAnswer],
+                correctAnswer: question.options[question.correct],
+                timestamp: Date.now()
+            });
+            
+            playSound('incorrect');
+            document.getElementById('question-emoji').classList.add('animate-shake');
+            setTimeout(() => {
+                document.getElementById('question-emoji').classList.remove('animate-shake');
+            }, 500);
+        }
+
+        function nextQuestion() {
+            game.currentIndex++;
+            showQuestion();
+        }
+
+        function endGame() {
+            showScreen('results');
+            
+            const totalQuestions = game.gameQuestions.length;
+            const correctCount = game.correctAnswers.length;
+            const incorrectCount = game.incorrectAnswers.length;
+            const accuracy = Math.round((correctCount / totalQuestions) * 100);
+            const finalStars = Math.floor((game.score / (totalQuestions * 100)) * 3);
+            const starsEarned = correctCount * 3;
+            
+            // Mostrar resultados
+            document.getElementById('final-puntos').textContent = game.score;
+            document.getElementById('final-aciertos').textContent = correctCount;
+            document.getElementById('final-errores').textContent = incorrectCount;
+            document.getElementById('final-precision').textContent = accuracy + '%';
+            document.getElementById('earned-stars').textContent = starsEarned;
+            
+            // Estrellas finales
+            const container = document.getElementById('final-stars');
+            container.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const star = document.createElement('span');
+                star.className = `text-4xl ${i < finalStars ? 'text-yellow-500' : 'text-gray-300'}`;
+                star.textContent = '⭐';
+                container.appendChild(star);
+            }
+
+            // Mensaje final
+            const title = document.getElementById('result-title');
+            const emoji = document.getElementById('result-emoji');
+            
+            if (finalStars === 3) {
+                title.textContent = '¡Excelente trabajo!';
+                emoji.textContent = '🏆';
+                createConfetti();
+            } else if (finalStars === 2) {
+                title.textContent = '¡Muy bien!';
+                emoji.textContent = '🎉';
+            } else if (finalStars === 1) {
+                title.textContent = '¡Buen intento!';
+                emoji.textContent = '👏';
+            } else {
+                title.textContent = '¡Sigue practicando!';
+                emoji.textContent = '💪';
+            }
+        }
+
+        function resetGame() {
+            game.currentIndex = 0;
+            game.score = 0;
+            game.selectedAnswer = -1;
+            
+            document.getElementById('score').textContent = '0';
+            document.getElementById('progress-bar').style.width = '0%';
+            
+            // Resetear estrellas de nivel
+            ['star1', 'star2', 'star3'].forEach(id => {
+                const star = document.getElementById(id);
+                star.classList.add('opacity-30');
+                star.classList.remove('animate-star-pop');
+            });
+            document.getElementById('star1').classList.remove('opacity-30');
+            
+            showScreen('start');
+        }
+
+        // Configuraciones
+        function setGameMode(mode) {
+            game.gameMode = mode;
+            document.querySelectorAll('.mode-option').forEach(btn => {
+                btn.classList.remove('mode-active');
+            });
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('mode-active');
+        }
+
+        function setOrder(isRandom) {
+            game.isRandom = isRandom;
+            const randomBtn = document.getElementById('order-random');
+            const sequentialBtn = document.getElementById('order-sequential');
+            
+            if (isRandom) {
+                randomBtn.classList.add('bg-green-500', 'text-white');
+                randomBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white');
+                sequentialBtn.classList.remove('bg-green-500', 'text-white');
+                sequentialBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white');
+            } else {
+                sequentialBtn.classList.add('bg-green-500', 'text-white');
+                sequentialBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white');
+                randomBtn.classList.remove('bg-green-500', 'text-white');
+                randomBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white');
+            }
+        }
+
+        function setDifficulty(difficulty) {
+            game.difficulty = difficulty;
+            document.querySelectorAll('.difficulty-option').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'text-white', 'border-green-500', 'border-yellow-500', 'border-red-500');
+                btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white', 'border-gray-200', 'dark:border-gray-600');
+            });
+            
+            const selected = document.querySelector(`[data-difficulty="${difficulty}"]`);
+            if (difficulty === 'easy') {
+                selected.classList.add('bg-green-500', 'text-white', 'border-green-500');
+            } else if (difficulty === 'medium') {
+                selected.classList.add('bg-yellow-500', 'text-white', 'border-yellow-500');
+            } else {
+                selected.classList.add('bg-red-500', 'text-white', 'border-red-500');
+            }
+        }
+
+        // Event Listeners
+        function setupListeners() {
+            // Botones principales
+            document.getElementById('start-btn').addEventListener('click', startGame);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            document.getElementById('play-again-btn').addEventListener('click', resetGame);
+            
+            // Navegación
+            document.getElementById('settings-btn').addEventListener('click', () => showScreen('settings'));
+            document.getElementById('stats-btn').addEventListener('click', () => showScreen('stats'));
+            document.getElementById('avatar-btn').addEventListener('click', () => showScreen('avatar'));
+            document.getElementById('close-settings').addEventListener('click', () => showScreen('start'));
+            document.getElementById('close-stats').addEventListener('click', () => showScreen('start'));
+            document.getElementById('close-avatar').addEventListener('click', () => showScreen('start'));
+            
+            // Configuraciones
+            document.querySelectorAll('.mode-option').forEach(btn => {
+                btn.addEventListener('click', (e) => setGameMode(e.target.dataset.mode));
+            });
+            
+            document.getElementById('order-random').addEventListener('click', () => setOrder(true));
+            document.getElementById('order-sequential').addEventListener('click', () => setOrder(false));
+            
+            document.querySelectorAll('.difficulty-option').forEach(btn => {
+                btn.addEventListener('click', (e) => setDifficulty(e.target.dataset.difficulty));
+            });
+            
+            document.getElementById('sound-toggle').addEventListener('change', (e) => {
+                game.soundEnabled = e.target.checked;
+            });
+            
+            // Avatar
+            document.querySelectorAll('.avatar-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const type = e.target.dataset.type;
+                    const item = parseInt(e.target.dataset.item);
+                    const cost = parseInt(e.target.dataset.cost);
+                    buyAvatarItem(type, item, cost);
+                });
+            });
+            
+            document.getElementById('reset-avatar-btn').addEventListener('click', resetAvatar);
+        }
+
+        // Inicialización
+        function init() {
+            document.getElementById('total-questions').textContent = questions.length;
+            prepareGame();
+            updateAvatar();
+            updateHomeStats();
+            setupListeners();
+        }
+
+        // Inicializar al cargar
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

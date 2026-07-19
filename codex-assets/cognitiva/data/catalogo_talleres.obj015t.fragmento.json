@@ -1,0 +1,34 @@
+{
+  "id_taller": "inf_2_obj_015t",
+  "codigo": "2º INFANTIL obj.015t",
+  "nombre": "Adquisición de sílabas inversas con fonema S en mayúscula",
+  "modulo": "ruta_fonologica_silabas_inversas",
+  "objetivo_clinico": [
+    "transcodificacion_grafema_fonema",
+    "discriminacion_estructural_CV_vs_VC",
+    "automatizacion_ruta_fonologica"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "reproducir_audio_automatico_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "discriminacion_auditiva_silabica_inversa",
+    "estimulo_modelo": "audio_silaba_inversa_VS",
+    "estructura_objetivo": "VC",
+    "set_silabas_objetivo": ["AS", "ES", "IS", "OS", "US"],
+    "num_opciones": { "base": 3, "min": 2, "max": 4 },
+    "boton_repeticion_audio": true,
+    "tiempo_max_respuesta_ms": 8000
+  },
+  "regla_distractores": {
+    "obligatorio_directa": "misma sílaba en estructura directa (AS -> SA)",
+    "segundo_distractor": "otra sílaba inversa distinta (ej: ES o IS)"
+  }
+}

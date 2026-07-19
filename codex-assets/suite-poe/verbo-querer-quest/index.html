@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Querer Quest - Encuentra la Forma Nueva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap");
+
+      * {
+        font-family: "Comic Neue", cursive;
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 10% 15%, rgba(255,255,255,0.18), transparent 18%),
+          radial-gradient(circle at 85% 18%, rgba(255,255,255,0.18), transparent 16%),
+          linear-gradient(180deg, #7dd3fc 0%, #818cf8 45%, #5b21b6 100%);
+      }
+
+      .quest-bg {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quest-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 20px 20px, rgba(255,255,255,0.14) 2px, transparent 2px),
+          radial-gradient(circle at 70px 70px, rgba(255,255,255,0.14) 2px, transparent 2px);
+        background-size: 90px 90px;
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      .glass-card {
+        background: rgba(36, 35, 97, 0.26);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        box-shadow: 0 22px 50px rgba(35, 25, 102, 0.22);
+      }
+
+      .hero-art {
+        background:
+          radial-gradient(circle at center, rgba(255,255,255,0.14), transparent 68%),
+          linear-gradient(135deg, rgba(31, 41, 89, 0.46), rgba(68, 37, 116, 0.3));
+      }
+
+      .option-card,
+      .mode-card,
+      .tense-card {
+        transition: all 0.28s ease;
+        cursor: pointer;
+      }
+
+      .option-card:hover,
+      .mode-card:hover,
+      .tense-card:hover {
+        transform: translateY(-4px) scale(1.02);
+      }
+
+      .mode-card.selected,
+      .tense-card.selected {
+        background: linear-gradient(135deg, #f59e0b, #ea580c);
+        color: white;
+        transform: scale(1.02);
+      }
+
+      .option-card.correct {
+        animation: correctBounce 0.6s ease;
+        background: linear-gradient(135deg, #22c55e, #15803d);
+        color: white;
+      }
+
+      .option-card.wrong {
+        animation: wrongShake 0.5s ease;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: white;
+      }
+
+      @keyframes correctBounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-14px); }
+        60% { transform: translateY(-8px); }
+      }
+
+      @keyframes wrongShake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-8px); }
+        40% { transform: translateX(8px); }
+        60% { transform: translateX(-8px); }
+        80% { transform: translateX(8px); }
+      }
+
+      .floating-badge {
+        animation: floaty 2.2s ease-in-out infinite;
+      }
+
+      @keyframes floaty {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+
+      .verb-card {
+        position: absolute;
+        width: 116px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.92);
+        color: #312e81;
+        box-shadow: 0 16px 28px rgba(49, 46, 129, 0.18);
+        border: 3px solid rgba(255,255,255,0.5);
+      }
+
+      .verb-emoji {
+        font-size: 2rem;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+
+      .verb-text {
+        text-align: center;
+        font-weight: 700;
+        line-height: 1.05;
+        font-size: 0.95rem;
+      }
+
+      #gameBoard {
+        position: relative;
+        min-height: 620px;
+        height: 72vh;
+        max-height: 820px;
+        border-radius: 32px;
+        overflow: hidden;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
+          linear-gradient(180deg, #dbeafe 0%, #bfdbfe 22%, #93c5fd 48%, #60a5fa 68%, #4f46e5 100%);
+        border: 2px solid rgba(255,255,255,0.32);
+      }
+
+      #gameBoard::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 120px;
+        background:
+          radial-gradient(circle at 12% 40%, rgba(255,255,255,0.8), transparent 16%),
+          radial-gradient(circle at 68% 34%, rgba(255,255,255,0.65), transparent 18%),
+          radial-gradient(circle at 86% 55%, rgba(255,255,255,0.5), transparent 14%);
+        pointer-events: none;
+      }
+
+      #gameBoard::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 120px;
+        background: linear-gradient(180deg, rgba(55,48,163,0) 0%, rgba(55,48,163,0.22) 24%, rgba(55,48,163,0.58) 100%);
+      }
+
+      .kid-guide {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        width: 160px;
+        z-index: 5;
+        text-align: center;
+      }
+
+      .kid-head {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 10px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 50% 38%, #ffe0bd 0 32px, transparent 33px),
+          radial-gradient(circle at 38% 62%, #1f2a5a 0 7px, transparent 8px),
+          radial-gradient(circle at 62% 62%, #1f2a5a 0 7px, transparent 8px),
+          radial-gradient(circle at 50% 76%, #ff8aa1 0 11px, transparent 12px),
+          linear-gradient(180deg, #f59e0b 0%, #ec4899 100%);
+        border: 4px solid rgba(255,255,255,0.46);
+        position: relative;
+      }
+
+      .kid-head::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: -10px;
+        height: 34px;
+        background: #4338ca;
+        border-radius: 999px 999px 18px 18px;
+      }
+
+      .kid-body {
+        width: 72px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 18px 18px 14px 14px;
+        background: linear-gradient(180deg, #fde68a, #f59e0b);
+        border: 3px solid rgba(255,255,255,0.4);
+      }
+
+      .mission-banner {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        z-index: 6;
+      }
+
+      .timer-bar {
+        transition: width 0.12s linear;
+      }
+
+      .text-contrast-dark {
+        color: #f8fbff;
+        text-shadow: 0 2px 10px rgba(20, 22, 61, 0.22);
+      }
+
+      .text-contrast-soft {
+        color: rgba(244, 247, 255, 0.92);
+      }
+
+      .surface-light {
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+      }
+
+      @media (max-width: 1024px) {
+        .verb-card {
+          width: 96px;
+          height: 88px;
+        }
+        .verb-emoji {
+          font-size: 1.65rem;
+        }
+        .verb-text {
+          font-size: 0.82rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #gameBoard {
+          min-height: 520px;
+          height: 66vh;
+        }
+
+        .verb-card {
+          width: 82px;
+          height: 72px;
+          border-radius: 20px;
+        }
+
+        .verb-emoji {
+          font-size: 1.3rem;
+          margin-bottom: 4px;
+        }
+
+        .verb-text {
+          font-size: 0.7rem;
+        }
+
+        .kid-guide {
+          width: 120px;
+        }
+      }
+    </style>
+  </head>
+  <body class="quest-bg">
+    <div id="introPanel" class="container mx-auto px-4 py-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10">
+          <div class="glass-card hero-art rounded-[36px] p-8 md:p-12">
+            <div class="floating-badge inline-flex items-center gap-3 bg-white/20 rounded-full px-5 py-3 text-white font-bold uppercase tracking-[0.18em] text-xs mb-6">
+              <span>☁️</span>
+              <span>Querer Quest</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Encuentra la forma nueva</h1>
+            <p class="text-white/90 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+              Un juego de nuestra casa: color, ritmo, memoria visual y conjugación.
+              Mira las cartas, detecta la nueva forma del verbo <strong>querer</strong> y tócala a tiempo.
+            </p>
+            <div class="grid md:grid-cols-4 gap-4 mt-8">
+              <div class="glass-card rounded-3xl p-4">
+                <div class="text-3xl mb-2">☁️</div>
+                <div class="text-contrast-dark font-bold">Cartas mágicas</div>
+                <div class="text-contrast-soft text-sm">La nueva aparece entre las anteriores</div>
+              </div>
+              <div class="glass-card rounded-3xl p-4">
+                <div class="text-3xl mb-2">⚡</div>
+                <div class="text-contrast-dark font-bold">Tiempo real</div>
+                <div class="text-contrast-soft text-sm">Mide reacción, precisión y racha</div>
+              </div>
+              <div class="glass-card rounded-3xl p-4">
+                <div class="text-3xl mb-2">🧠</div>
+                <div class="text-contrast-dark font-bold">Morfosintaxis</div>
+                <div class="text-contrast-soft text-sm">Presente, imperfecto, pretérito, futuro y condicional</div>
+              </div>
+              <div class="glass-card rounded-3xl p-4">
+                <div class="text-3xl mb-2">🏆</div>
+                <div class="text-contrast-dark font-bold">Listo para suite</div>
+                <div class="text-contrast-soft text-sm">Guarda métricas para integración medible</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6 mb-8">
+          <div class="glass-card rounded-[30px] p-6 text-white">
+            <h2 class="text-2xl font-bold mb-4 text-contrast-dark">¿Cómo se juega?</h2>
+            <div class="space-y-4">
+              <div class="flex gap-4 items-start">
+                <div class="text-3xl">👀</div>
+                <div><strong class="text-contrast-dark">1. Mira</strong><p class="text-contrast-soft text-sm">Memoriza las cartas que aparecen en el tablero.</p></div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="text-3xl">✨</div>
+                <div><strong class="text-contrast-dark">2. Detecta</strong><p class="text-contrast-soft text-sm">En la siguiente ronda aparecerá una forma nueva.</p></div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="text-3xl">🎯</div>
+                <div><strong class="text-contrast-dark">3. Tócala</strong><p class="text-contrast-soft text-sm">Si eliges bien, ganas puntos, estrellas y racha.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-[30px] p-6 text-white">
+            <h2 class="text-2xl font-bold mb-4 text-contrast-dark">Qué trabaja</h2>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="surface-light rounded-2xl p-4 text-center"><div class="text-2xl">📚</div><div class="text-contrast-dark font-bold mt-2">Conjugación</div></div>
+              <div class="surface-light rounded-2xl p-4 text-center"><div class="text-2xl">🧠</div><div class="text-contrast-dark font-bold mt-2">Memoria visual</div></div>
+              <div class="surface-light rounded-2xl p-4 text-center"><div class="text-2xl">⚡</div><div class="text-contrast-dark font-bold mt-2">Velocidad</div></div>
+              <div class="surface-light rounded-2xl p-4 text-center"><div class="text-2xl">✅</div><div class="text-contrast-dark font-bold mt-2">Precisión</div></div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-[30px] p-6 text-white text-center">
+            <h2 class="text-2xl font-bold mb-4 text-contrast-dark">Empieza ya</h2>
+            <button id="quickStartBtn" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-6 py-5 rounded-2xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl border-2 border-amber-200/30 mb-4">
+              ⚡ Comenzar rápido
+              <div class="text-sm opacity-90 mt-1">Presente + mezclado</div>
+            </button>
+            <button id="startConfigBtn" class="w-full bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 text-white px-6 py-5 rounded-2xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl border-2 border-fuchsia-200/30">
+              🎛️ Configurar juego
+              <div class="text-sm opacity-90 mt-1">Elegir tiempos y reto</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="configPanel" class="container mx-auto px-4 py-6 hidden">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-5">
+          <button id="backToIntroFromConfig" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-2xl font-bold transition-all">🏠 Inicio</button>
+          <div class="text-white/85 font-bold">Configuración de Querer Quest</div>
+          <div></div>
+        </div>
+
+        <div class="glass-card rounded-[34px] p-8 mb-6">
+          <h2 class="text-3xl font-bold text-contrast-dark mb-6 text-center">🗺️ Elige el mapa verbal</h2>
+          <div id="tenseGrid" class="grid md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <div class="glass-card rounded-[34px] p-8 mb-6">
+          <h2 class="text-3xl font-bold text-contrast-dark mb-6 text-center">🎮 Elige el modo</h2>
+          <div id="modeGrid" class="grid md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div class="glass-card rounded-[34px] p-8 text-center">
+          <h2 class="text-2xl font-bold text-contrast-dark mb-3">📋 Configuración actual</h2>
+          <p class="text-contrast-dark text-lg"><strong>Tiempo:</strong> <span id="selectedTenseDisplay">No seleccionado</span></p>
+          <p class="text-contrast-dark text-lg mt-2"><strong>Modo:</strong> <span id="selectedModeDisplay">No seleccionado</span></p>
+          <p class="text-contrast-soft mt-4" id="difficultyDisplay">Selecciona un tiempo verbal y un modo para comenzar.</p>
+          <button id="startGameBtn" class="mt-6 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-10 py-4 rounded-2xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            🚀 Comenzar misión
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="gamePanel" class="container mx-auto px-4 py-6 hidden">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+          <button id="backToIntroFromGame" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-2xl font-bold transition-all">🏠 Inicio</button>
+          <div class="text-white font-bold text-lg" id="gameSubtitle">Querer Quest</div>
+          <div></div>
+        </div>
+
+        <div class="grid lg:grid-cols-[1fr_340px] gap-6">
+          <div>
+            <div class="glass-card rounded-[34px] p-5 mb-4">
+              <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center text-white">
+                <div class="bg-white/10 rounded-2xl p-3"><div class="text-sm opacity-80">Items</div><div id="currentItems" class="text-2xl font-bold">3</div></div>
+                <div class="bg-white/10 rounded-2xl p-3"><div class="text-sm opacity-80">Ronda</div><div id="currentRound" class="text-2xl font-bold">1</div></div>
+                <div class="bg-white/10 rounded-2xl p-3"><div class="text-sm opacity-80">Puntos</div><div id="score" class="text-2xl font-bold">0</div></div>
+                <div class="bg-white/10 rounded-2xl p-3"><div class="text-sm opacity-80">Vidas</div><div id="livesDisplay" class="text-2xl font-bold">❤❤❤</div></div>
+                <div class="bg-white/10 rounded-2xl p-3"><div class="text-sm opacity-80">Racha</div><div id="streakDisplay" class="text-2xl font-bold">0</div></div>
+              </div>
+            </div>
+
+            <div id="gameBoard">
+              <div class="mission-banner glass-card rounded-[28px] px-4 py-3">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div>
+                    <h2 class="text-white text-xl md:text-2xl font-bold" id="instruction">Encuentra la forma nueva</h2>
+                    <p class="text-white/85 text-sm md:text-base" id="sentencePrompt">Observa las cartas y toca la nueva forma verbal cuando aparezca.</p>
+                  </div>
+                  <div class="min-w-[180px]">
+                    <div class="bg-white/15 rounded-full h-4 overflow-hidden">
+                      <div id="timerBar" class="timer-bar h-full bg-gradient-to-r from-emerald-400 via-amber-300 to-rose-500 w-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kid-guide">
+                <div class="kid-head"></div>
+                <div class="kid-body"></div>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-[28px] p-4 mt-4 text-center text-white">
+              <p id="feedbackText" class="font-semibold text-lg">¡Toca “Comenzar” y prepárate para encontrar la forma nueva!</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 mt-4">
+              <button id="backToConfigBtn" class="bg-white/20 hover:bg-white/30 text-white px-5 py-3 rounded-2xl font-bold transition-all">⬅️ Configurar</button>
+              <button id="startBtn" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-5 py-3 rounded-2xl font-bold transition-all">🚀 Comenzar</button>
+              <button id="nextBtn" class="bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 text-white px-5 py-3 rounded-2xl font-bold transition-all hidden">✨ Siguiente ronda</button>
+            </div>
+          </div>
+
+          <aside class="space-y-5">
+            <div class="glass-card rounded-[30px] p-5 text-white">
+              <h3 class="text-2xl font-bold mb-3">📊 Analítica rápida</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white/10 rounded-2xl p-4 text-center"><div class="text-sm opacity-80">Precisión</div><div id="accuracyDisplay" class="text-2xl font-bold">0%</div></div>
+                <div class="bg-white/10 rounded-2xl p-4 text-center"><div class="text-sm opacity-80">Tiempo medio</div><div id="avgReactionDisplay" class="text-2xl font-bold">0.0s</div></div>
+                <div class="bg-white/10 rounded-2xl p-4 text-center"><div class="text-sm opacity-80">Aciertos</div><div id="hitsDisplay" class="text-2xl font-bold">0</div></div>
+                <div class="bg-white/10 rounded-2xl p-4 text-center"><div class="text-sm opacity-80">Errores</div><div id="missesDisplay" class="text-2xl font-bold">0</div></div>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-[30px] p-5 text-white">
+              <h3 class="text-2xl font-bold mb-3">⭐ Dominio por tiempo</h3>
+              <div id="masteryPanel" class="space-y-3"></div>
+            </div>
+
+            <div class="glass-card rounded-[30px] p-5 text-white">
+              <h3 class="text-2xl font-bold mb-3">🧾 Última sesión</h3>
+              <div id="sessionPanel" class="space-y-3 text-white/85 text-sm"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const STORAGE_KEY = "verbo_querer_quest_v3";
+      const ROUND_DURATION = 8500;
+
+      const tenseData = {
+        presente: {
+          label: "Presente",
+          icon: "☀️",
+          color: "#22c55e",
+          forms: [
+            { key: "yo", form: "quiero", emoji: "🧒" },
+            { key: "tu", form: "quieres", emoji: "👧" },
+            { key: "el", form: "quiere", emoji: "🧑" },
+            { key: "nosotros", form: "queremos", emoji: "👨‍👩‍👧" },
+            { key: "vosotros", form: "queréis", emoji: "🧑‍🤝‍🧑" },
+            { key: "ellos", form: "quieren", emoji: "👫" }
+          ]
+        },
+        imperfecto: {
+          label: "Imperfecto",
+          icon: "🌤️",
+          color: "#3b82f6",
+          forms: [
+            { key: "yo", form: "quería", emoji: "🧒" },
+            { key: "tu", form: "querías", emoji: "👧" },
+            { key: "el", form: "quería", emoji: "🧑" },
+            { key: "nosotros", form: "queríamos", emoji: "👨‍👩‍👧" },
+            { key: "vosotros", form: "queríais", emoji: "🧑‍🤝‍🧑" },
+            { key: "ellos", form: "querían", emoji: "👫" }
+          ]
+        },
+        preterito: {
+          label: "Pretérito",
+          icon: "🌙",
+          color: "#f97316",
+          forms: [
+            { key: "yo", form: "quise", emoji: "🧒" },
+            { key: "tu", form: "quisiste", emoji: "👧" },
+            { key: "el", form: "quiso", emoji: "🧑" },
+            { key: "nosotros", form: "quisimos", emoji: "👨‍👩‍👧" },
+            { key: "vosotros", form: "quisisteis", emoji: "🧑‍🤝‍🧑" },
+            { key: "ellos", form: "quisieron", emoji: "👫" }
+          ]
+        },
+        futuro: {
+          label: "Futuro",
+          icon: "🚀",
+          color: "#ec4899",
+          forms: [
+            { key: "yo", form: "querré", emoji: "🧒" },
+            { key: "tu", form: "querrás", emoji: "👧" },
+            { key: "el", form: "querrá", emoji: "🧑" },
+            { key: "nosotros", form: "querremos", emoji: "👨‍👩‍👧" },
+            { key: "vosotros", form: "querréis", emoji: "🧑‍🤝‍🧑" },
+            { key: "ellos", form: "querrán", emoji: "👫" }
+          ]
+        },
+        condicional: {
+          label: "Condicional",
+          icon: "🪄",
+          color: "#8b5cf6",
+          forms: [
+            { key: "yo", form: "querría", emoji: "🧒" },
+            { key: "tu", form: "querrías", emoji: "👧" },
+            { key: "el", form: "querría", emoji: "🧑" },
+            { key: "nosotros", form: "querríamos", emoji: "👨‍👩‍👧" },
+            { key: "vosotros", form: "querríais", emoji: "🧑‍🤝‍🧑" },
+            { key: "ellos", form: "querrían", emoji: "👫" }
+          ]
+        }
+      };
+
+      const modes = {
+        mixed: {
+          label: "Aventura total",
+          desc: "Se mezclan todos los tiempos verbales."
+        },
+        focus: {
+          label: "Entrenamiento focal",
+          desc: "Solo juegas con el tiempo que elijas."
+        }
+      };
+
+      const state = {
+        selectedTense: null,
+        selectedMode: null,
+        currentTense: null,
+        currentItems: 3,
+        round: 1,
+        score: 0,
+        hits: 0,
+        misses: 0,
+        streak: 0,
+        bestStreak: 0,
+        lives: 3,
+        totalReactionMs: 0,
+        bestReactionMs: null,
+        displayedCards: [],
+        newCardKey: null,
+        waitingForAnswer: false,
+        roundStartMs: 0,
+        timerInterval: null,
+        history: loadHistory(),
+        mastery: Object.fromEntries(Object.keys(tenseData).map((key) => [key, { hits: 0, attempts: 0, avgReactionMs: 0 }]))
+      };
+
+      const UI = {
+        introPanel: document.getElementById("introPanel"),
+        configPanel: document.getElementById("configPanel"),
+        gamePanel: document.getElementById("gamePanel"),
+        tenseGrid: document.getElementById("tenseGrid"),
+        modeGrid: document.getElementById("modeGrid"),
+        selectedTenseDisplay: document.getElementById("selectedTenseDisplay"),
+        selectedModeDisplay: document.getElementById("selectedModeDisplay"),
+        difficultyDisplay: document.getElementById("difficultyDisplay"),
+        startGameBtn: document.getElementById("startGameBtn"),
+        quickStartBtn: document.getElementById("quickStartBtn"),
+        startConfigBtn: document.getElementById("startConfigBtn"),
+        backToIntroFromConfig: document.getElementById("backToIntroFromConfig"),
+        backToIntroFromGame: document.getElementById("backToIntroFromGame"),
+        backToConfigBtn: document.getElementById("backToConfigBtn"),
+        startBtn: document.getElementById("startBtn"),
+        nextBtn: document.getElementById("nextBtn"),
+        gameBoard: document.getElementById("gameBoard"),
+        instruction: document.getElementById("instruction"),
+        sentencePrompt: document.getElementById("sentencePrompt"),
+        timerBar: document.getElementById("timerBar"),
+        currentItems: document.getElementById("currentItems"),
+        currentRound: document.getElementById("currentRound"),
+        score: document.getElementById("score"),
+        livesDisplay: document.getElementById("livesDisplay"),
+        streakDisplay: document.getElementById("streakDisplay"),
+        feedbackText: document.getElementById("feedbackText"),
+        gameSubtitle: document.getElementById("gameSubtitle"),
+        accuracyDisplay: document.getElementById("accuracyDisplay"),
+        avgReactionDisplay: document.getElementById("avgReactionDisplay"),
+        hitsDisplay: document.getElementById("hitsDisplay"),
+        missesDisplay: document.getElementById("missesDisplay"),
+        masteryPanel: document.getElementById("masteryPanel"),
+        sessionPanel: document.getElementById("sessionPanel")
+      };
+
+      function loadHistory() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") || [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function buildMetrics(status = "in_progress") {
+        const accuracy = state.hits + state.misses ? Math.round((state.hits / (state.hits + state.misses)) * 100) : 0;
+        const avgReaction = state.hits + state.misses ? Math.round(state.totalReactionMs / (state.hits + state.misses)) : 0;
+        return {
+          sessionId: "quererquest-" + new Date().toISOString().replace(/[^\d]/g, "").slice(0, 14),
+          createdAt: new Date().toISOString(),
+          status,
+          mode: state.selectedMode || "mixed",
+          selected_tense: state.selectedTense || "mixed",
+          score: state.score,
+          rounds: state.round,
+          hits: state.hits,
+          misses: state.misses,
+          lives: state.lives,
+          accuracy,
+          averageReactionMs: avgReaction,
+          bestReactionMs: state.bestReactionMs,
+          bestStreak: state.bestStreak,
+          stars: state.score ? Math.max(1, Math.round(state.score / 180)) : 0,
+          area: "morfosintaxis",
+          mastery: state.mastery,
+          summary: `querer · ${accuracy}% · ${state.score} pts`
+        };
+      }
+
+      function persistMetrics(status = "in_progress") {
+        const entry = buildMetrics(status);
+        state.history = [entry, ...state.history].slice(0, 8);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history));
+        window.__verboQuererMetrics = entry;
+        renderHistory();
+      }
+
+      function renderTenseGrid() {
+        UI.tenseGrid.innerHTML = Object.entries(tenseData).map(([key, tense]) => `
+          <article class="tense-card glass-card rounded-3xl p-5 text-white text-center ${state.selectedTense === key ? "selected" : ""}" data-tense="${key}">
+            <div class="text-4xl mb-3">${tense.icon}</div>
+            <div class="font-bold text-xl">${tense.label}</div>
+            <div class="text-sm text-white/80 mt-2">${tense.forms.length} formas disponibles</div>
+          </article>
+        `).join("");
+
+        document.querySelectorAll("[data-tense]").forEach((card) => {
+          card.addEventListener("click", () => {
+            state.selectedTense = card.dataset.tense;
+            updateConfigSummary();
+            renderTenseGrid();
+          });
+        });
+      }
+
+      function renderModeGrid() {
+        UI.modeGrid.innerHTML = Object.entries(modes).map(([key, mode]) => `
+          <article class="mode-card glass-card rounded-3xl p-5 text-white ${state.selectedMode === key ? "selected" : ""}" data-mode="${key}">
+            <div class="font-bold text-xl">${mode.label}</div>
+            <div class="text-sm text-white/80 mt-2">${mode.desc}</div>
+          </article>
+        `).join("");
+
+        document.querySelectorAll("[data-mode]").forEach((card) => {
+          card.addEventListener("click", () => {
+            state.selectedMode = card.dataset.mode;
+            updateConfigSummary();
+            renderModeGrid();
+          });
+        });
+      }
+
+      function updateConfigSummary() {
+        UI.selectedTenseDisplay.textContent = state.selectedTense ? tenseData[state.selectedTense].label : "No seleccionado";
+        UI.selectedModeDisplay.textContent = state.selectedMode ? modes[state.selectedMode].label : "No seleccionado";
+        UI.difficultyDisplay.textContent =
+          state.selectedTense && state.selectedMode
+            ? `Jugarás ${state.selectedMode === "mixed" ? "mezclando tiempos" : "en modo focal"} con foco principal en ${tenseData[state.selectedTense].label}.`
+            : "Selecciona un tiempo verbal y un modo para comenzar.";
+        UI.startGameBtn.disabled = !(state.selectedTense && state.selectedMode);
+      }
+
+      function showPanel(panel) {
+        UI.introPanel.classList.add("hidden");
+        UI.configPanel.classList.add("hidden");
+        UI.gamePanel.classList.add("hidden");
+        panel.classList.remove("hidden");
+      }
+
+      function quickStart() {
+        state.selectedTense = "presente";
+        state.selectedMode = "mixed";
+        renderTenseGrid();
+        renderModeGrid();
+        updateConfigSummary();
+        beginGame();
+      }
+
+      function beginGame() {
+        resetGameState();
+        showPanel(UI.gamePanel);
+        UI.gameSubtitle.textContent = `Querer Quest · ${state.selectedMode === "mixed" ? "Aventura total" : tenseData[state.selectedTense].label}`;
+        renderStats();
+        prepareRound();
+      }
+
+      function resetGameState() {
+        clearTimer();
+        state.currentItems = 3;
+        state.round = 1;
+        state.score = 0;
+        state.hits = 0;
+        state.misses = 0;
+        state.streak = 0;
+        state.bestStreak = 0;
+        state.lives = 3;
+        state.totalReactionMs = 0;
+        state.bestReactionMs = null;
+        state.displayedCards = [];
+        state.newCardKey = null;
+        state.waitingForAnswer = false;
+        state.mastery = Object.fromEntries(Object.keys(tenseData).map((key) => [key, { hits: 0, attempts: 0, avgReactionMs: 0 }]));
+      }
+
+      function getRoundTenseKey() {
+        if (state.selectedMode === "focus") return state.selectedTense;
+        const keys = Object.keys(tenseData);
+        return keys[Math.floor(Math.random() * keys.length)];
+      }
+
+      function prepareRound() {
+        clearTimer();
+        UI.nextBtn.classList.add("hidden");
+        state.waitingForAnswer = false;
+
+        const tenseKey = getRoundTenseKey();
+        state.currentTense = tenseKey;
+        const forms = [...tenseData[tenseKey].forms];
+        const shuffled = forms.sort(() => Math.random() - 0.5);
+        const visibleBase = Math.min(state.currentItems - 1, shuffled.length - 1);
+        const baseCards = shuffled.slice(0, visibleBase);
+        const newCard = shuffled[visibleBase];
+
+        state.displayedCards = [...baseCards, newCard];
+        state.newCardKey = newCard.form;
+
+        UI.instruction.textContent = `Encuentra la forma nueva del ${tenseData[tenseKey].label}`;
+        UI.sentencePrompt.textContent = `Mira las cartas y toca la NUEVA forma de “querer” antes de que se acabe el tiempo.`;
+        UI.feedbackText.textContent = "Primero memoriza las cartas. En un momento aparecerá una forma nueva.";
+
+        renderBoard(baseCards, false);
+
+        setTimeout(() => {
+          renderBoard([...baseCards, newCard], true);
+          state.roundStartMs = performance.now();
+          state.waitingForAnswer = true;
+          startTimer();
+        }, 1300);
+      }
+
+      function renderBoard(cards, interactive) {
+        UI.gameBoard.querySelectorAll(".verb-card").forEach((node) => node.remove());
+
+        const boardRect = UI.gameBoard.getBoundingClientRect();
+        const cardWidth = window.innerWidth < 768 ? 82 : window.innerWidth < 1024 ? 96 : 116;
+        const cardHeight = window.innerWidth < 768 ? 72 : window.innerWidth < 1024 ? 88 : 100;
+        const topPadding = 120;
+        const bottomPadding = 150;
+        const cols = Math.min(cards.length, window.innerWidth < 768 ? 2 : 4);
+        const gapX = Math.max(12, (boardRect.width - (cols * cardWidth)) / (cols + 1));
+        const rows = Math.ceil(cards.length / cols);
+        const gapY = rows > 1 ? Math.max(12, (boardRect.height - topPadding - bottomPadding - (rows * cardHeight)) / (rows + 1)) : 28;
+
+        cards.forEach((card, index) => {
+          const col = index % cols;
+          const row = Math.floor(index / cols);
+          const left = gapX + col * (cardWidth + gapX);
+          const top = topPadding + gapY + row * (cardHeight + gapY);
+
+          const node = document.createElement("button");
+          node.type = "button";
+          node.className = "verb-card option-card";
+          node.style.left = `${left}px`;
+          node.style.top = `${top}px`;
+          node.innerHTML = `
+            <span class="verb-emoji">${card.emoji}</span>
+            <span class="verb-text">${card.form}</span>
+          `;
+
+          if (interactive) {
+            node.addEventListener("click", () => chooseCard(card.form, node));
+          } else {
+            node.disabled = true;
+          }
+
+          UI.gameBoard.appendChild(node);
+        });
+      }
+
+      function startTimer() {
+        clearTimer();
+        const start = performance.now();
+        state.timerInterval = requestAnimationFrame(function tick(now) {
+          const elapsed = now - start;
+          const remaining = Math.max(0, 1 - elapsed / ROUND_DURATION);
+          UI.timerBar.style.width = `${remaining * 100}%`;
+          if (remaining <= 0) {
+            onTimeout();
+            return;
+          }
+          state.timerInterval = requestAnimationFrame(tick);
+        });
+      }
+
+      function clearTimer() {
+        if (state.timerInterval) cancelAnimationFrame(state.timerInterval);
+        state.timerInterval = null;
+        UI.timerBar.style.width = "100%";
+      }
+
+      function chooseCard(form, node) {
+        if (!state.waitingForAnswer) return;
+        state.waitingForAnswer = false;
+        clearTimer();
+
+        const reactionMs = Math.round(performance.now() - state.roundStartMs);
+        const correct = form === state.newCardKey;
+        const mastery = state.mastery[state.currentTense];
+        mastery.attempts += 1;
+        mastery.avgReactionMs = mastery.attempts === 1
+          ? reactionMs
+          : Math.round(((mastery.avgReactionMs * (mastery.attempts - 1)) + reactionMs) / mastery.attempts);
+
+        if (state.bestReactionMs == null || reactionMs < state.bestReactionMs) state.bestReactionMs = reactionMs;
+
+        if (correct) {
+          state.hits += 1;
+          state.streak += 1;
+          state.bestStreak = Math.max(state.bestStreak, state.streak);
+          mastery.hits += 1;
+          const gain = Math.max(80, 220 - Math.round(reactionMs / 40)) + state.streak * 15;
+          state.score += gain;
+          node.classList.add("correct");
+          UI.feedbackText.textContent = `¡Muy bien! ${form} era la forma nueva. +${gain} puntos en ${(reactionMs / 1000).toFixed(2)}s.`;
+        } else {
+          state.misses += 1;
+          state.streak = 0;
+          state.lives = Math.max(0, state.lives - 1);
+          node.classList.add("wrong");
+          markCorrectCard();
+          UI.feedbackText.textContent = `Casi... la forma nueva era ${state.newCardKey}. Pierdes una vida.`;
+        }
+
+        state.totalReactionMs += reactionMs;
+        renderStats();
+        persistMetrics(state.lives > 0 ? "in_progress" : "failed");
+
+        if (state.lives <= 0) {
+          finishSession("failed");
+          return;
+        }
+
+        state.round += 1;
+        if (state.round % 2 === 0 && state.currentItems < 6) state.currentItems += 1;
+        UI.nextBtn.classList.remove("hidden");
+      }
+
+      function markCorrectCard() {
+        [...UI.gameBoard.querySelectorAll(".verb-card")].forEach((node) => {
+          if (node.textContent.trim() === state.newCardKey) node.classList.add("correct");
+        });
+      }
+
+      function onTimeout() {
+        if (!state.waitingForAnswer) return;
+        state.waitingForAnswer = false;
+        state.misses += 1;
+        state.streak = 0;
+        state.lives = Math.max(0, state.lives - 1);
+        state.mastery[state.currentTense].attempts += 1;
+        markCorrectCard();
+        UI.feedbackText.textContent = `¡Se acabó el tiempo! La forma nueva era ${state.newCardKey}.`;
+        renderStats();
+        persistMetrics(state.lives > 0 ? "in_progress" : "failed");
+        if (state.lives <= 0) {
+          finishSession("failed");
+          return;
+        }
+        state.round += 1;
+        UI.nextBtn.classList.remove("hidden");
+      }
+
+      function finishSession(status) {
+        clearTimer();
+        const accuracy = state.hits + state.misses ? Math.round((state.hits / (state.hits + state.misses)) * 100) : 0;
+        UI.feedbackText.textContent =
+          status === "failed"
+            ? `Fin de la misión. Has terminado con ${state.score} puntos y ${accuracy}% de precisión.`
+            : `¡Sesión completada! ${state.score} puntos y ${accuracy}% de precisión.`;
+        persistMetrics(status);
+        UI.nextBtn.classList.add("hidden");
+      }
+
+      function renderStats() {
+        const attempts = state.hits + state.misses;
+        const accuracy = attempts ? Math.round((state.hits / attempts) * 100) : 0;
+        const avgReaction = attempts ? state.totalReactionMs / attempts : 0;
+        UI.currentItems.textContent = state.currentItems;
+        UI.currentRound.textContent = state.round;
+        UI.score.textContent = state.score;
+        UI.livesDisplay.textContent = "❤".repeat(state.lives) || "0";
+        UI.streakDisplay.textContent = state.streak;
+        UI.accuracyDisplay.textContent = `${accuracy}%`;
+        UI.avgReactionDisplay.textContent = `${(avgReaction / 1000).toFixed(1)}s`;
+        UI.hitsDisplay.textContent = state.hits;
+        UI.missesDisplay.textContent = state.misses;
+
+        UI.masteryPanel.innerHTML = Object.entries(tenseData).map(([key, tense]) => {
+          const item = state.mastery[key];
+          const pct = item.attempts ? Math.round((item.hits / item.attempts) * 100) : 0;
+          return `
+            <div class="bg-white/10 rounded-2xl p-3">
+              <div class="flex justify-between items-center text-white mb-2">
+                <span>${tense.icon} ${tense.label}</span>
+                <strong>${pct}%</strong>
+              </div>
+              <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-cyan-300 to-fuchsia-400 rounded-full" style="width:${pct}%"></div>
+              </div>
+              <div class="text-white/75 text-xs mt-2">${item.hits}/${item.attempts} aciertos · ${item.avgReactionMs ? (item.avgReactionMs / 1000).toFixed(1) : "0.0"}s</div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function renderHistory() {
+        UI.sessionPanel.innerHTML = state.history.length
+          ? state.history.slice(0, 4).map((item) => `
+              <div class="bg-white/10 rounded-2xl p-3">
+                <div class="font-bold">${new Date(item.createdAt).toLocaleString()}</div>
+                <div class="text-white/80 mt-1">${item.summary}</div>
+                <div class="text-white/70 text-xs mt-2">${item.status} · ${item.mode} · ${item.selected_tense}</div>
+              </div>
+            `).join("")
+          : `<div class="bg-white/10 rounded-2xl p-3 text-white/80">Cuando juegues, aquí saldrán tus últimas sesiones.</div>`;
+      }
+
+      UI.quickStartBtn.addEventListener("click", quickStart);
+      UI.startConfigBtn.addEventListener("click", () => showPanel(UI.configPanel));
+      UI.backToIntroFromConfig.addEventListener("click", () => showPanel(UI.introPanel));
+      UI.backToIntroFromGame.addEventListener("click", () => {
+        clearTimer();
+        showPanel(UI.introPanel);
+      });
+      UI.backToConfigBtn.addEventListener("click", () => {
+        clearTimer();
+        showPanel(UI.configPanel);
+      });
+      UI.startGameBtn.addEventListener("click", beginGame);
+      UI.startBtn.addEventListener("click", prepareRound);
+      UI.nextBtn.addEventListener("click", prepareRound);
+
+      renderTenseGrid();
+      renderModeGrid();
+      updateConfigSummary();
+      renderStats();
+      renderHistory();
+      window.__verboQuererMetrics = buildMetrics("idle");
+    </script>
+  </body>
+</html>

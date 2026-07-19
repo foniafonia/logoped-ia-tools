@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta Educativa - Fonemas, Sílabas y Palabras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49C7',
+                        secondary: '#FF6B6B',
+                        accent: '#4ECDC4',
+                        warning: '#FFE66D'
+                    },
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite'
+                    }
+                }
+            }
+        }
+
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .wheel-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+        
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 6px solid #333;
+            transition: transform 4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 40px;
+            font-weight: bold;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            border-right: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #333;
+            z-index: 10;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        /* Estilos para el modal del puzle */
+        .puzzle-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .puzzle-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 95vw;
+            max-height: 95vh;
+            width: 100%;
+            position: relative;
+            animation: puzzleAppear 0.5s ease-out;
+            overflow-y: auto;
+        }
+        
+        @keyframes puzzleAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .puzzle-piece {
+            cursor: grab;
+            transition: transform 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .puzzle-piece:hover {
+            transform: scale(1.05);
+            border-color: #5D5CDE;
+        }
+        .puzzle-piece.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            cursor: grabbing;
+        }
+        .puzzle-slot {
+            border: 2px dashed #ccc;
+            transition: all 0.3s ease;
+        }
+        .puzzle-slot.drag-over {
+            border-color: #5D5CDE;
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+        .puzzle-slot.occupied {
+            border: 2px solid #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        .completed {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .category-btn {
+            border: 3px solid transparent;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .category-btn.active {
+            border-color: #8b5cf6;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        .level-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .level-btn:hover {
+            border-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+        .level-btn.active {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+        .level-btn.completed {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .level-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <i class="fas fa-sync-alt text-white"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        Ruleta Educativa
+                    </h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#inicio" class="hover:text-primary transition-colors">Inicio</a>
+                    <a href="#caracteristicas" class="hover:text-primary transition-colors">Características</a>
+                    <a href="#demo" class="hover:text-primary transition-colors">Demo</a>
+                    <a href="#crear" class="hover:text-primary transition-colors">Crear Ruleta</a>
+                </div>
+                <button class="md:hidden text-gray-600 dark:text-gray-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="gradient-bg py-20 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6 animate-bounce-slow">
+                    🎯 Ruleta Educativa Interactiva
+                </h2>
+                <p class="text-xl md:text-2xl mb-8 opacity-90">
+                    Crea ruletas personalizadas para enseñar fonemas, sílabas y palabras de manera divertida
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToDemo()" class="bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105">
+                        <i class="fas fa-play mr-2"></i>Ver Demo
+                    </button>
+                    <button onclick="scrollToCrear()" class="border-2 border-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-primary transition-all transform hover:scale-105">
+                        <i class="fas fa-plus mr-2"></i>Crear Ruleta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características -->
+    <section id="caracteristicas" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-16">¿Por qué elegir nuestra Ruleta Educativa?</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg card-hover text-center">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-volume-up text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-secondary">Fonemas</h4>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Practica sonidos individuales y mejora la pronunciación con ruletas de fonemas personalizables.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg card-hover text-center">
+                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-puzzle-piece text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-accent">Sílabas</h4>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Construye palabras paso a paso con ruletas de sílabas que facilitan el aprendizaje de la lectura.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg card-hover text-center">
+                    <div class="w-16 h-16 bg-warning rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-warning">Palabras</h4>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Amplía el vocabulario con ruletas temáticas de palabras organizadas por categorías.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-16">Prueba la Ruleta</h3>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h4 class="text-2xl font-bold mb-6">Ruleta de Sílabas</h4>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">
+                            Haz clic en "Girar" para probar nuestra ruleta educativa con sílabas comunes en español.
+                        </p>
+                        <button id="spinBtn" onclick="spinWheel()" class="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-dark transition-all transform hover:scale-105 mb-4">
+                            <i class="fas fa-sync-alt mr-2"></i>Girar Ruleta
+                        </button>
+                        <div id="result" class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <p class="font-bold">Resultado: <span id="resultText">¡Gira la ruleta!</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center">
+                        <div class="wheel-container">
+                            <div class="wheel-pointer"></div>
+                            <div id="wheel" class="wheel">
+                                <!-- Los segmentos se generarán con JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crear Ruleta -->
+    <section id="crear" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-16">Crea tu Propia Ruleta</h3>
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg">
+                    <div class="mb-6">
+                        <label class="block text-lg font-bold mb-2">🎲 Campo Semántico:</label>
+                        <select id="semanticField" onchange="loadSemanticField()" class="w-full p-4 border rounded-lg text-base dark:bg-gray-600 dark:border-gray-500 mb-4">
+                            <option value="">Selecciona un campo semántico</option>
+                            <option value="animales">🐶 Animales</option>
+                            <option value="colores">🌈 Colores</option>
+                            <option value="frutas">🍎 Frutas</option>
+                            <option value="comida">🍕 Comida</option>
+                            <option value="transportes">🚗 Transportes</option>
+                            <option value="cuerpo">👁️ Partes del Cuerpo</option>
+                            <option value="casa">🏠 Casa</option>
+                            <option value="silabas">📝 Sílabas</option>
+                            <option value="fonemas">🔤 Fonemas</option>
+                        </select>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <button onclick="loadPreset('animales')" class="p-2 bg-red-100 dark:bg-red-900 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-colors text-sm">
+                                🐶 Animales
+                            </button>
+                            <button onclick="loadPreset('colores')" class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors text-sm">
+                                🌈 Colores
+                            </button>
+                            <button onclick="loadPreset('frutas')" class="p-2 bg-green-100 dark:bg-green-900 rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors text-sm">
+                                🍎 Frutas
+                            </button>
+                            <button onclick="loadPreset('comida')" class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors text-sm">
+                                🍕 Comida
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-lg font-bold mb-2">✏️ Elementos personalizados (separados por comas):</label>
+                        <textarea id="elements" rows="4" class="w-full p-4 border rounded-lg text-base dark:bg-gray-600 dark:border-gray-500" placeholder="ma, pa, ta, sa, la, na, ra, ca"></textarea>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            💡 Puedes incluir emojis: 🐶 perro, 🍎 manzana, etc.
+                        </p>
+                    </div>
+                    
+                    <button onclick="createCustomWheel()" class="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:bg-primary-dark transition-all">
+                        <i class="fas fa-magic mr-2"></i>Crear Ruleta Personalizada
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-16">Beneficios Educativos</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-brain text-white text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2">Estimula el Aprendizaje</h4>
+                    <p class="text-gray-600 dark:text-gray-400">Método visual y kinestésico para reforzar conceptos</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gamepad text-white text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2">Gamificación</h4>
+                    <p class="text-gray-600 dark:text-gray-400">Convierte el aprendizaje en una experiencia divertida</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-white text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2">Participación Grupal</h4>
+                    <p class="text-gray-600 dark:text-gray-400">Ideal para actividades en clase y grupos de estudio</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-white text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2">Progreso Medible</h4>
+                    <p class="text-gray-600 dark:text-gray-400">Facilita el seguimiento del progreso de aprendizaje</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <i class="fas fa-sync-alt text-white text-sm"></i>
+                    </div>
+                    <h5 class="text-xl font-bold">Ruleta Educativa</h5>
+                </div>
+                <p class="text-gray-400 mb-6">Transformando la educación a través del juego interactivo</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                </div>
+                <p class="text-gray-500 mt-8">&copy; 2024 Ruleta Educativa. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datos para la ruleta demo
+        const defaultElements = ['ma', 'pa', 'ta', 'sa', 'la', 'na', 'ra', 'ca'];
+        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
+        
+        // Base de datos de palabras relacionadas para el puzle
+        const wordDatabase = {
+            // Sílabas
+            'ma': { word: 'mamá', syllables: ['ma', 'má'], emoji: '👩' },
+            'pa': { word: 'papá', syllables: ['pa', 'pá'], emoji: '👨' },
+            'ta': { word: 'taza', syllables: ['ta', 'za'], emoji: '☕' },
+            'sa': { word: 'sapo', syllables: ['sa', 'po'], emoji: '🐸' },
+            'la': { word: 'lago', syllables: ['la', 'go'], emoji: '🏞️' },
+            'na': { word: 'nana', syllables: ['na', 'na'], emoji: '👶' },
+            'ra': { word: 'ratón', syllables: ['ra', 'tón'], emoji: '🐭' },
+            'ca': { word: 'casa', syllables: ['ca', 'sa'], emoji: '🏠' },
+            
+            // Animales
+            '🐶 perro': { word: 'perro', syllables: ['pe', 'rro'], emoji: '🐶' },
+            '🐱 gato': { word: 'gato', syllables: ['ga', 'to'], emoji: '🐱' },
+            '🐸 rana': { word: 'rana', syllables: ['ra', 'na'], emoji: '🐸' },
+            '🐰 conejo': { word: 'conejo', syllables: ['co', 'ne', 'jo'], emoji: '🐰' },
+            '🦁 león': { word: 'león', syllables: ['le', 'ón'], emoji: '🦁' },
+            '🐘 elefante': { word: 'elefante', syllables: ['e', 'le', 'fan', 'te'], emoji: '🐘' },
+            '🐧 pingüino': { word: 'pingüino', syllables: ['pin', 'güi', 'no'], emoji: '🐧' },
+            '🦋 mariposa': { word: 'mariposa', syllables: ['ma', 'ri', 'po', 'sa'], emoji: '🦋' },
+            
+            // Frutas
+            '🍎 manzana': { word: 'manzana', syllables: ['man', 'za', 'na'], emoji: '🍎' },
+            '🍌 plátano': { word: 'plátano', syllables: ['plá', 'ta', 'no'], emoji: '🍌' },
+            '🍊 naranja': { word: 'naranja', syllables: ['na', 'ran', 'ja'], emoji: '🍊' },
+            '🍇 uvas': { word: 'uvas', syllables: ['u', 'vas'], emoji: '🍇' },
+            '🍓 fresa': { word: 'fresa', syllables: ['fre', 'sa'], emoji: '🍓' },
+            '🥝 kiwi': { word: 'kiwi', syllables: ['ki', 'wi'], emoji: '🥝' },
+            '🍑 cereza': { word: 'cereza', syllables: ['ce', 're', 'za'], emoji: '🍑' },
+            '🥭 mango': { word: 'mango', syllables: ['man', 'go'], emoji: '🥭' },
+            
+            // Colores
+            '🔴 rojo': { word: 'rojo', syllables: ['ro', 'jo'], emoji: '🔴' },
+            '🟦 azul': { word: 'azul', syllables: ['a', 'zul'], emoji: '🟦' },
+            '🟢 verde': { word: 'verde', syllables: ['ver', 'de'], emoji: '🟢' },
+            '🟡 amarillo': { word: 'amarillo', syllables: ['a', 'ma', 'ri', 'llo'], emoji: '🟡' },
+            '🟣 morado': { word: 'morado', syllables: ['mo', 'ra', 'do'], emoji: '🟣' },
+            '🟠 naranja': { word: 'naranja', syllables: ['na', 'ran', 'ja'], emoji: '🟠' },
+            '⚫ negro': { word: 'negro', syllables: ['ne', 'gro'], emoji: '⚫' },
+            '⚪ blanco': { word: 'blanco', syllables: ['blan', 'co'], emoji: '⚪' },
+            
+            // Comida
+            '🍕 pizza': { word: 'pizza', syllables: ['pi', 'zza'], emoji: '🍕' },
+            '🍔 hamburguesa': { word: 'hamburguesa', syllables: ['ham', 'bur', 'gue', 'sa'], emoji: '🍔' },
+            '🍝 pasta': { word: 'pasta', syllables: ['pas', 'ta'], emoji: '🍝' },
+            '🥗 ensalada': { word: 'ensalada', syllables: ['en', 'sa', 'la', 'da'], emoji: '🥗' },
+            '🍰 pastel': { word: 'pastel', syllables: ['pas', 'tel'], emoji: '🍰' },
+            '🥪 sandwich': { word: 'sandwich', syllables: ['sand', 'wich'], emoji: '🥪' },
+            '🌮 taco': { word: 'taco', syllables: ['ta', 'co'], emoji: '🌮' },
+            '🍲 sopa': { word: 'sopa', syllables: ['so', 'pa'], emoji: '🍲' },
+            
+            // Transportes
+            '🚗 coche': { word: 'coche', syllables: ['co', 'che'], emoji: '🚗' },
+            '🚌 autobús': { word: 'autobús', syllables: ['au', 'to', 'bús'], emoji: '🚌' },
+            '🚂 tren': { word: 'tren', syllables: ['tren'], emoji: '🚂' },
+            '✈️ avión': { word: 'avión', syllables: ['a', 'vión'], emoji: '✈️' },
+            '🚲 bicicleta': { word: 'bicicleta', syllables: ['bi', 'ci', 'cle', 'ta'], emoji: '🚲' },
+            '🛴 patinete': { word: 'patinete', syllables: ['pa', 'ti', 'ne', 'te'], emoji: '🛴' },
+            '🚁 helicóptero': { word: 'helicóptero', syllables: ['he', 'li', 'cóp', 'te', 'ro'], emoji: '🚁' },
+            '⛵ barco': { word: 'barco', syllables: ['bar', 'co'], emoji: '⛵' },
+            
+            // Partes del cuerpo
+            '👁️ ojo': { word: 'ojo', syllables: ['o', 'jo'], emoji: '👁️' },
+            '👂 oreja': { word: 'oreja', syllables: ['o', 're', 'ja'], emoji: '👂' },
+            '👃 nariz': { word: 'nariz', syllables: ['na', 'riz'], emoji: '👃' },
+            '👄 boca': { word: 'boca', syllables: ['bo', 'ca'], emoji: '👄' },
+            '✋ mano': { word: 'mano', syllables: ['ma', 'no'], emoji: '✋' },
+            '🦶 pie': { word: 'pie', syllables: ['pie'], emoji: '🦶' },
+            '💪 brazo': { word: 'brazo', syllables: ['bra', 'zo'], emoji: '💪' },
+            '🧠 cerebro': { word: 'cerebro', syllables: ['ce', 're', 'bro'], emoji: '🧠' },
+            
+            // Casa
+            '🏠 casa': { word: 'casa', syllables: ['ca', 'sa'], emoji: '🏠' },
+            '🚪 puerta': { word: 'puerta', syllables: ['puer', 'ta'], emoji: '🚪' },
+            '🪟 ventana': { word: 'ventana', syllables: ['ven', 'ta', 'na'], emoji: '🪟' },
+            '🛏️ cama': { word: 'cama', syllables: ['ca', 'ma'], emoji: '🛏️' },
+            '🪑 silla': { word: 'silla', syllables: ['si', 'lla'], emoji: '🪑' },
+            '🍽️ mesa': { word: 'mesa', syllables: ['me', 'sa'], emoji: '🍽️' },
+            '🚿 ducha': { word: 'ducha', syllables: ['du', 'cha'], emoji: '🚿' },
+            '📺 televisión': { word: 'televisión', syllables: ['te', 'le', 'vi', 'sión'], emoji: '📺' },
+            
+            // Fonemas
+            '/m/': { word: 'mmm', syllables: ['mmm'], emoji: '🗣️' },
+            '/p/': { word: 'ppp', syllables: ['ppp'], emoji: '🗣️' },
+            '/t/': { word: 'ttt', syllables: ['ttt'], emoji: '🗣️' },
+            '/s/': { word: 'sss', syllables: ['sss'], emoji: '🗣️' },
+            '/l/': { word: 'lll', syllables: ['lll'], emoji: '🗣️' },
+            '/n/': { word: 'nnn', syllables: ['nnn'], emoji: '🗣️' },
+            '/r/': { word: 'rrr', syllables: ['rrr'], emoji: '🗣️' },
+            '/k/': { word: 'kkk', syllables: ['kkk'], emoji: '🗣️' }
+        };
+        
+        // Variables para audio
+        let backgroundMusic = null;
+        let isMusicPlaying = false;
+        
+        // Campos semánticos con emojis
+        const semanticFields = {
+            animales: ['🐶 perro', '🐱 gato', '🐸 rana', '🐰 conejo', '🦁 león', '🐘 elefante', '🐧 pingüino', '🦋 mariposa'],
+            colores: ['🔴 rojo', '🟦 azul', '🟢 verde', '🟡 amarillo', '🟣 morado', '🟠 naranja', '⚫ negro', '⚪ blanco'],
+            frutas: ['🍎 manzana', '🍌 plátano', '🍊 naranja', '🍇 uvas', '🍓 fresa', '🥝 kiwi', '🍑 cereza', '🥭 mango'],
+            comida: ['🍕 pizza', '🍔 hamburguesa', '🍝 pasta', '🥗 ensalada', '🍰 pastel', '🥪 sandwich', '🌮 taco', '🍲 sopa'],
+            transportes: ['🚗 coche', '🚌 autobús', '🚂 tren', '✈️ avión', '🚲 bicicleta', '🛴 patinete', '🚁 helicóptero', '⛵ barco'],
+            cuerpo: ['👁️ ojo', '👂 oreja', '👃 nariz', '👄 boca', '✋ mano', '🦶 pie', '💪 brazo', '🧠 cerebro'],
+            casa: ['🏠 casa', '🚪 puerta', '🪟 ventana', '🛏️ cama', '🪑 silla', '🍽️ mesa', '🚿 ducha', '📺 televisión'],
+            silabas: ['ma', 'pa', 'ta', 'sa', 'la', 'na', 'ra', 'ca'],
+            fonemas: ['/m/', '/p/', '/t/', '/s/', '/l/', '/n/', '/r/', '/k/']
+        };
+        
+        let currentElements = [...defaultElements];
+        let isSpinning = false;
+        
+        // Función para crear la ruleta usando SVG para mejor precisión
+        function createWheel(elements) {
+            const wheel = document.getElementById('wheel');
+            wheel.innerHTML = '';
+            
+            // Crear SVG para la ruleta
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 350 350');
+            
+            const centerX = 175;
+            const centerY = 175;
+            const radius = 170;
+            const segmentAngle = 360 / elements.length;
+            
+            elements.forEach((element, index) => {
+                const startAngle = (index * segmentAngle - 90) * Math.PI / 180;
+                const endAngle = ((index + 1) * segmentAngle - 90) * Math.PI / 180;
+                
+                const x1 = centerX + radius * Math.cos(startAngle);
+                const y1 = centerY + radius * Math.sin(startAngle);
+                const x2 = centerX + radius * Math.cos(endAngle);
+                const y2 = centerY + radius * Math.sin(endAngle);
+                
+                const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                
+                // Crear el path del segmento
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const pathData = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+                path.setAttribute('d', pathData);
+                path.setAttribute('fill', colors[index % colors.length]);
+                path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+                path.setAttribute('stroke-width', '2');
+                
+                // Crear fondo negro para el texto (mejor contraste)
+                const textBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                const textAngle = (startAngle + endAngle) / 2;
+                const textRadius = radius * 0.65;
+                const textX = centerX + textRadius * Math.cos(textAngle);
+                const textY = centerY + textRadius * Math.sin(textAngle);
+                
+                // Calcular tamaño del fondo basado en la longitud del texto
+                const textLength = element.length;
+                const bgWidth = Math.max(textLength * 12, 60);
+                const bgHeight = 30;
+                
+                textBg.setAttribute('x', textX - bgWidth/2);
+                textBg.setAttribute('y', textY - bgHeight/2);
+                textBg.setAttribute('width', bgWidth);
+                textBg.setAttribute('height', bgHeight);
+                textBg.setAttribute('fill', 'rgba(0,0,0,0.8)');
+                textBg.setAttribute('rx', '8');
+                textBg.setAttribute('ry', '8');
+                
+                // Crear el texto (siempre horizontal para mejor lectura)
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', textX);
+                text.setAttribute('y', textY + 6); // Ajuste vertical para centrado
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#FFFFFF');
+                text.setAttribute('font-size', '14');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('font-family', 'Arial, sans-serif');
+                // Mantener el texto horizontal (sin rotación)
+                text.textContent = element;
+                
+                svg.appendChild(path);
+                svg.appendChild(textBg);
+                svg.appendChild(text);
+            });
+            
+            wheel.appendChild(svg);
+        }
+        
+        // Función para inicializar música de fondo
+        function initBackgroundMusic() {
+            if (!isMusicPlaying) {
+                // Crear audio suave de fondo usando Web Audio API
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(220, audioContext.currentTime); // Nota A3
+                    gainNode.gain.setValueAtTime(0.02, audioContext.currentTime); // Muy suave
+                    
+                    oscillator.start();
+                    
+                    // Detener después de unos segundos
+                    setTimeout(() => {
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1);
+                        oscillator.stop(audioContext.currentTime + 1);
+                    }, 5000);
+                    
+                    isMusicPlaying = true;
+                } catch (e) {
+                    console.log('No se pudo inicializar el audio');
+                }
+            }
+        }
+        
+        // Función para reproducir sonidos del juego
+        function playGameSound(type) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                let frequency, duration, type_wave = 'sine';
+                
+                switch(type) {
+                    case 'spin':
+                        // Sonido de giro de ruleta - crescendo
+                        frequency = 200;
+                        duration = 0.8;
+                        type_wave = 'sawtooth';
+                        break;
+                    case 'target':
+                        // Sonido cuando llega al objetivo - campanita
+                        frequency = 800;
+                        duration = 0.5;
+                        type_wave = 'sine';
+                        break;
+                    case 'success':
+                        // Sonido de éxito - acorde alegre
+                        frequency = 523; // Do mayor
+                        duration = 0.6;
+                        type_wave = 'triangle';
+                        break;
+                    case 'piece':
+                        // Sonido al colocar pieza correcta
+                        frequency = 660;
+                        duration = 0.2;
+                        type_wave = 'sine';
+                        break;
+                    case 'wrong':
+                        // Sonido de pieza incorrecta
+                        frequency = 150;
+                        duration = 0.3;
+                        type_wave = 'square';
+                        break;
+                }
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                oscillator.type = type_wave;
+                
+                // Configurar volumen con fade out
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+                
+                // Para sonidos especiales
+                if (type === 'success') {
+                    // Crear acorde con múltiples frecuencias
+                    setTimeout(() => playFrequency(audioContext, 659, 0.4), 200); // Mi
+                    setTimeout(() => playFrequency(audioContext, 784, 0.4), 400); // Sol
+                }
+                
+            } catch (error) {
+                console.log('No se pudo reproducir el sonido:', error);
+            }
+        }
+        
+        // Función auxiliar para reproducir frecuencias adicionales
+        function playFrequency(audioContext, freq, dur) {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = 'triangle';
+            
+            gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        // Función para reproducir voz de niña más entendible
+        function speakText(text) {
+            try {
+                // Cancelar cualquier síntesis anterior
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES'; // Español
+                utterance.rate = 0.7; // Más lenta para mejor comprensión
+                utterance.pitch = 1.4; // Tono más alto (voz de niña)
+                utterance.volume = 0.9;
+                
+                // Buscar voz femenina española infantil
+                const voices = speechSynthesis.getVoices();
+                let selectedVoice = null;
+                
+                // Prioridad 1: Buscar voces específicamente infantiles o femeninas
+                selectedVoice = voices.find(voice => 
+                    voice.lang.includes('es') && 
+                    (voice.name.toLowerCase().includes('monica') || 
+                     voice.name.toLowerCase().includes('child') ||
+                     voice.name.toLowerCase().includes('kid') ||
+                     voice.name.toLowerCase().includes('nina'))
+                );
+                
+                // Prioridad 2: Cualquier voz femenina española
+                if (!selectedVoice) {
+                    selectedVoice = voices.find(voice => 
+                        voice.lang.includes('es') && 
+                        (voice.name.toLowerCase().includes('female') ||
+                         voice.name.toLowerCase().includes('maria') ||
+                         voice.name.toLowerCase().includes('carmen') ||
+                         voice.name.toLowerCase().includes('pilar'))
+                    );
+                }
+                
+                // Prioridad 3: Cualquier voz española
+                if (!selectedVoice) {
+                    selectedVoice = voices.find(voice => voice.lang.includes('es'));
+                }
+                
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+                
+                speechSynthesis.speak(utterance);
+                
+            } catch (error) {
+                console.log('No se pudo reproducir la voz:', error);
+            }
+        }
+        
+        // Inicializar voces cuando estén disponibles
+        function initializeVoices() {
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.addEventListener('voiceschanged', initializeVoices);
+            }
+        }
+        
+        // Llamar al inicializar
+        initializeVoices();
+        
+        // Función para mostrar el juego de puzzle exacto
+        function showPuzzleModal(selectedElement) {
+            const puzzleData = wordDatabase[selectedElement];
+            if (!puzzleData) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'puzzle-modal';
+            modal.innerHTML = `
+                <div class="puzzle-container">
+                    <button onclick="closePuzzleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-4">🧩 Puzzle Game</h1>
+                        <p class="text-gray-600">🎯 Resultado: <strong>${selectedElement}</strong></p>
+                        <p class="text-gray-600">Arrastra las piezas para completar el puzzle</p>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="bg-gray-100 rounded-lg p-6 mb-8">
+                        <div class="flex flex-wrap gap-4 items-center justify-center">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Dificultad:
+                                </label>
+                                <select id="difficulty" class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-base">
+                                    <option value="4">Fácil (2x2)</option>
+                                    <option value="9">Medio (3x3)</option>
+                                    <option value="16">Difícil (4x4)</option>
+                                    <option value="25">Experto (5x5)</option>
+                                </select>
+                            </div>
+                            
+                            <button id="startGame" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
+                                Nuevo Juego
+                            </button>
+                            
+                            <button id="showPreview" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors">
+                                Ver Original
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Game Status -->
+                    <div id="gameStatus" class="text-center mb-6 hidden">
+                        <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-lg">
+                            <span id="statusText">¡Arrastra las piezas para comenzar!</span>
+                        </div>
+                    </div>
+
+                    <!-- Game Area -->
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Puzzle Board -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Tablero del Puzzle</h3>
+                            <div id="puzzleBoard" class="grid gap-1 mx-auto" style="width: fit-content;"></div>
+                        </div>
+
+                        <!-- Pieces Area -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Piezas</h3>
+                            <div id="piecesArea" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Preview Modal -->
+                    <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                        <div class="bg-white p-6 rounded-lg max-w-md mx-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Imagen Original</h3>
+                            <img id="previewImage" class="w-full h-auto rounded-lg mb-4">
+                            <button id="closePreview" class="w-full px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Success Modal -->
+                    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                        <div class="bg-white p-8 rounded-lg max-w-md mx-4 text-center">
+                            <div class="text-6xl mb-4">🎉</div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">¡Felicitaciones!</h3>
+                            <p class="text-gray-600 mb-6">Has completado el puzzle exitosamente</p>
+                            <button id="playAgain" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
+                                Jugar de Nuevo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Inicializar el juego exacto
+            initExactPuzzleGame(puzzleData);
+        }
+        
+        // Función simplificada para drag and drop del puzle
+        function initSimplePuzzleDragDrop() {
+            const pieces = document.querySelectorAll('.puzzle-piece');
+            const slots = document.querySelectorAll('.puzzle-slot');
+            let completedPieces = 0;
+            
+            pieces.forEach(piece => {
+                piece.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.position);
+                    e.target.classList.add('dragging');
+                });
+                
+                piece.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                });
+                
+                // Soporte táctil - clic para mover automáticamente
+                piece.addEventListener('click', () => {
+                    if (piece.style.opacity === '0.5') return;
+                    
+                    const targetPosition = piece.dataset.position;
+                    const targetSlot = document.querySelector(`.puzzle-slot[data-position="${targetPosition}"]`);
+                    
+                    if (targetSlot && !targetSlot.classList.contains('filled')) {
+                        placePieceInSlot(piece, targetSlot);
+                    }
+                });
+            });
+            
+            slots.forEach(slot => {
+                slot.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    slot.classList.add('highlight');
+                });
+                
+                slot.addEventListener('dragleave', () => {
+                    slot.classList.remove('highlight');
+                });
+                
+                slot.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    slot.classList.remove('highlight');
+                    
+                    const piecePosition = e.dataTransfer.getData('text/plain');
+                    const piece = document.querySelector(`.puzzle-piece[data-position="${piecePosition}"]`);
+                    
+                    if (piece && slot.dataset.position === piecePosition && !slot.classList.contains('filled')) {
+                        placePieceInSlot(piece, slot);
+                    }
+                });
+            });
+            
+            function placePieceInSlot(piece, slot) {
+                slot.innerHTML = piece.innerHTML;
+                slot.classList.add('filled');
+                piece.style.opacity = '0.5';
+                piece.style.pointerEvents = 'none';
+                
+                completedPieces++;
+                
+                // Efecto de éxito
+                slot.classList.add('celebration');
+                setTimeout(() => slot.classList.remove('celebration'), 600);
+                
+                // Verificar si se completó el puzle
+                if (completedPieces === 9) {
+                    setTimeout(() => {
+                        const board = document.getElementById('puzzleBoard');
+                        board.classList.add('completion-animation');
+                        speakText('¡Felicidades! Has completado el puzle');
+                        
+                        // Confetti virtual
+                        showConfetti();
+                    }, 500);
+                }
+            }
+            
+            // Reproducir el elemento seleccionado
+            speakText(selectedElement);
+        }
+        
+        // Función para mezclar las piezas del puzle
+        function mixPuzzlePieces() {
+            const piecesContainer = document.getElementById('puzzlePieces');
+            const pieces = [...piecesContainer.children];
+            
+            // Mezclar array
+            for (let i = pieces.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
+            }
+            
+            // Reorganizar en el DOM
+            pieces.forEach(piece => piecesContainer.appendChild(piece));
+        }
+        
+        // Función para cerrar el modal del puzle
+        function closePuzzleModal() {
+            const modal = document.querySelector('.puzzle-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        // Función para reproducir la palabra del puzle
+        function playPuzzleWord(word) {
+            speakText(word);
+        }
+        
+        // Función para generar piezas de imagen del emoji
+        function generateImagePieces(emoji) {
+            const pieces = [];
+            
+            // Crear 9 piezas del mismo emoji pero con indicadores de posición
+            for (let i = 0; i < 9; i++) {
+                const row = Math.floor(i / 3);
+                const col = i % 3;
+                
+                pieces.push({
+                    position: i,
+                    content: emoji,
+                    originalPosition: i,
+                    style: getImagePieceStyle(row, col)
+                });
+            }
+            
+            // Mezclar las piezas aleatoriamente
+            return shuffleArray(pieces);
+        }
+        
+        // Función para generar el estilo de cada pieza del puzzle
+        function getImagePieceStyle(row, col) {
+            // Crear un efecto de "recorte" visual para simular piezas de puzzle
+            const clipPath = `inset(${row * 33.33}% ${(2-col) * 33.33}% ${(2-row) * 33.33}% ${col * 33.33}%)`;
+            
+            return {
+                clipPath: clipPath,
+                transform: `scale(3)`, // Hacer el emoji más grande
+                filter: `hue-rotate(${row * 60 + col * 30}deg) brightness(${0.8 + (row + col) * 0.1})` // Variación de color
+            };
+        }
+        
+        // Función para mezclar array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+
+        
+        // Función para reiniciar puzle
+        function resetPuzzle() {
+            const pieces = document.querySelectorAll('.puzzle-piece');
+            const slots = document.querySelectorAll('.puzzle-slot');
+            
+            pieces.forEach(piece => {
+                piece.style.opacity = '1';
+                piece.style.pointerEvents = 'auto';
+            });
+            
+            slots.forEach(slot => {
+                slot.innerHTML = '';
+                slot.classList.remove('filled', 'celebration');
+            });
+            
+            document.getElementById('puzzleBoard').classList.remove('completion-animation');
+        }
+        
+        // Función para mostrar confetti virtual
+        function showConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'fixed';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '9999';
+            
+            const confettiPieces = ['🎉', '🎊', '⭐', '🌟', '💫', '✨'];
+            
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.textContent = confettiPieces[Math.floor(Math.random() * confettiPieces.length)];
+                confetti.style.position = 'absolute';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-50px';
+                confetti.style.fontSize = '2em';
+                confetti.style.animation = `confettiFall ${2 + Math.random() * 3}s ease-out forwards`;
+                
+                confettiContainer.appendChild(confetti);
+            }
+            
+            // Añadir animación CSS
+            if (!document.getElementById('confetti-style')) {
+                const style = document.createElement('style');
+                style.id = 'confetti-style';
+                style.textContent = `
+                    @keyframes confettiFall {
+                        to {
+                            transform: translateY(calc(100vh + 100px)) rotate(720deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(confettiContainer);
+            
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 5000);
+        }
+        
+        // Variables globales para el puzzle avanzado
+        let currentPuzzleData = null;
+        let puzzlePieces = [];
+        let puzzleBoard = [];
+        let puzzleGridSize = 3;
+        let puzzlePieceSize = 80;
+        let draggedPuzzlePiece = null;
+        let completedPuzzlePieces = 0;
+        
+        // Función para inicializar el puzzle avanzado
+        function initAdvancedPuzzle(puzzleData) {
+            currentPuzzleData = puzzleData;
+            const difficulty = parseInt(document.getElementById('puzzleDifficulty').value);
+            puzzleGridSize = Math.sqrt(difficulty);
+            puzzlePieceSize = puzzleGridSize === 2 ? 100 : (puzzleGridSize === 3 ? 80 : 60);
+            
+            createAdvancedPuzzle();
+            updatePuzzleStatus('¡Arrastra las piezas para comenzar!', 'blue');
+            
+            // Reproducir palabra al inicio
+            speakText(puzzleData.word);
+        }
+        
+        // Función para crear el puzzle avanzado
+        function createAdvancedPuzzle() {
+            const boardElement = document.getElementById('puzzleBoard');
+            const piecesElement = document.getElementById('puzzlePieces');
+            
+            boardElement.innerHTML = '';
+            piecesElement.innerHTML = '';
+            
+            puzzlePieces = [];
+            puzzleBoard = [];
+            completedPuzzlePieces = 0;
+            
+            // Configurar grid del tablero
+            boardElement.style.gridTemplateColumns = `repeat(${puzzleGridSize}, ${puzzlePieceSize}px)`;
+            boardElement.style.gridTemplateRows = `repeat(${puzzleGridSize}, ${puzzlePieceSize}px)`;
+            
+            // Configurar grid de piezas
+            const piecesPerRow = puzzleGridSize === 2 ? 2 : (puzzleGridSize === 3 ? 3 : 4);
+            piecesElement.style.gridTemplateColumns = `repeat(${piecesPerRow}, 1fr)`;
+            
+            // Crear slots del tablero
+            for (let i = 0; i < puzzleGridSize * puzzleGridSize; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'puzzle-slot';
+                slot.style.width = `${puzzlePieceSize}px`;
+                slot.style.height = `${puzzlePieceSize}px`;
+                slot.style.border = '2px dashed #ccc';
+                slot.style.borderRadius = '8px';
+                slot.style.display = 'flex';
+                slot.style.alignItems = 'center';
+                slot.style.justifyContent = 'center';
+                slot.style.background = '#fff';
+                slot.style.transition = 'all 0.3s ease';
+                slot.dataset.correctPiece = i;
+                
+                setupAdvancedDropZone(slot);
+                boardElement.appendChild(slot);
+                puzzleBoard.push(null);
+            }
+            
+            // Crear piezas del puzzle
+            createPuzzlePieces();
+        }
+        
+        // Función para crear las piezas del puzzle
+        function createPuzzlePieces() {
+            const piecesElement = document.getElementById('puzzlePieces');
+            const totalPieces = puzzleGridSize * puzzleGridSize;
+            
+            // Generar piezas con emoji dividido
+            for (let i = 0; i < totalPieces; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece';
+                piece.style.width = `${puzzlePieceSize}px`;
+                piece.style.height = `${puzzlePieceSize}px`;
+                piece.style.borderRadius = '8px';
+                piece.style.cursor = 'grab';
+                piece.style.transition = 'all 0.2s ease';
+                piece.style.userSelect = 'none';
+                piece.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                piece.style.display = 'flex';
+                piece.style.alignItems = 'center';
+                piece.style.justifyContent = 'center';
+                piece.style.border = '2px solid transparent';
+                piece.style.fontSize = puzzleGridSize === 2 ? '2.5em' : (puzzleGridSize === 3 ? '2em' : '1.5em');
+                
+                // Asignar contenido según la posición
+                const row = Math.floor(i / puzzleGridSize);
+                const col = i % puzzleGridSize;
+                const centerPos = Math.floor(totalPieces / 2);
+                
+                if (i === centerPos && puzzleGridSize % 2 === 1) {
+                    // Centro con el emoji principal (solo en grids impares)
+                    piece.textContent = currentPuzzleData.emoji;
+                    piece.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                } else {
+                    // Piezas decorativas con patrones
+                    const patterns = ['🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬜', '⬛'];
+                    const pattern = patterns[(row + col) % patterns.length];
+                    piece.textContent = pattern;
+                    piece.style.background = 'linear-gradient(135deg, #FF6B6B, #4ECDC4)';
+                }
+                
+                piece.dataset.pieceId = i;
+                piece.draggable = true;
+                
+                setupAdvancedDragPiece(piece);
+                puzzlePieces.push(piece);
+            }
+            
+            // Mezclar y agregar piezas al contenedor
+            shuffleAdvancedPieces();
+        }
+        
+        // Función para mezclar las piezas
+        function shuffleAdvancedPieces() {
+            const piecesElement = document.getElementById('puzzlePieces');
+            const shuffled = [...puzzlePieces].sort(() => Math.random() - 0.5);
+            shuffled.forEach(piece => {
+                piecesElement.appendChild(piece);
+            });
+        }
+        
+        // Función para configurar drag en las piezas
+        function setupAdvancedDragPiece(piece) {
+            piece.addEventListener('dragstart', (e) => {
+                draggedPuzzlePiece = piece;
+                piece.classList.add('dragging');
+                piece.style.opacity = '0.5';
+                piece.style.transform = 'rotate(5deg)';
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            
+            piece.addEventListener('dragend', () => {
+                piece.classList.remove('dragging');
+                piece.style.opacity = '1';
+                piece.style.transform = 'none';
+                draggedPuzzlePiece = null;
+            });
+            
+            piece.addEventListener('mouseenter', () => {
+                if (!piece.classList.contains('dragging')) {
+                    piece.style.transform = 'scale(1.05)';
+                    piece.style.borderColor = '#5D5CDE';
+                }
+            });
+            
+            piece.addEventListener('mouseleave', () => {
+                if (!piece.classList.contains('dragging')) {
+                    piece.style.transform = 'none';
+                    piece.style.borderColor = 'transparent';
+                }
+            });
+        }
+        
+        // Función para configurar drop zones
+        function setupAdvancedDropZone(slot) {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (!slot.classList.contains('occupied')) {
+                    slot.style.borderColor = '#5D5CDE';
+                    slot.style.backgroundColor = 'rgba(93, 92, 222, 0.1)';
+                }
+            });
+            
+            slot.addEventListener('dragleave', () => {
+                slot.style.borderColor = '#ccc';
+                slot.style.backgroundColor = '#fff';
+            });
+            
+            slot.addEventListener('drop', (e) => {
+                e.preventDefault();
+                slot.style.borderColor = '#ccc';
+                slot.style.backgroundColor = '#fff';
+                
+                if (draggedPuzzlePiece && !slot.classList.contains('occupied')) {
+                    dropAdvancedPiece(slot, draggedPuzzlePiece);
+                }
+            });
+        }
+        
+        // Función para colocar una pieza
+        function dropAdvancedPiece(slot, piece) {
+            const slotIndex = parseInt(slot.dataset.correctPiece);
+            const pieceIndex = parseInt(piece.dataset.pieceId);
+            
+            // Remover pieza de su ubicación actual
+            const currentParent = piece.parentNode;
+            if (currentParent && currentParent !== document.getElementById('puzzlePieces')) {
+                // Pieza estaba en otro slot, liberar ese slot
+                const oldSlotIndex = Array.from(document.getElementById('puzzleBoard').children).indexOf(currentParent);
+                if (oldSlotIndex !== -1) {
+                    puzzleBoard[oldSlotIndex] = null;
+                    currentParent.classList.remove('occupied');
+                    currentParent.innerHTML = '';
+                }
+            }
+            
+            // Colocar pieza en nuevo slot
+            slot.appendChild(piece);
+            slot.classList.add('occupied');
+            puzzleBoard[slotIndex] = pieceIndex;
+            
+            // Verificar si la pieza está en posición correcta
+            if (slotIndex === pieceIndex) {
+                piece.style.border = '2px solid #10b981';
+                slot.style.borderColor = '#10b981';
+                slot.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                completedPuzzlePieces++;
+                
+                // Efecto de celebración
+                piece.style.animation = 'celebrate 0.8s ease-in-out';
+                setTimeout(() => piece.style.animation = 'none', 800);
+                
+                if (completedPuzzlePieces === puzzleGridSize * puzzleGridSize) {
+                    setTimeout(() => showPuzzleSuccess(), 500);
+                } else {
+                    updatePuzzleStatus(`¡Bien! ${completedPuzzlePieces}/${puzzleGridSize * puzzleGridSize} piezas correctas`, 'green');
+                }
+            } else {
+                piece.style.border = '2px solid #ef4444';
+                updatePuzzleStatus('Pieza incorrecta, intenta otra posición', 'yellow');
+            }
+        }
+        
+        // Función para actualizar el estado del puzzle
+        function updatePuzzleStatus(message, color) {
+            const statusElement = document.getElementById('puzzleStatusText');
+            const statusContainer = statusElement.parentNode;
+            
+            statusElement.textContent = message;
+            
+            const colorClasses = {
+                blue: 'bg-blue-100 text-blue-800',
+                green: 'bg-green-100 text-green-800',
+                yellow: 'bg-yellow-100 text-yellow-800'
+            };
+            
+            statusContainer.className = `inline-flex items-center px-4 py-2 rounded-lg ${colorClasses[color]}`;
+        }
+        
+        // Función para mostrar el modal de éxito
+        function showPuzzleSuccess() {
+            updatePuzzleStatus('¡Puzzle completado! 🎉', 'green');
+            document.getElementById('puzzleBoard').style.animation = 'completionPulse 1s ease-in-out';
+            
+            setTimeout(() => {
+                const successModal = document.getElementById('puzzleSuccessModal');
+                successModal.classList.remove('hidden');
+                successModal.classList.add('flex');
+                
+                // Confetti
+                showConfetti();
+                
+                // Reproducir palabra
+                speakText(`¡Felicidades! Has completado el puzzle de ${currentPuzzleData.word}`);
+            }, 1000);
+        }
+        
+        // Función para mostrar preview
+        function showPuzzlePreview() {
+            const previewModal = document.getElementById('puzzlePreviewModal');
+            previewModal.classList.remove('hidden');
+            previewModal.classList.add('flex');
+        }
+        
+        // Función para ocultar preview
+        function hidePuzzlePreview() {
+            const previewModal = document.getElementById('puzzlePreviewModal');
+            previewModal.classList.add('hidden');
+            previewModal.classList.remove('flex');
+        }
+        
+        // Función para reiniciar el juego del puzzle
+        function resetPuzzleGame() {
+            const difficulty = parseInt(document.getElementById('puzzleDifficulty').value);
+            puzzleGridSize = Math.sqrt(difficulty);
+            puzzlePieceSize = puzzleGridSize === 2 ? 100 : (puzzleGridSize === 3 ? 80 : 60);
+            
+            createAdvancedPuzzle();
+            updatePuzzleStatus('¡Nuevo puzzle generado!', 'blue');
+        }
+        
+        // Función para inicializar el juego exacto basado en el código proporcionado
+        function initExactPuzzleGame(puzzleData) {
+            // Crear una imagen especial basada en el emoji del elemento seleccionado
+            const imageUrl = generateEmojiImageUrl(puzzleData.emoji);
+            
+            // Inicializar la clase PuzzleGame exacta
+            const puzzleGame = new PuzzleGame(imageUrl, puzzleData);
+        }
+        
+        // Función para generar URL de imagen del emoji o texto
+        function generateEmojiImageUrl(element) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            
+            // Verificar si es una sílaba o fonema (solo texto sin emoji)
+            const isSyllableOrPhoneme = !element.includes('�ดด') && 
+                                       (semanticFields.silabas.includes(element) || 
+                                        semanticFields.fonemas.includes(element));
+            
+            if (isSyllableOrPhoneme) {
+                // Crear imagen especial para sílabas y fonemas
+                return generateSyllablePhonemeImage(element);
+            } else {
+                // Extraer emoji del elemento
+                const emoji = element.split(' ')[0] || element;
+                
+                // Fondo blanco
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Dibujar el emoji en el centro
+                ctx.font = '200px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(emoji, canvas.width / 2, canvas.height / 2);
+                
+                return canvas.toDataURL();
+            }
+        }
+        
+        // Función especial para generar imágenes de sílabas y fonemas
+        function generateSyllablePhonemeImage(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo degradado colorido para sílabas/fonemas
+            const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+            gradient.addColorStop(0, '#FFE5B4');  // Peach
+            gradient.addColorStop(0.5, '#FFCCCB'); // Light pink
+            gradient.addColorStop(1, '#E0E6FF');   // Light blue
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Borde decorativo
+            ctx.strokeStyle = '#5D5CDE';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(20, 20, 360, 360);
+            
+            // Texto principal (sílaba o fonema)
+            ctx.fillStyle = '#2D1B69';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Sombra del texto
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowOffsetX = 4;
+            ctx.shadowOffsetY = 4;
+            ctx.shadowBlur = 8;
+            
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            
+            // Quitar sombra para elementos decorativos
+            ctx.shadowColor = 'transparent';
+            
+            // Elementos decorativos (estrellitas)
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '40px Arial';
+            
+            // Estrellitas en las esquinas
+            ctx.fillText('⭐', 80, 80);
+            ctx.fillText('⭐', 320, 80);
+            ctx.fillText('⭐', 80, 320);
+            ctx.fillText('⭐', 320, 320);
+            
+            // Líneas decorativas
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([10, 5]);
+            
+            // Líneas horizontales
+            ctx.beginPath();
+            ctx.moveTo(50, 150);
+            ctx.lineTo(120, 150);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(280, 150);
+            ctx.lineTo(350, 150);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(50, 250);
+            ctx.lineTo(120, 250);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(280, 250);
+            ctx.lineTo(350, 250);
+            ctx.stroke();
+            
+            ctx.setLineDash([]); // Reset line dash
+            
+            return canvas.toDataURL();
+        }
+        
+        // Clase exacta del PuzzleGame del código proporcionado
+        class PuzzleGame {
+            constructor(customImage = null, puzzleData = null) {
+                this.currentImage = customImage || 'https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&h=225';
+                this.puzzleData = puzzleData;
+                this.pieces = [];
+                this.board = [];
+                this.gridSize = 2;
+                this.pieceSize = 100;
+                this.draggedPiece = null;
+                this.completedPieces = 0;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.loadImage();
+            }
+
+            initializeElements() {
+                this.puzzleBoard = document.getElementById('puzzleBoard');
+                this.piecesArea = document.getElementById('piecesArea');
+                this.difficultySelect = document.getElementById('difficulty');
+                this.startGameBtn = document.getElementById('startGame');
+                this.showPreviewBtn = document.getElementById('showPreview');
+                this.previewModal = document.getElementById('previewModal');
+                this.previewImage = document.getElementById('previewImage');
+                this.closePreviewBtn = document.getElementById('closePreview');
+                this.successModal = document.getElementById('successModal');
+                this.playAgainBtn = document.getElementById('playAgain');
+                this.gameStatus = document.getElementById('gameStatus');
+                this.statusText = document.getElementById('statusText');
+            }
+
+            bindEvents() {
+                this.startGameBtn.addEventListener('click', () => this.startNewGame());
+                this.showPreviewBtn.addEventListener('click', () => this.showPreview());
+                this.closePreviewBtn.addEventListener('click', () => this.hidePreview());
+                this.playAgainBtn.addEventListener('click', () => {
+                    this.hideSuccessModal();
+                    this.startNewGame();
+                });
+                
+                // Close modals when clicking outside
+                this.previewModal.addEventListener('click', (e) => {
+                    if (e.target === this.previewModal) this.hidePreview();
+                });
+                this.successModal.addEventListener('click', (e) => {
+                    if (e.target === this.successModal) this.hideSuccessModal();
+                });
+            }
+
+            loadImage() {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    this.image = img;
+                    this.previewImage.src = this.currentImage;
+                    this.startNewGame();
+                };
+                img.src = this.currentImage;
+            }
+
+            startNewGame() {
+                const difficulty = parseInt(this.difficultySelect.value);
+                this.gridSize = Math.sqrt(difficulty);
+                this.pieces = [];
+                this.board = [];
+                this.completedPieces = 0;
+                
+                this.updateStatus('Generando puzzle...', 'blue');
+                this.gameStatus.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    this.createPuzzle();
+                    this.updateStatus('¡Arrastra las piezas para comenzar!', 'blue');
+                }, 500);
+            }
+
+            createPuzzle() {
+                if (!this.image) return;
+
+                this.puzzleBoard.innerHTML = '';
+                this.piecesArea.innerHTML = '';
+                
+                // Configure grid
+                this.puzzleBoard.style.gridTemplateColumns = `repeat(${this.gridSize}, ${this.pieceSize}px)`;
+                this.puzzleBoard.style.gridTemplateRows = `repeat(${this.gridSize}, ${this.pieceSize}px)`;
+
+                // Create canvas for piece generation
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const pieceWidth = this.image.width / this.gridSize;
+                const pieceHeight = this.image.height / this.gridSize;
+
+                // Create board slots
+                for (let i = 0; i < this.gridSize * this.gridSize; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'puzzle-slot';
+                    slot.style.width = `${this.pieceSize}px`;
+                    slot.style.height = `${this.pieceSize}px`;
+                    slot.dataset.correctPiece = i;
+                    
+                    this.setupDropZone(slot);
+                    this.puzzleBoard.appendChild(slot);
+                    this.board.push(null);
+                }
+
+                // Create puzzle pieces
+                for (let row = 0; row < this.gridSize; row++) {
+                    for (let col = 0; col < this.gridSize; col++) {
+                        const pieceIndex = row * this.gridSize + col;
+                        
+                        canvas.width = pieceWidth;
+                        canvas.height = pieceHeight;
+                        
+                        ctx.drawImage(
+                            this.image,
+                            col * pieceWidth, row * pieceHeight,
+                            pieceWidth, pieceHeight,
+                            0, 0,
+                            pieceWidth, pieceHeight
+                        );
+
+                        const pieceImg = document.createElement('img');
+                        pieceImg.src = canvas.toDataURL();
+                        pieceImg.className = 'puzzle-piece rounded-lg';
+                        pieceImg.style.width = `${this.pieceSize}px`;
+                        pieceImg.style.height = `${this.pieceSize}px`;
+                        pieceImg.dataset.pieceId = pieceIndex;
+                        
+                        this.setupDragPiece(pieceImg);
+                        this.pieces.push(pieceImg);
+                    }
+                }
+
+                // Shuffle and add pieces to pieces area
+                this.shufflePieces();
+            }
+
+            shufflePieces() {
+                const shuffled = [...this.pieces].sort(() => Math.random() - 0.5);
+                shuffled.forEach(piece => {
+                    this.piecesArea.appendChild(piece);
+                });
+            }
+
+            setupDragPiece(piece) {
+                piece.draggable = true;
+                
+                piece.addEventListener('dragstart', (e) => {
+                    this.draggedPiece = piece;
+                    piece.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                piece.addEventListener('dragend', () => {
+                    piece.classList.remove('dragging');
+                    this.draggedPiece = null;
+                });
+            }
+
+            setupDropZone(slot) {
+                slot.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (!slot.classList.contains('occupied')) {
+                        slot.classList.add('drag-over');
+                    }
+                });
+
+                slot.addEventListener('dragleave', () => {
+                    slot.classList.remove('drag-over');
+                });
+
+                slot.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    slot.classList.remove('drag-over');
+                    
+                    if (this.draggedPiece && !slot.classList.contains('occupied')) {
+                        this.dropPiece(slot, this.draggedPiece);
+                    }
+                });
+            }
+
+            dropPiece(slot, piece) {
+                const slotIndex = parseInt(slot.dataset.correctPiece);
+                const pieceIndex = parseInt(piece.dataset.pieceId);
+                
+                // Remove piece from its current location
+                const currentParent = piece.parentNode;
+                if (currentParent !== this.piecesArea) {
+                    // Piece was in another slot, free that slot
+                    const oldSlotIndex = Array.from(this.puzzleBoard.children).indexOf(currentParent);
+                    this.board[oldSlotIndex] = null;
+                    currentParent.classList.remove('occupied');
+                    currentParent.innerHTML = '';
+                }
+
+                // Place piece in new slot
+                slot.appendChild(piece);
+                slot.classList.add('occupied');
+                this.board[slotIndex] = pieceIndex;
+
+                // Check if piece is in correct position
+                if (slotIndex === pieceIndex) {
+                    // Sonido de éxito para pieza correcta
+                    playGameSound('piece');
+                    
+                    piece.style.border = '2px solid #10b981';
+                    this.completedPieces++;
+                    
+                    if (this.completedPieces === this.gridSize * this.gridSize) {
+                        // Sonido especial de puzzle completado
+                        setTimeout(() => {
+                            playGameSound('success');
+                            this.showSuccess();
+                        }, 500);
+                    } else {
+                        this.updateStatus(`¡Bien! ${this.completedPieces}/${this.gridSize * this.gridSize} piezas correctas`, 'green');
+                    }
+                } else {
+                    // Sonido de error para pieza incorrecta
+                    playGameSound('wrong');
+                    
+                    piece.style.border = '2px solid #ef4444';
+                    this.updateStatus('Pieza incorrecta, intenta otra posición', 'yellow');
+                }
+            }
+
+            updateStatus(message, color) {
+                this.statusText.textContent = message;
+                this.gameStatus.className = `text-center mb-6`;
+                
+                const colorClasses = {
+                    blue: 'bg-blue-100 text-blue-800',
+                    green: 'bg-green-100 text-green-800',
+                    yellow: 'bg-yellow-100 text-yellow-800'
+                };
+                
+                this.statusText.parentNode.className = `inline-flex items-center px-4 py-2 rounded-lg ${colorClasses[color]}`;
+            }
+
+            showPreview() {
+                this.previewModal.classList.remove('hidden');
+                this.previewModal.classList.add('flex');
+            }
+
+            hidePreview() {
+                this.previewModal.classList.add('hidden');
+                this.previewModal.classList.remove('flex');
+            }
+
+            showSuccess() {
+                let message = '¡Puzzle completado! 🎉';
+                if (this.puzzleData) {
+                    message = `¡Puzzle de ${this.puzzleData.word} completado! 🎉`;
+                    speakText(`¡Felicidades! Has completado el puzzle de ${this.puzzleData.word}`);
+                }
+                
+                this.updateStatus(message, 'green');
+                this.puzzleBoard.classList.add('completed');
+                
+                // Mostrar confetti
+                showConfetti();
+                
+                setTimeout(() => {
+                    this.successModal.classList.remove('hidden');
+                    this.successModal.classList.add('flex');
+                }, 1000);
+            }
+
+            hideSuccessModal() {
+                this.successModal.classList.add('hidden');
+                this.successModal.classList.remove('flex');
+                this.puzzleBoard.classList.remove('completed');
+            }
+        }
+        
+        // Función para inicializar drag and drop del puzle
+        function initPuzzleDragDrop() {
+            const pieces = document.querySelectorAll('.puzzle-piece');
+            const target = document.getElementById('wordTarget');
+            let currentSyllables = [];
+            
+            pieces.forEach(piece => {
+                piece.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.syllable);
+                    e.target.classList.add('dragging');
+                });
+                
+                piece.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                });
+                
+                // También para dispositivos táctiles
+                piece.addEventListener('click', () => {
+                    const syllable = piece.dataset.syllable;
+                    currentSyllables.push(syllable);
+                    updateWordTarget(currentSyllables);
+                    piece.style.opacity = '0.5';
+                    piece.style.pointerEvents = 'none';
+                });
+            });
+            
+            target.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            
+            target.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const syllable = e.dataTransfer.getData('text/plain');
+                currentSyllables.push(syllable);
+                updateWordTarget(currentSyllables);
+                
+                // Ocultar la pieza usada
+                const usedPiece = [...pieces].find(p => p.dataset.syllable === syllable);
+                if (usedPiece) {
+                    usedPiece.style.opacity = '0.5';
+                    usedPiece.style.pointerEvents = 'none';
+                }
+            });
+            
+            // Botón para reiniciar
+            const resetBtn = document.createElement('button');
+            resetBtn.innerHTML = '<i class="fas fa-redo mr-2"></i>Reiniciar';
+            resetBtn.className = 'mt-4 bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-600 transition-all';
+            resetBtn.onclick = () => {
+                currentSyllables = [];
+                updateWordTarget(currentSyllables);
+                pieces.forEach(piece => {
+                    piece.style.opacity = '1';
+                    piece.style.pointerEvents = 'auto';
+                });
+            };
+            
+            target.parentNode.insertBefore(resetBtn, target.nextSibling);
+        }
+        
+        // Función para actualizar el objetivo de la palabra
+        function updateWordTarget(syllables) {
+            const target = document.getElementById('wordTarget');
+            const wordData = Object.values(wordDatabase).find(data => 
+                JSON.stringify(data.syllables.sort()) === JSON.stringify(syllables.sort())
+            );
+            
+            if (syllables.length === 0) {
+                target.textContent = 'Arrastra aquí las sílabas';
+                target.classList.remove('filled');
+            } else if (wordData && syllables.length === wordData.syllables.length) {
+                target.innerHTML = `🎉 ¡Correcto! <strong>${wordData.word}</strong>`;
+                target.classList.add('filled', 'celebration');
+                speakWithPaulina(`¡Muy bien! ${wordData.word}`);
+                
+                setTimeout(() => {
+                    target.classList.remove('celebration');
+                }, 600);
+            } else {
+                target.textContent = syllables.join(' - ');
+                target.classList.remove('filled');
+            }
+        }
+        
+        // Función para girar la ruleta (mejorada con sonidos)
+        function spinWheel() {
+            if (isSpinning) return;
+            
+            // Sonido de giro inicial
+            playGameSound('spin');
+            
+            // Inicializar música de fondo
+            initBackgroundMusic();
+            
+            isSpinning = true;
+            const spinBtn = document.getElementById('spinBtn');
+            const resultText = document.getElementById('resultText');
+            
+            spinBtn.disabled = true;
+            spinBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin mr-2"></i>Girando...';
+            resultText.textContent = '🎯 ¡Girando!';
+            
+            const wheel = document.getElementById('wheel');
+            // Más vueltas para mejor efecto visual (8-12 vueltas)
+            const randomDegree = Math.random() * 360 + (8 + Math.random() * 4) * 360;
+            
+            wheel.style.transform = `rotate(${randomDegree}deg)`;
+            
+            // Sonidos durante el giro
+            setTimeout(() => playGameSound('spin'), 800);
+            setTimeout(() => playGameSound('spin'), 1600);
+            setTimeout(() => playGameSound('spin'), 2400);
+            
+            setTimeout(() => {
+                const segmentAngle = 360 / currentElements.length;
+                const normalizedDegree = randomDegree % 360;
+                const selectedIndex = Math.floor((360 - normalizedDegree) / segmentAngle) % currentElements.length;
+                const selectedElement = currentElements[selectedIndex];
+                
+                // Sonido cuando se detiene en el objetivo
+                playGameSound('target');
+                
+                resultText.innerHTML = `🎉 <strong style="font-size: 1.5em; color: #5D5CDE;">${selectedElement}</strong>`;
+                
+                // Solo decir la palabra específica
+                const wordData = wordDatabase[selectedElement];
+                if (wordData) {
+                    speakText(wordData.word);
+                } else {
+                    // Para elementos que no están en la base de datos, decir el elemento limpio
+                    const cleanElement = selectedElement.replace(/[🔤📝🐶🌈🍎🍕🚗👁️🏠]/g, '').trim();
+                    speakText(cleanElement);
+                }
+                
+                spinBtn.disabled = false;
+                spinBtn.innerHTML = '<i class="fas fa-sync-alt mr-2"></i>Girar Ruleta';
+                isSpinning = false;
+                
+                // Mostrar puzle después de un breve delay
+                setTimeout(() => {
+                    showPuzzleModal(selectedElement);
+                }, 1000);
+                
+            }, 4000);
+        }
+        
+        // Función para cargar campo semántico desde el select
+        function loadSemanticField() {
+            const selectedField = document.getElementById('semanticField').value;
+            if (selectedField && semanticFields[selectedField]) {
+                document.getElementById('elements').value = semanticFields[selectedField].join(', ');
+            }
+        }
+        
+        // Función para cargar presets rápidos
+        function loadPreset(field) {
+            if (semanticFields[field]) {
+                document.getElementById('elements').value = semanticFields[field].join(', ');
+                document.getElementById('semanticField').value = field;
+                showCustomAlert(`¡Campo semántico "${field}" cargado! 🎉`);
+            }
+        }
+        
+        // Función para crear ruleta personalizada
+        function createCustomWheel() {
+            const elements = document.getElementById('elements').value;
+            const selectedField = document.getElementById('semanticField').value;
+            
+            if (!elements.trim()) {
+                showCustomAlert('Por favor, ingresa elementos para la ruleta');
+                return;
+            }
+            
+            currentElements = elements.split(',').map(item => item.trim()).filter(item => item);
+            
+            if (currentElements.length < 2) {
+                showCustomAlert('La ruleta necesita al menos 2 elementos');
+                return;
+            }
+            
+            if (currentElements.length > 8) {
+                showCustomAlert('Máximo 8 elementos por ruleta');
+                return;
+            }
+            
+            createWheel(currentElements);
+            
+            // Scroll a la demo
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+            
+            const fieldName = selectedField ? selectedField : 'personalizada';
+            showCustomAlert(`¡Ruleta "${fieldName}" creada exitosamente! 🎯`);
+        }
+        
+        // Función para mostrar alertas personalizadas
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-4 right-4 bg-primary text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-bounce';
+            alertDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        // Funciones de navegación
+        function scrollToDemo() {
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToCrear() {
+            document.getElementById('crear').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Inicializar la ruleta al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            createWheel(currentElements);
+            
+            // Llenar el textarea con elementos por defecto
+            document.getElementById('elements').value = defaultElements.join(', ');
+        });
+        
+        // Smooth scrolling para enlaces de navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

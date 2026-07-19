@@ -1,0 +1,39 @@
+{
+  "id_taller": "pri_3_obj_003a_004a",
+  "codigo": "3º PRIMARIA obj.003a-004a",
+  "nombre": "Seguimiento ocular, atención y memoria visual",
+  "modulo": "eficiencia_lectora",
+  "objetivo_clinico": [
+    "movimientos_de_busqueda_y_seguimiento_ocular",
+    "atencion_selectiva_visual",
+    "velocidad_de_procesamiento_lector"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "penalizacion_error_segundos": 3,
+    "ayuda_adaptativa_destello_por_inactividad": true,
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_total_ms",
+      "penalizacion_total_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "rastreo_visual_con_cronometro",
+    "presentacion_palabra_modelo_ms": 2500,
+    "texto_interactivo_palabra_a_palabra": true,
+    "objetivos_por_texto": 4
+  },
+  "banco_items": [
+    {
+      "id_item": "ef_001",
+      "palabra_modelo": "castillo",
+      "texto": "El castillo está en la colina y desde allí se ve el rio. Marta dibujo un castillo pequeño en su cuaderno. En la excursion, el guia hablo del castillo antiguo y de sus torres. Al final, todos compraron una postal del castillo y volvieron contentos al autobus.",
+      "ocurrencias_objetivo": 4,
+      "distractores_cercanos": ["casillo", "castio", "castillos"]
+    }
+  ]
+}

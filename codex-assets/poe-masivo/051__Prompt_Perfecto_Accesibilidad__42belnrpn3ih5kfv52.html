@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lectura Fácil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #FDF8F0;
+      --bg-green: rgba(200, 235, 200, 0.25);
+      --card: #FFFFFF;
+      --text: #1a1a1a;
+      --text-soft: #666;
+      --accent: #2E7D32;
+      --b-color: #E91E63;
+      --d-color: #9C27B0;
+      --p-color: #FF9800;
+      --q-color: #00BCD4;
+      --hint-bg: #FFF3E0;
+      --hint-border: #FF9800;
+    }
+
+    .dark {
+      --bg: #121212;
+      --bg-green: rgba(100, 180, 100, 0.1);
+      --card: #1e1e1e;
+      --text: #e0e0e0;
+      --text-soft: #999;
+      --hint-bg: #3D2A10;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.8;
+    }
+
+    .header {
+      background: var(--card);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: transparent;
+      color: var(--text-soft);
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover { background: var(--bg-green); color: var(--accent); }
+
+    .main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .input-area {
+      background: linear-gradient(var(--bg-green), var(--bg-green)), var(--card);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .text-input {
+      width: 100%;
+      min-height: 120px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 18px;
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      resize: vertical;
+    }
+
+    .text-input:focus { outline: none; }
+    .text-input::placeholder { color: var(--text-soft); opacity: 0.6; }
+
+    .toolbar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: var(--card);
+      border-radius: 12px;
+    }
+
+    .tool-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.875rem;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 40px;
+    }
+
+    .tool-btn:hover { border-color: var(--accent); }
+    .tool-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .output-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      min-height: 200px;
+    }
+
+    .output-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .output-title i { color: var(--accent); }
+
+    .output-text {
+      font-size: 20px;
+      line-height: 2.4;
+      letter-spacing: 0.05em;
+      word-spacing: 0.15em;
+    }
+
+    .output-empty {
+      color: var(--text-soft);
+      opacity: 0.5;
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    /* Letras coloreadas */
+    .lb { color: var(--b-color); font-weight: 600; }
+    .ld { color: var(--d-color); font-weight: 600; }
+    .lp { color: var(--p-color); font-weight: 600; }
+    .lq { color: var(--q-color); font-weight: 600; }
+
+    .sep { color: #999; margin: 0 2px; font-weight: 300; }
+
+    .paragraph { margin-bottom: 1.5em; }
+
+    .legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .legend-letter {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .leg-b { background: rgba(233,30,99,0.15); color: var(--b-color); }
+    .leg-d { background: rgba(156,39,176,0.15); color: var(--d-color); }
+    .leg-p { background: rgba(255,152,0,0.15); color: var(--p-color); }
+    .leg-q { background: rgba(0,188,212,0.15); color: var(--q-color); }
+
+    /* Pista visible inline */
+    .hint-word {
+      display: inline;
+      background: var(--hint-bg);
+      padding: 2px 6px;
+      border-radius: 6px;
+      border-bottom: 2px solid var(--hint-border);
+    }
+
+    .hint-tip {
+      display: inline-block;
+      background: var(--hint-border);
+      color: white;
+      font-size: 0.65em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 4px;
+      vertical-align: middle;
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .btn-primary { background: var(--accent); color: white; flex: 1; }
+    .btn-secondary { background: var(--bg); color: var(--text); }
+
+    .panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .panel-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .panel {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 340px;
+      height: 100%;
+      background: var(--card);
+      z-index: 201;
+      transition: right 0.3s;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .panel.open { right: 0; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel h2 { font-size: 1.1rem; }
+
+    .setting-group { margin-bottom: 1.25rem; }
+
+    .setting-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .setting-select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--text);
+      color: var(--card);
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .info-box {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .info-box h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .info-box p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 600px) {
+      .legend { justify-content: center; }
+      .output-text { font-size: 18px; line-height: 2.2; }
+      .hint-tip { font-size: 0.6em; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <i class="fas fa-book-reader"></i>
+      <span>Lectura Fácil</span>
+    </div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Configuración">
+      <i class="fas fa-cog"></i>
+    </button>
+  </header>
+
+  <main class="main">
+    <div class="input-area">
+      <textarea id="inputText" class="text-input" placeholder="Escribe o pega tu texto aquí..."></textarea>
+    </div>
+
+    <div class="toolbar">
+      <button class="tool-btn active" data-tool="bdpq">
+        <span class="lb">b</span><span class="ld">d</span><span class="lp">p</span><span class="lq">q</span>
+        Colorear
+      </button>
+      <button class="tool-btn" data-tool="syllables">
+        <i class="fas fa-grip-lines-vertical"></i>
+        Sílabas
+      </button>
+      <button class="tool-btn active" data-tool="hints">
+        <i class="fas fa-lightbulb"></i>
+        Pistas
+      </button>
+      <button class="tool-btn" data-tool="spacing">
+        <i class="fas fa-text-width"></i>
+        Espaciado+
+      </button>
+    </div>
+
+    <div class="output-card">
+      <div class="output-title">
+        <i class="fas fa-eye"></i>
+        Texto adaptado para lectura
+      </div>
+
+      <div class="legend" id="legend">
+        <div class="legend-item"><span class="legend-letter leg-b">b</span><span>panza abajo</span></div>
+        <div class="legend-item"><span class="legend-letter leg-d">d</span><span>panza derecha</span></div>
+        <div class="legend-item"><span class="legend-letter leg-p">p</span><span>palo abajo</span></div>
+        <div class="legend-item"><span class="legend-letter leg-q">q</span><span>colita</span></div>
+      </div>
+
+      <div class="output-text" id="output">
+        <p class="output-empty">El texto adaptado aparecerá aquí...</p>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="copyBtn"><i class="fas fa-copy"></i> Copiar</button>
+        <button class="btn btn-secondary" id="clearBtn"><i class="fas fa-trash-alt"></i></button>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h3><i class="fas fa-info-circle"></i> Ayudas disponibles</h3>
+      <p>
+        <strong>b·d·p·q:</strong> Colorea estas letras para distinguirlas.<br>
+        <strong>Sílabas:</strong> Separa palabras largas con puntos.<br>
+        <strong>Pistas:</strong> Muestra ayuda al lado de palabras confusas.<br>
+        <strong>Espaciado+:</strong> Más espacio entre palabras.
+      </p>
+    </div>
+  </main>
+
+  <div class="panel-overlay" id="panelOverlay"></div>
+  <div class="panel" id="settingsPanel">
+    <div class="panel-header">
+      <h2>Configuración</h2>
+      <button class="icon-btn" id="closePanel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Tamaño de texto</div>
+      <select class="setting-select" id="sizeSelect">
+        <option value="18">18px</option>
+        <option value="20" selected>20px</option>
+        <option value="22">22px</option>
+        <option value="24">24px</option>
+        <option value="28">28px</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">Interlineado</div>
+      <select class="setting-select" id="lineSelect">
+        <option value="1.8">1.8</option>
+        <option value="2.0">2.0</option>
+        <option value="2.2" selected>2.2</option>
+        <option value="2.5">2.5</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Dark mode
+    if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      document.documentElement.classList.toggle('dark', e.matches);
+    });
+
+    const inputEl = document.getElementById('inputText');
+    const outputEl = document.getElementById('output');
+    const legendEl = document.getElementById('legend');
+    const toolBtns = document.querySelectorAll('.tool-btn');
+
+    // Pistas activadas por defecto
+    const tools = { bdpq: true, syllables: false, hints: true, spacing: false };
+
+    // Pistas con explicación corta - solo palabras que causan confusión real
+    const hints = {
+      // hay/ahí/ay - MUY confusas
+      'hay': '¿existe?',
+      'ahí': 'en ese lugar',
+      'ay': '¡dolor!',
+      // hecho/echo
+      'hecho': 'de hacer',
+      'echo': 'yo tiro',
+      // tuvo/tubo
+      'tuvo': 'de tener',
+      'tubo': 'cilindro',
+      // vaya/valla/baya
+      'vaya': 'de ir',
+      'valla': 'cerca',
+      'baya': 'fruta',
+      // hola/ola
+      'hola': 'saludo',
+      'ola': 'del mar',
+      // haya/halla/aya
+      'haya': 'de haber',
+      'halla': 'encontrar',
+      'aya': 'cuidadora',
+      // vaca/baca
+      'vaca': 'animal',
+      'baca': 'del coche',
+      // bello/vello
+      'bello': 'bonito',
+      'vello': 'pelo',
+      // hierba/hierva
+      'hierba': 'planta',
+      'hierva': 'de hervir',
+      // cabo/cavo
+      'cabo': 'extremo',
+      'cavo': 'yo cavo',
+      // iba
+      'iba': 'de ir',
+      // botar/votar
+      'botar': 'tirar',
+      'votar': 'elegir',
+      // barón/varón
+      'barón': 'título noble',
+      'varón': 'hombre',
+      // bienes/vienes
+      'bienes': 'cosas',
+      'vienes': 'de venir',
+      // revelar/rebelar
+      'revelar': 'mostrar',
+      'rebelar': 'resistir',
+      // grabar/gravar
+      'grabar': 'registrar',
+      'gravar': 'impuesto',
+      // sabia/savia
+      'sabia': 'inteligente',
+      'savia': 'de planta',
+      // ciervo/siervo
+      'ciervo': 'animal',
+      'siervo': 'sirviente',
+      // cima/sima
+      'cima': 'arriba',
+      'sima': 'abajo',
+      // cocer/coser
+      'cocer': 'cocinar',
+      'coser': 'con hilo',
+      // cazar/casar
+      'cazar': 'animales',
+      'casar': 'boda',
+      // abrazar/abrasar
+      'abrazar': 'con brazos',
+      'abrasar': 'quemar',
+      // has/haz
+      'has': 'de haber',
+      'haz': 'de hacer',
+      // ves/vez
+      'ves': 'de ver',
+      'vez': 'ocasión',
+      // Tildes diacríticas importantes
+      'tú': 'tú = persona',
+      'él': 'él = persona',
+      'mí': 'a mí = persona',
+      'sí': 'sí = afirma',
+      'sé': 'yo sé / sé tú',
+      'té': 'té = bebida',
+      'dé': 'que dé = dar',
+      'más': 'más = cantidad',
+      'aún': 'aún = todavía',
+      // b/v confusiones
+      'había': 'de haber',
+      'habían': 'de haber',
+      'iban': 'de ir',
+      'ibas': 'de ir',
+      'abeja': 'insecto con b',
+      'oveja': 'animal con v',
+      // Terminaciones -ción/-sión
+      'acción': '-cción',
+      'lección': '-cción',
+      'dirección': '-cción',
+      'atención': '-ción',
+      'televisión': '-sión',
+      'decisión': '-sión',
+      'expresión': '-sión',
+      'comprensión': '-sión'
+    };
+
+    // Silabear
+    function syllabify(word) {
+      if (word.length < 5) return [word];
+
+      const vowels = 'aeiouáéíóúüAEIOUÁÉÍÓÚÜ';
+      const insep = ['bl','br','cl','cr','dr','fl','fr','gl','gr','pl','pr','tr','ch','ll','rr'];
+      const syllables = [];
+      let current = '';
+
+      for (let i = 0; i < word.length; i++) {
+        const c = word[i];
+        current += c;
+
+        if (vowels.includes(c) && i < word.length - 1) {
+          const next = word[i + 1];
+          const next2 = word[i + 2] || '';
+
+          if (!vowels.includes(next)) {
+            const pair = next + next2;
+            if (insep.includes(pair.toLowerCase()) || vowels.includes(next2)) {
+              syllables.push(current);
+              current = '';
+            } else if (!next2 || !vowels.includes(next2)) {
+              if (i < word.length - 2) {
+                current += next;
+                i++;
+                syllables.push(current);
+                current = '';
+              }
+            }
+          }
+        }
+      }
+
+      if (current) {
+        if (syllables.length > 0 && current.length === 1 && !vowels.includes(current)) {
+          syllables[syllables.length - 1] += current;
+        } else {
+          syllables.push(current);
+        }
+      }
+
+      return syllables.length > 1 ? syllables : [word];
+    }
+
+    // Procesar palabra
+    function processWord(word) {
+      const lower = word.toLowerCase();
+      const fragments = [];
+
+      // Si es palabra con pista y está activado
+      if (tools.hints && hints[lower]) {
+        // Primero la palabra (con colores bdpq si está activo)
+        if (tools.bdpq) {
+          for (const char of word) {
+            const lc = char.toLowerCase();
+            if (lc === 'b') fragments.push({ type: 'b', text: char });
+            else if (lc === 'd') fragments.push({ type: 'd', text: char });
+            else if (lc === 'p') fragments.push({ type: 'p', text: char });
+            else if (lc === 'q') fragments.push({ type: 'q', text: char });
+            else fragments.push({ type: 'text', text: char });
+          }
+        } else {
+          fragments.push({ type: 'text', text: word });
+        }
+        // Añadir la pista
+        fragments.push({ type: 'tip', text: hints[lower] });
+        return fragments;
+      }
+
+      // Silabear si está activo
+      let parts = tools.syllables ? syllabify(word) : [word];
+
+      parts.forEach((part, idx) => {
+        if (idx > 0 && tools.syllables) {
+          fragments.push({ type: 'sep', text: '·' });
+        }
+
+        if (tools.bdpq) {
+          for (const char of part) {
+            const lc = char.toLowerCase();
+            if (lc === 'b') fragments.push({ type: 'b', text: char });
+            else if (lc === 'd') fragments.push({ type: 'd', text: char });
+            else if (lc === 'p') fragments.push({ type: 'p', text: char });
+            else if (lc === 'q') fragments.push({ type: 'q', text: char });
+            else fragments.push({ type: 'text', text: char });
+          }
+        } else {
+          fragments.push({ type: 'text', text: part });
+        }
+      });
+
+      return fragments;
+    }
+
+    // Renderizar
+    function renderFragments(fragments) {
+      let html = '';
+      let hasHint = fragments.some(f => f.type === 'tip');
+
+      if (hasHint) {
+        html += '<span class="hint-word">';
+      }
+
+      fragments.forEach(f => {
+        switch (f.type) {
+          case 'b': html += `<span class="lb">${f.text}</span>`; break;
+          case 'd': html += `<span class="ld">${f.text}</span>`; break;
+          case 'p': html += `<span class="lp">${f.text}</span>`; break;
+          case 'q': html += `<span class="lq">${f.text}</span>`; break;
+          case 'sep': html += `<span class="sep">${f.text}</span>`; break;
+          case 'tip': html += `<span class="hint-tip">${f.text}</span>`; break;
+          default: html += f.text;
+        }
+      });
+
+      if (hasHint) {
+        html += '</span>';
+      }
+
+      return html;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function processText() {
+      const text = inputEl.value.trim();
+
+      if (!text) {
+        outputEl.innerHTML = '<p class="output-empty">El texto adaptado aparecerá aquí...</p>';
+        legendEl.style.display = tools.bdpq ? 'flex' : 'none';
+        return;
+      }
+
+      legendEl.style.display = tools.bdpq ? 'flex' : 'none';
+
+      const paragraphs = text.split(/\n+/);
+      let html = '';
+
+      paragraphs.forEach(para => {
+        if (!para.trim()) return;
+
+        const tokens = para.split(/(\s+|[.,;:!?¿¡()"""''\-—])/);
+        let paraHtml = '';
+
+        tokens.forEach(token => {
+          if (/^[\s.,;:!?¿¡()"""''\-—]+$/.test(token)) {
+            paraHtml += escapeHtml(token);
+          } else if (token.length > 0) {
+            const fragments = processWord(token);
+            paraHtml += renderFragments(fragments);
+          }
+        });
+
+        html += `<p class="paragraph">${paraHtml}</p>`;
+      });
+
+      outputEl.innerHTML = html;
+
+      outputEl.style.letterSpacing = tools.spacing ? '0.12em' : '0.05em';
+      outputEl.style.wordSpacing = tools.spacing ? '0.35em' : '0.15em';
+      outputEl.style.fontSize = document.getElementById('sizeSelect').value + 'px';
+      outputEl.style.lineHeight = document.getElementById('lineSelect').value;
+    }
+
+    // Events
+    inputEl.addEventListener('input', processText);
+
+    toolBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tool = btn.dataset.tool;
+        tools[tool] = !tools[tool];
+        btn.classList.toggle('active', tools[tool]);
+        processText();
+      });
+    });
+
+    document.getElementById('sizeSelect').addEventListener('change', processText);
+    document.getElementById('lineSelect').addEventListener('change', processText);
+
+    // Panel
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      document.getElementById('panelOverlay').classList.add('open');
+      document.getElementById('settingsPanel').classList.add('open');
+    });
+
+    function closePanel() {
+      document.getElementById('panelOverlay').classList.remove('open');
+      document.getElementById('settingsPanel').classList.remove('open');
+    }
+
+    document.getElementById('closePanel').addEventListener('click', closePanel);
+    document.getElementById('panelOverlay').addEventListener('click', closePanel);
+
+    // Copy
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      const text = inputEl.value.trim();
+      if (!text) { showToast('No hay texto'); return; }
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('✓ Copiado');
+      } catch (e) {
+        showToast('Error');
+      }
+    });
+
+    // Clear
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      inputEl.value = '';
+      processText();
+      showToast('✓ Limpiado');
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
+</html>
