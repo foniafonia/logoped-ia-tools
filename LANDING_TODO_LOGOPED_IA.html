@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logoped-IA · Centro de Todo (Claude + Codex)</title>
+<style>
+  :root{
+    --bg:#0d1117; --bg2:#111a24; --card:#161f2b; --card2:#1b2634;
+    --ink:#e9eef5; --muted:#93a1b3; --line:#26313f;
+    --green:#22c55e; --green-d:#16a34a; --gold:#eab308; --purple:#8b5cf6;
+    --blue:#38bdf8; --pink:#f472b6; --red:#f87171;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f4f7fb; --bg2:#eef2f8; --card:#ffffff; --card2:#f7fafc;
+      --ink:#16202c; --muted:#5a6b7d; --line:#e2e8f0; --shadow:0 10px 30px rgba(20,40,70,.10);}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+  header.hero{padding:34px 26px;border-radius:22px;background:
+    radial-gradient(1200px 300px at 10% -20%, rgba(34,197,94,.20), transparent 60%),
+    radial-gradient(900px 300px at 110% 0%, rgba(234,179,8,.16), transparent 55%),
+    var(--card);border:1px solid var(--line);box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .logo{display:inline-flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.4px}
+  .logo .mark{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:20px;
+    background:linear-gradient(135deg,var(--green),var(--gold));color:#0b1220;font-weight:900}
+  h1{font-size:clamp(26px,4vw,40px);margin:16px 0 6px;line-height:1.1}
+  .sub{color:var(--muted);max-width:760px;font-size:16px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .chip{font-size:12.5px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:var(--muted)}
+  .chip b{color:var(--ink)}
+  .controls{position:sticky;top:0;z-index:5;margin:26px 0 18px;padding:12px;border-radius:16px;
+    background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--line);backdrop-filter:blur(8px);
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  #q{flex:1;min-width:220px;padding:11px 14px;border-radius:11px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px}
+  #q::placeholder{color:var(--muted)}
+  .filters{display:flex;gap:7px;flex-wrap:wrap}
+  .fbtn{cursor:pointer;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card2);color:var(--muted);user-select:none}
+  .fbtn.active{background:linear-gradient(135deg,var(--green),var(--green-d));color:#06210f;border-color:transparent;font-weight:700}
+  .section-title{margin:30px 4px 12px;font-size:14px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px 17px 15px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;transition:transform .12s ease,border-color .12s}
+  .card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--green) 45%,var(--line))}
+  .card h3{margin:0;font-size:17px;display:flex;align-items:center;gap:8px}
+  .emoji{font-size:19px}
+  .desc{color:var(--muted);font-size:14px;margin:0}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .b{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);font-weight:600}
+  .b.live{color:#052e12;background:var(--green);border-color:transparent}
+  .b.repo{color:#04212f;background:var(--blue);border-color:transparent}
+  .b.local{color:#2a1a02;background:var(--gold);border-color:transparent}
+  .b.soon{color:var(--muted);background:transparent}
+  .b.cantera{color:#3a0f27;background:var(--pink);border-color:transparent}
+  .b.tag{color:var(--muted);background:var(--card2)}
+  .links{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;padding-top:6px}
+  .go{font-size:13px;text-decoration:none;padding:7px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--card2);color:var(--ink);font-weight:600;white-space:nowrap}
+  .go.primary{background:linear-gradient(135deg,var(--green),var(--green-d));color:#06210f;border-color:transparent}
+  .go.muted{color:var(--muted);cursor:default}
+  .path{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--muted);word-break:break-all}
+  .empty{color:var(--muted);text-align:center;padding:40px;display:none}
+  footer{margin-top:44px;padding:22px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:13.5px}
+  footer b{color:var(--ink)}
+  .count{color:var(--muted);font-size:13px;margin-left:auto}
+  .note{margin:16px 0 0;padding:14px 16px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--gold) 55%,var(--line));background:color-mix(in srgb,var(--gold) 8%,transparent);color:var(--ink);font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="logo"><span class="mark">L</span> LOGOPED-IA</div>
+    <h1>Centro de Todo · un solo sitio con todo lo construido</h1>
+    <p class="sub">Índice vivo de todos los hilos y proyectos trabajados con <b>Claude</b> y <b>Codex</b>: membresía, Suite clínica, juegos, prototipos, curso, infraestructura y coordinación. Pensado para buscar, abrir y mostrar rápido. Nada se pierde: lo que aún vive en local o está por recuperar queda etiquetado, no borrado.</p>
+    <div class="meta">
+      <span class="chip">Repo: <b>foniafonia/logoped-ia-tools</b></span>
+      <span class="chip">Rama: <b>claude/codex-claude-landing-coordination-p1vwm2</b></span>
+      <span class="chip">Actualizado: <b>2026-07-19</b></span>
+      <span class="chip">Mantienen: <b>Claude + Codex</b></span>
+    </div>
+    <div class="note">🧭 <b>Cómo leer los estados:</b>
+      <span class="b live">EN VIVO</span> URL pública funcionando ·
+      <span class="b repo">EN ESTE REPO</span> abrible aquí mismo ·
+      <span class="b local">EN LOCAL</span> vive en el Mac (localhost / carpeta) ·
+      <span class="b soon">PRÓXIMAMENTE</span> en desarrollo ·
+      <span class="b cantera">CANTERA</span> por recuperar/podar.
+    </div>
+  </header>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="Buscar proyecto, juego, herramienta, tecnología…" autocomplete="off">
+    <div class="filters" id="filters"></div>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="board"></div>
+  <div class="empty" id="empty">No hay resultados para tu búsqueda.</div>
+
+  <footer>
+    <b>Coordinación Claude + Codex.</b> Este archivo es el índice maestro. La bitácora operativa compartida está en
+    <span class="path">tmp_bitacora_compartida.md</span> (mismo repo). Regla: antes de trabajar, leer la bitácora; al terminar algo relevante, registrar
+    <i>Hecho / Siguiente paso / Bloqueos</i>. Los items <span class="b local">EN LOCAL</span> y <span class="b cantera">CANTERA</span> necesitan que el usuario suba esos archivos al repo para que ambos agentes los alcancen.
+  </footer>
+</div>
+
+<script>
+/* Datos: inventario real reconstruido desde la bitácora compartida + archivos de este repo.
+   status: live | repo | local | soon | cantera   →   cat: filtro de sección */
+const ITEMS = [
+  // ---- MEMBRESÍA / ACADEMIA ----
+  {cat:"Membresía", emoji:"🎓", title:"Academia Logoped-IA (membresía)", status:"live",
+   desc:"Área privada Next.js: dashboard, formación, prompts, herramientas, materiales, comunidad, ranking, plaza, perfil, biblioteca. Login con Supabase + bcrypt.",
+   tags:["Next.js","Vercel","Supabase"], links:[{t:"Abrir en vivo",u:"https://academia-logoped-ia.vercel.app",p:1}]},
+  {cat:"Membresía", emoji:"💳", title:"Pricing 2 planes + registro diferenciado", status:"live",
+   desc:"Membresía Base 4,95€/mes vs Membresía + Suite 9,94€/mes (4,95 base + 4,99 extra). Selector de plan en el registro, campo `plan` llega al backend.",
+   tags:["pricing","registro"], links:[{t:"Ver landing",u:"https://academia-logoped-ia.vercel.app",p:0}]},
+  {cat:"Membresía", emoji:"📝", title:"Prueba de Nivel (examen)", status:"live",
+   desc:"Examen en Railway integrado por iframe en /prueba-nivel; postMessage devuelve el nivel (básico/intermedio/avanzado/experto) a la Academia.",
+   tags:["Railway","iframe","postMessage"], links:[{t:"Repo examen",u:"https://github.com/foniafonia/logoped-ia-examen",p:0}]},
+
+  // ---- SUITE ----
+  {cat:"Suite", emoji:"🧩", title:"Logoped-IA Suite (contenedor clínico)", status:"local",
+   desc:"Suite integrada en el área privada (/suite). Módulos por área clínica, visor iframe. Dos entornos vivos: Suite Pruebas (8093) y Suite Membresía (8094).",
+   tags:["8093","8094","iframe"], links:[{t:"Localhost 8093",u:"http://localhost:8093",p:0},{t:"Localhost 8094",u:"http://localhost:8094",p:0}]},
+  {cat:"Suite", emoji:"🔤", title:"Módulo Lectoescritura", status:"local",
+   desc:"5 juegos: Detective de Palabras, Letra Crush, LetraBlaster (demo), LetraPang (demo), LectoViva v2.",
+   tags:["lectoescritura","juegos"], links:[]},
+  {cat:"Suite", emoji:"🔊", title:"Módulo Fonología — Encuentra el Nuevo", status:"local",
+   desc:"Juego de discriminación fonológica disponible dentro de la Suite.",
+   tags:["fonología"], links:[]},
+  {cat:"Suite", emoji:"🎤", title:"TerapiaFlu — Karaoke Tartamudez (POE)", status:"local",
+   desc:"Recurso de fluidez integrado en Suite Pruebas (poe-karaoke-tartamudez): cronómetro, PPM y captura de disfluencias desde el DOM.",
+   tags:["fluidez","tartamudez","POE"], links:[]},
+  {cat:"Suite", emoji:"🚧", title:"Módulos próximamente", status:"soon",
+   desc:"Morfosintaxis, Atención y Funciones Ejecutivas, Pragmática. Marcados como próximamente en la Suite privada.",
+   tags:["roadmap"], links:[]},
+
+  // ---- JUEGOS / PROTOTIPOS (en este repo) ----
+  {cat:"Juegos", emoji:"🕵️", title:"Misión Perfiles — Detective del Colegio", status:"repo",
+   desc:"Prototipo completo sin copyright: 10 personajes y 15 casos propios, avatares DiceBear (MIT), estética cuaderno escolar. Mecánica perfil→caso→sospechoso→feedback clínico.",
+   tags:["evaluación","narrativa"], links:[
+     {t:"Abrir aquí",u:"mision-perfiles-nuevo.html",p:1},
+     {t:"GitHub Pages",u:"https://foniafonia.github.io/maleta-resuelve-casos/mision-perfiles-nuevo.html",p:0}]},
+  {cat:"Juegos", emoji:"🧳", title:"Resuelve los casos / Maleta", status:"repo",
+   desc:"Actividad interactiva con niveles, panel profesional, demo e informe clínico. Assets de 31 páginas incluidos.",
+   tags:["casos","informe"], links:[{t:"Abrir aquí",u:"index.html",p:1}]},
+  {cat:"Juegos", emoji:"🗣️", title:"Cribado de comunicación en adultos", status:"repo",
+   desc:"Landing/herramienta de cribado de comunicación en adultos (evaluación rápida).",
+   tags:["adultos","cribado"], links:[{t:"Abrir aquí",u:"evaluacion-comunicacion-adultos-pc.html",p:1}]},
+  {cat:"Juegos", emoji:"📡", title:"Radar de Materiales Educativos", status:"repo",
+   desc:"Landing limpia (sin datos personales) para descubrir/filtrar materiales educativos.",
+   tags:["materiales"], links:[{t:"Abrir aquí",u:"radar-materiales-landing.html",p:1}]},
+
+  // ---- ARAIA ----
+  {cat:"ARAIA", emoji:"🖼️", title:"iSecuencias (ARAIA)", status:"local",
+   desc:"Secuencias con pictogramas ARASAAC. Rescatada y estabilizada; creador acepta frase natural (\"me levanto, me lavo, desayuno…\") y genera pasos jugables. Bug de comillas tipográficas corregido.",
+   tags:["ARASAAC","secuencias"], links:[{t:"Ruta local",u:"#",p:0}], path:"/araia/isecuencias/index.html"},
+
+  // ---- BETA INNOVADORES ----
+  {cat:"Beta", emoji:"🧬", title:"Praxias Connect", status:"local",
+   desc:"Rehabilitación motora orofacial con MediaPipe + Canvas. Dentro de public/beta-innovadores/ de la membresía.",
+   tags:["MediaPipe","praxias"], links:[], path:"public/beta-innovadores/praxias-connect.html"},
+  {cat:"Beta", emoji:"🔠", title:"Alfabeto PNL", status:"local",
+   desc:"Sincronización neurológica / Web Speech. Segunda app del hub Beta Innovadores.",
+   tags:["Web Speech","PNL"], links:[], path:"public/beta-innovadores/alfabeto-pnl.html"},
+
+  // ---- CURSO IA ----
+  {cat:"Curso", emoji:"🎬", title:"Curso IA — Landing de preventa", status:"local",
+   desc:"Landing editorial nivel senior (Flask + SQLite, Stripe). Precios por tramos (10×49€ / 10×79€), copy profesional, branding Logoped-IA. Corre en localhost:5088.",
+   tags:["Flask","Stripe","preventa"], links:[{t:"Localhost 5088",u:"http://localhost:5088",p:0}], path:"/curso-ia-preventa/"},
+  {cat:"Curso", emoji:"🚀", title:"Deploy Curso IA (pendiente)", status:"soon",
+   desc:"Siguiente paso: llevar la preventa a Railway + PostgreSQL + Stripe en producción.",
+   tags:["Railway","roadmap"], links:[]},
+
+  // ---- CANTERA / BOLSA GRANDE ----
+  {cat:"Cantera", emoji:"🧺", title:"POE masivo — 55 HTML", status:"cantera",
+   desc:"Bolsa grande de recursos POE como cantera. No perder de cara a mañana; luego se poda. Viven en el Mac, hay que subirlos al repo para alcanzarlos.",
+   tags:["POE","recuperar"], links:[]},
+  {cat:"Cantera", emoji:"🗂️", title:"17 descartados / no-referencia", status:"cantera",
+   desc:"Conjunto marcado como descartado o no-referencia. Se conserva por si acaso hasta después de la reunión.",
+   tags:["descartes"], links:[]},
+  {cat:"Cantera", emoji:"🎮", title:"Otros juegos mencionados", status:"cantera",
+   desc:"DonkeyFon, Querer Quest, 194RRR, Logopod, Detective de Palabras. Referenciados en el circuito de suite; confirmar ubicación y subir al repo.",
+   tags:["juegos","por confirmar"], links:[]},
+  {cat:"Cantera", emoji:"💬", title:"Hilos de chat + artefactos (Claude/Codex)", status:"cantera",
+   desc:"Todo lo generado en conversaciones y artefactos que aún NO está en este repo. Regla para no perder nada: exportar/pegar cada artefacto o HTML al repo y darlo de alta aquí como una tarjeta más. Esta landing solo puede indexar lo que llega al repo.",
+   tags:["artefactos","chats","exportar"], links:[]},
+
+  // ---- DOCUMENTACIÓN ----
+  {cat:"Docs", emoji:"📘", title:"Línea F — Entrenamiento guiado multimodal", status:"local",
+   desc:"Análisis clínico-técnico (MediaPipe + STT + Gemini): qué se puede validar de verdad, 5 ejercicios prototipables, arquitectura on-device+cloud, MVP 8-10 semanas.",
+   tags:["multimodal","clínico"], links:[], path:"/DOCUMENTACION/LINEA_F_ENTRENAMIENTO_GUIADO_MULTIMODAL.md"},
+  {cat:"Docs", emoji:"🗺️", title:"DASHBOARD_LANDINGS.html (Centro de Mando)", status:"local",
+   desc:"Dashboard visual que indexa membresía, suite, juegos, prototipos y documentación. Antecedente local de esta landing.",
+   tags:["dashboard"], links:[], path:"/CENTRO_DE_MANDO_LOGOPED_IA/DASHBOARD_LANDINGS.html"},
+  {cat:"Docs", emoji:"🏛️", title:"Centro de Mando + CLAUDE.md + protocolos", status:"local",
+   desc:"Hub de coordinación en el Escritorio (hoja de ruta, estado actual, workspace unificado, accesos directos). Incluye CLAUDE.md con reglas de eficiencia y PROTOCOLO_TELEGRAM_RESPUESTA_AGENTES.md.",
+   tags:["coordinación","reglas"], links:[], path:"~/Desktop/CENTRO_DE_MANDO_LOGOPED_IA/"},
+
+  // ---- INFRA / COORDINACIÓN ----
+  {cat:"Infra", emoji:"🤖", title:"Bot Telegram + agente 9:00", status:"local",
+   desc:"@Logopedia_mando_bot recibe órdenes desde el móvil y las escribe en la bitácora con [PARA_CLAUDE/CODEX PENDIENTE]. Agente diario a las 9:00 ejecuta lo pendiente.",
+   tags:["Telegram","automatización"], links:[]},
+  {cat:"Infra", emoji:"📓", title:"Bitácora compartida (este repo)", status:"repo",
+   desc:"Memoria operativa común Claude↔Codex. Protocolo de tareas entre agentes con estados PENDIENTE/HECHO/BLOQUEADA.",
+   tags:["coordinación"], links:[{t:"Abrir bitácora",u:"tmp_bitacora_compartida.md",p:1}]},
+];
+
+const CATS = ["Todos","Membresía","Suite","Juegos","ARAIA","Beta","Curso","Cantera","Docs","Infra"];
+const board = document.getElementById('board');
+const filtersEl = document.getElementById('filters');
+const qEl = document.getElementById('q');
+const emptyEl = document.getElementById('empty');
+const countEl = document.getElementById('count');
+let active = "Todos";
+
+CATS.forEach(c=>{
+  const b=document.createElement('div');
+  b.className='fbtn'+(c===active?' active':''); b.textContent=c; b.dataset.cat=c;
+  b.onclick=()=>{active=c;[...filtersEl.children].forEach(x=>x.classList.toggle('active',x.dataset.cat===c));render();};
+  filtersEl.appendChild(b);
+});
+
+function statusBadge(s){
+  const map={live:['live','EN VIVO'],repo:['repo','EN ESTE REPO'],local:['local','EN LOCAL'],soon:['soon','PRÓXIMAMENTE'],cantera:['cantera','CANTERA']};
+  const [cls,txt]=map[s]||['tag',s]; return `<span class="b ${cls}">${txt}</span>`;
+}
+function cardHTML(it){
+  const badges = statusBadge(it.status) + (it.tags||[]).map(t=>`<span class="b tag">${t}</span>`).join('');
+  const links = (it.links||[]).map(l=>{
+    if(l.u==='#') return '';
+    return `<a class="go ${l.p?'primary':''}" href="${l.u}" ${l.u.startsWith('http')?'target="_blank" rel="noopener"':''}>${l.t} ↗</a>`;
+  }).join('');
+  const path = it.path?`<div class="path">📍 ${it.path}</div>`:'';
+  return `<article class="card">
+    <h3><span class="emoji">${it.emoji}</span> ${it.title}</h3>
+    <p class="desc">${it.desc}</p>
+    <div class="badges">${badges}</div>
+    ${path}
+    <div class="links">${links||'<span class="go muted">Sin enlace directo</span>'}</div>
+  </article>`;
+}
+function render(){
+  const q=qEl.value.trim().toLowerCase();
+  const groups={};
+  let shown=0;
+  ITEMS.forEach(it=>{
+    if(active!=="Todos" && it.cat!==active) return;
+    if(q){
+      const hay=(it.title+' '+it.desc+' '+(it.tags||[]).join(' ')+' '+it.cat).toLowerCase();
+      if(!hay.includes(q)) return;
+    }
+    (groups[it.cat]=groups[it.cat]||[]).push(it); shown++;
+  });
+  board.innerHTML = Object.keys(groups).map(cat=>
+    `<div class="section-title">${cat}</div><div class="grid">${groups[cat].map(cardHTML).join('')}</div>`
+  ).join('');
+  emptyEl.style.display = shown?'none':'block';
+  countEl.textContent = shown+' / '+ITEMS.length+' items';
+}
+qEl.addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
