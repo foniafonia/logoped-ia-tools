@@ -1,0 +1,17 @@
+{
+  "id_taller": "inf_1_obj_006e_007e_012e",
+  "codigo": "1º INFANTIL obj.006e-007e-012e",
+  "nombre": "Asociación fonema-grafema 'i' en mayúscula",
+  "modulo": "integracion_multisensorial_auditivo_visual",
+  "objetivo_clinico": ["transcodificacion_fonema_grafema"],
+  "mecanica": {
+    "estimulo_modelo": "audio_fonema_i",
+    "respuesta_esperada": "grafema_I_mayuscula",
+    "num_opciones": { "base": 3, "min": 2, "max": 4 },
+    "boton_repeticion_audio": true
+  },
+  "regla_distractores": {
+    "target": "I",
+    "no_similares": ["M", "O", "P", "U", "X", "C"]
+  }
+}

@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuegosLogopedos | Herramientas Digitales para Logopedia Infantil</title>
+    <meta name="description" content="Plataforma especializada en juegos y herramientas digitales para logopedia infantil. Desarrollada por José Aserraf con 18 años de experiencia. Ejercicios interactivos para niños con dificultades del habla y lenguaje.">
+    <meta name="keywords" content="logopedia, juegos educativos, terapia del habla, niños, ejercicios fonéticos, pronunciación, José Aserraf, Gabinete Fönia">
+    <meta name="author" content="José Aserraf - Gabinete Fönia">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="JuegosLogopedos | Herramientas Digitales para Logopedia Infantil">
+    <meta property="og:description" content="Plataforma especializada en juegos y herramientas digitales para logopedia infantil desarrollada por José Aserraf.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://juegoslogopedos.com">
+    <meta property="og:image" content="https://juegoslogopedos.com/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JuegosLogopedos | Herramientas Digitales para Logopedia Infantil">
+    <meta name="twitter:description" content="Plataforma especializada en juegos y herramientas digitales para logopedia infantil desarrollada por José Aserraf.">
+    <meta name="twitter:image" content="https://juegoslogopedos.com/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- TailwindCSS Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#667eea',
+                        accent: '#764ba2',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        error: '#ef4444',
+                        'gray-50': '#f8fafc',
+                        'gray-100': '#f1f5f9',
+                        'gray-200': '#e2e8f0',
+                        'gray-300': '#cbd5e1',
+                        'gray-400': '#94a3b8',
+                        'gray-500': '#64748b',
+                        'gray-600': '#475569',
+                        'gray-700': '#334155',
+                        'gray-800': '#1e293b',
+                        'gray-900': '#0f172a',
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '88': '22rem',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 0.6s ease-in-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        },
+                    },
+                    boxShadow: {
+                        'elegant': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'elegant-lg': '0 10px 40px rgba(0, 0, 0, 0.1)',
+                        'glow': '0 0 20px rgba(93, 92, 222, 0.3)',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Variables CSS para consistencia */
+        :root {
+            --primary-color: #5D5CDE;
+            --secondary-color: #667eea;
+            --accent-color: #764ba2;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1a1d29;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-3xl: 1.5rem;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --transition-fast: all 0.15s ease;
+            --transition-normal: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+            --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            --gradient-success: linear-gradient(135deg, #81FBB8 0%, var(--success-color) 100%);
+            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            --glow-primary: 0 0 30px rgba(93, 92, 222, 0.3);
+            --glow-secondary: 0 0 30px rgba(102, 126, 234, 0.3);
+            --glow-success: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Dark mode variables */
+        .dark {
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --bg-primary: #181818;
+            --bg-secondary: #1e293b;
+            --border-color: #334155;
+            --gradient-card: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header styling */
+        #header {
+            transition: var(--transition-normal);
+            backdrop-filter: blur(12px);
+        }
+
+        #header.header-scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark #header.header-scrolled {
+            background: rgba(24, 24, 24, 0.95);
+        }
+
+        /* Navigation links */
+        .nav-link {
+            position: relative;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition-fast);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: var(--transition-normal);
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Hero section */
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                rgba(93, 92, 222, 0.05) 0%, 
+                rgba(102, 126, 234, 0.05) 50%, 
+                rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        /* Game cards styling */
+        .game-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: translateX(-100%);
+            transition: var(--transition-normal);
+        }
+
+        .game-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl), var(--glow-primary);
+            border-color: var(--primary-color);
+        }
+
+        /* Game details (expandable) */
+        .game-details {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .game-details.expanded {
+            max-height: 1000px;
+            opacity: 1;
+            margin-top: var(--space-4);
+        }
+
+        .game-card.expanded {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-2xl), var(--glow-primary);
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-xl);
+            padding: var(--space-3) var(--space-6);
+            font-weight: 600;
+            transition: var(--transition-bounce);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3) var(--space-6);
+            font-weight: 600;
+            transition: var(--transition-normal);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Quiz styling */
+        .quiz-container {
+            background: var(--gradient-card);
+            border-radius: var(--radius-3xl);
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .quiz-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-slow);
+        }
+
+        .quiz-step.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .option-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+            transition: var(--transition-normal);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .option-card.selected {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            height: 12px;
+        }
+
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            border-radius: var(--radius-xl);
+            transition: width 0.5s ease;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Filter buttons */
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2) var(--space-4);
+            font-weight: 500;
+            transition: var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Search input */
+        .search-input {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3) var(--space-4);
+            transition: var(--transition-normal);
+            background: white;
+            font-size: 16px; /* Prevent zoom on iOS */
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Contact form */
+        .form-input {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3) var(--space-4);
+            transition: var(--transition-normal);
+            background: white;
+            font-size: 16px; /* Prevent zoom on iOS */
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Professional cards */
+        .professional-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-elegant);
+            border: 1px solid var(--border-color);
+            padding: var(--space-8);
+            transition: var(--transition-normal);
+        }
+
+        .professional-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-elegant-lg), var(--glow-secondary);
+        }
+
+        /* Stats counter */
+        .stat-counter {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Testimonial cards */
+        .testimonial-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-elegant);
+            border: 1px solid var(--border-color);
+            padding: var(--space-6);
+            transition: var(--transition-normal);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary-color);
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            opacity: 0.3;
+        }
+
+        /* Scroll progress indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 9999;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Feature highlights */
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(93, 92, 222, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+            border: 2px solid rgba(93, 92, 222, 0.2);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            transition: var(--transition-normal);
+        }
+
+        .feature-highlight:hover {
+            background: linear-gradient(135deg, rgba(93, 92, 222, 0.15) 0%, rgba(102, 126, 234, 0.15) 100%);
+            border-color: rgba(93, 92, 222, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive utilities */
+        @media (max-width: 768px) {
+            .mobile-hidden {
+                display: none !important;
+            }
+            
+            .mobile-full {
+                width: 100% !important;
+            }
+            
+            .mobile-text-center {
+                text-align: center !important;
+            }
+            
+            .mobile-px-4 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
+
+        /* Animation utilities */
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .animate-bounce-gentle {
+            animation: bounceGentle 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .game-card,
+            .professional-card,
+            .testimonial-card {
+                border-width: 3px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Indicator -->
+    <div id="scrollProgress" class="scroll-progress"></div>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300">
+        <nav class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                    JL
+                </div>
+                <div class="font-bold text-xl text-gray-900 dark:text-white">
+                    JuegosLogopedos
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#inicio" class="nav-link text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary font-medium transition-colors">Inicio</a>
+                <a href="#quiz" class="nav-link text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary font-medium transition-colors">Quiz Diagnóstico</a>
+                <a href="#juegos" class="nav-link text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary font-medium transition-colors">Juegos</a>
+                <a href="#profesional" class="nav-link text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary font-medium transition-colors">Profesional</a>
+                <a href="#contacto" class="nav-link text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary font-medium transition-colors">Contacto</a>
+                <a href="#contacto" class="btn-primary">
+                    <span>Consulta Gratuita</span>
+                    <span>📞</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="menuToggle" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-primary p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <div id="navLinks" class="mobile-menu md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t dark:border-gray-700">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#inicio" class="block text-gray-600 dark:text-gray-300 hover:text-primary font-medium py-2 transition-colors">Inicio</a>
+                <a href="#quiz" class="block text-gray-600 dark:text-gray-300 hover:text-primary font-medium py-2 transition-colors">Quiz Diagnóstico</a>
+                <a href="#juegos" class="block text-gray-600 dark:text-gray-300 hover:text-primary font-medium py-2 transition-colors">Juegos</a>
+                <a href="#profesional" class="block text-gray-600 dark:text-gray-300 hover:text-primary font-medium py-2 transition-colors">Profesional</a>
+                <a href="#contacto" class="block text-gray-600 dark:text-gray-300 hover:text-primary font-medium py-2 transition-colors">Contacto</a>
+                <a href="#contacto" class="btn-primary w-full text-center">
+                    <span>Consulta Gratuita</span>
+                    <span>📞</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero-gradient pt-24 pb-16 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <!-- Content -->
+                    <div class="animate-fade-in">
+                        <div class="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+                            <span class="w-2 h-2 bg-success rounded-full mr-2 animate-pulse"></span>
+                            18 años de experiencia en logopedia
+                        </div>
+                        
+                        <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                            Herramientas Digitales para 
+                            <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                                Logopedia Infantil
+                            </span>
+                        </h1>
+                        
+                        <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 mb-8 border-l-4 border-primary shadow-lg">
+                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 leading-relaxed italic">
+                                "Sé exactamente cómo te sientes. He visto la misma preocupación en miles de padres: 
+                                <strong>'¿Estoy exagerando? ¿Necesita ayuda? ¿Por dónde empiezo?'</strong>
+                            </p>
+                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                                Mi enfoque es diferente: combino <strong>evidencia científica con diversión</strong>, 
+                                porque he comprobado que los niños aprenden mejor cuando se divierten."
+                            </p>
+                            <div class="text-right">
+                                <div class="text-primary font-bold">— José Aserraf</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Logopeda Especialista • 18 años de experiencia</div>
+                            </div>
+                        </div>
+                        
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                            Plataforma especializada desarrollada por <strong>José Aserraf</strong>, logopeda colegiado con 18 años de experiencia. 
+                            Herramientas digitales <strong>basadas en evidencia científica</strong> que hacen la terapia efectiva y divertida.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                            <a href="#quiz" class="btn-primary text-lg px-8 py-4">
+                                <span>🎯 Quiz Diagnóstico Gratuito</span>
+                            </a>
+                            <a href="#juegos" class="btn-secondary text-lg px-8 py-4">
+                                <span>🎮 Explorar Juegos</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200 dark:border-gray-700">
+                            <div class="text-center">
+                                <div class="stat-counter">12+</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 font-medium">Juegos Interactivos</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="stat-counter">18</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 font-medium">Años Experiencia</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="stat-counter">100%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 font-medium">Personalizado</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hero Image/Illustration -->
+                    <div class="animate-slide-up">
+                        <div class="relative">
+                            <div class="bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl p-8 backdrop-blur-sm border border-white/20">
+                                <div class="space-y-6">
+                                    <!-- Simulated Game Interface -->
+                                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 shadow-xl">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="text-lg font-bold text-gray-900 dark:text-white">🎮 Auditory Run Pro</div>
+                                            <div class="text-sm text-success font-medium">Nivel 5</div>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                                <div class="h-full w-3/4 bg-gradient-to-r from-success to-primary rounded-full"></div>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-3">
+                                                <div class="bg-primary/10 text-primary px-3 py-2 rounded-lg text-center font-medium text-sm">P - B</div>
+                                                <div class="bg-secondary/10 text-secondary px-3 py-2 rounded-lg text-center font-medium text-sm">T - D</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Professional Info -->
+                                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 shadow-xl">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                                JA
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-900 dark:text-white">José Aserraf</div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-400">Logopeda Colegiado</div>
+                                                <div class="text-xs text-success font-medium">Gabinete Fönia, Melilla</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Features -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="bg-white/90 dark:bg-gray-800/90 rounded-xl p-4 shadow-lg text-center">
+                                            <div class="text-2xl mb-2">🎯</div>
+                                            <div class="text-sm font-medium text-gray-900 dark:text-white">Diagnóstico IA</div>
+                                        </div>
+                                        <div class="bg-white/90 dark:bg-gray-800/90 rounded-xl p-4 shadow-lg text-center">
+                                            <div class="text-2xl mb-2">📱</div>
+                                            <div class="text-sm font-medium text-gray-900 dark:text-white">100% Digital</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Floating Elements -->
+                            <div class="absolute -top-4 -right-4 w-20 h-20 bg-success/20 rounded-full animate-bounce-gentle"></div>
+                            <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-primary/20 rounded-full animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        ¿Por qué elegir JuegosLogopedos?
+                    </h2>
+                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 mb-8 border-l-4 border-success shadow-lg max-w-4xl mx-auto">
+                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 leading-relaxed italic">
+                            "Cada día veo la frustración de los padres que sienten que su hijo se está quedando atrás. 
+                            <strong>No están solos.</strong> He desarrollado estas herramientas porque sé que con el apoyo correcto, 
+                            <strong>todos los niños pueden prosperar</strong>."
+                        </p>
+                        <div class="text-right">
+                            <div class="text-success font-bold">— Evidencia científica + Compasión humana</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">El enfoque JuegosLogopedos</div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Nuestra plataforma combina la experiencia profesional de 18 años con la tecnología más avanzada 
+                        para ofrecer herramientas efectivas y divertidas. <strong>Respaldado por evidencia científica, 
+                        diseñado con el corazón.</strong>
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="feature-highlight text-center">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Diagnóstico Inteligente</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Quiz interactivo que identifica necesidades específicas y sugiere juegos personalizados.</p>
+                    </div>
+                    
+                    <div class="feature-highlight text-center">
+                        <div class="text-4xl mb-4">👨‍⚕️</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Experiencia Profesional</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Desarrollado por José Aserraf, logopeda colegiado con 18 años de experiencia clínica.</p>
+                    </div>
+                    
+                    <div class="feature-highlight text-center">
+                        <div class="text-4xl mb-4">🎮</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Juegos Especializados</h3>
+                        <p class="text-gray-600 dark:text-gray-300">12+ juegos interactivos diseñados específicamente para diferentes áreas del habla y lenguaje.</p>
+                    </div>
+                    
+                    <div class="feature-highlight text-center">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Acceso Universal</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Compatible con todos los dispositivos. Sin descargas, sin instalaciones, acceso inmediato.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="py-20 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        🎯 Quiz Diagnóstico Inteligente
+                    </h2>
+                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-6 mb-8 border-l-4 border-warning shadow-lg max-w-3xl mx-auto">
+                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 leading-relaxed italic">
+                            "Este quiz está diseñado para darte claridad y tranquilidad. En pocos minutos sabrás exactamente 
+                            qué necesita tu hijo/a y cómo podemos ayudarle. <strong>No hay respuestas incorrectas, 
+                            solo información valiosa para su progreso.</strong>"
+                        </p>
+                        <div class="text-right">
+                            <div class="text-warning font-bold">— Diagnóstico preciso, corazón tranquilo</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Protocolo clínico adaptado para padres</div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        Responde unas pocas preguntas y recibe un <strong>informe profesional personalizado</strong> con recomendaciones específicas 
+                        para las necesidades de tu hijo/a, <strong>basado en protocolos clínicos reales</strong>.
+                    </p>
+                </div>
+
+                <div class="quiz-container">
+                    <!-- Progress Bar -->
+                    <div class="bg-gradient-to-r from-primary to-secondary p-6 text-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">Evaluación Personalizada</h3>
+                            <div class="text-sm opacity-90">
+                                <span id="progressText">Paso 1 de 7</span>
+                                <span class="ml-2">(<span id="progressPercent">14%</span>)</span>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div id="progressFill" class="progress-fill" style="width: 14%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Steps -->
+                    <div class="p-8">
+                        <!-- Step 1: Age -->
+                        <div class="quiz-step active" data-step="1">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Qué edad tiene tu hijo/a?
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="option-card" data-value="3-5" data-next="2">
+                                    <div class="text-3xl mb-3">👶</div>
+                                    <div class="text-lg font-semibold mb-2">3-5 años</div>
+                                    <div class="text-sm text-gray-600">Preescolar - Desarrollo inicial del lenguaje</div>
+                                </div>
+                                <div class="option-card" data-value="6-8" data-next="2">
+                                    <div class="text-3xl mb-3">🧒</div>
+                                    <div class="text-lg font-semibold mb-2">6-8 años</div>
+                                    <div class="text-sm text-gray-600">Primaria temprana - Lectoescritura</div>
+                                </div>
+                                <div class="option-card" data-value="9-12" data-next="2">
+                                    <div class="text-3xl mb-3">👦</div>
+                                    <div class="text-lg font-semibold mb-2">9-12 años</div>
+                                    <div class="text-sm text-gray-600">Primaria - Consolidación del lenguaje</div>
+                                </div>
+                                <div class="option-card" data-value="13+" data-next="2">
+                                    <div class="text-3xl mb-3">🧑</div>
+                                    <div class="text-lg font-semibold mb-2">13+ años</div>
+                                    <div class="text-sm text-gray-600">Adolescente - Refinamiento</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Main Concern -->
+                        <div class="quiz-step" data-step="2">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Cuál es tu principal preocupación?
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="option-card" data-value="pronunciacion" data-next="3">
+                                    <div class="text-3xl mb-3">🗣️</div>
+                                    <div class="text-lg font-semibold mb-2">Pronunciación</div>
+                                    <div class="text-sm text-gray-600">Dificultades para pronunciar ciertos sonidos o palabras</div>
+                                </div>
+                                <div class="option-card" data-value="lectura" data-next="3">
+                                    <div class="text-3xl mb-3">📚</div>
+                                    <div class="text-lg font-semibold mb-2">Lectura</div>
+                                    <div class="text-sm text-gray-600">Problemas para leer con fluidez o comprensión</div>
+                                </div>
+                                <div class="option-card" data-value="escritura" data-next="3">
+                                    <div class="text-3xl mb-3">✍️</div>
+                                    <div class="text-lg font-semibold mb-2">Escritura</div>
+                                    <div class="text-sm text-gray-600">Dificultades con la escritura o grafomotricidad</div>
+                                </div>
+                                <div class="option-card" data-value="comprension" data-next="3">
+                                    <div class="text-3xl mb-3">🧠</div>
+                                    <div class="text-lg font-semibold mb-2">Comprensión</div>
+                                    <div class="text-sm text-gray-600">Problemas para entender instrucciones o lenguaje</div>
+                                </div>
+                                <div class="option-card" data-value="atencion" data-next="3">
+                                    <div class="text-3xl mb-3">🎯</div>
+                                    <div class="text-lg font-semibold mb-2">Atención</div>
+                                    <div class="text-sm text-gray-600">Dificultades para mantener la concentración</div>
+                                </div>
+                                <div class="option-card" data-value="tartamudez" data-next="3">
+                                    <div class="text-3xl mb-3">🔄</div>
+                                    <div class="text-lg font-semibold mb-2">Tartamudez</div>
+                                    <div class="text-sm text-gray-600">Repeticiones, bloqueos o interrupciones en el habla</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Severity -->
+                        <div class="quiz-step" data-step="3">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Cómo calificarías la intensidad de la dificultad?
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="option-card" data-value="leve" data-next="4">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">🟢</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Leve</div>
+                                            <div class="text-sm text-gray-600">Se nota ocasionalmente, no interfiere mucho en la comunicación diaria</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-card" data-value="moderada" data-next="4">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">🟡</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Moderada</div>
+                                            <div class="text-sm text-gray-600">Se nota frecuentemente, a veces dificulta la comunicación</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-card" data-value="severa" data-next="4">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">🔴</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Severa</div>
+                                            <div class="text-sm text-gray-600">Muy evidente, interfiere significativamente en la comunicación</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Timeline -->
+                        <div class="quiz-step" data-step="4">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Desde cuándo has notado esta dificultad?
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="option-card" data-value="reciente" data-next="5">
+                                    <div class="text-3xl mb-3">🆕</div>
+                                    <div class="text-lg font-semibold mb-2">Recientemente</div>
+                                    <div class="text-sm text-gray-600">Últimas semanas o meses</div>
+                                </div>
+                                <div class="option-card" data-value="año" data-next="5">
+                                    <div class="text-3xl mb-3">📅</div>
+                                    <div class="text-lg font-semibold mb-2">Más de un año</div>
+                                    <div class="text-sm text-gray-600">Lo he notado durante más de un año</div>
+                                </div>
+                                <div class="option-card" data-value="siempre" data-next="5">
+                                    <div class="text-3xl mb-3">⏳</div>
+                                    <div class="text-lg font-semibold mb-2">Desde siempre</div>
+                                    <div class="text-sm text-gray-600">Ha estado presente desde que empezó a hablar</div>
+                                </div>
+                                <div class="option-card" data-value="noseguro" data-next="5">
+                                    <div class="text-3xl mb-3">❓</div>
+                                    <div class="text-lg font-semibold mb-2">No estoy seguro/a</div>
+                                    <div class="text-sm text-gray-600">Es difícil precisar cuándo comenzó</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Additional Symptoms -->
+                        <div class="quiz-step" data-step="5">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Has observado alguno de estos síntomas adicionales?
+                            </h3>
+                            <p class="text-center text-gray-600 dark:text-gray-400 mb-8">
+                                Selecciona todos los que apliquen (puedes elegir varios o ninguno)
+                            </p>
+                            <div class="symptoms-options grid md:grid-cols-2 gap-4">
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="frustracion" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Frustración al comunicarse</div>
+                                        <div class="text-sm text-gray-600">Se molesta cuando no lo entienden</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="evita_hablar" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Evita hablar en público</div>
+                                        <div class="text-sm text-gray-600">Prefiere no participar en conversaciones</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="problemas_escolares" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Dificultades escolares</div>
+                                        <div class="text-sm text-gray-600">Problemas en el rendimiento académico</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="autoestima_baja" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Baja autoestima</div>
+                                        <div class="text-sm text-gray-600">Se siente inseguro/a al hablar</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="problemas_sociales" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Dificultades sociales</div>
+                                        <div class="text-sm text-gray-600">Problemas para hacer amigos</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary cursor-pointer transition-colors">
+                                    <input type="checkbox" value="otros" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <div class="font-semibold">Otros síntomas</div>
+                                        <div class="text-sm text-gray-600">Otros comportamientos que te preocupan</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="text-center mt-8">
+                                <button onclick="nextStep(6)" class="btn-primary text-lg px-8 py-3">
+                                    Continuar
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Previous Therapy -->
+                        <div class="quiz-step" data-step="6">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¿Ha recibido terapia del habla anteriormente?
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="option-card" data-value="si_actual" data-next="7">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">✅</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Sí, actualmente</div>
+                                            <div class="text-sm text-gray-600">Está recibiendo terapia del habla en este momento</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-card" data-value="si_pasado" data-next="7">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">📋</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Sí, en el pasado</div>
+                                            <div class="text-sm text-gray-600">Recibió terapia anteriormente pero ya no</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-card" data-value="no" data-next="7">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">❌</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">No, nunca</div>
+                                            <div class="text-sm text-gray-600">Nunca ha recibido terapia del habla</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-card" data-value="considerando" data-next="7">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-3xl">🤔</div>
+                                        <div class="text-left">
+                                            <div class="text-lg font-semibold">Estoy considerándolo</div>
+                                            <div class="text-sm text-gray-600">Estoy pensando en buscar ayuda profesional</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 7: Contact Information -->
+                        <div class="quiz-step" data-step="7">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                                ¡Perfecto! Tu evaluación está completa
+                            </h3>
+                            <p class="text-center text-gray-600 dark:text-gray-400 mb-8">
+                                Información opcional para personalizar tu informe:
+                            </p>
+                            <div class="max-w-md mx-auto space-y-6">
+                                <div>
+                                    <label for="contactName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Nombre (opcional)
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="contactName" 
+                                        class="form-input w-full"
+                                        placeholder="Tu nombre o el del niño/a"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="contactEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Email (opcional)
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="contactEmail" 
+                                        class="form-input w-full"
+                                        placeholder="tu@email.com"
+                                    >
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        📧 Solo para enviarte recursos adicionales. No spam, lo prometemos.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-8">
+                                <button onclick="showDirectReport()" class="btn-primary text-lg px-8 py-3">
+                                    <span>🎯 Ver Mi Informe Personalizado</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="juegos" class="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        🎮 Herramientas Interactivas Especializadas
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+                        Juegos y herramientas digitales desarrollados específicamente para diferentes áreas del desarrollo 
+                        del habla y lenguaje. Cada herramienta está diseñada con base en evidencia científica y experiencia clínica.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div class="mb-12">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Search Bar -->
+                        <div class="relative mb-8">
+                            <input 
+                                type="text" 
+                                id="gameSearch" 
+                                class="search-input w-full pl-12 pr-12"
+                                placeholder="🔍 Buscar herramientas por nombre, categoría o síntoma..."
+                                autocomplete="off"
+                            >
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <button 
+                                id="searchClear" 
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+                                title="Limpiar búsqueda"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Category Filters -->
+                        <div class="flex flex-wrap justify-center gap-3 mb-6">
+                            <button class="filter-btn active" data-category="all">📋 Todas las herramientas</button>
+                            <button class="filter-btn" data-category="discriminacion-auditiva">🎵 Discriminación Auditiva</button>
+                            <button class="filter-btn" data-category="conciencia-fonologica">🔤 Conciencia Fonológica</button>
+                            <button class="filter-btn" data-category="lectoescritura">📚 Lectoescritura</button>
+                            <button class="filter-btn" data-category="coordinacion">✋ Coordinación</button>
+                            <button class="filter-btn" data-category="consulta-profesional">👨‍⚕️ Consulta Profesional</button>
+                        </div>
+
+                        <!-- Results Counter -->
+                        <div class="text-center text-sm text-gray-600 dark:text-gray-400 mb-8">
+                            <span id="resultsCount">12 herramientas disponibles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Games Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                    <!-- AUDITORY RUN PRO -->
+                    <div class="game-card" 
+                         data-categories="discriminacion-auditiva" 
+                         data-search-terms="auditory run pro endless runner discriminacion auditiva fonologica pares minimos pronunciacion b p d t l r">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-bounce-gentle">🏃‍♂️</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                                🎵 Discriminación Auditiva
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            AUDITORY RUN PRO
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Endless runner que combina diversión con entrenamiento de discriminación auditiva. 
+                            Perfecto para desarrollar la percepción fonológica.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Pares mínimos</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Voz natural</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Progresivo</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/Templerunlogopeda')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Niños de 6-12 años con dificultades auditivas</li>
+                                    <li>• Terapia de discriminación fonológica</li>
+                                    <li>• Refuerzo de procesamiento auditivo</li>
+                                    <li>• Práctica de atención selectiva</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Pares mínimos de palabras (b/p, d/t, l/r, etc.)</li>
+                                    <li>• Síntesis de voz natural en español</li>
+                                    <li>• Sistema progresivo de vidas</li>
+                                    <li>• Efectos visuales de recompensa</li>
+                                    <li>• Contador de distancia y precisión</li>
+                                    <li>• Controles táctiles optimizados</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SÍLABA LUXOR PRO -->
+                    <div class="game-card" 
+                         data-categories="conciencia-fonologica" 
+                         data-search-terms="silaba luxor pro burbujas silabicas conciencia fonologica lectura separacion silabas">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-purple-400 to-pink-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">💭</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+                                🔤 Conciencia Fonológica
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            SÍLABA LUXOR PRO
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Herramienta interactiva para aprender y practicar sílabas en español. 
+                            Desarrolla la conciencia fonológica de manera divertida.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded text-xs">Separación silábica</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Interactivo</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Adaptativo</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/luxorlogopeda')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Niños en proceso de lectoescritura</li>
+                                    <li>• Refuerzo de segmentación silábica</li>
+                                    <li>• Terapia de conciencia fonológica</li>
+                                    <li>• Preparación para la lectura</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Separación silábica interactiva en tiempo real</li>
+                                    <li>• Niveles progresivos de dificultad adaptativa</li>
+                                    <li>• Sistema de puntuación y recompensas visuales</li>
+                                    <li>• Banco extenso de palabras clasificadas</li>
+                                    <li>• Feedback inmediato con refuerzo positivo</li>
+                                    <li>• Interfaz colorida para todas las edades</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NINJA PHONETICS PRO -->
+                    <div class="game-card" 
+                         data-categories="conciencia-fonologica" 
+                         data-search-terms="ninja phonetics pro fruit ninja fonetico discriminacion visual letras silabas tdah dislexia tel">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-red-400 to-orange-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-bounce-gentle">🥷</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+                                🔤 Conciencia Fonológica
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            NINJA PHONETICS PRO
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Juego tipo Fruit Ninja para entrenamiento fonético y discriminación visual. 
+                            Contenido 100% configurable según necesidades específicas.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Personalizable</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">TDAH</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Dislexia</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/ninjagamefono')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Entrenamiento fonético específico</li>
+                                    <li>• Discriminación visual de letras similares</li>
+                                    <li>• Terapia para TDAH y dislexia</li>
+                                    <li>• Ejercicios de atención selectiva</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Panel de control para personalización total</li>
+                                    <li>• Contenido configurable: letras, sílabas, palabras, imágenes</li>
+                                    <li>• Sistema de vidas con combos de recuperación</li>
+                                    <li>• Distractores personalizables y símbolos malvados</li>
+                                    <li>• Ninja con katana energética y animaciones suaves</li>
+                                    <li>• Ideal para TDAH, dislexia, TEL y trastornos del lenguaje</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SNAKE 3D PALABRAS -->
+                    <div class="game-card" 
+                         data-categories="lectoescritura" 
+                         data-search-terms="snake 3d palabras serpiente vocabulario neurorehabilitacion lenguaje educacion especial">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-bounce-gentle">🐍</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                📚 Lectoescritura
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            SNAKE 3D PALABRAS
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            El clásico Snake reinventado para aprender y rehabilitar el lenguaje. 
+                            Controla una serpiente 3D mientras recoges palabras en español.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">3D inmersivo</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">+75 palabras</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Configurable</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/SNAKE3DPALABRAS')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Desarrollo de vocabulario en español</li>
+                                    <li>• Neurorehabilitación del lenguaje</li>
+                                    <li>• Educación especial y logopedia</li>
+                                    <li>• Entrenamiento cognitivo lúdico</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Serpiente 3D en mundo colorido e inmersivo</li>
+                                    <li>• Más de 75 palabras por nivel de dificultad</li>
+                                    <li>• Filtros por letra, sílaba o contenido específico</li>
+                                    <li>• Ideal para logopedia y educación especial</li>
+                                    <li>• Controles táctiles o teclado adaptativos</li>
+                                    <li>• Juego terapéutico que engancha y enseña</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MOTOR SKILLS ADVENTURE -->
+                    <div class="game-card" 
+                         data-categories="coordinacion" 
+                         data-search-terms="motor skills adventure psicomotricidad fina coordinacion ojo mano escritura terapia ocupacional">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-orange-400 to-yellow-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-bounce-gentle">🎯</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">
+                                ✋ Coordinación
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            MOTOR SKILLS ADVENTURE
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            8 mini-juegos para desarrollar psicomotricidad fina, coordinación ojo-mano 
+                            y destrezas manipulativas esenciales para la escritura.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">8 mini-juegos</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Progresivo</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">5 niveles c/u</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/Piscomotricidad')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Desarrollo de psicomotricidad fina en niños</li>
+                                    <li>• Preparación para la escritura</li>
+                                    <li>• Rehabilitación de destrezas manipulativas</li>
+                                    <li>• Terapia ocupacional pediátrica</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Mini-juegos incluidos:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Precisión Click: 5 rondas de círculos cada vez más rápidos</li>
+                                    <li>• Arrastra y Suelta: 5 niveles con más objetos cada vez</li>
+                                    <li>• Sigue el Patrón: Secuencias de memoria progresivas</li>
+                                    <li>• Pellizcar y Sostener: Mantén presionado tiempos más largos</li>
+                                    <li>• Trazado de Formas: Formas más complejas por nivel</li>
+                                    <li>• Y 3 mini-juegos adicionales especializados</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ENCUENTRA EL NUEVO FON/R -->
+                    <div class="game-card" 
+                         data-categories="conciencia-fonologica" 
+                         data-search-terms="encuentra nuevo fon r rotacismo fonema r memoria trabajo auditiva pronunciacion articulacion">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-red-400 to-pink-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">🗣️</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+                                🔤 Conciencia Fonológica
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            ENCUENTRA EL NUEVO FON/R
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Herramienta especializada para automatizar el fonema /r/. Combina memoria visual, 
+                            atención selectiva y producción oral en un entorno lúdico.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Fonema /R/</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Memoria auditiva</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Progresivo</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/EncuentraelNuevoFonR')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Niños de 6-12 años con rotacismo</li>
+                                    <li>• Terapia especializada del fonema /r/</li>
+                                    <li>• Automatización de pronunciación</li>
+                                    <li>• Mejora de memoria de trabajo auditiva</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Ejercicios progresivos hasta 20 elementos de memoria</li>
+                                    <li>• Detección de elementos nuevos con pronunciación</li>
+                                    <li>• Sistema de puntuación y niveles adaptativos</li>
+                                    <li>• Supervisión profesional o práctica en casa</li>
+                                    <li>• Sesiones optimizadas de 15-20 minutos</li>
+                                    <li>• Indicadores de progreso en tiempo real</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DONKEY KONG FONEMAS -->
+                    <div class="game-card" 
+                         data-categories="discriminacion-auditiva" 
+                         data-search-terms="donkey kong fonemas plataformas letras similares p b d q discriminacion visual mario">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-yellow-400 to-red-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-bounce-gentle">🦍</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                                🎵 Discriminación Auditiva
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            DONKEY KONG FONEMAS
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            El clásico Donkey Kong adaptado para aprender discriminación de letras similares. 
+                            Mario debe recoger letras correctas y evitar las incorrectas.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Clásico adaptado</span>
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">P-B-D-Q</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Visoperceptivo</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/donkeykongfonemas')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎮 Jugar Ahora
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Discriminación de letras similares</li>
+                                    <li>• Entrenamiento visoperceptivo</li>
+                                    <li>• Coordinación ojo-mano</li>
+                                    <li>• Atención selectiva visual</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Escaleras que conectan rampas correctamente</li>
+                                    <li>• Barriles controlados que siguen las rampas</li>
+                                    <li>• Mario estable sin rebote molesto</li>
+                                    <li>• Sistema de recolección de letras objetivo</li>
+                                    <li>• Martillo para destruir barriles con letras intrusas</li>
+                                    <li>• Enfoque en discriminación de letras similares (P-B-D-Q)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gabinete Fönia 3D -->
+                    <div class="game-card" 
+                         data-categories="consulta-profesional" 
+                         data-search-terms="gabinete fonia 3d consulta virtual logopedia screening evaluacion melilla jose aserraf">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-green-400 to-blue-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">🏥</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                👨‍⚕️ Consulta Profesional
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            Gabinete Fönia - Consulta Virtual 3D
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Consulta médica virtual interactiva que combina un entorno 3D profesional 
+                            con inteligencia artificial conversacional especializada.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Entorno 3D</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">IA conversacional</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Voz sintética</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/simslogoconsulta')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🏥 Acceder a Consulta
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Consultas preliminares de logopedia</li>
+                                    <li>• Screening inicial de casos clínicos</li>
+                                    <li>• Información sobre servicios profesionales</li>
+                                    <li>• Preparación para consulta presencial</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Entorno 3D realista con navegación libre (Three.js)</li>
+                                    <li>• IA conversacional con voz sintética ultra-natural</li>
+                                    <li>• Sistema autónomo sin dependencia de APIs externas</li>
+                                    <li>• Screening inicial de casos antes de consulta presencial</li>
+                                    <li>• Información completa de servicios y tarifas 2024</li>
+                                    <li>• Gabinete Fönia, Melilla - 667 712 699</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PHONOVOICELAB -->
+                    <div class="game-card" 
+                         data-categories="consulta-profesional" 
+                         data-search-terms="phonovoicelab disfonia laura neira lax vox tracto vocal semiocluido reeducacion vocal">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-pink-400 to-purple-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">🎤</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                👨‍⚕️ Consulta Profesional
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            PHONOVOICELAB
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Plataforma integral para el tratamiento de la disfonía basada en el método de Laura Neira. 
+                            Ideal para logopedas, cantantes, docentes y pacientes.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded text-xs">Método L. Neira</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Lax Vox</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Dashboard</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/PHONOVOICELAB')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎤 Acceder a Lab
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Profesionales de la voz (cantantes, docentes)</li>
+                                    <li>• Pacientes con disfonía en rehabilitación</li>
+                                    <li>• Logopedas especializados en voz</li>
+                                    <li>• Terapia vocal preventiva</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Método Laura Neira + Lax Vox + Tracto Vocal Semiocluido</li>
+                                    <li>• Ejercicios gamificados con feedback en tiempo real</li>
+                                    <li>• Dashboard personalizado para seguimiento de progreso</li>
+                                    <li>• Compatible con dispositivos móviles y escritorio</li>
+                                    <li>• Ideal para logopedas, cantantes y docentes</li>
+                                    <li>• Sistema de puntuación y recompensas motivacional</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DiagnostIAPro -->
+                    <div class="game-card" 
+                         data-categories="consulta-profesional" 
+                         data-search-terms="diagnostiapro disgrafia ia inteligencia artificial escritura grafomotriz analisis espacial temporal">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-purple-400 to-blue-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">🔬</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                👨‍⚕️ Consulta Profesional
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            DiagnostIAPro
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Sistema inteligente para la detección temprana, análisis gráfico-motor 
+                            y evaluación funcional de la disgrafía en niños y adolescentes.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">IA Avanzada</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Análisis gráfico</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">PDF automático</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/DiagnostIAPro')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🔬 Acceder a Diagnóstico
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Niños y adolescentes con dificultades de escritura</li>
+                                    <li>• Evaluación temprana de disgrafía</li>
+                                    <li>• Terapeutas ocupacionales especializados</li>
+                                    <li>• Seguimiento de evolución terapéutica</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Algoritmos de IA entrenados con patrones clínicos</li>
+                                    <li>• Análisis espacial, temporal y de presión de escritura</li>
+                                    <li>• Informes clínicos automáticos en PDF profesional</li>
+                                    <li>• Pruebas adaptativas según edad y nivel escolar</li>
+                                    <li>• Sistema de reevaluación y seguimiento temporal</li>
+                                    <li>• Modo profesional para terapeutas ocupacionales</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Karaoke Tartamudez -->
+                    <div class="game-card" 
+                         data-categories="consulta-profesional" 
+                         data-search-terms="karaoke tartamudez fluidez habla respiracion prosodica disfluencias bloqueos repeticiones">
+                        <!-- Game Preview Image -->
+                        <div class="w-full h-32 bg-gradient-to-br from-blue-400 to-teal-600 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                            <div class="text-white text-4xl animate-pulse">🎤</div>
+                            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                    Vista Previa del Juego
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                👨‍⚕️ Consulta Profesional
+                            </div>
+                        </div>
+                        
+                        <h3 class="game-title text-xl font-bold text-gray-900 dark:text-white mb-3">
+                            Karaoke Tartamudez
+                        </h3>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Herramienta web interactiva para terapia de tartamudez que combina 
+                            tecnología avanzada con evidencia científica de neuroplasticidad.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Lectura palabra/palabra</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">5 modos visuales</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Gráficas prosódicas</span>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="openGame('https://poe.com/karaoketartamudez')" 
+                                class="btn-primary flex-1 text-center"
+                            >
+                                🎤 Acceder a Karaoke
+                            </button>
+                            <button 
+                                onclick="toggleGameDetails(this)" 
+                                class="btn-secondary px-4"
+                                title="Más información"
+                            >
+                                <span>📖 Ver más información</span>
+                                <span class="toggle-icon">⬇️</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Expandable Details -->
+                        <div class="game-details">
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">🎯 Ideal para:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
+                                    <li>• Terapia de tartamudez profesional</li>
+                                    <li>• Práctica de fluidez del habla</li>
+                                    <li>• Ejercicios de control respiratorio</li>
+                                    <li>• Trabajo prosódico especializado</li>
+                                </ul>
+                                
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">⚙️ Características:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Lectura con velocidad ajustable y modos visuales</li>
+                                    <li>• Gráficas prosódicas en tiempo real</li>
+                                    <li>• Guía de respiración con círculo animado</li>
+                                    <li>• Panel para registrar disfluencias (bloqueos, repeticiones)</li>
+                                    <li>• Evaluación inicial que personaliza configuración</li>
+                                    <li>• Basado en evidencia científica de neuroplasticidad</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results Message -->
+                <div id="noResults" class="text-center py-16 hidden">
+                    <div class="text-6xl mb-6">🔍</div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">No se encontraron resultados</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-8">
+                        Intenta con otros términos de búsqueda o explora todas nuestras herramientas.
+                    </p>
+                    <button onclick="clearAllFilters()" class="btn-primary">
+                        <span>📋 Ver todas las herramientas</span>
+                    </button>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="text-center bg-gradient-to-r from-primary to-secondary rounded-3xl p-12 text-white">
+                    <h3 class="text-2xl lg:text-3xl font-bold mb-4">
+                        ¿Necesitas ayuda personalizada?
+                    </h3>
+                    <p class="text-xl mb-8 opacity-90">
+                        Nuestros juegos son solo el primer paso. Para un tratamiento completo y personalizado, 
+                        agenda una consulta profesional con José Aserraf.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#quiz" class="bg-white text-primary px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors">
+                            🎯 Hacer Quiz Diagnóstico
+                        </a>
+                        <a href="#contacto" class="border-2 border-white px-8 py-3 rounded-xl font-semibold hover:bg-white hover:text-primary transition-colors">
+                            📞 Consulta Profesional
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Section -->
+        <section id="profesional" class="py-20 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        👨‍⚕️ Experiencia Profesional
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Conoce al profesional detrás de JuegosLogopedos: José Aserraf, logopeda colegiado 
+                        con 18 años de experiencia en el desarrollo de herramientas digitales para logopedia.
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                    <!-- Professional Info -->
+                    <div class="professional-card">
+                        <div class="flex items-center mb-6">
+                            <img 
+                                src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&h=225" 
+                                alt="José Aserraf - Logopeda Especialista" 
+                                class="w-20 h-20 rounded-full object-cover border-4 border-primary shadow-lg mr-6"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            >
+                            <div class="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-2xl mr-6" style="display: none;">
+                                JA
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">José Aserraf</h3>
+                                <p class="text-lg text-primary font-semibold">Logopeda Colegiado</p>
+                                <p class="text-gray-600 dark:text-gray-300">Gabinete Fönia, Melilla</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <span class="text-primary font-bold">18</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300">Años de experiencia profesional</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <span class="text-primary">🎓</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300">Especialista en logopedia digital</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <span class="text-primary">🏥</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300">Gabinete Fönia, Melilla</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <span class="text-primary">📞</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300">667 712 699</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                            "Mi pasión es crear herramientas digitales que hagan la terapia logopédica más efectiva y divertida. 
+                            Durante mis 18 años de experiencia, he visto cómo la tecnología puede transformar la vida de los niños 
+                            con dificultades del habla y lenguaje."
+                        </p>
+                        
+                        <div class="flex gap-4">
+                            <a href="#contacto" class="btn-primary">
+                                <span>📞 Contactar</span>
+                            </a>
+                            <a href="https://poe.com/simslogoconsulta" target="_blank" class="btn-secondary">
+                                <span>🏥 Consulta Virtual 3D</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="space-y-8">
+                        <div class="text-center">
+                            <div class="stat-counter">18</div>
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white">Años de Experiencia</div>
+                            <div class="text-gray-600 dark:text-gray-300">En logopedia clínica y digital</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="stat-counter">12+</div>
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white">Herramientas Desarrolladas</div>
+                            <div class="text-gray-600 dark:text-gray-300">Juegos y aplicaciones especializadas</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="stat-counter">100%</div>
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white">Enfoque Personalizado</div>
+                            <div class="text-gray-600 dark:text-gray-300">Cada herramienta diseñada con propósito</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="professional-card text-center">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Evaluación Diagnóstica</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Análisis completo de las necesidades específicas de cada niño mediante herramientas 
+                            digitales avanzadas y experiencia clínica.
+                        </p>
+                    </div>
+                    
+                    <div class="professional-card text-center">
+                        <div class="text-4xl mb-4">🎮</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Terapia Gamificada</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Tratamiento a través de juegos especializados que hacen la terapia más efectiva 
+                            y motivadora para los niños.
+                        </p>
+                    </div>
+                    
+                    <div class="professional-card text-center">
+                        <div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Orientación Familiar</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Asesoramiento y herramientas para que las familias puedan apoyar el desarrollo 
+                            del habla en casa de manera efectiva.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        💬 Lo que dicen las familias
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        Testimonios reales de familias que han usado nuestras herramientas
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="testimonial-card">
+                        <div class="mb-4">
+                            <div class="flex text-yellow-400 mb-2">
+                                <span>⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 italic">
+                                "Los juegos de José han transformado la manera en que mi hijo ve la terapia. 
+                                Ahora pide jugar y ha mejorado muchísimo su pronunciación."
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3">M</div>
+                            <div>
+                                <div class="font-semibold text-gray-900 dark:text-white">María García</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Madre de Lucas, 7 años</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="mb-4">
+                            <div class="flex text-yellow-400 mb-2">
+                                <span>⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 italic">
+                                "Como logopeda, utilizo las herramientas de José en mi consulta. 
+                                Son extraordinariamente efectivas y los niños las adoran."
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold mr-3">A</div>
+                            <div>
+                                <div class="font-semibold text-gray-900 dark:text-white">Ana Rodríguez</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Logopeda, Madrid</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="mb-4">
+                            <div class="flex text-yellow-400 mb-2">
+                                <span>⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 italic">
+                                "El diagnóstico inicial fue súper útil. Nos ayudó a entender qué necesitaba 
+                                nuestra hija y qué herramientas usar."
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold mr-3">C</div>
+                            <div>
+                                <div class="font-semibold text-gray-900 dark:text-white">Carlos Martín</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Padre de Sofía, 9 años</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto" class="py-20 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        📞 Contacto Profesional
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        ¿Tienes dudas sobre el desarrollo del habla de tu hijo/a? Contacta directamente con José Aserraf 
+                        para una consulta profesional personalizada.
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="professional-card">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Envía tu consulta</h3>
+                        
+                        <form id="contactForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Nombre completo *
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="name" 
+                                        name="name" 
+                                        required 
+                                        class="form-input w-full"
+                                        placeholder="Tu nombre completo"
+                                    >
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Email *
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        required 
+                                        class="form-input w-full"
+                                        placeholder="tu@email.com"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Asunto *
+                                </label>
+                                <select 
+                                    id="subject" 
+                                    name="subject" 
+                                    required 
+                                    class="form-input w-full"
+                                >
+                                    <option value="">Selecciona un asunto</option>
+                                    <option value="Consulta inicial - Evaluación">Consulta inicial - Evaluación</option>
+                                    <option value="Dudas sobre herramientas digitales">Dudas sobre herramientas digitales</option>
+                                    <option value="Solicitud de cita presencial">Solicitud de cita presencial</option>
+                                    <option value="Consulta sobre desarrollo del habla">Consulta sobre desarrollo del habla</option>
+                                    <option value="Información sobre servicios">Información sobre servicios</option>
+                                    <option value="Otro motivo">Otro motivo</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Mensaje *
+                                </label>
+                                <textarea 
+                                    id="message" 
+                                    name="message" 
+                                    required 
+                                    rows="6" 
+                                    class="form-input form-textarea w-full"
+                                    placeholder="Describe tu consulta con el mayor detalle posible. Incluye la edad del niño/a, síntomas observados, y cualquier información relevante."
+                                ></textarea>
+                            </div>
+                            
+                            <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-4">
+                                <div class="flex">
+                                    <div class="text-blue-400 mr-3">ℹ️</div>
+                                    <div class="text-sm text-blue-800 dark:text-blue-300">
+                                        <strong>Información importante:</strong> Este formulario abrirá tu cliente de email con el mensaje preparado. 
+                                        Tu consulta llegará directamente a José Aserraf (gestionafonia@gmail.com).
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="submit-button btn-primary w-full text-lg py-4">
+                                <span>📧 Enviar Consulta</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="space-y-8">
+                        <!-- Direct Contact -->
+                        <div class="professional-card">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">📞 Contacto Directo</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                        <span class="text-primary">📞</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900 dark:text-white">Teléfono</div>
+                                        <a href="tel:+34667712699" class="text-primary hover:underline">667 712 699</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                        <span class="text-primary">📧</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900 dark:text-white">Email</div>
+                                        <a href="mailto:gestionafonia@gmail.com" class="text-primary hover:underline">gestionafonia@gmail.com</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                        <span class="text-primary">📍</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900 dark:text-white">Ubicación</div>
+                                        <div class="text-gray-600 dark:text-gray-300">Gabinete Fönia, Melilla</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Virtual Consultation -->
+                        <div class="professional-card">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">🏥 Consulta Virtual 3D</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Experimenta una consulta virtual interactiva con IA conversacional especializada.
+                            </p>
+                            <a href="https://poe.com/simslogoconsulta" target="_blank" class="btn-primary w-full text-center">
+                                <span>🏥 Acceder a Consulta Virtual</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Working Hours -->
+                        <div class="professional-card">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">🕒 Horario de Atención</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Lunes - Viernes:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white">9:00 - 18:00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Sábados:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white">9:00 - 14:00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Domingos:</span>
+                                    <span class="text-gray-600 dark:text-gray-300">Cerrado</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+                                <strong>Nota:</strong> Para urgencias fuera del horario, envía un email detallando la situación.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                            JL
+                        </div>
+                        <div class="font-bold text-xl">JuegosLogopedos</div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Plataforma especializada en herramientas digitales para logopedia infantil. 
+                        Desarrollada por José Aserraf con 18 años de experiencia.
+                    </p>
+                    <div class="text-sm text-gray-400">
+                        <div>📍 Gabinete Fönia, Melilla</div>
+                        <div>📞 667 712 699</div>
+                        <div>📧 gestionafonia@gmail.com</div>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Enlaces Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#inicio" class="text-gray-300 hover:text-white transition-colors">Inicio</a></li>
+                        <li><a href="#quiz" class="text-gray-300 hover:text-white transition-colors">Quiz Diagnóstico</a></li>
+                        <li><a href="#juegos" class="text-gray-300 hover:text-white transition-colors">Juegos</a></li>
+                        <li><a href="#profesional" class="text-gray-300 hover:text-white transition-colors">Profesional</a></li>
+                        <li><a href="#contacto" class="text-gray-300 hover:text-white transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Servicios</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Evaluación Diagnóstica</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Terapia Gamificada</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Consulta Virtual 3D</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Orientación Familiar</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Herramientas Digitales</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Popular Tools -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Herramientas Populares</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://poe.com/Templerunlogopeda" target="_blank" class="text-gray-300 hover:text-white transition-colors">Auditory Run Pro</a></li>
+                        <li><a href="https://poe.com/luxorlogopeda" target="_blank" class="text-gray-300 hover:text-white transition-colors">Sílaba Luxor Pro</a></li>
+                        <li><a href="https://poe.com/ninjagamefono" target="_blank" class="text-gray-300 hover:text-white transition-colors">Ninja Phonetics Pro</a></li>
+                        <li><a href="https://poe.com/SNAKE3DPALABRAS" target="_blank" class="text-gray-300 hover:text-white transition-colors">Snake 3D Palabras</a></li>
+                        <li><a href="https://poe.com/simslogoconsulta" target="_blank" class="text-gray-300 hover:text-white transition-colors">Consulta Virtual 3D</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-400 text-sm mb-4 md:mb-0">
+                        © 2024 JuegosLogopedos. Desarrollado por José Aserraf - Gabinete Fönia. Todos los derechos reservados.
+                    </div>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Política de Privacidad</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Términos de Uso</a>
+                        <a href="#contacto" class="text-gray-400 hover:text-white transition-colors">Soporte</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ===== JAVASCRIPT COMPLETO Y DEPURADO =====
+        console.log('🚀 JuegosLogopedos v4.0 - Sistema completamente funcional');
+
+        // Configuración global
+        const CONFIG = {
+            quiz: { currentStep: 1, totalSteps: 7, userAnswers: {}, isCompleting: false },
+            filters: { currentCategory: 'all', currentSearchTerm: '' },
+            isInitialized: false
+        };
+
+        // Sistema de notificaciones mejorado
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'linear-gradient(135deg, #81FBB8 0%, #28C76F 100%)',
+                error: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+                info: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            };
+
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 30px; right: 30px; z-index: 9999;
+                background: ${colors[type]}; color: white; padding: 15px 20px;
+                border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                transform: translateX(120%); transition: all 0.3s ease;
+                max-width: 350px; font-weight: 600; font-size: 0.95rem;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            requestAnimationFrame(() => notification.style.transform = 'translateX(0)');
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120%)';
+                setTimeout(() => document.body.contains(notification) && document.body.removeChild(notification), 300);
+            }, 4000);
+        }
+
+        // Sistema de filtros
+        function filterGames() {
+            const gameCards = document.querySelectorAll('.game-card[data-categories]');
+            const noResults = document.getElementById('noResults');
+            const resultsCount = document.getElementById('resultsCount');
+            let visibleCount = 0;
+
+            gameCards.forEach(card => {
+                const categories = card.getAttribute('data-categories').split(',');
+                const searchTerms = card.getAttribute('data-search-terms').toLowerCase();
+                const gameTitle = card.querySelector('.game-title').textContent.toLowerCase();
+                
+                const categoryMatch = CONFIG.filters.currentCategory === 'all' || categories.includes(CONFIG.filters.currentCategory);
+                const searchMatch = CONFIG.filters.currentSearchTerm === '' || 
+                                  searchTerms.includes(CONFIG.filters.currentSearchTerm) ||
+                                  gameTitle.includes(CONFIG.filters.currentSearchTerm);
+                
+                if (categoryMatch && searchMatch) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
+                }
+            });
+
+            if (resultsCount) {
+                resultsCount.textContent = visibleCount === 1 ? '1 herramienta disponible' : `${visibleCount} herramientas disponibles`;
+            }
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        function clearAllFilters() {
+            CONFIG.filters.currentCategory = 'all';
+            CONFIG.filters.currentSearchTerm = '';
+            
+            const gameSearch = document.getElementById('gameSearch');
+            const searchClear = document.getElementById('searchClear');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            if (gameSearch) gameSearch.value = '';
+            if (searchClear) searchClear.style.display = 'none';
+            
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === 'all') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            filterGames();
+        }
+
+        // Sistema de quiz
+        function nextStep(step) {
+            if (CONFIG.quiz.isCompleting) return;
+
+            const currentStepEl = document.querySelector(`.quiz-step[data-step="${CONFIG.quiz.currentStep}"]`);
+            const nextStepEl = document.querySelector(`.quiz-step[data-step="${step}"]`);
+
+            if (!currentStepEl || !nextStepEl) return;
+
+            currentStepEl.style.opacity = '0';
+            setTimeout(() => {
+                currentStepEl.classList.remove('active');
+                nextStepEl.classList.add('active');
+                nextStepEl.style.opacity = '1';
+                updateProgress(step);
+                CONFIG.quiz.currentStep = step;
+            }, 300);
+        }
+
+        function updateProgress(step) {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const progressPercent = document.getElementById('progressPercent');
+
+            if (progressFill && progressText && progressPercent) {
+                const percentage = (step / CONFIG.quiz.totalSteps) * 100;
+                progressFill.style.width = `${percentage}%`;
+                progressText.textContent = `Paso ${step} de ${CONFIG.quiz.totalSteps}`;
+                progressPercent.textContent = `${Math.round(percentage)}%`;
+            }
+        }
+
+        function generatePersonalizedReport() {
+            const answers = CONFIG.quiz.userAnswers;
+            const concern = answers.step_2 || 'pronunciacion';
+            const severity = answers.step_3 || 'leve';
+            
+            let riskLevel = 'bajo', riskColor = '#10b981', riskIcon = '✅';
+            
+            if (severity === 'severa') {
+                riskLevel = 'alto'; riskColor = '#f59e0b'; riskIcon = '🚨';
+            } else if (severity === 'moderada') {
+                riskLevel = 'moderado'; riskColor = '#f59e0b'; riskIcon = '⚠️';
+            }
+
+            const gameMap = {
+                pronunciacion: ['AUDITORY RUN PRO', 'NINJA PHONETICS PRO', 'ENCUENTRA EL NUEVO FON/R'],
+                lectura: ['SÍLABA LUXOR PRO', 'DONKEY KONG FONEMAS', 'SNAKE 3D PALABRAS'],
+                escritura: ['MOTOR SKILLS ADVENTURE', 'DiagnostIAPro'],
+                comprension: ['SÍLABA LUXOR PRO', 'AUDITORY RUN PRO'],
+                atencion: ['AUDITORY RUN PRO', 'MOTOR SKILLS ADVENTURE'],
+                tartamudez: ['Karaoke Tartamudez', 'PHONOVOICELAB']
+            };
+
+            return {
+                riskLevel, riskColor, riskIcon,
+                games: gameMap[concern] || gameMap.pronunciacion,
+                priority: severity === 'severa' ? 'alta' : severity === 'moderada' ? 'media' : 'normal',
+                concern, severity, 
+                age: answers.step_1 || '6-8',
+                timeline: answers.step_4 || 'reciente',
+                therapy: answers.step_6 || 'no',
+                name: document.getElementById('contactName')?.value || '',
+                email: document.getElementById('contactEmail')?.value || ''
+            };
+        }
+
+        // Función principal para mostrar el informe
+        function showDirectReport() {
+            if (CONFIG.quiz.isCompleting) return;
+            CONFIG.quiz.isCompleting = true;
+
+            // Recopilar respuestas de síntomas
+            const symptomsCheckboxes = document.querySelectorAll('.symptoms-options input[type="checkbox"]:checked');
+            const symptoms = Array.from(symptomsCheckboxes).map(cb => cb.value);
+            CONFIG.quiz.userAnswers.step_5 = symptoms;
+
+            const button = document.querySelector('button[onclick="showDirectReport()"]');
+            if (button) {
+                button.innerHTML = '<span class="loading"></span> Generando informe...';
+                button.disabled = true;
+            }
+
+            setTimeout(() => {
+                const report = generatePersonalizedReport();
+                showParentReport(report);
+                
+                if (button) {
+                    button.innerHTML = '<span>🎯 Ver Mi Informe Personalizado</span>';
+                    button.disabled = false;
+                }
+                CONFIG.quiz.isCompleting = false;
+                
+                showNotification('📋 Informe personalizado generado', 'success');
+            }, 1500);
+        }
+
+        // Función para mostrar informe interpretativo para padres
+        function showParentReport(report) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = generateParentReport(report);
+            document.body.appendChild(modal);
+            
+            // Cerrar modal al hacer clic fuera
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+
+        function generateParentReport(report) {
+            const name = document.getElementById('contactName')?.value || 'tu hijo/a';
+            
+            const interpretations = {
+                pronunciacion: {
+                    explanation: "Las dificultades de pronunciación en niños son muy comunes y, en la mayoría de casos, se pueden corregir completamente con el enfoque adecuado.",
+                    nextSteps: "Es importante trabajar la discriminación auditiva y los ejercicios de articulación específicos.",
+                    timeframe: "Con práctica regular, suelen verse mejoras significativas en 3-6 meses."
+                },
+                lectura: {
+                    explanation: "Las dificultades de lectura pueden estar relacionadas con la conciencia fonológica, que es la base para un buen desarrollo lector.",
+                    nextSteps: "Recomendamos ejercicios de segmentación silábica y reconocimiento de sonidos.",
+                    timeframe: "El progreso en lectura requiere constancia, pero los avances se notan en 2-4 meses."
+                },
+                escritura: {
+                    explanation: "Los problemas de escritura a menudo se relacionan con la coordinación motora fina y la planificación del movimiento.",
+                    nextSteps: "Ejercicios de psicomotricidad fina y coordinación ojo-mano serán muy beneficiosos.",
+                    timeframe: "La mejoría en escritura es gradual, esperando cambios notables en 4-8 meses."
+                },
+                comprension: {
+                    explanation: "Las dificultades de comprensión pueden trabajarse efectivamente con ejercicios específicos de procesamiento del lenguaje.",
+                    nextSteps: "Actividades que combinen audición, comprensión y vocabulario son fundamentales.",
+                    timeframe: "La comprensión mejora progresivamente con ejercicios regulares en 3-6 meses."
+                },
+                atencion: {
+                    explanation: "Los problemas de atención son frecuentes y se pueden mejorar con actividades estructuradas y motivadoras.",
+                    nextSteps: "Juegos que requieran concentración sostenida pero sean divertidos serán ideales.",
+                    timeframe: "La capacidad de atención mejora gradualmente en 2-4 meses con práctica constante."
+                },
+                tartamudez: {
+                    explanation: "La tartamudez requiere un enfoque especializado que combine técnicas de fluidez con control de ansiedad.",
+                    nextSteps: "Ejercicios de respiración, ritmo y técnicas de relajación son fundamentales.",
+                    timeframe: "Los avances en fluidez del habla pueden observarse en 6-12 meses con terapia adecuada."
+                }
+            };
+
+            const currentInterpretation = interpretations[report.concern] || interpretations.pronunciacion;
+
+            return `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-primary to-secondary text-white p-6 rounded-t-2xl">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-2xl font-bold">📋 Tu Informe Personalizado</h2>
+                                <p class="text-lg opacity-90">Evaluación y recomendaciones para ${name}</p>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-full transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-8 space-y-8">
+                        <!-- Resultado Principal -->
+                        <div class="text-center mb-8">
+                            <div class="inline-block p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border-2" style="border-color: ${report.riskColor};">
+                                <div class="text-6xl mb-4">${report.riskIcon}</div>
+                                <h3 class="text-2xl font-bold mb-2" style="color: ${report.riskColor};">
+                                    Nivel de Atención: ${report.riskLevel.toUpperCase()}
+                                </h3>
+                                <p class="text-gray-600 text-lg">Prioridad: ${report.priority}</p>
+                            </div>
+                        </div>
+
+                        <!-- Interpretación del Resultado -->
+                        <div class="bg-blue-50 dark:bg-blue-900/30 rounded-2xl p-6 border-l-4 border-blue-400">
+                            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-4 flex items-center">
+                                <span class="mr-3">💡</span> ¿Qué significa esto?
+                            </h3>
+                            <p class="text-blue-800 dark:text-blue-200 text-lg leading-relaxed mb-4">
+                                ${currentInterpretation.explanation}
+                            </p>
+                            <div class="bg-white dark:bg-blue-800 rounded-lg p-4">
+                                <p class="text-blue-900 dark:text-blue-100 font-semibold">
+                                    <span class="mr-2">⏱️</span> Tiempo estimado de mejora: ${currentInterpretation.timeframe}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Recomendaciones Específicas -->
+                        <div class="bg-green-50 dark:bg-green-900/30 rounded-2xl p-6 border-l-4 border-green-400">
+                            <h3 class="text-xl font-bold text-green-900 dark:text-green-100 mb-4 flex items-center">
+                                <span class="mr-3">🎯</span> Qué hacer ahora
+                            </h3>
+                            <p class="text-green-800 dark:text-green-200 text-lg leading-relaxed mb-6">
+                                ${currentInterpretation.nextSteps}
+                            </p>
+                            
+                            <h4 class="font-bold text-green-900 dark:text-green-100 mb-3">🎮 Juegos recomendados para ${name}:</h4>
+                            <div class="grid gap-3">
+                                ${report.games.map(game => `
+                                    <div class="bg-white dark:bg-green-800 rounded-lg p-4 flex items-center justify-between">
+                                        <div>
+                                            <div class="font-semibold text-green-900 dark:text-green-100">${game}</div>
+                                            <div class="text-sm text-green-700 dark:text-green-200">Especialmente diseñado para ${report.concern}</div>
+                                        </div>
+                                        <button onclick="openRecommendedGame('${game}'); this.closest('.fixed').remove();" class="btn-primary text-sm px-4 py-2">
+                                            🎮 Jugar
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Consejos para Padres -->
+                        <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-2xl p-6 border-l-4 border-yellow-400">
+                            <h3 class="text-xl font-bold text-yellow-900 dark:text-yellow-100 mb-4 flex items-center">
+                                <span class="mr-3">👨‍👩‍👧‍👦</span> Consejos para casa
+                            </h3>
+                            <div class="space-y-3 text-yellow-800 dark:text-yellow-200">
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-yellow-600 font-bold">1.</span>
+                                    <span>Practica 15-20 minutos diarios con los juegos recomendados, preferiblemente a la misma hora.</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-yellow-600 font-bold">2.</span>
+                                    <span>Celebra cada pequeño progreso para mantener la motivación alta.</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-yellow-600 font-bold">3.</span>
+                                    <span>Sé paciente y constante - cada niño tiene su propio ritmo de aprendizaje.</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-yellow-600 font-bold">4.</span>
+                                    <span>Si no ves mejoras en 2-3 meses, considera una consulta profesional.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cuándo Buscar Ayuda Profesional -->
+                        <div class="bg-red-50 dark:bg-red-900/30 rounded-2xl p-6 border-l-4 border-red-400">
+                            <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-4 flex items-center">
+                                <span class="mr-3">🚨</span> Cuándo buscar ayuda profesional
+                            </h3>
+                            <div class="text-red-800 dark:text-red-200 space-y-2">
+                                <p>• Si las dificultades interfieren significativamente en el día a día</p>
+                                <p>• Si ${name} muestra frustración constante o evita hablar</p>
+                                <p>• Si no hay progreso después de 3 meses de práctica regular</p>
+                                <p>• Si tienes dudas sobre cómo ayudar mejor</p>
+                            </div>
+                        </div>
+
+                        <!-- Siguiente Paso -->
+                        <div class="bg-purple-50 dark:bg-purple-900/30 rounded-2xl p-6 border-l-4 border-purple-400">
+                            <h3 class="text-xl font-bold text-purple-900 dark:text-purple-100 mb-4 flex items-center">
+                                <span class="mr-3">🚀</span> Tu próximo paso
+                            </h3>
+                            <p class="text-purple-800 dark:text-purple-200 text-lg mb-4">
+                                Empieza hoy mismo con los juegos recomendados. La constancia es clave para el éxito.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="this.closest('.fixed').remove(); scrollToGames();" class="btn-primary flex-1 text-center">
+                                    🎮 Ir a los Juegos
+                                </button>
+                                <button onclick="this.closest('.fixed').remove(); scrollToContact();" class="btn-secondary flex-1 text-center">
+                                    📞 Consulta Profesional
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje de José -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-2xl p-6 border-2 border-primary">
+                            <div class="flex items-start space-x-4">
+                                <img 
+                                    src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&h=225" 
+                                    alt="José Aserraf" 
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-primary"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                >
+                                <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-lg" style="display: none;">
+                                    JA
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-white dark:bg-gray-600 rounded-lg p-4 mb-2">
+                                        <p class="text-gray-800 dark:text-gray-200 italic">
+                                            "Recuerda que cada niño es único y especial. Con paciencia, amor y las herramientas adecuadas, 
+                                            ${name} puede superar estas dificultades. Estoy aquí para apoyarte en este camino."
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-primary">José Aserraf</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400">Logopeda Especialista</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Funciones de navegación
+        function openRecommendedGame(gameName) {
+            showNotification(`🎮 Abriendo ${gameName}...`, 'info');
+            setTimeout(() => {
+                const section = document.querySelector('#juegos');
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        }
+
+        function scrollToGames() {
+            const section = document.querySelector('#juegos');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+                showNotification('🎮 Explorando juegos disponibles', 'success');
+            }
+        }
+
+        function scrollToContact() {
+            const section = document.querySelector('#contacto');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+                showNotification('📞 Te llevamos al contacto directo', 'success');
+            }
+        }
+
+        function restartQuiz() {
+            CONFIG.quiz = { currentStep: 1, totalSteps: 7, userAnswers: {}, isCompleting: false };
+            
+            document.querySelectorAll('.quiz-step').forEach(step => {
+                step.classList.remove('active');
+                step.style.opacity = '0';
+            });
+            
+            document.querySelectorAll('.option-card').forEach(option => option.classList.remove('selected'));
+            document.querySelectorAll('.symptoms-options input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            ['contactEmail', 'contactName'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) input.value = '';
+            });
+
+            setTimeout(() => {
+                const firstStep = document.querySelector('.quiz-step[data-step="1"]');
+                if (firstStep) {
+                    firstStep.classList.add('active');
+                    firstStep.style.opacity = '1';
+                }
+                updateProgress(1);
+            }, 100);
+
+            showNotification('🔄 Quiz reiniciado', 'info');
+        }
+
+        function openGame(gameUrl) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span class="loading"></span> Abriendo...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = gameUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showNotification('¡Juego abierto! 🎮', 'success');
+            }, 800);
+        }
+
+        function toggleGameDetails(button) {
+            const card = button.closest('.game-card');
+            const details = card.querySelector('.game-details');
+            const toggleIcon = button.querySelector('.toggle-icon');
+            const textSpan = button.querySelector('span:first-child');
+            
+            if (!details || !toggleIcon || !textSpan) return;
+            
+            const isExpanded = details.classList.contains('expanded');
+            
+            if (isExpanded) {
+                details.classList.remove('expanded');
+                toggleIcon.textContent = '⬇️';
+                textSpan.textContent = '📖 Ver más información';
+                card.classList.remove('expanded');
+            } else {
+                details.classList.add('expanded');
+                toggleIcon.textContent = '⬆️';
+                textSpan.textContent = '📖 Ocultar información';
+                card.classList.add('expanded');
+                
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            }
+            
+            const action = isExpanded ? 'ocultada' : 'mostrada';
+            showNotification(`Información ${action} 📖`, 'info');
+        }
+
+        // Inicialización principal
+        function initializeApp() {
+            if (CONFIG.isInitialized) return;
+            console.log('🚀 Iniciando JuegosLogopedos...');
+            
+            try {
+                // Navegación móvil
+                const menuToggle = document.getElementById('menuToggle');
+                const navLinks = document.getElementById('navLinks');
+                
+                if (menuToggle && navLinks) {
+                    menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+                }
+
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) target.scrollIntoView({ behavior: 'smooth' });
+                        if (navLinks) navLinks.classList.remove('active');
+                    });
+                });
+
+                // Filtros
+                const gameSearch = document.getElementById('gameSearch');
+                const searchClear = document.getElementById('searchClear');
+                const filterButtons = document.querySelectorAll('.filter-btn');
+
+                if (gameSearch) {
+                    gameSearch.addEventListener('input', function() {
+                        CONFIG.filters.currentSearchTerm = this.value.toLowerCase().trim();
+                        if (searchClear) {
+                            searchClear.style.display = CONFIG.filters.currentSearchTerm ? 'block' : 'none';
+                        }
+                        filterGames();
+                    });
+                }
+
+                if (searchClear) {
+                    searchClear.addEventListener('click', function() {
+                        if (gameSearch) gameSearch.value = '';
+                        CONFIG.filters.currentSearchTerm = '';
+                        this.style.display = 'none';
+                        filterGames();
+                    });
+                }
+
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        CONFIG.filters.currentCategory = this.getAttribute('data-category');
+                        filterGames();
+                    });
+                });
+
+                // Quiz
+                document.querySelectorAll('.option-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const value = this.getAttribute('data-value');
+                        const nextStepNum = parseInt(this.getAttribute('data-next'));
+                        
+                        CONFIG.quiz.userAnswers[`step_${CONFIG.quiz.currentStep}`] = value;
+                        
+                        this.parentNode.querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        
+                        setTimeout(() => nextStep(nextStepNum), 600);
+                    });
+                });
+
+                // Formulario de contacto
+                const form = document.getElementById('contactForm');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const submitButton = this.querySelector('.submit-button');
+                        const originalText = submitButton.innerHTML;
+                        
+                        submitButton.innerHTML = '<span class="loading"></span> Procesando...';
+                        submitButton.disabled = true;
+                        
+                        const formData = new FormData(this);
+                        const mailtoLink = `mailto:gestionafonia@gmail.com?subject=${encodeURIComponent(`[JuegosLogopedos] ${formData.get('subject')}`)}&body=${encodeURIComponent(`Nombre: ${formData.get('name')}\nEmail: ${formData.get('email')}\n\nMensaje:\n${formData.get('message')}\n\n---\nEnviado desde JuegosLogopedos.com`)}`;
+                        
+                        setTimeout(() => {
+                            window.location.href = mailtoLink;
+                            this.reset();
+                            submitButton.innerHTML = originalText;
+                            submitButton.disabled = false;
+                            showNotification('¡Mensaje preparado! 📧', 'success');
+                        }, 1500);
+                    });
+                }
+
+                // Efectos de scroll
+                window.addEventListener('scroll', function() {
+                    const scrollProgress = document.getElementById('scrollProgress');
+                    if (scrollProgress) {
+                        const scrollPercent = (window.pageYOffset / (document.body.offsetHeight - window.innerHeight)) * 100;
+                        scrollProgress.style.width = scrollPercent + '%';
+                    }
+
+                    const header = document.getElementById('header');
+                    if (header) {
+                        header.classList.toggle('header-scrolled', window.scrollY > 100);
+                    }
+                });
+                
+                setTimeout(() => {
+                    filterGames();
+                    CONFIG.isInitialized = true;
+                    console.log('✅ JuegosLogopedos cargado exitosamente');
+                }, 50);
+                
+            } catch (error) {
+                console.error('❌ Error en inicialización:', error);
+            }
+        }
+
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+
+        console.log('✅ JuegosLogopedos v4.0 - Sistema completamente funcional y depurado');
+    </script>
+
+    <!-- Dark Mode Support -->
+    <script>
+        // Dark mode detection and support
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+</body>
+</html>

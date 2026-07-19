@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiagnostIA • Evaluación clínica de disgrafía (adultos y niños)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            primaryDark: '#1d4ed8',
+            accent: '#f59e0b',
+            success: '#22c55e',
+            kid: '#f472b6',
+            kidSoft: '#fdf2f8',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    canvas { touch-action: none; }
+    .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.35); border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-full bg-gray-50 text-gray-900 transition-colors duration-300">
+  <div class="bg-white shadow-sm">
+    <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-primary font-semibold">Plataforma clínica</p>
+        <h1 class="text-3xl font-bold">DiagnostIA</h1>
+        <p class="text-sm text-gray-600">Evaluación empática y científica de la escritura manuscrita — adultos y niños.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <span id="apiStatus" class="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-xs text-green-700">
+          <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> API lista (demo)
+        </span>
+        <button id="toggleTheme" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Tema</button>
+        <label class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">
+          <input id="useMock" type="checkbox" class="h-4 w-4 text-primary rounded border-gray-300" checked />
+          Modo demo
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 space-y-6">
+    <!-- Perfil y protocolos -->
+    <section class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3 md:col-span-2">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold">Perfiles de usuario</h2>
+            <p class="text-xs text-gray-500">Adultos y niños. Guarda sesiones y seguimiento.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input id="newProfileName" type="text" placeholder="Nombre" class="w-32 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary" />
+            <input id="newProfileAge" type="number" min="5" max="90" value="25" class="w-20 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary" />
+            <select id="newProfileHand" class="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary">
+              <option value="diestro">Diestro</option>
+              <option value="zurdo">Zurdo</option>
+              <option value="ambidiestro">Ambidiestro</option>
+            </select>
+            <button id="addProfile" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primaryDark">Añadir</button>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2" id="profilesContainer"></div>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+        <h3 class="text-sm font-semibold text-gray-800">Protocolo de evaluación</h3>
+        <select id="protocolSelect" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary">
+          <option value="comprehensive">Comprehensive (clínico completo)</option>
+          <option value="screening">Screening inicial</option>
+          <option value="followup">Seguimiento</option>
+          <option value="adult-functional">Adulto funcional (comercial)</option>
+          <option value="pediatric-training">Pediátrico (entrenamiento)</option>
+          <option value="comparative">Comparativo (pre/pos)</option>
+        </select>
+        <button id="calibrateBtn" class="w-full rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100">Calibrar presión / touch</button>
+        <p class="text-[11px] text-gray-500">Usa un stylus si es posible. La presión se registra en dispositivos compatibles.</p>
+      </div>
+    </section>
+
+    <!-- Escritura + Métricas -->
+    <section class="grid gap-4 lg:grid-cols-3">
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm lg:col-span-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div>
+            <h2 class="text-lg font-semibold">Escritura digital (canvas profesional)</h2>
+            <p class="text-xs text-gray-500">Detección de presión, análisis temporal y legibilidad.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="clearBtn" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Limpiar</button>
+            <button id="toggleShade" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Sombrear guía</button>
+            <button id="analyzeWritingBtn" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primaryDark">Analizar escritura</button>
+          </div>
+        </div>
+
+        <!-- CANVAS FIX: FG absoluto, pointer-events activas -->
+        <div class="relative w-full h-96 rounded-lg border border-dashed border-gray-300 bg-white overflow-hidden">
+          <canvas id="drawBgCanvas" class="absolute inset-0 h-full w-full rounded-lg pointer-events-none"></canvas>
+          <canvas id="drawCanvas" class="absolute inset-0 h-full w-full rounded-lg z-20" style="touch-action:none; pointer-events:auto;"></canvas>
+          <div id="guideOverlay" class="pointer-events-none absolute inset-0 opacity-25 hidden z-30">
+            <svg class="h-full w-full">
+              <defs>
+                <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#3b82f6" stroke-width="0.5" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
+        <p class="mt-2 text-xs text-gray-500">Arrastra con dedo o mouse. Activa "Sombrear guía" para calcar (útil para niños).</p>
+      </div>
+
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-semibold text-gray-800">Métricas en tiempo real</h3>
+          <span id="liveStatus" class="text-[11px] text-gray-500">En espera</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <MetricCard label="Trazos" id="mStrokes" />
+          <MetricCard label="Velocidad media" id="mSpeed" suffix="mm/s" />
+          <MetricCard label="Velocidad pico" id="mPeak" suffix="mm/s" />
+          <MetricCard label="Tiempo" id="mTime" suffix="s" />
+          <MetricCard label="Distancia" id="mDistance" suffix="mm" />
+          <MetricCard label="Irregularidad" id="mIrreg" suffix="/100" />
+          <MetricCard label="Presión media" id="mPressure" suffix="rel" />
+          <MetricCard label="Consistencia" id="mConsistency" suffix="/100" />
+          <MetricCard label="Legibilidad" id="mLegibility" suffix="/100" />
+          <MetricCard label="Cobertura guía" id="mCoverage" suffix="%" />
+          <MetricCard label="Errores consigna" id="mErrors" suffix="%" />
+        </div>
+        <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-xs text-gray-600">
+          Basado en Van Galen & Teulings: fluidez (CV de velocidad), consistencia inter-trazo, presión, temblor (FFT simplificado), desviación de baseline, legibilidad y cobertura de guía.
+        </div>
+      </div>
+    </section>
+
+    <!-- Entrenamiento infantil -->
+    <section class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <div class="h-10 w-10 rounded-full bg-kidSoft text-kid flex items-center justify-center text-xl">⭐</div>
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900">Zona de entrenamiento infantil</h2>
+            <p class="text-xs text-gray-500">Grafía, sílabas y palabras con guía sombreada y feedback inmediato.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <select id="trainingLevel" class="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary">
+            <option value="grafia">Grafía (letras)</option>
+            <option value="silabas">Sílabas</option>
+            <option value="palabras">Palabras</option>
+          </select>
+          <button id="newDrill" class="rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white hover:bg-amber-600">Nueva consigna</button>
+          <button id="evalDrill" class="rounded-lg bg-kid px-3 py-2 text-sm font-semibold text-white hover:bg-pink-600">Evaluar consigna</button>
+          <button id="toggleGuide" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Guía de cuadrícula</button>
+        </div>
+      </div>
+      <div class="rounded-lg border border-gray-100 bg-kidSoft/60 p-4 flex flex-col gap-2">
+        <p class="text-sm font-semibold text-gray-800">Consigna actual:</p>
+        <p id="drillText" class="text-2xl font-bold text-primary tracking-wide"></p>
+        <p class="text-xs text-gray-600">1) Activa "Sombrear guía" y calca. 2) Presiona "Evaluar consigna" para ver errores y legibilidad.</p>
+        <div id="childFeedback" class="text-sm font-semibold text-kid mt-1"></div>
+      </div>
+      <div class="grid gap-3 md:grid-cols-3 text-sm">
+        <div class="rounded-lg border border-gray-100 bg-white p-3">
+          <p class="text-xs text-gray-500">Legibilidad estimada</p>
+          <p id="legibilityLabel" class="text-lg font-bold text-gray-900">--</p>
+        </div>
+        <div class="rounded-lg border border-gray-100 bg-white p-3">
+          <p class="text-xs text-gray-500">Cobertura de guía</p>
+          <p id="coverageLabel" class="text-lg font-bold text-gray-900">--</p>
+        </div>
+        <div class="rounded-lg border border-gray-100 bg-white p-3">
+          <p class="text-xs text-gray-500">Errores vs consigna</p>
+          <p id="errorsLabel" class="text-lg font-bold text-gray-900">--</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Imagen + IA -->
+    <section class="grid gap-4 lg:grid-cols-2">
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-semibold">Análisis de imagen</h2>
+          </div>
+          <button id="analyzeImageBtn" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primaryDark">Analizar imagen</button>
+        </div>
+        <label for="imageInput" class="block cursor-pointer rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4 text-center hover:border-primary hover:bg-blue-50 transition">
+          <p class="text-sm font-medium text-gray-700">Sube una foto de la escritura</p>
+          <p class="text-xs text-gray-500">JPG, PNG, HEIC. Móvil y desktop.</p>
+          <input id="imageInput" type="file" accept="image/*" multiple class="hidden" />
+        </label>
+        <div id="imagePreview" class="grid grid-cols-2 gap-3"></div>
+      </div>
+
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm flex flex-col">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-lg font-semibold">Informe IA en tiempo real</h2>
+          <span id="statusBadge" class="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">
+            <span class="h-2 w-2 rounded-full bg-gray-400"></span> Esperando
+          </span>
+        </div>
+        <div id="aiOutput" class="scrollbar-thin flex-1 rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm text-gray-800 whitespace-pre-line">
+          Inicia un análisis para ver el informe.
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráficos -->
+    <section class="grid gap-4 lg:grid-cols-2">
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-gray-800">Análisis temporal</h3>
+          <p class="text-[11px] text-gray-500">Velocidad, presión (últimos 50 puntos)</p>
+        </div>
+        <div class="h-64">
+          <canvas id="temporalChart"></canvas>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-gray-800">Progreso por sesiones</h3>
+        </div>
+        <div class="h-64">
+          <canvas id="progressChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acciones -->
+    <section class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="saveSession" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Guardar sesión (JSON)</button>
+        <button id="addToProgress" class="rounded-lg bg-success px-3 py-2 text-sm font-semibold text-white hover:bg-green-600">Añadir a progreso</button>
+        <button id="exportPDF" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primaryDark">Exportar informe PDF</button>
+        <button id="shareLink" class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">Compartir</button>
+      </div>
+      <p class="text-xs text-gray-500">Informe clínico incluye métricas científicas, percentiles por edad, legibilidad, recomendaciones y pronóstico.</p>
+    </section>
+
+    <footer class="pb-10 text-center text-[11px] text-gray-500">
+      Interfaz premium, criterios realistas para adultos y adaptados a niños. Basado en evidencia científica (Van Galen & Teulings).
+    </footer>
+  </main>
+
+  <!-- Reusable metric card template -->
+  <template id="metric-card">
+    <div class="rounded-lg bg-gray-50 p-3">
+      <p class="text-gray-500 text-xs"></p>
+      <p class="text-xl font-semibold"></p>
+    </div>
+  </template>
+
+<script>
+/* =========================
+   CONFIGURACIÓN Y ESTADO
+   ========================= */
+const API_TEXT_ENDPOINT = '/api/analyze-text';   // Sustituye por tu endpoint real
+const API_IMAGE_ENDPOINT = '/api/analyze-image'; // Sustituye por tu endpoint real
+
+const profilesContainer = document.getElementById('profilesContainer');
+const protocolSelect = document.getElementById('protocolSelect');
+const useMock = document.getElementById('useMock');
+const aiOutput = document.getElementById('aiOutput');
+const statusBadge = document.getElementById('statusBadge');
+const apiStatus = document.getElementById('apiStatus');
+const liveStatus = document.getElementById('liveStatus');
+const guideOverlay = document.getElementById('guideOverlay');
+const toggleShadeBtn = document.getElementById('toggleShade');
+
+let shadingOn = true;
+
+let currentProfileId = null;
+let profiles = [
+  { id: 'adult-25', name: 'Adulto 25', age: 25, hand: 'diestro' },
+  { id: 'nino-9', name: 'Niño 9', age: 9, hand: 'diestro' },
+];
+let sessions = []; // seguimiento en memoria
+
+/* Normativas por edad */
+const normatives = {
+  '5-7':   { velocity: [8, 15],  fluency: [60, 80], consistency: [40, 70] },
+  '8-10':  { velocity: [12, 22], fluency: [70, 85], consistency: [60, 80] },
+  '11-13': { velocity: [15, 28], fluency: [75, 90], consistency: [70, 85] },
+  '14-17': { velocity: [18, 35], fluency: [80, 95], consistency: [75, 90] },
+  '18-30': { velocity: [20, 40], fluency: [85, 98], consistency: [80, 95] },
+  '31-50': { velocity: [18, 36], fluency: [82, 96], consistency: [78, 94] },
+  '51+':   { velocity: [15, 30], fluency: [78, 92], consistency: [74, 90] },
+};
+
+function normativeForAge(age) {
+  const a = Number(age);
+  if (a <= 7) return normatives['5-7'];
+  if (a <= 10) return normatives['8-10'];
+  if (a <= 13) return normatives['11-13'];
+  if (a <= 17) return normatives['14-17'];
+  if (a <= 30) return normatives['18-30'];
+  if (a <= 50) return normatives['31-50'];
+  return normatives['51+'];
+}
+
+/* =========================
+   UI HELPERS
+   ========================= */
+function setStatusBadge(text, color='gray') {
+  const map = {
+    gray: ['bg-gray-100','text-gray-700','bg-gray-400'],
+    blue: ['bg-blue-100','text-blue-700','bg-blue-500'],
+    green:['bg-green-100','text-green-700','bg-green-500'],
+    amber:['bg-amber-100','text-amber-700','bg-amber-500'],
+    red:  ['bg-red-100','text-red-700','bg-red-500'],
+  };
+  const [bg, tx, dot] = map[color]||map.gray;
+  statusBadge.className = `inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs ${bg} ${tx}`;
+  statusBadge.innerHTML = `<span class="h-2 w-2 rounded-full ${dot}"></span> ${text}`;
+}
+
+/* Metric cards injection */
+(function initMetricCards(){
+  const tpl = document.getElementById('metric-card');
+  const ids = [
+    ['mStrokes','Trazos'],
+    ['mSpeed','Velocidad media'],
+    ['mPeak','Velocidad pico'],
+    ['mTime','Tiempo'],
+    ['mDistance','Distancia'],
+    ['mIrreg','Irregularidad'],
+    ['mPressure','Presión media'],
+    ['mConsistency','Consistencia'],
+    ['mLegibility','Legibilidad'],
+    ['mCoverage','Cobertura guía'],
+    ['mErrors','Errores consigna']
+  ];
+  const container = document.querySelector('.grid.grid-cols-2.gap-3.text-sm');
+  container.innerHTML = '';
+  ids.forEach(([id,label])=>{
+    const node = tpl.content.cloneNode(true);
+    node.querySelector('p.text-gray-500').textContent = label;
+    node.querySelector('p.text-xl').id = id;
+    node.querySelector('p.text-xl').textContent = '--';
+    container.appendChild(node);
+  });
+})();
+
+/* Profiles UI */
+function renderProfiles() {
+  profilesContainer.innerHTML = '';
+  profiles.forEach(p => {
+    const btn = document.createElement('button');
+    const active = p.id === currentProfileId;
+    btn.className = `rounded-full border px-3 py-2 text-sm ${active ? 'border-primary bg-blue-50 text-primary font-semibold' : 'border-gray-200 text-gray-700 hover:bg-gray-100'}`;
+    btn.textContent = `${p.name} · ${p.age}a · ${p.hand}`;
+    btn.onclick = ()=> { currentProfileId = p.id; renderProfiles(); updateProgressChart(); };
+    profilesContainer.appendChild(btn);
+  });
+}
+currentProfileId = profiles[0].id;
+renderProfiles();
+
+document.getElementById('addProfile').addEventListener('click', ()=>{
+  const name = document.getElementById('newProfileName').value.trim() || 'Paciente';
+  const age = Number(document.getElementById('newProfileAge').value) || 25;
+  const hand = document.getElementById('newProfileHand').value;
+  const id = `${name}-${Date.now()}`;
+  profiles.push({id, name, age, hand});
+  currentProfileId = id;
+  renderProfiles();
+});
+
+/* Theme */
+const root = document.documentElement;
+function toggleTheme(){
+  root.classList.toggle('dark');
+  document.body.classList.toggle('bg-gray-900');
+  document.body.classList.toggle('text-gray-100');
+}
+document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
+
+/* Guide overlay */
+document.getElementById('toggleGuide').addEventListener('click', ()=>{
+  guideOverlay.classList.toggle('hidden');
+});
+
+/* =========================
+   CANVAS: FG y BG
+   ========================= */
+const fgCanvas = document.getElementById('drawCanvas');
+const bgCanvas = document.getElementById('drawBgCanvas');
+const fgCtx = fgCanvas.getContext('2d');
+const bgCtx = bgCanvas.getContext('2d');
+let dpr = window.devicePixelRatio || 1;
+
+let strokes = [];
+let currentStroke = [];
+let drawing = false;
+let startTime = null;
+let lastPointTime = null;
+let totalDistancePx = 0;
+let speedSamples = [];
+let pressureSamples = [];
+let lastPoint = null;
+
+let guideMask = null;
+let guideMaskW = 0, guideMaskH = 0, guideMaskCount = 0;
+
+function resizeCanvases() {
+  const rect = fgCanvas.getBoundingClientRect();
+  dpr = window.devicePixelRatio || 1;
+  [fgCanvas, bgCanvas].forEach(c=>{
+    c.width = Math.floor(rect.width * dpr);
+    c.height = Math.floor(rect.height * dpr);
+    const ctx = c.getContext('2d');
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  });
+  fgCtx.lineCap='round'; fgCtx.lineJoin='round'; fgCtx.strokeStyle='#111827'; fgCtx.lineWidth=2;
+  redrawAll();
+  drawGuide();
+}
+window.addEventListener('resize', resizeCanvases, {passive:true});
+resizeCanvases();
+
+/* Guía sombreada */
+function drawGuide(){
+  const text = document.getElementById('drillText').textContent || '';
+  bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+  if (!text) { guideMask=null; guideMaskCount=0; return; }
+
+  const rect = fgCanvas.getBoundingClientRect();
+  bgCtx.save();
+  const alpha = shadingOn ? 0.22 : 0.10;
+  bgCtx.globalAlpha = alpha;
+  bgCtx.fillStyle = '#94a3b8';
+  const baseFont = rect.width > 520 ? 96 : 72;
+  bgCtx.font = `bold ${baseFont}px "Segoe UI", system-ui, sans-serif`;
+  bgCtx.textAlign = 'center';
+  bgCtx.textBaseline = 'middle';
+  const x = rect.width/2;
+  const y = rect.height/2;
+  bgCtx.fillText(text, x, y);
+  bgCtx.restore();
+
+  bgCtx.save();
+  bgCtx.setLineDash([8,6]);
+  bgCtx.strokeStyle = 'rgba(59,130,246,0.35)';
+  bgCtx.lineWidth = 1.2;
+  bgCtx.beginPath();
+  bgCtx.moveTo(24, y + baseFont*0.35);
+  bgCtx.lineTo(rect.width-24, y + baseFont*0.35);
+  bgCtx.stroke();
+  bgCtx.restore();
+
+  computeGuideMask();
+}
+
+function computeGuideMask(){
+  const w = bgCanvas.width;
+  const h = bgCanvas.height;
+  const data = bgCtx.getImageData(0,0,w,h).data;
+  guideMask = new Uint8Array(w*h);
+  let count=0;
+  for(let i=0;i<w*h;i++){
+    const a = data[i*4+3];
+    if (a>10){ guideMask[i]=1; count++; }
+  }
+  guideMaskW = w; guideMaskH = h; guideMaskCount = count;
+}
+
+/* Drill sets */
+const drills = {
+  grafia: ['a','e','i','o','u','m','p','t','s','r','ñ','g','l','b','d','c'],
+  silabas:['pa','pe','pi','po','pu','tra','pla','bra','cla','gra','flo','fre','cri','dra'],
+  palabras:['casa','árbol','pluma','grafía','funcional','terapia','escuela','rápido','mañana','comunicación','sombrero','camino','mariposa']
+};
+
+function setNewDrill(){
+  const level = document.getElementById('trainingLevel').value;
+  const arr = drills[level];
+  const t = arr[Math.floor(Math.random()*arr.length)];
+  document.getElementById('drillText').textContent = t;
+  drawGuide();
+}
+document.getElementById('newDrill').addEventListener('click', ()=>{
+  resetAll();
+  setNewDrill();
+});
+setNewDrill();
+
+toggleShadeBtn.addEventListener('click', ()=>{
+  shadingOn = !shadingOn;
+  toggleShadeBtn.classList.toggle('bg-blue-50');
+  drawGuide();
+});
+
+document.getElementById('calibrateBtn').addEventListener('click', ()=>{
+  alert('Calibración: realiza 3 trazos horizontales de izquierda a derecha para ajustar presión y escala.');
+});
+
+/* Pointer handling */
+function getPos(e){
+  const rect = fgCanvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function pointerDown(e){
+  e.preventDefault();
+  const {x,y} = getPos(e);
+  drawing = true;
+  currentStroke = [{x,y,t:Date.now(),p:e.pressure||0.5}];
+  lastPoint = {x,y,t:Date.now(),p:e.pressure||0.5};
+  if (!startTime) startTime = Date.now();
+  fgCtx.beginPath();
+  fgCtx.moveTo(x,y);
+  liveStatus.textContent = 'Grabando...';
+}
+function pointerMove(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const {x,y} = getPos(e);
+  const now = Date.now();
+  const dt = now - lastPoint.t;
+  const dx = x - lastPoint.x;
+  const dy = y - lastPoint.y;
+  const dist = Math.hypot(dx,dy);
+  const p = e.pressure || 0.5;
+  if (dt>0){
+    const instSpeed = dist / (dt/1000);
+    speedSamples.push(instSpeed);
+    totalDistancePx += dist;
+  }
+  pressureSamples.push(p);
+  fgCtx.lineWidth = 1 + p*3;
+  fgCtx.globalAlpha = 0.75 + p*0.25;
+  fgCtx.lineTo(x,y);
+  fgCtx.stroke();
+  currentStroke.push({x,y,t:now,p});
+  lastPoint = {x,y,t:now,p};
+  lastPointTime = now;
+  updateMetricsUI();
+}
+function pointerUp(e){
+  if(!drawing) return;
+  e.preventDefault();
+  drawing=false;
+  if(currentStroke.length>1){
+    strokes.push(currentStroke);
+  }
+  currentStroke=[];
+  updateMetricsUI();
+  liveStatus.textContent = 'En espera';
+}
+
+/* Listeners (pointer + touch + mouse) con passive:false */
+const opts = {passive:false};
+fgCanvas.addEventListener('pointerdown', pointerDown, opts);
+fgCanvas.addEventListener('pointermove', pointerMove, opts);
+fgCanvas.addEventListener('pointerup', pointerUp, opts);
+fgCanvas.addEventListener('pointerleave', pointerUp, opts);
+fgCanvas.addEventListener('pointercancel', pointerUp, opts);
+
+fgCanvas.addEventListener('touchstart', pointerDown, opts);
+fgCanvas.addEventListener('touchmove', pointerMove, opts);
+fgCanvas.addEventListener('touchend', pointerUp, opts);
+fgCanvas.addEventListener('touchcancel', pointerUp, opts);
+
+fgCanvas.addEventListener('mousedown', pointerDown, opts);
+fgCanvas.addEventListener('mousemove', pointerMove, opts);
+fgCanvas.addEventListener('mouseup', pointerUp, opts);
+
+fgCanvas.addEventListener('contextmenu', e=>e.preventDefault());
+
+function redrawAll(){
+  fgCtx.clearRect(0,0,fgCanvas.width,fgCanvas.height);
+  fgCtx.save();
+  strokes.forEach(s=>{
+    if(s.length<2) return;
+    fgCtx.beginPath();
+    fgCtx.moveTo(s[0].x, s[0].y);
+    for(let i=1;i<s.length;i++){
+      fgCtx.lineWidth = 1 + (s[i].p||0.5)*3;
+      fgCtx.globalAlpha = 0.75 + (s[i].p||0.5)*0.25;
+      fgCtx.lineTo(s[i].x, s[i].y);
+    }
+    fgCtx.stroke();
+  });
+  fgCtx.restore();
+}
+
+function resetAll(){
+  strokes=[]; currentStroke=[]; drawing=false;
+  startTime=null; lastPointTime=null; totalDistancePx=0;
+  speedSamples=[]; pressureSamples=[]; lastPoint=null;
+  fgCtx.clearRect(0,0,fgCanvas.width,fgCanvas.height);
+  updateMetricsUI(true);
+  setStatusBadge('Listo','gray');
+  appendOutput('Lienzo limpio. Escribe para analizar.\n', true);
+}
+document.getElementById('clearBtn').addEventListener('click', resetAll);
+
+/* =========================
+   MÉTRICAS CIENTÍFICAS + LEGIBILIDAD
+   ========================= */
+function pxToMm(px){ return px / 3.78; }
+
+function calcIrregularity(speeds){
+  if (speeds.length<4) return 0;
+  const mean = speeds.reduce((a,b)=>a+b,0)/speeds.length;
+  const variance = speeds.reduce((a,b)=>a+Math.pow(b-mean,2),0)/speeds.length;
+  const sd = Math.sqrt(variance);
+  const cv = mean===0?0:sd/mean;
+  return Math.max(0, Math.min(100, cv*100));
+}
+
+function calcConsistency(strokesArr){
+  if (strokesArr.length<3) return 0;
+  const lens = strokesArr.map(s=>{
+    let L=0;
+    for(let i=1;i<s.length;i++){
+      L += Math.hypot(s[i].x - s[i-1].x, s[i].y - s[i-1].y);
+    }
+    return L;
+  });
+  const mean = lens.reduce((a,b)=>a+b,0)/lens.length;
+  const variance = lens.reduce((a,b)=>a+Math.pow(b-mean,2),0)/lens.length;
+  const sd = Math.sqrt(variance);
+  const ci = (1 - sd/mean)*100;
+  return Math.max(0, Math.min(100, ci));
+}
+
+function calcFluencyVanGalen(speeds){
+  if (speeds.length<10) return 0;
+  const mean = speeds.reduce((a,b)=>a+b,0)/speeds.length;
+  const variance = speeds.reduce((a,b)=>a+Math.pow(b-mean,2),0)/speeds.length;
+  const sd = Math.sqrt(variance);
+  const cv = mean===0?1:sd/mean;
+  return Math.max(0, Math.min(100, (1-cv)*100));
+}
+
+function calcPressureVariability(ps){
+  if (ps.length<2) return 0;
+  const mean = ps.reduce((a,b)=>a+b,0)/ps.length;
+  const variance = ps.reduce((a,b)=>a+Math.pow(b-mean,2),0)/ps.length;
+  const sd = Math.sqrt(variance);
+  return mean===0?0:sd/mean;
+}
+
+function calcTremor(acc){
+  if (acc.length<8) return 0;
+  let high=0;
+  for(let i=1;i<acc.length;i++){
+    const diff = Math.abs(acc[i]-acc[i-1]);
+    if (diff>0.12) high++;
+  }
+  return high/acc.length;
+}
+
+function calcBaselineDeviation(strokesArr){
+  if (!strokesArr.length) return 0;
+  const ys = [];
+  strokesArr.forEach(s=>s.forEach(p=>ys.push(p.y)));
+  const mean = ys.reduce((a,b)=>a+b,0)/ys.length;
+  const variance = ys.reduce((a,b)=>a+Math.pow(b-mean,2),0)/ys.length;
+  const sd = Math.sqrt(variance);
+  const h = fgCanvas.getBoundingClientRect().height;
+  return Math.min(1, sd / h);
+}
+
+function computeGuideCoverage(){
+  if (!guideMask || guideMaskCount===0) return {coverageScore:null, missing: null, stray: null};
+  let onMask=0;
+  let totalPoints=0;
+  let offMask=0;
+  const w = guideMaskW;
+  const h = guideMaskH;
+  const scale = dpr;
+  const expectedPoints = Math.max(guideMaskCount / 80, 1);
+  const allStrokes = [...strokes, ...(currentStroke.length>1?[currentStroke]:[])];
+  allStrokes.forEach(s=>{
+    s.forEach(p=>{
+      totalPoints++;
+      const xi = Math.max(0, Math.min(w-1, Math.floor(p.x*scale)));
+      const yi = Math.max(0, Math.min(h-1, Math.floor(p.y*scale)));
+      const idx = yi*w + xi;
+      if (guideMask[idx]) onMask++; else offMask++;
+    });
+  });
+  if (totalPoints===0) return {coverageScore:0, missing: 100, stray:0};
+  const hitRatio = onMask / totalPoints;
+  const maskHitRatio = onMask / expectedPoints;
+  const coverageScore = Math.max(0, Math.min(1, hitRatio*0.6 + Math.min(1,maskHitRatio)*0.4));
+  const missing = Math.max(0, (1 - Math.min(1,maskHitRatio))*100);
+  const stray = Math.max(0, (1 - hitRatio)*100);
+  return {coverageScore, missing, stray};
+}
+
+function computeLegibility(m){
+  const cov = computeGuideCoverage();
+  const coverageScore = cov.coverageScore===null ? 0.5 : cov.coverageScore;
+  const flu = Math.min(1, m.fluency/100);
+  const cons = Math.min(1, m.consistency/100);
+  const irr = Math.min(1, m.irregularity/80);
+  const base = Math.min(1, m.baselineDeviation);
+  const stray = cov.stray===null ? 0.2 : Math.min(1, cov.stray/100);
+  const leg = 0.35*coverageScore + 0.15*flu + 0.15*cons + 0.15*(1-irr) + 0.1*(1-base) + 0.1*(1-stray);
+  return Math.max(0, Math.min(1, leg))*100;
+}
+
+function legibilityLabel(score){
+  if (score>=75) return 'Alta';
+  if (score>=55) return 'Media';
+  return 'Baja';
+}
+
+function extractMetrics(){
+  const strokesCount = strokes.length + (currentStroke.length>1?1:0);
+  const totalTimeMs = startTime && lastPointTime ? lastPointTime - startTime : 0;
+  const totalTimeSec = totalTimeMs/1000;
+  const totalDistanceMm = pxToMm(totalDistancePx);
+  const meanSpeedMm = totalTimeSec>0 ? totalDistanceMm/totalTimeSec : 0;
+  const peakSpeedMm = speedSamples.length ? Math.max(...speedSamples.map(s=>pxToMm(s))) : 0;
+  const irregularity = calcIrregularity(speedSamples.map(pxToMm));
+  const fluency = calcFluencyVanGalen(speedSamples.map(pxToMm));
+  const consistency = calcConsistency(strokes);
+  const pVar = calcPressureVariability(pressureSamples);
+  const acc = [];
+  for (let s of strokes){
+    for(let i=2;i<s.length;i++){
+      const dt1 = (s[i].t - s[i-1].t)/1000;
+      const dt0 = (s[i-1].t - s[i-2].t)/1000;
+      if (dt1<=0 || dt0<=0) continue;
+      const v1 = Math.hypot(s[i].x - s[i-1].x, s[i].y - s[i-1].y)/dt1;
+      const v0 = Math.hypot(s[i-1].x - s[i-2].x, s[i-1].y - s[i-2].y)/dt0;
+      acc.push((v1 - v0)/((dt1+dt0)/2));
+    }
+  }
+  const tremor = calcTremor(acc);
+  const baselineDeviation = calcBaselineDeviation(strokes);
+  const cov = computeGuideCoverage();
+  const leg = computeLegibility({
+    fluency,
+    consistency,
+    irregularity,
+    baselineDeviation
+  });
+  return {
+    strokesCount,
+    totalTimeSec,
+    totalDistanceMm,
+    meanSpeedMm,
+    peakSpeedMm,
+    irregularity,
+    fluency,
+    consistency,
+    pressureVariability: pVar,
+    tremor,
+    baselineDeviation,
+    accelerationSamples: acc,
+    coverageScore: cov.coverageScore,
+    missing: cov.missing,
+    stray: cov.stray,
+    legibility: leg
+  };
+}
+
+function updateMetricsUI(reset=false){
+  if (reset){
+    ['mStrokes','mSpeed','mPeak','mTime','mDistance','mIrreg','mPressure','mConsistency','mLegibility','mCoverage','mErrors']
+      .forEach(id=>document.getElementById(id).textContent='--');
+    return;
+  }
+  const m = extractMetrics();
+  document.getElementById('mStrokes').textContent = m.strokesCount;
+  document.getElementById('mSpeed').textContent = m.meanSpeedMm.toFixed(1)+' mm/s';
+  document.getElementById('mPeak').textContent = m.peakSpeedMm.toFixed(1)+' mm/s';
+  document.getElementById('mTime').textContent = m.totalTimeSec.toFixed(1)+' s';
+  document.getElementById('mDistance').textContent = m.totalDistanceMm.toFixed(1)+' mm';
+  document.getElementById('mIrreg').textContent = m.irregularity.toFixed(0)+' /100';
+  const pMean = pressureSamples.length? pressureSamples.reduce((a,b)=>a+b,0)/pressureSamples.length : 0;
+  document.getElementById('mPressure').textContent = pMean.toFixed(2);
+  document.getElementById('mConsistency').textContent = m.consistency.toFixed(1)+' /100';
+  document.getElementById('mLegibility').textContent = m.legibility.toFixed(0)+' /100';
+  document.getElementById('mCoverage').textContent = m.coverageScore===null ? '--' : (m.coverageScore*100).toFixed(0)+' %';
+  const errTxt = m.missing===null ? '--' : `Falt: ${m.missing.toFixed(0)}% · Fuera: ${m.stray.toFixed(0)}%`;
+  document.getElementById('mErrors').textContent = errTxt;
+}
+
+/* Feedback infantil */
+function updateChildFeedback(){
+  const m = extractMetrics();
+  const label = legibilityLabel(m.legibility);
+  document.getElementById('legibilityLabel').textContent = `${label} (${m.legibility.toFixed(0)}/100)`;
+  document.getElementById('coverageLabel').textContent = m.coverageScore===null ? '--' : `${(m.coverageScore*100).toFixed(0)}%`;
+  document.getElementById('errorsLabel').textContent = m.missing===null ? '--' : `Falt: ${m.missing.toFixed(0)}% · Fuera: ${m.stray.toFixed(0)}%`;
+  const fb = document.getElementById('childFeedback');
+  if (m.legibility>=75 && (m.coverageScore||0)>=0.65){
+    fb.textContent = '¡Genial! Tu letra se entiende muy bien. Sigue así ⭐';
+  } else if (m.legibility>=55){
+    fb.textContent = 'Vas bien. Practica despacio y sigue la guía para mejorar aún más.';
+  } else {
+    fb.textContent = 'No pasa nada, solo practica trazando sobre el sombreado y separa un poco las letras 😊';
+  }
+}
+document.getElementById('evalDrill').addEventListener('click', ()=>{
+  updateChildFeedback();
+});
+
+/* =========================
+   IA STREAMING
+   ========================= */
+function appendOutput(text, replace=false){
+  if(replace) aiOutput.textContent = text;
+  else aiOutput.textContent += text;
+  aiOutput.scrollTop = aiOutput.scrollHeight;
+}
+
+async function* mockStream(payload){
+  const chunks = [
+    "Evaluación realista: riesgo BAJO. Escritura funcional para contexto adulto/comercial.\n",
+    "Legibilidad: adecuada; Fluidez: dentro de rango; Consistencia: básica preservada.\n",
+    "Recomendaciones: mantener hábitos; opcional mejorar espaciado leve si se desea.\n",
+    "Pronóstico: favorable. Seguimiento solo si aparecen quejas funcionales.\n",
+  ];
+  for (const c of chunks){
+    await new Promise(r=>setTimeout(r,350));
+    yield c;
+  }
+}
+
+async function streamFromApi(url, payload, isForm=false){
+  if (useMock.checked) return mockStream(payload);
+  const res = await fetch(url,{
+    method:'POST',
+    body: isForm? payload : JSON.stringify(payload),
+    headers: isForm? undefined : {'Content-Type':'application/json'}
+  });
+  if(!res.ok || !res.body) throw new Error('API error');
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  return (async function*(){
+    while(true){
+      const {value, done} = await reader.read();
+      if(done) break;
+      yield decoder.decode(value);
+    }
+  })();
+}
+
+/* Prompt clínico */
+function buildPrompt(profile, metrics, contextSource){
+return `Como experto logopeda especializado en disgrafía, analiza con criterios apropiados para escritura funcional de adultos y adaptados para niños.
+
+CONTEXTO IMPORTANTE:
+- Puede ser escritura comercial/rápida (adultos) o tarea escolar (niños).
+- Priorizar funcionalidad comunicativa. No sobrediagnosticar.
+- Identificar disgrafía solo si hay dificultades SEVERAS que afecten la comunicación.
+
+CRITERIOS REALISTAS:
+1) Legibilidad funcional (puntúa alto si se entiende): ${metrics.legibility.toFixed(0)}/100
+2) Cobertura de guía (si hay consigna): ${metrics.coverageScore===null?'N/A':((metrics.coverageScore||0)*100).toFixed(0)+'%'}
+3) Fluidez y consistencia apropiadas a la edad
+
+DATOS DEL PACIENTE:
+- Nombre: ${profile.name}
+- Edad: ${profile.age} años
+- Dominancia: ${profile.hand}
+- Contexto: ${protocolSelect.value}
+- Origen de datos: ${contextSource}
+
+MÉTRICAS CIENTÍFICAS (Van Galen & Teulings):
+- Trazos: ${metrics.strokesCount}
+- Tiempo total: ${metrics.totalTimeSec.toFixed(2)} s
+- Distancia: ${metrics.totalDistanceMm.toFixed(1)} mm
+- Velocidad media: ${metrics.meanSpeedMm.toFixed(2)} mm/s
+- Velocidad pico: ${metrics.peakSpeedMm.toFixed(2)} mm/s
+- Fluidez (CV inverso): ${metrics.fluency.toFixed(1)}/100
+- Consistencia inter-trazo: ${metrics.consistency.toFixed(1)}/100
+- Variabilidad de presión (coef): ${metrics.pressureVariability.toFixed(3)}
+- Intensidad de temblor (FFT proxy): ${metrics.tremor.toFixed(3)}
+- Desviación de baseline: ${(metrics.baselineDeviation*100).toFixed(1)}%
+- Legibilidad: ${metrics.legibility.toFixed(0)}/100
+- Cobertura de guía: ${metrics.coverageScore===null?'N/A':((metrics.coverageScore||0)*100).toFixed(0)+' %'}
+- Errores consigna: faltan ${(metrics.missing||0).toFixed(0)}%, fuera ${(metrics.stray||0).toFixed(0)}%
+
+NORMATIVAS (percentiles 25-75 por edad):
+- Velocidad esperada: ${metrics.norm.velocity[0]}-${metrics.norm.velocity[1]} mm/s
+- Fluidez esperada: ${metrics.norm.fluency[0]}-${metrics.norm.fluency[1]}%
+- Consistencia esperada: ${metrics.norm.consistency[0]}-${metrics.norm.consistency[1]}%
+
+INSTRUCCIONES:
+- Compara con normativas por edad.
+- Clasifica riesgo: Bajo/Moderado/Alto/Severo (solo si hay impacto funcional).
+- Da percentil estimado.
+- Identifica patrones (motora/espacial) solo si son claros.
+- Ofrece recomendaciones específicas y pronóstico.
+
+Formato de salida:
+EVALUACIÓN CLÍNICA:
+- Riesgo y percentil
+
+ANÁLISIS CIENTÍFICO:
+- Hallazgos clave
+- Comparación normativa (tabla breve)
+
+RECOMENDACIONES:
+- Terapéuticas
+- Adaptaciones (escolar/laboral)
+- Seguimiento
+
+PRONÓSTICO:
+- Según edad y severidad
+
+Evita sobrediagnosticar. Escritura funcional adulta es normal; en niños, sé empático y gradual.`;
+}
+
+/* =========================
+   ANALIZAR ESCRITURA
+   ========================= */
+document.getElementById('analyzeWritingBtn').addEventListener('click', async ()=>{
+  if (strokes.length<1 && currentStroke.length<2){
+    appendOutput('Escribe algo antes de analizar.\n', true);
+    setStatusBadge('Sin datos','amber');
+    return;
+  }
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const m = extractMetrics();
+  m.norm = normativeForAge(profile.age);
+
+  setStatusBadge('Analizando escritura...','blue');
+  appendOutput('', true);
+
+  const payload = {
+    prompt: buildPrompt(profile, m, 'Canvas digital'),
+    metrics: m,
+    profile
+  };
+
+  try {
+    const streamer = await streamFromApi(API_TEXT_ENDPOINT, payload, false);
+    for await (const chunk of streamer){
+      appendOutput(chunk);
+    }
+    setStatusBadge('Informe listo','green');
+  } catch (err){
+    console.error(err);
+    setStatusBadge('Error de análisis','red');
+    appendOutput('Error al conectar con la IA. Verifica la API.\n', true);
+  }
+});
+
+/* =========================
+   ANALIZAR IMAGEN
+   ========================= */
+const imageInput = document.getElementById('imageInput');
+const imagePreview = document.getElementById('imagePreview');
+let imageFiles = [];
+
+imageInput.addEventListener('change', ()=>{
+  imageFiles = Array.from(imageInput.files||[]);
+  imagePreview.innerHTML='';
+  imageFiles.forEach((file, idx)=>{
+    const url = URL.createObjectURL(file);
+    const wrap = document.createElement('div');
+    wrap.className = 'relative rounded-lg border border-gray-200 overflow-hidden';
+    wrap.innerHTML = `
+      <img src="${url}" class="h-32 w-full object-cover" alt="img-${idx}" />
+      <button class="absolute bottom-2 right-2 rounded bg-primary px-3 py-1 text-xs font-semibold text-white">Analizar</button>
+    `;
+    wrap.querySelector('button').onclick = ()=> analyzeSingleImage(idx);
+    imagePreview.appendChild(wrap);
+  });
+});
+
+async function analyzeSingleImage(idx){
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const file = imageFiles[idx];
+  if (!file){
+    appendOutput('No hay imagen.\n', true);
+    return;
+  }
+  setStatusBadge('Analizando imagen...','blue');
+  appendOutput('', true);
+  const form = new FormData();
+  form.append('image', file);
+  form.append('prompt', buildPrompt(profile, {
+    strokesCount:0,totalTimeSec:0,totalDistanceMm:0,meanSpeedMm:0,peakSpeedMm:0,
+    fluency:0,consistency:0,pressureVariability:0,tremor:0,baselineDeviation:0,legibility:0,coverageScore:0,missing:0,stray:0,
+    norm:normativeForAge(profile.age)
+  }, 'Imagen manuscrita'));
+
+  try {
+    const streamer = await streamFromApi(API_IMAGE_ENDPOINT, form, true);
+    for await (const chunk of streamer){
+      appendOutput(chunk);
+    }
+    setStatusBadge('Informe listo','green');
+  } catch (err){
+    console.error(err);
+    setStatusBadge('Error de análisis','red');
+    appendOutput('Error al conectar con IA de imagen.\n', true);
+  }
+}
+document.getElementById('analyzeImageBtn').addEventListener('click', ()=>{
+  if (!imageFiles.length){
+    appendOutput('Sube al menos una imagen.\n', true);
+  } else {
+    analyzeSingleImage(0);
+  }
+});
+
+/* =========================
+   GRÁFICOS
+   ========================= */
+let temporalChart, progressChart;
+
+function initCharts(){
+  const tctx = document.getElementById('temporalChart').getContext('2d');
+  temporalChart = new Chart(tctx, {
+    type:'line',
+    data:{ labels:[], datasets:[
+      {label:'Velocidad (norm.)', data:[], borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,0.1)', tension:0.35},
+      {label:'Presión', data:[], borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.1)', tension:0.35},
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true, max:1}} }
+  });
+
+  const pctx = document.getElementById('progressChart').getContext('2d');
+  progressChart = new Chart(pctx,{
+    type:'line',
+    data:{ labels:[], datasets:[
+      {label:'Velocidad media (mm/s)', data:[], borderColor:'#2563eb', tension:0.35},
+      {label:'Fluidez (/100)', data:[], borderColor:'#f59e0b', tension:0.35, yAxisID:'y1'},
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      scales:{ y:{beginAtZero:true}, y1:{beginAtZero:true, position:'right'} }
+    }
+  });
+}
+initCharts();
+
+function updateTemporalChart(){
+  const speeds = speedSamples.slice(-50).map(pxToMm);
+  const pressures = pressureSamples.slice(-50);
+  const labels = speeds.map((_,i)=>i);
+  const normSpeeds = speeds.map(v=>Math.min(1, v/50));
+  temporalChart.data.labels = labels;
+  temporalChart.data.datasets[0].data = normSpeeds;
+  temporalChart.data.datasets[1].data = pressures;
+  temporalChart.update('none');
+}
+
+/* =========================
+   PROGRESO / SESIONES
+   ========================= */
+document.getElementById('addToProgress').addEventListener('click', ()=>{
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const m = extractMetrics();
+  sessions.push({profileId:profile.id, ts: Date.now(), metrics:m});
+  updateProgressChart();
+  alert('Sesión añadida al progreso (en memoria).');
+});
+
+function updateProgressChart(){
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const data = sessions.filter(s=>s.profileId===profile.id);
+  data.sort((a,b)=>a.ts-b.ts);
+  progressChart.data.labels = data.map(s=>new Date(s.ts).toLocaleDateString());
+  progressChart.data.datasets[0].data = data.map(s=>s.metrics.meanSpeedMm);
+  progressChart.data.datasets[1].data = data.map(s=>s.metrics.fluency);
+  progressChart.update();
+}
+
+/* =========================
+   EXPORTAR / GUARDAR
+   ========================= */
+document.getElementById('saveSession').addEventListener('click', ()=>{
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const m = extractMetrics();
+  const payload = { profile, metrics:m, protocol: protocolSelect.value, strokes };
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`diagnostIA-${profile.name}-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('shareLink').addEventListener('click', async ()=>{
+  if (navigator.share){
+    try {
+      await navigator.share({ title:'DiagnostIA', text:'Resultados de evaluación', url: location.href });
+    } catch(e){}
+  } else {
+    await navigator.clipboard.writeText(location.href);
+    alert('Enlace copiado.');
+  }
+});
+
+/* PDF */
+document.getElementById('exportPDF').addEventListener('click', async ()=>{
+  const profile = profiles.find(p=>p.id===currentProfileId);
+  const m = extractMetrics();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y=14;
+  doc.setFontSize(16); doc.text('INFORME NEUROPSICOLÓGICO - EVALUACIÓN DE DISGRAFÍA', 10, y); y+=8;
+  doc.setFontSize(11);
+  doc.text(`Paciente: ${profile.name} | Edad: ${profile.age} | Dominancia: ${profile.hand}`, 10, y); y+=6;
+  doc.text(`Fecha: ${new Date().toLocaleString()}`, 10, y); y+=10;
+  doc.setFontSize(12); doc.text('MÉTRICAS CIENTÍFICAS', 10, y); y+=7;
+  const rows = [
+    `Trazos: ${m.strokesCount}`,
+    `Velocidad media: ${m.meanSpeedMm.toFixed(2)} mm/s (pico: ${m.peakSpeedMm.toFixed(2)})`,
+    `Fluidez (Van Galen): ${m.fluency.toFixed(1)}/100`,
+    `Consistencia: ${m.consistency.toFixed(1)}/100`,
+    `Presión (coef var): ${m.pressureVariability.toFixed(3)}`,
+    `Temblor (FFT proxy): ${m.tremor.toFixed(3)}`,
+    `Baseline dev: ${(m.baselineDeviation*100).toFixed(1)}%`,
+    `Legibilidad: ${m.legibility.toFixed(0)}/100`,
+    `Cobertura guía: ${m.coverageScore===null?'N/A':(m.coverageScore*100).toFixed(0)+'%'} | Errores: falt ${m.missing?.toFixed(0)||'--'}% / fuera ${m.stray?.toFixed(0)||'--'}%`,
+    `Tiempo: ${m.totalTimeSec.toFixed(2)} s | Distancia: ${m.totalDistanceMm.toFixed(1)} mm`,
+  ];
+  doc.setFontSize(10);
+  rows.forEach(r=>{ doc.text(r, 12, y); y+=5; });
+  y+=5;
+  doc.setFontSize(12); doc.text('NORMATIVAS POR EDAD (p25-75)', 10, y); y+=7;
+  const norm = normativeForAge(profile.age);
+  doc.setFontSize(10);
+  doc.text(`Velocidad: ${norm.velocity[0]}-${norm.velocity[1]} mm/s | Fluidez: ${norm.fluency[0]}-${norm.fluency[1]} | Consistencia: ${norm.consistency[0]}-${norm.consistency[1]}`, 12, y); y+=10;
+  const chartCanvas = document.getElementById('temporalChart');
+  const chartImg = await html2canvas(chartCanvas, {backgroundColor:'#ffffff'}).then(c=>c.toDataURL('image/png',0.9));
+  doc.addImage(chartImg, 'PNG', 10, y, 90, 60);
+  y += 70;
+  if (y > 260) doc.addPage(), y=20;
+  const chart2 = document.getElementById('progressChart');
+  const chartImg2 = await html2canvas(chart2, {backgroundColor:'#ffffff'}).then(c=>c.toDataURL('image/png',0.9));
+  doc.addImage(chartImg2, 'PNG', 110, y-70, 90, 60);
+  doc.save(`informe-${profile.name}-${Date.now()}.pdf`);
+});
+
+/* =========================
+   LIVE UPDATE
+   ========================= */
+setInterval(()=>{
+  updateMetricsUI();
+  updateTemporalChart();
+}, 800);
+
+/* =========================
+   UX inicial
+   ========================= */
+appendOutput('Bienvenido. Escribe en el canvas o sube imágenes. Evaluación empática para adultos y adaptada para niños.\n', true);
+setStatusBadge('Listo','gray');
+apiStatus.innerHTML = `<span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> API lista (demo)`;
+
+/* =========================
+   DEMO DATA FOR CHART PROGRESS
+   ========================= */
+sessions = [
+  {profileId: profiles[0].id, ts: Date.now()-86400000*5, metrics:{meanSpeedMm:22, fluency:88}},
+  {profileId: profiles[0].id, ts: Date.now()-86400000*2, metrics:{meanSpeedMm:24, fluency:90}},
+];
+updateProgressChart();
+</script>
+</body>
+</html>

@@ -1,0 +1,3711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sílaba-UNO | Terapia Logopédica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --table-bg: #1B5E20;
+            --table-dark: #0D3B0F;
+            --table-light: #2E7D32;
+            --table-felt: #1A6B1E;
+            --card-red: #E53935;
+            --card-green: #43A047;
+            --card-blue: #1E88E5;
+            --card-yellow: #FDD835;
+            --card-purple: #8E24AA;
+            --card-orange: #FB8C00;
+            --card-wild: linear-gradient(135deg, #E53935 25%, #1E88E5 25%, #1E88E5 50%, #43A047 50%, #43A047 75%, #FDD835 75%);
+            --text-light: #FFF8E7;
+            --text-dark: #1B5E20;
+            --shadow: 0 4px 15px rgba(0,0,0,0.4);
+            --glow: 0 0 20px rgba(255,255,255,0.3);
+            --gold: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(145deg, #0D3B0F 0%, #1B5E20 50%, #0D3B0F 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-light);
+        }
+
+        /* START SCREEN */
+        .start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at center, rgba(46,125,50,0.3) 0%, transparent 70%),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px),
+                linear-gradient(145deg, #0D3B0F 0%, #1B5E20 50%, #0D3B0F 100%);
+        }
+
+        .logo {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(38px, 11vw, 65px);
+            text-shadow: 3px 3px 0 #E53935, 6px 6px 0 rgba(0,0,0,0.4);
+            margin-bottom: 8px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .logo span:nth-child(1) { color: #E53935; }
+        .logo span:nth-child(2) { color: #FDD835; }
+        .logo span:nth-child(3) { color: #1E88E5; }
+        .logo span:nth-child(4) { color: #43A047; }
+
+        .subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .start-cards {
+            display: flex;
+            margin-bottom: 25px;
+        }
+
+        .start-card {
+            width: 50px;
+            height: 72px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 16px;
+            color: white;
+            box-shadow: var(--shadow);
+            transform: rotate(var(--rot));
+            transition: transform 0.3s;
+            border: 3px solid white;
+            margin: 0 -5px;
+        }
+
+        .start-card:hover { transform: rotate(0) scale(1.1) translateY(-5px); }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #E53935, #C62828);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #8B1A1A, var(--shadow);
+            transition: all 0.15s;
+            width: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #8B1A1A;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(145deg, #2E7D32, #1B5E20);
+            box-shadow: 0 5px 0 #0D3B0F, var(--shadow);
+        }
+
+        .btn-secondary:active {
+            box-shadow: 0 2px 0 #0D3B0F;
+        }
+
+        .btn-gold {
+            background: linear-gradient(145deg, #FFD700, #FFA000);
+            color: #333;
+            box-shadow: 0 5px 0 #B8860B, var(--shadow);
+        }
+
+        .btn-gold:active {
+            box-shadow: 0 2px 0 #B8860B;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        /* GAME SCREEN */
+        .game-screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+            background:
+                radial-gradient(ellipse at center, rgba(46,125,50,0.2) 0%, transparent 60%),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px),
+                var(--table-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+        }
+
+        .game-screen.active { display: flex; }
+        .start-screen.hidden { display: none; }
+
+        /* Header */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 100;
+            position: relative;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .score-display {
+            display: flex;
+            gap: 10px;
+        }
+
+        .score-box {
+            background: rgba(0,0,0,0.3);
+            padding: 4px 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .score-label {
+            font-size: 9px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        .score-value {
+            font-family: 'Fredoka One', cursive;
+            font-size: 15px;
+            color: var(--gold);
+        }
+
+        .game-mode-badge {
+            background: var(--gold);
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Game Table */
+        .game-table {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 8px;
+            z-index: 1;
+        }
+
+        /* Player Zones */
+        .player-zone {
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .player-zone.active-turn .opponent-name,
+        .player-zone.active-turn .player-label {
+            background: linear-gradient(145deg, #FFD700, #FFA000) !important;
+            color: #333 !important;
+            animation: namePulse 1s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        @keyframes namePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .player-zone.inactive {
+            opacity: 0.5;
+            filter: grayscale(20%);
+        }
+
+        /* Opponent Areas */
+        .opponent-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 6px;
+        }
+
+        .opponent-cards-row {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 5px;
+        }
+
+        .opponent-card-back {
+            width: 28px;
+            height: 40px;
+            background: linear-gradient(145deg, #C62828, #8B1A1A);
+            border-radius: 4px;
+            border: 2px solid #EF5350;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .opponent-card-back::after {
+            content: '🎴';
+            font-size: 12px;
+        }
+
+        .opponent-name {
+            font-weight: 700;
+            font-size: 12px;
+            padding: 3px 10px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .card-count {
+            background: #E53935;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
+        .opponents-side {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+        }
+
+        .opponent-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 6px;
+        }
+
+        .opponent-side .opponent-name {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .side-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .side-card-back {
+            width: 40px;
+            height: 28px;
+            background: linear-gradient(145deg, #C62828, #8B1A1A);
+            border-radius: 4px;
+            border: 2px solid #EF5350;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .side-card-back::after {
+            content: '🎴';
+            font-size: 10px;
+        }
+
+        /* Center Play Area */
+        .center-area {
+            position: relative;
+            width: 200px;
+            height: 160px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.2);
+        }
+
+        .direction-arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .arrow {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            transition: all 0.5s;
+        }
+
+        .arrow.active {
+            opacity: 1;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255,215,0,0.8);
+            animation: arrowPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .arrow-top-left { top: 0; left: 20px; transform: rotate(-45deg); }
+        .arrow-top-right { top: 0; right: 20px; transform: rotate(45deg); }
+        .arrow-bottom-left { bottom: 0; left: 20px; transform: rotate(-135deg); }
+        .arrow-bottom-right { bottom: 0; right: 20px; transform: rotate(135deg); }
+
+        .piles {
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .pile {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .draw-pile .card {
+            background: linear-gradient(145deg, #C62828, #8B1A1A);
+            border-color: #EF5350;
+        }
+
+        .draw-pile-hint {
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            opacity: 0.6;
+            white-space: nowrap;
+        }
+
+        .discard-pile {
+            position: relative;
+            width: 55px;
+            height: 80px;
+        }
+
+        .discard-pile .card {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Player Area */
+        .player-area {
+            padding: 10px 8px 15px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .player-label {
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 8px;
+            padding: 4px 16px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            display: inline-block;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.3s;
+        }
+
+        .player-hand {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 6px 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Cards */
+        .card {
+            width: 55px;
+            height: 80px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka One', cursive;
+            color: white;
+            box-shadow: var(--shadow);
+            border: 3px solid white;
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            user-select: none;
+        }
+
+        .card:hover:not(.disabled) {
+            transform: translateY(-10px);
+            box-shadow: var(--glow), var(--shadow);
+        }
+
+        .card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
+        .card.playable {
+            box-shadow: 0 0 12px rgba(255,215,0,0.6), var(--shadow);
+            animation: playableGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes playableGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(255,215,0,0.4), var(--shadow); }
+            50% { box-shadow: 0 0 20px rgba(255,215,0,0.8), var(--shadow); }
+        }
+
+        .card-red { background: var(--card-red); }
+        .card-green { background: var(--card-green); }
+        .card-blue { background: var(--card-blue); }
+        .card-yellow { background: var(--card-yellow); color: #333; }
+        .card-purple { background: var(--card-purple); }
+        .card-orange { background: var(--card-orange); }
+        .card-wild { background: var(--card-wild); }
+
+        .card-content {
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .card-syllable {
+            font-size: 20px;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+        }
+
+        .card-word {
+            font-size: 9px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            max-width: 48px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-emoji {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .card-yellow .card-syllable,
+        .card-yellow .card-word {
+            text-shadow: none;
+            color: #333;
+        }
+
+        .card-corner {
+            position: absolute;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .card-corner-top { top: 3px; left: 5px; }
+        .card-corner-bottom { bottom: 3px; right: 5px; transform: rotate(180deg); }
+
+        .card-back {
+            background: linear-gradient(145deg, #C62828, #8B1A1A);
+            border-color: #EF5350;
+        }
+
+        .card-back::after {
+            content: '🎴';
+            font-size: 24px;
+        }
+
+        /* Flying Card Animation */
+        .flying-card {
+            position: fixed;
+            z-index: 2000;
+            pointer-events: none;
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .flying-card.to-center {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .flying-card.from-opponent {
+            animation: opponentCardReveal 0.3s ease-out forwards;
+        }
+
+        @keyframes opponentCardReveal {
+            0% { transform: scale(0.8) rotateY(180deg); }
+            100% { transform: scale(1) rotateY(0deg); }
+        }
+
+        /* Turn Banner */
+        .turn-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(145deg, rgba(0,0,0,0.95), rgba(20,20,20,0.95));
+            padding: 18px 35px;
+            border-radius: 18px;
+            border: 3px solid var(--gold);
+            z-index: 500;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .turn-banner.visible {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .turn-banner-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            color: var(--gold);
+        }
+
+        .turn-banner-sub {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: linear-gradient(145deg, #1B5E20, #0D3B0F);
+            border-radius: 18px;
+            padding: 20px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid var(--table-light);
+            box-shadow: var(--shadow);
+            animation: modalPop 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-large {
+            max-width: 95%;
+            max-height: 95vh;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--gold);
+        }
+
+        .modal-text {
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .modal-syllable {
+            font-family: 'Fredoka One', cursive;
+            font-size: 56px;
+            margin: 12px 0;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        .modal-word-hint {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+
+        .word-hint-title {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 6px;
+        }
+
+        .word-hint-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .word-hint-emoji { font-size: 32px; }
+        .word-hint-word {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+        }
+
+        /* Voice Button */
+        .voice-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #9C27B0, #7B1FA2);
+            border: 3px solid white;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            animation: voicePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(156, 39, 176, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(156, 39, 176, 0); }
+        }
+
+        .voice-btn.speaking {
+            background: linear-gradient(145deg, #43A047, #2E7D32);
+            animation: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-family: 'Fredoka One', cursive;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .modal-btn-success { background: linear-gradient(145deg, #43A047, #2E7D32); color: white; }
+        .modal-btn-warning { background: linear-gradient(145deg, #FDD835, #F9A825); color: #333; }
+        .modal-btn-danger { background: linear-gradient(145deg, #E53935, #C62828); color: white; }
+
+        /* Color Picker */
+        .color-picker {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 12px auto;
+            max-width: 240px;
+        }
+
+        .color-option {
+            padding: 12px 8px;
+            border-radius: 12px;
+            border: 3px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: var(--shadow);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .color-option:hover { transform: scale(1.05); }
+
+        /* Settings Panel */
+        .settings-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+
+        .settings-overlay.active { display: block; }
+
+        .settings-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 340px;
+            max-width: 95%;
+            background: linear-gradient(145deg, #1B5E20, #0D3B0F);
+            z-index: 1001;
+            padding: 15px;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .settings-panel.active { display: block; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .settings-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+        }
+
+        .settings-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--card-red);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .settings-section {
+            margin-bottom: 18px;
+        }
+
+        .settings-section-title {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 8px;
+            color: var(--gold);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .toggle {
+            width: 46px;
+            height: 24px;
+            background: #555;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle.active { background: var(--card-green); }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after { transform: translateX(22px); }
+
+        /* Game Mode Selector */
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .mode-option {
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .mode-option.active {
+            background: var(--card-green);
+            border-color: white;
+        }
+
+        .mode-option-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+        .mode-option-label { font-size: 12px; font-weight: 700; }
+
+        /* Phoneme Selector */
+        .phoneme-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .phoneme-btn {
+            padding: 8px 4px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .phoneme-btn.active {
+            background: var(--card-green);
+            border-color: white;
+        }
+
+        .phoneme-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .phoneme-group-title {
+            font-size: 10px;
+            opacity: 0.6;
+            margin: 10px 0 5px;
+            text-transform: uppercase;
+        }
+
+        /* Family Selector */
+        .family-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .family-option {
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .family-option.active {
+            background: var(--card-green);
+            border-color: white;
+        }
+
+        .family-option-icon { font-size: 20px; display: block; }
+        .family-option-label { font-size: 10px; font-weight: 700; }
+
+        /* Vocabulary Viewer */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+
+        .vocab-card {
+            padding: 10px 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vocab-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .vocab-emoji { font-size: 28px; display: block; margin-bottom: 4px; }
+        .vocab-syllable { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--gold); }
+        .vocab-word { font-size: 10px; opacity: 0.8; }
+
+        .vocab-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .vocab-filter-btn {
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .vocab-filter-btn.active {
+            background: var(--gold);
+            color: #333;
+        }
+
+        /* UNO Button */
+        .uno-button {
+            position: fixed;
+            bottom: 160px;
+            right: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #E53935, #C62828);
+            border: 4px solid white;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 50;
+            display: none;
+            animation: unoPulse 0.5s infinite;
+        }
+
+        @keyframes unoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .uno-button.visible { display: flex; align-items: center; justify-content: center; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(0,0,0,0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 13px;
+            z-index: 500;
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Rep Counter */
+        .rep-counter {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .rep-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid white;
+        }
+
+        .rep-dot.completed { background: var(--card-green); }
+
+        /* Win Overlay */
+        .win-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .win-overlay.active { display: flex; }
+
+        .win-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .win-message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .card { width: 48px; height: 70px; }
+            .card-syllable { font-size: 16px; }
+            .player-hand { gap: 3px; }
+        }
+
+        .instruction-box {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .instruction-box strong { color: var(--gold); }
+
+        /* Color coded phoneme buttons */
+        .phoneme-btn[data-color="red"] { background: rgba(229,57,53,0.3); }
+        .phoneme-btn[data-color="red"].active { background: var(--card-red); }
+        .phoneme-btn[data-color="green"] { background: rgba(67,160,71,0.3); }
+        .phoneme-btn[data-color="green"].active { background: var(--card-green); }
+        .phoneme-btn[data-color="blue"] { background: rgba(30,136,229,0.3); }
+        .phoneme-btn[data-color="blue"].active { background: var(--card-blue); }
+        .phoneme-btn[data-color="yellow"] { background: rgba(253,216,53,0.3); color: #333; }
+        .phoneme-btn[data-color="yellow"].active { background: var(--card-yellow); }
+        .phoneme-btn[data-color="purple"] { background: rgba(142,36,170,0.3); }
+        .phoneme-btn[data-color="purple"].active { background: var(--card-purple); }
+        .phoneme-btn[data-color="orange"] { background: rgba(251,140,0,0.3); }
+        .phoneme-btn[data-color="orange"].active { background: var(--card-orange); }
+
+        /* Inverse syllable indicator */
+        .card-inverse::before {
+            content: '↩';
+            position: absolute;
+            top: 2px;
+            right: 3px;
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
+        .card-inverse .card-corner-top { left: 3px; }
+
+        /* Mode selector 3 columns */
+        .mode-selector-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .mode-selector-3 .mode-option {
+            padding: 10px 6px;
+        }
+
+        .mode-selector-3 .mode-option-label {
+            font-size: 10px;
+        }
+
+        /* Morphosyntax Settings */
+        .morpho-settings {
+            background: rgba(142,36,170,0.15);
+            border: 2px solid rgba(142,36,170,0.3);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .morpho-subsection {
+            margin-bottom: 12px;
+        }
+
+        .morpho-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .morpho-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        .morpho-btn {
+            padding: 8px 6px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .morpho-btn.active {
+            background: var(--card-purple);
+            border-color: white;
+        }
+
+        .morpho-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 6px;
+        }
+
+        .diff-btn {
+            flex: 1;
+            padding: 8px 4px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .diff-btn.active {
+            background: var(--card-orange);
+            border-color: white;
+        }
+
+        /* Morpho Cards */
+        .card-morpho {
+            font-size: 12px !important;
+        }
+
+        .card-morpho .card-syllable {
+            font-size: 14px;
+        }
+
+        .card-morpho .card-category {
+            font-size: 8px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .card-category-icon {
+            position: absolute;
+            bottom: 3px;
+            right: 5px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Morpho Modal Styles */
+        .morpho-exercise {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+
+        .morpho-question {
+            font-size: 16px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .morpho-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .morpho-option {
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .morpho-option:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.02);
+        }
+
+        .morpho-option.correct {
+            background: var(--card-green);
+            border-color: white;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .morpho-option.incorrect {
+            background: var(--card-red);
+            border-color: white;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .morpho-sentence {
+            font-size: 18px;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .morpho-blank {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 3px solid var(--gold);
+            margin: 0 4px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .word-order-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .word-chip {
+            padding: 10px 16px;
+            background: var(--card-blue);
+            border-radius: 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s;
+            border: 2px solid white;
+        }
+
+        .word-chip:hover { transform: scale(1.05); }
+        .word-chip.selected { background: var(--card-green); }
+        .word-chip.used { opacity: 0.3; pointer-events: none; }
+
+        .sentence-builder {
+            min-height: 50px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border: 2px dashed rgba(255,255,255,0.3);
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sentence-builder .word-chip {
+            cursor: pointer;
+            background: var(--card-purple);
+        }
+
+        .morpho-hint {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .morpho-feedback {
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .morpho-feedback.correct {
+            background: rgba(67,160,71,0.3);
+            color: #81C784;
+            display: block;
+        }
+
+        .morpho-feedback.incorrect {
+            background: rgba(229,57,53,0.3);
+            color: #EF5350;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- START SCREEN -->
+    <div class="start-screen" id="startScreen">
+        <div class="logo">
+            <span>S</span><span>í</span><span>l</span><span>a</span>ba-UNO
+        </div>
+        <p class="subtitle">🎯 Terapia Logopédica Interactiva</p>
+
+        <div class="start-cards">
+            <div class="start-card card-red" style="--rot: -20deg;">PA</div>
+            <div class="start-card card-blue" style="--rot: -10deg;">LA</div>
+            <div class="start-card card-yellow" style="--rot: 0deg;">AN</div>
+            <div class="start-card card-green" style="--rot: 10deg;">AL</div>
+            <div class="start-card card-purple" style="--rot: 20deg;">AR</div>
+        </div>
+
+        <div class="menu-buttons">
+            <button class="btn" onclick="startGame()">▶ JUGAR</button>
+            <button class="btn btn-gold" onclick="openVocabulary()">📚 Ver Vocabulario</button>
+            <button class="btn btn-secondary" onclick="openSettings()">⚙ Configuración</button>
+        </div>
+
+        <div class="instruction-box" style="max-width: 300px; margin-top: 20px;">
+            <strong>🎓 Configurable:</strong> Sílabas directas (PA, TA, MA...), inversas (AL, AN, AR...), grupos consonánticos y familias de palabras.
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="game-screen" id="gameScreen">
+        <div class="game-header">
+            <button class="header-btn" onclick="goToMenu()">←</button>
+            <div class="score-display">
+                <span class="game-mode-badge" id="gameModeLabel">SÍLABAS</span>
+                <div class="score-box">
+                    <div class="score-label">Puntos</div>
+                    <div class="score-value" id="currentScore">0</div>
+                </div>
+            </div>
+            <button class="header-btn" onclick="openSettings()">⚙</button>
+        </div>
+
+        <div class="turn-banner" id="turnBanner">
+            <div class="turn-banner-text" id="turnBannerText">¡Tu turno!</div>
+            <div class="turn-banner-sub" id="turnBannerSub">Juega o roba</div>
+        </div>
+
+        <div class="game-table">
+            <div class="opponent-top player-zone" id="zoneAna">
+                <div class="opponent-cards-row" id="anaCards"></div>
+                <div class="opponent-name">Ana <span class="card-count" id="anaCount">7</span></div>
+            </div>
+
+            <div class="opponents-side">
+                <div class="opponent-side player-zone" id="zoneCarlos">
+                    <div class="opponent-name">Carlos <span class="card-count" id="carlosCount">7</span></div>
+                    <div class="side-cards" id="carlosCards"></div>
+                </div>
+
+                <div class="center-area">
+                    <div class="center-circle"></div>
+                    <div class="direction-arrows">
+                        <span class="arrow arrow-top-left" id="arrowTL">↖</span>
+                        <span class="arrow arrow-top-right" id="arrowTR">↗</span>
+                        <span class="arrow arrow-bottom-left" id="arrowBL">↙</span>
+                        <span class="arrow arrow-bottom-right" id="arrowBR">↘</span>
+                    </div>
+                    <div class="piles">
+                        <div class="pile draw-pile" id="drawPile" onclick="drawCard()">
+                            <div class="card card-back"></div>
+                            <div class="draw-pile-hint">Robar</div>
+                        </div>
+                        <div class="pile discard-pile" id="discardPile"></div>
+                    </div>
+                </div>
+
+                <div class="opponent-side player-zone" id="zoneMaria">
+                    <div class="opponent-name">María <span class="card-count" id="mariaCount">7</span></div>
+                    <div class="side-cards" id="mariaCards"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="player-area player-zone" id="zonePlayer">
+            <div class="player-label">👤 TÚ</div>
+            <div class="player-hand" id="playerHand"></div>
+        </div>
+
+        <button class="uno-button" id="unoButton" onclick="sayUno()">¡UNO!</button>
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <div class="settings-title">⚙ Configuración</div>
+            <button class="settings-close" onclick="closeSettings()">×</button>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">Modo de Juego</div>
+            <div class="mode-selector mode-selector-3">
+                <div class="mode-option active" data-mode="syllables" onclick="selectGameMode(this)">
+                    <span class="mode-option-icon">🔤</span>
+                    <span class="mode-option-label">Sílabas</span>
+                </div>
+                <div class="mode-option" data-mode="words" onclick="selectGameMode(this)">
+                    <span class="mode-option-icon">📝</span>
+                    <span class="mode-option-label">Palabras</span>
+                </div>
+                <div class="mode-option" data-mode="morpho" onclick="selectGameMode(this)">
+                    <span class="mode-option-icon">🧩</span>
+                    <span class="mode-option-label">Morfosintaxis</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MORPHOSYNTAX SETTINGS (hidden by default) -->
+        <div class="settings-section morpho-settings" id="morphoSettings" style="display: none;">
+            <div class="settings-section-title">🧩 Configuración Morfosintaxis</div>
+
+            <div class="morpho-subsection">
+                <div class="morpho-label">Categorías Gramaticales</div>
+                <div class="morpho-grid" id="categoryGrid">
+                    <button class="morpho-btn active" data-cat="sustantivos" onclick="toggleMorphoCat(this)">📦 Sustantivos</button>
+                    <button class="morpho-btn active" data-cat="verbos" onclick="toggleMorphoCat(this)">🏃 Verbos</button>
+                    <button class="morpho-btn" data-cat="adjetivos" onclick="toggleMorphoCat(this)">🎨 Adjetivos</button>
+                    <button class="morpho-btn" data-cat="articulos" onclick="toggleMorphoCat(this)">📑 Artículos</button>
+                    <button class="morpho-btn" data-cat="pronombres" onclick="toggleMorphoCat(this)">👤 Pronombres</button>
+                    <button class="morpho-btn" data-cat="preposiciones" onclick="toggleMorphoCat(this)">📍 Preposiciones</button>
+                </div>
+            </div>
+
+            <div class="morpho-subsection">
+                <div class="morpho-label">Ejercicios Activos</div>
+                <div class="setting-item">
+                    <span class="setting-label">♂️♀️ Concordancia Género</span>
+                    <div class="toggle active" id="toggleGenero" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">1️⃣🔢 Concordancia Número</span>
+                    <div class="toggle active" id="toggleNumero" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">⏰ Tiempos Verbales</span>
+                    <div class="toggle active" id="toggleTiempos" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">📝 Completar Oraciones</span>
+                    <div class="toggle active" id="toggleCompletar" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">🔀 Ordenar Palabras</span>
+                    <div class="toggle" id="toggleOrdenar" onclick="toggleSetting(this)"></div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">🔗 Formar Oraciones</span>
+                    <div class="toggle" id="toggleFormar" onclick="toggleSetting(this)"></div>
+                </div>
+            </div>
+
+            <div class="morpho-subsection">
+                <div class="morpho-label">Nivel de Dificultad</div>
+                <div class="difficulty-selector">
+                    <button class="diff-btn active" data-level="1" onclick="selectDifficulty(this)">⭐ Básico</button>
+                    <button class="diff-btn" data-level="2" onclick="selectDifficulty(this)">⭐⭐ Medio</button>
+                    <button class="diff-btn" data-level="3" onclick="selectDifficulty(this)">⭐⭐⭐ Avanzado</button>
+                </div>
+            </div>
+
+            <div class="morpho-subsection">
+                <div class="morpho-label">Temas Semánticos</div>
+                <div class="morpho-grid" id="themeGrid">
+                    <button class="morpho-btn active" data-theme="cotidiano" onclick="toggleMorphoTheme(this)">🏠 Cotidiano</button>
+                    <button class="morpho-btn active" data-theme="animales" onclick="toggleMorphoTheme(this)">🐾 Animales</button>
+                    <button class="morpho-btn" data-theme="escuela" onclick="toggleMorphoTheme(this)">📚 Escuela</button>
+                    <button class="morpho-btn" data-theme="comida" onclick="toggleMorphoTheme(this)">🍽️ Comida</button>
+                    <button class="morpho-btn" data-theme="familia" onclick="toggleMorphoTheme(this)">👨‍👩‍👧 Familia</button>
+                    <button class="morpho-btn" data-theme="naturaleza" onclick="toggleMorphoTheme(this)">🌳 Naturaleza</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">Opciones</div>
+            <div class="setting-item">
+                <span class="setting-label">🔊 Audio Automático</span>
+                <div class="toggle active" id="toggleTTS" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">🎯 Modo Terapeuta</span>
+                <div class="toggle active" id="toggleTherapist" onclick="toggleSetting(this)"></div>
+            </div>
+        </div>
+
+        <div class="settings-section" id="phonemesSection">
+            <div class="settings-section-title">Fonemas Activos</div>
+            <div class="phoneme-group-title">Oclusivas</div>
+            <div class="phoneme-grid" id="phonemesOclusivas"></div>
+            <div class="phoneme-group-title">Fricativas / Africadas</div>
+            <div class="phoneme-grid" id="phonemesFricativas"></div>
+            <div class="phoneme-group-title">Nasales / Laterales / Vibrantes</div>
+            <div class="phoneme-grid" id="phonemesNasales"></div>
+            <div class="phoneme-group-title">Grupos Consonánticos</div>
+            <div class="phoneme-grid" id="phonemesGrupos"></div>
+            <div class="phoneme-group-title">🔄 Inversas Comunes (V+C)</div>
+            <div class="phoneme-grid" id="phonemesInversasComunes"></div>
+            <div class="phoneme-group-title">🔄 Otras Inversas</div>
+            <div class="phoneme-grid" id="phonemesInversasOtras"></div>
+        </div>
+
+        <div class="settings-section" id="familySection">
+            <div class="settings-section-title">Familia de Palabras</div>
+            <div class="family-selector" id="familySelector"></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">Cartas Especiales</div>
+            <div class="setting-item">
+                <span class="setting-label">⛔ Bloqueo</span>
+                <div class="toggle active" id="toggleBlock" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">🔄 Cambio</span>
+                <div class="toggle active" id="toggleReverse" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label">➕2 / ➕4</span>
+                <div class="toggle active" id="toggleDraw" onclick="toggleSetting(this)"></div>
+            </div>
+        </div>
+
+        <button class="btn" style="width: 100%;" onclick="closeSettings()">✓ Guardar</button>
+    </div>
+
+    <!-- VOCABULARY MODAL -->
+    <div class="modal-overlay" id="vocabularyModal">
+        <div class="modal modal-large">
+            <div class="modal-title">📚 Vocabulario</div>
+            <div class="modal-text">Pulsa una carta para escuchar la pronunciación</div>
+            <div class="vocab-filter" id="vocabFilter"></div>
+            <div class="vocab-grid" id="vocabGrid"></div>
+            <div class="modal-buttons" style="margin-top: 15px;">
+                <button class="modal-btn modal-btn-danger" onclick="hideModal('vocabularyModal')">✕ Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRONUNCIATION MODAL -->
+    <div class="modal-overlay" id="pronunciationModal">
+        <div class="modal">
+            <div class="modal-title">🎤 Pronuncia</div>
+            <div class="modal-syllable" id="syllableToSay"></div>
+            <button class="voice-btn" onclick="speakSyllable()">🔊</button>
+            <div class="modal-word-hint" id="wordHint">
+                <div class="word-hint-title">💡 Ejemplo:</div>
+                <div class="word-hint-content">
+                    <span class="word-hint-emoji" id="hintEmoji">🐼</span>
+                    <span class="word-hint-word" id="hintWord">PANDA</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="pronunciationCorrect()">✓ Correcto</button>
+                <button class="modal-btn modal-btn-warning" onclick="pronunciationRepeat()">↻ Repetir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK MODAL -->
+    <div class="modal-overlay" id="blockModal">
+        <div class="modal">
+            <div class="modal-title">⛔ Bloqueo</div>
+            <div class="modal-syllable" id="blockSyllable"></div>
+            <button class="voice-btn" onclick="speakCurrentSyllable('block')">🔊</button>
+            <div class="modal-text">Repite <strong>3 veces</strong></div>
+            <div class="rep-counter" id="repCounter">
+                <div class="rep-dot"></div>
+                <div class="rep-dot"></div>
+                <div class="rep-dot"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="blockRepCorrect()">✓ ¡Bien!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVERSE MODAL -->
+    <div class="modal-overlay" id="reverseModal">
+        <div class="modal">
+            <div class="modal-title">🔄 Cambio</div>
+            <div class="modal-syllable" id="reverseSyllable"></div>
+            <button class="voice-btn" onclick="speakCurrentSyllable('reverse')">🔊</button>
+            <div class="modal-word-hint">
+                <div class="word-hint-title">💡 Ejemplo:</div>
+                <div class="word-hint-content">
+                    <span class="word-hint-emoji" id="reverseEmoji">🐼</span>
+                    <span class="word-hint-word" id="reverseWord">PANDA</span>
+                </div>
+            </div>
+            <div class="modal-text">Di una palabra que empiece así</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="reverseComplete()">✓ Dicho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WILD MODAL -->
+    <div class="modal-overlay" id="wildModal">
+        <div class="modal">
+            <div class="modal-title">🌈 Comodín</div>
+            <div class="modal-text">Elige un fonema</div>
+            <div class="color-picker" id="wildPicker"></div>
+        </div>
+    </div>
+
+    <!-- DRAW4 MODAL -->
+    <div class="modal-overlay" id="draw4Modal">
+        <div class="modal">
+            <div class="modal-title">➕4</div>
+            <div class="modal-text">Elige fonema + di palabra + frase</div>
+            <div class="color-picker" id="draw4Picker"></div>
+        </div>
+    </div>
+
+    <!-- PHRASE MODAL -->
+    <div class="modal-overlay" id="phraseModal">
+        <div class="modal">
+            <div class="modal-title">📝 Palabra y Frase</div>
+            <div class="modal-syllable" id="phraseFamily"></div>
+            <button class="voice-btn" onclick="speakCurrentSyllable('phrase')">🔊</button>
+            <div class="modal-word-hint">
+                <div class="word-hint-title">💡 Ejemplo:</div>
+                <div class="word-hint-content">
+                    <span class="word-hint-emoji" id="phraseEmoji">🐼</span>
+                    <span class="word-hint-word" id="phraseWord">PANDA</span>
+                </div>
+            </div>
+            <div class="modal-text">Di palabra y frase corta</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="phraseComplete()">✓ Hecho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNO MODAL -->
+    <div class="modal-overlay" id="unoModal">
+        <div class="modal">
+            <div class="modal-title">🎯 ¡UNO!</div>
+            <div class="modal-syllable" id="unoSyllable"></div>
+            <button class="voice-btn" onclick="speakCurrentSyllable('uno')">🔊</button>
+            <div class="modal-text">Segmenta: separa los sonidos</div>
+            <div class="instruction-box">Ej: PA = /p/ + /a/</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="unoCorrect()">✓ Correcto</button>
+                <button class="modal-btn modal-btn-danger" onclick="unoFailed()">✗ Error</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Gender Agreement -->
+    <div class="modal-overlay" id="morphoGeneroModal">
+        <div class="modal">
+            <div class="modal-title">♂️♀️ Concordancia de Género</div>
+            <div class="morpho-exercise">
+                <div class="morpho-question" id="generoQuestion">¿Cuál es el artículo correcto?</div>
+                <div class="morpho-sentence" id="generoSentence">
+                    <span class="morpho-blank" id="generoBlank">___</span> <span id="generoWord">casa</span>
+                </div>
+                <div class="morpho-options" id="generoOptions"></div>
+                <div class="morpho-feedback" id="generoFeedback"></div>
+            </div>
+            <button class="voice-btn" onclick="speakMorphoSentence('genero')">🔊</button>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Number Agreement -->
+    <div class="modal-overlay" id="morphoNumeroModal">
+        <div class="modal">
+            <div class="modal-title">1️⃣🔢 Concordancia de Número</div>
+            <div class="morpho-exercise">
+                <div class="morpho-question" id="numeroQuestion">Cambia al plural/singular:</div>
+                <div class="morpho-sentence" id="numeroSentence"></div>
+                <div class="morpho-options" id="numeroOptions"></div>
+                <div class="morpho-feedback" id="numeroFeedback"></div>
+            </div>
+            <button class="voice-btn" onclick="speakMorphoSentence('numero')">🔊</button>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Verb Tenses -->
+    <div class="modal-overlay" id="morphoTiemposModal">
+        <div class="modal">
+            <div class="modal-title">⏰ Tiempos Verbales</div>
+            <div class="morpho-exercise">
+                <div class="morpho-question" id="tiemposQuestion">Conjuga el verbo:</div>
+                <div class="morpho-sentence" id="tiemposSentence"></div>
+                <div class="morpho-options" id="tiemposOptions"></div>
+                <div class="morpho-feedback" id="tiemposFeedback"></div>
+            </div>
+            <button class="voice-btn" onclick="speakMorphoSentence('tiempos')">🔊</button>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Complete Sentence -->
+    <div class="modal-overlay" id="morphoCompletarModal">
+        <div class="modal">
+            <div class="modal-title">📝 Completa la Oración</div>
+            <div class="morpho-exercise">
+                <div class="morpho-sentence" id="completarSentence"></div>
+                <div class="morpho-options" id="completarOptions"></div>
+                <div class="morpho-feedback" id="completarFeedback"></div>
+            </div>
+            <button class="voice-btn" onclick="speakMorphoSentence('completar')">🔊</button>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Word Order -->
+    <div class="modal-overlay" id="morphoOrdenarModal">
+        <div class="modal">
+            <div class="modal-title">🔀 Ordena las Palabras</div>
+            <div class="morpho-exercise">
+                <div class="morpho-question">Forma una oración correcta:</div>
+                <div class="sentence-builder" id="sentenceBuilder"></div>
+                <div class="word-order-container" id="wordOrderContainer"></div>
+                <div class="morpho-hint" id="ordenarHint">Pulsa las palabras en orden</div>
+                <div class="morpho-feedback" id="ordenarFeedback"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-warning" onclick="resetWordOrder()">↻ Reiniciar</button>
+                <button class="modal-btn modal-btn-success" onclick="checkWordOrder()">✓ Comprobar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MORPHOSYNTAX MODAL - Form Sentence -->
+    <div class="modal-overlay" id="morphoFormarModal">
+        <div class="modal">
+            <div class="modal-title">🔗 Forma una Oración</div>
+            <div class="morpho-exercise">
+                <div class="morpho-question" id="formarQuestion">Usa estas palabras:</div>
+                <div class="word-order-container" id="formarWords"></div>
+                <div class="morpho-hint">Di una oración con estas palabras</div>
+            </div>
+            <button class="voice-btn" onclick="speakMorphoWords()">🔊</button>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-success" onclick="morphoFormarCorrect()">✓ ¡Dicho!</button>
+                <button class="modal-btn modal-btn-warning" onclick="morphoFormarHelp()">💡 Ayuda</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIN OVERLAY -->
+    <div class="win-overlay" id="winOverlay">
+        <div class="win-title" id="winTitle">🎉 ¡GANASTE!</div>
+        <div class="win-message" id="winMessage">Puntos: 0</div>
+        <button class="btn" onclick="restartGame()">🔄 Jugar</button>
+        <button class="btn btn-secondary" style="margin-top: 8px;" onclick="goToMenu()">🏠 Menú</button>
+    </div>
+
+    <script>
+        // ==================== PHONEME DATABASE ====================
+        const PHONEMES = {
+            // Oclusivas (Sílabas Directas)
+            P: { color: 'red', syllables: ['PA', 'PE', 'PI', 'PO', 'PU'] },
+            T: { color: 'green', syllables: ['TA', 'TE', 'TI', 'TO', 'TU'] },
+            K: { color: 'blue', syllables: ['CA', 'QUE', 'QUI', 'CO', 'CU'] },
+            B: { color: 'purple', syllables: ['BA', 'BE', 'BI', 'BO', 'BU'] },
+            D: { color: 'orange', syllables: ['DA', 'DE', 'DI', 'DO', 'DU'] },
+            G: { color: 'yellow', syllables: ['GA', 'GUE', 'GUI', 'GO', 'GU'] },
+            // Fricativas
+            F: { color: 'red', syllables: ['FA', 'FE', 'FI', 'FO', 'FU'] },
+            S: { color: 'green', syllables: ['SA', 'SE', 'SI', 'SO', 'SU'] },
+            J: { color: 'orange', syllables: ['JA', 'JE', 'JI', 'JO', 'JU'] },
+            Z: { color: 'purple', syllables: ['ZA', 'CE', 'CI', 'ZO', 'ZU'] },
+            // Africadas
+            CH: { color: 'blue', syllables: ['CHA', 'CHE', 'CHI', 'CHO', 'CHU'] },
+            // Nasales
+            M: { color: 'blue', syllables: ['MA', 'ME', 'MI', 'MO', 'MU'] },
+            N: { color: 'yellow', syllables: ['NA', 'NE', 'NI', 'NO', 'NU'] },
+            Ñ: { color: 'purple', syllables: ['ÑA', 'ÑE', 'ÑI', 'ÑO', 'ÑU'] },
+            // Laterales
+            L: { color: 'green', syllables: ['LA', 'LE', 'LI', 'LO', 'LU'] },
+            LL: { color: 'orange', syllables: ['LLA', 'LLE', 'LLI', 'LLO', 'LLU'] },
+            // Vibrantes
+            R: { color: 'red', syllables: ['RA', 'RE', 'RI', 'RO', 'RU'] },
+            RR: { color: 'purple', syllables: ['RRA', 'RRE', 'RRI', 'RRO', 'RRU'] },
+            // Grupos Consonánticos
+            PL: { color: 'red', syllables: ['PLA', 'PLE', 'PLI', 'PLO', 'PLU'] },
+            PR: { color: 'orange', syllables: ['PRA', 'PRE', 'PRI', 'PRO', 'PRU'] },
+            BL: { color: 'blue', syllables: ['BLA', 'BLE', 'BLI', 'BLO', 'BLU'] },
+            BR: { color: 'purple', syllables: ['BRA', 'BRE', 'BRI', 'BRO', 'BRU'] },
+            FL: { color: 'green', syllables: ['FLA', 'FLE', 'FLI', 'FLO', 'FLU'] },
+            FR: { color: 'yellow', syllables: ['FRA', 'FRE', 'FRI', 'FRO', 'FRU'] },
+            CL: { color: 'blue', syllables: ['CLA', 'CLE', 'CLI', 'CLO', 'CLU'] },
+            CR: { color: 'orange', syllables: ['CRA', 'CRE', 'CRI', 'CRO', 'CRU'] },
+            GL: { color: 'green', syllables: ['GLA', 'GLE', 'GLI', 'GLO', 'GLU'] },
+            GR: { color: 'purple', syllables: ['GRA', 'GRE', 'GRI', 'GRO', 'GRU'] },
+            TR: { color: 'red', syllables: ['TRA', 'TRE', 'TRI', 'TRO', 'TRU'] },
+            DR: { color: 'yellow', syllables: ['DRA', 'DRE', 'DRI', 'DRO', 'DRU'] },
+            // ============ SÍLABAS INVERSAS (Vocal + Consonante) ============
+            // Inversas con L
+            _L: { color: 'green', syllables: ['AL', 'EL', 'IL', 'OL', 'UL'], inverse: true, label: '-L' },
+            // Inversas con N
+            _N: { color: 'yellow', syllables: ['AN', 'EN', 'IN', 'ON', 'UN'], inverse: true, label: '-N' },
+            // Inversas con S
+            _S: { color: 'blue', syllables: ['AS', 'ES', 'IS', 'OS', 'US'], inverse: true, label: '-S' },
+            // Inversas con R
+            _R: { color: 'red', syllables: ['AR', 'ER', 'IR', 'OR', 'UR'], inverse: true, label: '-R' },
+            // Inversas con Z
+            _Z: { color: 'purple', syllables: ['AZ', 'EZ', 'IZ', 'OZ', 'UZ'], inverse: true, label: '-Z' },
+            // Inversas con D
+            _D: { color: 'orange', syllables: ['AD', 'ED', 'ID', 'OD', 'UD'], inverse: true, label: '-D' },
+            // Inversas con J
+            _J: { color: 'orange', syllables: ['AJ', 'EJ', 'OJ', 'UJ'], inverse: true, label: '-J' },
+            // Inversas con M
+            _M: { color: 'blue', syllables: ['AM', 'EM', 'IM', 'OM', 'UM'], inverse: true, label: '-M' },
+            // Inversas con P
+            _P: { color: 'red', syllables: ['AP', 'EP', 'IP', 'OP', 'UP'], inverse: true, label: '-P' },
+            // Inversas con K/C
+            _K: { color: 'blue', syllables: ['AC', 'EC', 'IC', 'OC', 'UC'], inverse: true, label: '-C' },
+            // Inversas con B
+            _B: { color: 'purple', syllables: ['AB', 'EB', 'IB', 'OB', 'UB'], inverse: true, label: '-B' },
+            // Inversas con G
+            _G: { color: 'yellow', syllables: ['AG', 'EG', 'IG', 'OG', 'UG'], inverse: true, label: '-G' },
+            // Inversas con T
+            _T: { color: 'green', syllables: ['AT', 'ET', 'IT', 'OT', 'UT'], inverse: true, label: '-T' },
+            // Inversas con F
+            _F: { color: 'red', syllables: ['AF', 'EF', 'IF', 'OF', 'UF'], inverse: true, label: '-F' }
+        };
+
+        const PHONEME_GROUPS = {
+            oclusivas: ['P', 'T', 'K', 'B', 'D', 'G'],
+            fricativas: ['F', 'S', 'J', 'Z', 'CH'],
+            nasales: ['M', 'N', 'Ñ', 'L', 'LL', 'R', 'RR'],
+            grupos: ['PL', 'PR', 'BL', 'BR', 'FL', 'FR', 'CL', 'CR', 'GL', 'GR', 'TR', 'DR'],
+            inversas_comunes: ['_L', '_N', '_S', '_R'],
+            inversas_otras: ['_Z', '_D', '_J', '_M', '_P', '_K', '_B', '_G', '_T', '_F']
+        };
+
+        // ==================== MORPHOSYNTAX DATABASE ====================
+        const MORPHO_DATA = {
+            // Sustantivos con género y número
+            sustantivos: {
+                cotidiano: [
+                    { word: 'casa', gender: 'f', plural: 'casas', emoji: '🏠' },
+                    { word: 'mesa', gender: 'f', plural: 'mesas', emoji: '🪑' },
+                    { word: 'silla', gender: 'f', plural: 'sillas', emoji: '🪑' },
+                    { word: 'cama', gender: 'f', plural: 'camas', emoji: '🛏️' },
+                    { word: 'puerta', gender: 'f', plural: 'puertas', emoji: '🚪' },
+                    { word: 'ventana', gender: 'f', plural: 'ventanas', emoji: '🪟' },
+                    { word: 'libro', gender: 'm', plural: 'libros', emoji: '📚' },
+                    { word: 'vaso', gender: 'm', plural: 'vasos', emoji: '🥛' },
+                    { word: 'plato', gender: 'm', plural: 'platos', emoji: '🍽️' },
+                    { word: 'coche', gender: 'm', plural: 'coches', emoji: '🚗' },
+                    { word: 'teléfono', gender: 'm', plural: 'teléfonos', emoji: '📱' },
+                    { word: 'reloj', gender: 'm', plural: 'relojes', emoji: '⏰' }
+                ],
+                animales: [
+                    { word: 'perro', gender: 'm', plural: 'perros', emoji: '🐕' },
+                    { word: 'gato', gender: 'm', plural: 'gatos', emoji: '🐱' },
+                    { word: 'pájaro', gender: 'm', plural: 'pájaros', emoji: '🐦' },
+                    { word: 'pez', gender: 'm', plural: 'peces', emoji: '🐟' },
+                    { word: 'león', gender: 'm', plural: 'leones', emoji: '🦁' },
+                    { word: 'elefante', gender: 'm', plural: 'elefantes', emoji: '🐘' },
+                    { word: 'vaca', gender: 'f', plural: 'vacas', emoji: '🐄' },
+                    { word: 'gallina', gender: 'f', plural: 'gallinas', emoji: '🐔' },
+                    { word: 'mariposa', gender: 'f', plural: 'mariposas', emoji: '🦋' },
+                    { word: 'tortuga', gender: 'f', plural: 'tortugas', emoji: '🐢' },
+                    { word: 'rana', gender: 'f', plural: 'ranas', emoji: '🐸' },
+                    { word: 'abeja', gender: 'f', plural: 'abejas', emoji: '🐝' }
+                ],
+                escuela: [
+                    { word: 'lápiz', gender: 'm', plural: 'lápices', emoji: '✏️' },
+                    { word: 'cuaderno', gender: 'm', plural: 'cuadernos', emoji: '📓' },
+                    { word: 'borrador', gender: 'm', plural: 'borradores', emoji: '🧹' },
+                    { word: 'estuche', gender: 'm', plural: 'estuches', emoji: '🎒' },
+                    { word: 'pizarra', gender: 'f', plural: 'pizarras', emoji: '📋' },
+                    { word: 'mochila', gender: 'f', plural: 'mochilas', emoji: '🎒' },
+                    { word: 'regla', gender: 'f', plural: 'reglas', emoji: '📏' },
+                    { word: 'tijera', gender: 'f', plural: 'tijeras', emoji: '✂️' }
+                ],
+                comida: [
+                    { word: 'manzana', gender: 'f', plural: 'manzanas', emoji: '🍎' },
+                    { word: 'naranja', gender: 'f', plural: 'naranjas', emoji: '🍊' },
+                    { word: 'fresa', gender: 'f', plural: 'fresas', emoji: '🍓' },
+                    { word: 'galleta', gender: 'f', plural: 'galletas', emoji: '🍪' },
+                    { word: 'pan', gender: 'm', plural: 'panes', emoji: '🍞' },
+                    { word: 'huevo', gender: 'm', plural: 'huevos', emoji: '🥚' },
+                    { word: 'queso', gender: 'm', plural: 'quesos', emoji: '🧀' },
+                    { word: 'helado', gender: 'm', plural: 'helados', emoji: '🍦' }
+                ],
+                familia: [
+                    { word: 'mamá', gender: 'f', plural: 'mamás', emoji: '👩' },
+                    { word: 'papá', gender: 'm', plural: 'papás', emoji: '👨' },
+                    { word: 'hermana', gender: 'f', plural: 'hermanas', emoji: '👧' },
+                    { word: 'hermano', gender: 'm', plural: 'hermanos', emoji: '👦' },
+                    { word: 'abuela', gender: 'f', plural: 'abuelas', emoji: '👵' },
+                    { word: 'abuelo', gender: 'm', plural: 'abuelos', emoji: '👴' },
+                    { word: 'bebé', gender: 'm', plural: 'bebés', emoji: '👶' },
+                    { word: 'niña', gender: 'f', plural: 'niñas', emoji: '👧' },
+                    { word: 'niño', gender: 'm', plural: 'niños', emoji: '👦' }
+                ],
+                naturaleza: [
+                    { word: 'árbol', gender: 'm', plural: 'árboles', emoji: '🌳' },
+                    { word: 'flor', gender: 'f', plural: 'flores', emoji: '🌸' },
+                    { word: 'sol', gender: 'm', plural: 'soles', emoji: '☀️' },
+                    { word: 'luna', gender: 'f', plural: 'lunas', emoji: '🌙' },
+                    { word: 'nube', gender: 'f', plural: 'nubes', emoji: '☁️' },
+                    { word: 'río', gender: 'm', plural: 'ríos', emoji: '🏞️' },
+                    { word: 'montaña', gender: 'f', plural: 'montañas', emoji: '🏔️' },
+                    { word: 'estrella', gender: 'f', plural: 'estrellas', emoji: '⭐' }
+                ]
+            },
+            // Verbos con conjugaciones
+            verbos: {
+                basicos: [
+                    { infinitive: 'comer', present: ['como', 'comes', 'come', 'comemos', 'coméis', 'comen'], past: 'comió', future: 'comerá', gerund: 'comiendo', emoji: '🍽️' },
+                    { infinitive: 'beber', present: ['bebo', 'bebes', 'bebe', 'bebemos', 'bebéis', 'beben'], past: 'bebió', future: 'beberá', gerund: 'bebiendo', emoji: '🥤' },
+                    { infinitive: 'dormir', present: ['duermo', 'duermes', 'duerme', 'dormimos', 'dormís', 'duermen'], past: 'durmió', future: 'dormirá', gerund: 'durmiendo', emoji: '😴' },
+                    { infinitive: 'jugar', present: ['juego', 'juegas', 'juega', 'jugamos', 'jugáis', 'juegan'], past: 'jugó', future: 'jugará', gerund: 'jugando', emoji: '⚽' },
+                    { infinitive: 'correr', present: ['corro', 'corres', 'corre', 'corremos', 'corréis', 'corren'], past: 'corrió', future: 'correrá', gerund: 'corriendo', emoji: '🏃' },
+                    { infinitive: 'saltar', present: ['salto', 'saltas', 'salta', 'saltamos', 'saltáis', 'saltan'], past: 'saltó', future: 'saltará', gerund: 'saltando', emoji: '🦘' },
+                    { infinitive: 'cantar', present: ['canto', 'cantas', 'canta', 'cantamos', 'cantáis', 'cantan'], past: 'cantó', future: 'cantará', gerund: 'cantando', emoji: '🎤' },
+                    { infinitive: 'bailar', present: ['bailo', 'bailas', 'baila', 'bailamos', 'bailáis', 'bailan'], past: 'bailó', future: 'bailará', gerund: 'bailando', emoji: '💃' },
+                    { infinitive: 'leer', present: ['leo', 'lees', 'lee', 'leemos', 'leéis', 'leen'], past: 'leyó', future: 'leerá', gerund: 'leyendo', emoji: '📖' },
+                    { infinitive: 'escribir', present: ['escribo', 'escribes', 'escribe', 'escribimos', 'escribís', 'escriben'], past: 'escribió', future: 'escribirá', gerund: 'escribiendo', emoji: '✍️' },
+                    { infinitive: 'dibujar', present: ['dibujo', 'dibujas', 'dibuja', 'dibujamos', 'dibujáis', 'dibujan'], past: 'dibujó', future: 'dibujará', gerund: 'dibujando', emoji: '🎨' },
+                    { infinitive: 'pintar', present: ['pinto', 'pintas', 'pinta', 'pintamos', 'pintáis', 'pintan'], past: 'pintó', future: 'pintará', gerund: 'pintando', emoji: '🖌️' }
+                ]
+            },
+            // Adjetivos con concordancia
+            adjetivos: [
+                { masc: 'grande', fem: 'grande', mascPl: 'grandes', femPl: 'grandes', emoji: '📏' },
+                { masc: 'pequeño', fem: 'pequeña', mascPl: 'pequeños', femPl: 'pequeñas', emoji: '🔹' },
+                { masc: 'alto', fem: 'alta', mascPl: 'altos', femPl: 'altas', emoji: '📐' },
+                { masc: 'bajo', fem: 'baja', mascPl: 'bajos', femPl: 'bajas', emoji: '📉' },
+                { masc: 'gordo', fem: 'gorda', mascPl: 'gordos', femPl: 'gordas', emoji: '🐷' },
+                { masc: 'flaco', fem: 'flaca', mascPl: 'flacos', femPl: 'flacas', emoji: '🦴' },
+                { masc: 'bonito', fem: 'bonita', mascPl: 'bonitos', femPl: 'bonitas', emoji: '🌸' },
+                { masc: 'feo', fem: 'fea', mascPl: 'feos', femPl: 'feas', emoji: '👺' },
+                { masc: 'rápido', fem: 'rápida', mascPl: 'rápidos', femPl: 'rápidas', emoji: '⚡' },
+                { masc: 'lento', fem: 'lenta', mascPl: 'lentos', femPl: 'lentas', emoji: '🐢' },
+                { masc: 'nuevo', fem: 'nueva', mascPl: 'nuevos', femPl: 'nuevas', emoji: '✨' },
+                { masc: 'viejo', fem: 'vieja', mascPl: 'viejos', femPl: 'viejas', emoji: '🏚️' },
+                { masc: 'rojo', fem: 'roja', mascPl: 'rojos', femPl: 'rojas', emoji: '🔴' },
+                { masc: 'azul', fem: 'azul', mascPl: 'azules', femPl: 'azules', emoji: '🔵' },
+                { masc: 'verde', fem: 'verde', mascPl: 'verdes', femPl: 'verdes', emoji: '🟢' },
+                { masc: 'amarillo', fem: 'amarilla', mascPl: 'amarillos', femPl: 'amarillas', emoji: '🟡' }
+            ],
+            // Artículos
+            articulos: {
+                definidos: { masc: 'el', fem: 'la', mascPl: 'los', femPl: 'las' },
+                indefinidos: { masc: 'un', fem: 'una', mascPl: 'unos', femPl: 'unas' }
+            },
+            // Pronombres personales
+            pronombres: ['yo', 'tú', 'él', 'ella', 'nosotros', 'nosotras', 'vosotros', 'vosotras', 'ellos', 'ellas'],
+            // Preposiciones comunes
+            preposiciones: ['en', 'sobre', 'bajo', 'dentro', 'fuera', 'con', 'sin', 'para', 'por', 'a', 'de', 'entre'],
+            // Oraciones para ordenar (por nivel)
+            oraciones: {
+                nivel1: [
+                    { words: ['El', 'perro', 'come'], correct: 'El perro come' },
+                    { words: ['La', 'niña', 'salta'], correct: 'La niña salta' },
+                    { words: ['El', 'gato', 'duerme'], correct: 'El gato duerme' },
+                    { words: ['Mamá', 'cocina', 'pasta'], correct: 'Mamá cocina pasta' },
+                    { words: ['El', 'bebé', 'llora'], correct: 'El bebé llora' }
+                ],
+                nivel2: [
+                    { words: ['El', 'perro', 'grande', 'corre'], correct: 'El perro grande corre' },
+                    { words: ['La', 'niña', 'come', 'manzana'], correct: 'La niña come manzana' },
+                    { words: ['Mi', 'mamá', 'hace', 'comida'], correct: 'Mi mamá hace comida' },
+                    { words: ['El', 'gato', 'negro', 'salta'], correct: 'El gato negro salta' },
+                    { words: ['Los', 'niños', 'juegan', 'pelota'], correct: 'Los niños juegan pelota' }
+                ],
+                nivel3: [
+                    { words: ['El', 'perro', 'marrón', 'corre', 'rápido'], correct: 'El perro marrón corre rápido' },
+                    { words: ['La', 'niña', 'pequeña', 'come', 'una', 'manzana'], correct: 'La niña pequeña come una manzana' },
+                    { words: ['Mi', 'hermano', 'mayor', 'lee', 'un', 'libro'], correct: 'Mi hermano mayor lee un libro' },
+                    { words: ['Los', 'pájaros', 'azules', 'vuelan', 'alto'], correct: 'Los pájaros azules vuelan alto' },
+                    { words: ['El', 'gato', 'gordo', 'duerme', 'en', 'la', 'cama'], correct: 'El gato gordo duerme en la cama' }
+                ]
+            },
+            // Ejercicios de completar
+            completar: {
+                nivel1: [
+                    { sentence: 'El perro ___ agua', blank: 'bebe', options: ['bebe', 'come', 'duerme', 'salta'] },
+                    { sentence: 'La niña ___ una manzana', blank: 'come', options: ['bebe', 'come', 'salta', 'corre'] },
+                    { sentence: 'El gato ___ en la cama', blank: 'duerme', options: ['come', 'bebe', 'duerme', 'canta'] },
+                    { sentence: 'El pájaro ___ en el árbol', blank: 'canta', options: ['nada', 'canta', 'come', 'duerme'] },
+                    { sentence: 'El niño ___ con la pelota', blank: 'juega', options: ['duerme', 'juega', 'lee', 'come'] }
+                ],
+                nivel2: [
+                    { sentence: '___ perro es grande', blank: 'El', options: ['El', 'La', 'Los', 'Las'] },
+                    { sentence: '___ niñas juegan', blank: 'Las', options: ['El', 'La', 'Los', 'Las'] },
+                    { sentence: 'El perro ___ bonito', blank: 'es', options: ['es', 'son', 'está', 'están'] },
+                    { sentence: 'Los gatos ___ pequeños', blank: 'son', options: ['es', 'son', 'está', 'están'] },
+                    { sentence: 'Yo ___ en casa', blank: 'estoy', options: ['soy', 'estoy', 'es', 'está'] }
+                ],
+                nivel3: [
+                    { sentence: 'Ayer el niño ___ al parque', blank: 'fue', options: ['va', 'fue', 'irá', 'iba'] },
+                    { sentence: 'Mañana yo ___ a la escuela', blank: 'iré', options: ['fui', 'voy', 'iré', 'iba'] },
+                    { sentence: 'Ahora nosotros ___ la tarea', blank: 'hacemos', options: ['hicimos', 'hacemos', 'haremos', 'hacíamos'] },
+                    { sentence: 'El año pasado ella ___ mucho', blank: 'estudió', options: ['estudia', 'estudió', 'estudiará', 'estudiaba'] },
+                    { sentence: 'La semana que viene ellos ___ de vacaciones', blank: 'irán', options: ['van', 'fueron', 'irán', 'iban'] }
+                ]
+            }
+        };
+
+        // Morphosyntax Settings
+        const MorphoSettings = {
+            categories: ['sustantivos', 'verbos'],
+            exercises: {
+                genero: true,
+                numero: true,
+                tiempos: true,
+                completar: true,
+                ordenar: false,
+                formar: false
+            },
+            difficulty: 1,
+            themes: ['cotidiano', 'animales']
+        };
+
+        // Morphosyntax Game State
+        const MorphoState = {
+            currentExercise: null,
+            correctAnswer: null,
+            wordOrderSelected: [],
+            wordOrderCorrect: []
+        };
+
+        // ==================== WORD FAMILIES ====================
+        const WORD_FAMILIES = {
+            animales: {
+                icon: '🐾', name: 'Animales',
+                words: {
+                    'PA': { word: 'PANDA', emoji: '🐼' }, 'PE': { word: 'PERRO', emoji: '🐕' },
+                    'PI': { word: 'PINGÜINO', emoji: '🐧' }, 'PO': { word: 'POLLITO', emoji: '🐤' },
+                    'PU': { word: 'PUMA', emoji: '🐆' }, 'TA': { word: 'TORTUGA', emoji: '🐢' },
+                    'TE': { word: 'TEJÓN', emoji: '🦡' }, 'TI': { word: 'TIGRE', emoji: '🐅' },
+                    'TO': { word: 'TORO', emoji: '🐂' }, 'TU': { word: 'TUCÁN', emoji: '🦜' },
+                    'CA': { word: 'CABALLO', emoji: '🐴' }, 'QUE': { word: 'QUETZAL', emoji: '🦚' },
+                    'QUI': { word: 'KIWI', emoji: '🐦' }, 'CO': { word: 'CONEJO', emoji: '🐰' },
+                    'CU': { word: 'CUERVO', emoji: '🐦‍⬛' }, 'BA': { word: 'BALLENA', emoji: '🐋' },
+                    'BE': { word: 'BECERRO', emoji: '🐄' }, 'BI': { word: 'BISONTE', emoji: '🦬' },
+                    'BO': { word: 'BORREGO', emoji: '🐑' }, 'BU': { word: 'BÚHO', emoji: '🦉' },
+                    'DA': { word: 'DÁLMATA', emoji: '🐕' }, 'DE': { word: 'DELFÍN', emoji: '🐬' },
+                    'DI': { word: 'DINOSAURIO', emoji: '🦕' }, 'DO': { word: 'DRAGÓN', emoji: '🐉' },
+                    'DU': { word: 'DUGONGO', emoji: '🦭' }, 'GA': { word: 'GATO', emoji: '🐱' },
+                    'GUE': { word: 'GUEPARDO', emoji: '🐆' }, 'GUI': { word: 'GUILA', emoji: '🦅' },
+                    'GO': { word: 'GORILA', emoji: '🦍' }, 'GU': { word: 'GUSANO', emoji: '🐛' },
+                    'FA': { word: 'FAISÁN', emoji: '🦚' }, 'FE': { word: 'FELINO', emoji: '🐱' },
+                    'FI': { word: 'FIERA', emoji: '🦁' }, 'FO': { word: 'FOCA', emoji: '🦭' },
+                    'FU': { word: 'FURÓN', emoji: '🦡' }, 'SA': { word: 'SAPO', emoji: '🐸' },
+                    'SE': { word: 'SERPIENTE', emoji: '🐍' }, 'SI': { word: 'SIRENA', emoji: '🧜' },
+                    'SO': { word: 'SOMORMUJO', emoji: '🦆' }, 'SU': { word: 'SURICATO', emoji: '🦡' },
+                    'JA': { word: 'JABALÍ', emoji: '🐗' }, 'JE': { word: 'JERBO', emoji: '🐹' },
+                    'JI': { word: 'JIRAFA', emoji: '🦒' }, 'JO': { word: 'JOROBA', emoji: '🐪' },
+                    'JU': { word: 'JURÁSICO', emoji: '🦖' }, 'MA': { word: 'MARIPOSA', emoji: '🦋' },
+                    'ME': { word: 'MEDUSA', emoji: '🪼' }, 'MI': { word: 'MIRLO', emoji: '🐦' },
+                    'MO': { word: 'MONO', emoji: '🐒' }, 'MU': { word: 'MURCIÉLAGO', emoji: '🦇' },
+                    'NA': { word: 'NARVAL', emoji: '🦭' }, 'NE': { word: 'NÉCORA', emoji: '🦀' },
+                    'NI': { word: 'NUTRIA', emoji: '🦦' }, 'NO': { word: 'NOCTURNO', emoji: '🦉' },
+                    'NU': { word: 'ÑANDÚ', emoji: '🦤' }, 'LA': { word: 'LAGARTO', emoji: '🦎' },
+                    'LE': { word: 'LEÓN', emoji: '🦁' }, 'LI': { word: 'LIEBRE', emoji: '🐇' },
+                    'LO': { word: 'LOBO', emoji: '🐺' }, 'LU': { word: 'LUCIÉRNAGA', emoji: '🪲' },
+                    'RA': { word: 'RANA', emoji: '🐸' }, 'RE': { word: 'RENO', emoji: '🦌' },
+                    'RI': { word: 'RINOCERONTE', emoji: '🦏' }, 'RO': { word: 'ROEDOR', emoji: '🐹' },
+                    'RU': { word: 'RUISEÑOR', emoji: '🐦' }, 'CHA': { word: 'CHACAL', emoji: '🐺' },
+                    'CHE': { word: 'CHEETAH', emoji: '🐆' }, 'CHI': { word: 'CHIMPANCÉ', emoji: '🦧' },
+                    'CHO': { word: 'CHORLITO', emoji: '🐦' }, 'CHU': { word: 'CHUCHO', emoji: '🐕' },
+                    // Sílabas Inversas
+                    'AL': { word: 'ALCE', emoji: '🦌' }, 'EL': { word: 'ELEFANTE', emoji: '🐘' },
+                    'IL': { word: 'IBIS', emoji: '🦩' }, 'OL': { word: 'OLINGO', emoji: '🦝' },
+                    'UL': { word: 'URRACA', emoji: '🐦' }, 'AN': { word: 'ANGUILA', emoji: '🐍' },
+                    'EN': { word: 'ERIZO', emoji: '🦔' }, 'IN': { word: 'INSECTO', emoji: '🐛' },
+                    'ON': { word: 'ORCA', emoji: '🐋' }, 'UN': { word: 'UNICORNIO', emoji: '🦄' },
+                    'AS': { word: 'ASNO', emoji: '🫏' }, 'ES': { word: 'ESCARABAJO', emoji: '🪲' },
+                    'IS': { word: 'IGUANA', emoji: '🦎' }, 'OS': { word: 'OSO', emoji: '🐻' },
+                    'US': { word: 'UROGALLO', emoji: '🦃' }, 'AR': { word: 'ARAÑA', emoji: '🕷️' },
+                    'ER': { word: 'ERIZO', emoji: '🦔' }, 'IR': { word: 'IRBIS', emoji: '🐆' },
+                    'OR': { word: 'ORUGA', emoji: '🐛' }, 'UR': { word: 'URRACA', emoji: '🐦' },
+                    'AZ': { word: 'AZOR', emoji: '🦅' }, 'EZ': { word: 'PEZ', emoji: '🐟' },
+                    'IZ': { word: 'PERDIZ', emoji: '🐦' }, 'OZ': { word: 'AVESTRUZ', emoji: '🦤' },
+                    'UZ': { word: 'AVESTRUZ', emoji: '🦤' }, 'AD': { word: 'ÁNADE', emoji: '🦆' },
+                    'ED': { word: 'MILPIÉS', emoji: '🐛' }, 'ID': { word: 'ARDID', emoji: '🦊' },
+                    'OD': { word: 'ÑANDÚ', emoji: '🦤' }, 'UD': { word: 'ÑANDÚ', emoji: '🦤' },
+                    'AJ': { word: 'PÁJARO', emoji: '🐦' }, 'EJ': { word: 'ABEJA', emoji: '🐝' },
+                    'OJ': { word: 'OJO', emoji: '👁️' }, 'UJ': { word: 'BUJÍA', emoji: '💡' },
+                    'AM': { word: 'ALMEJA', emoji: '🦪' }, 'EM': { word: 'EMBLEMA', emoji: '🏷️' },
+                    'IM': { word: 'IMPALA', emoji: '🦌' }, 'OM': { word: 'LOMBRIZ', emoji: '🪱' },
+                    'UM': { word: 'PUMA', emoji: '🐆' }, 'AP': { word: 'JABALÍ', emoji: '🐗' },
+                    'AC': { word: 'ÁCARO', emoji: '🕷️' }, 'AB': { word: 'ABEJA', emoji: '🐝' },
+                    'AG': { word: 'ÁGUILA', emoji: '🦅' }, 'AT': { word: 'GATO', emoji: '🐱' }
+                }
+            },
+            transportes: {
+                icon: '🚗', name: 'Transportes',
+                words: {
+                    'PA': { word: 'PATINETE', emoji: '🛴' }, 'PE': { word: 'PETROLERO', emoji: '🚢' },
+                    'PI': { word: 'PIRAGUA', emoji: '🛶' }, 'PO': { word: 'PORTAAVIONES', emoji: '⛵' },
+                    'PU': { word: 'PUENTE', emoji: '🌉' }, 'TA': { word: 'TAXI', emoji: '🚕' },
+                    'TE': { word: 'TELEFÉRICO', emoji: '🚡' }, 'TI': { word: 'TITANIC', emoji: '🚢' },
+                    'TO': { word: 'TRACTOR', emoji: '🚜' }, 'TU': { word: 'TURISMO', emoji: '🚗' },
+                    'CA': { word: 'CAMIÓN', emoji: '🚛' }, 'CO': { word: 'COHETE', emoji: '🚀' },
+                    'CU': { word: 'CUATRICICLO', emoji: '🏍️' }, 'BA': { word: 'BARCO', emoji: '⛵' },
+                    'BI': { word: 'BICICLETA', emoji: '🚲' }, 'BU': { word: 'BUS', emoji: '🚌' },
+                    'MA': { word: 'MAQUINISTA', emoji: '🚂' }, 'ME': { word: 'METRO', emoji: '🚇' },
+                    'MO': { word: 'MOTO', emoji: '🏍️' }, 'LA': { word: 'LANCHA', emoji: '🚤' },
+                    'RA': { word: 'RAÍL', emoji: '🛤️' }, 'SA': { word: 'SATÉLITE', emoji: '🛰️' },
+                    'SE': { word: 'SEDÁN', emoji: '🚗' }, 'TR': { word: 'TREN', emoji: '🚂' }
+                }
+            },
+            alimentos: {
+                icon: '🍎', name: 'Alimentos',
+                words: {
+                    'PA': { word: 'PAN', emoji: '🍞' }, 'PE': { word: 'PERA', emoji: '🍐' },
+                    'PI': { word: 'PIZZA', emoji: '🍕' }, 'PO': { word: 'POLLO', emoji: '🍗' },
+                    'PU': { word: 'PURÉ', emoji: '🥔' }, 'TA': { word: 'TARTA', emoji: '🎂' },
+                    'TE': { word: 'TÉ', emoji: '🍵' }, 'TO': { word: 'TOMATE', emoji: '🍅' },
+                    'TU': { word: 'TURRÓN', emoji: '🍫' }, 'CA': { word: 'CALABAZA', emoji: '🎃' },
+                    'QUE': { word: 'QUESO', emoji: '🧀' }, 'CO': { word: 'COCO', emoji: '🥥' },
+                    'CU': { word: 'CUPCAKE', emoji: '🧁' }, 'BA': { word: 'BANANA', emoji: '🍌' },
+                    'BE': { word: 'BERENJENA', emoji: '🍆' }, 'BO': { word: 'BOCADILLO', emoji: '🥪' },
+                    'MA': { word: 'MANZANA', emoji: '🍎' }, 'ME': { word: 'MELÓN', emoji: '🍈' },
+                    'MI': { word: 'MIEL', emoji: '🍯' }, 'MO': { word: 'MORA', emoji: '🫐' },
+                    'LA': { word: 'LECHUGA', emoji: '🥬' }, 'LE': { word: 'LECHE', emoji: '🥛' },
+                    'LI': { word: 'LIMÓN', emoji: '🍋' }, 'NA': { word: 'NARANJA', emoji: '🍊' },
+                    'SA': { word: 'SANDÍA', emoji: '🍉' }, 'FR': { word: 'FRESA', emoji: '🍓' },
+                    'CHA': { word: 'CHOCOLATE', emoji: '🍫' }, 'CHU': { word: 'CHURRO', emoji: '🥖' }
+                }
+            },
+            objetos: {
+                icon: '🏠', name: 'Objetos',
+                words: {
+                    'PA': { word: 'PAPEL', emoji: '📄' }, 'PE': { word: 'PELOTA', emoji: '⚽' },
+                    'PI': { word: 'PINCEL', emoji: '🖌️' }, 'PU': { word: 'PUERTA', emoji: '🚪' },
+                    'TA': { word: 'TABLA', emoji: '📋' }, 'TE': { word: 'TELÉFONO', emoji: '📱' },
+                    'TI': { word: 'TIJERAS', emoji: '✂️' }, 'CA': { word: 'CAMA', emoji: '🛏️' },
+                    'CO': { word: 'CORONA', emoji: '👑' }, 'CU': { word: 'CUBO', emoji: '🧊' },
+                    'MA': { word: 'MALETA', emoji: '🧳' }, 'ME': { word: 'MESA', emoji: '🪑' },
+                    'MI': { word: 'MICRÓFONO', emoji: '🎤' }, 'MO': { word: 'MOCHILA', emoji: '🎒' },
+                    'LA': { word: 'LÁMPARA', emoji: '💡' }, 'LI': { word: 'LIBRO', emoji: '📚' },
+                    'RE': { word: 'RELOJ', emoji: '⏰' }, 'SI': { word: 'SILLA', emoji: '🪑' },
+                    'SO': { word: 'SOFÁ', emoji: '🛋️' }, 'CHA': { word: 'CHAQUETA', emoji: '🧥' }
+                }
+            },
+            naturaleza: {
+                icon: '🌳', name: 'Naturaleza',
+                words: {
+                    'PA': { word: 'PALMERA', emoji: '🌴' }, 'PI': { word: 'PINO', emoji: '🌲' },
+                    'PL': { word: 'PLANTA', emoji: '🌱' }, 'TA': { word: 'TALLO', emoji: '🌿' },
+                    'TI': { word: 'TIERRA', emoji: '🌍' }, 'TO': { word: 'TORNADO', emoji: '🌪️' },
+                    'TU': { word: 'TULIPÁN', emoji: '🌷' }, 'MA': { word: 'MAR', emoji: '🌊' },
+                    'MO': { word: 'MONTAÑA', emoji: '🏔️' }, 'LA': { word: 'LAGO', emoji: '💧' },
+                    'LU': { word: 'LUNA', emoji: '🌙' }, 'SO': { word: 'SOL', emoji: '☀️' },
+                    'NU': { word: 'NUBE', emoji: '☁️' }, 'RO': { word: 'ROCA', emoji: '🪨' },
+                    'RI': { word: 'RÍO', emoji: '🏞️' }, 'FL': { word: 'FLOR', emoji: '🌸' },
+                    'AR': { word: 'ÁRBOL', emoji: '🌳' }, 'ES': { word: 'ESTRELLA', emoji: '⭐' }
+                }
+            },
+            cuerpo: {
+                icon: '🖐️', name: 'Cuerpo',
+                words: {
+                    'PA': { word: 'PALMA', emoji: '🖐️' }, 'PE': { word: 'PELO', emoji: '💇' },
+                    'PI': { word: 'PIE', emoji: '🦶' }, 'PU': { word: 'PUÑO', emoji: '✊' },
+                    'TA': { word: 'TALÓN', emoji: '🦶' }, 'TE': { word: 'TENDÓN', emoji: '💪' },
+                    'CA': { word: 'CABEZA', emoji: '🗣️' }, 'CO': { word: 'CODO', emoji: '💪' },
+                    'CU': { word: 'CUELLO', emoji: '🦒' }, 'MA': { word: 'MANO', emoji: '🤚' },
+                    'ME': { word: 'MEJILLA', emoji: '😊' }, 'MU': { word: 'MUÑECA', emoji: '🤝' },
+                    'DE': { word: 'DEDO', emoji: '👆' }, 'LA': { word: 'LABIO', emoji: '👄' },
+                    'LE': { word: 'LENGUA', emoji: '👅' }, 'NA': { word: 'NARIZ', emoji: '👃' },
+                    'OJ': { word: 'OJO', emoji: '👁️' }, 'OR': { word: 'OREJA', emoji: '👂' },
+                    'BR': { word: 'BRAZO', emoji: '💪' }, 'RO': { word: 'RODILLA', emoji: '🦵' }
+                }
+            },
+            inversas: {
+                icon: '🔄', name: 'Inversas',
+                words: {
+                    // -L inversas
+                    'AL': { word: 'ALTO', emoji: '📏' }, 'EL': { word: 'ELFO', emoji: '🧝' },
+                    'IL': { word: 'ILDA', emoji: '👧' }, 'OL': { word: 'OLMO', emoji: '🌳' },
+                    'UL': { word: 'ÚLTIMO', emoji: '🏁' },
+                    // -N inversas
+                    'AN': { word: 'ÁNGEL', emoji: '👼' }, 'EN': { word: 'ENFERMO', emoji: '🤒' },
+                    'IN': { word: 'INDIO', emoji: '🪶' }, 'ON': { word: 'ONCE', emoji: '🕚' },
+                    'UN': { word: 'UNO', emoji: '1️⃣' },
+                    // -S inversas
+                    'AS': { word: 'ASNO', emoji: '🫏' }, 'ES': { word: 'ESPEJO', emoji: '🪞' },
+                    'IS': { word: 'ISLA', emoji: '🏝️' }, 'OS': { word: 'OSO', emoji: '🐻' },
+                    'US': { word: 'USTED', emoji: '🧑' },
+                    // -R inversas
+                    'AR': { word: 'ÁRBOL', emoji: '🌳' }, 'ER': { word: 'ERIZO', emoji: '🦔' },
+                    'IR': { word: 'IRIS', emoji: '🌈' }, 'OR': { word: 'ORO', emoji: '🥇' },
+                    'UR': { word: 'URNA', emoji: '🗳️' },
+                    // -Z inversas
+                    'AZ': { word: 'AZUL', emoji: '🔵' }, 'EZ': { word: 'DIEZ', emoji: '🔟' },
+                    'IZ': { word: 'MAÍZ', emoji: '🌽' }, 'OZ': { word: 'VOZ', emoji: '🗣️' },
+                    'UZ': { word: 'LUZ', emoji: '💡' },
+                    // -D inversas
+                    'AD': { word: 'ADIÓS', emoji: '👋' }, 'ED': { word: 'EDAD', emoji: '📅' },
+                    'ID': { word: 'IDEA', emoji: '💡' }, 'OD': { word: 'PODER', emoji: '💪' },
+                    'UD': { word: 'SALUD', emoji: '❤️' },
+                    // -J inversas
+                    'AJ': { word: 'AJO', emoji: '🧄' }, 'EJ': { word: 'TEJADO', emoji: '🏠' },
+                    'OJ': { word: 'OJO', emoji: '👁️' }, 'UJ': { word: 'AGUJA', emoji: '🪡' },
+                    // -M inversas
+                    'AM': { word: 'AMOR', emoji: '❤️' }, 'EM': { word: 'EMBLEMA', emoji: '🏷️' },
+                    'IM': { word: 'IMÁN', emoji: '🧲' }, 'OM': { word: 'HOMBRE', emoji: '👨' },
+                    'UM': { word: 'HUMO', emoji: '💨' },
+                    // -P inversas
+                    'AP': { word: 'APTO', emoji: '✅' }, 'EP': { word: 'REPTIL', emoji: '🦎' },
+                    'IP': { word: 'TIPO', emoji: '📝' }, 'OP': { word: 'OPCIÓN', emoji: '☑️' },
+                    'UP': { word: 'CÚPULA', emoji: '🏛️' },
+                    // -C inversas
+                    'AC': { word: 'ACTO', emoji: '🎭' }, 'EC': { word: 'RECTO', emoji: '📏' },
+                    'IC': { word: 'RICO', emoji: '💰' }, 'OC': { word: 'OCHO', emoji: '8️⃣' },
+                    'UC': { word: 'ZUMO', emoji: '🧃' },
+                    // -B inversas
+                    'AB': { word: 'ABRIR', emoji: '🚪' }, 'EB': { word: 'DÉBIL', emoji: '😫' },
+                    'IB': { word: 'LIBRO', emoji: '📚' }, 'OB': { word: 'OBJETO', emoji: '📦' },
+                    'UB': { word: 'CUBO', emoji: '🧊' },
+                    // -G inversas
+                    'AG': { word: 'AGUA', emoji: '💧' }, 'EG': { word: 'NEGRO', emoji: '⬛' },
+                    'IG': { word: 'AMIGO', emoji: '🤝' }, 'OG': { word: 'YOGUR', emoji: '🥛' },
+                    'UG': { word: 'LUGAR', emoji: '📍' },
+                    // -T inversas
+                    'AT': { word: 'ATLAS', emoji: '🗺️' }, 'ET': { word: 'ETNIA', emoji: '🌍' },
+                    'IT': { word: 'RITMO', emoji: '🎵' }, 'OT': { word: 'OTRO', emoji: '👥' },
+                    'UT': { word: 'ÚTIL', emoji: '🛠️' },
+                    // -F inversas
+                    'AF': { word: 'AFRO', emoji: '💇' }, 'EF': { word: 'JEFE', emoji: '👔' },
+                    'IF': { word: 'RIFLE', emoji: '🔫' }, 'OF': { word: 'OFERTA', emoji: '🏷️' },
+                    'UF': { word: 'BÚFALO', emoji: '🦬' }
+                }
+            }
+        };
+
+        // ==================== GAME STATE ====================
+        const GameState = {
+            deck: [], discardPile: [],
+            players: {
+                player: { hand: [], name: 'Tú' },
+                ana: { hand: [], name: 'Ana' },
+                carlos: { hand: [], name: 'Carlos' },
+                maria: { hand: [], name: 'María' }
+            },
+            currentPlayer: 'player',
+            direction: 1, currentColor: null, currentSyllable: null,
+            score: 0, gameActive: false,
+            pendingCard: null, blockReps: 0,
+            calledUno: false, currentModalSyllable: ''
+        };
+
+        const Settings = {
+            gameMode: 'syllables', // 'syllables' or 'words'
+            ttsEnabled: true,
+            therapistMode: true,
+            activePhonemes: ['P', 'T', 'M', 'L', 'S', 'R'],
+            wordFamily: 'animales',
+            enableBlock: true,
+            enableReverse: true,
+            enableDraw: true
+        };
+
+        const PLAYER_ORDER = ['player', 'carlos', 'ana', 'maria'];
+
+        // ==================== INITIALIZATION ====================
+        function initSettings() {
+            // Phoneme grids
+            const groups = {
+                phonemesOclusivas: PHONEME_GROUPS.oclusivas,
+                phonemesFricativas: PHONEME_GROUPS.fricativas,
+                phonemesNasales: PHONEME_GROUPS.nasales,
+                phonemesGrupos: PHONEME_GROUPS.grupos,
+                phonemesInversasComunes: PHONEME_GROUPS.inversas_comunes,
+                phonemesInversasOtras: PHONEME_GROUPS.inversas_otras
+            };
+
+            Object.entries(groups).forEach(([id, phonemes]) => {
+                const container = document.getElementById(id);
+                container.innerHTML = phonemes.map(p => {
+                    const isActive = Settings.activePhonemes.includes(p);
+                    const pData = PHONEMES[p];
+                    const color = pData.color;
+                    const label = pData.label || p; // Use label for inverse syllables
+                    return `<button class="phoneme-btn ${isActive ? 'active' : ''}" data-phoneme="${p}" data-color="${color}" onclick="togglePhoneme(this)">${label}</button>`;
+                }).join('');
+            });
+
+            // Family selector
+            const familyContainer = document.getElementById('familySelector');
+            familyContainer.innerHTML = Object.entries(WORD_FAMILIES).map(([key, fam]) => {
+                const isActive = Settings.wordFamily === key;
+                return `<div class="family-option ${isActive ? 'active' : ''}" data-family="${key}" onclick="selectWordFamily(this)">
+                    <span class="family-option-icon">${fam.icon}</span>
+                    <span class="family-option-label">${fam.name}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function togglePhoneme(element) {
+            element.classList.toggle('active');
+        }
+
+        function selectWordFamily(element) {
+            document.querySelectorAll('.family-option').forEach(e => e.classList.remove('active'));
+            element.classList.add('active');
+            Settings.wordFamily = element.dataset.family;
+        }
+
+        function toggleSetting(element) {
+            element.classList.toggle('active');
+        }
+
+        // ==================== DECK CREATION ====================
+        function createDeck() {
+            const deck = [];
+            const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+            let colorIndex = 0;
+
+            Settings.activePhonemes.forEach(phoneme => {
+                const pData = PHONEMES[phoneme];
+                if (!pData) return;
+
+                pData.syllables.forEach(syllable => {
+                    const color = colors[colorIndex % colors.length];
+                    const wordData = getWordForSyllable(syllable);
+
+                    // Create 2 of each card
+                    for (let i = 0; i < 2; i++) {
+                        deck.push({
+                            type: 'normal',
+                            color: color,
+                            syllable: syllable,
+                            word: wordData.word,
+                            emoji: wordData.emoji,
+                            phoneme: phoneme,
+                            inverse: pData.inverse || false // Mark inverse syllables
+                        });
+                    }
+                });
+                colorIndex++;
+            });
+
+            // Special cards
+            if (Settings.enableBlock) {
+                for (let i = 0; i < 4; i++) {
+                    deck.push({ type: 'block', color: colors[i % colors.length], syllable: '⛔' });
+                }
+            }
+            if (Settings.enableReverse) {
+                for (let i = 0; i < 4; i++) {
+                    deck.push({ type: 'reverse', color: colors[i % colors.length], syllable: '🔄' });
+                }
+            }
+            if (Settings.enableDraw) {
+                for (let i = 0; i < 4; i++) {
+                    deck.push({ type: 'draw2', color: colors[i % colors.length], syllable: '+2' });
+                }
+                for (let i = 0; i < 4; i++) {
+                    deck.push({ type: 'wild', color: 'wild', syllable: '🌈' });
+                    deck.push({ type: 'draw4', color: 'wild', syllable: '+4' });
+                }
+            }
+
+            return shuffleDeck(deck);
+        }
+
+        function createMorphoDeck() {
+            const deck = [];
+            const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+            const categories = MorphoSettings.categories.length > 0 ? MorphoSettings.categories : ['sustantivos', 'verbos'];
+            const themes = MorphoSettings.themes.length > 0 ? MorphoSettings.themes : ['cotidiano', 'animales'];
+
+            let colorIndex = 0;
+
+            // Add noun cards
+            if (categories.includes('sustantivos')) {
+                themes.forEach(theme => {
+                    const nouns = MORPHO_DATA.sustantivos[theme] || [];
+                    nouns.forEach(noun => {
+                        const color = colors[colorIndex % colors.length];
+                        deck.push({
+                            type: 'normal',
+                            color: color,
+                            syllable: noun.word.toUpperCase(),
+                            word: noun.word,
+                            emoji: noun.emoji,
+                            category: 'sustantivo',
+                            gender: noun.gender,
+                            morpho: true
+                        });
+                        colorIndex++;
+                    });
+                });
+            }
+
+            // Add verb cards
+            if (categories.includes('verbos')) {
+                MORPHO_DATA.verbos.basicos.forEach(verb => {
+                    const color = colors[colorIndex % colors.length];
+                    deck.push({
+                        type: 'normal',
+                        color: color,
+                        syllable: verb.infinitive.toUpperCase(),
+                        word: verb.infinitive,
+                        emoji: verb.emoji,
+                        category: 'verbo',
+                        morpho: true
+                    });
+                    colorIndex++;
+                });
+            }
+
+            // Add adjective cards
+            if (categories.includes('adjetivos')) {
+                MORPHO_DATA.adjetivos.slice(0, 8).forEach(adj => {
+                    const color = colors[colorIndex % colors.length];
+                    deck.push({
+                        type: 'normal',
+                        color: color,
+                        syllable: adj.masc.toUpperCase(),
+                        word: adj.masc,
+                        emoji: adj.emoji,
+                        category: 'adjetivo',
+                        morpho: true
+                    });
+                    colorIndex++;
+                });
+            }
+
+            // Add article cards
+            if (categories.includes('articulos')) {
+                const arts = ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'];
+                arts.forEach(art => {
+                    const color = colors[colorIndex % colors.length];
+                    deck.push({
+                        type: 'normal',
+                        color: color,
+                        syllable: art.toUpperCase(),
+                        word: art,
+                        emoji: '📑',
+                        category: 'artículo',
+                        morpho: true
+                    });
+                    colorIndex++;
+                });
+            }
+
+            // Add pronoun cards
+            if (categories.includes('pronombres')) {
+                MORPHO_DATA.pronombres.slice(0, 6).forEach(pron => {
+                    const color = colors[colorIndex % colors.length];
+                    deck.push({
+                        type: 'normal',
+                        color: color,
+                        syllable: pron.toUpperCase(),
+                        word: pron,
+                        emoji: '👤',
+                        category: 'pronombre',
+                        morpho: true
+                    });
+                    colorIndex++;
+                });
+            }
+
+            // Add preposition cards
+            if (categories.includes('preposiciones')) {
+                MORPHO_DATA.preposiciones.slice(0, 6).forEach(prep => {
+                    const color = colors[colorIndex % colors.length];
+                    deck.push({
+                        type: 'normal',
+                        color: color,
+                        syllable: prep.toUpperCase(),
+                        word: prep,
+                        emoji: '📍',
+                        category: 'preposición',
+                        morpho: true
+                    });
+                    colorIndex++;
+                });
+            }
+
+            // Duplicate deck to have enough cards
+            const fullDeck = [...deck, ...deck];
+
+            // Add special cards
+            if (Settings.enableBlock) {
+                for (let i = 0; i < 4; i++) {
+                    fullDeck.push({ type: 'block', color: colors[i % colors.length], syllable: '⛔', morpho: true });
+                }
+            }
+            if (Settings.enableReverse) {
+                for (let i = 0; i < 4; i++) {
+                    fullDeck.push({ type: 'reverse', color: colors[i % colors.length], syllable: '🔄', morpho: true });
+                }
+            }
+            if (Settings.enableDraw) {
+                for (let i = 0; i < 4; i++) {
+                    fullDeck.push({ type: 'draw2', color: colors[i % colors.length], syllable: '+2', morpho: true });
+                }
+                for (let i = 0; i < 4; i++) {
+                    fullDeck.push({ type: 'wild', color: 'wild', syllable: '🌈', morpho: true });
+                    fullDeck.push({ type: 'draw4', color: 'wild', syllable: '+4', morpho: true });
+                }
+            }
+
+            return shuffleDeck(fullDeck);
+        }
+
+        function getWordForSyllable(syllable) {
+            const family = WORD_FAMILIES[Settings.wordFamily];
+            if (family && family.words[syllable]) {
+                return family.words[syllable];
+            }
+            // Try other families
+            for (const fam of Object.values(WORD_FAMILIES)) {
+                if (fam.words[syllable]) return fam.words[syllable];
+            }
+            return { word: syllable, emoji: '📝' };
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        function dealCards() {
+            Object.keys(GameState.players).forEach(player => {
+                GameState.players[player].hand = [];
+                for (let i = 0; i < 7; i++) {
+                    if (GameState.deck.length > 0) {
+                        GameState.players[player].hand.push(GameState.deck.pop());
+                    }
+                }
+            });
+
+            let firstCard;
+            let attempts = 0;
+            do {
+                if (GameState.deck.length === 0) break;
+                firstCard = GameState.deck.pop();
+                if (firstCard.type !== 'normal') {
+                    GameState.deck.unshift(firstCard);
+                }
+                attempts++;
+            } while (firstCard.type !== 'normal' && attempts < 50);
+
+            if (firstCard) {
+                GameState.discardPile = [firstCard];
+                GameState.currentColor = firstCard.color;
+                GameState.currentSyllable = firstCard.syllable;
+            }
+        }
+
+        // ==================== RENDERING ====================
+        function renderCard(card, clickable = false, index = 0) {
+            const colorClass = card.color === 'wild' ? 'card-wild' : `card-${card.color}`;
+            const clickAttr = clickable ? `onclick="playCard(${index})"` : '';
+            const isPlayable = clickable && canPlayCard(card);
+            const playableClass = isPlayable ? 'playable' : '';
+            const disabledClass = clickable && !isPlayable ? 'disabled' : '';
+            const inverseClass = card.inverse ? 'card-inverse' : '';
+            const morphoClass = card.morpho ? 'card-morpho' : '';
+
+            let content = '';
+            let categoryIcon = '';
+
+            if (card.type === 'normal') {
+                if (Settings.gameMode === 'morpho' && card.morpho) {
+                    // Morpho mode: show emoji and word
+                    content = `<span class="card-emoji">${card.emoji || '📝'}</span>
+                              <span class="card-word" style="font-size: 11px;">${card.word || card.syllable}</span>`;
+                    if (card.category) {
+                        const catIcons = { 'sustantivo': '📦', 'verbo': '🏃', 'adjetivo': '🎨', 'artículo': '📑', 'pronombre': '👤', 'preposición': '📍' };
+                        categoryIcon = `<span class="card-category-icon">${catIcons[card.category] || ''}</span>`;
+                    }
+                } else if (Settings.gameMode === 'words' && card.emoji) {
+                    content = `<span class="card-emoji">${card.emoji}</span>
+                              <span class="card-word">${card.word || card.syllable}</span>`;
+                } else {
+                    content = `<span class="card-syllable">${card.syllable}</span>`;
+                }
+            } else {
+                content = `<span class="card-syllable">${card.syllable}</span>`;
+            }
+
+            return `<div class="card ${colorClass} ${playableClass} ${disabledClass} ${inverseClass} ${morphoClass}" ${clickAttr} data-index="${index}">
+                <span class="card-corner card-corner-top">${card.syllable}</span>
+                <div class="card-content">${content}</div>
+                <span class="card-corner card-corner-bottom">${card.syllable}</span>
+                ${categoryIcon}
+            </div>`;
+        }
+
+        function renderOpponentCards(count, type = 'top') {
+            let html = '';
+            const max = type === 'top' ? 7 : 4;
+            for (let i = 0; i < Math.min(count, max); i++) {
+                html += type === 'top' ? '<div class="opponent-card-back"></div>' : '<div class="side-card-back"></div>';
+            }
+            return html;
+        }
+
+        function renderGame() {
+            document.getElementById('playerHand').innerHTML = GameState.players.player.hand.map((c, i) => renderCard(c, true, i)).join('');
+
+            document.getElementById('anaCards').innerHTML = renderOpponentCards(GameState.players.ana.hand.length, 'top');
+            document.getElementById('carlosCards').innerHTML = renderOpponentCards(GameState.players.carlos.hand.length, 'side');
+            document.getElementById('mariaCards').innerHTML = renderOpponentCards(GameState.players.maria.hand.length, 'side');
+
+            document.getElementById('anaCount').textContent = GameState.players.ana.hand.length;
+            document.getElementById('carlosCount').textContent = GameState.players.carlos.hand.length;
+            document.getElementById('mariaCount').textContent = GameState.players.maria.hand.length;
+
+            if (GameState.discardPile.length > 0) {
+                const topCard = { ...GameState.discardPile[GameState.discardPile.length - 1] };
+                if (topCard.type === 'wild' || topCard.type === 'draw4') {
+                    topCard.color = GameState.currentColor || 'wild';
+                }
+                document.getElementById('discardPile').innerHTML = renderCard(topCard);
+            }
+
+            document.getElementById('currentScore').textContent = GameState.score;
+            const modeLabels = { syllables: 'SÍLABAS', words: 'PALABRAS', morpho: 'MORFOSINTAXIS' };
+            document.getElementById('gameModeLabel').textContent = modeLabels[Settings.gameMode] || 'SÍLABAS';
+
+            updatePlayerZones();
+            updateDirectionArrows();
+            updateWildPickers();
+
+            const unoBtn = document.getElementById('unoButton');
+            unoBtn.classList.toggle('visible', GameState.players.player.hand.length === 2 && GameState.currentPlayer === 'player' && !GameState.calledUno);
+        }
+
+        function updatePlayerZones() {
+            ['player', 'ana', 'carlos', 'maria'].forEach(p => {
+                const zone = document.getElementById(`zone${p.charAt(0).toUpperCase() + p.slice(1)}`);
+                zone.classList.toggle('active-turn', p === GameState.currentPlayer);
+                zone.classList.toggle('inactive', p !== GameState.currentPlayer);
+            });
+        }
+
+        function updateDirectionArrows() {
+            document.querySelectorAll('.arrow').forEach(a => a.classList.remove('active'));
+            if (GameState.direction === 1) {
+                document.getElementById('arrowBL').classList.add('active');
+                document.getElementById('arrowTR').classList.add('active');
+            } else {
+                document.getElementById('arrowBR').classList.add('active');
+                document.getElementById('arrowTL').classList.add('active');
+            }
+        }
+
+        function updateWildPickers() {
+            const activePhonemes = Settings.activePhonemes.slice(0, 6);
+            const html = activePhonemes.map(p => {
+                const color = PHONEMES[p].color;
+                return `<div class="color-option" style="background: var(--card-${color});" onclick="selectWildColor('${color}', '${p}')">${p}</div>`;
+            }).join('');
+            document.getElementById('wildPicker').innerHTML = html;
+            document.getElementById('draw4Picker').innerHTML = activePhonemes.map(p => {
+                const color = PHONEMES[p].color;
+                return `<div class="color-option" style="background: var(--card-${color});" onclick="selectDraw4Color('${color}', '${p}')">${p}</div>`;
+            }).join('');
+        }
+
+        function showTurnBanner(text, subtext) {
+            const banner = document.getElementById('turnBanner');
+            document.getElementById('turnBannerText').textContent = text;
+            document.getElementById('turnBannerSub').textContent = subtext || '';
+            banner.classList.add('visible');
+            setTimeout(() => banner.classList.remove('visible'), 1300);
+        }
+
+        // ==================== CARD ANIMATIONS ====================
+        function animateCardToCenter(cardElement, callback) {
+            const rect = cardElement.getBoundingClientRect();
+            const target = document.getElementById('discardPile').getBoundingClientRect();
+
+            const flying = cardElement.cloneNode(true);
+            flying.className = cardElement.className + ' flying-card';
+            flying.style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;`;
+            document.body.appendChild(flying);
+            cardElement.style.opacity = '0';
+
+            requestAnimationFrame(() => {
+                flying.classList.add('to-center');
+                flying.style.left = target.left + 'px';
+                flying.style.top = target.top + 'px';
+            });
+
+            setTimeout(() => { flying.remove(); callback && callback(); }, 600);
+        }
+
+        function animateAICardToCenter(player, card, callback) {
+            const target = document.getElementById('discardPile').getBoundingClientRect();
+            let startX, startY;
+
+            const zones = { ana: 'zoneAna', carlos: 'zoneCarlos', maria: 'zoneMaria' };
+            const zone = document.getElementById(zones[player]);
+            if (!zone) { callback && callback(); return; }
+
+            const r = zone.getBoundingClientRect();
+            if (player === 'ana') { startX = r.left + r.width/2 - 27; startY = r.bottom - 15; }
+            else if (player === 'carlos') { startX = r.right - 15; startY = r.top + r.height/2 - 40; }
+            else { startX = r.left - 35; startY = r.top + r.height/2 - 40; }
+
+            const colorClass = card.color === 'wild' ? 'card-wild' : `card-${card.color}`;
+            const flying = document.createElement('div');
+            flying.className = `card ${colorClass} flying-card from-opponent`;
+            flying.innerHTML = `<span class="card-syllable">${card.syllable}</span>`;
+            flying.style.cssText = `left:${startX}px;top:${startY}px;width:55px;height:80px;`;
+            document.body.appendChild(flying);
+
+            setTimeout(() => {
+                flying.style.left = target.left + 'px';
+                flying.style.top = target.top + 'px';
+                flying.style.transform = 'scale(1.05) rotate(-3deg)';
+            }, 300);
+
+            setTimeout(() => { flying.remove(); callback && callback(); }, 1000);
+        }
+
+        // ==================== GAME LOGIC ====================
+        function canPlayCard(card) {
+            if (card.type === 'wild' || card.type === 'draw4') return true;
+            if (card.color === GameState.currentColor) return true;
+            if (card.syllable === GameState.currentSyllable) return true;
+            return false;
+        }
+
+        function playCard(index) {
+            if (GameState.currentPlayer !== 'player' || !GameState.gameActive) return;
+
+            const card = GameState.players.player.hand[index];
+            if (!canPlayCard(card)) { showToast('❌ No puedes'); return; }
+
+            GameState.pendingCard = { card, index };
+            const cardEl = document.querySelectorAll('#playerHand .card')[index];
+
+            animateCardToCenter(cardEl, () => {
+                if (card.type === 'wild') { showModal('wildModal'); }
+                else if (card.type === 'draw4') { showModal('draw4Modal'); }
+                else if (card.type === 'block') {
+                    const syl = getRandomSyllableFromActivePhonemes();
+                    document.getElementById('blockSyllable').textContent = syl;
+                    GameState.currentModalSyllable = syl;
+                    GameState.blockReps = 0;
+                    updateBlockDots();
+                    showModal('blockModal');
+                    if (Settings.ttsEnabled) setTimeout(() => speakText(syl), 300);
+                } else if (card.type === 'reverse') {
+                    const syl = getRandomSyllableFromActivePhonemes();
+                    document.getElementById('reverseSyllable').textContent = syl;
+                    updateWordHint(syl, 'reverseEmoji', 'reverseWord');
+                    GameState.currentModalSyllable = syl;
+                    showModal('reverseModal');
+                    if (Settings.ttsEnabled) setTimeout(() => speakText(syl), 300);
+                } else if (card.type === 'draw2') {
+                    confirmPlayCard();
+                    const next = getNextPlayer();
+                    drawCardsForPlayer(next, 2);
+                    showToast(`📥 ${GameState.players[next].name} +2`);
+                } else {
+                    // Check if morpho mode
+                    if (Settings.gameMode === 'morpho') {
+                        showRandomMorphoExercise();
+                    } else {
+                        const displayText = Settings.gameMode === 'words' ? (card.word || card.syllable) : card.syllable;
+                        document.getElementById('syllableToSay').textContent = displayText;
+                        document.getElementById('syllableToSay').style.color = getColorValue(card.color);
+                        updateWordHint(card.syllable, 'hintEmoji', 'hintWord');
+                        GameState.currentModalSyllable = displayText;
+                        showModal('pronunciationModal');
+                        if (Settings.ttsEnabled) setTimeout(() => speakText(displayText), 300);
+                    }
+                }
+            });
+        }
+
+        function getRandomSyllableFromActivePhonemes() {
+            const phoneme = Settings.activePhonemes[Math.floor(Math.random() * Settings.activePhonemes.length)];
+            const syls = PHONEMES[phoneme]?.syllables || ['PA'];
+            return syls[Math.floor(Math.random() * syls.length)];
+        }
+
+        function getColorValue(color) {
+            const colors = { red: '#E53935', green: '#43A047', blue: '#1E88E5', yellow: '#FDD835', purple: '#8E24AA', orange: '#FB8C00' };
+            return colors[color] || '#FFF';
+        }
+
+        function updateWordHint(syllable, emojiId, wordId) {
+            const hint = getWordForSyllable(syllable);
+            document.getElementById(emojiId).textContent = hint.emoji;
+            document.getElementById(wordId).textContent = hint.word;
+        }
+
+        function confirmPlayCard() {
+            const { card, index } = GameState.pendingCard;
+            GameState.players.player.hand.splice(index, 1);
+            GameState.discardPile.push(card);
+
+            if (card.color !== 'wild') GameState.currentColor = card.color;
+            if (card.type === 'normal') GameState.currentSyllable = card.syllable;
+
+            GameState.score += 10;
+
+            if (GameState.players.player.hand.length === 0) { endGame('player'); return; }
+
+            if (GameState.players.player.hand.length === 1 && !GameState.calledUno) {
+                const lastCard = GameState.players.player.hand[0];
+                const syl = lastCard.type === 'normal' ? lastCard.syllable : getRandomSyllableFromActivePhonemes();
+                document.getElementById('unoSyllable').textContent = syl;
+                GameState.currentModalSyllable = syl;
+                showModal('unoModal');
+                if (Settings.ttsEnabled) setTimeout(() => speakText(syl), 300);
+                return;
+            }
+
+            renderGame();
+            nextTurn();
+        }
+
+        function drawCard() {
+            if (GameState.currentPlayer !== 'player' || !GameState.gameActive) return;
+            if (GameState.deck.length === 0) reshuffleDeck();
+            const card = GameState.deck.pop();
+            GameState.players.player.hand.push(card);
+            showToast('📥 Robaste');
+            renderGame();
+            setTimeout(nextTurn, 700);
+        }
+
+        function drawCardsForPlayer(player, count) {
+            for (let i = 0; i < count; i++) {
+                if (GameState.deck.length === 0) reshuffleDeck();
+                GameState.players[player].hand.push(GameState.deck.pop());
+            }
+        }
+
+        function reshuffleDeck() {
+            const top = GameState.discardPile.pop();
+            GameState.deck = shuffleDeck(GameState.discardPile);
+            GameState.discardPile = [top];
+        }
+
+        function nextTurn() {
+            let idx = PLAYER_ORDER.indexOf(GameState.currentPlayer) + GameState.direction;
+            if (idx < 0) idx = PLAYER_ORDER.length - 1;
+            if (idx >= PLAYER_ORDER.length) idx = 0;
+
+            GameState.currentPlayer = PLAYER_ORDER[idx];
+            GameState.calledUno = false;
+            renderGame();
+
+            if (GameState.currentPlayer === 'player') {
+                showTurnBanner('🎯 ¡Tu turno!', 'Juega o roba');
+            } else {
+                showTurnBanner(`${GameState.players[GameState.currentPlayer].name}`, 'Pensando...');
+                setTimeout(aiTurn, 1400 + Math.random() * 800);
+            }
+        }
+
+        function getNextPlayer() {
+            let idx = PLAYER_ORDER.indexOf(GameState.currentPlayer) + GameState.direction;
+            if (idx < 0) idx = PLAYER_ORDER.length - 1;
+            if (idx >= PLAYER_ORDER.length) idx = 0;
+            return PLAYER_ORDER[idx];
+        }
+
+        // ==================== AI ====================
+        function aiTurn() {
+            if (!GameState.gameActive) return;
+            const player = GameState.currentPlayer;
+            const hand = GameState.players[player].hand;
+            const playable = hand.filter(canPlayCard);
+
+            if (playable.length > 0) {
+                const card = playable[Math.floor(Math.random() * playable.length)];
+                const idx = hand.indexOf(card);
+
+                animateAICardToCenter(player, card, () => {
+                    hand.splice(idx, 1);
+                    GameState.discardPile.push(card);
+
+                    if (card.type === 'wild' || card.type === 'draw4') {
+                        const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+                        GameState.currentColor = colors[Math.floor(Math.random() * colors.length)];
+                    } else {
+                        GameState.currentColor = card.color;
+                        if (card.type === 'normal') GameState.currentSyllable = card.syllable;
+                    }
+
+                    renderGame();
+
+                    setTimeout(() => {
+                        if (card.type === 'block') {
+                            nextTurn();
+                            showToast(`⛔ ¡Salto!`);
+                            if (Settings.ttsEnabled) speakText('Bloqueo');
+                            setTimeout(nextTurn, 1500);
+                            return;
+                        }
+                        if (card.type === 'reverse') {
+                            GameState.direction *= -1;
+                            showToast('🔄 Cambio');
+                            if (Settings.ttsEnabled) speakText('Cambio de sentido');
+                        }
+                        if (card.type === 'draw2') {
+                            const next = getNextPlayer();
+                            drawCardsForPlayer(next, 2);
+                            showToast(`📥 ${GameState.players[next].name} +2`);
+                            if (Settings.ttsEnabled) speakText('Más dos');
+                        }
+                        if (card.type === 'draw4') {
+                            const next = getNextPlayer();
+                            drawCardsForPlayer(next, 4);
+                            showToast(`📥 ${GameState.players[next].name} +4`);
+                            if (Settings.ttsEnabled) speakText('Más cuatro');
+                        }
+
+                        if (hand.length === 0) { endGame(player); return; }
+                        if (hand.length === 1) {
+                            setTimeout(() => {
+                                showToast(`🎯 ${GameState.players[player].name}: ¡UNO!`);
+                                if (Settings.ttsEnabled) speakText('¡UNO!');
+                            }, 400);
+                        }
+
+                        setTimeout(() => { renderGame(); nextTurn(); }, 500);
+                    }, 350);
+                });
+
+                // Show toast and speak the syllable/word
+                const displayText = Settings.gameMode === 'morpho' ? (card.word || card.syllable) :
+                                   (Settings.gameMode === 'words' ? (card.word || card.syllable) : card.syllable);
+                showToast(`${GameState.players[player].name}: ${displayText}`);
+
+                // Speak the syllable/word for AI players
+                if (Settings.ttsEnabled && card.type === 'normal') {
+                    speakText(displayText);
+                }
+            } else {
+                if (GameState.deck.length === 0) reshuffleDeck();
+                hand.push(GameState.deck.pop());
+                showToast(`📥 ${GameState.players[player].name} roba`);
+                setTimeout(() => { renderGame(); nextTurn(); }, 1000);
+            }
+        }
+
+        // ==================== MODALS ====================
+        function showModal(id) { document.getElementById(id).classList.add('active'); }
+        function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+        function hideAllModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
+
+        function pronunciationCorrect() {
+            hideModal('pronunciationModal');
+            GameState.score += 5;
+            showToast('✅ ¡Bien!');
+            confirmPlayCard();
+        }
+
+        function pronunciationRepeat() {
+            speakSyllable();
+            showToast('🔄 Repite');
+        }
+
+        function blockRepCorrect() {
+            GameState.blockReps++;
+            updateBlockDots();
+            speakText(GameState.currentModalSyllable);
+
+            if (GameState.blockReps >= 3) {
+                hideModal('blockModal');
+                GameState.score += 15;
+                confirmPlayCard();
+                setTimeout(() => {
+                    nextTurn();
+                    showToast('⛔ ¡Salto!');
+                    setTimeout(nextTurn, 1500);
+                }, 400);
+            }
+        }
+
+        function updateBlockDots() {
+            document.querySelectorAll('#repCounter .rep-dot').forEach((d, i) => {
+                d.classList.toggle('completed', i < GameState.blockReps);
+            });
+        }
+
+        function reverseComplete() {
+            hideModal('reverseModal');
+            GameState.direction *= -1;
+            GameState.score += 10;
+            showToast('🔄 Cambio');
+            confirmPlayCard();
+        }
+
+        function selectWildColor(color, phoneme) {
+            hideModal('wildModal');
+            GameState.currentColor = color;
+            showToast(`🎨 ${phoneme}`);
+            confirmPlayCard();
+        }
+
+        function selectDraw4Color(color, phoneme) {
+            hideModal('draw4Modal');
+            GameState.currentColor = color;
+            const syl = PHONEMES[phoneme]?.syllables[0] || 'PA';
+            document.getElementById('phraseFamily').textContent = `/${phoneme}/`;
+            updateWordHint(syl, 'phraseEmoji', 'phraseWord');
+            GameState.currentModalSyllable = syl;
+            showModal('phraseModal');
+            if (Settings.ttsEnabled) setTimeout(() => speakText(syl), 300);
+        }
+
+        function phraseComplete() {
+            hideModal('phraseModal');
+            GameState.score += 20;
+            const next = getNextPlayer();
+            drawCardsForPlayer(next, 4);
+            showToast(`📥 ${GameState.players[next].name} +4`);
+            confirmPlayCard();
+        }
+
+        function sayUno() {
+            GameState.calledUno = true;
+            document.getElementById('unoButton').classList.remove('visible');
+            showToast('🎯 ¡UNO!');
+        }
+
+        function unoCorrect() {
+            hideModal('unoModal');
+            GameState.score += 25;
+            showToast('🌟 ¡Perfecto!');
+            renderGame();
+            nextTurn();
+        }
+
+        function unoFailed() {
+            hideModal('unoModal');
+            drawCardsForPlayer('player', 2);
+            showToast('❌ +2 cartas');
+            renderGame();
+            nextTurn();
+        }
+
+        // ==================== TTS ====================
+        function speakText(text) {
+            if (!window.speechSynthesis) return;
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'es-ES';
+            u.rate = 0.7;
+            const btn = document.querySelector('.voice-btn');
+            if (btn) { btn.classList.add('speaking'); u.onend = () => btn.classList.remove('speaking'); }
+            speechSynthesis.speak(u);
+        }
+
+        function speakSyllable() {
+            speakText(document.getElementById('syllableToSay').textContent);
+        }
+
+        function speakCurrentSyllable(modal) {
+            const ids = { block: 'blockSyllable', reverse: 'reverseSyllable', phrase: 'phraseFamily', uno: 'unoSyllable' };
+            speakText(document.getElementById(ids[modal])?.textContent || '');
+        }
+
+        // ==================== VOCABULARY ====================
+        function openVocabulary() {
+            const filter = document.getElementById('vocabFilter');
+            filter.innerHTML = Object.entries(WORD_FAMILIES).map(([key, fam]) =>
+                `<button class="vocab-filter-btn ${key === Settings.wordFamily ? 'active' : ''}" onclick="filterVocab('${key}')">${fam.icon} ${fam.name}</button>`
+            ).join('');
+
+            renderVocabGrid(Settings.wordFamily);
+            showModal('vocabularyModal');
+        }
+
+        function filterVocab(family) {
+            document.querySelectorAll('.vocab-filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderVocabGrid(family);
+        }
+
+        function renderVocabGrid(family) {
+            const fam = WORD_FAMILIES[family];
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = Object.entries(fam.words).map(([syl, data]) =>
+                `<div class="vocab-card" onclick="speakText('${data.word}')">
+                    <span class="vocab-emoji">${data.emoji}</span>
+                    <span class="vocab-syllable">${syl}</span>
+                    <span class="vocab-word">${data.word}</span>
+                </div>`
+            ).join('');
+        }
+
+        // ==================== MORPHOSYNTAX FUNCTIONS ====================
+        function toggleMorphoCat(btn) {
+            btn.classList.toggle('active');
+        }
+
+        function toggleMorphoTheme(btn) {
+            btn.classList.toggle('active');
+        }
+
+        function selectDifficulty(btn) {
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            MorphoSettings.difficulty = parseInt(btn.dataset.level);
+        }
+
+        function selectGameMode(el) {
+            document.querySelectorAll('.mode-option').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+            Settings.gameMode = el.dataset.mode;
+
+            // Show/hide morpho settings and phoneme/family sections
+            const morphoPanel = document.getElementById('morphoSettings');
+            const phonemeSection = document.getElementById('phonemesSection');
+            const familySection = document.getElementById('familySection');
+
+            if (Settings.gameMode === 'morpho') {
+                if (morphoPanel) morphoPanel.style.display = 'block';
+                if (phonemeSection) phonemeSection.style.display = 'none';
+                if (familySection) familySection.style.display = 'none';
+            } else {
+                if (morphoPanel) morphoPanel.style.display = 'none';
+                if (phonemeSection) phonemeSection.style.display = 'block';
+                if (familySection) familySection.style.display = 'block';
+            }
+        }
+
+        function saveMorphoSettings() {
+            MorphoSettings.categories = [];
+            document.querySelectorAll('#categoryGrid .morpho-btn.active').forEach(b => {
+                MorphoSettings.categories.push(b.dataset.cat);
+            });
+
+            MorphoSettings.themes = [];
+            document.querySelectorAll('#themeGrid .morpho-btn.active').forEach(b => {
+                MorphoSettings.themes.push(b.dataset.theme);
+            });
+
+            MorphoSettings.exercises = {
+                genero: document.getElementById('toggleGenero')?.classList.contains('active') ?? true,
+                numero: document.getElementById('toggleNumero')?.classList.contains('active') ?? true,
+                tiempos: document.getElementById('toggleTiempos')?.classList.contains('active') ?? true,
+                completar: document.getElementById('toggleCompletar')?.classList.contains('active') ?? true,
+                ordenar: document.getElementById('toggleOrdenar')?.classList.contains('active') ?? false,
+                formar: document.getElementById('toggleFormar')?.classList.contains('active') ?? false
+            };
+        }
+
+        function getRandomNoun() {
+            const themes = MorphoSettings.themes.length > 0 ? MorphoSettings.themes : ['cotidiano', 'animales'];
+            const theme = themes[Math.floor(Math.random() * themes.length)];
+            const nouns = MORPHO_DATA.sustantivos[theme] || MORPHO_DATA.sustantivos.cotidiano;
+            return nouns[Math.floor(Math.random() * nouns.length)];
+        }
+
+        function getRandomVerb() {
+            const verbs = MORPHO_DATA.verbos.basicos;
+            return verbs[Math.floor(Math.random() * verbs.length)];
+        }
+
+        function getRandomAdjective() {
+            return MORPHO_DATA.adjetivos[Math.floor(Math.random() * MORPHO_DATA.adjetivos.length)];
+        }
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function getActiveExercises() {
+            const active = [];
+            if (MorphoSettings.exercises.genero) active.push('genero');
+            if (MorphoSettings.exercises.numero) active.push('numero');
+            if (MorphoSettings.exercises.tiempos) active.push('tiempos');
+            if (MorphoSettings.exercises.completar) active.push('completar');
+            if (MorphoSettings.exercises.ordenar) active.push('ordenar');
+            if (MorphoSettings.exercises.formar) active.push('formar');
+            return active.length > 0 ? active : ['genero', 'numero'];
+        }
+
+        function showRandomMorphoExercise() {
+            const exercises = getActiveExercises();
+            const exercise = exercises[Math.floor(Math.random() * exercises.length)];
+            MorphoState.currentExercise = exercise;
+
+            switch(exercise) {
+                case 'genero': showGeneroExercise(); break;
+                case 'numero': showNumeroExercise(); break;
+                case 'tiempos': showTiemposExercise(); break;
+                case 'completar': showCompletarExercise(); break;
+                case 'ordenar': showOrdenarExercise(); break;
+                case 'formar': showFormarExercise(); break;
+            }
+        }
+
+        function showGeneroExercise() {
+            const noun = getRandomNoun();
+            const isDefinite = Math.random() > 0.5;
+            const articles = isDefinite ? MORPHO_DATA.articulos.definidos : MORPHO_DATA.articulos.indefinidos;
+
+            const correct = noun.gender === 'm' ? articles.masc : articles.fem;
+            const wrong = noun.gender === 'm' ? articles.fem : articles.masc;
+            const allOptions = [correct, wrong, articles.mascPl, articles.femPl];
+
+            MorphoState.correctAnswer = correct;
+
+            document.getElementById('generoWord').textContent = noun.word;
+            document.getElementById('generoBlank').textContent = '___';
+            document.getElementById('generoFeedback').className = 'morpho-feedback';
+            document.getElementById('generoFeedback').textContent = '';
+
+            const options = shuffleArray(allOptions).slice(0, 4);
+            document.getElementById('generoOptions').innerHTML = options.map(opt =>
+                `<button class="morpho-option" onclick="checkMorphoAnswer('genero', '${opt}', this)">${opt}</button>`
+            ).join('');
+
+            showModal('morphoGeneroModal');
+            if (Settings.ttsEnabled) setTimeout(() => speakText(noun.word), 300);
+        }
+
+        function showNumeroExercise() {
+            const noun = getRandomNoun();
+            const toPlural = Math.random() > 0.5;
+
+            if (toPlural) {
+                const article = noun.gender === 'm' ? 'El' : 'La';
+                document.getElementById('numeroQuestion').textContent = 'Cambia al PLURAL:';
+                document.getElementById('numeroSentence').innerHTML = `${article} <strong>${noun.word}</strong> → `;
+
+                const correctArticle = noun.gender === 'm' ? 'Los' : 'Las';
+                MorphoState.correctAnswer = `${correctArticle} ${noun.plural}`;
+
+                const options = [
+                    `${correctArticle} ${noun.plural}`,
+                    `${article} ${noun.plural}`,
+                    `${correctArticle} ${noun.word}`,
+                    `${noun.gender === 'm' ? 'Las' : 'Los'} ${noun.plural}`
+                ];
+
+                document.getElementById('numeroOptions').innerHTML = shuffleArray(options).map(opt =>
+                    `<button class="morpho-option" onclick="checkMorphoAnswer('numero', '${opt}', this)">${opt}</button>`
+                ).join('');
+            } else {
+                const article = noun.gender === 'm' ? 'Los' : 'Las';
+                document.getElementById('numeroQuestion').textContent = 'Cambia al SINGULAR:';
+                document.getElementById('numeroSentence').innerHTML = `${article} <strong>${noun.plural}</strong> → `;
+
+                const correctArticle = noun.gender === 'm' ? 'El' : 'La';
+                MorphoState.correctAnswer = `${correctArticle} ${noun.word}`;
+
+                const options = [
+                    `${correctArticle} ${noun.word}`,
+                    `${article} ${noun.word}`,
+                    `${correctArticle} ${noun.plural}`,
+                    `${noun.gender === 'm' ? 'La' : 'El'} ${noun.word}`
+                ];
+
+                document.getElementById('numeroOptions').innerHTML = shuffleArray(options).map(opt =>
+                    `<button class="morpho-option" onclick="checkMorphoAnswer('numero', '${opt}', this)">${opt}</button>`
+                ).join('');
+            }
+
+            document.getElementById('numeroFeedback').className = 'morpho-feedback';
+            showModal('morphoNumeroModal');
+        }
+
+        function showTiemposExercise() {
+            const verb = getRandomVerb();
+            const pronouns = ['yo', 'tú', 'él/ella', 'nosotros', 'vosotros', 'ellos'];
+            const pronounIdx = Math.floor(Math.random() * 6);
+            const pronoun = pronouns[pronounIdx];
+
+            const tenses = ['presente', 'pasado', 'futuro'];
+            const tense = tenses[Math.floor(Math.random() * tenses.length)];
+
+            let correct, options;
+            if (tense === 'presente') {
+                correct = verb.present[pronounIdx];
+                options = [correct, verb.past, verb.future, verb.gerund];
+            } else if (tense === 'pasado') {
+                correct = verb.past;
+                options = [correct, verb.present[2], verb.future, verb.infinitive];
+            } else {
+                correct = verb.future;
+                options = [correct, verb.present[2], verb.past, verb.infinitive];
+            }
+
+            MorphoState.correctAnswer = correct;
+
+            const timeWord = tense === 'presente' ? 'Ahora' : (tense === 'pasado' ? 'Ayer' : 'Mañana');
+            document.getElementById('tiemposQuestion').innerHTML = `${verb.emoji} <strong>${timeWord}</strong>, ${pronoun}...`;
+            document.getElementById('tiemposSentence').innerHTML = `<span class="morpho-blank">___</span> (${verb.infinitive})`;
+
+            document.getElementById('tiemposOptions').innerHTML = shuffleArray(options).map(opt =>
+                `<button class="morpho-option" onclick="checkMorphoAnswer('tiempos', '${opt}', this)">${opt}</button>`
+            ).join('');
+
+            document.getElementById('tiemposFeedback').className = 'morpho-feedback';
+            showModal('morphoTiemposModal');
+        }
+
+        function showCompletarExercise() {
+            const level = `nivel${MorphoSettings.difficulty}`;
+            const exercises = MORPHO_DATA.completar[level] || MORPHO_DATA.completar.nivel1;
+            const exercise = exercises[Math.floor(Math.random() * exercises.length)];
+
+            MorphoState.correctAnswer = exercise.blank;
+
+            document.getElementById('completarSentence').innerHTML = exercise.sentence.replace('___',
+                '<span class="morpho-blank">___</span>');
+
+            document.getElementById('completarOptions').innerHTML = shuffleArray(exercise.options).map(opt =>
+                `<button class="morpho-option" onclick="checkMorphoAnswer('completar', '${opt}', this)">${opt}</button>`
+            ).join('');
+
+            document.getElementById('completarFeedback').className = 'morpho-feedback';
+            showModal('morphoCompletarModal');
+        }
+
+        function showOrdenarExercise() {
+            const level = `nivel${MorphoSettings.difficulty}`;
+            const sentences = MORPHO_DATA.oraciones[level] || MORPHO_DATA.oraciones.nivel1;
+            const sentence = sentences[Math.floor(Math.random() * sentences.length)];
+
+            MorphoState.wordOrderCorrect = sentence.words;
+            MorphoState.wordOrderSelected = [];
+
+            document.getElementById('sentenceBuilder').innerHTML = '';
+            document.getElementById('wordOrderContainer').innerHTML = shuffleArray(sentence.words).map((word, i) =>
+                `<span class="word-chip" data-word="${word}" data-idx="${i}" onclick="selectWord(this)">${word}</span>`
+            ).join('');
+
+            document.getElementById('ordenarFeedback').className = 'morpho-feedback';
+            document.getElementById('ordenarHint').textContent = 'Pulsa las palabras en orden';
+            showModal('morphoOrdenarModal');
+        }
+
+        function selectWord(chip) {
+            if (chip.classList.contains('used')) return;
+
+            const word = chip.dataset.word;
+            MorphoState.wordOrderSelected.push(word);
+            chip.classList.add('used');
+
+            const builder = document.getElementById('sentenceBuilder');
+            const newChip = document.createElement('span');
+            newChip.className = 'word-chip';
+            newChip.textContent = word;
+            newChip.onclick = () => removeWord(newChip, chip);
+            builder.appendChild(newChip);
+        }
+
+        function removeWord(builderChip, originalChip) {
+            const word = builderChip.textContent;
+            const idx = MorphoState.wordOrderSelected.indexOf(word);
+            if (idx > -1) MorphoState.wordOrderSelected.splice(idx, 1);
+            builderChip.remove();
+            originalChip.classList.remove('used');
+        }
+
+        function resetWordOrder() {
+            MorphoState.wordOrderSelected = [];
+            document.getElementById('sentenceBuilder').innerHTML = '';
+            document.querySelectorAll('#wordOrderContainer .word-chip').forEach(c => c.classList.remove('used'));
+            document.getElementById('ordenarFeedback').className = 'morpho-feedback';
+        }
+
+        function checkWordOrder() {
+            const correct = MorphoState.wordOrderCorrect.join(' ');
+            const selected = MorphoState.wordOrderSelected.join(' ');
+            const feedback = document.getElementById('ordenarFeedback');
+
+            if (selected === correct) {
+                feedback.className = 'morpho-feedback correct';
+                feedback.textContent = '✓ ¡Perfecto! ' + correct;
+                if (Settings.ttsEnabled) speakText(correct);
+                setTimeout(() => morphoExerciseComplete(true), 1500);
+            } else {
+                feedback.className = 'morpho-feedback incorrect';
+                feedback.textContent = '✗ Intenta de nuevo';
+                setTimeout(() => {
+                    feedback.className = 'morpho-feedback';
+                }, 1500);
+            }
+        }
+
+        function showFormarExercise() {
+            const noun = getRandomNoun();
+            const verb = getRandomVerb();
+            const adj = getRandomAdjective();
+
+            const article = noun.gender === 'm' ? 'El' : 'La';
+            const adjForm = noun.gender === 'm' ? adj.masc : adj.fem;
+
+            MorphoState.formarWords = [article, noun.word, adjForm, verb.present[2]];
+
+            document.getElementById('formarWords').innerHTML = MorphoState.formarWords.map(w =>
+                `<span class="word-chip">${w}</span>`
+            ).join('');
+
+            showModal('morphoFormarModal');
+        }
+
+        function speakMorphoWords() {
+            if (MorphoState.formarWords) {
+                speakText(MorphoState.formarWords.join(' '));
+            }
+        }
+
+        function morphoFormarCorrect() {
+            morphoExerciseComplete(true);
+        }
+
+        function morphoFormarHelp() {
+            if (MorphoState.formarWords) {
+                const sentence = MorphoState.formarWords.join(' ');
+                showToast('💡 ' + sentence);
+                speakText(sentence);
+            }
+        }
+
+        function checkMorphoAnswer(type, answer, btn) {
+            const feedbackId = `${type}Feedback`;
+            const feedback = document.getElementById(feedbackId);
+            const isCorrect = answer === MorphoState.correctAnswer;
+
+            document.querySelectorAll(`#${type}Options .morpho-option`).forEach(b => {
+                b.style.pointerEvents = 'none';
+            });
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.className = 'morpho-feedback correct';
+                feedback.textContent = '✓ ¡Muy bien!';
+                if (Settings.ttsEnabled) speakText(answer);
+                setTimeout(() => morphoExerciseComplete(true), 1200);
+            } else {
+                btn.classList.add('incorrect');
+                feedback.className = 'morpho-feedback incorrect';
+                feedback.textContent = '✗ La respuesta correcta es: ' + MorphoState.correctAnswer;
+                setTimeout(() => morphoExerciseComplete(false), 2000);
+            }
+        }
+
+        function morphoExerciseComplete(success) {
+            hideAllModals();
+            if (success) GameState.score += 10;
+            finishCardPlay();
+        }
+
+        function speakMorphoSentence(type) {
+            const sentenceEl = document.getElementById(`${type}Sentence`);
+            if (sentenceEl) {
+                speakText(sentenceEl.textContent.replace('___', ''));
+            }
+        }
+
+        // ==================== GAME FLOW ====================
+        function startGame() {
+            // Save settings
+            Settings.activePhonemes = [];
+            document.querySelectorAll('.phoneme-btn.active').forEach(b => Settings.activePhonemes.push(b.dataset.phoneme));
+            if (Settings.activePhonemes.length < 2) Settings.activePhonemes = ['P', 'T', 'M', 'L'];
+
+            Settings.ttsEnabled = document.getElementById('toggleTTS').classList.contains('active');
+            Settings.therapistMode = document.getElementById('toggleTherapist').classList.contains('active');
+            Settings.enableBlock = document.getElementById('toggleBlock').classList.contains('active');
+            Settings.enableReverse = document.getElementById('toggleReverse').classList.contains('active');
+            Settings.enableDraw = document.getElementById('toggleDraw').classList.contains('active');
+
+            // Save morpho settings if in morpho mode
+            if (Settings.gameMode === 'morpho') {
+                saveMorphoSettings();
+            }
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('active');
+
+            // Create appropriate deck
+            GameState.deck = Settings.gameMode === 'morpho' ? createMorphoDeck() : createDeck();
+            GameState.discardPile = [];
+            GameState.score = 0;
+            GameState.direction = 1;
+            GameState.gameActive = true;
+            GameState.calledUno = false;
+            GameState.currentPlayer = 'player';
+
+            dealCards();
+            renderGame();
+            setTimeout(() => showTurnBanner('🎯 ¡Tu turno!', 'Juega o roba'), 400);
+        }
+
+        function restartGame() {
+            hideAllModals();
+            document.getElementById('winOverlay').classList.remove('active');
+            startGame();
+        }
+
+        function goToMenu() {
+            GameState.gameActive = false;
+            hideAllModals();
+            document.getElementById('winOverlay').classList.remove('active');
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+
+        function endGame(winner) {
+            GameState.gameActive = false;
+            const overlay = document.getElementById('winOverlay');
+            const title = document.getElementById('winTitle');
+            const msg = document.getElementById('winMessage');
+
+            if (winner === 'player') {
+                title.textContent = '🎉 ¡GANASTE!';
+                title.style.color = '#43A047';
+            } else {
+                title.textContent = `${GameState.players[winner].name} gana`;
+                title.style.color = '#FDD835';
+            }
+            msg.textContent = `Puntos: ${GameState.score}`;
+            setTimeout(() => overlay.classList.add('active'), 400);
+        }
+
+        function openSettings() {
+            document.getElementById('settingsPanel').classList.add('active');
+            document.getElementById('settingsOverlay').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsPanel').classList.remove('active');
+            document.getElementById('settingsOverlay').classList.remove('active');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 2200);
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            initSettings();
+            if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+        });
+    </script>
+</body>
+</html>

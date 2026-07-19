@@ -1,0 +1,2836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Templo de Logopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Baloo+2:wght@700&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --accent: #fdcb6e;
+            --accent-bright: #ffeaa7;
+            --success: #00b894;
+            --danger: #ff7675;
+            --danger-dark: #d63031;
+            --bg-light: #dfe6e9;
+            --bg-gradient-1: #74b9ff;
+            --bg-gradient-2: #a29bfe;
+            --text-dark: #2d3436;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, #fd79a8 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dark body {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 900px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .game-header {
+            background: linear-gradient(180deg, var(--primary) 0%, #5f4dd0 100%);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent);
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .game-title {
+            font-family: 'Baloo 2', cursive;
+            color: var(--white);
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            display: flex;
+            gap: 8px;
+            color: var(--white);
+            font-size: 0.85rem;
+            font-weight: 600;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 15px;
+        }
+
+        .remaining-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Avatar upload button */
+        .avatar-btn {
+            background: var(--accent);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .avatar-btn:hover {
+            background: var(--accent-bright);
+            transform: scale(1.05);
+        }
+
+        .sound-btn {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+        }
+
+        .sound-btn:hover {
+            background: linear-gradient(135deg, #b8b5ff, #7c75e7);
+        }
+
+        #avatar-input {
+            display: none;
+        }
+
+        /* Mode selector */
+        .mode-selector {
+            background: linear-gradient(180deg, var(--secondary) 0%, #00a8a5 100%);
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 3px solid rgba(0,0,0,0.1);
+        }
+
+        .mode-btn {
+            background: var(--white);
+            border: 3px solid transparent;
+            color: var(--text-dark);
+            padding: 6px 12px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .mode-btn:hover, .mode-btn.active {
+            background: var(--accent);
+            color: var(--text-dark);
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            border-color: var(--primary);
+        }
+
+        /* Phoneme selector dropdown */
+        .phoneme-selector {
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .phoneme-selector.visible {
+            display: flex;
+        }
+
+        .phoneme-select {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .phoneme-label {
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Mission display */
+        .mission-bar {
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary));
+            padding: 8px;
+            text-align: center;
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .mission-bar span {
+            color: var(--accent-bright);
+            font-weight: 700;
+        }
+
+        /* Timer warning */
+        .timer-bar {
+            height: 5px;
+            background: rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent), var(--danger));
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .timer-fill.warning {
+            animation: timerPulse 0.5s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Game area */
+        .game-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(255,200,100,0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,150,200,0.3) 0%, transparent 40%),
+                radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, transparent 60%),
+                linear-gradient(180deg, #81ecec 0%, #74b9ff 40%, #a29bfe 70%, #fd79a8 100%);
+        }
+
+        /* Floating sparkles */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #fff 0%, #ffeaa7 50%, transparent 70%);
+            border-radius: 50%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .sparkle:nth-child(1) { top: 15%; left: 10%; animation: sparkleFloat 3s ease-in-out infinite, sparklePulse 1.5s ease-in-out infinite; }
+        .sparkle:nth-child(2) { top: 25%; right: 15%; animation: sparkleFloat 4s ease-in-out infinite 0.5s, sparklePulse 2s ease-in-out infinite; }
+        .sparkle:nth-child(3) { top: 10%; left: 40%; animation: sparkleFloat 3.5s ease-in-out infinite 1s, sparklePulse 1.8s ease-in-out infinite; }
+        .sparkle:nth-child(4) { top: 20%; right: 30%; animation: sparkleFloat 2.8s ease-in-out infinite 0.3s, sparklePulse 1.2s ease-in-out infinite; }
+        .sparkle:nth-child(5) { top: 8%; left: 70%; animation: sparkleFloat 3.2s ease-in-out infinite 0.8s, sparklePulse 1.6s ease-in-out infinite; }
+        .sparkle:nth-child(6) { top: 30%; left: 25%; animation: sparkleFloat 4.2s ease-in-out infinite 1.2s, sparklePulse 2.2s ease-in-out infinite; }
+
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.3); }
+        }
+
+        @keyframes sparklePulse {
+            0%, 100% { opacity: 0.6; box-shadow: 0 0 5px #ffeaa7; }
+            50% { opacity: 1; box-shadow: 0 0 15px #fff, 0 0 25px #ffeaa7; }
+        }
+
+        /* Decorative clouds */
+        .cloud {
+            position: absolute;
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 100%);
+            border-radius: 50px;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1), inset 0 -5px 10px rgba(200,200,255,0.3);
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .cloud.c1 {
+            width: 90px;
+            height: 35px;
+            top: 8%;
+            left: 3%;
+            animation: cloudFloat 25s infinite ease-in-out;
+        }
+        .cloud.c1::before { width: 40px; height: 40px; top: -20px; left: 15px; }
+        .cloud.c1::after { width: 30px; height: 30px; top: -12px; left: 45px; }
+
+        .cloud.c2 {
+            width: 110px;
+            height: 40px;
+            top: 3%;
+            right: 8%;
+            animation: cloudFloat 30s infinite ease-in-out reverse;
+        }
+        .cloud.c2::before { width: 50px; height: 50px; top: -25px; left: 20px; }
+        .cloud.c2::after { width: 35px; height: 35px; top: -15px; left: 60px; }
+
+        .cloud.c3 {
+            width: 70px;
+            height: 28px;
+            top: 14%;
+            left: 55%;
+            animation: cloudFloat 20s infinite ease-in-out 2s;
+        }
+        .cloud.c3::before { width: 30px; height: 30px; top: -15px; left: 10px; }
+        .cloud.c3::after { width: 25px; height: 25px; top: -10px; left: 35px; }
+
+        .cloud.c4 {
+            width: 60px;
+            height: 25px;
+            top: 18%;
+            right: 35%;
+            animation: cloudFloat 22s infinite ease-in-out 4s;
+        }
+        .cloud.c4::before { width: 25px; height: 25px; top: -12px; left: 8px; }
+        .cloud.c4::after { width: 20px; height: 20px; top: -8px; left: 30px; }
+
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(20px) translateY(-5px); }
+            50% { transform: translateX(40px) translateY(0); }
+            75% { transform: translateX(20px) translateY(5px); }
+        }
+
+        /* Rainbow decoration */
+        .rainbow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 160px;
+            background:
+                linear-gradient(180deg,
+                    transparent 0%, transparent 35%,
+                    #ff6b6b 35%, #ff6b6b 42%,
+                    #feca57 42%, #feca57 49%,
+                    #48dbfb 49%, #48dbfb 56%,
+                    #a29bfe 56%, #a29bfe 63%,
+                    #ff9ff3 63%, #ff9ff3 70%,
+                    transparent 70%);
+            border-radius: 180px 180px 0 0;
+            opacity: 0.5;
+            z-index: 1;
+            animation: rainbowPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes rainbowPulse {
+            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.6; transform: translateX(-50%) scale(1.02); }
+        }
+
+        /* Floating bubbles */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(150,200,255,0.3));
+            border: 1px solid rgba(255,255,255,0.5);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bubble:nth-child(1) { width: 20px; height: 20px; bottom: 20%; left: 5%; animation: bubbleRise 8s ease-in-out infinite; }
+        .bubble:nth-child(2) { width: 15px; height: 15px; bottom: 15%; right: 8%; animation: bubbleRise 10s ease-in-out infinite 2s; }
+        .bubble:nth-child(3) { width: 25px; height: 25px; bottom: 25%; left: 85%; animation: bubbleRise 12s ease-in-out infinite 4s; }
+        .bubble:nth-child(4) { width: 12px; height: 12px; bottom: 30%; right: 20%; animation: bubbleRise 9s ease-in-out infinite 1s; }
+
+        @keyframes bubbleRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-80px) scale(1.1); opacity: 0.9; }
+            100% { transform: translateY(-160px) scale(0.8); opacity: 0; }
+        }
+
+        /* Sun decoration */
+        .sun {
+            position: absolute;
+            top: 2%;
+            right: 3%;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #fff700 0%, #ffb700 60%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            animation: sunPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 30px #ffcc00, 0 0 60px rgba(255,200,0,0.5);
+        }
+
+        .sun::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            background: radial-gradient(circle, transparent 40%, rgba(255,200,0,0.3) 50%, transparent 70%);
+            animation: sunRays 2s linear infinite;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px #ffcc00, 0 0 60px rgba(255,200,0,0.5); }
+            50% { transform: scale(1.1); box-shadow: 0 0 40px #ffcc00, 0 0 80px rgba(255,200,0,0.7); }
+        }
+
+        @keyframes sunRays {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Grass/plants at bottom */
+        .grass {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,180,100,0.3) 100%);
+            z-index: 1;
+        }
+
+        .plant {
+            position: absolute;
+            bottom: 0;
+            z-index: 2;
+            font-size: 28px;
+            animation: plantSway 3s ease-in-out infinite;
+        }
+
+        .plant:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .plant:nth-child(2) { left: 15%; animation-delay: 0.5s; font-size: 24px; }
+        .plant:nth-child(3) { right: 10%; animation-delay: 1s; }
+        .plant:nth-child(4) { right: 25%; animation-delay: 0.3s; font-size: 22px; }
+        .plant:nth-child(5) { left: 40%; animation-delay: 0.7s; font-size: 26px; }
+
+        @keyframes plantSway {
+            0%, 100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-3px); }
+        }
+
+        /* Butterflies */
+        .butterfly {
+            position: absolute;
+            font-size: 20px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .butterfly:nth-child(1) { animation: butterflyFly1 15s ease-in-out infinite; }
+        .butterfly:nth-child(2) { animation: butterflyFly2 18s ease-in-out infinite 3s; }
+
+        @keyframes butterflyFly1 {
+            0% { top: 30%; left: 5%; transform: scaleX(1); }
+            25% { top: 15%; left: 30%; transform: scaleX(1); }
+            50% { top: 25%; left: 60%; transform: scaleX(-1); }
+            75% { top: 10%; left: 35%; transform: scaleX(-1); }
+            100% { top: 30%; left: 5%; transform: scaleX(1); }
+        }
+
+        @keyframes butterflyFly2 {
+            0% { top: 20%; right: 5%; transform: scaleX(-1); }
+            25% { top: 35%; right: 30%; transform: scaleX(-1); }
+            50% { top: 15%; right: 55%; transform: scaleX(1); }
+            75% { top: 28%; right: 25%; transform: scaleX(1); }
+            100% { top: 20%; right: 5%; transform: scaleX(-1); }
+        }
+
+        /* Platform grid */
+        .platform-grid {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) perspective(800px) rotateX(55deg);
+            display: grid;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        /* Stone platform - using CSS shapes instead of image with background */
+        .platform {
+            width: 65px;
+            height: 65px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.15s;
+            transform-style: preserve-3d;
+        }
+
+        .platform-stone {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, #5a5a5a 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, #3a3a3a 0%, transparent 40%),
+                linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 50%, #1a1a1a 100%);
+            border-radius: 8px 8px 12px 12px;
+            box-shadow:
+                inset 0 2px 4px rgba(255,255,255,0.2),
+                inset 0 -3px 6px rgba(0,0,0,0.4);
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5));
+        }
+
+        .platform-stone::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,150,50,0.6), transparent);
+            border-radius: 2px;
+        }
+
+        .platform-stone::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            right: 10%;
+            height: 10px;
+            background: linear-gradient(180deg, #1a1a1a, transparent);
+            border-radius: 0 0 8px 8px;
+            opacity: 0.6;
+        }
+
+        .platform-content {
+            position: relative;
+            z-index: 2;
+            text-shadow:
+                0 0 10px rgba(255,200,100,0.8),
+                2px 2px 4px rgba(0,0,0,0.9);
+        }
+
+        /* Letter case indicators */
+        .platform.uppercase .platform-content {
+            color: #ffeb3b;
+            text-decoration: underline;
+            text-decoration-color: #ff9800;
+            text-underline-offset: 3px;
+        }
+
+        .platform.lowercase .platform-content {
+            color: #81ecec;
+            font-style: italic;
+        }
+
+        .platform:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .platform:hover .platform-stone {
+            filter: drop-shadow(0 12px 15px rgba(0,0,0,0.6)) brightness(1.2);
+        }
+
+        .platform.correct .platform-stone {
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(0,255,100,0.7));
+        }
+
+        .platform.wrong {
+            animation: platformFall 0.8s forwards;
+        }
+
+        .platform.wrong .platform-stone {
+            filter: drop-shadow(0 8px 10px rgba(255,0,0,0.8));
+        }
+
+        .platform.visited {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .platform.visited .platform-stone {
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)) grayscale(0.7);
+        }
+
+        .platform.goal .platform-stone {
+            background:
+                radial-gradient(ellipse at 30% 20%, #ffd700 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, #ff9800 0%, transparent 40%),
+                linear-gradient(135deg, #ffcc00 0%, #ff9800 50%, #ff6600 100%);
+            animation: goalPulse 1.5s infinite;
+        }
+
+        .platform.goal-locked .platform-stone {
+            background:
+                radial-gradient(ellipse at 30% 20%, #888 0%, transparent 50%),
+                linear-gradient(135deg, #666 0%, #444 50%, #333 100%);
+        }
+
+        .platform.goal-locked .platform-content::after {
+            content: '🔒';
+            position: absolute;
+        }
+
+        /* Current player position highlight */
+        .platform.player-here {
+            z-index: 45;
+        }
+
+        .platform.player-here .platform-stone {
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.8), 0 0 20px rgba(108, 92, 231, 0.6);
+            animation: currentPlatformPulse 1s infinite;
+        }
+
+        .platform.player-here::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border: 3px solid rgba(108, 92, 231, 0.6);
+            border-radius: 12px;
+            animation: currentPlatformRing 1.5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes currentPlatformPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.7), 0 0 15px rgba(108, 92, 231, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 5px rgba(108, 92, 231, 0.9), 0 0 25px rgba(108, 92, 231, 0.8);
+            }
+        }
+
+        @keyframes currentPlatformRing {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .platform.goal-locked .platform-content::before {
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+        }
+
+        .platform.must-visit .platform-stone::before {
+            background: linear-gradient(90deg, transparent, rgba(0,255,150,0.8), transparent);
+            animation: mustVisitGlow 1s infinite;
+        }
+
+        @keyframes mustVisitGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes platformFall {
+            0% {
+                transform: translateY(0) rotateX(0) rotateZ(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) rotateX(45deg) rotateZ(30deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes goalPulse {
+            0%, 100% { filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(255,200,0,0.6)); }
+            50% { filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 25px rgba(255,200,0,1)); }
+        }
+
+        /* Player */
+        .player {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            z-index: 50;
+            pointer-events: none;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+            transition: left 0.15s ease-out, top 0.15s ease-out;
+        }
+
+        /* Player position indicator - shows which platform the player is on */
+        .player::before {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 15px;
+            background: radial-gradient(ellipse, rgba(108, 92, 231, 0.8) 0%, rgba(108, 92, 231, 0.4) 40%, transparent 70%);
+            border-radius: 50%;
+            animation: playerShadowPulse 1s infinite ease-in-out;
+        }
+
+        /* Arrow pointing down to platform */
+        .player::after {
+            content: '▼';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: rgba(108, 92, 231, 0.9);
+            text-shadow: 0 0 8px rgba(108, 92, 231, 0.8);
+            animation: arrowBounce 0.8s infinite ease-in-out;
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
+            50% { transform: translateX(-50%) translateY(4px); opacity: 1; }
+        }
+
+        @keyframes playerShadowPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+        }
+
+        .player-avatar {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://pfst.cf2.poecdn.net/base/image/94a71b7aa847129c99bf582e093b88880b97742f98415572ba09a655fa1d84c3?w=1024&h=1024');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: playerBounce 1s infinite ease-in-out;
+        }
+
+        @keyframes playerBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-4px) scale(1.02); }
+        }
+
+        .player.falling .player-avatar {
+            animation: none;
+        }
+
+        .player.falling {
+            animation: playerFall 1s forwards;
+        }
+
+        .player.hit {
+            animation: playerHit 0.5s;
+        }
+
+        @keyframes playerFall {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.8) translateY(80px) rotate(180deg); opacity: 0.7; }
+            100% { transform: scale(0.2) translateY(250px) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes playerHit {
+            0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
+            25%, 75% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)) brightness(0.5) sepia(1) hue-rotate(-50deg); }
+            50% { filter: drop-shadow(0 0 20px red) brightness(1.5); }
+        }
+
+        /* Enemies */
+        .enemy {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 40;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
+            transition: left 0.3s ease-out, top 0.3s ease-out;
+        }
+
+        .enemy-body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            font-size: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: enemyBounce 0.8s infinite ease-in-out;
+        }
+
+        .enemy-glow {
+            position: absolute;
+            inset: -10px;
+            background: radial-gradient(circle, rgba(255,100,100,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: enemyGlow 1.5s infinite;
+        }
+
+        @keyframes enemyGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes enemyBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+
+        .enemy.chasing .enemy-body {
+            animation: enemyChase 0.3s infinite ease-in-out;
+        }
+
+        @keyframes enemyChase {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .enemy.angry .enemy-body::after {
+            content: '💢';
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 22px;
+            animation: angerBubble 0.2s infinite alternate;
+        }
+
+        .enemy.angry .enemy-glow {
+            background: radial-gradient(circle, rgba(255,50,50,0.6) 0%, transparent 70%);
+            animation: enemyGlowAngry 0.3s infinite;
+        }
+
+        @keyframes enemyGlowAngry {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.4); opacity: 1; }
+        }
+
+        @keyframes angerBubble {
+            0% { transform: scale(1) rotate(-10deg); }
+            100% { transform: scale(1.3) rotate(10deg); }
+        }
+
+        /* Enemy speech bubble */
+        .enemy-speech {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .enemy-speech::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: white;
+        }
+
+        .enemy.speaking .enemy-speech {
+            opacity: 1;
+            animation: speechBounce 0.5s ease-out;
+        }
+
+        @keyframes speechBounce {
+            0% { transform: translateX(-50%) translateY(10px); opacity: 0; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        /* Projectiles */
+        .projectile {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            z-index: 45;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: projectileSpin 0.3s infinite linear;
+            filter: drop-shadow(0 0 10px rgba(255,100,0,0.8));
+        }
+
+        .projectile::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            background: radial-gradient(circle, rgba(255,150,0,0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: projectileGlow 0.2s infinite;
+        }
+
+        @keyframes projectileSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes projectileGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* Projectile trail effect */
+        .projectile-trail {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, rgba(255,100,0,0.5) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: trailFade 0.3s forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            grid-template-areas:
+                "upleft up upright"
+                "left center right"
+                "downleft down downright";
+            gap: 3px;
+            z-index: 200;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(180deg, var(--white) 0%, #dfe6e9 100%);
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 3px 0 var(--primary), 0 5px 12px rgba(0,0,0,0.2);
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .control-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 var(--primary);
+        }
+
+        .control-btn.up { grid-area: up; }
+        .control-btn.down { grid-area: down; }
+        .control-btn.left { grid-area: left; }
+        .control-btn.right { grid-area: right; }
+        .control-btn.upleft { grid-area: upleft; }
+        .control-btn.upright { grid-area: upright; }
+        .control-btn.downleft { grid-area: downleft; }
+        .control-btn.downright { grid-area: downright; }
+        .control-btn.center {
+            grid-area: center;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--accent-bright) 100%);
+            border-color: var(--accent);
+            box-shadow: 0 3px 0 #e17055, 0 5px 12px rgba(0,0,0,0.2);
+            cursor: default;
+            font-size: 1.3rem;
+        }
+
+        /* Overlays */
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            animation: fadeIn 0.5s;
+        }
+
+        .overlay.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .overlay-title {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.2rem;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .overlay-title.fail {
+            color: var(--danger);
+            text-shadow: 0 0 20px rgba(255,0,0,0.5);
+        }
+
+        .overlay-message {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .overlay-btn {
+            background: linear-gradient(180deg, var(--accent) 0%, #e17055 100%);
+            border: none;
+            padding: 12px 35px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            cursor: pointer;
+            border-radius: 25px;
+            box-shadow: 0 4px 0 #d63031, 0 8px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+
+        .overlay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #d63031, 0 12px 20px rgba(0,0,0,0.4);
+        }
+
+        .overlay-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #d63031;
+        }
+
+        /* Lives */
+        .lives {
+            display: flex;
+            gap: 2px;
+        }
+
+        .heart {
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .heart.lost {
+            filter: grayscale(1);
+            opacity: 0.4;
+        }
+
+        .heart.hit {
+            animation: heartHit 0.5s;
+        }
+
+        @keyframes heartHit {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.5); filter: brightness(2); }
+        }
+
+        /* Error feedback popup */
+        .error-feedback {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff6b6b, #d63031);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 100;
+            animation: feedbackPop 2s forwards;
+            box-shadow: 0 4px 20px rgba(214, 48, 49, 0.5);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        @keyframes feedbackPop {
+            0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+            15% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+            30% { transform: translateX(-50%) scale(1); }
+            70% { transform: translateX(-50%) scale(1); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(-20px) scale(0.8); opacity: 0; }
+        }
+
+        /* Life gained feedback */
+        .life-gained {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            z-index: 100;
+            animation: lifeGainedPop 1.5s forwards;
+            text-shadow: 0 0 20px rgba(255, 100, 100, 0.8);
+        }
+
+        @keyframes lifeGainedPop {
+            0% { transform: translateX(-50%) scale(0); opacity: 0; }
+            30% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+            50% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) translateY(-50px) scale(1.2); opacity: 0; }
+        }
+
+        /* Bonus heart platform */
+        .platform.bonus-heart .platform-stone {
+            background:
+                radial-gradient(ellipse at 30% 20%, #ff9ff3 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, #fd79a8 0%, transparent 40%),
+                linear-gradient(135deg, #ff6b6b 0%, #e84393 50%, #fd79a8 100%);
+            animation: heartPlatformPulse 1s infinite;
+        }
+
+        @keyframes heartPlatformPulse {
+            0%, 100% { filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,100,150,0.5)); }
+            50% { filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(255,100,150,0.8)); }
+        }
+
+        /* Points milestone indicator */
+        .milestone-badge {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            color: #2d3436;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            z-index: 100;
+            animation: milestonePop 2.5s forwards;
+            box-shadow: 0 4px 20px rgba(253, 203, 110, 0.6);
+        }
+
+        @keyframes milestonePop {
+            0% { transform: translateX(-50%) scale(0) rotate(-10deg); opacity: 0; }
+            20% { transform: translateX(-50%) scale(1.2) rotate(5deg); opacity: 1; }
+            40% { transform: translateX(-50%) scale(1) rotate(0deg); }
+            80% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translateX(-50%) scale(0.8) translateY(-30px); opacity: 0; }
+        }
+
+        @keyframes heartGain {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Swipe indicator */
+        .swipe-indicator {
+            position: absolute;
+            height: 8px;
+            background: linear-gradient(90deg, rgba(108, 92, 231, 0.8), rgba(162, 155, 254, 0.4));
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 200;
+            transform-origin: left center;
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+        }
+
+        .swipe-indicator::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: rgba(162, 155, 254, 0.8);
+        }
+
+        /* Swipe hint for mobile */
+        .swipe-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            z-index: 10;
+            pointer-events: none;
+            animation: hintPulse 2s infinite;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @media (min-width: 768px) {
+            .swipe-hint {
+                display: none;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .game-title { font-size: 0.95rem; }
+            .stats { font-size: 0.75rem; gap: 5px; }
+            .stat { padding: 3px 6px; }
+            .mode-btn { padding: 5px 8px; font-size: 0.7rem; }
+            .platform { width: 52px; height: 52px; font-size: 1rem; }
+            .platform-grid { gap: 4px; }
+            .control-btn { width: 38px; height: 38px; font-size: 0.9rem; }
+            .controls { gap: 2px; bottom: 8px; }
+            .mission-bar { font-size: 0.8rem; padding: 6px; }
+            .player { width: 36px; height: 36px; }
+            .avatar-btn { font-size: 0.65rem; padding: 3px 6px; }
+            .phoneme-select { font-size: 0.7rem; padding: 3px 6px; }
+        }
+
+        @media (max-width: 400px) {
+            .platform { width: 44px; height: 44px; font-size: 0.85rem; }
+            .platform-grid { gap: 3px; }
+            .control-btn { width: 34px; height: 34px; font-size: 0.8rem; border-width: 2px; }
+            .player { width: 30px; height: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <header class="game-header">
+            <h1 class="game-title">🏛️ Templo de Logopedia</h1>
+            <div class="stats">
+                <button class="avatar-btn" onclick="document.getElementById('avatar-input').click()">📷 Foto</button>
+                <input type="file" id="avatar-input" accept="image/*">
+                <button class="avatar-btn sound-btn" id="sound-toggle">🔊 Sonido</button>
+                <div class="remaining-badge" id="remaining-badge">
+                    <span>🎯</span>
+                    <span id="remaining-count">0</span>
+                </div>
+                <div class="stat">
+                    <span>⭐</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="stat">
+                    <span>🏆</span>
+                    <span id="level">1</span>
+                </div>
+                <div class="lives" id="lives">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="pares">Pares</button>
+            <button class="mode-btn" data-mode="impares">Impares</button>
+            <button class="mode-btn" data-mode="mayusculas">MAYÚS</button>
+            <button class="mode-btn" data-mode="minusculas">minús</button>
+            <button class="mode-btn" data-mode="sinfones">Sinfones</button>
+            <button class="mode-btn" data-mode="fonemas">Fonemas</button>
+            <div class="phoneme-selector" id="phoneme-selector">
+                <span class="phoneme-label">Fonema:</span>
+                <select class="phoneme-select" id="phoneme-select">
+                    <option value="r">/r/ (erre)</option>
+                    <option value="rr">/rr/ (erre fuerte)</option>
+                    <option value="s">/s/ (ese)</option>
+                    <option value="l">/l/ (ele)</option>
+                    <option value="d">/d/ (de)</option>
+                    <option value="t">/t/ (te)</option>
+                    <option value="k">/k/ (ca,co,cu)</option>
+                    <option value="g">/g/ (ga,go,gu)</option>
+                    <option value="f">/f/ (efe)</option>
+                    <option value="p">/p/ (pe)</option>
+                    <option value="b">/b/ (be)</option>
+                    <option value="m">/m/ (eme)</option>
+                    <option value="n">/n/ (ene)</option>
+                    <option value="ch">/ch/ (che)</option>
+                    <option value="j">/j/ (jota)</option>
+                    <option value="z">/z/ (zeta)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mission-bar">
+            Misión: Pisa TODAS las <span id="mission-target">números pares</span> antes de la meta 🏁
+        </div>
+        <div class="timer-bar">
+            <div class="timer-fill" id="timer-fill"></div>
+        </div>
+
+        <div class="game-area" id="game-area">
+            <!-- Sky decorations -->
+            <div class="sun"></div>
+            <div class="rainbow"></div>
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+
+            <!-- Sparkles -->
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+
+            <!-- Bubbles -->
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+
+            <!-- Butterflies -->
+            <div class="butterfly">🦋</div>
+            <div class="butterfly">🦋</div>
+
+            <!-- Ground decorations -->
+            <div class="grass"></div>
+            <div class="plant">🌿</div>
+            <div class="plant">🌱</div>
+            <div class="plant">🌿</div>
+            <div class="plant">🌾</div>
+            <div class="plant">🍀</div>
+
+            <!-- Swipe hint for mobile -->
+            <div class="swipe-hint" id="swipe-hint">👆 Desliza para moverte en 8 direcciones</div>
+
+            <div class="platform-grid" id="platform-grid"></div>
+            <div class="player" id="player">
+                <div class="player-avatar" id="player-avatar"></div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn upleft" data-dir="upleft">↖</button>
+                <button class="control-btn up" data-dir="up">▲</button>
+                <button class="control-btn upright" data-dir="upright">↗</button>
+                <button class="control-btn left" data-dir="left">◀</button>
+                <button class="control-btn center">🎯</button>
+                <button class="control-btn right" data-dir="right">▶</button>
+                <button class="control-btn downleft" data-dir="downleft">↙</button>
+                <button class="control-btn down" data-dir="down">▼</button>
+                <button class="control-btn downright" data-dir="downright">↘</button>
+            </div>
+        </div>
+
+        <div class="overlay" id="game-over">
+            <h2 class="overlay-title fail">💀 ¡Caíste!</h2>
+            <p class="overlay-message" id="gameover-message">Pisaste una casilla incorrecta</p>
+            <button class="overlay-btn" id="retry-btn">🔄 Reintentar</button>
+        </div>
+
+        <div class="overlay" id="level-complete">
+            <h2 class="overlay-title">🎉 ¡Nivel Completado!</h2>
+            <p class="overlay-message" id="complete-message">+100 puntos</p>
+            <button class="overlay-btn" id="next-level-btn">➡️ Siguiente Nivel</button>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            document.documentElement.classList.toggle('dark', e.matches);
+        });
+
+        // Phoneme word lists
+        const phonemeWords = {
+            r: { correct: ['ara', 'oro', 'era', 'ira', 'aro', 'pera', 'cara', 'toro', 'mora', 'loro'], incorrect: ['ala', 'oso', 'esa', 'isla', 'ajo'] },
+            rr: { correct: ['perro', 'carro', 'torre', 'gorro', 'burro', 'tierra', 'guerra', 'barra'], incorrect: ['pero', 'caro', 'toro', 'gota', 'buro'] },
+            s: { correct: ['sol', 'sal', 'sopa', 'mesa', 'casa', 'oso', 'vaso', 'peso', 'rosa', 'beso'], incorrect: ['col', 'cal', 'copa', 'meza', 'caza'] },
+            l: { correct: ['luna', 'lata', 'pala', 'bola', 'cola', 'malo', 'polo', 'hilo', 'mula', 'vela'], incorrect: ['tuna', 'rata', 'pana', 'boca', 'coma'] },
+            d: { correct: ['dado', 'dedo', 'día', 'dos', 'don', 'nido', 'lado', 'modo', 'todo', 'cada'], incorrect: ['gato', 'pecho', 'tía', 'tos', 'con'] },
+            t: { correct: ['taza', 'tela', 'pato', 'gato', 'rato', 'alto', 'roto', 'foto', 'moto', 'pito'], incorrect: ['caza', 'pela', 'paco', 'galo', 'raco'] },
+            k: { correct: ['casa', 'cama', 'copa', 'cuna', 'coco', 'poco', 'loco', 'boca', 'foca', 'roca'], incorrect: ['gasa', 'gama', 'gota', 'luna', 'gogo'] },
+            g: { correct: ['gato', 'goma', 'gota', 'lago', 'jugo', 'mago', 'pago', 'riego', 'fuego', 'luego'], incorrect: ['cato', 'coma', 'cola', 'laco', 'juco'] },
+            f: { correct: ['foca', 'foto', 'fila', 'café', 'sofá', 'mofa', 'rifa', 'fifa', 'jefe', 'faro'], incorrect: ['poca', 'poto', 'pila', 'capé', 'sopá'] },
+            p: { correct: ['pato', 'papa', 'pipa', 'copa', 'sopa', 'ropa', 'tapa', 'capa', 'mapa', 'palo'], incorrect: ['bato', 'baba', 'biba', 'coba', 'soba'] },
+            b: { correct: ['bota', 'boca', 'bola', 'lobo', 'tubo', 'cabo', 'rabo', 'cubo', 'nube', 'bebé'], incorrect: ['pota', 'poca', 'pola', 'lopo', 'tupo'] },
+            m: { correct: ['mamá', 'mesa', 'mano', 'cama', 'rama', 'loma', 'dama', 'suma', 'lima', 'puma'], incorrect: ['papá', 'pesa', 'pano', 'cana', 'rana'] },
+            n: { correct: ['nido', 'nota', 'luna', 'mano', 'cana', 'lana', 'pino', 'mono', 'tono', 'pena'], incorrect: ['mido', 'mota', 'luma', 'malo', 'cama'] },
+            ch: { correct: ['chico', 'leche', 'noche', 'coche', 'ficha', 'hacha', 'lucha', 'mucho', 'ocho', 'pecho'], incorrect: ['tico', 'lete', 'note', 'cote', 'fita'] },
+            j: { correct: ['jota', 'jefe', 'ojo', 'rojo', 'caja', 'hoja', 'baja', 'paja', 'vieja', 'abeja'], incorrect: ['gota', 'gefe', 'ogo', 'rogo', 'caga'] },
+            z: { correct: ['zapato', 'zona', 'zumo', 'pozo', 'mozo', 'lazo', 'cazo', 'brazo', 'plaza', 'pez'], incorrect: ['sapato', 'sona', 'sumo', 'poso', 'moso'] }
+        };
+
+        const sinfonesLists = {
+            correct: ['br', 'bl', 'cr', 'cl', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'tr'],
+            incorrect: ['ba', 'ca', 'da', 'fa', 'ga', 'pa', 'ta', 'ma', 'na', 'sa', 'la', 'ra']
+        };
+
+        // Game state
+        const state = {
+            mode: 'pares',
+            selectedPhoneme: 'r',
+            score: 0,
+            level: 1,
+            lives: 3,
+            maxLives: 5,
+            playerPos: { row: 0, col: 0 },
+            gridSize: { rows: 5, cols: 5 },
+            platforms: [],
+            enemies: [],
+            gameActive: false,
+            goalPos: { row: 4, col: 4 },
+            lastMoveTime: Date.now(),
+            maxInactivityTime: 5000,
+            timerInterval: null,
+            enemyMoveInterval: null,
+            remainingCorrect: 0,
+            totalCorrect: 0,
+            livesLostThisLevel: 0,
+            lastMilestone: 0
+        };
+
+        const villainEmojis = ['👹', '👺', '🤡', '👿', '💀', '🦹'];
+
+        const missionTexts = {
+            pares: 'números pares',
+            impares: 'números impares',
+            mayusculas: 'MAYÚSCULAS (amarillas)',
+            minusculas: 'minúsculas (azules)',
+            sinfones: 'sinfones (br, bl, cr...)',
+            fonemas: 'palabras con el fonema'
+        };
+
+        // DOM elements
+        const gridEl = document.getElementById('platform-grid');
+        const playerEl = document.getElementById('player');
+        const playerAvatarEl = document.getElementById('player-avatar');
+        const gameArea = document.getElementById('game-area');
+        const gameOverEl = document.getElementById('game-over');
+        const levelCompleteEl = document.getElementById('level-complete');
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+        const livesEl = document.getElementById('lives');
+        const missionTargetEl = document.getElementById('mission-target');
+        const gameoverMessageEl = document.getElementById('gameover-message');
+        const completeMessageEl = document.getElementById('complete-message');
+        const avatarInput = document.getElementById('avatar-input');
+        const timerFillEl = document.getElementById('timer-fill');
+        const phonemeSelectorEl = document.getElementById('phoneme-selector');
+        const phonemeSelectEl = document.getElementById('phoneme-select');
+        const remainingCountEl = document.getElementById('remaining-count');
+
+        // Avatar upload
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    playerAvatarEl.style.backgroundImage = `url('${event.target.result}')`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Phoneme selector
+        phonemeSelectEl.addEventListener('change', () => {
+            state.selectedPhoneme = phonemeSelectEl.value;
+            if (state.mode === 'fonemas') {
+                missionTargetEl.textContent = `palabras con /${state.selectedPhoneme}/`;
+                initGame();
+            }
+        });
+
+        // Content generators
+        const generators = {
+            pares: () => {
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const num = Math.floor(Math.random() * 50) + 1;
+                    items.push({ value: num, correct: num % 2 === 0 });
+                }
+                return items;
+            },
+            impares: () => {
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const num = Math.floor(Math.random() * 50) + 1;
+                    items.push({ value: num, correct: num % 2 !== 0 });
+                }
+                return items;
+            },
+            mayusculas: () => {
+                const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const lower = 'abcdefghijklmnopqrstuvwxyz';
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const isUpper = Math.random() > 0.5;
+                    const letters = isUpper ? upper : lower;
+                    const letter = letters[Math.floor(Math.random() * letters.length)];
+                    items.push({ value: letter, correct: isUpper, caseType: isUpper ? 'uppercase' : 'lowercase' });
+                }
+                return items;
+            },
+            minusculas: () => {
+                const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const lower = 'abcdefghijklmnopqrstuvwxyz';
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const isLower = Math.random() > 0.5;
+                    const letters = isLower ? lower : upper;
+                    const letter = letters[Math.floor(Math.random() * letters.length)];
+                    items.push({ value: letter, correct: isLower, caseType: isLower ? 'lowercase' : 'uppercase' });
+                }
+                return items;
+            },
+            sinfones: () => {
+                const all = [...sinfonesLists.correct, ...sinfonesLists.incorrect];
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const item = all[Math.floor(Math.random() * all.length)];
+                    items.push({ value: item, correct: sinfonesLists.correct.includes(item) });
+                }
+                return items;
+            },
+            fonemas: () => {
+                const phoneme = state.selectedPhoneme;
+                const words = phonemeWords[phoneme] || phonemeWords.r;
+                const all = [...words.correct, ...words.incorrect];
+                const items = [];
+                for (let i = 0; i < 30; i++) {
+                    const word = all[Math.floor(Math.random() * all.length)];
+                    items.push({ value: word, correct: words.correct.includes(word) });
+                }
+                return items;
+            }
+        };
+
+        function initGame() {
+            state.gameActive = true;
+            state.playerPos = { row: 0, col: 0 };
+            state.gridSize.rows = 4 + Math.min(state.level, 3);
+            state.gridSize.cols = 4 + Math.min(state.level, 3);
+            state.goalPos = { row: state.gridSize.rows - 1, col: state.gridSize.cols - 1 };
+            state.lastMoveTime = Date.now();
+            state.livesLostThisLevel = 0;
+
+            generatePlatforms();
+            addBonusHearts();
+            renderGrid();
+            updatePlayerPosition();
+            spawnEnemies();
+            updateLivesDisplay();
+            updateRemainingCount();
+            startInactivityTimer();
+
+            gameOverEl.classList.remove('active');
+            levelCompleteEl.classList.remove('active');
+            playerEl.classList.remove('falling', 'hit');
+        }
+
+        function addBonusHearts() {
+            // Add 1 bonus heart platform per level (max 2)
+            const numHearts = Math.min(Math.floor(state.level / 2) + 1, 2);
+            let heartsAdded = 0;
+
+            // Find incorrect platforms that are not start/goal
+            const candidates = [];
+            for (let row = 0; row < state.gridSize.rows; row++) {
+                for (let col = 0; col < state.gridSize.cols; col++) {
+                    const p = state.platforms[row][col];
+                    if (!p.correct && !p.isStart && !p.isGoal && !p.mustVisit) {
+                        candidates.push({ row, col });
+                    }
+                }
+            }
+
+            // Randomly select platforms for hearts
+            while (heartsAdded < numHearts && candidates.length > 0) {
+                const idx = Math.floor(Math.random() * candidates.length);
+                const { row, col } = candidates.splice(idx, 1)[0];
+                const p = state.platforms[row][col];
+
+                p.isBonusHeart = true;
+                p.correct = true; // Safe to step on
+                p.value = '❤️';
+                heartsAdded++;
+            }
+        }
+
+        function generatePlatforms() {
+            const items = generators[state.mode]();
+            state.platforms = [];
+            state.remainingCorrect = 0;
+            state.totalCorrect = 0;
+
+            let idx = 0;
+            for (let row = 0; row < state.gridSize.rows; row++) {
+                const rowPlatforms = [];
+                for (let col = 0; col < state.gridSize.cols; col++) {
+                    if (row === 0 && col === 0) {
+                        rowPlatforms.push({ value: '🚶', correct: true, isStart: true, visited: false });
+                    } else if (row === state.goalPos.row && col === state.goalPos.col) {
+                        rowPlatforms.push({ value: '🏁', correct: true, isGoal: true, visited: false });
+                    } else {
+                        const item = { ...items[idx % items.length], visited: false, mustVisit: false };
+                        if (item.correct) {
+                            item.mustVisit = true;
+                            state.totalCorrect++;
+                            state.remainingCorrect++;
+                        }
+                        rowPlatforms.push(item);
+                        idx++;
+                    }
+                }
+                state.platforms.push(rowPlatforms);
+            }
+            ensureValidPath();
+        }
+
+        function ensureValidPath() {
+            // Get all correct items (mustVisit) positions
+            const correctItems = [];
+            for (let row = 0; row < state.gridSize.rows; row++) {
+                for (let col = 0; col < state.gridSize.cols; col++) {
+                    const p = state.platforms[row][col];
+                    if (p.mustVisit && !p.isStart && !p.isGoal) {
+                        correctItems.push({ row, col });
+                    }
+                }
+            }
+
+            // Ensure at least 3 correct items exist
+            while (correctItems.length < 3) {
+                const row = Math.floor(Math.random() * (state.gridSize.rows - 1)) + 1;
+                const col = Math.floor(Math.random() * state.gridSize.cols);
+                const p = state.platforms[row][col];
+                if (!p.correct && !p.isGoal && !p.isStart) {
+                    p.correct = true;
+                    p.mustVisit = true;
+                    updateValueForCorrect(p);
+                    state.totalCorrect++;
+                    state.remainingCorrect++;
+                    correctItems.push({ row, col });
+                }
+            }
+
+            // Helper function to check if two cells are adjacent (8 directions)
+            const isAdjacent = (r1, c1, r2, c2) => {
+                return Math.abs(r1 - r2) <= 1 && Math.abs(c1 - c2) <= 1 && (r1 !== r2 || c1 !== c2);
+            };
+
+            // Helper function to check if cell is safe to step on (correct, start, or goal when unlocked)
+            const isSafe = (row, col) => {
+                if (row < 0 || row >= state.gridSize.rows || col < 0 || col >= state.gridSize.cols) return false;
+                const p = state.platforms[row][col];
+                return p.correct || p.isStart || p.isGoal;
+            };
+
+            // BFS to find all reachable safe cells from start
+            const getReachableCells = () => {
+                const visited = new Set();
+                const queue = [{ row: 0, col: 0 }];
+                visited.add('0,0');
+
+                while (queue.length > 0) {
+                    const { row, col } = queue.shift();
+
+                    // Check all 8 directions
+                    for (let dr = -1; dr <= 1; dr++) {
+                        for (let dc = -1; dc <= 1; dc++) {
+                            if (dr === 0 && dc === 0) continue;
+                            const nr = row + dr;
+                            const nc = col + dc;
+                            const key = `${nr},${nc}`;
+
+                            if (!visited.has(key) && isSafe(nr, nc)) {
+                                visited.add(key);
+                                queue.push({ row: nr, col: nc });
+                            }
+                        }
+                    }
+                }
+                return visited;
+            };
+
+            // Create a path from one cell to another by converting cells to correct
+            const createPath = (fromRow, fromCol, toRow, toCol) => {
+                let currentRow = fromRow;
+                let currentCol = fromCol;
+
+                while (currentRow !== toRow || currentCol !== toCol) {
+                    // Move towards target
+                    const dr = Math.sign(toRow - currentRow);
+                    const dc = Math.sign(toCol - currentCol);
+
+                    currentRow += dr;
+                    currentCol += dc;
+
+                    // Ensure we're in bounds
+                    if (currentRow < 0 || currentRow >= state.gridSize.rows ||
+                        currentCol < 0 || currentCol >= state.gridSize.cols) break;
+
+                    const p = state.platforms[currentRow][currentCol];
+
+                    // Skip if already correct, goal, or start
+                    if (p.correct || p.isGoal || p.isStart) continue;
+
+                    // Convert this cell to correct
+                    p.correct = true;
+                    p.mustVisit = true;
+                    updateValueForCorrect(p);
+                    state.totalCorrect++;
+                    state.remainingCorrect++;
+                }
+            };
+
+            // Find the nearest reachable cell to a target
+            const findNearestReachable = (targetRow, targetCol, reachable) => {
+                let nearest = null;
+                let minDist = Infinity;
+
+                for (const key of reachable) {
+                    const [r, c] = key.split(',').map(Number);
+                    const dist = Math.max(Math.abs(r - targetRow), Math.abs(c - targetCol));
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearest = { row: r, col: c };
+                    }
+                }
+                return nearest;
+            };
+
+            // Keep fixing until all correct items are reachable
+            let maxIterations = 20;
+            while (maxIterations-- > 0) {
+                const reachable = getReachableCells();
+                let allReachable = true;
+
+                // Check each correct item
+                for (const item of correctItems) {
+                    const key = `${item.row},${item.col}`;
+                    if (!reachable.has(key)) {
+                        allReachable = false;
+                        // Find nearest reachable cell and create path to this item
+                        const nearest = findNearestReachable(item.row, item.col, reachable);
+                        if (nearest) {
+                            createPath(nearest.row, nearest.col, item.row, item.col);
+                        }
+                        break; // Recalculate reachable after creating path
+                    }
+                }
+
+                // Also ensure goal is reachable
+                const goalKey = `${state.goalPos.row},${state.goalPos.col}`;
+                if (!reachable.has(goalKey)) {
+                    allReachable = false;
+                    const nearest = findNearestReachable(state.goalPos.row, state.goalPos.col, reachable);
+                    if (nearest) {
+                        createPath(nearest.row, nearest.col, state.goalPos.row, state.goalPos.col);
+                    }
+                }
+
+                if (allReachable) break;
+            }
+        }
+
+        function updateValueForCorrect(platform) {
+            switch (state.mode) {
+                case 'pares':
+                    platform.value = (Math.floor(Math.random() * 25) + 1) * 2;
+                    break;
+                case 'impares':
+                    platform.value = (Math.floor(Math.random() * 25) * 2) + 1;
+                    break;
+                case 'mayusculas':
+                    platform.value = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)];
+                    platform.caseType = 'uppercase';
+                    break;
+                case 'minusculas':
+                    platform.value = 'abcdefghijklmnopqrstuvwxyz'[Math.floor(Math.random() * 26)];
+                    platform.caseType = 'lowercase';
+                    break;
+                case 'sinfones':
+                    platform.value = sinfonesLists.correct[Math.floor(Math.random() * sinfonesLists.correct.length)];
+                    break;
+                case 'fonemas':
+                    const words = phonemeWords[state.selectedPhoneme] || phonemeWords.r;
+                    platform.value = words.correct[Math.floor(Math.random() * words.correct.length)];
+                    break;
+            }
+        }
+
+        function updateRemainingCount() {
+            remainingCountEl.textContent = state.remainingCorrect;
+        }
+
+        function renderGrid() {
+            gridEl.innerHTML = '';
+            gridEl.style.gridTemplateColumns = `repeat(${state.gridSize.cols}, 1fr)`;
+            gridEl.style.gridTemplateRows = `repeat(${state.gridSize.rows}, 1fr)`;
+
+            for (let row = 0; row < state.gridSize.rows; row++) {
+                for (let col = 0; col < state.gridSize.cols; col++) {
+                    const platform = state.platforms[row][col];
+                    const div = document.createElement('div');
+                    div.className = 'platform';
+                    div.dataset.row = row;
+                    div.dataset.col = col;
+
+                    // Add case type class for uppercase/lowercase
+                    if (platform.caseType) {
+                        div.classList.add(platform.caseType);
+                    }
+
+                    if (platform.isGoal) {
+                        div.classList.add('goal');
+                        if (state.remainingCorrect > 0) {
+                            div.classList.add('goal-locked');
+                        }
+                    }
+                    if (platform.isBonusHeart && !platform.visited) {
+                        div.classList.add('bonus-heart');
+                    }
+                    if (platform.visited) div.classList.add('visited');
+                    if (platform.mustVisit && !platform.visited) div.classList.add('must-visit');
+
+                    div.innerHTML = `
+                        <div class="platform-stone"></div>
+                        <span class="platform-content">${platform.value}</span>
+                    `;
+
+                    div.addEventListener('click', () => handlePlatformClick(row, col));
+                    div.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        handlePlatformClick(row, col);
+                    }, { passive: false });
+
+                    gridEl.appendChild(div);
+                }
+            }
+        }
+
+        function startInactivityTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+
+            state.timerInterval = setInterval(() => {
+                if (!state.gameActive) return;
+
+                const elapsed = Date.now() - state.lastMoveTime;
+                const remaining = Math.max(0, state.maxInactivityTime - elapsed);
+                const percent = (remaining / state.maxInactivityTime) * 100;
+
+                timerFillEl.style.width = `${percent}%`;
+
+                if (percent < 30) {
+                    timerFillEl.classList.add('warning');
+                    document.querySelectorAll('.enemy').forEach(e => e.classList.add('angry'));
+                } else {
+                    timerFillEl.classList.remove('warning');
+                    document.querySelectorAll('.enemy').forEach(e => e.classList.remove('angry'));
+                }
+
+                if (remaining <= 0) {
+                    shootAtPlayer();
+                    state.lastMoveTime = Date.now();
+                }
+            }, 100);
+        }
+
+        function resetInactivityTimer() {
+            state.lastMoveTime = Date.now();
+            timerFillEl.style.width = '100%';
+            timerFillEl.classList.remove('warning');
+            document.querySelectorAll('.enemy').forEach(e => e.classList.remove('angry'));
+        }
+
+        function handlePlatformClick(row, col) {
+            if (!state.gameActive) return;
+
+            const rowDiff = Math.abs(row - state.playerPos.row);
+            const colDiff = Math.abs(col - state.playerPos.col);
+
+            if (rowDiff <= 1 && colDiff <= 1 && (rowDiff > 0 || colDiff > 0)) {
+                movePlayer(row, col);
+            }
+        }
+
+        function movePlayer(newRow, newCol) {
+            if (!state.gameActive) return;
+            if (newRow < 0 || newRow >= state.gridSize.rows || newCol < 0 || newCol >= state.gridSize.cols) return;
+
+            resetInactivityTimer();
+
+            const platform = state.platforms[newRow][newCol];
+
+            // Check if trying to reach goal without collecting all correct items
+            if (platform.isGoal && state.remainingCorrect > 0) {
+                // Can't enter goal yet - visual feedback
+                const goalEl = document.querySelector(`.platform[data-row="${newRow}"][data-col="${newCol}"]`);
+                if (goalEl) {
+                    goalEl.style.animation = 'none';
+                    goalEl.offsetHeight;
+                    goalEl.style.animation = 'shake 0.3s';
+                }
+                return;
+            }
+
+            // Mark current as visited
+            const currentPlatform = state.platforms[state.playerPos.row][state.playerPos.col];
+            if (!currentPlatform.isStart) {
+                currentPlatform.visited = true;
+                const currentEl = document.querySelector(`.platform[data-row="${state.playerPos.row}"][data-col="${state.playerPos.col}"]`);
+                if (currentEl) {
+                    currentEl.classList.add('visited');
+                    currentEl.classList.remove('must-visit');
+                }
+            }
+
+            state.playerPos.row = newRow;
+            state.playerPos.col = newCol;
+            updatePlayerPosition();
+
+            if (platform.correct || platform.isGoal || platform.isStart) {
+                const platformEl = document.querySelector(`.platform[data-row="${newRow}"][data-col="${newCol}"]`);
+
+                // Check if bonus heart
+                if (platform.isBonusHeart && !platform.visited) {
+                    gainLife('¡Corazón bonus!');
+                    platformEl.classList.remove('bonus-heart');
+                }
+
+                // Track collected correct items
+                if (platform.mustVisit && !platform.visited) {
+                    state.remainingCorrect--;
+                    updateRemainingCount();
+
+                    // Update goal appearance
+                    const goalEl = document.querySelector('.platform.goal');
+                    if (goalEl && state.remainingCorrect === 0) {
+                        goalEl.classList.remove('goal-locked');
+                    }
+                }
+
+                platform.visited = true;
+                if (platformEl && !platform.isGoal) {
+                    platformEl.classList.add('correct');
+                    platformEl.classList.remove('must-visit');
+                }
+
+                playSoundCorrect();
+                state.score += 10;
+                scoreEl.textContent = state.score;
+
+                // Check for points milestone (every 200 points = extra life)
+                checkPointsMilestone();
+
+                if (platform.isGoal) {
+                    state.gameActive = false;
+                    if (state.timerInterval) clearInterval(state.timerInterval);
+                    if (state.enemyMoveInterval) clearInterval(state.enemyMoveInterval);
+                    state.score += 100;
+                    scoreEl.textContent = state.score;
+
+                    // Bonus life if completed without losing lives
+                    let bonusMessage = '';
+                    if (state.livesLostThisLevel === 0) {
+                        gainLife('¡Nivel perfecto!');
+                        bonusMessage = ' 🌟 ¡+1 vida por nivel perfecto!';
+                    }
+
+                    completeMessageEl.textContent = `¡Recogiste todo! +100 puntos • Nivel ${state.level}${bonusMessage}`;
+                    playSoundLevelComplete();
+                    setTimeout(() => levelCompleteEl.classList.add('active'), 500);
+                }
+            } else {
+                // Wrong move - lose a life but continue if lives remain
+                playSoundWrong();
+                const platformEl = document.querySelector(`.platform[data-row="${newRow}"][data-col="${newCol}"]`);
+                if (platformEl) {
+                    platformEl.classList.add('wrong');
+                    setTimeout(() => platformEl.classList.remove('wrong'), 800);
+                }
+
+                state.lives--;
+                state.livesLostThisLevel++;
+                updateLivesDisplay();
+
+                // Animate life loss
+                const hearts = livesEl.querySelectorAll('.heart');
+                if (hearts[state.lives]) {
+                    hearts[state.lives].classList.add('hit');
+                    setTimeout(() => hearts[state.lives].classList.remove('hit'), 500);
+                }
+
+                // Show error feedback
+                playerEl.classList.add('hit');
+                showErrorFeedback(`"${platform.value}" no es ${missionTexts[state.mode]}`);
+
+                if (state.lives <= 0) {
+                    // Game over - no more lives
+                    state.gameActive = false;
+                    if (state.timerInterval) clearInterval(state.timerInterval);
+                    if (state.enemyMoveInterval) clearInterval(state.enemyMoveInterval);
+                    playerEl.classList.add('falling');
+
+                    playSoundGameOver();
+                    setTimeout(() => {
+                        gameoverMessageEl.textContent = `¡Sin vidas! Puntuación final: ${state.score}`;
+                        gameOverEl.querySelector('.overlay-title').textContent = '💀 Game Over';
+                        gameOverEl.classList.add('active');
+                    }, 800);
+                } else {
+                    // Return to previous position
+                    setTimeout(() => {
+                        state.playerPos.row = state.playerPos.row === newRow ?
+                            (newRow > 0 ? newRow - 1 : 0) : state.playerPos.row;
+                        state.playerPos.col = state.playerPos.col === newCol ?
+                            (newCol > 0 ? newCol - 1 : 0) : state.playerPos.col;
+                        updatePlayerPosition();
+                        playerEl.classList.remove('hit');
+                    }, 500);
+                }
+            }
+        }
+
+        function showErrorFeedback(message) {
+            const feedback = document.createElement('div');
+            feedback.className = 'error-feedback';
+            feedback.textContent = message;
+            gameArea.appendChild(feedback);
+
+            setTimeout(() => feedback.remove(), 2000);
+        }
+
+        function gainLife(reason) {
+            if (state.lives < state.maxLives) {
+                state.lives++;
+                updateLivesDisplay();
+                playSoundGainLife();
+
+                // Show life gained animation
+                const lifeGained = document.createElement('div');
+                lifeGained.className = 'life-gained';
+                lifeGained.textContent = '❤️ +1';
+                gameArea.appendChild(lifeGained);
+                setTimeout(() => lifeGained.remove(), 1500);
+
+                // Animate the new heart
+                const hearts = livesEl.querySelectorAll('.heart');
+                if (hearts[state.lives - 1]) {
+                    hearts[state.lives - 1].style.animation = 'none';
+                    hearts[state.lives - 1].offsetHeight;
+                    hearts[state.lives - 1].style.animation = 'heartGain 0.5s ease-out';
+                }
+
+                // Show milestone badge
+                const badge = document.createElement('div');
+                badge.className = 'milestone-badge';
+                badge.textContent = reason;
+                gameArea.appendChild(badge);
+                setTimeout(() => badge.remove(), 2500);
+            }
+        }
+
+        function checkPointsMilestone() {
+            // Every 200 points = 1 extra life
+            const milestone = Math.floor(state.score / 200);
+            if (milestone > state.lastMilestone) {
+                state.lastMilestone = milestone;
+                gainLife(`¡${milestone * 200} puntos!`);
+            }
+        }
+
+        function updatePlayerPosition() {
+            // Remove player-here from all platforms
+            document.querySelectorAll('.platform.player-here').forEach(p => p.classList.remove('player-here'));
+
+            const platformEl = document.querySelector(`.platform[data-row="${state.playerPos.row}"][data-col="${state.playerPos.col}"]`);
+            if (platformEl) {
+                // Add player-here to current platform
+                platformEl.classList.add('player-here');
+
+                const rect = platformEl.getBoundingClientRect();
+                const gameAreaRect = gameArea.getBoundingClientRect();
+
+                const playerWidth = 45;
+                const playerHeight = 45;
+                const centerX = rect.left - gameAreaRect.left + (rect.width / 2) - (playerWidth / 2);
+                const centerY = rect.top - gameAreaRect.top + (rect.height / 2) - playerHeight - 5;
+
+                playerEl.style.left = `${centerX}px`;
+                playerEl.style.top = `${centerY}px`;
+                playerEl.classList.remove('falling');
+            }
+        }
+
+        function updateLivesDisplay() {
+            const hearts = livesEl.querySelectorAll('.heart');
+            hearts.forEach((heart, index) => {
+                // Show only up to maxLives hearts
+                if (index < state.maxLives) {
+                    heart.style.display = '';
+                    heart.classList.toggle('lost', index >= state.lives);
+                } else {
+                    heart.style.display = 'none';
+                }
+            });
+        }
+
+        const enemyTaunts = ['¡Te veo!', '¡Ven aquí!', '¡No escaparás!', '¡Jajaja!', '¡Cuidado!', '¡Boom!'];
+
+        function spawnEnemies() {
+            document.querySelectorAll('.enemy').forEach(e => e.remove());
+            document.querySelectorAll('.projectile').forEach(p => p.remove());
+            state.enemies = [];
+
+            // Stop any existing enemy movement
+            if (state.enemyMoveInterval) {
+                clearInterval(state.enemyMoveInterval);
+            }
+
+            const enemyCount = Math.min(state.level + 1, 4);
+            const areaRect = gameArea.getBoundingClientRect();
+
+            for (let i = 0; i < enemyCount; i++) {
+                const enemy = document.createElement('div');
+                enemy.className = 'enemy';
+                enemy.innerHTML = `
+                    <div class="enemy-glow"></div>
+                    <div class="enemy-body">${villainEmojis[i % villainEmojis.length]}</div>
+                    <div class="enemy-speech">${enemyTaunts[i % enemyTaunts.length]}</div>
+                `;
+
+                const side = i % 2 === 0 ? 'left' : 'right';
+                const startX = side === 'left' ? 10 : areaRect.width - 70;
+                const startY = 50 + (i * 80);
+
+                enemy.style.left = `${startX}px`;
+                enemy.style.top = `${startY}px`;
+                enemy.dataset.side = side;
+                enemy.dataset.baseX = startX;
+                enemy.dataset.baseY = startY;
+                enemy.dataset.targetX = startX;
+                enemy.dataset.targetY = startY;
+
+                gameArea.appendChild(enemy);
+                state.enemies.push(enemy);
+
+                // Random taunt timing
+                setInterval(() => {
+                    if (state.gameActive && Math.random() < 0.3) {
+                        enemy.classList.add('speaking');
+                        enemy.querySelector('.enemy-speech').textContent = enemyTaunts[Math.floor(Math.random() * enemyTaunts.length)];
+                        setTimeout(() => enemy.classList.remove('speaking'), 2000);
+                    }
+                }, 4000 + Math.random() * 3000);
+            }
+
+            // Start enemy movement AI
+            startEnemyMovement();
+        }
+
+        function startEnemyMovement() {
+            if (state.enemyMoveInterval) {
+                clearInterval(state.enemyMoveInterval);
+            }
+
+            state.enemyMoveInterval = setInterval(() => {
+                if (!state.gameActive) return;
+
+                const playerRect = playerEl.getBoundingClientRect();
+                const areaRect = gameArea.getBoundingClientRect();
+                const playerCenterX = playerRect.left - areaRect.left + playerRect.width / 2;
+                const playerCenterY = playerRect.top - areaRect.top + playerRect.height / 2;
+
+                const elapsed = Date.now() - state.lastMoveTime;
+                const urgency = Math.min(1, elapsed / state.maxInactivityTime);
+
+                state.enemies.forEach((enemy, index) => {
+                    const currentX = parseFloat(enemy.style.left) || 0;
+                    const currentY = parseFloat(enemy.style.top) || 0;
+                    const baseX = parseFloat(enemy.dataset.baseX);
+                    const baseY = parseFloat(enemy.dataset.baseY);
+                    const side = enemy.dataset.side;
+
+                    // Calculate target position (chase player more when timer is low)
+                    let targetX, targetY;
+
+                    if (urgency > 0.5) {
+                        // Chase more aggressively
+                        enemy.classList.add('chasing');
+                        const chaseIntensity = (urgency - 0.5) * 2; // 0 to 1
+
+                        // Move towards player but stay on sides
+                        if (side === 'left') {
+                            targetX = Math.min(areaRect.width * 0.35, baseX + (playerCenterX - baseX) * chaseIntensity * 0.5);
+                        } else {
+                            targetX = Math.max(areaRect.width * 0.65, baseX + (playerCenterX - baseX) * chaseIntensity * 0.5);
+                        }
+                        targetY = baseY + (playerCenterY - baseY) * chaseIntensity * 0.7;
+
+                        // Clamp Y position
+                        targetY = Math.max(30, Math.min(areaRect.height - 150, targetY));
+                    } else {
+                        // Patrol mode - wander around base position
+                        enemy.classList.remove('chasing');
+                        const patrolRadius = 40;
+                        const time = Date.now() / 1000 + index * 2;
+                        targetX = baseX + Math.sin(time * 0.8) * patrolRadius;
+                        targetY = baseY + Math.cos(time * 0.6) * patrolRadius * 0.5;
+                    }
+
+                    // Smoothly move towards target
+                    const moveSpeed = 0.08 + urgency * 0.1;
+                    const newX = currentX + (targetX - currentX) * moveSpeed;
+                    const newY = currentY + (targetY - currentY) * moveSpeed;
+
+                    enemy.style.left = `${newX}px`;
+                    enemy.style.top = `${newY}px`;
+
+                    // Face the player
+                    const facingRight = playerCenterX > newX + 30;
+                    enemy.querySelector('.enemy-body').style.transform =
+                        `translateY(${Math.sin(Date.now() / 300) * 8}px) scaleX(${facingRight ? 1 : -1})`;
+                });
+            }, 50);
+        }
+
+        function shootAtPlayer() {
+            if (!state.gameActive || state.enemies.length === 0) return;
+
+            const enemy = state.enemies[Math.floor(Math.random() * state.enemies.length)];
+
+            // Enemy reaction when shooting
+            enemy.classList.add('speaking');
+            enemy.querySelector('.enemy-speech').textContent = '¡BOOM!';
+            setTimeout(() => enemy.classList.remove('speaking'), 1500);
+
+            playSoundShoot();
+
+            const projectile = document.createElement('div');
+            projectile.className = 'projectile';
+            projectile.textContent = '🔥';
+
+            const enemyRect = enemy.getBoundingClientRect();
+            const areaRect = gameArea.getBoundingClientRect();
+            const playerRect = playerEl.getBoundingClientRect();
+
+            const startX = enemyRect.left - areaRect.left + 25;
+            const startY = enemyRect.top - areaRect.top + 25;
+            const targetX = playerRect.left - areaRect.left + 22;
+            const targetY = playerRect.top - areaRect.top + 22;
+
+            projectile.style.left = `${startX}px`;
+            projectile.style.top = `${startY}px`;
+
+            gameArea.appendChild(projectile);
+
+            const dx = targetX - startX;
+            const dy = targetY - startY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const speed = 10;
+            const vx = (dx / distance) * speed;
+            const vy = (dy / distance) * speed;
+
+            let posX = startX, posY = startY;
+            let trailCounter = 0;
+
+            const moveProjectile = () => {
+                if (!state.gameActive) {
+                    projectile.remove();
+                    return;
+                }
+
+                posX += vx;
+                posY += vy;
+                projectile.style.left = `${posX}px`;
+                projectile.style.top = `${posY}px`;
+
+                // Create trail effect every few frames
+                trailCounter++;
+                if (trailCounter % 3 === 0) {
+                    const trail = document.createElement('div');
+                    trail.className = 'projectile-trail';
+                    trail.style.left = `${posX + 7}px`;
+                    trail.style.top = `${posY + 7}px`;
+                    gameArea.appendChild(trail);
+                    setTimeout(() => trail.remove(), 300);
+                }
+
+                const projRect = projectile.getBoundingClientRect();
+                const currentPlayerRect = playerEl.getBoundingClientRect();
+
+                if (
+                    projRect.left < currentPlayerRect.right &&
+                    projRect.right > currentPlayerRect.left &&
+                    projRect.top < currentPlayerRect.bottom &&
+                    projRect.bottom > currentPlayerRect.top
+                ) {
+                    projectile.remove();
+                    handlePlayerHit();
+                    return;
+                }
+
+                if (posX < -20 || posX > areaRect.width + 20 || posY < -20 || posY > areaRect.height + 20) {
+                    projectile.remove();
+                    return;
+                }
+
+                requestAnimationFrame(moveProjectile);
+            };
+
+            requestAnimationFrame(moveProjectile);
+        }
+
+        function handlePlayerHit() {
+            if (!state.gameActive) return;
+
+            playSoundHit();
+            state.lives--;
+            updateLivesDisplay();
+
+            const hearts = livesEl.querySelectorAll('.heart');
+            if (hearts[state.lives]) {
+                hearts[state.lives].classList.add('hit');
+                setTimeout(() => hearts[state.lives].classList.remove('hit'), 500);
+            }
+
+            playerEl.classList.add('hit');
+            setTimeout(() => playerEl.classList.remove('hit'), 500);
+
+            if (state.lives <= 0) {
+                state.gameActive = false;
+                if (state.timerInterval) clearInterval(state.timerInterval);
+                if (state.enemyMoveInterval) clearInterval(state.enemyMoveInterval);
+                playerEl.classList.add('falling');
+
+                playSoundGameOver();
+                setTimeout(() => {
+                    gameoverMessageEl.textContent = `¡Los malotes te atraparon! Puntuación: ${state.score}`;
+                    gameOverEl.querySelector('.overlay-title').textContent = '💥 ¡Te dieron!';
+                    gameOverEl.classList.add('active');
+                }, 500);
+            }
+        }
+
+        // Controls
+        function handleMove(direction) {
+            if (!state.gameActive) return;
+
+            let newRow = state.playerPos.row;
+            let newCol = state.playerPos.col;
+
+            switch (direction) {
+                case 'up': newRow--; break;
+                case 'down': newRow++; break;
+                case 'left': newCol--; break;
+                case 'right': newCol++; break;
+                case 'upleft': newRow--; newCol--; break;
+                case 'upright': newRow--; newCol++; break;
+                case 'downleft': newRow++; newCol--; break;
+                case 'downright': newRow++; newCol++; break;
+            }
+
+            movePlayer(newRow, newCol);
+        }
+
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            if (btn.dataset.dir) {
+                btn.addEventListener('click', () => handleMove(btn.dataset.dir));
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    handleMove(btn.dataset.dir);
+                }, { passive: false });
+            }
+        });
+
+        // Keyboard mapping for all directions
+        const keyMap = {
+            // Cardinal directions - WASD
+            'w': 'up', 'W': 'up',
+            's': 'down', 'S': 'down',
+            'a': 'left', 'A': 'left',
+            'd': 'right', 'D': 'right',
+            // Cardinal directions - Arrow keys
+            'ArrowUp': 'up',
+            'ArrowDown': 'down',
+            'ArrowLeft': 'left',
+            'ArrowRight': 'right',
+            // Cardinal directions - Numpad
+            '8': 'up',
+            '2': 'down',
+            '4': 'left',
+            '6': 'right',
+            // Diagonal directions - QEZC
+            'q': 'upleft', 'Q': 'upleft',
+            'e': 'upright', 'E': 'upright',
+            'z': 'downleft', 'Z': 'downleft',
+            'c': 'downright', 'C': 'downright',
+            // Diagonal directions - Numpad
+            '7': 'upleft',
+            '9': 'upright',
+            '1': 'downleft',
+            '3': 'downright',
+            // Diagonal directions - Home/End/PgUp/PgDown
+            'Home': 'upleft',
+            'PageUp': 'upright',
+            'End': 'downleft',
+            'PageDown': 'downright'
+        };
+
+        document.addEventListener('keydown', (e) => {
+            const direction = keyMap[e.key];
+            if (direction) {
+                e.preventDefault();
+                handleMove(direction);
+            }
+        });
+
+        // ========== SWIPE GESTURE SYSTEM ==========
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        const minSwipeDistance = 30; // Minimum distance for a swipe
+        const maxSwipeTime = 500; // Maximum time for a swipe (ms)
+
+        gameArea.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                touchStartTime = Date.now();
+            }
+        }, { passive: true });
+
+        gameArea.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length === 1) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                const touchEndTime = Date.now();
+
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+                const deltaTime = touchEndTime - touchStartTime;
+
+                // Check if it's a valid swipe
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                if (distance >= minSwipeDistance && deltaTime <= maxSwipeTime) {
+                    // Calculate angle
+                    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+                    // Determine direction based on angle
+                    // Angles: Right=0, Down=90, Left=180/-180, Up=-90
+                    let direction;
+
+                    if (angle >= -22.5 && angle < 22.5) {
+                        direction = 'right';
+                    } else if (angle >= 22.5 && angle < 67.5) {
+                        direction = 'downright';
+                    } else if (angle >= 67.5 && angle < 112.5) {
+                        direction = 'down';
+                    } else if (angle >= 112.5 && angle < 157.5) {
+                        direction = 'downleft';
+                    } else if (angle >= 157.5 || angle < -157.5) {
+                        direction = 'left';
+                    } else if (angle >= -157.5 && angle < -112.5) {
+                        direction = 'upleft';
+                    } else if (angle >= -112.5 && angle < -67.5) {
+                        direction = 'up';
+                    } else if (angle >= -67.5 && angle < -22.5) {
+                        direction = 'upright';
+                    }
+
+                    if (direction) {
+                        handleMove(direction);
+                        // Hide swipe hint after first successful swipe
+                        const hint = document.getElementById('swipe-hint');
+                        if (hint) {
+                            hint.style.opacity = '0';
+                            setTimeout(() => hint.remove(), 300);
+                        }
+                    }
+                }
+            }
+        }, { passive: true });
+
+        // Visual swipe indicator
+        let swipeIndicator = null;
+
+        gameArea.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && state.gameActive) {
+                const deltaX = e.touches[0].clientX - touchStartX;
+                const deltaY = e.touches[0].clientY - touchStartY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                if (distance >= minSwipeDistance / 2) {
+                    if (!swipeIndicator) {
+                        swipeIndicator = document.createElement('div');
+                        swipeIndicator.className = 'swipe-indicator';
+                        gameArea.appendChild(swipeIndicator);
+                    }
+
+                    const areaRect = gameArea.getBoundingClientRect();
+                    const startX = touchStartX - areaRect.left;
+                    const startY = touchStartY - areaRect.top;
+                    const angle = Math.atan2(deltaY, deltaX);
+
+                    swipeIndicator.style.left = `${startX}px`;
+                    swipeIndicator.style.top = `${startY}px`;
+                    swipeIndicator.style.width = `${Math.min(distance, 60)}px`;
+                    swipeIndicator.style.transform = `rotate(${angle}rad)`;
+                    swipeIndicator.style.opacity = Math.min(distance / minSwipeDistance, 1);
+                }
+            }
+        }, { passive: true });
+
+        gameArea.addEventListener('touchend', () => {
+            if (swipeIndicator) {
+                swipeIndicator.remove();
+                swipeIndicator = null;
+            }
+        }, { passive: true });
+
+        gameArea.addEventListener('touchcancel', () => {
+            if (swipeIndicator) {
+                swipeIndicator.remove();
+                swipeIndicator = null;
+            }
+        }, { passive: true });
+
+        // Mode buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.mode = btn.dataset.mode;
+
+                // Show/hide phoneme selector
+                phonemeSelectorEl.classList.toggle('visible', state.mode === 'fonemas');
+
+                if (state.mode === 'fonemas') {
+                    missionTargetEl.textContent = `palabras con /${state.selectedPhoneme}/`;
+                } else {
+                    missionTargetEl.textContent = missionTexts[state.mode];
+                }
+
+                state.level = 1;
+                state.score = 0;
+                state.lives = 3;
+                state.lastMilestone = 0;
+                levelEl.textContent = state.level;
+                scoreEl.textContent = state.score;
+                initGame();
+            });
+        });
+
+        document.getElementById('retry-btn').addEventListener('click', () => {
+            if (state.lives <= 0) {
+                state.lives = 3;
+                state.score = 0;
+                state.level = 1;
+                state.lastMilestone = 0;
+                scoreEl.textContent = state.score;
+                levelEl.textContent = state.level;
+            }
+            initGame();
+        });
+
+        document.getElementById('next-level-btn').addEventListener('click', () => {
+            state.level++;
+            levelEl.textContent = state.level;
+            initGame();
+        });
+
+        window.addEventListener('resize', () => {
+            if (state.gameActive) updatePlayerPosition();
+        });
+
+        // CSS for shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ========== AUDIO SYSTEM ==========
+        let audioContext = null;
+        let soundEnabled = true;
+        let musicPlaying = false;
+        let musicOscillators = [];
+        let musicGain = null;
+
+        const soundToggleBtn = document.getElementById('sound-toggle');
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        // Toggle sound on/off
+        soundToggleBtn.addEventListener('click', () => {
+            initAudio();
+            soundEnabled = !soundEnabled;
+            soundToggleBtn.textContent = soundEnabled ? '🔊 Sonido' : '🔇 Mute';
+
+            if (soundEnabled) {
+                if (!musicPlaying) startBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+        });
+
+        // Play a tone with given frequency, duration and type
+        function playTone(frequency, duration, type = 'sine', volume = 0.3, delay = 0) {
+            if (!soundEnabled || !audioContext) return;
+
+            setTimeout(() => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = frequency;
+                oscillator.type = type;
+
+                gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            }, delay);
+        }
+
+        // Sound effect: Correct move (pleasant ascending chime)
+        function playSoundCorrect() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(523, 0.15, 'sine', 0.25); // C5
+            playTone(659, 0.15, 'sine', 0.25, 80); // E5
+            playTone(784, 0.2, 'sine', 0.2, 160); // G5
+        }
+
+        // Sound effect: Wrong move (descending buzz)
+        function playSoundWrong() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(300, 0.15, 'sawtooth', 0.2);
+            playTone(200, 0.2, 'sawtooth', 0.25, 100);
+            playTone(150, 0.3, 'sawtooth', 0.15, 200);
+        }
+
+        // Sound effect: Projectile hit (harsh impact)
+        function playSoundHit() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(150, 0.1, 'square', 0.3);
+            playTone(80, 0.2, 'sawtooth', 0.25, 50);
+            playTone(60, 0.15, 'square', 0.2, 120);
+        }
+
+        // Sound effect: Projectile fired (whoosh)
+        function playSoundShoot() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(800, 0.1, 'sine', 0.15);
+            playTone(400, 0.15, 'sine', 0.1, 50);
+        }
+
+        // Sound effect: Gain life (magical sparkle)
+        function playSoundGainLife() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(523, 0.1, 'sine', 0.2);
+            playTone(659, 0.1, 'sine', 0.2, 60);
+            playTone(784, 0.1, 'sine', 0.2, 120);
+            playTone(1047, 0.2, 'sine', 0.25, 180);
+            playTone(1319, 0.3, 'sine', 0.15, 250);
+        }
+
+        // Sound effect: Level complete (fanfare)
+        function playSoundLevelComplete() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(523, 0.15, 'sine', 0.25);
+            playTone(659, 0.15, 'sine', 0.25, 100);
+            playTone(784, 0.15, 'sine', 0.25, 200);
+            playTone(1047, 0.3, 'sine', 0.3, 300);
+            playTone(784, 0.1, 'sine', 0.2, 450);
+            playTone(1047, 0.4, 'sine', 0.25, 550);
+        }
+
+        // Sound effect: Game over (sad descending)
+        function playSoundGameOver() {
+            if (!soundEnabled) return;
+            initAudio();
+            playTone(392, 0.3, 'sine', 0.25);
+            playTone(349, 0.3, 'sine', 0.25, 300);
+            playTone(330, 0.3, 'sine', 0.25, 600);
+            playTone(262, 0.5, 'sine', 0.2, 900);
+        }
+
+        // Background music - soft ambient melody
+        function startBackgroundMusic() {
+            if (!soundEnabled || !audioContext || musicPlaying) return;
+
+            musicPlaying = true;
+            musicGain = audioContext.createGain();
+            musicGain.connect(audioContext.destination);
+            musicGain.gain.value = 0.08; // Very soft
+
+            // Chord progression notes (peaceful ambient)
+            const chords = [
+                [261.63, 329.63, 392.00], // C major
+                [293.66, 369.99, 440.00], // D minor (as major for brightness)
+                [329.63, 415.30, 493.88], // E minor
+                [349.23, 440.00, 523.25], // F major
+            ];
+
+            let chordIndex = 0;
+
+            function playChord() {
+                if (!musicPlaying || !soundEnabled) return;
+
+                // Clear old oscillators
+                musicOscillators.forEach(osc => {
+                    try { osc.stop(); } catch(e) {}
+                });
+                musicOscillators = [];
+
+                const chord = chords[chordIndex % chords.length];
+                chordIndex++;
+
+                chord.forEach((freq, i) => {
+                    const osc = audioContext.createOscillator();
+                    const oscGain = audioContext.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+
+                    oscGain.gain.setValueAtTime(0, audioContext.currentTime);
+                    oscGain.gain.linearRampToValueAtTime(0.06, audioContext.currentTime + 0.5);
+                    oscGain.gain.linearRampToValueAtTime(0.04, audioContext.currentTime + 2.5);
+                    oscGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3.5);
+
+                    osc.connect(oscGain);
+                    oscGain.connect(musicGain);
+
+                    osc.start(audioContext.currentTime + i * 0.1);
+                    osc.stop(audioContext.currentTime + 4);
+
+                    musicOscillators.push(osc);
+                });
+
+                // Add a gentle arpeggio
+                const arpNotes = [chord[0] * 2, chord[1] * 2, chord[2] * 2, chord[1] * 2];
+                arpNotes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        if (!musicPlaying || !soundEnabled) return;
+                        const osc = audioContext.createOscillator();
+                        const oscGain = audioContext.createGain();
+
+                        osc.type = 'triangle';
+                        osc.frequency.value = freq;
+
+                        oscGain.gain.setValueAtTime(0.03, audioContext.currentTime);
+                        oscGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.8);
+
+                        osc.connect(oscGain);
+                        oscGain.connect(musicGain);
+
+                        osc.start(audioContext.currentTime);
+                        osc.stop(audioContext.currentTime + 0.8);
+                    }, 500 + i * 400);
+                });
+
+                // Schedule next chord
+                if (musicPlaying) {
+                    setTimeout(playChord, 4000);
+                }
+            }
+
+            playChord();
+        }
+
+        function stopBackgroundMusic() {
+            musicPlaying = false;
+            musicOscillators.forEach(osc => {
+                try { osc.stop(); } catch(e) {}
+            });
+            musicOscillators = [];
+        }
+
+        // Initialize audio on first user interaction
+        document.addEventListener('click', () => {
+            initAudio();
+            if (soundEnabled && !musicPlaying) {
+                startBackgroundMusic();
+            }
+        }, { once: true });
+
+        document.addEventListener('touchstart', () => {
+            initAudio();
+            if (soundEnabled && !musicPlaying) {
+                startBackgroundMusic();
+            }
+        }, { once: true });
+
+        // Start
+        initGame();
+    </script>
+</body>
+</html>

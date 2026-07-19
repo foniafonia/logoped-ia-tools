@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🌈 LetraSlots - Aprende Jugando</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #ff6b9d;
+      --purple: #c56cf0;
+      --blue: #54a0ff;
+      --green: #5cd85c;
+      --yellow: #ffd93d;
+      --orange: #ff9f43;
+      --red: #ff6b6b;
+      --cyan: #48dbfb;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      --card-bg: rgba(255,255,255,0.95);
+      --shadow-soft: 0 10px 40px rgba(0,0,0,0.15);
+      --rainbow: linear-gradient(90deg, #ff6b6b, #ffd93d, #5cd85c, #54a0ff, #c56cf0);
+    }
+
+    .dark {
+      --card-bg: rgba(40,40,60,0.95);
+      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    /* Floating decorations */
+    .decoration {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.6;
+      animation: floatAround 20s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatAround {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-20px) rotate(10deg); }
+      50% { transform: translateY(0) rotate(0deg); }
+      75% { transform: translateY(20px) rotate(-10deg); }
+    }
+
+    .slot-machine {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 40px;
+      padding: 20px;
+      box-shadow: var(--shadow-soft), 0 0 0 6px rgba(255,255,255,0.3);
+      width: 100%;
+      max-width: 800px;
+      z-index: 1;
+    }
+
+    .machine-top {
+      background: var(--rainbow);
+      height: 12px;
+      border-radius: 20px 20px 0 0;
+      margin: -20px -20px 15px -20px;
+    }
+
+    .title-section {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      background: var(--rainbow);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+    }
+
+    .mascot {
+      font-size: 2.5rem;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #888;
+      font-weight: 700;
+    }
+
+    .dark .subtitle { color: #aaa; }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-bubble {
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(197, 108, 240, 0.4);
+      min-width: 80px;
+    }
+
+    .stat-bubble.gold {
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      box-shadow: 0 4px 15px rgba(255, 217, 61, 0.4);
+    }
+
+    .stat-bubble.green {
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      box-shadow: 0 4px 15px rgba(92, 216, 92, 0.4);
+    }
+
+    .stat-bubble.blue {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 4px 15px rgba(84, 160, 255, 0.4);
+    }
+
+    .stat-icon {
+      font-size: 1.2rem;
+    }
+
+    .stat-value {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+    }
+
+    /* Reels area */
+    .game-area {
+      background: linear-gradient(180deg, #f0f4ff 0%, #e8ecff 100%);
+      border-radius: 25px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 4px dashed #d0d8ff;
+    }
+
+    .dark .game-area {
+      background: linear-gradient(180deg, #2a2a4a 0%, #1f1f3a 100%);
+      border-color: #3a3a5a;
+    }
+
+    .reels-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .reel-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nudge-btn {
+      width: 50px;
+      height: 35px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+      box-shadow: 0 4px 0 #6a5acd, 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .nudge-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #6a5acd, 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .nudge-btn:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #6a5acd;
+    }
+
+    .nudge-btn:disabled {
+      background: #ccc;
+      box-shadow: 0 2px 0 #999;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .reel-wrapper {
+      position: relative;
+      width: clamp(70px, 18vw, 110px);
+      height: clamp(200px, 35vw, 280px);
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 4px solid #e0e5ff;
+      box-shadow: inset 0 5px 20px rgba(0,0,0,0.1), 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .dark .reel-wrapper {
+      background: #2a2a4a;
+      border-color: #4a4a6a;
+    }
+
+    .reel-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.8) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(255,255,255,0.8) 100%);
+      z-index: 10;
+    }
+
+    .dark .reel-glow {
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.6) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(0,0,0,0.6) 100%);
+    }
+
+    .reel-highlight {
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 33.33%;
+      border: 3px solid var(--yellow);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 217, 61, 0.5), inset 0 0 15px rgba(255, 217, 61, 0.2);
+      z-index: 11;
+      pointer-events: none;
+    }
+
+    .reel {
+      position: absolute;
+      width: 100%;
+      transition: none;
+    }
+
+    .symbol {
+      width: 100%;
+      height: clamp(66px, 11.5vw, 93px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .symbol-inner {
+      width: 85%;
+      height: 85%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(145deg, #fff 0%, #f8f8ff 100%);
+      border-radius: 18px;
+      border: 3px solid currentColor;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .dark .symbol-inner {
+      background: linear-gradient(145deg, #3a3a5a 0%, #2a2a4a 100%);
+    }
+
+    .symbol-inner::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 10%;
+      width: 80%;
+      height: 30%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), transparent);
+      border-radius: 50%;
+    }
+
+    .symbol.highlight .symbol-inner {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px currentColor, 0 6px 0 rgba(0,0,0,0.15);
+    }
+
+    /* Combo highlights */
+    .symbol.combo-triple .symbol-inner {
+      transform: scale(1.15);
+      background: linear-gradient(145deg, #fff9c4, #ffeb3b, #ffc107) !important;
+      border-color: #ff9800 !important;
+      box-shadow: 0 0 40px #ffd700, 0 0 80px #ffeb3b, 0 8px 0 rgba(0,0,0,0.2);
+      animation: tripleGlow 0.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes tripleGlow {
+      0% { transform: scale(1.15) rotate(-3deg); box-shadow: 0 0 40px #ffd700, 0 0 80px #ffeb3b; }
+      100% { transform: scale(1.2) rotate(3deg); box-shadow: 0 0 60px #ffd700, 0 0 100px #ffeb3b; }
+    }
+
+    .symbol.combo-double .symbol-inner {
+      transform: scale(1.1);
+      background: linear-gradient(145deg, #e1f5fe, #81d4fa, #4fc3f7) !important;
+      border-color: #29b6f6 !important;
+      box-shadow: 0 0 30px #29b6f6, 0 6px 0 rgba(0,0,0,0.15);
+      animation: doubleGlow 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes doubleGlow {
+      0% { transform: scale(1.1); }
+      100% { transform: scale(1.15); }
+    }
+
+    .symbol.combo-stair .symbol-inner {
+      transform: scale(1.12);
+      background: linear-gradient(145deg, #e8f5e9, #a5d6a7, #66bb6a) !important;
+      border-color: #43a047 !important;
+      box-shadow: 0 0 35px #4caf50, 0 6px 0 rgba(0,0,0,0.15);
+      animation: stairGlow 0.6s ease-in-out infinite;
+    }
+
+    @keyframes stairGlow {
+      0%, 100% { transform: scale(1.12) translateY(0); }
+      50% { transform: scale(1.15) translateY(-5px); }
+    }
+
+    .symbol.combo-palindrome .symbol-inner {
+      transform: scale(1.1);
+      background: linear-gradient(145deg, #f3e5f5, #ce93d8, #ab47bc) !important;
+      border-color: #8e24aa !important;
+      box-shadow: 0 0 35px #9c27b0, 0 6px 0 rgba(0,0,0,0.15);
+      animation: palindromeGlow 0.8s ease-in-out infinite;
+    }
+
+    @keyframes palindromeGlow {
+      0%, 100% { transform: scale(1.1) rotateY(0deg); }
+      50% { transform: scale(1.12) rotateY(180deg); }
+    }
+
+    .symbol.combo-vowels .symbol-inner {
+      transform: scale(1.1);
+      background: linear-gradient(90deg, #ff6b6b, #ffd93d, #5cd85c, #54a0ff, #c56cf0) !important;
+      border-color: #fff !important;
+      box-shadow: 0 0 35px rgba(255,255,255,0.8), 0 6px 0 rgba(0,0,0,0.15);
+      animation: rainbowGlow 1s linear infinite;
+    }
+
+    @keyframes rainbowGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .symbol.combo-wildcard .symbol-inner {
+      background: linear-gradient(145deg, #fff9c4, #ffd700, #ffab00) !important;
+      border-color: #ff6f00 !important;
+      box-shadow: 0 0 40px #ffc107, 0 0 60px #ffeb3b;
+      animation: wildcardSpin 1s linear infinite;
+    }
+
+    @keyframes wildcardSpin {
+      0% { transform: scale(1.1) rotate(0deg); }
+      100% { transform: scale(1.1) rotate(360deg); }
+    }
+
+    @keyframes symbolWiggle {
+      0%, 100% { transform: scale(1.1) rotate(-2deg); }
+      50% { transform: scale(1.1) rotate(2deg); }
+    }
+
+    /* Wildcard default style */
+    .wildcard-symbol {
+      animation: wildcardPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes wildcardPulse {
+      0%, 100% { box-shadow: 0 0 20px #ffd700, 0 6px 0 rgba(0,0,0,0.15); }
+      50% { box-shadow: 0 0 40px #ffd700, 0 0 60px #ffeb3b, 0 6px 0 rgba(0,0,0,0.15); }
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Fredoka One', cursive;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-radius: 20px;
+    }
+
+    .btn-spin {
+      width: clamp(150px, 35vw, 220px);
+      height: clamp(60px, 12vw, 80px);
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      background: linear-gradient(135deg, var(--green) 0%, #3cb371 100%);
+      color: #fff;
+      box-shadow: 0 8px 0 #2e8b57, 0 12px 30px rgba(92, 216, 92, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-spin:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 11px 0 #2e8b57, 0 18px 40px rgba(92, 216, 92, 0.4);
+    }
+
+    .btn-spin:active:not(:disabled) {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #2e8b57;
+    }
+
+    .btn-spin:disabled {
+      background: linear-gradient(135deg, #aaa 0%, #888 100%);
+      box-shadow: 0 5px 0 #666;
+    }
+
+    .btn-spin.spinning {
+      animation: spinPulse 0.4s ease-in-out infinite;
+    }
+
+    @keyframes spinPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .btn-secondary {
+      width: clamp(55px, 12vw, 70px);
+      height: clamp(55px, 12vw, 70px);
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+      box-shadow: 0 5px 0 #ccc, 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .dark .btn-secondary {
+      background: linear-gradient(135deg, #3a3a5a 0%, #2a2a4a 100%);
+      box-shadow: 0 5px 0 #1a1a2a;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #ccc;
+    }
+
+    .btn-secondary.active {
+      background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
+      box-shadow: 0 5px 0 #e67e22, 0 0 20px rgba(255, 217, 61, 0.5);
+    }
+
+    .btn-config {
+      position: absolute;
+      top: 25px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #f8f8f8, #e0e0e0);
+      box-shadow: 0 4px 0 #bbb, 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .dark .btn-config {
+      background: linear-gradient(135deg, #3a3a5a, #2a2a4a);
+      box-shadow: 0 4px 0 #1a1a2a;
+    }
+
+    /* Nudges counter */
+    .nudges-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      border-radius: 20px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Combos display */
+    .combos-panel {
+      background: rgba(255,255,255,0.5);
+      border-radius: 15px;
+      padding: 12px;
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .dark .combos-panel {
+      background: rgba(0,0,0,0.2);
+    }
+
+    .combo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #fff;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 2px solid transparent;
+    }
+
+    .dark .combo-item {
+      background: #2a2a4a;
+      color: #fff;
+      border: 2px solid transparent;
+    }
+
+    .combo-icon {
+      font-size: 1.2rem;
+    }
+
+    .combo-points {
+      margin-left: auto;
+      color: var(--green);
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .combo-item.active {
+      background: linear-gradient(135deg, #fff9c4, #ffeb3b);
+      border: 2px solid #ffc107;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.5);
+    }
+
+    .dark .combo-item.active {
+      background: linear-gradient(135deg, #4a4a2a, #3a3a1a);
+      border-color: #ffc107;
+    }
+
+    .combo-item {
+      transition: all 0.3s ease;
+    }
+
+    /* Win display */
+    .win-display {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: #fff;
+      padding: 30px 50px;
+      border-radius: 30px;
+      z-index: 1000;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      border: 5px solid var(--yellow);
+    }
+
+    .dark .win-display {
+      background: #2a2a4a;
+    }
+
+    .win-display.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    .win-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+      background: var(--rainbow);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .win-symbols {
+      font-size: clamp(2.5rem, 10vw, 4rem);
+      margin: 15px 0;
+    }
+
+    .win-points {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      color: var(--green);
+    }
+
+    .win-bonus {
+      font-size: 1rem;
+      color: var(--purple);
+      margin-top: 10px;
+    }
+
+    /* Message toast */
+    .message-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 10px 30px rgba(197, 108, 240, 0.4);
+    }
+
+    .message-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Config panel */
+    .config-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .config-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .config-panel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: min(400px, 90vw);
+      height: 100vh;
+      background: var(--card-bg);
+      z-index: 1001;
+      padding: 25px;
+      overflow-y: auto;
+      transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      border-radius: 30px 0 0 30px;
+    }
+
+    .config-panel.open {
+      right: 0;
+    }
+
+    .config-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px dashed #e0e5ff;
+    }
+
+    .dark .config-header {
+      border-color: #3a3a5a;
+    }
+
+    .config-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.4rem;
+      color: var(--purple);
+    }
+
+    .btn-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--pink);
+      color: #fff;
+      font-size: 1.3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 0 #d63384;
+    }
+
+    .config-section {
+      margin-bottom: 20px;
+    }
+
+    .config-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dark .config-label {
+      color: #aaa;
+    }
+
+    .config-select, .config-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: #f5f7ff;
+      border: 3px solid #e0e5ff;
+      border-radius: 15px;
+      color: #333;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .dark .config-select, .dark .config-input {
+      background: #2a2a4a;
+      border-color: #3a3a5a;
+      color: #fff;
+    }
+
+    .config-select:focus, .config-input:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+
+    .config-toggle {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      padding: 10px 0;
+    }
+
+    .toggle-switch {
+      width: 55px;
+      height: 30px;
+      background: #ddd;
+      border-radius: 15px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: left 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .config-toggle input {
+      display: none;
+    }
+
+    .config-toggle input:checked + .toggle-switch {
+      background: var(--green);
+    }
+
+    .config-toggle input:checked + .toggle-switch::after {
+      left: 28px;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .config-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 10px;
+      background: #e0e5ff;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .dark .config-slider {
+      background: #3a3a5a;
+    }
+
+    .config-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 25px;
+      height: 25px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(197, 108, 240, 0.4);
+    }
+
+    .slider-value {
+      min-width: 45px;
+      text-align: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.2rem;
+      color: var(--purple);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #f5f7ff, #e8ecff);
+      padding: 12px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .dark .stat-card {
+      background: linear-gradient(135deg, #2a2a4a, #1f1f3a);
+    }
+
+    .stat-card-label {
+      font-size: 0.7rem;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .stat-card-value {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem;
+      color: var(--purple);
+    }
+
+    .btn-reset {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--pink), var(--red));
+      color: #fff;
+      border-radius: 15px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      box-shadow: 0 5px 0 #c0392b;
+      margin-top: 15px;
+    }
+
+    /* Confetti */
+    .confetti-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      opacity: 0;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(1080deg); opacity: 0; }
+    }
+
+    /* Stars animation */
+    @keyframes starBurst {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+      100% { transform: scale(2) rotate(360deg); opacity: 0; }
+    }
+
+    .star-burst {
+      position: fixed;
+      font-size: 3rem;
+      pointer-events: none;
+      z-index: 997;
+      animation: starBurst 0.8s ease-out forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .slot-machine {
+        padding: 15px;
+        border-radius: 25px;
+      }
+
+      .reels-container {
+        gap: 8px;
+      }
+
+      .nudge-btn {
+        width: 40px;
+        height: 28px;
+        font-size: 0.9rem;
+      }
+
+      .combos-panel {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-height: 700px) and (orientation: landscape) {
+      .slot-machine {
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .reel-wrapper {
+        height: 150px;
+      }
+
+      .symbol {
+        height: 50px;
+        font-size: 1.5rem;
+      }
+
+      .combos-panel {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating decorations -->
+  <div class="decoration" style="top: 10%; left: 5%;">🌟</div>
+  <div class="decoration" style="top: 20%; right: 8%; animation-delay: -5s;">🎈</div>
+  <div class="decoration" style="bottom: 15%; left: 10%; animation-delay: -10s;">🎀</div>
+  <div class="decoration" style="bottom: 25%; right: 5%; animation-delay: -15s;">✨</div>
+  <div class="decoration" style="top: 50%; left: 3%; animation-delay: -7s;">🌈</div>
+
+  <div class="slot-machine">
+    <div class="machine-top"></div>
+
+    <button class="btn btn-config" id="btnConfig" aria-label="Configuración">⚙️</button>
+
+    <div class="title-section">
+      <span class="mascot">🦄</span>
+      <h1 class="title">LetraSlots</h1>
+      <div class="subtitle">¡Aprende jugando! 🎮</div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-bubble gold">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value" id="points">0</div>
+      </div>
+      <div class="stat-bubble">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value" id="stars">0</div>
+      </div>
+      <div class="stat-bubble green">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value" id="streak">0</div>
+      </div>
+      <div class="stat-bubble blue">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" id="spins">0</div>
+      </div>
+    </div>
+
+    <div class="game-area">
+      <div class="reels-container" id="reelsContainer"></div>
+
+      <div class="nudges-display">
+        <span>🔄 Empujones:</span>
+        <span id="nudgesCount">3</span>
+        <span style="font-size: 0.8rem; opacity: 0.8;">(50 pts = +1)</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" id="btnSound">🔊</button>
+      <button class="btn btn-spin" id="btnSpin">
+        <span>🎰</span>
+        <span>¡GIRAR!</span>
+      </button>
+      <button class="btn btn-secondary" id="btnAuto">🔁</button>
+    </div>
+
+    <div class="combos-panel">
+      <div class="combo-item" data-combo="jackpot">
+        <span class="combo-icon">👑</span>
+        <span>Jackpot (4=)</span>
+        <span class="combo-points">+100</span>
+      </div>
+      <div class="combo-item" data-combo="triple">
+        <span class="combo-icon">🎯</span>
+        <span>Triple (3=)</span>
+        <span class="combo-points">+75</span>
+      </div>
+      <div class="combo-item" data-combo="stair">
+        <span class="combo-icon">📈</span>
+        <span>Escalera</span>
+        <span class="combo-points">+75</span>
+      </div>
+      <div class="combo-item" data-combo="palindrome">
+        <span class="combo-icon">🔮</span>
+        <span>Palíndromo</span>
+        <span class="combo-points">+60</span>
+      </div>
+      <div class="combo-item" data-combo="vowels">
+        <span class="combo-icon">🌈</span>
+        <span>Todas vocales</span>
+        <span class="combo-points">+50</span>
+      </div>
+      <div class="combo-item" data-combo="double">
+        <span class="combo-icon">✌️</span>
+        <span>Doble (2=)</span>
+        <span class="combo-points">+25</span>
+      </div>
+      <div class="combo-item" data-combo="wildcard">
+        <span class="combo-icon">⭐</span>
+        <span>Comodín ★</span>
+        <span class="combo-points">×1.5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="win-display" id="winDisplay">
+    <div class="win-title" id="winTitle">¡GENIAL!</div>
+    <div class="win-symbols" id="winSymbols"></div>
+    <div class="win-points" id="winPoints"></div>
+    <div class="win-bonus" id="winBonus"></div>
+  </div>
+
+  <div class="message-toast" id="messageToast"></div>
+
+  <div class="config-overlay" id="configOverlay"></div>
+  <div class="config-panel" id="configPanel">
+    <div class="config-header">
+      <span class="config-title">⚙️ Configuración</span>
+      <button class="btn btn-close" id="btnCloseConfig">✕</button>
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">📝 Modo de símbolos</label>
+      <select class="config-select" id="symbolMode">
+        <option value="vowels">Vocales (A, E, I, O, U)</option>
+        <option value="consonants">Consonantes</option>
+        <option value="syllables-p">Sílabas con P</option>
+        <option value="syllables-m">Sílabas con M</option>
+        <option value="syllables-s">Sílabas con S</option>
+        <option value="syllables-l">Sílabas con L</option>
+        <option value="syllables-r">Sílabas con R</option>
+        <option value="syllables-rr">Sílabas con RR</option>
+        <option value="phonemes">Fonemas</option>
+        <option value="numbers">Números</option>
+        <option value="animals">Animales 🐾</option>
+        <option value="fruits">Frutas 🍎</option>
+        <option value="custom">Personalizado</option>
+      </select>
+    </div>
+
+    <div class="config-section" id="customSymbolsSection" style="display: none;">
+      <label class="config-label">✏️ Tus símbolos</label>
+      <input type="text" class="config-input" id="customSymbols" placeholder="Separa con comas: PA, PE, PI...">
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">🎰 Número de rodillos</label>
+      <div class="slider-container">
+        <input type="range" class="config-slider" id="reelCount" min="3" max="5" value="4">
+        <span class="slider-value" id="reelCountValue">4</span>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">⚡ Velocidad</label>
+      <div class="slider-container">
+        <input type="range" class="config-slider" id="spinSpeed" min="1" max="5" value="3">
+        <span class="slider-value" id="spinSpeedValue">3</span>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">🎯 Dificultad</label>
+      <div class="slider-container">
+        <input type="range" class="config-slider" id="difficulty" min="1" max="5" value="3">
+        <span class="slider-value" id="difficultyValue">3</span>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">⏱️ Pausa auto-giro</label>
+      <div class="slider-container">
+        <input type="range" class="config-slider" id="autoPause" min="1" max="5" value="2">
+        <span class="slider-value" id="autoPauseValue">2s</span>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="config-toggle">
+        <input type="checkbox" id="voiceEnabled" checked>
+        <span class="toggle-switch"></span>
+        <span>🗣️ Pronunciar resultados</span>
+      </label>
+    </div>
+
+    <div class="config-section">
+      <label class="config-toggle">
+        <input type="checkbox" id="wildcardEnabled" checked>
+        <span class="toggle-switch"></span>
+        <span>⭐ Incluir comodín</span>
+      </label>
+    </div>
+
+    <div class="config-section">
+      <label class="config-label">📊 Estadísticas</label>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Giros</div>
+          <div class="stat-card-value" id="statSpins">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Triples</div>
+          <div class="stat-card-value" id="statTriples">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Dobles</div>
+          <div class="stat-card-value" id="statDoubles">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Escaleras</div>
+          <div class="stat-card-value" id="statStairs">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Mejor racha</div>
+          <div class="stat-card-value" id="statMaxStreak">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Tiempo</div>
+          <div class="stat-card-value" id="statTime">00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-reset" id="btnResetStats">🔄 Reiniciar todo</button>
+  </div>
+
+  <div class="confetti-container" id="confetti"></div>
+
+  <script>
+    // ===== AUDIO ENGINE =====
+    class AudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+        this.initialized = false;
+      }
+
+      init() {
+        if (this.initialized) return;
+        try {
+          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+          this.initialized = true;
+        } catch (e) {
+          console.log('Audio not supported');
+        }
+      }
+
+      playTone(freq, duration, type = 'sine', volume = 0.3) {
+        if (!this.enabled || !this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      }
+
+      playSpinStart() {
+        if (!this.enabled || !this.ctx) return;
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => this.playTone(300 + i * 80, 0.06, 'sine', 0.2), i * 40);
+        }
+      }
+
+      playReelStop() {
+        if (!this.enabled || !this.ctx) return;
+        this.playTone(180, 0.08, 'square', 0.25);
+        setTimeout(() => this.playTone(120, 0.12, 'triangle', 0.2), 40);
+      }
+
+      playNudge() {
+        if (!this.enabled || !this.ctx) return;
+        this.playTone(500, 0.05, 'sine', 0.2);
+        setTimeout(() => this.playTone(600, 0.05, 'sine', 0.15), 50);
+      }
+
+      playWin(level = 1) {
+        if (!this.enabled || !this.ctx) return;
+        const melodies = {
+          1: [523, 659],
+          2: [523, 659, 784],
+          3: [523, 659, 784, 1047, 1175, 1319]
+        };
+        const notes = melodies[level] || melodies[1];
+        notes.forEach((freq, i) => {
+          setTimeout(() => {
+            this.playTone(freq, 0.25, 'sine', 0.3);
+            this.playTone(freq * 1.5, 0.25, 'triangle', 0.15);
+          }, i * 120);
+        });
+      }
+
+      playClick() {
+        this.playTone(600, 0.04, 'square', 0.1);
+      }
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+    }
+
+    // ===== TTS ENGINE =====
+    class TTSEngine {
+      constructor() {
+        this.enabled = true;
+        this.synth = window.speechSynthesis;
+      }
+
+      speak(text) {
+        if (!this.enabled || !this.synth) return;
+        this.synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.rate = 0.85;
+        utterance.pitch = 1.2;
+        this.synth.speak(utterance);
+      }
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+    }
+
+    // ===== SYMBOL SETS =====
+    const SYMBOL_SETS = {
+      vowels: ['A', 'E', 'I', 'O', 'U'],
+      consonants: ['B', 'C', 'D', 'F', 'G', 'L', 'M', 'N', 'P', 'R', 'S', 'T'],
+      'syllables-p': ['PA', 'PE', 'PI', 'PO', 'PU'],
+      'syllables-m': ['MA', 'ME', 'MI', 'MO', 'MU'],
+      'syllables-s': ['SA', 'SE', 'SI', 'SO', 'SU'],
+      'syllables-l': ['LA', 'LE', 'LI', 'LO', 'LU'],
+      'syllables-r': ['RA', 'RE', 'RI', 'RO', 'RU'],
+      'syllables-rr': ['RRA', 'RRE', 'RRI', 'RRO', 'RRU'],
+      phonemes: ['/r/', '/rr/', '/s/', '/l/', '/p/', '/m/', '/n/'],
+      numbers: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+      animals: ['🐶', '🐱', '🐰', '🦊', '🐻', '🐼', '🦁', '🐸'],
+      fruits: ['🍎', '🍊', '🍋', '🍇', '🍓', '🍌', '🍉', '🍒']
+    };
+
+    const SYMBOL_COLORS = {
+      'A': '#ff6b6b', 'E': '#ffd93d', 'I': '#5cd85c', 'O': '#54a0ff', 'U': '#c56cf0',
+      'PA': '#ff6b6b', 'PE': '#ffd93d', 'PI': '#5cd85c', 'PO': '#54a0ff', 'PU': '#c56cf0',
+      'MA': '#ff9f43', 'ME': '#ee5a24', 'MI': '#48dbfb', 'MO': '#10ac84', 'MU': '#5f27cd',
+      'SA': '#ff6b81', 'SE': '#feca57', 'SI': '#48dbfb', 'SO': '#1dd1a1', 'SU': '#a55eea',
+      'LA': '#ff4757', 'LE': '#ffa502', 'LI': '#2ed573', 'LO': '#3742fa', 'LU': '#8854d0',
+      'RA': '#eb3b5a', 'RE': '#fa8231', 'RI': '#20bf6b', 'RO': '#4b6584', 'RU': '#9b59b6',
+      'RRA': '#e74c3c', 'RRE': '#f39c12', 'RRI': '#27ae60', 'RRO': '#2980b9', 'RRU': '#8e44ad',
+      '/r/': '#e55039', '/rr/': '#f5cd79', '/s/': '#78e08f', '/l/': '#60a3bc', '/p/': '#b8e994', '/m/': '#82ccdd', '/n/': '#f8c291',
+      '1': '#ff6b6b', '2': '#ffd93d', '3': '#5cd85c', '4': '#54a0ff', '5': '#c56cf0',
+      '6': '#ff9f43', '7': '#48dbfb', '8': '#10ac84', '9': '#5f27cd',
+      '★': '#ffd700',
+      'default': '#54a0ff'
+    };
+
+    // Special symbol styles
+    const SPECIAL_SYMBOLS = {
+      '★': { bg: 'linear-gradient(145deg, #fff9c4, #ffd700, #ffab00)', border: '#ff6f00', glow: true }
+    };
+
+    // ===== GAME STATE =====
+    const state = {
+      points: 0,
+      stars: 0,
+      streak: 0,
+      maxStreak: 0,
+      spins: 0,
+      triples: 0,
+      doubles: 0,
+      stairs: 0,
+      nudges: 3,
+      spinning: false,
+      autoMode: false,
+      autoTimer: null,
+      sessionStart: Date.now(),
+      symbols: SYMBOL_SETS.vowels,
+      reelCount: 4,
+      spinSpeed: 3,
+      difficulty: 3,
+      autoPause: 2,
+      wildcardEnabled: true,
+      lastNudgePoints: 0
+    };
+
+    // ===== ENGINES =====
+    const audio = new AudioEngine();
+    const tts = new TTSEngine();
+
+    // ===== DOM HELPERS =====
+    const $ = id => document.getElementById(id);
+    const reelsContainer = $('reelsContainer');
+    const btnSpin = $('btnSpin');
+    const btnAuto = $('btnAuto');
+    const btnSound = $('btnSound');
+    const configPanel = $('configPanel');
+    const configOverlay = $('configOverlay');
+    const winDisplay = $('winDisplay');
+    const messageToast = $('messageToast');
+
+    // ===== REEL SYSTEM =====
+    let reels = [];
+    let reelElements = [];
+    let currentResults = [];
+
+    function getActiveSymbols() {
+      const syms = [...state.symbols];
+      if (state.wildcardEnabled && !syms.includes('★')) {
+        syms.push('★');
+      }
+      return syms;
+    }
+
+    function createReels() {
+      reelsContainer.innerHTML = '';
+      reels = [];
+      reelElements = [];
+      currentResults = [];
+
+      const activeSymbols = getActiveSymbols();
+
+      for (let i = 0; i < state.reelCount; i++) {
+        const column = document.createElement('div');
+        column.className = 'reel-column';
+
+        // Nudge up button
+        const nudgeUp = document.createElement('button');
+        nudgeUp.className = 'nudge-btn';
+        nudgeUp.innerHTML = '▲';
+        nudgeUp.dataset.reel = i;
+        nudgeUp.dataset.direction = 'up';
+        nudgeUp.disabled = true;
+        nudgeUp.addEventListener('click', handleNudge);
+
+        // Reel wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'reel-wrapper';
+
+        const glow = document.createElement('div');
+        glow.className = 'reel-glow';
+
+        const highlight = document.createElement('div');
+        highlight.className = 'reel-highlight';
+
+        const reel = document.createElement('div');
+        reel.className = 'reel';
+        reel.id = `reel-${i}`;
+
+        // Create symbols
+        const extendedSymbols = [];
+        for (let j = 0; j < 20; j++) {
+          extendedSymbols.push(activeSymbols[j % activeSymbols.length]);
+        }
+
+        extendedSymbols.forEach((sym) => {
+          const symbolEl = document.createElement('div');
+          symbolEl.className = 'symbol';
+          const color = SYMBOL_COLORS[sym] || SYMBOL_COLORS['default'];
+          const special = SPECIAL_SYMBOLS[sym];
+
+          let innerStyle = `color: ${color}; border-color: ${color};`;
+          let extraClass = '';
+
+          if (special) {
+            innerStyle = `color: ${color}; border-color: ${special.border}; background: ${special.bg};`;
+            if (special.glow) {
+              innerStyle += ` box-shadow: 0 0 20px ${color}, 0 6px 0 rgba(0,0,0,0.15);`;
+              extraClass = ' wildcard-symbol';
+            }
+          }
+
+          symbolEl.innerHTML = `<div class="symbol-inner${extraClass}" style="${innerStyle}">${sym}</div>`;
+          reel.appendChild(symbolEl);
+        });
+
+        wrapper.appendChild(reel);
+        wrapper.appendChild(glow);
+        wrapper.appendChild(highlight);
+
+        // Nudge down button
+        const nudgeDown = document.createElement('button');
+        nudgeDown.className = 'nudge-btn';
+        nudgeDown.innerHTML = '▼';
+        nudgeDown.dataset.reel = i;
+        nudgeDown.dataset.direction = 'down';
+        nudgeDown.disabled = true;
+        nudgeDown.addEventListener('click', handleNudge);
+
+        column.appendChild(nudgeUp);
+        column.appendChild(wrapper);
+        column.appendChild(nudgeDown);
+        reelsContainer.appendChild(column);
+
+        reelElements.push(reel);
+        reels.push({
+          element: reel,
+          position: 0,
+          velocity: 0,
+          targetSymbol: null,
+          stopped: true,
+          symbols: extendedSymbols,
+          currentIndex: 0
+        });
+      }
+    }
+
+    function getSymbolHeight() {
+      const wrapper = document.querySelector('.reel-wrapper');
+      if (!wrapper) return 93;
+      return wrapper.offsetHeight / 3;
+    }
+
+    function handleNudge(e) {
+      if (state.spinning || state.nudges <= 0) return;
+
+      const reelIndex = parseInt(e.target.dataset.reel);
+      const direction = e.target.dataset.direction;
+      const reel = reels[reelIndex];
+
+      audio.init();
+      audio.playNudge();
+
+      state.nudges--;
+      updateNudgesDisplay();
+
+      const symbolHeight = getSymbolHeight();
+
+      if (direction === 'up') {
+        reel.currentIndex = (reel.currentIndex - 1 + reel.symbols.length) % reel.symbols.length;
+      } else {
+        reel.currentIndex = (reel.currentIndex + 1) % reel.symbols.length;
+      }
+
+      reel.position = reel.currentIndex * symbolHeight;
+      reel.element.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      reel.element.style.transform = `translateY(${-reel.position + symbolHeight}px)`;
+
+      setTimeout(() => {
+        reel.element.style.transition = 'none';
+      }, 300);
+
+      currentResults[reelIndex] = reel.symbols[reel.currentIndex];
+      updateHighlights();
+      checkCombosAfterNudge();
+    }
+
+    function updateHighlights() {
+      reels.forEach((reel, idx) => {
+        const symbols = reel.element.querySelectorAll('.symbol');
+        symbols.forEach((s, i) => {
+          s.classList.remove('highlight', 'combo-triple', 'combo-double', 'combo-stair', 'combo-palindrome', 'combo-vowels', 'combo-wildcard');
+          if (i === reel.currentIndex) {
+            s.classList.add('highlight');
+          }
+        });
+      });
+    }
+
+    function highlightCombos(comboInfo) {
+      // Clear all combo classes first
+      reels.forEach((reel) => {
+        const symbols = reel.element.querySelectorAll('.symbol');
+        symbols.forEach((s) => {
+          s.classList.remove('combo-triple', 'combo-double', 'combo-stair', 'combo-palindrome', 'combo-vowels', 'combo-wildcard');
+        });
+      });
+
+      // Clear combo panel highlights
+      document.querySelectorAll('.combo-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      if (!comboInfo || comboInfo.winLevel === 0) return;
+
+      const { comboType, involvedIndices, wildcardIndices, points } = comboInfo;
+
+      // Highlight the combo in the panel
+      let panelComboType = comboType;
+      if (comboType === 'triple' && points >= 100) {
+        panelComboType = 'jackpot';
+      }
+      const comboItem = document.querySelector(`.combo-item[data-combo="${panelComboType}"]`);
+      if (comboItem) {
+        comboItem.classList.add('active');
+      }
+
+      // Also highlight wildcard in panel if present
+      if (wildcardIndices && wildcardIndices.length > 0) {
+        const wildcardItem = document.querySelector('.combo-item[data-combo="wildcard"]');
+        if (wildcardItem) {
+          wildcardItem.classList.add('active');
+        }
+      }
+
+      // Highlight wildcard symbols
+      if (wildcardIndices && wildcardIndices.length > 0) {
+        wildcardIndices.forEach(idx => {
+          const reel = reels[idx];
+          if (reel) {
+            const symbols = reel.element.querySelectorAll('.symbol');
+            if (symbols[reel.currentIndex]) {
+              symbols[reel.currentIndex].classList.add('combo-wildcard');
+            }
+          }
+        });
+      }
+
+      // Highlight combo symbols
+      if (involvedIndices && involvedIndices.length > 0) {
+        involvedIndices.forEach(idx => {
+          const reel = reels[idx];
+          if (reel) {
+            const symbols = reel.element.querySelectorAll('.symbol');
+            if (symbols[reel.currentIndex]) {
+              symbols[reel.currentIndex].classList.add(`combo-${comboType}`);
+            }
+          }
+        });
+      }
+    }
+
+    function checkCombosAfterNudge() {
+      const result = evaluateCombos(currentResults, false);
+      highlightCombos(result);
+      if (result.points > 0 && result.points !== state.lastNudgePoints) {
+        state.lastNudgePoints = result.points;
+        showMessage(`¡${result.message}! +${result.points} pts`);
+      }
+    }
+
+    function updateNudgesDisplay() {
+      $('nudgesCount').textContent = state.nudges;
+      const nudgeBtns = document.querySelectorAll('.nudge-btn');
+      nudgeBtns.forEach(btn => {
+        btn.disabled = state.spinning || state.nudges <= 0;
+      });
+    }
+
+    function enableNudgeButtons(enable) {
+      const nudgeBtns = document.querySelectorAll('.nudge-btn');
+      nudgeBtns.forEach(btn => {
+        btn.disabled = !enable || state.nudges <= 0;
+      });
+    }
+
+    function spin() {
+      if (state.spinning) return;
+
+      // Award combo points before new spin
+      if (currentResults.length > 0) {
+        const result = evaluateCombos(currentResults, true);
+        if (result.points > 0) {
+          awardPoints(result);
+        }
+      }
+
+      audio.init();
+      state.spinning = true;
+      state.spins++;
+      state.lastNudgePoints = 0;
+
+      btnSpin.disabled = true;
+      btnSpin.classList.add('spinning');
+      btnSpin.innerHTML = '<span>🎰</span><span>...</span>';
+      enableNudgeButtons(false);
+
+      audio.playSpinStart();
+
+      const symbolHeight = getSymbolHeight();
+      const results = generateResults();
+
+      reels.forEach((reel, i) => {
+        reel.stopped = false;
+        reel.velocity = 12 + (state.spinSpeed * 4);
+        reel.targetSymbol = results[i];
+
+        const targetIndex = reel.symbols.indexOf(reel.targetSymbol);
+        reel.targetIndex = targetIndex >= 0 ? targetIndex : 0;
+
+        const stopDelay = 800 + (i * (350 - state.spinSpeed * 40));
+        setTimeout(() => decelerateReel(reel, i), stopDelay);
+      });
+
+      animateReels();
+    }
+
+    function generateResults() {
+      const results = [];
+      const activeSymbols = getActiveSymbols();
+      const difficultyChances = [0.06, 0.12, 0.18, 0.28, 0.45];
+      const tripleChance = difficultyChances[state.difficulty - 1];
+      const doubleChance = tripleChance * 1.8;
+      const stairChance = tripleChance * 1.2;
+
+      const rand = Math.random();
+
+      if (rand < tripleChance) {
+        const symbol = state.symbols[Math.floor(Math.random() * state.symbols.length)];
+        for (let i = 0; i < state.reelCount; i++) results.push(symbol);
+      } else if (rand < tripleChance + stairChance && state.symbols.length >= state.reelCount) {
+        const startIdx = Math.floor(Math.random() * (state.symbols.length - state.reelCount + 1));
+        for (let i = 0; i < state.reelCount; i++) results.push(state.symbols[startIdx + i]);
+      } else if (rand < tripleChance + stairChance + doubleChance) {
+        const symbol = state.symbols[Math.floor(Math.random() * state.symbols.length)];
+        const pos1 = Math.floor(Math.random() * state.reelCount);
+        let pos2;
+        do { pos2 = Math.floor(Math.random() * state.reelCount); } while (pos2 === pos1);
+        for (let i = 0; i < state.reelCount; i++) {
+          if (i === pos1 || i === pos2) results.push(symbol);
+          else {
+            let other;
+            do { other = activeSymbols[Math.floor(Math.random() * activeSymbols.length)]; } while (other === symbol);
+            results.push(other);
+          }
+        }
+      } else {
+        for (let i = 0; i < state.reelCount; i++) {
+          results.push(activeSymbols[Math.floor(Math.random() * activeSymbols.length)]);
+        }
+      }
+
+      return results;
+    }
+
+    function animateReels() {
+      if (!state.spinning) return;
+
+      const symbolHeight = getSymbolHeight();
+      const totalHeight = symbolHeight * reels[0].symbols.length;
+      let allStopped = true;
+
+      reels.forEach((reel) => {
+        if (!reel.stopped) {
+          allStopped = false;
+          reel.position += reel.velocity;
+          if (reel.position >= totalHeight) reel.position -= totalHeight;
+          reel.element.style.transform = `translateY(${-reel.position + symbolHeight}px)`;
+        }
+      });
+
+      if (!allStopped) requestAnimationFrame(animateReels);
+    }
+
+    function decelerateReel(reel, index) {
+      const symbolHeight = getSymbolHeight();
+
+      const decelerate = () => {
+        if (reel.velocity > 0) {
+          reel.velocity = Math.max(0, reel.velocity - 0.6);
+          reel.position += reel.velocity;
+          const totalHeight = symbolHeight * reel.symbols.length;
+          if (reel.position >= totalHeight) reel.position -= totalHeight;
+          reel.element.style.transform = `translateY(${-reel.position + symbolHeight}px)`;
+          if (reel.velocity > 0) requestAnimationFrame(decelerate);
+          else snapToPosition(reel, index);
+        }
+      };
+
+      decelerate();
+    }
+
+    function snapToPosition(reel, index) {
+      const symbolHeight = getSymbolHeight();
+      reel.currentIndex = reel.targetIndex;
+      reel.position = reel.currentIndex * symbolHeight;
+      reel.element.style.transform = `translateY(${-reel.position + symbolHeight}px)`;
+      reel.stopped = true;
+
+      audio.playReelStop();
+      currentResults[index] = reel.targetSymbol;
+
+      const symbols = reel.element.querySelectorAll('.symbol');
+      symbols.forEach((s, i) => {
+        s.classList.remove('highlight');
+        if (i === reel.currentIndex) s.classList.add('highlight');
+      });
+
+      if (reels.every(r => r.stopped)) {
+        setTimeout(finishSpin, 300);
+      }
+    }
+
+    function finishSpin() {
+      state.spinning = false;
+      btnSpin.disabled = false;
+      btnSpin.classList.remove('spinning');
+      btnSpin.innerHTML = '<span>🎰</span><span>¡GIRAR!</span>';
+      enableNudgeButtons(true);
+
+      // Check and highlight combos
+      const result = evaluateCombos(currentResults, false);
+      highlightCombos(result);
+
+      updateDisplay();
+      updateStats();
+
+      if (state.autoMode) {
+        state.autoTimer = setTimeout(spin, state.autoPause * 1000);
+      }
+    }
+
+    function evaluateCombos(results, applyStats) {
+      const counts = {};
+      results.forEach(s => counts[s] = (counts[s] || 0) + 1);
+
+      // Find wildcard positions
+      const wildcardIndices = [];
+      results.forEach((s, i) => {
+        if (s === '★') wildcardIndices.push(i);
+      });
+      const wildcardCount = wildcardIndices.length;
+      delete counts['★'];
+
+      let maxCount = 0;
+      let winSymbol = null;
+      Object.keys(counts).forEach(sym => {
+        if (counts[sym] > maxCount) {
+          maxCount = counts[sym];
+          winSymbol = sym;
+        }
+      });
+
+      // Find indices of matching symbols
+      const matchingIndices = [];
+      results.forEach((s, i) => {
+        if (s === winSymbol) matchingIndices.push(i);
+      });
+
+      // Add wildcards to the best match
+      maxCount += wildcardCount;
+
+      // Check for stair
+      let isStair = false;
+      const nonWildcards = results.filter(s => s !== '★');
+      const stairIndices = [];
+      if (nonWildcards.length >= 2) {
+        const symbolIndices = nonWildcards.map(s => state.symbols.indexOf(s)).filter(i => i >= 0);
+        if (symbolIndices.length >= 2) {
+          const sortedSymbolIndices = [...symbolIndices].sort((a, b) => a - b);
+          isStair = sortedSymbolIndices.every((v, i, arr) => i === 0 || v === arr[i - 1] + 1);
+          if (isStair) {
+            results.forEach((s, i) => {
+              if (s !== '★') stairIndices.push(i);
+            });
+          }
+        }
+      }
+
+      // Check palindrome
+      const isPalindrome = results.length >= 3 &&
+        results.join('') === results.slice().reverse().join('');
+
+      // Check all vowels
+      const vowels = ['A', 'E', 'I', 'O', 'U'];
+      const allVowels = nonWildcards.length > 0 && nonWildcards.every(s => vowels.includes(s));
+      const vowelIndices = [];
+      if (allVowels) {
+        results.forEach((s, i) => {
+          if (vowels.includes(s)) vowelIndices.push(i);
+        });
+      }
+
+      let winLevel = 0;
+      let points = 0;
+      let message = '';
+      let bonus = '';
+      let comboType = '';
+      let involvedIndices = [];
+
+      if (maxCount >= state.reelCount) {
+        winLevel = 3;
+        points = 100;
+        message = '¡JACKPOT!';
+        comboType = 'triple';
+        involvedIndices = matchingIndices;
+        if (applyStats) state.triples++;
+      } else if (maxCount >= 3) {
+        winLevel = 3;
+        points = 75;
+        message = '¡TRIPLE!';
+        comboType = 'triple';
+        involvedIndices = matchingIndices;
+        if (applyStats) state.triples++;
+      } else if (isPalindrome) {
+        winLevel = 2;
+        points = 60;
+        message = '¡PALÍNDROMO!';
+        comboType = 'palindrome';
+        involvedIndices = results.map((_, i) => i);
+        bonus = results.join(' - ');
+      } else if (isStair && nonWildcards.length >= 3) {
+        winLevel = 2;
+        points = 75;
+        message = '¡ESCALERA!';
+        comboType = 'stair';
+        involvedIndices = stairIndices;
+        if (applyStats) state.stairs++;
+      } else if (allVowels && nonWildcards.length >= 3) {
+        winLevel = 2;
+        points = 50;
+        message = '¡TODAS VOCALES!';
+        comboType = 'vowels';
+        involvedIndices = vowelIndices;
+      } else if (maxCount >= 2) {
+        winLevel = 1;
+        points = 25;
+        message = '¡DOBLE!';
+        comboType = 'double';
+        involvedIndices = matchingIndices;
+        if (applyStats) state.doubles++;
+      }
+
+      // Wildcard multiplier
+      if (wildcardCount > 0 && points > 0) {
+        points = Math.floor(points * (1 + wildcardCount * 0.5));
+        bonus = `Comodín ×${1 + wildcardCount * 0.5}`;
+      }
+
+      return { winLevel, points, message, bonus, winSymbol, comboType, involvedIndices, wildcardIndices };
+    }
+
+    function awardPoints(result) {
+      if (result.points <= 0) {
+        state.streak = 0;
+        showMessage('¡Sigue intentando! 💪');
+        return;
+      }
+
+      state.points += result.points;
+      state.streak++;
+      state.maxStreak = Math.max(state.maxStreak, state.streak);
+
+      // Award stars for big wins
+      if (result.points >= 50) state.stars++;
+
+      // Award nudges for points
+      const nudgeThreshold = 50;
+      const newNudges = Math.floor(state.points / nudgeThreshold) - Math.floor((state.points - result.points) / nudgeThreshold);
+      if (newNudges > 0) {
+        state.nudges += newNudges;
+        updateNudgesDisplay();
+      }
+
+      audio.playWin(result.winLevel);
+
+      if (result.winLevel >= 2) {
+        showWin(result.message, currentResults.join(' '), `+${result.points}`, result.bonus);
+        launchConfetti(result.winLevel === 3 ? 60 : 30);
+        createStarBurst();
+      } else {
+        showMessage(`${result.message} +${result.points} pts`);
+      }
+
+      // TTS
+      if (tts.enabled && result.winSymbol) {
+        setTimeout(() => tts.speak(result.winSymbol), 500);
+      }
+
+      updateDisplay();
+    }
+
+    function showWin(title, symbols, points, bonus) {
+      $('winTitle').textContent = title;
+      $('winSymbols').textContent = symbols;
+      $('winPoints').textContent = points;
+      $('winBonus').textContent = bonus || '';
+      winDisplay.classList.add('show');
+      setTimeout(() => winDisplay.classList.remove('show'), 2500);
+    }
+
+    function showMessage(text) {
+      messageToast.textContent = text;
+      messageToast.classList.add('show');
+      setTimeout(() => messageToast.classList.remove('show'), 2000);
+    }
+
+    function updateDisplay() {
+      $('points').textContent = state.points;
+      $('stars').textContent = state.stars;
+      $('streak').textContent = state.streak;
+      $('spins').textContent = state.spins;
+    }
+
+    function updateStats() {
+      $('statSpins').textContent = state.spins;
+      $('statTriples').textContent = state.triples;
+      $('statDoubles').textContent = state.doubles;
+      $('statStairs').textContent = state.stairs;
+      $('statMaxStreak').textContent = state.maxStreak;
+
+      const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
+      const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+      const secs = (elapsed % 60).toString().padStart(2, '0');
+      $('statTime').textContent = `${mins}:${secs}`;
+    }
+
+    // ===== CONFETTI =====
+    function launchConfetti(count = 40) {
+      const container = $('confetti');
+      const colors = ['#ff6b6b', '#ffd93d', '#5cd85c', '#54a0ff', '#c56cf0', '#ff9f43', '#48dbfb'];
+      const shapes = ['●', '■', '★', '♦', '♥'];
+
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.color = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.fontSize = (Math.random() * 15 + 10) + 'px';
+        piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        piece.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
+        piece.style.animationDelay = Math.random() * 0.5 + 's';
+        container.appendChild(piece);
+      }
+
+      setTimeout(() => container.innerHTML = '', 4500);
+    }
+
+    function createStarBurst() {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const star = document.createElement('div');
+          star.className = 'star-burst';
+          star.textContent = '⭐';
+          star.style.left = (30 + Math.random() * 40) + '%';
+          star.style.top = (30 + Math.random() * 40) + '%';
+          document.body.appendChild(star);
+          setTimeout(() => star.remove(), 800);
+        }, i * 100);
+      }
+    }
+
+    // ===== CONFIG =====
+    function openConfig() {
+      audio.playClick();
+      configPanel.classList.add('open');
+      configOverlay.classList.add('open');
+      updateStats();
+    }
+
+    function closeConfig() {
+      audio.playClick();
+      configPanel.classList.remove('open');
+      configOverlay.classList.remove('open');
+    }
+
+    function applyConfig() {
+      const mode = $('symbolMode').value;
+
+      if (mode === 'custom') {
+        const custom = $('customSymbols').value.split(',').map(s => s.trim()).filter(s => s);
+        state.symbols = custom.length > 0 ? custom : SYMBOL_SETS.vowels;
+        $('customSymbolsSection').style.display = 'block';
+      } else {
+        state.symbols = SYMBOL_SETS[mode] || SYMBOL_SETS.vowels;
+        $('customSymbolsSection').style.display = 'none';
+      }
+
+      state.reelCount = parseInt($('reelCount').value);
+      state.spinSpeed = parseInt($('spinSpeed').value);
+      state.difficulty = parseInt($('difficulty').value);
+      state.autoPause = parseInt($('autoPause').value);
+      tts.enabled = $('voiceEnabled').checked;
+      state.wildcardEnabled = $('wildcardEnabled').checked;
+
+      $('reelCountValue').textContent = state.reelCount;
+      $('spinSpeedValue').textContent = state.spinSpeed;
+      $('difficultyValue').textContent = state.difficulty;
+      $('autoPauseValue').textContent = state.autoPause + 's';
+
+      createReels();
+      updateNudgesDisplay();
+    }
+
+    function resetStats() {
+      if (state.spinning) return;
+
+      state.points = 0;
+      state.stars = 0;
+      state.streak = 0;
+      state.maxStreak = 0;
+      state.spins = 0;
+      state.triples = 0;
+      state.doubles = 0;
+      state.stairs = 0;
+      state.nudges = 3;
+      state.sessionStart = Date.now();
+      currentResults = [];
+
+      updateDisplay();
+      updateStats();
+      updateNudgesDisplay();
+      createReels();
+      showMessage('¡Empezamos de nuevo! 🎉');
+    }
+
+    // ===== AUTO MODE =====
+    function toggleAuto() {
+      audio.init();
+      state.autoMode = !state.autoMode;
+      btnAuto.classList.toggle('active', state.autoMode);
+
+      if (state.autoMode && !state.spinning) {
+        spin();
+      } else if (!state.autoMode && state.autoTimer) {
+        clearTimeout(state.autoTimer);
+        state.autoTimer = null;
+      }
+    }
+
+    // ===== SOUND =====
+    function toggleSound() {
+      audio.init();
+      const enabled = audio.toggle();
+      btnSound.textContent = enabled ? '🔊' : '🔇';
+      if (enabled) audio.playClick();
+    }
+
+    // ===== DARK MODE =====
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      document.documentElement.classList.toggle('dark', event.matches);
+    });
+
+    // ===== EVENT LISTENERS =====
+    btnSpin.addEventListener('click', () => { audio.init(); spin(); });
+    btnAuto.addEventListener('click', toggleAuto);
+    btnSound.addEventListener('click', toggleSound);
+    $('btnConfig').addEventListener('click', openConfig);
+    $('btnCloseConfig').addEventListener('click', closeConfig);
+    configOverlay.addEventListener('click', closeConfig);
+    $('btnResetStats').addEventListener('click', resetStats);
+
+    ['symbolMode', 'reelCount', 'spinSpeed', 'difficulty', 'autoPause', 'voiceEnabled', 'wildcardEnabled', 'customSymbols'].forEach(id => {
+      $(id).addEventListener('change', applyConfig);
+      $(id).addEventListener('input', applyConfig);
+    });
+
+    setInterval(updateStats, 1000);
+
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !state.spinning) {
+        e.preventDefault();
+        audio.init();
+        spin();
+      }
+    });
+
+    // ===== INIT =====
+    createReels();
+    updateDisplay();
+    updateNudgesDisplay();
+  </script>
+</body>
+</html>

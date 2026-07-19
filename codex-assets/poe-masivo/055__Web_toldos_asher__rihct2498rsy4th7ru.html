@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSky Luxe Design - Pérgolas y Toldos de Alta Gama</title>
+    <meta name="description" content="Especialistas en pérgolas y toldos de alta gama. Lujo y confort, justo fuera de tu casa. Diseño moderno y atención personalizada.">
+    <meta name="keywords" content="pérgolas, toldos, alta gama, diseño moderno, pérgolas bioclimáticas, toldos extensibles">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#87CEEB',
+                        secondary: '#2C3E50',
+                        accent: '#34495E',
+                        light: '#F8F9FA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .rtl { direction: rtl; }
+        .ltr { direction: ltr; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.8), rgba(135, 206, 235, 0.6)),
+                        url('https://pfst.cf2.poecdn.net/base/image/811a2ff6f1821981d24000a700d3756225791d776f91db357eae2e8c24760c66?w=800&h=600');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .dark .product-card {
+            background: linear-gradient(145deg, #374151, #4B5563);
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 2px 2px 20px rgba(0,0,0,0.4);
+        }
+        
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: #87CEEB;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="font-sans scroll-smooth bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <!-- Language & Theme Detection -->
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Translations -->
+    <script>
+        const translations = {
+            es: {
+                // Navigation
+                home: "Inicio",
+                products: "Productos",
+                about: "Nosotros",
+                projects: "Proyectos",
+                contact: "Contacto",
+                
+                // Hero Section
+                heroTitle1: "Lujo y confort",
+                heroTitle2: "Justo fuera de tu casa",
+                heroSubtitle: "Especialistas en pérgolas y toldos de alta gama con diseño moderno y atención personalizada",
+                heroButton: "Solicitar Presupuesto",
+                
+                // Products Section
+                productsTitle: "Nuestros Productos",
+                productsSubtitle: "Soluciones de alta gama para exteriores",
+                
+                // Product Names
+                pergolaBioclimatic: "Pérgolas Bioclimáticas",
+                pergolaRetractable: "Pérgolas Retráctiles",
+                pergolaFixed: "Pérgolas Fijas",
+                awningExtensible: "Toldos Extensibles",
+                awningVertical: "Toldos Verticales",
+                
+                // Product Descriptions
+                pergolaBioclimaticDesc: "Pérgolas de aluminio con lamas orientables para control perfecto del clima y la luz natural.",
+                pergolaRetractableDesc: "Pérgolas de PVC retráctiles que ofrecen flexibilidad total según las condiciones climáticas.",
+                pergolaFixedDesc: "Pérgolas fijas de aluminio con diseño elegante y durabilidad excepcional.",
+                awningExtensibleDesc: "Toldos de brazos extensibles para terrazas y jardines con accionamiento manual o motorizado.",
+                awningVerticalDesc: "Toldos verticales eléctricos tipo screen y zip para protección total contra sol y viento.",
+                
+                // Benefits Section
+                benefitsTitle: "¿Por qué elegir BlueSky Luxe Design?",
+                benefit1: "Diseño Personalizado",
+                benefit1Desc: "Cada proyecto se adapta a tus necesidades específicas y estilo arquitectónico.",
+                benefit2: "Calidad Premium",
+                benefit2Desc: "Utilizamos los mejores materiales y técnicas de fabricación europeas.",
+                benefit3: "Garantía Completa",
+                benefit3Desc: "Ofrecemos garantía integral en todos nuestros productos e instalaciones.",
+                benefit4: "Servicio Técnico",
+                benefit4Desc: "Mantenimiento y servicio técnico especializado post-instalación.",
+                
+                // Testimonials
+                testimonialsTitle: "Lo que dicen nuestros clientes",
+                testimonial1: "Excelente calidad y servicio. La pérgola bioclimática superó nuestras expectativas.",
+                testimonial1Author: "María González",
+                testimonial2: "Profesionales excepcionales. El toldo vertical cambió completamente nuestra terraza.",
+                testimonial2Author: "Carlos Ruiz",
+                testimonial3: "Atención personalizada desde el primer día. Totalmente recomendable.",
+                testimonial3Author: "Ana Martín",
+                
+                // About Section
+                aboutTitle: "Sobre Nosotros",
+                aboutSubtitle: "Experiencia y excelencia en diseño de exteriores",
+                aboutText1: "BlueSky Luxe Design nace de la pasión por crear espacios exteriores únicos que combinen funcionalidad, diseño y la más alta calidad. Con años de experiencia en el sector, nos especializamos en pérgolas y toldos de alta gama.",
+                aboutText2: "Nuestro compromiso es ofrecer soluciones personalizadas que se adapten perfectamente a cada espacio y necesidad, utilizando materiales premium y las últimas tecnologías en automatización y control climático.",
+                aboutText3: "Trabajamos con arquitectos, diseñadores y propietarios exigentes que buscan excelencia en cada detalle.",
+                
+                // Contact Section
+                contactTitle: "Contacto",
+                contactSubtitle: "Solicita tu presupuesto personalizado",
+                nameLabel: "Nombre completo",
+                emailLabel: "Correo electrónico",
+                phoneLabel: "Teléfono",
+                messageLabel: "Mensaje",
+                sendButton: "Enviar Consulta",
+                
+                // Contact Info
+                phoneNumber: "+34 900 123 456",
+                emailAddress: "asherlus@hotmail.com",
+                address: "Av. Diseño Moderno, 123, Madrid, España",
+                
+                // Footer
+                rightsReserved: "© 2024 BlueSky Luxe Design. Todos los derechos reservados.",
+                
+                // Form placeholders
+                namePlaceholder: "Tu nombre completo",
+                emailPlaceholder: "tu@email.com",
+                phonePlaceholder: "Tu número de teléfono",
+                messagePlaceholder: "Cuéntanos sobre tu proyecto..."
+            },
+            en: {
+                // Navigation
+                home: "Home",
+                products: "Products",
+                about: "About",
+                projects: "Projects",
+                contact: "Contact",
+                
+                // Hero Section
+                heroTitle1: "Luxury and comfort",
+                heroTitle2: "right outside your home",
+                heroSubtitle: "Specialists in high-end pergolas and awnings with modern design and personalized attention",
+                heroButton: "Request Quote",
+                
+                // Products Section
+                productsTitle: "Our Products",
+                productsSubtitle: "High-end outdoor solutions",
+                
+                // Product Names
+                pergolaBioclimatic: "Bioclimatic Pergolas",
+                pergolaRetractable: "Retractable Pergolas",
+                pergolaFixed: "Fixed Pergolas",
+                awningExtensible: "Extensible Awnings",
+                awningVertical: "Vertical Awnings",
+                
+                // Product Descriptions
+                pergolaBioclimaticDesc: "Aluminum pergolas with adjustable slats for perfect climate and natural light control.",
+                pergolaRetractableDesc: "Retractable PVC pergolas offering total flexibility according to weather conditions.",
+                pergolaFixedDesc: "Fixed aluminum pergolas with elegant design and exceptional durability.",
+                awningExtensibleDesc: "Extensible arm awnings for terraces and gardens with manual or motorized operation.",
+                awningVerticalDesc: "Electric vertical awnings, screen and zip type for total protection against sun and wind.",
+                
+                // Benefits Section
+                benefitsTitle: "Why choose BlueSky Luxe Design?",
+                benefit1: "Custom Design",
+                benefit1Desc: "Each project adapts to your specific needs and architectural style.",
+                benefit2: "Premium Quality",
+                benefit2Desc: "We use the best materials and European manufacturing techniques.",
+                benefit3: "Complete Warranty",
+                benefit3Desc: "We offer comprehensive warranty on all our products and installations.",
+                benefit4: "Technical Service",
+                benefit4Desc: "Specialized maintenance and technical service post-installation.",
+                
+                // Testimonials
+                testimonialsTitle: "What our clients say",
+                testimonial1: "Excellent quality and service. The bioclimatic pergola exceeded our expectations.",
+                testimonial1Author: "Maria Gonzalez",
+                testimonial2: "Exceptional professionals. The vertical awning completely changed our terrace.",
+                testimonial2Author: "Carlos Ruiz",
+                testimonial3: "Personalized attention from day one. Totally recommendable.",
+                testimonial3Author: "Ana Martin",
+                
+                // About Section
+                aboutTitle: "About Us",
+                aboutSubtitle: "Experience and excellence in outdoor design",
+                aboutText1: "BlueSky Luxe Design was born from the passion to create unique outdoor spaces that combine functionality, design and the highest quality. With years of experience in the sector, we specialize in high-end pergolas and awnings.",
+                aboutText2: "Our commitment is to offer personalized solutions that perfectly adapt to each space and need, using premium materials and the latest technologies in automation and climate control.",
+                aboutText3: "We work with demanding architects, designers and owners who seek excellence in every detail.",
+                
+                // Contact Section
+                contactTitle: "Contact",
+                contactSubtitle: "Request your personalized quote",
+                nameLabel: "Full name",
+                emailLabel: "Email",
+                phoneLabel: "Phone",
+                messageLabel: "Message",
+                sendButton: "Send Inquiry",
+                
+                // Contact Info
+                phoneNumber: "+34 900 123 456",
+                emailAddress: "info@blueskyluxe.com",
+                address: "Modern Design Ave, 123, Madrid, Spain",
+                
+                // Footer
+                rightsReserved: "© 2024 BlueSky Luxe Design. All rights reserved.",
+                
+                // Form placeholders
+                namePlaceholder: "Your full name",
+                emailPlaceholder: "your@email.com",
+                phonePlaceholder: "Your phone number",
+                messagePlaceholder: "Tell us about your project..."
+            },
+            he: {
+                // Navigation
+                home: "בית",
+                products: "מוצרים",
+                about: "אודות",
+                projects: "פרויקטים",
+                contact: "צור קשר",
+                
+                // Hero Section
+                heroTitle1: "יוקרה ונוחות",
+                heroTitle2: "ממש מחוץ לבית שלך",
+                heroSubtitle: "מתמחים בפרגולות וסוכנים יוקרתיים עם עיצוב מודרני וטיפול אישי",
+                heroButton: "בקש הצעת מחיר",
+                
+                // Products Section
+                productsTitle: "המוצרים שלנו",
+                productsSubtitle: "פתרונות חוץ יוקרתיים",
+                
+                // Product Names
+                pergolaBioclimatic: "פרגולות ביוקלימטיות",
+                pergolaRetractable: "פרגולות נשלפות",
+                pergolaFixed: "פרגולות קבועות",
+                awningExtensible: "סוכנים נפתחים",
+                awningVertical: "סוכנים אנכיים",
+                
+                // Product Descriptions
+                pergolaBioclimaticDesc: "פרגולות אלומיניום עם להבים מתכווננים לשליטה מושלמת באקלים ובאור טבעי.",
+                pergolaRetractableDesc: "פרגולות PVC נשלפות המציעות גמישות מלאה בהתאם לתנאי מזג האוויר.",
+                pergolaFixedDesc: "פרגולות אלומיניום קבועות עם עיצוב אלגנטי ועמידות יוצאת דופן.",
+                awningExtensibleDesc: "סוכנים עם זרועות נפתחות למרפסות וגנים עם הפעלה ידנית או ממונעת.",
+                awningVerticalDesc: "סוכנים אנכיים חשמליים מסוג screen ו-zip להגנה מלאה מפני שמש ורוח.",
+                
+                // Benefits Section
+                benefitsTitle: "למה לבחור ב-BlueSky Luxe Design?",
+                benefit1: "עיצוב מותאם אישית",
+                benefit1Desc: "כל פרויקט מותאם לצרכים הספציפיים שלך ולסגנון האדריכלי.",
+                benefit2: "איכות פרמיום",
+                benefit2Desc: "אנו משתמשים בחומרים הטובים ביותר ובטכניקות ייצור אירופאיות.",
+                benefit3: "אחריות מלאה",
+                benefit3Desc: "אנו מציעים אחריות כוללת על כל המוצרים וההתקנות שלנו.",
+                benefit4: "שירות טכני",
+                benefit4Desc: "תחזוקה ושירות טכני מתמחה לאחר ההתקנה.",
+                
+                // Testimonials
+                testimonialsTitle: "מה הלקוחות שלנו אומרים",
+                testimonial1: "איכות ושירות מעולים. הפרגולה הביוקלימטית עלתה על הציפיות שלנו.",
+                testimonial1Author: "מריה גונזלס",
+                testimonial2: "אנשי מקצוע יוצאי דופן. הסוכן האנכי שינה לחלוטין את המרפסת שלנו.",
+                testimonial2Author: "קרלוס רואיס",
+                testimonial3: "טיפול אישי מהיום הראשון. מומלץ לחלוטין.",
+                testimonial3Author: "אנה מרטין",
+                
+                // About Section
+                aboutTitle: "אודותינו",
+                aboutSubtitle: "ניסיון ומצוינות בעיצוב חוץ",
+                aboutText1: "BlueSky Luxe Design נולד מהתשוקה ליצור חללי חוץ ייחודיים המשלבים פונקציונליות, עיצוב והאיכות הגבוהה ביותר. עם שנות ניסיון בתחום, אנו מתמחים בפרגולות וסוכנים יוקרתיים.",
+                aboutText2: "המחויבות שלנו היא להציע פתרונות מותאמים אישית הנפגשים בצורה מושלמת עם כל חלל וצורך, תוך שימוש בחומרים פרמיום ובטכנולוגיות העדכניות ביותר באוטומציה ובקרת אקלים.",
+                aboutText3: "אנו עובדים עם אדריכלים, מעצבים ובעלי בתים תובעניים המחפשים מצוינות בכל פרט.",
+                
+                // Contact Section
+                contactTitle: "צור קשר",
+                contactSubtitle: "בקש את הצעת המחיר המותאמת אישית שלך",
+                nameLabel: "שם מלא",
+                emailLabel: "אימייל",
+                phoneLabel: "טלפון",
+                messageLabel: "הודעה",
+                sendButton: "שלח פנייה",
+                
+                // Contact Info
+                phoneNumber: "+34 900 123 456",
+                emailAddress: "info@blueskyluxe.com",
+                address: "שדרות עיצוב מודרני, 123, מדריד, ספרד",
+                
+                // Footer
+                rightsReserved: "© 2024 BlueSky Luxe Design. כל הזכויות שמורות.",
+                
+                // Form placeholders
+                namePlaceholder: "השם המלא שלך",
+                emailPlaceholder: "your@email.com",
+                phonePlaceholder: "מספר הטלפון שלך",
+                messagePlaceholder: "ספר לנו על הפרויקט שלך..."
+            }
+        };
+        
+        let currentLang = 'es';
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            const html = document.documentElement;
+            
+            // Set language and direction
+            html.setAttribute('lang', lang);
+            if (lang === 'he') {
+                html.setAttribute('dir', 'rtl');
+                document.body.classList.add('rtl');
+                document.body.classList.remove('ltr');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                document.body.classList.add('ltr');
+                document.body.classList.remove('rtl');
+            }
+            
+            // Update all text content
+            const elements = document.querySelectorAll('[data-text]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-text');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update placeholders
+            const placeholders = document.querySelectorAll('[data-placeholder]');
+            placeholders.forEach(el => {
+                const key = el.getAttribute('data-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.setAttribute('placeholder', translations[lang][key]);
+                }
+            });
+            
+            // Save language preference (using a simple cookie-like approach with document.cookie since localStorage is not available)
+            document.cookie = `lang=${lang}; path=/; max-age=31536000`;
+            
+            // Update language selector
+            document.getElementById('currentLang').textContent = lang.toUpperCase();
+        }
+        
+        function initLanguage() {
+            // Try to get saved language from cookie
+            const cookies = document.cookie.split(';');
+            let savedLang = 'es';
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'lang') {
+                    savedLang = value;
+                    break;
+                }
+            }
+            setLanguage(savedLang);
+        }
+    </script>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-50 shadow-lg">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/b108c85190e252a132bd7f1274214585c9699c9d56baa6ffd116361cfca72b13?w=448&h=443" alt="BlueSky Luxe Design Logo" class="w-10 h-10 rounded-lg">
+                    <div>
+                        <h1 class="font-bold text-xl text-secondary dark:text-white">BlueSky Luxe Design</h1>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="home">Inicio</a>
+                    <a href="#products" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="products">Productos</a>
+                    <a href="#about" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="about">Nosotros</a>
+                    <a href="#projects" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="projects">Proyectos</a>
+                    <a href="#contact" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="contact">Contacto</a>
+                    
+                    <!-- Language Selector -->
+                    <div class="relative">
+                        <button id="langSelector" class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                            <i class="fas fa-globe"></i>
+                            <span id="currentLang">ES</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <div id="langDropdown" class="absolute right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 hidden min-w-[120px]">
+                            <button onclick="setLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg">🇪🇸 Español</button>
+                            <button onclick="setLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">🇬🇧 English</button>
+                            <button onclick="setLanguage('he')" class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg">🇮🇱 עברית</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden">
+                    <i class="fas fa-bars text-2xl text-gray-700 dark:text-gray-300"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="home">Inicio</a>
+                    <a href="#products" class="text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="products">Productos</a>
+                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="about">Nosotros</a>
+                    <a href="#projects" class="text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="projects">Proyectos</a>
+                    <a href="#contact" class="text-gray-700 dark:text-gray-300 hover:text-primary font-medium" data-text="contact">Contacto</a>
+                    
+                    <!-- Mobile Language Selector -->
+                    <div class="flex space-x-2 pt-2 border-t dark:border-gray-700">
+                        <button onclick="setLanguage('es')" class="px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded">🇪🇸</button>
+                        <button onclick="setLanguage('en')" class="px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded">🇬🇧</button>
+                        <button onclick="setLanguage('he')" class="px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded">🇮🇱</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center text-white relative">
+        <div class="container mx-auto px-4 text-center">
+            <div class="fade-in">
+                <div class="mb-8">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/b108c85190e252a132bd7f1274214585c9699c9d56baa6ffd116361cfca72b13?w=448&h=443" alt="BlueSky Luxe Design Logo" class="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 drop-shadow-2xl brightness-110 contrast-110">
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    <span class="block" data-text="heroTitle1">Lujo y confort</span>
+                    <span class="block text-primary" data-text="heroTitle2">Justo fuera de tu casa</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed" data-text="heroSubtitle">
+                    Especialistas en pérgolas y toldos de alta gama con diseño moderno y atención personalizada
+                </p>
+                <a href="#contact" class="inline-block bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-xl" data-text="heroButton">
+                    Solicitar Presupuesto
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-4" data-text="productsTitle">Nuestros Productos</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400" data-text="productsSubtitle">Soluciones de alta gama para exteriores</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1: Pérgolas Bioclimáticas -->
+                <div class="product-card rounded-xl p-6 shadow-lg">
+                    <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6 overflow-hidden">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/0778f44911ae2b53be79b7370ffac331ad8f80add4b694547e2fd0d1eff88328?w=1200&h=800" alt="Pérgola Bioclimática" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary dark:text-white mb-3" data-text="pergolaBioclimatic">Pérgolas Bioclimáticas</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed" data-text="pergolaBioclimaticDesc">Pérgolas de aluminio con lamas orientables para control perfecto del clima y la luz natural.</p>
+                </div>
+                
+                <!-- Product 2: Pérgolas Retráctiles -->
+                <div class="product-card rounded-xl p-6 shadow-lg">
+                    <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6 overflow-hidden">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/eaa9fdb7a4f272b3d79a11f6c964846226c5e60f4d0dfd3a307804942be3dd26?w=721&h=625" alt="Pérgola Retráctil" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary dark:text-white mb-3" data-text="pergolaRetractable">Pérgolas Retráctiles</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed" data-text="pergolaRetractableDesc">Pérgolas de PVC retráctiles que ofrecen flexibilidad total según las condiciones climáticas.</p>
+                </div>
+                
+                <!-- Product 3: Pérgolas Fijas -->
+                <div class="product-card rounded-xl p-6 shadow-lg">
+                    <div class="h-48 bg-gradient-to-br from-secondary to-accent rounded-lg mb-6 flex items-center justify-center">
+                        <i class="fas fa-building text-white text-6xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary dark:text-white mb-3" data-text="pergolaFixed">Pérgolas Fijas</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed" data-text="pergolaFixedDesc">Pérgolas fijas de aluminio con diseño elegante y durabilidad excepcional.</p>
+                </div>
+                
+                <!-- Product 4: Toldos Extensibles -->
+                <div class="product-card rounded-xl p-6 shadow-lg">
+                    <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-6 overflow-hidden">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/b3b9ac1d873b9145f753752f0245c33ded701d6a44e3b72fa4773bb32d2d9102?w=736&h=594" alt="Toldo Extensible" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary dark:text-white mb-3" data-text="awningExtensible">Toldos Extensibles</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed" data-text="awningExtensibleDesc">Toldos de brazos extensibles para terrazas y jardines con accionamiento manual o motorizado.</p>
+                </div>
+                
+                <!-- Product 5: Toldos Verticales -->
+                <div class="product-card rounded-xl p-6 shadow-lg">
+                    <div class="h-48 bg-gradient-to-br from-accent to-secondary rounded-lg mb-6 flex items-center justify-center">
+                        <i class="fas fa-window-maximize text-white text-6xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary dark:text-white mb-3" data-text="awningVertical">Toldos Verticales</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed" data-text="awningVerticalDesc">Toldos verticales eléctricos tipo screen y zip para protección total contra sol y viento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-4" data-text="benefitsTitle">¿Por qué elegir BlueSky Luxe Design?</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-drafting-compass text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary dark:text-white mb-3" data-text="benefit1">Diseño Personalizado</h3>
+                    <p class="text-gray-600 dark:text-gray-400" data-text="benefit1Desc">Cada proyecto se adapta a tus necesidades específicas y estilo arquitectónico.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-gem text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary dark:text-white mb-3" data-text="benefit2">Calidad Premium</h3>
+                    <p class="text-gray-600 dark:text-gray-400" data-text="benefit2Desc">Utilizamos los mejores materiales y técnicas de fabricación europeas.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary dark:text-white mb-3" data-text="benefit3">Garantía Completa</h3>
+                    <p class="text-gray-600 dark:text-gray-400" data-text="benefit3Desc">Ofrecemos garantía integral en todos nuestros productos e instalaciones.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-tools text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary dark:text-white mb-3" data-text="benefit4">Servicio Técnico</h3>
+                    <p class="text-gray-600 dark:text-gray-400" data-text="benefit4Desc">Mantenimiento y servicio técnico especializado post-instalación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-4" data-text="testimonialsTitle">Lo que dicen nuestros clientes</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-lg">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic" data-text="testimonial1">"Excelente calidad y servicio. La pérgola bioclimática superó nuestras expectativas."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">M</div>
+                        <span class="font-semibold text-secondary dark:text-white" data-text="testimonial1Author">María González</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-lg">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic" data-text="testimonial2">"Profesionales excepcionales. El toldo vertical cambió completamente nuestra terraza."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">C</div>
+                        <span class="font-semibold text-secondary dark:text-white" data-text="testimonial2Author">Carlos Ruiz</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-lg">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic" data-text="testimonial3">"Atención personalizada desde el primer día. Totalmente recomendable."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">A</div>
+                        <span class="font-semibold text-secondary dark:text-white" data-text="testimonial3Author">Ana Martín</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-6" data-text="aboutTitle">Sobre Nosotros</h2>
+                    <h3 class="text-xl text-gray-600 dark:text-gray-400 mb-8" data-text="aboutSubtitle">Experiencia y excelencia en diseño de exteriores</h3>
+                    
+                    <div class="space-y-6 text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <p data-text="aboutText1">BlueSky Luxe Design nace de la pasión por crear espacios exteriores únicos que combinen funcionalidad, diseño y la más alta calidad. Con años de experiencia en el sector, nos especializamos en pérgolas y toldos de alta gama.</p>
+                        
+                        <p data-text="aboutText2">Nuestro compromiso es ofrecer soluciones personalizadas que se adapten perfectamente a cada espacio y necesidad, utilizando materiales premium y las últimas tecnologías en automatización y control climático.</p>
+                        
+                        <p data-text="aboutText3">Trabajamos con arquitectos, diseñadores y propietarios exigentes que buscan excelencia en cada detalle.</p>
+                    </div>
+                </div>
+                
+                <div class="lg:order-2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="h-48 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-white text-4xl"></i>
+                        </div>
+                        <div class="h-48 bg-gradient-to-br from-accent to-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-award text-white text-4xl"></i>
+                        </div>
+                        <div class="h-48 bg-gradient-to-br from-secondary to-accent rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cog text-white text-4xl"></i>
+                        </div>
+                        <div class="h-48 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-handshake text-white text-4xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-4" data-text="projects">Proyectos</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Próximamente: Galería de nuestras mejores instalaciones</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="relative rounded-lg h-64 overflow-hidden shadow-lg group">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/811a2ff6f1821981d24000a700d3756225791d776f91db357eae2e8c24760c66?w=800&h=600" alt="Proyecto de Terraza Moderna" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <p class="text-lg font-semibold">Terraza Moderna</p>
+                        <p class="text-sm opacity-90">Pérgola bioclimática con mobiliario de lujo</p>
+                    </div>
+                </div>
+                <div class="relative rounded-lg h-64 overflow-hidden shadow-lg group">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/0778f44911ae2b53be79b7370ffac331ad8f80add4b694547e2fd0d1eff88328?w=1200&h=800" alt="Pérgola Bioclimática" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <p class="text-lg font-semibold">Jardín Residencial</p>
+                        <p class="text-sm opacity-90">Pérgola con lamas orientables</p>
+                    </div>
+                </div>
+                <div class="relative rounded-lg h-64 overflow-hidden shadow-lg group">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/b3b9ac1d873b9145f753752f0245c33ded701d6a44e3b72fa4773bb32d2d9102?w=736&h=594" alt="Toldo Extensible" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <p class="text-lg font-semibold">Terraza Premium</p>
+                        <p class="text-sm opacity-90">Toldo extensible motorizado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-secondary dark:text-white mb-4" data-text="contactTitle">Contacto</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400" data-text="contactSubtitle">Solicita tu presupuesto personalizado</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-8">
+                    <form id="contactForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-text="nameLabel">Nombre completo</label>
+                            <input type="text" id="name" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base" data-placeholder="namePlaceholder" placeholder="Tu nombre completo">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-text="emailLabel">Correo electrónico</label>
+                            <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base" data-placeholder="emailPlaceholder" placeholder="tu@email.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-text="phoneLabel">Teléfono</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base" data-placeholder="phonePlaceholder" placeholder="Tu número de teléfono">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-text="messageLabel">Mensaje</label>
+                            <textarea id="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base resize-none" data-placeholder="messagePlaceholder" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-lg transition-all duration-300 transform hover:scale-105 text-base" data-text="sendButton">
+                            Enviar Consulta
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-phone text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-secondary dark:text-white mb-2">Teléfono</h3>
+                            <p class="text-gray-600 dark:text-gray-400" data-text="phoneNumber">+34 900 123 456</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-envelope text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-secondary dark:text-white mb-2">Email</h3>
+                            <p class="text-gray-600 dark:text-gray-400" data-text="emailAddress">info@blueskyluxe.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-secondary dark:text-white mb-2">Dirección</h3>
+                            <p class="text-gray-600 dark:text-gray-400" data-text="address">Av. Diseño Moderno, 123, Madrid, España</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
+                        <h3 class="font-semibold text-secondary dark:text-white mb-4">Horarios de Atención</h3>
+                        <div class="space-y-2 text-gray-600 dark:text-gray-400">
+                            <p>Lunes a Viernes: 9:00 - 18:00</p>
+                            <p>Sábados: 10:00 - 14:00</p>
+                            <p>Domingos: Cerrado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-secondary dark:bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/b108c85190e252a132bd7f1274214585c9699c9d56baa6ffd116361cfca72b13?w=448&h=443" alt="BlueSky Luxe Design Logo" class="w-10 h-10 rounded-lg">
+                        <h3 class="text-xl font-bold">BlueSky Luxe Design</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed" data-text="heroSubtitle">Especialistas en pérgolas y toldos de alta gama con diseño moderno y atención personalizada</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Enlaces Rápidos</h4>
+                    <div class="space-y-2">
+                        <a href="#home" class="block text-gray-400 hover:text-white transition" data-text="home">Inicio</a>
+                        <a href="#products" class="block text-gray-400 hover:text-white transition" data-text="products">Productos</a>
+                        <a href="#about" class="block text-gray-400 hover:text-white transition" data-text="about">Nosotros</a>
+                        <a href="#contact" class="block text-gray-400 hover:text-white transition" data-text="contact">Contacto</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400" data-text="rightsReserved">© 2024 BlueSky Luxe Design. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/972545844592" target="_blank" class="whatsapp-float" title="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initLanguage();
+            
+            // Language selector functionality
+            const langSelector = document.getElementById('langSelector');
+            const langDropdown = document.getElementById('langDropdown');
+            
+            langSelector.addEventListener('click', function(e) {
+                e.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                langDropdown.classList.add('hidden');
+            });
+            
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Contact form functionality
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const message = document.getElementById('message').value;
+                
+                if (!name || !email || !message) {
+                    showCustomAlert('Por favor, complete todos los campos obligatorios.');
+                    return;
+                }
+                
+                // Simulate form submission
+                showCustomAlert('¡Gracias! Hemos recibido su consulta. Nos pondremos en contacto pronto.');
+                contactForm.reset();
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            // Fade in animation on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+        
+        // Custom alert function (since alert() is not supported)
+        function showCustomAlert(message) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-info text-white"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white">Información</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">${message}</p>
+                    <div class="flex justify-end">
+                        <button class="px-6 py-2 bg-primary text-white hover:bg-primary/90 rounded-lg transition" onclick="this.closest('.fixed').remove()">Aceptar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (modal.parentNode) {
+                    modal.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

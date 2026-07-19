@@ -1,0 +1,27 @@
+:root { --bg:#f4f6f8; --ink:#1f2730; --line:#d4dde8; --ok:#28b463; --err:#e26a5d; }
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);font-family:Manrope,sans-serif;color:var(--ink)}
+.screen{min-height:100vh;max-width:1060px;margin:0 auto;padding:1rem;display:grid;gap:1rem;grid-template-rows:auto auto 1fr auto}
+.header-card,.panel{background:#fff;border:2px solid var(--line);border-radius:16px;padding:1rem}
+h2{margin:0 0 .3rem}
+p{margin:0}
+.hidden{display:none}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1rem}
+.slot{min-height:112px;border:2px dashed #b8c5d6;border-radius:12px;display:grid;place-items:center;color:#90a0b3;font-weight:700}
+.slot.fill{border-style:solid;color:var(--ink)}
+.vignettes{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.v-btn{min-height:112px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:2rem}
+.v-btn.used{opacity:.45;cursor:not-allowed}
+.story-rows{display:grid;gap:.8rem}
+.row{display:grid;grid-template-columns:180px 120px 1fr;gap:.7rem;align-items:center}
+.vignette-chip{min-height:72px;border:2px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:1.8rem;background:#fff}
+.nexo-select{min-height:44px;border:2px solid var(--line);border-radius:10px;font:inherit;padding:0 .4rem}
+.text-input{min-height:44px;border:2px solid var(--line);border-radius:10px;font:inherit;padding:0 .6rem}
+.submit-btn{margin-top:1rem;min-height:52px;border:2px solid #9bc3e8;border-radius:12px;background:#eaf3ff;color:#1f5faa;font-weight:800;cursor:pointer;padding:0 1rem}
+.feedback-zone{display:flex;justify-content:center;align-items:center}
+.dot{width:18px;height:18px;border-radius:999px;background:#c8d4e3}
+.dot.ok{background:var(--ok)}
+.dot.err{background:var(--err)}
+.shake{animation:shake .28s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (max-width:860px){.slots,.vignettes{grid-template-columns:1fr}.row{grid-template-columns:1fr}}

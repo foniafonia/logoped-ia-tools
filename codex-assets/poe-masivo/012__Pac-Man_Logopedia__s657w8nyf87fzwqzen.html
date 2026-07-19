@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 PAC-SEMÁNTICO MEJORADO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #ffff00;
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            user-select: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* PÁGINA DE INTRO */
+        .intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0a0a2e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: all 0.8s ease;
+        }
+
+        .intro-screen.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        .intro-image {
+            max-width: 90vw;
+            max-height: 70vh;
+            width: auto;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 150, 255, 0.5);
+            border: 3px solid #00aaff;
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 10px 30px rgba(0, 150, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 15px 40px rgba(255, 255, 0, 0.8);
+            }
+        }
+
+        .intro-title {
+            color: #00aaff;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00aaff;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .intro-subtitle {
+            color: #ffff00;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px #ffff00;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .play-button {
+            background: linear-gradient(145deg, #ffff00, #ffaa00);
+            color: #000;
+            border: none;
+            padding: 20px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 255, 0, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .play-button:hover {
+            background: linear-gradient(145deg, #fff, #ffff00);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 255, 0, 0.6);
+        }
+
+        .play-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 255, 0, 0.5);
+        }
+
+        .play-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            border-radius: 17px;
+            z-index: -1;
+            animation: rainbow 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .play-button:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes rainbow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .game-container {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh; /* Altura dinámica para móviles */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.8s ease;
+            transform: scale(0.9);
+            opacity: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Permitir scroll si es necesario */
+        }
+
+        .game-container.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Ajustes específicos para el área de juego en móviles */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 5px;
+                gap: 5px;
+            }
+            
+            .game-header {
+                margin: 5px;
+                padding: 10px;
+                width: 95%;
+            }
+            
+            #gameCanvas {
+                margin: 5px;
+                max-width: 95vw;
+                max-height: 50vh; /* Reducir altura en móviles */
+            }
+            
+            .controls-container {
+                margin: 5px;
+                gap: 10px;
+            }
+            
+            .instructions {
+                font-size: 12px;
+                margin: 5px;
+                padding: 0 10px;
+            }
+        }
+
+        /* Ajustes para móviles muy pequeños */
+        @media (max-width: 480px) {
+            #gameCanvas {
+                max-height: 45vh;
+            }
+            
+            .score-row {
+                font-size: 12px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 12px;
+                min-width: 100px;
+            }
+            
+            .field-selector {
+                padding: 8px;
+            }
+            
+            .field-selector select {
+                padding: 6px;
+                font-size: 12px;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .intro-screen {
+                /* Usar altura segura para móviles */
+                height: 100vh;
+                height: 100dvh; /* Altura dinámica en navegadores compatibles */
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            
+            .intro-title {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .intro-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 25px;
+                padding: 0 20px;
+            }
+            
+            .play-button {
+                padding: 12px 25px;
+                font-size: 1.3rem;
+                margin-bottom: 20px; /* Asegurar espacio inferior */
+                letter-spacing: 1px;
+            }
+            
+            .intro-image {
+                max-height: 50vh;
+                max-width: 85vw;
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Ajustes específicos para móviles muy pequeños */
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 1.5rem;
+            }
+            
+            .intro-subtitle {
+                font-size: 0.8rem;
+                line-height: 1.3;
+            }
+            
+            .play-button {
+                padding: 10px 20px;
+                font-size: 1.1rem;
+            }
+            
+            .intro-image {
+                max-height: 45vh;
+            }
+        }
+
+        .game-header {
+            background: #1a1a2e;
+            border: 3px solid #ffff00;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        #gameCanvas {
+            border: 4px solid #ffff00;
+            border-radius: 10px;
+            background: #000;
+            margin: 10px;
+            max-width: 90vw;
+            max-height: 70vh;
+        }
+
+        .controls-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        .game-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .field-selector {
+            background: #1a1a2e;
+            border: 2px solid #ffff00;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .field-selector select {
+            background: #000;
+            color: #ffff00;
+            border: 1px solid #ffff00;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+
+        .instructions {
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+            margin: 10px;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .message-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffff00;
+            padding: 30px;
+            border: 3px solid #ffff00;
+            border-radius: 15px;
+            font-size: 24px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            max-width: 90vw;
+        }
+
+        .game-notifications {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            z-index: 1001;
+        }
+
+        .notification {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 2px solid #ffff00;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            color: #ffff00;
+            font-weight: bold;
+            transform: translateX(320px);
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 0, 0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .notification.error {
+            border-color: #ff0000;
+            color: #ff0000;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .notification.level-up {
+            border-color: #ffd700;
+            color: #ffd700;
+            background: linear-gradient(145deg, #2a1a00, #3a2500);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            font-size: 18px;
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .audio-btn {
+            background: #1a1a2e;
+            border: 2px solid #ffff00;
+            color: #ffff00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background: #ffff00;
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .game-notifications {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+            
+            .notification {
+                transform: translateY(-100px);
+                font-size: 14px;
+                padding: 10px;
+            }
+            
+            .notification.show {
+                transform: translateY(0);
+            }
+            
+            .audio-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .audio-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .score-row {
+                font-size: 14px;
+            }
+            
+            .dpad-container {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .dpad-btn {
+                font-size: 20px;
+            }
+            
+            .dpad-up, .dpad-down, .dpad-left, .dpad-right {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .controls-container {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA DE INTRODUCCIÓN -->
+    <div class="intro-screen" id="introScreen">
+        <img src="https://pfst.cf2.poecdn.net/base/image/41ae4f04ce0fdd766a79aaad0560a706e9b83b34696eb843cbeedcf327127b8c?w=1024&h=1536" 
+             alt="Arcade Pro Competition" 
+             class="intro-image">
+        
+        <h1 class="intro-title">PAC-SEMÁNTICO</h1>
+        <p class="intro-subtitle">🎯 Juego Educativo • 🗣️ Fonemas • 📝 Sílabas • 🎮 Diversión</p>
+        
+        <button class="play-button" onclick="startGame()">
+            🎮 JUGAR AHORA
+        </button>
+    </div>
+
+    <!-- CONTENEDOR DEL JUEGO -->
+    <div class="game-container" id="gameContainer">
+        <div class="game-header">
+        <div class="score-row">
+            <span>PUNTOS: <span id="score">0</span></span>
+            <span>VIDAS: <span id="lives">❤️❤️❤️</span></span>
+            <span>NIVEL: <span id="level">1</span></span>
+        </div>
+        <div class="score-row">
+            <span>CAMPO: <span id="currentField">ANIMALES</span></span>
+            <span>PROGRESO: <span id="progress">0/5</span></span>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+    <div class="controls-container">
+        <div class="field-selector">
+            <label>Campo de estudio:</label><br>
+            <select id="fieldSelect" onchange="changeField()">
+                <option value="animales">🐕 Animales</option>
+                <option value="comida">🍎 Comida</option>
+                <option value="frutas">🍓 Frutas</option>
+                <option value="casa">🏠 Casa</option>
+                <option value="deportes">⚽ Deportes</option>
+                <option value="fonemas">🗣️ Fonemas</option>
+                <option value="silabas">📝 Sílabas</option>
+            </select>
+        </div>
+
+        <div class="game-buttons">
+            <button class="btn" onclick="newGame()">🎮 NUEVO JUEGO</button>
+            <button class="btn" onclick="togglePause()">⏸️ PAUSA</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        🎯 <strong>OBJETIVO:</strong> Dirije a Pac-Man para recoger 5 elementos correctos del campo semántico.<br>
+        🎮 <strong>CONTROLES:</strong> Pac-Man se mueve automáticamente. ¡Usa las flechas del teclado o toca la pantalla para cambiar su dirección!<br>
+        ⚠️ <strong>CUIDADO:</strong> Los elementos incorrectos (rojos) restan puntos y los fantasmas quitan vidas.
+    </div>
+
+    <div class="message-overlay" id="messageOverlay"></div>
+    
+    <!-- NOTIFICACIONES FUERA DEL JUEGO -->
+    <div class="game-notifications" id="notifications"></div>
+    
+    <!-- CONTROLES DE AUDIO -->
+    <div class="audio-controls">
+        <button class="audio-btn" id="musicBtn" onclick="toggleMusic()" title="Música">🎵</button>
+        <button class="audio-btn" id="soundBtn" onclick="toggleSounds()" title="Efectos">🔊</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 🎮 CONFIGURACIÓN SIMPLIFICADA
+        const CELL_SIZE = 60; // MÁS GRANDE
+        const MAZE_WIDTH = 10; // MÁS SIMPLE
+        const MAZE_HEIGHT = 10;
+        const PLAYER_SPEED = 3; // MÁS CONTROLABLE
+        const GHOST_SPEED = 2;
+        
+        // 🎯 ESTADO DEL JUEGO
+        let gameState = 'playing';
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let correctCount = 0;
+        let currentField = 'animales';
+        let animationFrame = 0;
+        
+        // 🎵 SISTEMA DE AUDIO
+        let audioContext = null;
+        let musicEnabled = true;
+        let soundsEnabled = true;
+        let backgroundMusic = null;
+        let musicStarted = false;
+        
+        // 🎭 OBJETOS DEL JUEGO
+        let player = {
+            x: 1,
+            y: 1,
+            direction: 'right',
+            moving: false,
+            targetX: 1,
+            targetY: 1,
+            animOffset: 0
+        };
+        
+        let ghosts = [];
+        let dots = [];
+        let semanticItems = [];
+        let maze = [];
+        
+        // 📚 DATOS SEMÁNTICOS
+        const semanticData = {
+            animales: [
+                {name: 'Perro', symbol: '🐕'}, {name: 'Gato', symbol: '🐱'},
+                {name: 'Pájaro', symbol: '🐦'}, {name: 'Pez', symbol: '🐟'},
+                {name: 'León', symbol: '🦁'}, {name: 'Elefante', symbol: '🐘'}
+            ],
+            comida: [
+                {name: 'Pizza', symbol: '🍕'}, {name: 'Hamburguesa', symbol: '🍔'},
+                {name: 'Pasta', symbol: '🍝'}, {name: 'Taco', symbol: '🌮'},
+                {name: 'Sushi', symbol: '🍣'}, {name: 'Pan', symbol: '🍞'}
+            ],
+            frutas: [
+                {name: 'Manzana', symbol: '🍎'}, {name: 'Plátano', symbol: '🍌'},
+                {name: 'Naranja', symbol: '🍊'}, {name: 'Uva', symbol: '🍇'},
+                {name: 'Fresa', symbol: '🍓'}, {name: 'Piña', symbol: '🍍'}
+            ],
+            casa: [
+                {name: 'Sofá', symbol: '🛋️'}, {name: 'Cama', symbol: '🛏️'},
+                {name: 'Mesa', symbol: '🪑'}, {name: 'TV', symbol: '📺'},
+                {name: 'Lámpara', symbol: '💡'}, {name: 'Puerta', symbol: '🚪'}
+            ],
+            deportes: [
+                {name: 'Fútbol', symbol: '⚽'}, {name: 'Básquet', symbol: '🏀'},
+                {name: 'Tenis', symbol: '🎾'}, {name: 'Golf', symbol: '🏌️'},
+                {name: 'Natación', symbol: '🏊'}, {name: 'Ciclismo', symbol: '🚴'}
+            ],
+            fonemas: [
+                {name: 'Fonema /p/', symbol: 'P'}, {name: 'Fonema /b/', symbol: 'B'},
+                {name: 'Fonema /m/', symbol: 'M'}, {name: 'Fonema /t/', symbol: 'T'},
+                {name: 'Fonema /d/', symbol: 'D'}, {name: 'Fonema /n/', symbol: 'N'},
+                {name: 'Fonema /k/', symbol: 'K'}, {name: 'Fonema /g/', symbol: 'G'},
+                {name: 'Fonema /f/', symbol: 'F'}, {name: 'Fonema /s/', symbol: 'S'},
+                {name: 'Fonema /l/', symbol: 'L'}, {name: 'Fonema /r/', symbol: 'R'}
+            ],
+            silabas: [
+                {name: 'Sílaba PA', symbol: 'PA'}, {name: 'Sílaba MA', symbol: 'MA'},
+                {name: 'Sílaba TA', symbol: 'TA'}, {name: 'Sílaba SA', symbol: 'SA'},
+                {name: 'Sílaba LA', symbol: 'LA'}, {name: 'Sílaba CA', symbol: 'CA'},
+                {name: 'Sílaba PE', symbol: 'PE'}, {name: 'Sílaba ME', symbol: 'ME'},
+                {name: 'Sílaba TE', symbol: 'TE'}, {name: 'Sílaba SE', symbol: 'SE'},
+                {name: 'Sílaba LE', symbol: 'LE'}, {name: 'Sílaba CE', symbol: 'CE'}
+            ]
+        };
+        
+        const wrongSymbols = ['🎵', '📱', '🚗', '👕', '📚', '🔧', '⭐', '❤️'];
+        
+        // 🏗️ CREAR LABERINTO SIMPLE
+        function createMaze() {
+            // Laberinto más abierto y simple
+            maze = [
+                [1,1,1,1,1,1,1,1,1,1],
+                [1,0,0,0,1,0,0,0,0,1],
+                [1,0,1,0,0,0,1,0,1,1],
+                [1,0,0,0,1,0,0,0,0,1],
+                [1,1,0,1,1,1,0,1,0,1],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,0,1,0,1,1,0,1,0,1],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,0,0,1,0,0,1,0,0,1],
+                [1,1,1,1,1,1,1,1,1,1]
+            ];
+            
+            // Resetear posición del jugador
+            player.x = 1;
+            player.y = 1;
+            player.targetX = 1;
+            player.targetY = 1;
+        }
+        
+        // 🟡 CREAR PUNTOS
+        function createDots() {
+            dots = [];
+            for (let y = 1; y < MAZE_HEIGHT - 1; y++) {
+                for (let x = 1; x < MAZE_WIDTH - 1; x++) {
+                    if (maze[y][x] === 0 && !(x === 1 && y === 1)) {
+                        if (Math.random() < 0.6) {
+                            dots.push({ x, y, collected: false });
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 📝 CREAR ELEMENTOS SEMÁNTICOS
+        function createSemanticItems() {
+            semanticItems = [];
+            const currentItems = semanticData[currentField];
+            const openSpaces = [];
+            
+            // Encontrar espacios abiertos
+            for (let y = 1; y < MAZE_HEIGHT - 1; y++) {
+                for (let x = 1; x < MAZE_WIDTH - 1; x++) {
+                    if (maze[y][x] === 0 && !(x === 1 && y === 1)) {
+                        openSpaces.push({ x, y });
+                    }
+                }
+            }
+            
+            // Colocar 5 elementos correctos
+            for (let i = 0; i < 5 && openSpaces.length > 0; i++) {
+                const spaceIndex = Math.floor(Math.random() * openSpaces.length);
+                const space = openSpaces.splice(spaceIndex, 1)[0];
+                const item = currentItems[Math.floor(Math.random() * currentItems.length)];
+                
+                semanticItems.push({
+                    x: space.x,
+                    y: space.y,
+                    symbol: item.symbol,
+                    name: item.name,
+                    isCorrect: true,
+                    collected: false
+                });
+            }
+            
+            // Colocar 3 elementos incorrectos
+            for (let i = 0; i < 3 && openSpaces.length > 0; i++) {
+                const spaceIndex = Math.floor(Math.random() * openSpaces.length);
+                const space = openSpaces.splice(spaceIndex, 1)[0];
+                const symbol = wrongSymbols[Math.floor(Math.random() * wrongSymbols.length)];
+                
+                semanticItems.push({
+                    x: space.x,
+                    y: space.y,
+                    symbol: symbol,
+                    name: 'Incorrecto',
+                    isCorrect: false,
+                    collected: false
+                });
+            }
+        }
+        
+        // 👻 CREAR FANTASMAS
+        function createGhosts() {
+            ghosts = [
+                { x: 8, y: 8, direction: 'up', color: '#FF0000' },
+                { x: 8, y: 1, direction: 'down', color: '#FFB6C1' }
+            ];
+        }
+        
+        // 🎮 CONTROLES SÚPER MEJORADOS
+        function setupControls() {
+            // CONTROLES DE TECLADO MEJORADOS
+            document.addEventListener('keydown', (e) => {
+                if (gameState !== 'playing') return;
+                
+                let newDirection = null;
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        newDirection = 'up';
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        newDirection = 'down';
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        newDirection = 'left';
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        newDirection = 'right';
+                        break;
+                    case ' ':
+                        togglePause();
+                        e.preventDefault();
+                        return;
+                }
+                
+                if (newDirection) {
+                    console.log('🎮 Tecla presionada:', e.key, '-> Dirección:', newDirection);
+                    changePlayerDirection(newDirection);
+                    e.preventDefault();
+                }
+            });
+            
+            // CONTROLES TÁCTILES MEJORADOS SOLO PARA MÓVILES
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        }
+        
+        // 🎯 CAMBIAR DIRECCIÓN DE PAC-MAN (SIN VALIDACIÓN ESTRICTA)
+        function changePlayerDirection(newDirection) {
+            // CAMBIO INMEDIATO - sin validar si puede moverse
+            // Pac-Man intentará ir en esa dirección cuando sea posible
+            player.direction = newDirection;
+            console.log('✅ Dirección cambiada a:', newDirection);
+        }
+        
+        // 📱 MANEJAR INICIO DE TOQUE
+        function handleTouchStart(e) {
+            e.preventDefault();
+            if (gameState !== 'playing') return;
+            
+            processTouch(e);
+        }
+        
+        // 📱 MANEJAR MOVIMIENTO DE TOQUE  
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (gameState !== 'playing') return;
+            
+            processTouch(e);
+        }
+        
+        // 🎯 PROCESAR TOQUE
+        function processTouch(e) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            
+            if (!touch) return;
+            
+            // Coordenadas relativas al canvas
+            const touchX = (touch.clientX - rect.left) / rect.width * canvas.width;
+            const touchY = (touch.clientY - rect.top) / rect.height * canvas.height;
+            
+            // Posición actual de Pac-Man en píxeles
+            const pacmanPixelX = player.x * CELL_SIZE + CELL_SIZE/2;
+            const pacmanPixelY = player.y * CELL_SIZE + CELL_SIZE/2;
+            
+            // Calcular diferencias
+            const deltaX = touchX - pacmanPixelX;
+            const deltaY = touchY - pacmanPixelY;
+            
+            // Zona mínima para registrar toque
+            const minDistance = 30;
+            
+            if (Math.abs(deltaX) > minDistance || Math.abs(deltaY) > minDistance) {
+                let newDirection;
+                
+                // Determinar dirección principal
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Movimiento horizontal predominante
+                    newDirection = deltaX > 0 ? 'right' : 'left';
+                } else {
+                    // Movimiento vertical predominante  
+                    newDirection = deltaY > 0 ? 'down' : 'up';
+                }
+                
+                console.log('👆 Toque detectado:', { touchX, touchY, deltaX, deltaY, newDirection });
+                changePlayerDirection(newDirection);
+            }
+        }
+        
+        // 🔍 VERIFICAR SI PUEDE MOVERSE EN UNA DIRECCIÓN ESPECÍFICA
+        function canMoveInDirection(direction) {
+            let newX = player.x;
+            let newY = player.y;
+            
+            switch(direction) {
+                case 'up': newY--; break;
+                case 'down': newY++; break;
+                case 'left': newX--; break;
+                case 'right': newX++; break;
+            }
+            
+            return newX >= 0 && newX < MAZE_WIDTH && 
+                   newY >= 0 && newY < MAZE_HEIGHT && 
+                   maze[newY][newX] === 0;
+        }
+        
+        // 🎮 MOVIMIENTO CONTINUO EN LA DIRECCIÓN ACTUAL
+        function movePlayerContinuously() {
+            if (gameState !== 'playing' || player.moving) return;
+            
+            // Intentar moverse en la dirección actual
+            if (canMoveInDirection(player.direction)) {
+                movePlayerInDirection(player.direction);
+            }
+            // Si no puede continuar en la dirección actual, se detiene
+            // hasta que el jugador cambie la dirección
+        }
+        
+        // 🎯 ENCONTRAR EL OBJETIVO MÁS CERCANO
+        function findClosestTarget() {
+            let closestTarget = null;
+            let minDistance = Infinity;
+            
+            // Priorizar elementos semánticos correctos
+            semanticItems.forEach(item => {
+                if (!item.collected && item.isCorrect) {
+                    const distance = Math.abs(item.x - player.x) + Math.abs(item.y - player.y);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestTarget = item;
+                    }
+                }
+            });
+            
+            // Si no hay elementos correctos, buscar puntos
+            if (!closestTarget) {
+                dots.forEach(dot => {
+                    if (!dot.collected) {
+                        const distance = Math.abs(dot.x - player.x) + Math.abs(dot.y - player.y);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestTarget = dot;
+                        }
+                    }
+                });
+            }
+            
+            return closestTarget;
+        }
+        
+        // 🎯 VERIFICAR SI PUEDE MOVERSE EN UNA DIRECCIÓN
+        function canMove(direction) {
+            let newX = player.x;
+            let newY = player.y;
+            
+            switch(direction) {
+                case 'up': newY--; break;
+                case 'down': newY++; break;
+                case 'left': newX--; break;
+                case 'right': newX++; break;
+            }
+            
+            return newX >= 0 && newX < MAZE_WIDTH && 
+                   newY >= 0 && newY < MAZE_HEIGHT && 
+                   maze[newY][newX] === 0;
+        }
+        
+        // ➡️ MOVER EN UNA DIRECCIÓN ESPECÍFICA
+        function movePlayerInDirection(direction) {
+            let newX = player.x;
+            let newY = player.y;
+            
+            switch(direction) {
+                case 'up': newY--; break;
+                case 'down': newY++; break;
+                case 'left': newX--; break;
+                case 'right': newX++; break;
+            }
+            
+            player.moving = true;
+            player.direction = direction;
+            player.targetX = newX;
+            player.targetY = newY;
+        }
+        
+        // 🗺️ BUSCAR CAMINO A UN OBJETIVO
+        function findPathToTarget() {
+            // Buscar el elemento semántico correcto más cercano
+            let closestTarget = null;
+            let minDistance = Infinity;
+            
+            semanticItems.forEach(item => {
+                if (!item.collected && item.isCorrect) {
+                    const distance = Math.abs(item.x - player.x) + Math.abs(item.y - player.y);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestTarget = item;
+                    }
+                }
+            });
+            
+            // Si no hay elementos correctos, buscar puntos
+            if (!closestTarget) {
+                dots.forEach(dot => {
+                    if (!dot.collected) {
+                        const distance = Math.abs(dot.x - player.x) + Math.abs(dot.y - player.y);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestTarget = dot;
+                        }
+                    }
+                });
+            }
+            
+            // Moverse hacia el objetivo más cercano
+            if (closestTarget) {
+                const deltaX = closestTarget.x - player.x;
+                const deltaY = closestTarget.y - player.y;
+                
+                // Priorizar movimiento horizontal o vertical según la distancia
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    const direction = deltaX > 0 ? 'right' : 'left';
+                    if (canMove(direction)) {
+                        movePlayerInDirection(direction);
+                    } else {
+                        const altDirection = deltaY > 0 ? 'down' : 'up';
+                        if (canMove(altDirection)) {
+                            movePlayerInDirection(altDirection);
+                        }
+                    }
+                } else {
+                    const direction = deltaY > 0 ? 'down' : 'up';
+                    if (canMove(direction)) {
+                        movePlayerInDirection(direction);
+                    } else {
+                        const altDirection = deltaX > 0 ? 'right' : 'left';
+                        if (canMove(altDirection)) {
+                            movePlayerInDirection(altDirection);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 🔄 ACTUALIZACIÓN DEL JUEGO
+        function update() {
+            if (gameState !== 'playing') return;
+            
+            animationFrame++;
+            
+            // 🎮 MOVIMIENTO CONTINUO EN LA DIRECCIÓN ACTUAL
+            if (animationFrame % 15 === 0) { // Cada cuarto de segundo
+                movePlayerContinuously();
+            }
+            
+            // Mover jugador suavemente - VELOCIDAD AUMENTADA
+            if (player.moving) {
+                const speed = 0.4; // DOBLE DE VELOCIDAD
+                const dx = player.targetX - player.x;
+                const dy = player.targetY - player.y;
+                
+                if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
+                    player.x = player.targetX;
+                    player.y = player.targetY;
+                    player.moving = false;
+                    
+                    // Verificar colisiones
+                    checkCollisions();
+                } else {
+                    player.x += dx * speed;
+                    player.y += dy * speed;
+                }
+            }
+            
+            // Mover fantasmas
+            if (animationFrame % 60 === 0) { // Cada segundo
+                moveGhosts();
+            }
+            
+            // Verificar victoria
+            if (correctCount >= 5) {
+                level++;
+                correctCount = 0;
+                playSound('levelup');
+                showNotification(`🏆 ¡NIVEL ${level-1} COMPLETADO! 🏆<br>Puntuación: ${score}<br>Avanzando al Nivel ${level}`, 'level-up', 3000);
+                showMessage(`¡Nivel ${level-1} Completado!\nPuntuación: ${score}`, 2000);
+                setTimeout(() => {
+                    initGame();
+                }, 2000);
+            }
+            
+            updateHUD();
+        }
+        
+        // 🎯 VERIFICAR COLISIONES CON AUDIO Y NOTIFICACIONES
+        function checkCollisions() {
+            const px = Math.round(player.x);
+            const py = Math.round(player.y);
+            
+            // Colisión con puntos
+            dots.forEach(dot => {
+                if (!dot.collected && dot.x === px && dot.y === py) {
+                    dot.collected = true;
+                    score += 10;
+                    playSound('dot');
+                }
+            });
+            
+            // Colisión con elementos semánticos
+            semanticItems.forEach(item => {
+                if (!item.collected && item.x === px && item.y === py) {
+                    item.collected = true;
+                    if (item.isCorrect) {
+                        score += 50;
+                        correctCount++;
+                        playSound('correct');
+                        showNotification(`✅ ¡CORRECTO! ${item.name} (+50 puntos)`, 'success', 2000);
+                    } else {
+                        score = Math.max(0, score - 25);
+                        playSound('wrong');
+                        showNotification(`❌ ¡INCORRECTO! ${item.name} (-25 puntos)`, 'error', 2000);
+                    }
+                }
+            });
+            
+            // Colisión con fantasmas
+            ghosts.forEach(ghost => {
+                if (Math.abs(ghost.x - px) < 1 && Math.abs(ghost.y - py) < 1) {
+                    lives--;
+                    playSound('wrong');
+                    if (lives > 0) {
+                        resetPlayerPosition();
+                        showNotification('👻 ¡Cuidado con los fantasmas! (-1 vida)', 'error', 2000);
+                    } else {
+                        gameState = 'gameOver';
+                        showMessage(`¡Juego Terminado!\nPuntuación Final: ${score}`, 3000);
+                    }
+                }
+            });
+        }
+        
+        // 👻 MOVER FANTASMAS
+        function moveGhosts() {
+            ghosts.forEach(ghost => {
+                const directions = ['up', 'down', 'left', 'right'];
+                const validMoves = [];
+                
+                directions.forEach(dir => {
+                    let newX = ghost.x;
+                    let newY = ghost.y;
+                    
+                    switch(dir) {
+                        case 'up': newY--; break;
+                        case 'down': newY++; break;
+                        case 'left': newX--; break;
+                        case 'right': newX++; break;
+                    }
+                    
+                    if (newX >= 0 && newX < MAZE_WIDTH && 
+                        newY >= 0 && newY < MAZE_HEIGHT && 
+                        maze[newY][newX] === 0) {
+                        validMoves.push({ x: newX, y: newY, direction: dir });
+                    }
+                });
+                
+                if (validMoves.length > 0) {
+                    const move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                    ghost.x = move.x;
+                    ghost.y = move.y;
+                    ghost.direction = move.direction;
+                }
+            });
+        }
+        
+        // 🎨 RENDERIZADO LIMPIO
+        function render() {
+            // Limpiar canvas
+            ctx.fillStyle = '#001122';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar laberinto
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (maze[y][x] === 1) {
+                        ctx.fillStyle = '#0066CC';
+                        ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                        
+                        ctx.strokeStyle = '#0088FF';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+            
+            // Dibujar puntos
+            ctx.fillStyle = '#FFFF00';
+            dots.forEach(dot => {
+                if (!dot.collected) {
+                    ctx.beginPath();
+                    ctx.arc(
+                        dot.x * CELL_SIZE + CELL_SIZE/2,
+                        dot.y * CELL_SIZE + CELL_SIZE/2,
+                        4, 0, Math.PI * 2
+                    );
+                    ctx.fill();
+                }
+            });
+            
+            // Dibujar elementos semánticos
+            ctx.font = '32px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            semanticItems.forEach(item => {
+                if (!item.collected) {
+                    const x = item.x * CELL_SIZE + CELL_SIZE/2;
+                    const y = item.y * CELL_SIZE + CELL_SIZE/2;
+                    
+                    // Fondo
+                    ctx.fillStyle = item.isCorrect ? '#00AA00' : '#AA0000';
+                    ctx.fillRect(
+                        item.x * CELL_SIZE + 4,
+                        item.y * CELL_SIZE + 4,
+                        CELL_SIZE - 8,
+                        CELL_SIZE - 8
+                    );
+                    
+                    // Símbolo
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(item.symbol, x, y);
+                }
+            });
+            
+            // Dibujar jugador (Pac-Man GRANDE)
+            const px = player.x * CELL_SIZE + CELL_SIZE/2;
+            const py = player.y * CELL_SIZE + CELL_SIZE/2;
+            const radius = CELL_SIZE/2 - 5;
+            
+            ctx.fillStyle = '#FFFF00';
+            ctx.beginPath();
+            
+            // Animación de boca
+            const mouthAngle = Math.abs(Math.sin(animationFrame * 0.2)) * 0.5 + 0.2;
+            let startAngle = 0;
+            let endAngle = Math.PI * 2;
+            
+            switch(player.direction) {
+                case 'right':
+                    startAngle = mouthAngle;
+                    endAngle = Math.PI * 2 - mouthAngle;
+                    break;
+                case 'left':
+                    startAngle = Math.PI + mouthAngle;
+                    endAngle = Math.PI - mouthAngle;
+                    break;
+                case 'up':
+                    startAngle = Math.PI * 1.5 + mouthAngle;
+                    endAngle = Math.PI * 0.5 - mouthAngle;
+                    break;
+                case 'down':
+                    startAngle = Math.PI * 0.5 + mouthAngle;
+                    endAngle = Math.PI * 1.5 - mouthAngle;
+                    break;
+            }
+            
+            ctx.arc(px, py, radius, startAngle, endAngle);
+            ctx.lineTo(px, py);
+            ctx.fill();
+            
+            // Dibujar fantasmas
+            ghosts.forEach(ghost => {
+                const gx = ghost.x * CELL_SIZE + CELL_SIZE/2;
+                const gy = ghost.y * CELL_SIZE + CELL_SIZE/2;
+                const gr = CELL_SIZE/2 - 5;
+                
+                // Cuerpo
+                ctx.fillStyle = ghost.color;
+                ctx.beginPath();
+                ctx.arc(gx, gy - 5, gr, Math.PI, 0);
+                ctx.rect(gx - gr, gy - 5, gr * 2, gr + 5);
+                ctx.fill();
+                
+                // Ojos
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(gx - 6, gy - 8, 4, 0, Math.PI * 2);
+                ctx.arc(gx + 6, gy - 8, 4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#000000';
+                ctx.beginPath();
+                ctx.arc(gx - 6, gy - 8, 2, 0, Math.PI * 2);
+                ctx.arc(gx + 6, gy - 8, 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Overlay de pausa
+            if (gameState === 'paused') {
+                ctx.fillStyle = 'rgba(0,0,0,0.8)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FFFF00';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSA', canvas.width/2, canvas.height/2);
+            }
+        }
+        
+        // 🎵 SISTEMA DE AUDIO COMPLETO
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (musicEnabled) {
+                    startBackgroundMusic();
+                }
+            } catch (e) {
+                console.log('Audio no disponible:', e);
+                musicEnabled = false;
+                soundsEnabled = false;
+            }
+        }
+        
+        // 🎵 MÚSICA DE FONDO (TEMA PACMAN SINTÉTICO)
+        function startBackgroundMusic() {
+            if (!audioContext || !musicEnabled || musicStarted) return;
+            
+            musicStarted = true;
+            playBackgroundLoop();
+        }
+        
+        function playBackgroundLoop() {
+            if (!audioContext || !musicEnabled) return;
+            
+            // Melodía inspirada en Pac-Man (frecuencias sintéticas)
+            const melody = [
+                { freq: 659, time: 0.2 },   // E
+                { freq: 523, time: 0.2 },   // C  
+                { freq: 659, time: 0.2 },   // E
+                { freq: 784, time: 0.2 },   // G
+                { freq: 880, time: 0.4 },   // A
+                { freq: 784, time: 0.2 },   // G
+                { freq: 659, time: 0.2 },   // E
+                { freq: 523, time: 0.2 },   // C
+                { freq: 440, time: 0.4 },   // A
+                { freq: 523, time: 0.4 }    // C
+            ];
+            
+            let currentTime = audioContext.currentTime;
+            
+            melody.forEach((note, index) => {
+                setTimeout(() => {
+                    if (musicEnabled && audioContext) {
+                        playTone(note.freq, note.time, 0.05); // Volumen bajo para fondo
+                    }
+                }, index * 250);
+            });
+            
+            // Repetir melodía cada 3 segundos
+            setTimeout(() => {
+                if (musicEnabled) {
+                    playBackgroundLoop();
+                }
+            }, 3000);
+        }
+        
+        // 🔊 EFECTOS DE SONIDO
+        function playSound(type) {
+            if (!audioContext || !soundsEnabled) return;
+            
+            switch(type) {
+                case 'correct':
+                    // Sonido de acierto (ding ascendente)
+                    playTone(523, 0.1, 0.3);  // C
+                    setTimeout(() => playTone(659, 0.1, 0.3), 100);  // E
+                    setTimeout(() => playTone(784, 0.2, 0.3), 200);  // G
+                    break;
+                    
+                case 'wrong':
+                    // Sonido de error (buzz descendente)
+                    playTone(200, 0.1, 0.4);
+                    setTimeout(() => playTone(150, 0.1, 0.4), 100);
+                    setTimeout(() => playTone(100, 0.3, 0.4), 200);
+                    break;
+                    
+                case 'levelup':
+                    // Fanfare de nivel completado
+                    const fanfare = [523, 659, 784, 1047]; // C E G C
+                    fanfare.forEach((freq, i) => {
+                        setTimeout(() => playTone(freq, 0.2, 0.4), i * 150);
+                    });
+                    break;
+                    
+                case 'dot':
+                    // Sonido sutil al recoger puntos
+                    playTone(800, 0.05, 0.1);
+                    break;
+            }
+        }
+        
+        // 🎶 GENERADOR DE TONOS
+        function playTone(frequency, duration, volume = 0.3) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'square'; // Sonido retro tipo Pac-Man
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        // 🎚️ CONTROLES DE AUDIO
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            const btn = document.getElementById('musicBtn');
+            
+            if (musicEnabled) {
+                btn.textContent = '🎵';
+                btn.style.background = '#1a1a2e';
+                if (!musicStarted) {
+                    initAudio();
+                }
+            } else {
+                btn.textContent = '🔇';
+                btn.style.background = '#444';
+            }
+        }
+        
+        function toggleSounds() {
+            soundsEnabled = !soundsEnabled;
+            const btn = document.getElementById('soundBtn');
+            
+            if (soundsEnabled) {
+                btn.textContent = '🔊';
+                btn.style.background = '#1a1a2e';
+                if (!audioContext) {
+                    initAudio();
+                }
+            } else {
+                btn.textContent = '🔇';
+                btn.style.background = '#444';
+            }
+        }
+        
+        // 📢 SISTEMA DE NOTIFICACIONES MEJORADO
+        function showNotification(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            
+            notification.className = `notification ${type}`;
+            notification.innerHTML = message;
+            
+            container.appendChild(notification);
+            
+            // Animación de entrada
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Remover después del tiempo especificado
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }, duration);
+        }
+        
+        // 🎯 FUNCIONES DE CONTROL MEJORADAS
+        function showMessage(text, duration) {
+            // Solo para mensajes importantes (Game Over, etc.)
+            const overlay = document.getElementById('messageOverlay');
+            overlay.innerHTML = text.replace(/\n/g, '<br>');
+            overlay.style.display = 'block';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, duration);
+        }
+        
+        function updateHUD() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+            document.getElementById('level').textContent = level;
+            document.getElementById('currentField').textContent = currentField.toUpperCase();
+            document.getElementById('progress').textContent = `${correctCount}/5`;
+        }
+        
+        function resetPlayerPosition() {
+            player.x = 1;
+            player.y = 1;
+            player.targetX = 1;
+            player.targetY = 1;
+            player.moving = false;
+        }
+        
+        function newGame() {
+            score = 0;
+            lives = 3;
+            level = 1;
+            correctCount = 0;
+            gameState = 'playing';
+            initGame();
+        }
+        
+        function togglePause() {
+            gameState = gameState === 'paused' ? 'playing' : 'paused';
+        }
+        
+        function changeField() {
+            const select = document.getElementById('fieldSelect');
+            currentField = select.value;
+            createSemanticItems();
+            updateHUD();
+        }
+        
+        function initGame() {
+            resetPlayerPosition();
+            createMaze();
+            createDots();
+            createSemanticItems();
+            createGhosts();
+            updateHUD();
+        }
+        
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 🚀 FUNCIÓN PARA INICIAR EL JUEGO DESDE LA INTRO
+        function startGame() {
+            const introScreen = document.getElementById('introScreen');
+            const gameContainer = document.getElementById('gameContainer');
+            
+            // INICIALIZAR AUDIO INMEDIATAMENTE (aprovechando el clic del botón)
+            if (!audioContext) {
+                initAudio();
+            }
+            
+            // Ocultar intro con animación
+            introScreen.classList.add('hidden');
+            
+            // Mostrar juego con retraso para la animación
+            setTimeout(() => {
+                gameContainer.classList.add('show');
+                
+                // Inicializar el juego
+                setupControls();
+                initGame();
+                gameLoop();
+                
+                console.log('🎵 Audio inicializado:', !!audioContext);
+                console.log('🎵 Música habilitada:', musicEnabled);
+                console.log('🔊 Sonidos habilitados:', soundsEnabled);
+                
+            }, 400);
+        }
+        
+        console.log('🎮 PAC-SEMÁNTICO MEJORADO - ¡Listo para jugar!');
+    </script>
+</body>
+</html>

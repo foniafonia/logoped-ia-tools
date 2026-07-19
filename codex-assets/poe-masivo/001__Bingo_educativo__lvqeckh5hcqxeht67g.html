@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Fonético - Jugador vs Máquina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#FF6B6B',
+                        accent: '#4ECDC4',
+                        warning: '#FFE66D',
+                        success: '#A8E6CF'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Fredoka:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+        
+        /* Forzar orientación apaisada */
+        @media screen and (max-height: 600px) and (orientation: landscape) {
+            .landscape-optimized {
+                height: 100vh;
+            }
+        }
+        
+        .game-table {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .table-surface {
+            background: radial-gradient(ellipse at center, #228B22, #006400);
+            border-radius: 25px;
+            margin: 15px;
+            position: relative;
+        }
+        
+        .bingo-card {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark .bingo-card {
+            background: linear-gradient(145deg, #374151, #1f2937);
+            border-color: #fbbf24;
+        }
+        
+        .bingo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .player-card::before {
+            content: '👤 TU CARTÓN';
+        }
+        
+        .machine-card::before {
+            content: '🤖 MÁQUINA';
+        }
+        
+        .bingo-cell {
+            background: linear-gradient(145deg, #fff, #f8f9fa);
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dark .bingo-cell {
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+        
+        .bingo-cell:hover {
+            transform: scale(1.05);
+            border-color: #5D5CDE;
+            box-shadow: 0 4px 12px rgba(93, 92, 222, 0.3);
+        }
+        
+        .bingo-cell.marked {
+            background: linear-gradient(145deg, #48bb78, #38a169);
+            color: white;
+            border-color: #38a169;
+            position: relative;
+        }
+        
+        .bingo-cell.marked::after {
+            content: '✓';
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .bingo-cell.machine-marked {
+            background: linear-gradient(145deg, #e53e3e, #c53030);
+            color: white;
+            border-color: #c53030;
+        }
+        
+        .bingo-cell.machine-marked::after {
+            content: '●';
+            position: absolute;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .bingo-cell.highlighted {
+            animation: highlight 1.5s ease-in-out;
+            border-color: #f6ad55;
+            box-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
+        }
+        
+        @keyframes highlight {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .called-number {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            border-radius: 20px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .winner-modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 1000;
+            animation: confetti-fall 3s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        .control-panel {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .dark .control-panel {
+            background: rgba(45,55,72,0.95);
+            border-color: rgba(255,255,255,0.1);
+        }
+        
+        .button-3d {
+            background: linear-gradient(145deg, #5D5CDE, #4c51bf);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 12px rgba(93, 92, 222, 0.3);
+            transition: all 0.2s ease;
+            transform: translateY(0);
+        }
+        
+        .button-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(93, 92, 222, 0.4);
+        }
+        
+        .button-3d:active {
+            transform: translateY(0);
+        }
+        
+        .machine-thinking {
+            animation: thinking 1s ease-in-out infinite;
+        }
+        
+        @keyframes thinking {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="h-full">
+    <div class="min-h-full flex flex-col">
+        <!-- Header Expandido con Controles -->
+        <header class="bg-white dark:bg-gray-800 shadow-lg px-4 py-3">
+            <div class="max-w-full mx-auto">
+                <!-- Fila Superior -->
+                <div class="flex items-center justify-between gap-4 mb-3">
+                    <h1 class="text-xl font-bold text-primary dark:text-purple-400">
+                        🎯 Bingo Fonético
+                    </h1>
+                    <div class="flex items-center gap-4">
+                        <select id="levelSelect" class="px-2 py-1 text-sm border rounded bg-white dark:bg-gray-700">
+                            <option value="fonemas">🔤 Fonemas</option>
+                            <option value="silabas">📝 Sílabas</option>
+                            <option value="palabras">📚 Palabras</option>
+                            <option value="imagenes">🖼️ Imágenes</option>
+                        </select>
+                        <select id="speedSelect" class="px-2 py-1 text-sm border rounded bg-white dark:bg-gray-700">
+                            <option value="4000">🐌 Lenta</option>
+                            <option value="3000" selected>🚶 Normal</option>
+                            <option value="2000">🏃 Rápida</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Fila Inferior - Controles Avanzados -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <!-- Filtro de Texto -->
+                    <div class="flex items-center gap-2">
+                        <label class="font-medium">Filtro:</label>
+                        <select id="filterType" class="px-2 py-1 border rounded bg-white dark:bg-gray-700 text-sm">
+                            <option value="todos">Todos</option>
+                            <option value="empieza">Empieza por</option>
+                            <option value="contiene">Contiene</option>
+                            <option value="termina">Termina por</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Valor del Filtro -->
+                    <div class="flex items-center gap-2">
+                        <input id="filterValue" 
+                               type="text" 
+                               placeholder="Ej: ma, s, etc." 
+                               class="px-2 py-1 border rounded w-full text-sm bg-white dark:bg-gray-700"
+                               disabled>
+                    </div>
+                    
+                    <!-- Tamaño de Cuadrícula -->
+                    <div class="flex items-center gap-2">
+                        <label class="font-medium">Cuadrícula:</label>
+                        <select id="gridSize" class="px-2 py-1 border rounded bg-white dark:bg-gray-700 text-sm">
+                            <option value="3x3">3x3 (9 items)</option>
+                            <option value="4x4">4x4 (16 items)</option>
+                            <option value="5x5" selected>5x5 (25 items)</option>
+                            <option value="6x6">6x6 (36 items)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Botón Aplicar Filtros -->
+                    <div>
+                        <button id="applyFilters" class="bg-primary hover:bg-purple-600 text-white px-4 py-1 rounded text-sm font-medium w-full">
+                            🔄 Aplicar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Área de Juego Apaisada -->
+        <main class="flex-1 overflow-hidden">
+            <div class="h-full flex flex-col">
+                
+                <!-- Panel Superior - Elemento Cantado -->
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4">
+                    <div class="max-w-full mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                            <!-- Elemento Cantado -->
+                            <div class="md:col-span-2 text-center">
+                                <h3 class="text-lg font-semibold mb-2">🎙️ ELEMENTO CANTADO</h3>
+                                <div id="calledElement" class="bg-white text-gray-800 rounded-xl text-4xl md:text-5xl font-bold p-6 min-h-[100px] flex items-center justify-center shadow-lg">
+                                    ¡Presiona Iniciar!
+                                </div>
+                                <div id="elementImage" class="mt-2 text-center hidden">
+                                    <div class="text-6xl mx-auto"></div>
+                                </div>
+                                <button id="audioBtn" class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold hidden">
+                                    🔊 Repetir Audio
+                                </button>
+                            </div>
+                            
+                            <!-- Controles -->
+                            <div class="text-center space-y-2">
+                                <button id="startBtn" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-lg">
+                                    ▶️ INICIAR
+                                </button>
+                                <button id="pauseBtn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg text-lg" disabled>
+                                    ⏸️ PAUSAR
+                                </button>
+                                <button id="newGameBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-lg">
+                                    🔄 NUEVO
+                                </button>
+                            </div>
+                            
+                            <!-- Marcador -->
+                            <div class="md:col-span-2 grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg mb-2">👤 JUGADOR</h4>
+                                    <div id="playerScore" class="text-3xl font-bold text-yellow-300">0/25</div>
+                                    <div class="text-sm">Marcadas</div>
+                                </div>
+                                <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg mb-2">🤖 MÁQUINA</h4>
+                                    <div id="machineScore" class="text-3xl font-bold text-red-300">0/25</div>
+                                    <div class="text-sm">Marcadas</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área Principal - Cartones Lado a Lado -->
+                <div class="flex-1 p-4 bg-gradient-to-br from-green-100 to-blue-100 dark:from-gray-800 dark:to-gray-900">
+                    <div class="h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- Cartón del Jugador -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-4 border-blue-500">
+                            <div class="text-center mb-4">
+                                <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400">👤 TU CARTÓN</h2>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Haz clic en las casillas cuando se canten</p>
+                            </div>
+                            <div id="playerBoard" class="grid grid-cols-5 gap-3 aspect-square max-w-lg mx-auto">
+                                <!-- Las celdas se generan dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Cartón de la Máquina -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border-4 border-red-500">
+                            <div class="text-center mb-4">
+                                <h2 class="text-2xl font-bold text-red-600 dark:text-red-400">🤖 CARTÓN MÁQUINA</h2>
+                                <p id="machineStatus" class="text-sm text-gray-600 dark:text-gray-400 mt-1">La máquina está lista</p>
+                            </div>
+                            <div id="machineBoard" class="grid grid-cols-5 gap-3 aspect-square max-w-lg mx-auto">
+                                <!-- Las celdas se generan dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Inferior - Historial (Compacto) -->
+                <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2">
+                    <div class="flex items-center gap-4">
+                        <span class="font-semibold text-sm">Cantados:</span>
+                        <div id="calledHistory" class="flex gap-2 overflow-x-auto flex-1 min-h-[30px]">
+                            <!-- Los elementos cantados aparecen aquí -->
+                        </div>
+                        <span id="calledCount" class="text-sm font-bold bg-primary text-white px-2 py-1 rounded">0</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Victoria -->
+    <div id="winnerModal" class="fixed inset-0 winner-modal hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-8 text-center max-w-md mx-4 transform scale-0 transition-transform">
+            <div id="winnerEmoji" class="text-6xl mb-4">🎉</div>
+            <h2 id="winnerTitle" class="text-3xl font-bold mb-4 text-primary">¡BINGO!</h2>
+            <p id="winnerMessage" class="text-lg mb-6">¡Has ganado!</p>
+            <button id="playAgainBtn" class="button-3d py-3 px-6 text-lg">
+                🎮 Jugar de Nuevo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Datos del juego
+        const gameData = {
+            fonemas: ['a', 'e', 'i', 'o', 'u', 'm', 'p', 's', 't', 'n', 'l', 'r', 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'v', 'w', 'x', 'y', 'z', 'ñ', 'ch', 'll', 'rr'],
+            silabas: ['ma', 'me', 'mi', 'mo', 'mu', 'pa', 'pe', 'pi', 'po', 'pu', 'sa', 'se', 'si', 'so', 'su', 'ta', 'te', 'ti', 'to', 'tu', 'la', 'le', 'li', 'lo', 'lu', 'ra', 're', 'ri', 'ro', 'ru', 'na', 'ne', 'ni', 'no', 'nu'],
+            palabras: ['gato', 'perro', 'casa', 'árbol', 'flor', 'agua', 'fuego', 'tierra', 'cielo', 'mar', 'sol', 'luna', 'estrella', 'nube', 'lluvia', 'viento', 'montaña', 'río', 'bosque', 'campo', 'ciudad', 'escuela', 'familia', 'amigo', 'amor', 'libro', 'mesa', 'silla', 'ventana', 'puerta'],
+            imagenes: ['🐱', '🐶', '🏠', '🌳', '🌸', '💧', '🔥', '🌍', '☁️', '🌊', '☀️', '🌙', '⭐', '🌧️', '💨', '⛰️', '🏞️', '🌲', '🌾', '🏙️', '🏫', '👨‍👩‍👧‍👦', '👫', '❤️', '📚', '🪑', '🪟', '🚪', '🌺', '🦋']
+        };
+
+        class BingoGame {
+            constructor() {
+                this.currentLevel = 'fonemas';
+                this.speed = 2000;
+                this.filterType = 'todos';
+                this.filterValue = '';
+                this.gridSize = '5x5';
+                this.gridDimensions = { rows: 5, cols: 5, total: 25 };
+                this.playerBoard = [];
+                this.machineBoard = [];
+                this.playerMarked = new Set();
+                this.machineMarked = new Set();
+                this.calledElements = [];
+                this.availableElements = [];
+                this.gameActive = false;
+                this.gameInterval = null;
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.setupDarkMode();
+                this.generateBoards();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    levelSelect: document.getElementById('levelSelect'),
+                    speedSelect: document.getElementById('speedSelect'),
+                    calledElement: document.getElementById('calledElement'),
+                    elementImage: document.getElementById('elementImage'),
+                    startBtn: document.getElementById('startBtn'),
+                    pauseBtn: document.getElementById('pauseBtn'),
+                    newGameBtn: document.getElementById('newGameBtn'),
+                    playerBoard: document.getElementById('playerBoard'),
+                    machineBoard: document.getElementById('machineBoard'),
+                    playerScore: document.getElementById('playerScore'),
+                    machineScore: document.getElementById('machineScore'),
+                    calledCount: document.getElementById('calledCount'),
+                    calledHistory: document.getElementById('calledHistory'),
+                    machineStatus: document.getElementById('machineStatus'),
+                    winnerModal: document.getElementById('winnerModal'),
+                    winnerEmoji: document.getElementById('winnerEmoji'),
+                    winnerTitle: document.getElementById('winnerTitle'),
+                    winnerMessage: document.getElementById('winnerMessage'),
+                    playAgainBtn: document.getElementById('playAgainBtn')
+                };
+            }
+
+            setupEventListeners() {
+                this.elements.levelSelect.addEventListener('change', () => {
+                    this.currentLevel = this.elements.levelSelect.value;
+                    this.generateBoards();
+                });
+
+                this.elements.speedSelect.addEventListener('change', () => {
+                    this.speed = parseInt(this.elements.speedSelect.value);
+                    if (this.gameActive) {
+                        this.stopGame();
+                        this.startGame();
+                    }
+                });
+
+                this.elements.startBtn.addEventListener('click', () => this.startGame());
+                this.elements.pauseBtn.addEventListener('click', () => this.stopGame());
+                this.elements.newGameBtn.addEventListener('click', () => this.newGame());
+                this.elements.playAgainBtn.addEventListener('click', () => this.newGame());
+                
+                // Botón de repetir audio
+                document.getElementById('audioBtn').addEventListener('click', () => this.repeatAudio());
+                
+                // Controles de filtros
+                document.getElementById('filterType').addEventListener('change', (e) => {
+                    this.filterType = e.target.value;
+                    const filterValueInput = document.getElementById('filterValue');
+                    if (this.filterType === 'todos') {
+                        filterValueInput.disabled = true;
+                        filterValueInput.value = '';
+                        this.filterValue = '';
+                    } else {
+                        filterValueInput.disabled = false;
+                    }
+                });
+                
+                document.getElementById('filterValue').addEventListener('input', (e) => {
+                    this.filterValue = e.target.value.toLowerCase();
+                });
+                
+                document.getElementById('gridSize').addEventListener('change', (e) => {
+                    this.gridSize = e.target.value;
+                    this.updateGridDimensions();
+                });
+                
+                document.getElementById('applyFilters').addEventListener('click', () => {
+                    this.generateBoards();
+                });
+            }
+
+            setupDarkMode() {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                    if (event.matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                });
+            }
+
+            updateGridDimensions() {
+                const gridMap = {
+                    '3x3': { rows: 3, cols: 3, total: 9 },
+                    '4x4': { rows: 4, cols: 4, total: 16 },
+                    '5x5': { rows: 5, cols: 5, total: 25 },
+                    '6x6': { rows: 6, cols: 6, total: 36 }
+                };
+                this.gridDimensions = gridMap[this.gridSize];
+            }
+
+            applyFilters(elements) {
+                if (this.filterType === 'todos' || !this.filterValue) {
+                    return elements;
+                }
+                
+                return elements.filter(element => {
+                    const elementLower = element.toLowerCase();
+                    const filterLower = this.filterValue.toLowerCase();
+                    
+                    switch (this.filterType) {
+                        case 'empieza':
+                            return elementLower.startsWith(filterLower);
+                        case 'contiene':
+                            return elementLower.includes(filterLower);
+                        case 'termina':
+                            return elementLower.endsWith(filterLower);
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            generateBoards() {
+                let elements = [...gameData[this.currentLevel]];
+                
+                // Aplicar filtros si están activos
+                elements = this.applyFilters(elements);
+                
+                // Verificar que tenemos suficientes elementos
+                if (elements.length < this.gridDimensions.total) {
+                    // Si no hay suficientes elementos filtrados, usar todos los elementos disponibles
+                    elements = [...gameData[this.currentLevel]];
+                    console.log(`Advertencia: No hay suficientes elementos filtrados. Usando todos los elementos disponibles.`);
+                }
+                
+                // Asegurar que tenemos al menos la cantidad necesaria
+                while (elements.length < this.gridDimensions.total) {
+                    elements = elements.concat(gameData[this.currentLevel]);
+                }
+                
+                this.availableElements = [...elements];
+                
+                // Generar cartón del jugador
+                this.playerBoard = this.shuffleArray([...elements]).slice(0, this.gridDimensions.total);
+                
+                // Generar cartón de la máquina (diferente al del jugador)
+                this.machineBoard = this.shuffleArray([...elements]).slice(0, this.gridDimensions.total);
+                
+                this.renderBoards();
+                this.resetGame();
+            }
+
+            renderBoards() {
+                // Configurar las clases CSS de la cuadrícula
+                const gridClass = `grid-cols-${this.gridDimensions.cols}`;
+                
+                // Renderizar cartón del jugador
+                this.elements.playerBoard.innerHTML = '';
+                this.elements.playerBoard.className = `grid ${gridClass} gap-3 aspect-square max-w-lg mx-auto`;
+                this.playerBoard.forEach((element, index) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'bingo-cell';
+                    cell.textContent = element;
+                    cell.dataset.index = index;
+                    cell.addEventListener('click', () => this.markPlayerCell(index));
+                    this.elements.playerBoard.appendChild(cell);
+                });
+
+                // Renderizar cartón de la máquina
+                this.elements.machineBoard.innerHTML = '';
+                this.elements.machineBoard.className = `grid ${gridClass} gap-3 aspect-square max-w-lg mx-auto`;
+                this.machineBoard.forEach((element, index) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'bingo-cell';
+                    cell.textContent = element;
+                    this.elements.machineBoard.appendChild(cell);
+                });
+            }
+
+            startGame() {
+                this.gameActive = true;
+                this.elements.startBtn.disabled = true;
+                this.elements.pauseBtn.disabled = false;
+                this.elements.machineStatus.textContent = 'La máquina está jugando...';
+                this.elements.machineStatus.classList.add('machine-thinking');
+                
+                this.gameInterval = setInterval(() => {
+                    this.callNextElement();
+                }, this.speed);
+            }
+
+            stopGame() {
+                this.gameActive = false;
+                this.elements.startBtn.disabled = false;
+                this.elements.pauseBtn.disabled = true;
+                this.elements.machineStatus.textContent = 'Juego pausado';
+                this.elements.machineStatus.classList.remove('machine-thinking');
+                
+                if (this.gameInterval) {
+                    clearInterval(this.gameInterval);
+                    this.gameInterval = null;
+                }
+            }
+
+            callNextElement() {
+                if (this.availableElements.length === 0) {
+                    this.stopGame();
+                    return;
+                }
+
+                const randomIndex = Math.floor(Math.random() * this.availableElements.length);
+                const element = this.availableElements.splice(randomIndex, 1)[0];
+                
+                this.calledElements.push(element);
+                this.elements.calledElement.textContent = element;
+                
+                // Reproducir audio del elemento
+                this.speakElement(element);
+                
+                // Mostrar imagen si es nivel de imágenes
+                if (this.currentLevel === 'imagenes') {
+                    this.elements.elementImage.querySelector('div').textContent = element;
+                    this.elements.elementImage.classList.remove('hidden');
+                } else {
+                    this.elements.elementImage.classList.add('hidden');
+                }
+                
+                // Mostrar botón de repetir audio
+                document.getElementById('audioBtn').classList.remove('hidden');
+                
+                this.addToHistory(element);
+                this.highlightElement(element);
+                this.machineAutoMark(element);
+                this.updateScores();
+                this.elements.calledCount.textContent = this.calledElements.length;
+            }
+
+            speakElement(element) {
+                if ('speechSynthesis' in window) {
+                    // Cancelar cualquier síntesis anterior
+                    speechSynthesis.cancel();
+                    
+                    const utterance = new SpeechSynthesisUtterance();
+                    
+                    // Configurar el texto según el nivel
+                    let textToSpeak = '';
+                    switch (this.currentLevel) {
+                        case 'fonemas':
+                            textToSpeak = `Letra ${element}`;
+                            break;
+                        case 'silabas':
+                            textToSpeak = `Sílaba ${element}`;
+                            break;
+                        case 'palabras':
+                            textToSpeak = `Palabra ${element}`;
+                            break;
+                        case 'imagenes':
+                            // Para imágenes, obtener la palabra correspondiente
+                            const imageIndex = gameData.imagenes.indexOf(element);
+                            const words = ['gato', 'perro', 'casa', 'árbol', 'flor', 'agua', 'fuego', 'tierra', 'nube', 'mar', 'sol', 'luna', 'estrella', 'lluvia', 'viento', 'montaña', 'paisaje', 'árbol', 'campo', 'ciudad', 'escuela', 'familia', 'amigos', 'amor', 'libro', 'silla', 'ventana', 'puerta', 'flor', 'mariposa'];
+                            textToSpeak = words[imageIndex] || element;
+                            break;
+                    }
+                    
+                    utterance.text = textToSpeak;
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 0.4; // Velocidad muy lenta para niños
+                    utterance.pitch = 1.2; // Tono más alto y amigable
+                    utterance.volume = 1;
+                    
+                    // Agregar evento para cuando termine de hablar
+                    utterance.onend = () => {
+                        this.elements.calledElement.classList.remove('pulse');
+                    };
+                    
+                    utterance.onerror = (event) => {
+                        console.log('Error en síntesis de voz:', event);
+                    };
+                    
+                    // Añadir efecto visual mientras habla
+                    this.elements.calledElement.classList.add('pulse');
+                    
+                    speechSynthesis.speak(utterance);
+                    
+                    // Guardar la última expresión para el botón de repetir
+                    this.lastUtterance = utterance;
+                } else {
+                    console.log('Síntesis de voz no disponible');
+                }
+            }
+
+            repeatAudio() {
+                if (this.lastUtterance && 'speechSynthesis' in window) {
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(this.lastUtterance);
+                    this.elements.calledElement.classList.add('pulse');
+                }
+            }
+
+            markPlayerCell(index) {
+                if (!this.gameActive) return;
+                
+                const element = this.playerBoard[index];
+                if (this.calledElements.includes(element) && !this.playerMarked.has(index)) {
+                    this.playerMarked.add(index);
+                    const cell = this.elements.playerBoard.children[index];
+                    cell.classList.add('marked');
+                    
+                    this.updateScores();
+                    this.checkWinner();
+                }
+            }
+
+            machineAutoMark(element) {
+                // La máquina marca automáticamente después de un pequeño delay
+                setTimeout(() => {
+                    this.machineBoard.forEach((boardElement, index) => {
+                        if (boardElement === element && !this.machineMarked.has(index)) {
+                            this.machineMarked.add(index);
+                            const cell = this.elements.machineBoard.children[index];
+                            cell.classList.add('machine-marked');
+                            
+                            setTimeout(() => this.checkWinner(), 100);
+                        }
+                    });
+                }, Math.random() * 500 + 200); // La máquina reacciona entre 200-700ms
+            }
+
+            highlightElement(element) {
+                // Destacar en cartón del jugador
+                this.playerBoard.forEach((boardElement, index) => {
+                    if (boardElement === element && !this.playerMarked.has(index)) {
+                        const cell = this.elements.playerBoard.children[index];
+                        cell.classList.add('highlighted');
+                        setTimeout(() => {
+                            cell.classList.remove('highlighted');
+                        }, 1500);
+                    }
+                });
+            }
+
+            addToHistory(element) {
+                const historyItem = document.createElement('span');
+                historyItem.className = 'bg-primary text-white px-3 py-1 rounded-full text-sm';
+                historyItem.textContent = element;
+                this.elements.calledHistory.appendChild(historyItem);
+                
+                // Scroll al final
+                this.elements.calledHistory.scrollLeft = this.elements.calledHistory.scrollWidth;
+            }
+
+            updateScores() {
+                this.elements.playerScore.textContent = `${this.playerMarked.size}/${this.gridDimensions.total}`;
+                this.elements.machineScore.textContent = `${this.machineMarked.size}/${this.gridDimensions.total}`;
+            }
+
+            checkWinner() {
+                if (this.playerMarked.size === this.gridDimensions.total) {
+                    this.showWinner('player');
+                } else if (this.machineMarked.size === this.gridDimensions.total) {
+                    this.showWinner('machine');
+                }
+            }
+
+            showWinner(winner) {
+                this.stopGame();
+                
+                if (winner === 'player') {
+                    this.elements.winnerEmoji.textContent = '🎉';
+                    this.elements.winnerTitle.textContent = '¡BINGO!';
+                    this.elements.winnerMessage.textContent = '¡Felicidades! ¡Has ganado!';
+                    this.createConfetti();
+                } else {
+                    this.elements.winnerEmoji.textContent = '🤖';
+                    this.elements.winnerTitle.textContent = '¡La máquina ganó!';
+                    this.elements.winnerMessage.textContent = '¡Inténtalo de nuevo!';
+                }
+                
+                this.elements.winnerModal.classList.remove('hidden');
+                this.elements.winnerModal.classList.add('flex');
+                
+                const modal = this.elements.winnerModal.querySelector('div');
+                setTimeout(() => {
+                    modal.style.transform = 'scale(1)';
+                }, 100);
+            }
+
+            createConfetti() {
+                const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
+                
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + 'vw';
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.animationDelay = Math.random() * 3 + 's';
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 3000);
+                    }, i * 100);
+                }
+            }
+
+            newGame() {
+                this.stopGame();
+                this.elements.winnerModal.classList.add('hidden');
+                this.elements.winnerModal.classList.remove('flex');
+                
+                const modal = this.elements.winnerModal.querySelector('div');
+                modal.style.transform = 'scale(0)';
+                
+                this.generateBoards();
+            }
+
+            resetGame() {
+                this.playerMarked.clear();
+                this.machineMarked.clear();
+                this.calledElements = [];
+                this.elements.calledElement.textContent = '¡Presiona Iniciar!';
+                this.elements.elementImage.classList.add('hidden');
+                this.elements.calledHistory.innerHTML = '';
+                this.elements.machineStatus.textContent = 'La máquina está lista';
+                this.elements.machineStatus.classList.remove('machine-thinking');
+                this.updateScores();
+                this.elements.calledCount.textContent = '0';
+                this.elements.startBtn.disabled = false;
+                this.elements.pauseBtn.disabled = true;
+            }
+
+            shuffleArray(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+        }
+
+        // Inicializar el juego
+        document.addEventListener('DOMContentLoaded', () => {
+            new BingoGame();
+        });
+    </script>
+</body>
+</html>

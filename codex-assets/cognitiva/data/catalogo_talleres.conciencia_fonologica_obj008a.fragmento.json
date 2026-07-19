@@ -1,0 +1,51 @@
+{
+  "id_taller": "pri_3_obj_008a",
+  "codigo": "3º PRIMARIA obj.008a",
+  "nombre": "Segmentación silábica y reproducción de palabras en orden inverso",
+  "modulo": "conciencia_fonologica",
+  "objetivo_clinico": [
+    "habilidades_metalinguisticas",
+    "memoria_de_trabajo_fonologica",
+    "analisis_e_inversion_silabica"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reiniciar_secuencia_en_error": true,
+      "vibracion_visual_suave": true,
+      "pista_auditiva_primera_silaba_inversa": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "inversion_silabica",
+    "estimulo_auditivo": "palabra_trisilaba",
+    "num_silabas": 3,
+    "flujo": "escucha_palabra_luego_clic_en_orden_inverso",
+    "tiempo_max_respuesta_ms": 18000
+  },
+  "banco_items": [
+    {
+      "id_item": "cf_001",
+      "palabra": "TOMATE",
+      "audio_text": "tomate",
+      "silabas_original": ["TO", "MA", "TE"],
+      "silabas_objetivo_inverso": ["TE", "MA", "TO"]
+    },
+    {
+      "id_item": "cf_002",
+      "palabra": "CAMISA",
+      "audio_text": "camisa",
+      "silabas_original": ["CA", "MI", "SA"],
+      "silabas_objetivo_inverso": ["SA", "MI", "CA"]
+    },
+    {
+      "id_item": "cf_003",
+      "palabra": "PELOTA",
+      "audio_text": "pelota",
+      "silabas_original": ["PE", "LO", "TA"],
+      "silabas_objetivo_inverso": ["TA", "LO", "PE"]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id_taller": "inf_2_obj_017b",
+  "codigo": "2º INFANTIL obj.017b",
+  "nombre": "Léxico visual palabras con S en sílaba directa en mayúscula",
+  "modulo": "ruta_lexica_palabra_imagen",
+  "objetivo_clinico": [
+    "ampliacion_lexico_visual",
+    "asociacion_forma_global_significado",
+    "lectura_global_comprensiva"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "reproducir_audio_automatico_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "asociacion_imagen_palabra",
+    "estimulo_semantico": "imagen",
+    "estimulo_auditivo": "audio_palabra",
+    "respuesta_esperada": "palabra_completa_mayuscula",
+    "num_opciones": { "base": 3, "min": 2, "max": 4 },
+    "boton_repeticion_audio": true,
+    "tiempo_max_respuesta_ms": 9000
+  },
+  "regla_distractores": {
+    "distractor_1_similitud_inicio": "misma sílaba inicial, significado distinto",
+    "distractor_2_contraste": "palabra básica de estructura similar con letras diferentes"
+  },
+  "banco_items": [
+    {
+      "id_item": "lex_sapo",
+      "palabra_objetivo": "SAPO",
+      "audio_text": "sapo",
+      "imagen_url": null,
+      "imagen_placeholder": "🐸",
+      "distractor_similitud_inicio": "SALA",
+      "distractor_contraste": "PATO"
+    },
+    {
+      "id_item": "lex_oso",
+      "palabra_objetivo": "OSO",
+      "audio_text": "oso",
+      "imagen_url": null,
+      "imagen_placeholder": "🐻",
+      "distractor_similitud_inicio": "OLA",
+      "distractor_contraste": "MESA"
+    },
+    {
+      "id_item": "lex_sopa",
+      "palabra_objetivo": "SOPA",
+      "audio_text": "sopa",
+      "imagen_url": null,
+      "imagen_placeholder": "🥣",
+      "distractor_similitud_inicio": "SOFA",
+      "distractor_contraste": "PATO"
+    }
+  ]
+}

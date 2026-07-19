@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Ficha del paciente</title>
+  <link rel="stylesheet" href="./src/app.css?v=8" />
+</head>
+<body data-page="paciente">
+  <div id="pinRoot" class="pin-block card hidden">
+    <h2 id="pinTitle">PIN</h2>
+    <p class="muted">Si es el primer uso, este PIN quedará guardado.</p>
+    <div class="pin-row">
+      <input id="pinInput" maxlength="4" inputmode="numeric" placeholder="0000" />
+      <button id="pinBtn" class="btn" type="button">Entrar</button>
+    </div>
+    <div style="margin-top:8px">
+      <button id="pinResetBtn" class="btn btn-danger" type="button">Reiniciar PIN</button>
+    </div>
+    <div id="pinMsg" class="muted" style="margin-top:8px"></div>
+  </div>
+
+  <main id="appRoot" class="wrap hidden">
+    <section class="card">
+      <div class="head">
+        <h1 id="pacienteName">Paciente</h1>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="btnBack" class="btn" type="button">← Volver</button>
+          <button id="btnDiag" class="btn" type="button">🔎 Diagnóstico inicial</button>
+          <button id="btnDelete" class="btn btn-danger" type="button">🗑 Eliminar paciente</button>
+        </div>
+      </div>
+      <div id="pathPaciente" class="path"></div>
+      <div id="exerciseInfo" style="margin-top:10px"></div>
+      <div id="errorPanel" style="margin-top:10px"></div>
+    </section>
+
+    <section class="card" style="margin-top:12px">
+      <div class="head">
+        <h1 style="font-size:clamp(1.5rem,3vw,2.2rem)">Elige los ejercicios del cuaderno</h1>
+        <button id="btnStartSesion" class="btn" type="button">▶ Iniciar sesión</button>
+      </div>
+      <p class="muted">Toca una tarjeta para añadirla al camino. Vuelve a tocarla para quitarla.</p>
+      <div id="exercisePicker"></div>
+    </section>
+  </main>
+
+  <script src="./src/app.js?v=8" defer></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitiva · Sinfones líquidos (PL BL CL FL GL)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/alumno_obj015j.css" />
+  <link rel="stylesheet" href="./src/cognitiva-theme.css?v=2" />
+  <script src="./src/cognitiva-tiempo.js?v=1"></script>
+</head>
+<body>
+  <main class="screen" aria-label="Sinfones líquidos: PL, BL, CL, FL, GL">
+    <section class="audio-zone">
+      <button id="repeatBtn" class="repeat-btn" type="button" aria-label="Repetir sílaba">Repetir sonido</button>
+    </section>
+    <section class="options-zone" id="optionsZone" aria-label="Opciones de sílabas"></section>
+    <section class="feedback-zone" aria-live="polite" aria-atomic="true">
+      <div id="face" class="face">•ᴗ•</div>
+      <div id="pulse" class="pulse"></div>
+    </section>
+  </main>
+
+<script defer>
+/* Sinfones líquidos: PL, BL, CL, FL, GL — motor reutilizado de obj015j */
+const VOWELS = ["A","E","I","O","U"];
+const CLUSTERS_LIQ = ["PL","BL","CL","FL","GL"];
+// 25 sílabas objetivo (CCV)
+const TARGET_SYLLABLES = CLUSTERS_LIQ.flatMap(c => VOWELS.map(v => c+v));
+// Sílabas simples de contraste (omisión de la primera consonante)
+// Clínicamente: detecta si el niño "se salta" la consonante líquida
+
+function pickRandom(arr, count) {
+  const pool = [...arr]; const out = [];
+  while (pool.length && out.length < count) { const i = Math.floor(Math.random()*pool.length); out.push(pool.splice(i,1)[0]); }
+  return out;
+}
+function pickOne(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){ const c=[...arr]; for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]];}return c; }
+
+function buildDistractors(target) {
+  const cluster = target.slice(0,2); // "PL"
+  const vowel   = target.slice(2);   // "A"
+  // Distractor 1: mismo cluster, vocal distinta (ej. PLA → PLO)
+  const otherVowel = pickOne(VOWELS.filter(v=>v!==vowel));
+  const sameClusterDiff = cluster + otherVowel;
+  // Distractor 2: omisión de la consonante líquida (ej. PLA → LA)
+  // Error típico de dislexia: "se salta" la líquida
+  const omission = target.slice(1); // "LA"
+  return [sameClusterDiff, omission];
+}
+
+function generateRound(optionsCount=3) {
+  const target = pickOne(TARGET_SYLLABLES);
+  const baseDistractors = buildDistractors(target);
+  let extras = [];
+  if (optionsCount > 3) {
+    // Extra: cluster diferente, misma vocal (ej. PLA → BLA)
+    const cluster = target.slice(0,2); const vowel = target.slice(2);
+    const otherClusters = CLUSTERS_LIQ.filter(c=>c!==cluster);
+    extras = pickRandom(otherClusters, optionsCount-3).map(c=>c+vowel);
+  }
+  const options = shuffle([target,...baseDistractors,...extras]).map((syllable,idx)=>({
+    id:`opt_${idx+1}`, syllable, isCorrect:syllable===target
+  }));
+  return { targetSyllable:target, options };
+}
+
+class MotorGestion {
+  constructor(profileId, config={}) {
+    this.profileId=profileId;
+    this.config={ sessionMs:config.sessionMs??15*60*1000, defaultExposureMs:config.defaultExposureMs??1000, minExposureMs:config.minExposureMs??700, maxExposureMs:config.maxExposureMs??2500 };
+    this.sessionStart=null; this.metrics={aciertos:0,errores:0,intentos:0,eventos:[]}; this.currentExposureMs=this.config.defaultExposureMs;
+  }
+  startSession(){ this.sessionStart=Date.now(); }
+  registerAttempt(event){
+    this.metrics.intentos++;
+    if(event.correct){ this.metrics.aciertos++; this.currentExposureMs=Math.max(this.config.minExposureMs,this.currentExposureMs-100); }
+    else { this.metrics.errores++; this.currentExposureMs=Math.min(this.config.maxExposureMs,this.currentExposureMs+150); }
+    this.metrics.eventos.push(event);
+  }
+  immediateFeedback(correct){ return correct?{type:"success",message:"¡Muy bien!"}:{type:"error",message:"Inténtalo de nuevo."}; }
+  errorTreatment(state){
+    if(state.consecutiveErrors===1) return {reduceDistractorsTo:Math.max(1,state.optionsCount-1),replayAudio:true,showSolution:false};
+    return {reduceDistractorsTo:1,replayAudio:true,showSolution:true};
+  }
+  getSessionSummary(){
+    const times=this.metrics.eventos.map(e=>e.responseMs);
+    const avg=times.length?Math.round(times.reduce((a,b)=>a+b,0)/times.length):0;
+    return {profileId:this.profileId,aciertos:this.metrics.aciertos,errores:this.metrics.errores,intentos:this.metrics.intentos,tiempo_respuesta_promedio_ms:avg,eventos:this.metrics.eventos};
+  }
+}
+
+function createTallerSinfonesLiqController(motor, config={}) {
+  const state={ optionsCount:config.optionsCount||3, consecutiveErrors:0, round:null, startMs:0 };
+  function nextRound(){ state.round=generateRound(state.optionsCount); state.startMs=Date.now(); return state.round; }
+  function replayModelAudio(){ return state.round?.targetSyllable||"PLA"; }
+  function clickOption(optionId){
+    const option=state.round.options.find(o=>o.id===optionId); if(!option)return{ignore:true};
+    const responseMs=Date.now()-state.startMs;
+    const event={ tallerId:"consolidacion_sinfones_liq", modelSyllable:state.round.targetSyllable, selectedSyllable:option.syllable, correct:option.isCorrect, responseMs, ts:new Date().toISOString() };
+    motor.registerAttempt(event); const feedback=motor.immediateFeedback(option.isCorrect);
+    if(option.isCorrect){ state.consecutiveErrors=0; state.optionsCount=3; return{correct:true,completed:true,feedback,session:motor.getSessionSummary(),option}; }
+    state.consecutiveErrors++;
+    const treatment=motor.errorTreatment(state); state.optionsCount=Math.max(2,treatment.reduceDistractorsTo+1);
+    return{correct:false,completed:false,feedback,treatment,replaySyllable:replayModelAudio(),session:motor.getSessionSummary(),option};
+  }
+  return{nextRound,replayModelAudio,clickOption,getSessionSummary:()=>motor.getSessionSummary()};
+}
+
+const ui={repeatBtn:document.getElementById("repeatBtn"),optionsZone:document.getElementById("optionsZone"),face:document.getElementById("face"),pulse:document.getElementById("pulse")};
+const profileId=new URLSearchParams(window.location.search).get("alumno")||("anonimo_"+Date.now());
+const motor=new MotorGestion(profileId,(window.COG_EXP&&window.COG_EXP())||{});if(typeof motor.startSession==="function")motor.startSession();
+const controller=createTallerSinfonesLiqController(motor,{optionsCount:3});let round=controller.nextRound();
+function speak(t){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=0.6;u.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}
+function fx(k){ui.pulse.className='pulse';void ui.pulse.offsetWidth;if(k==='ok'){ui.face.textContent='◕‿◕';ui.pulse.classList.add('ok');}else{ui.face.textContent='•ᴖ•';ui.pulse.classList.add('err');}setTimeout(()=>ui.face.textContent='•ᴗ•',420);}
+function render(r){ui.optionsZone.innerHTML='';r.options.forEach(opt=>{const b=document.createElement('button');b.className='syllable-btn';b.type='button';b.textContent=opt.syllable;b.addEventListener('click',()=>{const res=controller.clickOption(opt.id);if(res.ignore)return;if(res.correct){b.classList.add('correct');fx('ok');setTimeout(()=>{round=controller.nextRound();render(round);speak(round.targetSyllable);},700);}else{b.classList.add('error');fx('err');setTimeout(()=>b.classList.remove('error'),260);if(res.treatment?.replayAudio)setTimeout(()=>speak(res.replaySyllable),230);}});ui.optionsZone.appendChild(b);});}
+ui.repeatBtn.addEventListener('click',()=>speak(controller.replayModelAudio()));render(round);speak(round.targetSyllable);
+window.cognitivaSinfonesLiq={controller,motor,getSummary:()=>controller.getSessionSummary()};
+
+const id_taller="sinfones_liq";
+function persistSession(){ localStorage.setItem(`cognitiva_sesion_${profileId}_${id_taller}`,JSON.stringify({...motor.getSessionSummary(),ts:new Date().toISOString()})); }
+window.addEventListener("pagehide",persistSession); window.addEventListener("beforeunload",persistSession); setInterval(persistSession,2000);
+</script>
+<button type="button" onclick="window.close()" style="margin-top:16px;padding:12px 20px;border-radius:10px;border:1px solid #9bd4b0;background:#eaf8ef;color:#145a35;font-weight:800;cursor:pointer;font-size:16px">✅ Terminar y volver al camino</button>
+</body>
+</html>

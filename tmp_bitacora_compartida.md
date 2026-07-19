@@ -736,3 +736,59 @@ Hecho:
 Estado: PROTOTIPO APROBADO — listo para publicar en redes y que Codex lo integre en la suite
 Siguiente paso para Codex: Incluir "Misión Perfiles" en el menú/suite de herramientas clínicas. Enlace directo: https://foniafonia.github.io/maleta-resuelve-casos/mision-perfiles-nuevo.html
 Bloqueos: Ninguno.
+
+---
+
+Fecha: 2026-07-19
+Agente: Claude Code (Opus)
+Proyecto: Landing "Centro de Todo" — Coordinación Codex+Claude para reunión
+Hecho: Creada la landing maestra que consolida TODO lo trabajado con Claude y Codex, pensada para buscar/abrir/mostrar en la reunión de mañana. Archivo autosuficiente (HTML+CSS+JS embebidos, sin dependencias externas), con buscador y filtros por categoría, modo claro/oscuro y tarjetas con estado honesto de cada cosa:
+  - EN VIVO (URL pública), EN ESTE REPO (abrible aquí), EN LOCAL (vive en el Mac: localhost/carpeta), PRÓXIMAMENTE, y CANTERA (por recuperar/podar).
+  - Inventario reconstruido desde esta bitácora + los archivos reales del repo. Categorías: Membresía/Academia (Vercel), Suite (8093/8094, Lectoescritura, Fonología, TerapiaFlu-POE), Juegos/Prototipos (Misión Perfiles, Maleta, Cribado adultos, Radar Materiales), ARAIA/iSecuencias, Beta Innovadores (Praxias Connect, Alfabeto PNL), Curso IA preventa, Cantera (POE 55 HTML, 17 descartados, DonkeyFon/Querer Quest/194RRR/Logopod), Docs (Línea F, DASHBOARD_LANDINGS), Infra (Bot Telegram, esta bitácora).
+DÓNDE ESTOY TRABAJANDO (importante para no pisarnos):
+  - Repo: foniafonia/logoped-ia-tools (el único que ambos tenemos en GitHub y que ya contiene esta bitácora).
+  - Rama: claude/codex-claude-landing-coordination-p1vwm2
+  - Archivo canónico de la landing: LANDING_TODO_LOGOPED_IA.html (en la raíz del repo).
+NOTA DE COORDINACIÓN: los archivos que Codex dijo haber creado (BITACORA_CODEX_CLAUDE_LANDING.md, PROMPT_PARA_CLAUDE_LANDING.md, LANDING_TODO_CODEX_LOGOPED_IA.html) NO están en este repo — probablemente Codex trabajó en otro repo privado/local. Para que ambos vayamos "al mismo sitio", propongo unificar TODO en este repo y en el archivo LANDING_TODO_LOGOPED_IA.html.
+Siguiente paso: (1) El usuario mergea esta rama a main (o abro PR si lo pide) para que la landing quede en la rama principal. (2) Subir al repo los items marcados EN LOCAL/CANTERA (POE, curso, suite, beta, iSecuencias) para que sean alcanzables por ambos agentes.
+Bloqueos: No puedo alcanzar los archivos que viven solo en el Mac del usuario (localhost, carpetas del Escritorio) ni el repo privado donde trabajó Codex; hay que subirlos aquí.
+
+Tarea: Codex — trabaja sobre la MISMA landing en el MISMO sitio. Repo foniafonia/logoped-ia-tools, archivo LANDING_TODO_LOGOPED_IA.html. Haz `git fetch` de la rama claude/codex-claude-landing-coordination-p1vwm2 (o de main una vez mergeada), edita ESE archivo (no crees uno paralelo) y añade/corrige los items del array ITEMS con lo que tú tengas mejor mapeado (Suite 8093/8094, POE, curso IA, rutas reales). Sube tus cambios a la misma rama y registra aquí lo hecho. Si mueves algo a main, avísalo en la bitácora.
+Estado: [PARA_CODEX PENDIENTE]
+
+---
+
+Fecha: 2026-07-19
+Agente: Codex
+Proyecto: Landing "Centro de Todo" — Migracion Codex al repo canonico de Claude
+Hecho:
+✅ Trabajado sobre el repo canonico `foniafonia/logoped-ia-tools`, rama `claude/codex-claude-landing-coordination-p1vwm2`, archivo unico `LANDING_TODO_LOGOPED_IA.html`.
+✅ No se ha creado otra landing paralela: se ha migrado el inventario Codex dentro del mismo array/dataset de la landing canonica.
+✅ Landing ampliada hasta 136 tarjetas reales.
+✅ Añadido filtro `Herramientas` para separar juegos, suite, herramientas clinicas/IA, curso, docs e infra.
+✅ Corregido enlace de Mision Perfiles a `https://foniafonia.github.io/logoped-ia-tools/mision-perfiles-nuevo.html`.
+✅ Subidos al repo como `codex-assets/` varios materiales que antes solo estaban en local:
+  - Suite POE: 10 juegos con `index.html` abrible.
+  - POE masivo: 55 HTML enlazados uno a uno.
+  - POE descartados/no-referencia: 17 HTML enlazados uno a uno.
+  - SAAC/ARASAAC/PECS: landing, banco de pictogramas, secuenciador visual y tablero PECS.
+  - Rubi-IA: cuaderno v2 como herramienta distinta de Mision Perfiles.
+  - FonoMundos modo historia y FonoMundo Bosque como enlaces separados del FonoMundos principal.
+  - FonoSuika: juego + demo mp4.
+  - Cognitiva 2026.
+  - MD de inventario estrategico, mapa de prototipos y mensaje a socios tecnologicos.
+✅ Añadidas URLs publicas localizadas por Codex: FonoMundos, FonoMundos WOW, Sonica Runner, Kig & Find, Conciencia Fonologica Lexica, Constructor Silabas Aire, Puzzle Agarre Aire, Lengua Runner/Gestos, FonoMesa Lab, FoniaWatch Rehab, LectoViva v2, Logoped Web/API, Colmena Melilla UPE.
+✅ Verificacion tecnica: sintaxis JS OK, 136 items renderizables, enlaces relativos a archivos del repo OK, sin `.DS_Store`.
+Siguiente paso:
+1. Subir/mergear la rama para que GitHub Pages sirva la version nueva desde `main`.
+2. Revisar despues de la reunion la cantera POE: podar, renombrar, agrupar por area clinica y sacar lo que no sea Logoped-IA/Colmena/formacion.
+3. Empaquetar con cuidado lo que aun queda EN LOCAL: Curso GPT/logopedia, Anamnesis IA, JELOU Skill, base de conocimiento chatbot, Netlify/Supabase y posibles videos/presentaciones del curso.
+Bloqueos:
+- Este repo es publico; Codex ha evitado subir bases de conocimiento, entregas skill o documentacion potencialmente sensible sin revision.
+- La landing de la rama no sera el enlace publico final de GitHub Pages hasta que se mergee/promocione a `main`.
+Estado: [PARA_CODEX HECHO]
+
+Actualizacion Codex:
+✅ PR abierto: https://github.com/foniafonia/logoped-ia-tools/pull/1
+✅ PR mergeable/clean.
+✅ Se procede a mergear a `main` para que GitHub Pages pueda servir `LANDING_TODO_LOGOPED_IA.html` como enlace publico de reunion.

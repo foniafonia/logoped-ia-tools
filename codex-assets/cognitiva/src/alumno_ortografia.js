@@ -1,0 +1,179 @@
+/* AUTOGENERADO OFFLINE: fusion de taller_ortografia.js + alumno_ortografia_bv_cloze.js */
+function pickOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+const ORTO_ITEMS = [
+  {
+    id_item: "bv_001",
+    texto_base: "El a_ion volaba muy _ajo.",
+    huecos: [
+      { indice: 0, respuesta: "V", palabra: "avion", pista: "Recuerda, avion se escribe con V." },
+      { indice: 1, respuesta: "B", palabra: "bajo", pista: "Recuerda, bajo se escribe con B." }
+    ]
+  },
+  {
+    id_item: "bv_002",
+    texto_base: "El _arco es de color _erde.",
+    huecos: [
+      { indice: 0, respuesta: "B", palabra: "barco", pista: "Recuerda, barco se escribe con B." },
+      { indice: 1, respuesta: "V", palabra: "verde", pista: "Recuerda, verde se escribe con V." }
+    ]
+  },
+  {
+    id_item: "bv_003",
+    texto_base: "La _aca _ebe agua fresca.",
+    huecos: [
+      { indice: 0, respuesta: "V", palabra: "vaca", pista: "Recuerda, vaca se escribe con V." },
+      { indice: 1, respuesta: "B", palabra: "bebe", pista: "Recuerda, bebe se escribe con B." }
+    ]
+  }
+];
+
+class MotorGestion {
+  constructor(profileId) {
+    this.profileId = profileId;
+    this.metrics = { aciertos: 0, errores: 0, intentos: 0, eventos: [] };
+  }
+
+  registerAttempt(event) {
+    this.metrics.intentos += 1;
+    if (event.correct) this.metrics.aciertos += 1;
+    else this.metrics.errores += 1;
+    this.metrics.eventos.push(event);
+  }
+
+  immediateFeedback(correct) {
+    return correct
+      ? { type: "success", message: "Correcto" }
+      : { type: "error", message: "Letra incorrecta" };
+  }
+
+  getSessionSummary() {
+    const times = this.metrics.eventos.map((e) => e.responseMs);
+    const avg = times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : 0;
+    return { ...this.metrics, tiempo_respuesta_promedio_ms: avg };
+  }
+}
+
+function makeRound() {
+  const item = pickOne(ORTO_ITEMS);
+  const slots = item.huecos.map((h, idx) => ({
+    slotId: `slot_${idx + 1}`,
+    indice: h.indice,
+    respuesta: h.respuesta,
+    palabra: h.palabra,
+    pista: h.pista,
+    value: "",
+    solved: false
+  }));
+
+  return {
+    item,
+    slots,
+    selectedSlotId: null,
+    completed: false,
+    startMs: Date.now()
+  };
+}
+
+function createTallerOrtografiaController(motor) {
+  const state = { round: null };
+
+  function nextRound() {
+    state.round = makeRound();
+    return state.round;
+  }
+
+  function selectSlot(slotId) {
+    const slot = state.round.slots.find((s) => s.slotId === slotId);
+    if (!slot || slot.solved) return { ignore: true };
+    state.round.selectedSlotId = slotId;
+    return { selectedSlotId: slotId };
+  }
+
+  function inputLetter(letter) {
+    const slot = state.round.slots.find((s) => s.slotId === state.round.selectedSlotId);
+    if (!slot || slot.solved) return { ignore: true };
+
+    slot.value = letter;
+    const correct = letter === slot.respuesta;
+    const responseMs = Date.now() - state.round.startMs;
+
+    motor.registerAttempt({
+      tallerId: "pri_ort_bv_cloze_001",
+      itemId: state.round.item.id_item,
+      slotId: slot.slotId,
+      palabra: slot.palabra,
+      expected: slot.respuesta,
+      selected: letter,
+      correct,
+      responseMs,
+      ts: new Date().toISOString()
+    });
+
+    const feedback = motor.immediateFeedback(correct);
+
+    if (correct) {
+      slot.solved = true;
+      slot.value = letter;
+      const completed = state.round.slots.every((s) => s.solved);
+      state.round.completed = completed;
+      return {
+        correct: true,
+        feedback,
+        slotId: slot.slotId,
+        completed,
+        round: state.round,
+        session: motor.getSessionSummary()
+      };
+    }
+
+    return {
+      correct: false,
+      feedback,
+      slotId: slot.slotId,
+      wrongLetter: letter,
+      clearAfterMs: 900,
+      hintSpeech: slot.pista,
+      round: state.round,
+      session: motor.getSessionSummary()
+    };
+  }
+
+  function clearSlot(slotId) {
+    const slot = state.round.slots.find((s) => s.slotId === slotId);
+    if (!slot || slot.solved) return;
+    slot.value = "";
+  }
+
+  return {
+    nextRound,
+    selectSlot,
+    inputLetter,
+    clearSlot,
+    getSessionSummary: () => motor.getSessionSummary()
+  };
+}
+
+
+const ui={clozeText:document.getElementById('clozeText'),btnB:document.getElementById('btnB'),btnV:document.getElementById('btnV'),dot:document.getElementById('dot')};
+const profileId=new URLSearchParams(window.location.search).get('alumno')||('anonimo_'+Date.now());
+const motor=new MotorGestion(profileId);if(typeof motor.startSession==='function')motor.startSession();
+const controller=createTallerOrtografiaController(motor);let round=controller.nextRound();
+const dot=(k)=>{ui.dot.className='dot';if(k)ui.dot.classList.add(k);};
+function speak(t){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=.75;u.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);} 
+function render(r){const chunks=r.item.texto_base.split('_');ui.clozeText.innerHTML='';chunks.forEach((c,i)=>{ui.clozeText.append(document.createTextNode(c));if(i<r.slots.length){const slot=r.slots.find(s=>s.indice===i);const el=document.createElement('button');el.type='button';el.className='slot';el.dataset.slotId=slot.slotId;el.textContent=slot.value||'_';if(slot.solved)el.classList.add('correct');if(r.selectedSlotId===slot.slotId&&!slot.solved)el.classList.add('selected');if(slot.solved)el.disabled=true;el.addEventListener('click',()=>{const s=controller.selectSlot(slot.slotId);if(s.ignore)return;render(r);});ui.clozeText.append(el);}});}
+function put(letter){const res=controller.inputLetter(letter);if(res.ignore)return;console.log(res.feedback.message,res.session);const el=ui.clozeText.querySelector(`[data-slot-id="${res.slotId}"]`);if(res.correct){dot('ok');round=res.round;render(round);if(res.completed)setTimeout(()=>{round=controller.nextRound();render(round);dot(null);},1000);return;}dot('err');if(el){el.textContent=res.wrongLetter;el.classList.add('wrong');}setTimeout(()=>{controller.clearSlot(res.slotId);round=res.round;render(round);speak(res.hintSpeech);},res.clearAfterMs);} 
+ui.btnB.addEventListener('click',()=>put('B'));ui.btnV.addEventListener('click',()=>put('V'));render(round);window.cognitivaOrtografiaBV={controller,motor,getSummary:()=>controller.getSessionSummary()};
+
+const id_taller = "ortografia";
+function persistSession(){
+  localStorage.setItem(
+    `cognitiva_sesion_${profileId}_${id_taller}`,
+    JSON.stringify({ ...motor.getSessionSummary(), ts: new Date().toISOString() })
+  );
+}
+window.addEventListener("pagehide", persistSession);
+window.addEventListener("beforeunload", persistSession);
+setInterval(persistSession, 2000);

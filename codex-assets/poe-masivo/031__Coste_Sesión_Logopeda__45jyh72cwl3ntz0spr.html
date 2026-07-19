@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CliniCost — Modelo económico clínico</title>
+<style>
+  :root{
+    --bg:#f7f4ef;            /* base cálida */
+    --paper:#fffdfa;         /* bloque tipo cuaderno */
+    --paper-2:#f3f0ea;       /* bloque suave */
+    --line:#e3ddd3;          /* separador cálido */
+    --text:#1f2937;
+    --muted:#6b645c;         /* gris cálido */
+    --primary:#0f6b5f;       /* verde sanitario profundo */
+    --info:#0f8393;          /* azul verdoso suave */
+    --positive:#2f8f6b;      /* verde suave */
+    --warn:#c9852a;          /* naranja suave */
+    --shadow:0 1px 2px rgba(31, 41, 55, 0.04), 0 10px 24px rgba(31, 41, 55, 0.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Inter","Source Sans 3","Nunito",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+  }
+  .wrap{max-width:1200px; margin:0 auto; padding:24px 22px 40px;}
+  .brand{
+    display:flex; align-items:center; gap:16px;
+    padding:18px 20px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+  }
+  .logo{
+    width:140px; height:auto; color:var(--primary);
+    flex:0 0 auto;
+  }
+  .brand-text h1{
+    font-size:2rem; margin:0; font-weight:700; letter-spacing:-0.01em;
+  }
+  .brand-text .subtitle{
+    font-size:1.05rem; color:var(--muted); margin-top:2px;
+  }
+  .tool-title{
+    margin:18px 2px 4px;
+    font-size:1.1rem; font-weight:600; color:#2b3440;
+  }
+  .tool-sub{color:var(--muted); font-size:0.95rem; margin-bottom:18px}
+
+  /* Tabs */
+  .tabs{
+    display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 18px;
+    padding:6px; background:var(--paper-2); border:1px solid var(--line); border-radius:999px;
+  }
+  .tab-btn{
+    padding:8px 14px; border-radius:999px; border:1px solid transparent;
+    background:transparent; color:#2b3440; font-weight:600; cursor:pointer;
+  }
+  .tab-btn.active{
+    background:var(--paper);
+    border-color:var(--line);
+    color:var(--primary);
+  }
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  /* Secciones narrativas */
+  .section{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 16px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+  .section.soft{
+    background:var(--paper-2);
+    box-shadow:none;
+  }
+  .section-header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding-bottom:8px; border-bottom:1px dashed var(--line); margin-bottom:12px;
+  }
+  .section-title{
+    font-size:1.05rem; font-weight:700; margin:0;
+  }
+  .section-note{color:var(--muted); font-size:0.92rem}
+
+  .grid{display:grid; gap:16px}
+  @media (min-width: 980px){ .grid{grid-template-columns:1.1fr 0.9fr;} }
+  .row{display:grid; gap:12px}
+  .row.cols-2{grid-template-columns:1fr 1fr}
+  .row.cols-3{grid-template-columns:1fr 1fr 1fr}
+  @media (max-width:700px){
+    .row.cols-2,.row.cols-3{grid-template-columns:1fr}
+  }
+
+  label{display:block; font-size:0.88rem; color:#3c4652; margin-bottom:6px; font-weight:600}
+  input, select, button{
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #d8d2c7;
+    background:#ffffff;
+    color:#1f2937;
+    font-size:0.95rem;
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:#8fc4bb;
+    box-shadow:0 0 0 3px rgba(15, 131, 147, 0.12);
+  }
+  button{
+    cursor:pointer;
+    background:#f6f3ee;
+    border-color:#d8d2c7;
+    color:#1f2937;
+    font-weight:600;
+  }
+  button.primary{
+    background:linear-gradient(180deg, #0f6b5f 0%, #0b5f55 100%);
+    border-color:#0f6b5f;
+    color:white;
+  }
+  .pill{
+    display:inline-block; padding:4px 10px; border-radius:999px;
+    font-size:0.8rem; background:#eef7f5; border:1px solid #cfe5e1; color:#1b5a52;
+  }
+  .tag{
+    padding:4px 10px; border-radius:10px; background:#eef7f5; border:1px solid #cfe5e1; color:#1b5a52; font-size:0.8rem; font-weight:600;
+  }
+  .badge{
+    padding:4px 10px; border-radius:10px;
+    background:#edf6fb; border:1px solid #d4e8f2; color:#0f5f6b; font-size:0.8rem; font-weight:600;
+  }
+  .muted{color:var(--muted); font-size:0.92rem}
+  .small{font-size:0.85rem}
+  .warn{color:var(--warn)}
+
+  /* Instrumento clínico */
+  .instrument{
+    background:linear-gradient(180deg, #ffffff 0%, #f8f6f2 100%);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+  }
+  .instrument-header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin-bottom:8px;
+  }
+  .instrument-title{
+    font-size:0.95rem; color:#3c4652; font-weight:700;
+  }
+  .instrument-value{
+    font-size:2.2rem; font-weight:700; letter-spacing:-0.01em;
+    text-align:center; margin:10px 0 4px;
+  }
+  .instrument-value.primary{color:var(--primary)}
+  .instrument-sub{
+    text-align:center; color:var(--muted); font-size:0.92rem;
+  }
+
+  /* Bloques educativos */
+  .edu{
+    padding:12px 14px; border-left:4px solid #cfe5e1; background:#f4fbf9;
+    border-radius:10px; font-size:0.9rem; color:#2b3a36;
+  }
+
+  /* Listas y tablas */
+  ul.list, ol.list{margin:0; padding-left:18px;}
+  table{width:100%; border-collapse:collapse; font-size:0.9rem;}
+  th,td{border-bottom:1px solid var(--line); padding:8px 6px; text-align:left;}
+  th{color:#5a6672; font-weight:700; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em}
+  .table-wrap{overflow:auto}
+
+  /* Gráficas */
+  .chart{
+    background:#ffffff; border:1px solid var(--line); border-radius:12px; padding:10px;
+  }
+  .chart-title{font-size:0.9rem; color:#3c4652; margin-bottom:6px; font-weight:700}
+  .legend{display:flex; gap:12px; font-size:0.82rem; color:#6b7280; flex-wrap:wrap}
+  .dot{width:10px; height:10px; border-radius:3px; display:inline-block; margin-right:6px;}
+  .dot.green{background:var(--positive)}
+  .dot.orange{background:var(--warn)}
+  .dot.blue{background:#3b82f6}
+  .dot.purple{background:#8b5cf6}
+
+  /* Acordeón */
+  details.hist{
+    background:#ffffff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px 12px;
+  }
+  details.hist summary{
+    cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    color:#1f2937; font-weight:700;
+  }
+  details.hist summary::-webkit-details-marker{display:none;}
+  .chev{
+    width:0; height:0;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:8px solid #a3a3a3;
+    transition:transform .2s ease;
+  }
+  details[open] .chev{transform:rotate(180deg)}
+
+  /* Demo */
+  #modoActual, #clinicaModoActual{
+    background:#fff7ed; border:1px solid #fed7aa; color:#9a3412;
+  }
+  #modoActual.demo, #clinicaModoActual.demo{
+    background:#eef2ff; border-color:#c7d2fe; color:#3730a3;
+  }
+
+  /* Ajustes */
+  .inline{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Marca -->
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 1536 1024" aria-label="CliniCost logo" role="img">
+      <g transform="translate(0,1024) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+        <path d="M3355 6700 c-11 -4 -31 -20 -45 -35 l-25 -27 3 -280 c1 -155 0 -289 -4 -300 -5 -17 -23 -18 -327 -18 -353 0 -351 0 -382 -60 -12 -24 -15 -80 -15 -312 0 -263 1 -285 20 -315 31 -51 75 -59 213 -39 261 37 545 152 801 324 159 107 362 273 349 286 -3 3 6 10 20 15 18 7 25 15 21 26 -3 8 -2 15 2 15 5 0 8 145 8 322 -1 195 2 311 7 293 8 -27 8 -27 4 9 -5 47 -28 84 -61 96 -31 12 -561 12 -589 0z" />
+        <path d="M4003 6425 c0 -27 2 -38 4 -22 2 15 2 37 0 50 -2 12 -4 0 -4 -28z" />
+        <path d="M6468 6373 l-36 -4 1 -630 2 -629 118 0 117 0 0 635 0 635 -82 -2 c-46 -1 -100 -3 -120 -5z" />
+        <path d="M5830 6329 c-30 -5 -56 -13 -58 -18 -2 -5 -13 -7 -25 -4 -16 3 -18 2 -8 -5 11 -8 11 -11 0 -18 -7 -4 -14 -3 -17 4 -2 7 -8 12 -13 12 -6 0 -8 -4 -5 -9 4 -5 -2 -7 -12 -5 -32 9 -182 -84 -182 -113 0 -8 -5 -11 -11 -7 -13 7 -75 -65 -71 -82 1 -7 -3 -16 -9 -20 -8 -5 -9 -3 -4 6 5 8 4 11 -3 6 -6 -4 -9 -13 -6 -21 3 -8 -5 -25 -19 -37 -45 -43 -69 -129 -74 -273 -5 -112 -3 -141 16 -208 39 -144 106 -244 214 -321 136 -97 269 -133 457 -122 131 7 172 14 164 28 -4 6 2 7 16 3 17 -5 21 -4 15 6 -6 9 -3 11 10 5 10 -3 33 -2 52 5 l33 11 0 113 0 114 -52 -24 c-29 -14 -79 -30 -110 -37 -32 -7 -58 -14 -58 -18 0 -7 -151 -4 -175 4 -11 4 -49 20 -85 34 -36 15 -70 26 -76 24 -6 -1 -21 10 -35 25 l-24 28 25 -20 c13 -11 4 3 -22 32 -43 50 -88 128 -88 155 0 10 -2 11 -8 0 -5 -6 -8 60 -8 147 1 114 5 164 14 173 6 6 12 8 12 4 0 -5 18 18 39 50 47 69 90 105 169 142 110 51 302 38 432 -28 22 -11 41 -20 42 -20 3 0 3 140 0 197 -2 29 -6 33 -64 52 -121 39 -263 50 -388 30z" />
+        <path d="M6895 6328 c-67 -36 -96 -103 -71 -161 39 -95 165 -114 232 -34 23 27 26 38 22 84 -3 33 -12 61 -24 74 -38 43 -116 61 -159 37z" />
+        <path d="M8195 6325 c-68 -35 -89 -96 -57 -167 48 -108 203 -102 242 10 13 37 13 47 0 84 -27 76 -112 110 -185 73z" />
+        <path d="M8993 6325 c-290 -65 -473 -304 -473 -618 0 -299 166 -516 455 -598 118 -34 284 -32 419 5 55 14 106 32 113 38 10 8 13 40 12 125 0 62 -3 113 -5 113 -1 0 -18 -9 -36 -19 -56 -33 -186 -64 -273 -64 -218 -1 -372 126 -408 338 -22 130 23 286 107 369 135 134 335 148 589 41 16 -7 17 1 15 111 l-3 118 -75 25 c-63 20 -98 25 -225 27 -103 2 -170 -1 -212 -11z" />
+        <path d="M11480 6159 l-115 -26 -3 -101 -3 -101 -44 -7 c-25 -3 -54 -4 -65 -1 -19 5 -20 0 -20 -79 l0 -84 65 0 65 0 0 -220 c0 -120 5 -242 11 -269 14 -67 57 -123 114 -151 58 -28 193 -38 277 -21 l57 12 6 57 c12 107 11 117 -5 113 -8 -2 -42 -6 -76 -8 -130 -11 -147 25 -142 307 l3 175 108 3 108 3 -3 82 -3 82 -107 3 -107 3 -3 127 -3 127 -115 -26z" />
+        <path d="M4777 6002 c-38 -45 -113 -124 -168 -175 l-99 -94 0 -467 0 -466 28 6 c74 19 304 83 308 87 2 2 3 271 2 597 l-3 594 -68 -82z" />
+        <path d="M9922 5949 c-123 -21 -239 -106 -293 -214 -85 -172 -52 -399 76 -527 162 -163 465 -163 629 -1 156 153 163 448 16 616 -93 105 -259 154 -428 126z" />
+        <path d="M10782 5949 c-81 -14 -147 -47 -190 -93 -50 -54 -65 -101 -60 -181 7 -114 71 -174 243 -231 44 -15 96 -35 116 -45 56 -28 65 -70 23 -110 -23 -22 -34 -24 -112 -23 -72 1 -102 6 -171 32 -47 18 -88 32 -93 32 -11 0 -10 -158 2 -179 16 -31 158 -64 275 -64 246 -2 393 117 370 298 -10 86 -50 137 -137 178 -40 19 -105 44 -144 56 -88 26 -124 52 -124 91 0 47 40 70 119 70 57 0 160 -21 224 -46 16 -6 18 1 15 87 l-3 94 -70 18 c-87 21 -213 29 -283 16z" />
+        <path d="M7625 5937 c-36 -12 -80 -37 -142 -83 -23 -16 -23 -16 -23 30 l0 46 -115 0 -115 0 0 -410 0 -410 116 0 c96 0 114 2 105 13 -7 10 -8 24 -1 48 6 19 8 79 5 134 -3 55 -2 170 2 255 l8 155 45 23 c66 33 145 31 189 -6 45 -37 50 -72 50 -374 l1 -248 116 0 115 0 -3 323 c-3 282 -5 327 -21 361 -46 104 -110 147 -222 153 -40 1 -87 -3 -110 -10z" />
+        <path d="M6877 5909 c4 -14 0 -19 -15 -19 -12 0 -22 -9 -26 -22 -11 -44 -7 -726 5 -734 8 -4 7 -9 -2 -15 -8 -5 36 -9 109 -9 l122 0 0 410 0 411 -99 -2 c-91 -1 -98 -3 -94 -20z" />
+        <path d="M8153 5911 c-1 -9 -5 -193 -8 -408 l-7 -393 116 0 116 0 0 410 0 411 -108 -2 c-92 -1 -108 -4 -109 -18z" />
+        <path d="M3956 5731 c-17 -28 -294 -198 -428 -264 -161 -78 -247 -112 -388 -152 l-85 -24 61 0 c201 -3 612 118 848 249 83 46 94 55 91 77 -1 14 -18 38 -39 55 -20 16 -35 37 -34 45 3 18 -17 29 -26 14z" />
+        <path d="M3900 5382 c-30 -14 -102 -42 -160 -63 l-105 -37 -3 -365 -2 -365 67 18 c38 10 115 31 173 47 l105 29 3 382 c2 303 0 382 -10 381 -7 0 -38 -12 -68 -27z" />
+        <path d="M3420 5210 c22 -7 23 -8 4 -9 -12 -1 -33 -10 -48 -22 -14 -11 -26 -17 -26 -13 0 4 -8 0 -19 -10 -16 -15 -19 -15 -31 -1 -10 12 -10 15 1 15 9 0 10 3 2 11 -7 7 -33 8 -77 4 l-66 -7 0 -282 c0 -283 4 -331 23 -319 6 4 7 1 3 -6 -10 -16 21 -50 61 -67 71 -30 273 -2 281 39 3 12 -1 15 -15 11 -11 -4 -14 -3 -6 3 6 5 17 21 22 36 14 35 15 311 2 302 -18 -10 -21 12 -22 146 0 84 -4 128 -10 118 -5 -8 -9 -36 -10 -64 l-1 -50 -9 38 c-5 24 -5 45 1 56 6 12 5 22 -2 29 -9 9 -9 12 0 12 7 0 12 4 12 8 0 9 -60 32 -81 31 -8 -1 -3 -5 11 -9z" />
+      </g>
+    </svg>
+    <div class="brand-text">
+      <h1>CliniCost</h1>
+      <div class="subtitle">Modelo económico clínico</div>
+    </div>
+  </div>
+
+  <div class="tool-title">Coste real por sesión — modelo económico completo</div>
+  <div class="tool-sub">“Este es el coste real de tu trabajo, pase lo que pase.”</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="individual">Profesional individual</button>
+    <button class="tab-btn" data-tab="clinica">Clínica multiprofesional</button>
+  </div>
+
+  <!-- ===================== -->
+  <!-- TAB: PROFESIONAL INDIVIDUAL (SIN CAMBIOS DE LÓGICA) -->
+  <!-- ===================== -->
+  <section id="tab-individual" class="tab-panel active">
+
+    <div class="section soft">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Entorno de trabajo</h2>
+          <div class="section-note">Modo, fiabilidad y política informativa de cobros.</div>
+        </div>
+        <span class="pill">Contexto clínico</span>
+      </div>
+
+      <div class="row cols-3">
+        <div>
+          <label>Modo actual</label>
+          <div class="inline">
+            <span class="tag" id="modoActual">Real</span>
+            <button class="ghost" id="btnDemo">Activar modo ejemplo / demo</button>
+            <button class="ghost" id="btnSalirDemo" style="display:none">Salir de demo (vaciar)</button>
+          </div>
+          <div class="muted small">En demo puedes editar y borrar registros libremente.</div>
+        </div>
+        <div>
+          <label>Fiabilidad de la proyección</label>
+          <div class="badge" id="fiabilidad">—</div>
+        </div>
+        <div>
+          <label>Política de cobros (informativa)</label>
+          <div class="muted small">Se usa para avisos técnicos, no altera registros reales.</div>
+        </div>
+      </div>
+
+      <div class="row cols-2" style="margin-top:8px">
+        <div>
+          <label>¿Se suele cobrar ausencia injustificada?</label>
+          <select id="cobraInjustificada">
+            <option value="si" selected>Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div>
+          <label>¿Se suele cobrar ausencia justificada?</label>
+          <select id="cobraJustificada">
+            <option value="no" selected>No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Costes y apertura</h2>
+            <div class="section-note">Introduce tus costes fijos y tu capacidad real de agenda.</div>
+          </div>
+        </div>
+
+        <div class="row cols-2">
+          <div><label>Alquiler</label><input type="number" id="alquiler" min="0" value="600"></div>
+          <div><label>Suministros</label><input type="number" id="suministros" min="0" value="120"></div>
+          <div><label>Autónomos</label><input type="number" id="autonomos" min="0" value="320"></div>
+          <div><label>Personal</label><input type="number" id="personal" min="0" value="0"></div>
+          <div><label>Seguros</label><input type="number" id="seguros" min="0" value="40"></div>
+          <div><label>Software</label><input type="number" id="software" min="0" value="30"></div>
+          <div><label>Otros</label><input type="number" id="otros" min="0" value="50"></div>
+        </div>
+
+        <div class="edu" style="margin-top:12px">
+          Esta herramienta no adivina: **observa tu patrón** y te devuelve un coste realista.
+        </div>
+
+        <div class="row cols-3" style="margin-top:12px">
+          <div><label>Días abierto / mes</label><input type="number" id="dias" min="1" value="22"></div>
+          <div><label>Horas abierto / día</label><input type="number" id="horas" min="1" value="7"></div>
+          <div><label>Duración estándar sesión (min)</label><input type="number" id="duracion" min="10" value="45"></div>
+        </div>
+
+        <div class="row cols-2" style="margin-top:12px">
+          <div>
+            <label>Objetivo personal mensual (lo que quiero cobrar yo)</label>
+            <input type="number" id="objetivo" min="0" value="1800">
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button class="primary" id="recalcular">Recalcular</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Resultados principales</h2>
+            <div class="section-note">Dos lecturas distintas: coste real y precio responsable.</div>
+          </div>
+        </div>
+
+        <div class="instrument">
+          <div class="instrument-header">
+            <div class="instrument-title">Lo que cuesta (estimación basada en tu patrón)</div>
+            <span class="pill">€/sesión</span>
+          </div>
+          <div class="instrument-value" id="costeEstimadoHero">—</div>
+          <div class="instrument-sub">Esto es lo que ocurre si el patrón se mantiene.</div>
+        </div>
+
+        <div class="instrument" style="margin-top:12px">
+          <div class="instrument-header">
+            <div class="instrument-title">Lo que deberías cobrar (para cubrir costes y objetivo)</div>
+            <span class="pill">€/sesión</span>
+          </div>
+          <div class="instrument-value primary" id="precioRecomendado">—</div>
+          <div class="instrument-sub">No es una recomendación automática, es una estimación basada en tus datos.</div>
+        </div>
+
+        <div class="muted small" id="mensajePrecio" style="margin-top:10px">—</div>
+        <div class="muted small" id="mensajeEstimado" style="margin-top:4px">—</div>
+
+        <div class="edu" style="margin-top:12px">
+          El valor recomendado **no es un precio comercial**, sino una referencia clínica para sostener tu práctica.
+        </div>
+
+        <h3 style="margin-top:14px">Modos alternativos (informativos)</h3>
+        <ul class="list small">
+          <li><strong>Modo 1 — Estructural:</strong> <span id="costeEstructural">—</span></li>
+          <li><strong>Modo 2 — Real histórico:</strong> <span id="costeHistorico">—</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section soft">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Desglose técnico</h2>
+          <div class="section-note">Datos secundarios para entender el cálculo sin tecnicismos.</div>
+        </div>
+        <span class="pill">Detalle clínico</span>
+      </div>
+
+      <div class="row cols-3">
+        <div class="muted small">Coste mensual total: <strong id="costeMensual">—</strong></div>
+        <div class="muted small">Objetivo personal mensual: <strong id="objetivoMensual">—</strong></div>
+        <div class="muted small">Coste por día abierto: <strong id="costeDia">—</strong></div>
+        <div class="muted small">Sesiones ideales / mes: <strong id="sesionesIdeales">—</strong></div>
+        <div class="muted small">Días con registro: <strong id="diasRegistrados">—</strong></div>
+        <div class="muted small">Sesiones imputables: <strong id="sesionesImputables">—</strong></div>
+        <div class="muted small">Sesiones estimadas / mes: <strong id="sesionesEstimadasMes">—</strong></div>
+      </div>
+
+      <h3 style="margin-top:12px">Avisos técnicos</h3>
+      <ul class="list small" id="avisos">
+        <li class="muted">Sin avisos por ahora.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Registro diario</h2>
+          <div class="section-note">Registro real: append‑only. En demo: editable y reversible.</div>
+        </div>
+      </div>
+
+      <div class="row cols-3">
+        <div><label>Fecha</label><input type="date" id="fecha"></div>
+        <div><label>Sesiones realizadas</label><input type="number" id="realizadas" min="0" value="0"></div>
+        <div><label>Ausencias justificadas</label><input type="number" id="justificadas" min="0" value="0"></div>
+        <div><label>Ausencias injustificadas</label><input type="number" id="injustificadas" min="0" value="0"></div>
+        <div><label>Ausencias cobradas</label><input type="number" id="cobradas" min="0" value="0"></div>
+        <div><label>Sesiones recuperadas</label><input type="number" id="recuperadas" min="0" value="0"></div>
+      </div>
+      <div style="margin-top:8px">
+        <button id="addRegistro">Añadir registro</button>
+      </div>
+
+      <div style="margin-top:16px">
+        <details class="hist" open>
+          <summary>
+            <span>Histórico</span>
+            <span class="chev"></span>
+          </summary>
+          <div class="small muted" id="totalesResumen" style="margin-top:8px"></div>
+          <div style="margin-top:8px; overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Realizadas</th>
+                  <th>Justificadas</th>
+                  <th>Injustificadas</th>
+                  <th>Cobradas</th>
+                  <th>Recuperadas</th>
+                  <th id="colAcciones" style="display:none">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaBody">
+                <tr><td colspan="7" class="muted">Sin registros todavía.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Gráficas clínicas</h2>
+            <div class="section-note">Lectura visual clara, estilo informe.</div>
+          </div>
+        </div>
+
+        <div class="chart" style="margin-top:8px">
+          <div class="chart-title">1) Evolución diaria — sesiones vs ausencias</div>
+          <div class="legend">
+            <span><span class="dot green"></span>Sesiones realizadas</span>
+            <span><span class="dot orange"></span>Ausencias (just+injust)</span>
+          </div>
+          <svg id="chartEvolucion" viewBox="0 0 100 60" width="100%" height="160" aria-label="Evolución diaria"></svg>
+        </div>
+
+        <div class="chart" style="margin-top:12px">
+          <div class="chart-title">2) Comparativa — coste estructural vs coste estimado vs precio recomendado</div>
+          <div class="legend">
+            <span><span class="dot blue"></span>Estructural</span>
+            <span><span class="dot purple"></span>Estimado</span>
+            <span><span class="dot green"></span>Precio recomendado</span>
+          </div>
+          <svg id="chartComparativa" viewBox="0 0 100 60" width="100%" height="160" aria-label="Comparativa costes"></svg>
+        </div>
+
+        <div class="chart" style="margin-top:12px">
+          <div class="chart-title">3) Evolución del estimado conforme entran días</div>
+          <div class="legend">
+            <span><span class="dot purple"></span>Coste estimado</span>
+            <span><span class="dot green"></span>Precio recomendado</span>
+          </div>
+          <svg id="chartEvolucionEstimado" viewBox="0 0 100 60" width="100%" height="160" aria-label="Evolución estimada"></svg>
+        </div>
+      </div>
+
+      <div class="section soft">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Modelo conceptual (resumen operativo)</h2>
+            <div class="section-note">Lectura educativa, no contable.</div>
+          </div>
+        </div>
+        <ol class="list small">
+          <li><strong>Modo 1 — Estructural:</strong> depende solo de costes y agenda ideal.</li>
+          <li><strong>Modo 2 — Real histórico:</strong> usa solo días registrados, sin extrapolar.</li>
+          <li><strong>Modo 3 — Estimado:</strong> proyecta el patrón observado al mes completo desde el primer día.</li>
+        </ol>
+        <p class="muted small">El precio recomendado suma el objetivo personal al coste mensual y lo reparte en las sesiones estimadas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- TAB: CLÍNICA MULTIPROFESIONAL (NUEVO, LÓGICA INDEPENDIENTE) -->
+  <!-- ===================== -->
+  <section id="tab-clinica" class="tab-panel">
+    <div class="section soft">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Entorno de clínica</h2>
+          <div class="section-note">Modo, resumen y notas de uso.</div>
+        </div>
+      </div>
+
+      <div class="row cols-3">
+        <div>
+          <label>Modo clínica</label>
+          <div class="inline">
+            <span class="tag" id="clinicaModoActual">Real</span>
+            <button class="ghost" id="clinicaBtnDemo">Activar demo clínica</button>
+            <button class="ghost" id="clinicaBtnSalirDemo" style="display:none">Salir de demo (vaciar)</button>
+          </div>
+          <div class="muted small">En demo puedes editar y borrar profesionales.</div>
+        </div>
+        <div>
+          <label>Resumen rápido</label>
+          <div class="badge" id="clinicaResumen">—</div>
+        </div>
+        <div>
+          <label>Nota de uso</label>
+          <div class="muted small">No se mezclan datos individuales con los de clínica.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Estructura de personal</h2>
+          <div class="section-note">Cada profesional tiene su agenda propia.</div>
+        </div>
+      </div>
+      <p class="muted small">Las sesiones mensuales se estiman con: <strong>sesiones/día × días/mes</strong>.</p>
+
+      <div class="row cols-3">
+        <div><label>Nombre / rol</label><input type="text" id="clinicaNombre" placeholder="Ej. Logopeda senior"></div>
+        <div>
+          <label>Tipo de contrato</label>
+          <select id="clinicaTipo">
+            <option value="autonomo">Autónomo</option>
+            <option value="asalariado">Asalariado</option>
+          </select>
+        </div>
+        <div><label>Coste mensual bruto</label><input type="number" id="clinicaBruto" min="0" value="0"></div>
+        <div><label>Coste Seguridad Social empresa (si aplica)</label><input type="number" id="clinicaSS" min="0" value="0"></div>
+        <div><label>Horas semanales</label><input type="number" id="clinicaHoras" min="0" value="0"></div>
+        <div><label>Duración media de sesión (min)</label><input type="number" id="clinicaDuracion" min="10" value="45"></div>
+        <div><label>Sesiones medias por día</label><input type="number" id="clinicaSesDia" min="0" value="0"></div>
+        <div><label>Días trabajados al mes</label><input type="number" id="clinicaDiasMes" min="0" value="0"></div>
+      </div>
+      <div style="margin-top:8px">
+        <button id="clinicaAdd">Añadir profesional</button>
+      </div>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre / rol</th>
+              <th>Contrato</th>
+              <th>Coste bruto</th>
+              <th>SS empresa</th>
+              <th>Coste total mensual</th>
+              <th>Horas/sem</th>
+              <th>Duración sesión</th>
+              <th>Sesiones/día</th>
+              <th>Días/mes</th>
+              <th>Sesiones/mes</th>
+              <th>Coste por sesión</th>
+              <th id="clinicaColAcciones" style="display:none">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="clinicaTabla">
+            <tr><td colspan="12" class="muted">Sin profesionales todavía.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="muted small" style="margin-top:6px">Edición permitida siempre. Eliminación solo en modo demo.</div>
+    </div>
+
+    <div class="grid">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Costes generales de clínica</h2>
+            <div class="section-note">Costes compartidos por toda la estructura.</div>
+          </div>
+        </div>
+
+        <div class="row cols-2">
+          <div><label>Alquiler</label><input type="number" id="clinicaAlquiler" min="0" value="900"></div>
+          <div><label>Suministros</label><input type="number" id="clinicaSuministros" min="0" value="180"></div>
+          <div><label>Seguros</label><input type="number" id="clinicaSeguros" min="0" value="80"></div>
+          <div><label>Software</label><input type="number" id="clinicaSoftware" min="0" value="60"></div>
+          <div><label>Limpieza</label><input type="number" id="clinicaLimpieza" min="0" value="120"></div>
+          <div><label>Gestoría / impuestos</label><input type="number" id="clinicaGestoria" min="0" value="150"></div>
+          <div><label>Otros gastos fijos</label><input type="number" id="clinicaOtros" min="0" value="50"></div>
+        </div>
+
+        <div class="row cols-2" style="margin-top:12px">
+          <div>
+            <label>Objetivo mensual de beneficio</label>
+            <input type="number" id="clinicaObjetivo" min="0" value="2000">
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button class="primary" id="clinicaRecalcular">Recalcular clínica</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Resultados clínica</h2>
+            <div class="section-note">Lectura global para tomar decisiones prudentes.</div>
+          </div>
+        </div>
+
+        <div class="instrument">
+          <div class="instrument-header">
+            <div class="instrument-title">Coste real por sesión (clínica)</div>
+            <span class="pill">€/sesión</span>
+          </div>
+          <div class="instrument-value" id="clinicaCosteSesion">—</div>
+          <div class="instrument-sub">Coste medio real considerando todos los profesionales y costes fijos.</div>
+        </div>
+
+        <div class="instrument" style="margin-top:12px">
+          <div class="instrument-header">
+            <div class="instrument-title">Precio recomendado por sesión (clínica)</div>
+            <span class="pill">€/sesión</span>
+          </div>
+          <div class="instrument-value primary" id="clinicaPrecioSesion">—</div>
+          <div class="instrument-sub">Referencia para sostener costes y beneficio objetivo.</div>
+        </div>
+
+        <h3 style="margin-top:14px">Desglose técnico</h3>
+        <ul class="list small">
+          <li>Coste mensual total de personal: <strong id="clinicaCostePersonal">—</strong></li>
+          <li>Costes generales de clínica: <strong id="clinicaCosteGeneral">—</strong></li>
+          <li>Coste mensual total de clínica: <strong id="clinicaCosteTotal">—</strong></li>
+          <li>Sesiones totales estimadas / mes: <strong id="clinicaSesionesTotales">—</strong></li>
+          <li>Objetivo mensual de beneficio: <strong id="clinicaObjetivoOut">—</strong></li>
+        </ul>
+
+        <h3 style="margin-top:14px">Resumen por profesional</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Profesional</th>
+                <th>Coste mensual</th>
+                <th>Sesiones/mes</th>
+                <th>Coste por sesión</th>
+              </tr>
+            </thead>
+            <tbody id="clinicaResumenTabla">
+              <tr><td colspan="4" class="muted">Sin profesionales todavía.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  /* ===================== */
+  /* Tabs */
+  /* ===================== */
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      const id = btn.dataset.tab;
+      document.getElementById("tab-"+id).classList.add("active");
+    });
+  });
+
+  /* ===================== */
+  /* Lógica original: Profesional individual (SIN CAMBIOS) */
+  /* ===================== */
+  const $ = (id) => document.getElementById(id);
+  let demo = false;
+  let registros = [];
+
+  function num(id){
+    const v = parseFloat($(id).value);
+    return isNaN(v) ? 0 : v;
+  }
+  function money(n){
+    if (!isFinite(n)) return "—";
+    return n.toLocaleString("es-ES", { style:"currency", currency:"EUR", maximumFractionDigits:2 });
+  }
+  function daysUnique(records){
+    const set = new Set(records.map(r => r.fecha));
+    return set.size;
+  }
+  function calcImputable(r){
+    return r.realizadas + r.recuperadas + r.cobradas;
+  }
+  function fiabilidadLabel(diasReg){
+    if (diasReg <= 0) return "Sin datos";
+    if (diasReg <= 2) return "Estimación muy preliminar";
+    if (diasReg <= 7) return "Tendencia inicial";
+    if (diasReg <= 15) return "Estimación razonable";
+    return "Estimación estable";
+  }
+
+  function compute(){
+    const costeMensualTotal =
+      num("alquiler")+num("suministros")+num("autonomos")+num("personal")+
+      num("seguros")+num("software")+num("otros");
+
+    const objetivo = num("objetivo");
+    const dias = num("dias");
+    const horas = num("horas");
+    const duracion = num("duracion");
+
+    const sesionesIdealesDia = duracion > 0 ? (horas*60)/duracion : 0;
+    const sesionesIdealesMes = sesionesIdealesDia * dias;
+
+    const costeDia = dias > 0 ? (costeMensualTotal / dias) : Infinity;
+    const costeEstructural = sesionesIdealesMes > 0 ? (costeMensualTotal / sesionesIdealesMes) : NaN;
+
+    const diasReg = daysUnique(registros);
+    const sesionesImputables = registros.reduce((acc, r) => acc + calcImputable(r), 0);
+
+    const costeHistorico = (diasReg > 0 && sesionesImputables > 0)
+      ? ((costeDia * diasReg) / sesionesImputables)
+      : NaN;
+
+    const promedioImputableDia = diasReg > 0 ? (sesionesImputables / diasReg) : 0;
+    const sesionesEstimadasMes = promedioImputableDia * dias;
+    const costeEstimado = (sesionesEstimadasMes > 0)
+      ? (costeMensualTotal / sesionesEstimadasMes)
+      : NaN;
+
+    const precioRecomendado = (sesionesEstimadasMes > 0)
+      ? ((costeMensualTotal + objetivo) / sesionesEstimadasMes)
+      : NaN;
+
+    return {
+      costeMensualTotal, objetivo, costeDia, sesionesIdealesMes,
+      costeEstructural, costeHistorico, costeEstimado,
+      diasReg, sesionesImputables, sesionesEstimadasMes, precioRecomendado
+    };
+  }
+
+  function render(){
+    const d = compute();
+
+    $("costeMensual").textContent = money(d.costeMensualTotal);
+    $("objetivoMensual").textContent = money(d.objetivo);
+    $("costeDia").textContent = money(d.costeDia);
+    $("sesionesIdeales").textContent = isFinite(d.sesionesIdealesMes) ? d.sesionesIdealesMes.toFixed(1) : "—";
+    $("diasRegistrados").textContent = d.diasReg.toString();
+    $("sesionesImputables").textContent = d.sesionesImputables.toString();
+    $("sesionesEstimadasMes").textContent = isFinite(d.sesionesEstimadasMes) ? d.sesionesEstimadasMes.toFixed(1) : "—";
+
+    $("costeEstructural").textContent = money(d.costeEstructural);
+    $("costeHistorico").textContent = money(d.costeHistorico);
+
+    $("costeEstimadoHero").textContent = money(d.costeEstimado);
+
+    if (isFinite(d.precioRecomendado)){
+      $("precioRecomendado").textContent = money(d.precioRecomendado);
+      $("mensajePrecio").textContent =
+        "Precio recomendado = (coste mensual total + objetivo personal) ÷ sesiones estimadas.";
+    } else {
+      $("precioRecomendado").textContent = "—";
+      $("mensajePrecio").textContent =
+        "Introduce registros para proyectar sesiones estimadas del mes.";
+    }
+
+    if (isFinite(d.costeEstimado)){
+      $("mensajeEstimado").textContent =
+        "Si el patrón observado hasta ahora se mantiene, el coste real estimado por sesión este mes sería…";
+    } else {
+      $("mensajeEstimado").textContent =
+        "La estimación se activa desde el primer día registrado.";
+    }
+
+    $("fiabilidad").textContent = fiabilidadLabel(d.diasReg);
+
+    const avisos = [];
+    if (d.costeMensualTotal <= 0) avisos.push("Coste mensual total muy bajo o cero.");
+    if (!isFinite(d.costeDia)) avisos.push("Días abiertos/mes no válidos.");
+    if (d.sesionesImputables === 0) avisos.push("Sesiones imputables = 0.");
+    if (d.diasReg === 0) avisos.push("No hay días registrados.");
+
+    const cobraInj = $("cobraInjustificada").value === "si";
+    const cobraJus = $("cobraJustificada").value === "si";
+    const tot = registros.reduce((acc, r) => {
+      acc.just += r.justificadas;
+      acc.inj += r.injustificadas;
+      acc.cob += r.cobradas;
+      return acc;
+    }, {just:0, inj:0, cob:0});
+    if (!cobraInj && tot.cob > 0 && tot.inj > 0){
+      avisos.push("Se han cobrado ausencias injustificadas pese a política declarada.");
+    }
+    if (!cobraJus && tot.cob > (tot.inj) && tot.just > 0){
+      avisos.push("Se han cobrado ausencias justificadas pese a política declarada.");
+    }
+    if (tot.cob > (tot.just + tot.inj)){
+      avisos.push("Ausencias cobradas superan las ausencias registradas.");
+    }
+
+    const ul = $("avisos");
+    ul.innerHTML = "";
+    if (avisos.length === 0){
+      const li = document.createElement("li");
+      li.className = "muted";
+      li.textContent = "Sin avisos por ahora.";
+      ul.appendChild(li);
+    } else {
+      avisos.forEach(a => {
+        const li = document.createElement("li");
+        li.className = "warn";
+        li.textContent = a;
+        ul.appendChild(li);
+      });
+    }
+
+    renderTabla();
+    renderTotales();
+    renderCharts(d);
+  }
+
+  function renderTotales(){
+    const tot = registros.reduce((acc, r) => {
+      acc.real += r.realizadas;
+      acc.just += r.justificadas;
+      acc.inj += r.injustificadas;
+      acc.cob += r.cobradas;
+      acc.rec += r.recuperadas;
+      return acc;
+    }, {real:0, just:0, inj:0, cob:0, rec:0});
+    $("totalesResumen").textContent =
+      `Totales: realizadas ${tot.real}, justificadas ${tot.just}, injustificadas ${tot.inj}, cobradas ${tot.cob}, recuperadas ${tot.rec}.`;
+  }
+
+  function renderTabla(){
+    const tbody = $("tablaBody");
+    tbody.innerHTML = "";
+    if (registros.length === 0){
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = demo ? 7 : 6;
+      td.className = "muted";
+      td.textContent = "Sin registros todavía.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    registros.forEach((r, idx) => {
+      const tr = document.createElement("tr");
+
+      const cells = [
+        {key:"fecha", type:"date"},
+        {key:"realizadas", type:"number"},
+        {key:"justificadas", type:"number"},
+        {key:"injustificadas", type:"number"},
+        {key:"cobradas", type:"number"},
+        {key:"recuperadas", type:"number"},
+      ];
+
+      cells.forEach(c => {
+        const td = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = c.type;
+        input.value = r[c.key];
+        input.disabled = !demo;
+        input.style.width = "100%";
+        input.style.padding = "6px";
+        input.style.borderRadius = "8px";
+        input.style.border = "1px solid #d8d2c7";
+        input.style.background = "#ffffff";
+        input.style.color = "#1f2937";
+        input.addEventListener("change", () => {
+          r[c.key] = c.type === "number" ? (parseFloat(input.value)||0) : input.value;
+          render();
+        });
+        td.appendChild(input);
+        tr.appendChild(td);
+      });
+
+      if (demo){
+        const td = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Eliminar";
+        btn.addEventListener("click", () => {
+          registros.splice(idx,1);
+          render();
+        });
+        td.appendChild(btn);
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderCharts(d){
+    const svg1 = $("chartEvolucion");
+    svg1.innerHTML = "";
+    const data = registros.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha));
+    const n = data.length;
+    const maxVal = Math.max(1, ...data.map(r => r.realizadas + r.justificadas + r.injustificadas));
+    const barW = n > 0 ? 90 / n : 90;
+    const baseX = 5, baseY = 55, height = 50;
+
+    data.forEach((r, i) => {
+      const sesiones = r.realizadas;
+      const ausencias = r.justificadas + r.injustificadas;
+      const x = baseX + i * barW;
+      const hSes = (sesiones / maxVal) * height;
+      const hAus = (ausencias / maxVal) * height;
+
+      const rectSes = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      rectSes.setAttribute("x", x);
+      rectSes.setAttribute("y", baseY - hSes);
+      rectSes.setAttribute("width", barW*0.45);
+      rectSes.setAttribute("height", hSes);
+      rectSes.setAttribute("fill", "#2f8f6b");
+      svg1.appendChild(rectSes);
+
+      const rectAus = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      rectAus.setAttribute("x", x + barW*0.5);
+      rectAus.setAttribute("y", baseY - hAus);
+      rectAus.setAttribute("width", barW*0.45);
+      rectAus.setAttribute("height", hAus);
+      rectAus.setAttribute("fill", "#c9852a");
+      svg1.appendChild(rectAus);
+    });
+
+    const svg2 = $("chartComparativa");
+    svg2.innerHTML = "";
+    const vals = [
+      isFinite(d.costeEstructural) ? d.costeEstructural : 0,
+      isFinite(d.costeEstimado) ? d.costeEstimado : 0,
+      isFinite(d.precioRecomendado) ? d.precioRecomendado : 0
+    ];
+    const maxCost = Math.max(1, ...vals);
+    const colors = ["#3b82f6","#8b5cf6","#2f8f6b"];
+    vals.forEach((v,i)=>{
+      const h = (v / maxCost) * 50;
+      const x = 15 + i*25;
+      const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", 55 - h);
+      rect.setAttribute("width", 15);
+      rect.setAttribute("height", h);
+      rect.setAttribute("fill", colors[i]);
+      svg2.appendChild(rect);
+    });
+
+    const svg3 = $("chartEvolucionEstimado");
+    svg3.innerHTML = "";
+    if (data.length === 0) return;
+
+    const dias = num("dias");
+    const objetivo = num("objetivo");
+    const costeMensual = d.costeMensualTotal;
+
+    const series = data.map((r, idx) => {
+      const subset = data.slice(0, idx+1);
+      const diasReg = new Set(subset.map(x=>x.fecha)).size;
+      const sesionesImp = subset.reduce((acc, x)=>acc + calcImputable(x), 0);
+      const avg = diasReg>0 ? sesionesImp/diasReg : 0;
+      const sesionesEstMes = avg * dias;
+
+      const costeEst = sesionesEstMes>0 ? costeMensual/sesionesEstMes : 0;
+      const precioRec = sesionesEstMes>0 ? (costeMensual+objetivo)/sesionesEstMes : 0;
+
+      return {costeEst, precioRec};
+    });
+
+    const maxY = Math.max(1, ...series.flatMap(s=>[s.costeEst, s.precioRec]));
+    const minY = 0;
+    const toX = (i) => 5 + (90 * (i/(series.length-1 || 1)));
+    const toY = (v) => 55 - ( (v - minY) / (maxY - minY || 1) ) * 50;
+
+    function drawLine(key, color){
+      let dPath = "";
+      series.forEach((s,i)=>{
+        const x = toX(i);
+        const y = toY(s[key]);
+        dPath += (i===0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+      });
+      const path = document.createElementNS("http://www.w3.org/2000/svg","path");
+      path.setAttribute("d", dPath);
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke", color);
+      path.setAttribute("stroke-width", "2");
+      svg3.appendChild(path);
+    }
+    drawLine("costeEst", "#8b5cf6");
+    drawLine("precioRec", "#2f8f6b");
+  }
+
+  function addRegistro(){
+    const fecha = $("fecha").value;
+    if (!fecha){ alert("Introduce una fecha."); return; }
+    registros.push({
+      fecha,
+      realizadas: num("realizadas"),
+      justificadas: num("justificadas"),
+      injustificadas: num("injustificadas"),
+      cobradas: num("cobradas"),
+      recuperadas: num("recuperadas")
+    });
+    $("realizadas").value = 0;
+    $("justificadas").value = 0;
+    $("injustificadas").value = 0;
+    $("cobradas").value = 0;
+    $("recuperadas").value = 0;
+    render();
+  }
+
+  function activarDemo(){
+    demo = true;
+    $("modoActual").textContent = "Demo";
+    $("modoActual").classList.add("demo");
+    $("btnDemo").style.display = "none";
+    $("btnSalirDemo").style.display = "inline-block";
+    $("colAcciones").style.display = "table-cell";
+
+    registros = [
+      {fecha:"2026-01-02", realizadas:6, justificadas:1, injustificadas:0, cobradas:0, recuperadas:0},
+      {fecha:"2026-01-03", realizadas:7, justificadas:0, injustificadas:1, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-04", realizadas:5, justificadas:0, injustificadas:2, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-05", realizadas:8, justificadas:1, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-06", realizadas:6, justificadas:0, injustificadas:1, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-07", realizadas:7, justificadas:1, injustificadas:0, cobradas:0, recuperadas:0},
+      {fecha:"2026-01-08", realizadas:4, justificadas:2, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-09", realizadas:9, justificadas:0, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-10", realizadas:6, justificadas:0, injustificadas:1, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-11", realizadas:7, justificadas:1, injustificadas:0, cobradas:0, recuperadas:0},
+      {fecha:"2026-01-12", realizadas:5, justificadas:0, injustificadas:2, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-13", realizadas:8, justificadas:1, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-14", realizadas:7, justificadas:0, injustificadas:1, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-15", realizadas:6, justificadas:0, injustificadas:1, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-16", realizadas:7, justificadas:1, injustificadas:0, cobradas:0, recuperadas:0},
+      {fecha:"2026-01-17", realizadas:4, justificadas:2, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-18", realizadas:9, justificadas:0, injustificadas:0, cobradas:0, recuperadas:1},
+      {fecha:"2026-01-19", realizadas:6, justificadas:0, injustificadas:1, cobradas:1, recuperadas:0},
+      {fecha:"2026-01-20", realizadas:7, justificadas:1, injustificadas:0, cobradas:0, recuperadas:0},
+      {fecha:"2026-01-21", realizadas:5, justificadas:0, injustificadas:2, cobradas:1, recuperadas:0}
+    ];
+    render();
+  }
+
+  function salirDemo(){
+    demo = false;
+    $("modoActual").textContent = "Real";
+    $("modoActual").classList.remove("demo");
+    $("btnDemo").style.display = "inline-block";
+    $("btnSalirDemo").style.display = "none";
+    $("colAcciones").style.display = "none";
+    registros = [];
+    render();
+  }
+
+  $("addRegistro").addEventListener("click", addRegistro);
+  $("recalcular").addEventListener("click", render);
+  $("btnDemo").addEventListener("click", activarDemo);
+  $("btnSalirDemo").addEventListener("click", salirDemo);
+
+  $("fecha").value = new Date().toISOString().slice(0,10);
+  render();
+
+  /* ===================== */
+  /* Lógica nueva: Clínica multiprofesional (independiente) */
+  /* ===================== */
+  const c$ = (id) => document.getElementById(id);
+  let clinicaDemo = false;
+  let clinicaProfesionales = [];
+
+  function cNum(id){
+    const v = parseFloat(c$(id).value);
+    return isNaN(v) ? 0 : v;
+  }
+  function cMoney(n){
+    if (!isFinite(n)) return "—";
+    return n.toLocaleString("es-ES", { style:"currency", currency:"EUR", maximumFractionDigits:2 });
+  }
+
+  function clinicaCosteGeneral(){
+    return cNum("clinicaAlquiler")+cNum("clinicaSuministros")+cNum("clinicaSeguros")+
+           cNum("clinicaSoftware")+cNum("clinicaLimpieza")+cNum("clinicaGestoria")+cNum("clinicaOtros");
+  }
+
+  function clinicaCompute(){
+    const costePersonal = clinicaProfesionales.reduce((acc,p)=> acc + (p.bruto + p.ss), 0);
+    const costeGeneral = clinicaCosteGeneral();
+    const costeTotal = costePersonal + costeGeneral;
+
+    const sesionesTotales = clinicaProfesionales.reduce((acc,p)=> acc + (p.sesDia * p.diasMes), 0);
+
+    const costeSesion = sesionesTotales > 0 ? (costeTotal / sesionesTotales) : NaN;
+
+    const objetivo = cNum("clinicaObjetivo");
+    const precioSesion = sesionesTotales > 0 ? ((costeTotal + objetivo) / sesionesTotales) : NaN;
+
+    return {costePersonal, costeGeneral, costeTotal, sesionesTotales, costeSesion, objetivo, precioSesion};
+  }
+
+  function clinicaRender(){
+    const d = clinicaCompute();
+
+    c$("clinicaCostePersonal").textContent = cMoney(d.costePersonal);
+    c$("clinicaCosteGeneral").textContent = cMoney(d.costeGeneral);
+    c$("clinicaCosteTotal").textContent = cMoney(d.costeTotal);
+    c$("clinicaSesionesTotales").textContent = isFinite(d.sesionesTotales) ? d.sesionesTotales.toFixed(1) : "—";
+    c$("clinicaObjetivoOut").textContent = cMoney(d.objetivo);
+
+    c$("clinicaCosteSesion").textContent = cMoney(d.costeSesion);
+    c$("clinicaPrecioSesion").textContent = cMoney(d.precioSesion);
+
+    c$("clinicaResumen").textContent = clinicaProfesionales.length > 0
+      ? `${clinicaProfesionales.length} profesionales`
+      : "Sin profesionales";
+
+    clinicaRenderTabla();
+    clinicaRenderResumen();
+  }
+
+  function clinicaRenderTabla(){
+    const tbody = c$("clinicaTabla");
+    tbody.innerHTML = "";
+
+    if (clinicaProfesionales.length === 0){
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = clinicaDemo ? 12 : 11;
+      td.className = "muted";
+      td.textContent = "Sin profesionales todavía.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    clinicaProfesionales.forEach((p, idx)=>{
+      const tr = document.createElement("tr");
+
+      function cellInput(value, type, onChange){
+        const td = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = type;
+        input.value = value;
+        input.addEventListener("change", () => onChange(type==="number" ? (parseFloat(input.value)||0) : input.value));
+        input.style.width = "100%";
+        input.style.padding = "6px";
+        input.style.borderRadius = "8px";
+        input.style.border = "1px solid #d8d2c7";
+        input.style.background = "#ffffff";
+        input.style.color = "#1f2937";
+        td.appendChild(input);
+        return td;
+      }
+
+      tr.appendChild(cellInput(p.nombre, "text", v=>{p.nombre=v; clinicaRender();}));
+
+      const tdTipo = document.createElement("td");
+      const sel = document.createElement("select");
+      sel.innerHTML = `<option value="autonomo">Autónomo</option><option value="asalariado">Asalariado</option>`;
+      sel.value = p.tipo;
+      sel.addEventListener("change", ()=>{p.tipo=sel.value; clinicaRender();});
+      sel.style.width = "100%";
+      sel.style.padding = "6px";
+      sel.style.borderRadius = "8px";
+      sel.style.border = "1px solid #d8d2c7";
+      sel.style.background = "#ffffff";
+      sel.style.color = "#1f2937";
+      tdTipo.appendChild(sel);
+      tr.appendChild(tdTipo);
+
+      tr.appendChild(cellInput(p.bruto, "number", v=>{p.bruto=v; clinicaRender();}));
+      tr.appendChild(cellInput(p.ss, "number", v=>{p.ss=v; clinicaRender();}));
+
+      const total = p.bruto + p.ss;
+      const tdTotal = document.createElement("td");
+      tdTotal.textContent = cMoney(total);
+      tr.appendChild(tdTotal);
+
+      tr.appendChild(cellInput(p.horas, "number", v=>{p.horas=v; clinicaRender();}));
+      tr.appendChild(cellInput(p.duracion, "number", v=>{p.duracion=v; clinicaRender();}));
+      tr.appendChild(cellInput(p.sesDia, "number", v=>{p.sesDia=v; clinicaRender();}));
+      tr.appendChild(cellInput(p.diasMes, "number", v=>{p.diasMes=v; clinicaRender();}));
+
+      const sesionesMes = p.sesDia * p.diasMes;
+      const tdSes = document.createElement("td");
+      tdSes.textContent = isFinite(sesionesMes) ? sesionesMes.toFixed(1) : "—";
+      tr.appendChild(tdSes);
+
+      const costeSesion = sesionesMes > 0 ? (total / sesionesMes) : NaN;
+      const tdCosteSes = document.createElement("td");
+      tdCosteSes.textContent = cMoney(costeSesion);
+      tr.appendChild(tdCosteSes);
+
+      if (clinicaDemo){
+        const td = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Eliminar";
+        btn.addEventListener("click", ()=>{
+          clinicaProfesionales.splice(idx,1);
+          clinicaRender();
+        });
+        td.appendChild(btn);
+        tr.appendChild(td);
+      }
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function clinicaRenderResumen(){
+    const tbody = c$("clinicaResumenTabla");
+    tbody.innerHTML = "";
+
+    if (clinicaProfesionales.length === 0){
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 4;
+      td.className = "muted";
+      td.textContent = "Sin profesionales todavía.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    clinicaProfesionales.forEach(p=>{
+      const tr = document.createElement("tr");
+      const total = p.bruto + p.ss;
+      const sesionesMes = p.sesDia * p.diasMes;
+      const costeSesion = sesionesMes > 0 ? (total / sesionesMes) : NaN;
+
+      const td1 = document.createElement("td");
+      td1.textContent = p.nombre || "—";
+      const td2 = document.createElement("td");
+      td2.textContent = cMoney(total);
+      const td3 = document.createElement("td");
+      td3.textContent = isFinite(sesionesMes) ? sesionesMes.toFixed(1) : "—";
+      const td4 = document.createElement("td");
+      td4.textContent = cMoney(costeSesion);
+
+      tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function clinicaAdd(){
+    const nombre = c$("clinicaNombre").value.trim() || "Profesional";
+    const tipo = c$("clinicaTipo").value;
+    const bruto = cNum("clinicaBruto");
+    const ss = cNum("clinicaSS");
+    const horas = cNum("clinicaHoras");
+    const duracion = cNum("clinicaDuracion");
+    const sesDia = cNum("clinicaSesDia");
+    const diasMes = cNum("clinicaDiasMes");
+
+    clinicaProfesionales.push({nombre, tipo, bruto, ss, horas, duracion, sesDia, diasMes});
+
+    c$("clinicaNombre").value = "";
+    c$("clinicaTipo").value = "autonomo";
+    c$("clinicaBruto").value = 0;
+    c$("clinicaSS").value = 0;
+    c$("clinicaHoras").value = 0;
+    c$("clinicaDuracion").value = 45;
+    c$("clinicaSesDia").value = 0;
+    c$("clinicaDiasMes").value = 0;
+
+    clinicaRender();
+  }
+
+  function clinicaDemoOn(){
+    clinicaDemo = true;
+    c$("clinicaModoActual").textContent = "Demo";
+    c$("clinicaModoActual").classList.add("demo");
+    c$("clinicaBtnDemo").style.display = "none";
+    c$("clinicaBtnSalirDemo").style.display = "inline-block";
+    c$("clinicaColAcciones").style.display = "table-cell";
+
+    clinicaProfesionales = [
+      {nombre:"Logopeda senior", tipo:"asalariado", bruto:2400, ss:750, horas:35, duracion:45, sesDia:7, diasMes:20},
+      {nombre:"Logopeda junior", tipo:"asalariado", bruto:1600, ss:500, horas:30, duracion:45, sesDia:6, diasMes:18},
+      {nombre:"Apoyo tardes", tipo:"autonomo", bruto:1200, ss:0, horas:15, duracion:60, sesDia:4, diasMes:12}
+    ];
+
+    c$("clinicaAlquiler").value = 1200;
+    c$("clinicaSuministros").value = 220;
+    c$("clinicaSeguros").value = 110;
+    c$("clinicaSoftware").value = 90;
+    c$("clinicaLimpieza").value = 160;
+    c$("clinicaGestoria").value = 220;
+    c$("clinicaOtros").value = 80;
+    c$("clinicaObjetivo").value = 2500;
+
+    clinicaRender();
+  }
+
+  function clinicaDemoOff(){
+    clinicaDemo = false;
+    c$("clinicaModoActual").textContent = "Real";
+    c$("clinicaModoActual").classList.remove("demo");
+    c$("clinicaBtnDemo").style.display = "inline-block";
+    c$("clinicaBtnSalirDemo").style.display = "none";
+    c$("clinicaColAcciones").style.display = "none";
+    clinicaProfesionales = [];
+    clinicaRender();
+  }
+
+  c$("clinicaAdd").addEventListener("click", clinicaAdd);
+  c$("clinicaRecalcular").addEventListener("click", clinicaRender);
+  c$("clinicaBtnDemo").addEventListener("click", clinicaDemoOn);
+  c$("clinicaBtnSalirDemo").addEventListener("click", clinicaDemoOff);
+
+  // Inicializar clínica
+  clinicaRender();
+</script>
+</body>
+</html>

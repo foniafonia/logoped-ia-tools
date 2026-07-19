@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil Tutor · Cognitiva</title>
+  <style>
+    body{font-family:Manrope,system-ui,sans-serif;background:#f4f7fb;margin:0;color:#1f2730}
+    .layout{display:grid;grid-template-columns:2fr 1fr;gap:12px;padding:14px;max-width:1320px;margin:0 auto}
+    .card{background:#fff;border:1px solid #d4deea;border-radius:12px;padding:12px}
+    h1,h2,h3{margin:.2rem 0 .6rem}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+    input,select,button{font:inherit}
+    input,select{padding:8px;border:1px solid #c7d4e5;border-radius:9px}
+    button{padding:8px 10px;border:1px solid #8fb8ea;border-radius:9px;background:#eaf3ff;color:#1f5faa;font-weight:800;cursor:pointer}
+    .stack{display:grid;gap:8px}
+    .item{border:1px solid #e1e8f2;border-radius:10px;padding:8px}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip{padding:4px 8px;border-radius:999px;background:#eef3f9;font-size:12px}
+    .badge{padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
+    .pending{background:#f2f5f9;color:#5a6c83}
+    .curso{background:#e8f2ff;color:#1f5faa}
+    .done{background:#eaf8ef;color:#137045}
+    .danger{background:#ffeaea;color:#a33b2f}
+    .warning{background:#fff4e8;color:#9d5e00}
+    .muted{color:#5b6f86;font-size:12px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{border-bottom:1px solid #e5ebf3;padding:6px;text-align:left}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .table-wrap{overflow:auto}
+    .backup{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .small{font-size:12px}
+    @media (max-width:980px){.layout{grid-template-columns:1fr}.row,.row4{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <main class="stack">
+      <section class="card">
+        <div class="head">
+          <h1>Perfil Tutor <a href="./index.html" class="small" style="color:#5b6f86;font-weight:400">← Volver al portal</a></h1>
+          <div class="backup">
+            <button id="btnExportarBackup" type="button">💾 Exportar backup</button>
+            <button id="btnImportarBackup" type="button">📂 Importar backup</button>
+            <input id="fileBackup" type="file" accept=".json" hidden />
+          </div>
+        </div>
+        <div id="centroCabecera" class="muted"></div>
+      </section>
+
+      <section class="card">
+        <h2>Dashboard de Entrada</h2>
+        <div class="grid2">
+          <div>
+            <h3>Alumnos Activos</h3>
+            <div id="dashAlumnosActivos" class="stack"></div>
+          </div>
+          <div>
+            <h3>Últimas sesiones (5)</h3>
+            <div id="dashUltimasSesiones" class="table-wrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Alumnado</h2>
+        <div class="row">
+          <input id="alumnoId" placeholder="profileId (ej: alu_001)" />
+          <input id="alumnoNombre" placeholder="Nombre alumno" />
+          <button id="btnAlta">Dar de alta alumno</button>
+        </div>
+        <div id="listaAlumnos" class="stack" style="margin-top:8px"></div>
+      </section>
+
+      <section class="card grid2">
+        <div>
+          <h2>Cuadernos</h2>
+          <div class="stack">
+            <input id="cuadernoNombre" placeholder="Nombre cuaderno" />
+            <select id="cuadernoAlumno"></select>
+            <select id="tallerSelect"></select>
+            <button id="btnAddTaller">Añadir taller al cuaderno</button>
+            <div id="talleresTemp" class="chips"></div>
+            <button id="btnCrearCuaderno">Crear y asignar cuaderno</button>
+            <div class="row">
+              <button id="btnExportarPlantilla" type="button">Exportar cuaderno como plantilla</button>
+              <button id="btnImportarPlantilla" type="button">Importar plantilla de cuaderno</button>
+              <input id="filePlantilla" type="file" accept=".json" hidden />
+            </div>
+          </div>
+          <div id="listaCuadernos" class="stack" style="margin-top:8px"></div>
+        </div>
+        <div>
+          <h2>Grupos</h2>
+          <div class="stack">
+            <input id="grupoNombre" placeholder="Nombre del grupo" />
+            <select id="grupoAlumnos" multiple size="6"></select>
+            <button id="btnCrearGrupo" type="button">Crear grupo</button>
+            <select id="grupoSelect"></select>
+            <select id="grupoCuadernoSelect"></select>
+            <button id="btnAsignarGrupo" type="button">Asignar cuaderno al grupo</button>
+          </div>
+          <div id="listaGrupos" class="stack" style="margin-top:8px"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Panel de Informes Clínicos</h2>
+        <select id="informeAlumno"></select>
+        <div id="dashboard" class="stack" style="margin-top:8px"></div>
+      </section>
+
+      <section class="card">
+        <h2>Mi centro</h2>
+        <div class="row">
+          <input id="centroNombre" placeholder="Nombre del centro" />
+          <input id="centroLogopeda" placeholder="Logopeda responsable" />
+          <input id="centroCurso" placeholder="Curso escolar" />
+        </div>
+        <button id="btnGuardarCentro" style="margin-top:8px">Guardar datos del centro</button>
+      </section>
+    </main>
+
+    <aside class="card">
+      <h2>Panel de Avisos</h2>
+      <div id="avisos" class="stack"></div>
+    </aside>
+  </div>
+
+  <script src="./src/gestor_tutor.js" defer></script>
+</body>
+</html>

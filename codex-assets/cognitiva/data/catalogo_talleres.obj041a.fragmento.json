@@ -1,0 +1,56 @@
+{
+  "id_taller": "pri_2_obj_041a",
+  "codigo": "2º PRIMARIA obj.041a",
+  "nombre": "Comprensión lectora textos narrativos (Inferencias)",
+  "modulo": "procesos_semanticos_inferenciales",
+  "objetivo_clinico": [
+    "comprension_inferencial",
+    "razonamiento_causal",
+    "conexion_texto_conocimientos_previos"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "speech_synthesis_activo_por_defecto": false,
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "eliminar_un_distractor_en_primer_error": true,
+      "resaltar_pistas_inferenciales_en_azul": true
+    },
+    "registro_metricas": ["aciertos", "errores", "intentos", "tiempo_reaccion_ms"]
+  },
+  "mecanica": {
+    "tipo": "pregunta_inferencial_sobre_texto",
+    "estimulo_visual": "texto_narrativo_corto",
+    "estimulo_auditivo": "desactivado",
+    "num_opciones": { "base": 3, "min": 2, "max": 3 },
+    "tiempo_max_respuesta_ms": 22000
+  },
+  "banco_textos": [
+    {
+      "id_item": "inf_001",
+      "titulo": "Llegada de María",
+      "lineas": [
+        "Maria llego a casa empapada y tiritando de frio.",
+        "Dejo su paraguas goteando en la entrada.",
+        "Se fue directa a cambiarse de ropa."
+      ],
+      "pregunta": "¿Que tiempo hacia en la calle?",
+      "opciones": ["Hacia mucho sol", "Estaba lloviendo", "Estaba nevando"],
+      "respuesta_correcta": "Estaba lloviendo",
+      "pistas": ["empapada", "paraguas goteando"]
+    },
+    {
+      "id_item": "inf_002",
+      "titulo": "La cocina de Pablo",
+      "lineas": [
+        "Pablo salio corriendo de la cocina con las manos enrojecidas.",
+        "La olla seguia echando vapor sobre el fuego.",
+        "Su madre le puso crema fria en los dedos."
+      ],
+      "pregunta": "¿Que le pudo pasar a Pablo?",
+      "opciones": ["Se quemo con algo caliente", "Se mojo con lluvia", "Se pincho con una espina"],
+      "respuesta_correcta": "Se quemo con algo caliente",
+      "pistas": ["manos enrojecidas", "olla echando vapor", "crema fria"]
+    }
+  ]
+}

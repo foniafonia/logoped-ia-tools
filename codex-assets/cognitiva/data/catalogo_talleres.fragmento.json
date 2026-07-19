@@ -1,0 +1,51 @@
+{
+  "id_taller": "inf_1_obj_001a",
+  "codigo": "1º INFANTIL obj.001a",
+  "nombre": "Discriminación visual de letras no parecidas en minúscula",
+  "modulo": "procesos_perceptivos_visuales_input_visual",
+  "objetivo_clinico": [
+    "entrenamiento_atencion",
+    "discriminacion_visual",
+    "movimientos_busqueda_ocular"
+  ],
+  "estado": "activo",
+  "motor_config": {
+    "feedback_inmediato": true,
+    "tratamiento_error": {
+      "reducir_distractores_en_error": true,
+      "mostrar_respuesta_correcta_segundo_error": true
+    },
+    "registro_metricas": [
+      "aciertos",
+      "errores",
+      "intentos",
+      "tiempo_reaccion_ms"
+    ]
+  },
+  "mecanica": {
+    "tipo": "seleccion_visual",
+    "estimulo_modelo": "letra_minuscula",
+    "instruccion": "Marca todas las letras que sean exactamente iguales al modelo.",
+    "layout": "modelo_superior_opciones_inferiores",
+    "num_opciones": {
+      "base": 6,
+      "min": 3,
+      "max": 8
+    },
+    "num_objetivos_correctos": {
+      "base": 2,
+      "min": 1,
+      "max": 3
+    },
+    "tiempo_max_respuesta_ms": 8000
+  },
+  "regla_distractores": {
+    "fuente": "banco_datos.clasificaciones.visual.no_similares",
+    "criterio": "los distractores no pueden pertenecer al mismo grupo visual ni a grupos rotacionales del grafema modelo"
+  },
+  "ejemplo_no_similares": {
+    "modelo": "a",
+    "permitidos": ["t", "m", "n", "l"],
+    "prohibidos": ["e", "o", "d", "q"]
+  }
+}
