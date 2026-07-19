@@ -807,3 +807,18 @@ Auditoría con evidencia (no por nombre):
 Pendiente (marcado en la landing con plan): examen (Railway), VocalTrack y Chatbot familias (backend→Railway), AdaPro/Imagine/Logopedia Generador/Lleno-Vacío/ARAIA/decks AELFA-Extremadura-Valencia/Logopod (estáticos→GitHub Pages), concept-vivo-b (push+Vercel), vídeo de FonoMundos (pásame enlace).
 Bloqueos: desde el sandbox no alcanzo github.io (proxy) para probar el render en vivo; verificado que los archivos existen en repo/gh-pages. Prueba visual final: el usuario abre la URL. No se ha publicado nada personal/sensible; POE off-topic queda en CANTERA, no borrado.
 Publicado: rama claude/codex-claude-landing-coordination-p1vwm2 + gh-pages.
+
+---
+
+Fecha: 2026-07-19
+Agente: Claude Code (Opus)
+Proyecto: Integración de AUDITORIA_CODEX_GPT_PARA_CLAUDE_2026-07-19.md + rescate de familias
+Hecho: Leída la auditoría de Codex. Incorporado lo que faltaba a la landing (ahora 8 secciones, 38 cajas, 56 enlaces VER, 27 EN VIVO verificados, 22 pendientes con plan).
+  - Respetadas las URLs 404 que Codex avisó NO inventar (lectoviva-v2/valenciacodex-live/aelfa-landing/elevenlabs-pitch/laboratorio en Vercel): esos van por GitHub Pages o quedan pendientes, nunca con URL Vercel inventada.
+  - Academia/Colmenia enriquecida con evidencia: Stripe checkout+portal+webhooks/stripe + lib/stripe.ts + resend (emails); Suite clínica DENTRO de la app (/suite + public/suite + POE); Supabase schema.sql; login bcrypt + IA. Falta cobrar: claves Stripe en env Vercel + pasar el checkout a main.
+  - Rescatadas como cajas nuevas (sección 6, PENDIENTE con ruta local + plan, porque viven en el Mac): Preta/Fluidez (varias versiones, projectIds Vercel), Logopod, MirrorFono, Herramientas clínicas HTML (dicta/smb/fabricador-prompts/analizador/pictoia/arasecuencias/praxiasconnect/alfabeto-pnl), JELOU/Chatbot/Agentes (SENSIBLE → demo limpia, no publicar tal cual), Curso IA preventa, vídeos FonoMundos (MP4 en /Documents/FONOMUNDOS PARA CLAUDE).
+  - Añadidos "más juegos de aire" pendientes (abecedario, escritura, pintura, baloncesto, hub deploy-juegos-aire con projectId).
+  - CineMundos movido a "Personal", separado del escaparate de comprador (como pide Codex).
+Pendiente para el usuario/Codex: (1) URLs públicas Vercel de los proyectos con projectId (yo no puedo listarlos, el conector Vercel falló); (2) push al repo de las familias locales para que yo las publique en Pages; (3) revisar lo sensible (JELOU/chatbot) antes de cualquier publicación; (4) enlace del vídeo de FonoMundos.
+Bloqueos: no tengo acceso al Mac ni a Vercel API desde el sandbox; lo local solo se puede publicar si llega al repo. No se ha publicado nada sensible ni personal en el escaparate.
+Publicado: rama claude/codex-claude-landing-coordination-p1vwm2 + gh-pages.
