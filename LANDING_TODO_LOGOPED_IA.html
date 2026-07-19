@@ -108,7 +108,8 @@ const SECTIONS=[
    {emoji:"🐝", name:"Academia / Colmenia", desc:"La membresía · AUDITADA · 2 versiones en vivo", items:[
      {p:1, nm:"VER · Colmenia (renovación + Stripe)", sub:"la avanzada de ahora · requiere login · Next.js+Supabase · checkout Stripe en código", k:"verlive", url:"https://academia-logoped-ia-git-codex-renov-139c35-foniafonias-projects.vercel.app/"},
      {nm:"VER · Academia producción (estable)", sub:"rama main · sin Stripe · requiere login", k:"verlive", url:"https://academia-logoped-ia.vercel.app/"},
-     {nm:"✅ Stripe checkout REAL (auditado)", sub:"/api/stripe/checkout crea suscripción (customer + price_data €/mes) + /portal + /webhooks. Falta: claves Stripe en Vercel + pasar a producción", k:"pending", url:""},
+     {nm:"✅ Stripe REAL (auditado): checkout + portal + webhooks", sub:"api/stripe/checkout (suscripción €/mes) + api/stripe/portal + api/webhooks/stripe + lib/stripe.ts · emails con resend. Falta: claves Stripe en env Vercel + pasar a main", k:"repo", url:GH+"academia-logoped-ia/blob/codex/renovacion-visual/src/app/api/stripe/checkout/route.ts"},
+     {nm:"Suite clínica DENTRO de la Academia", sub:"ruta privada /suite + public/suite (index, resource-player, POE) · Supabase schema.sql · login bcrypt + IA (OpenAI/Anthropic)", k:"repo", url:GH+"academia-logoped-ia/tree/codex/renovacion-visual/public/suite"},
      {nm:"⚠️ concept-vivo-b (mejora visual)", sub:"LOCAL PENDIENTE · solo en tu localhost:3000 · plan: hacer push a rama y desplegar preview Vercel", k:"pending", url:""},
      {nm:"Colmenia — Qué falta para vender", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/7d1f5bd1-00ca-48f0-8763-cd2baf53b0da"},
      {nm:"Código", sub:"repo privado academia-logoped-ia", k:"repo", url:GH+"academia-logoped-ia"},
@@ -138,6 +139,7 @@ const SECTIONS=[
      {nm:"VER · Lengua Runner (gestos)", sub:"200", k:"verlive", url:"https://logopedizado-gestos-juego.vercel.app"},
      {nm:"VER · Kig & Find", sub:"200 · atención visual + lenguaje", k:"verlive", url:"https://kig-find-interactivo.vercel.app"},
      {nm:"VER · Conciencia Fonológica y Léxica", sub:"200", k:"verlive", url:"https://conciencia-fonologica-lexica-juego.vercel.app"},
+     {nm:"Más juegos de aire (por publicar)", sub:"abecedario-magico, escritura-aire-rotulador, pintura-aire-colores, baloncesto-tiro-aire + hub 'deploy-juegos-aire' (tiene projectId Vercel) · en tu Mac · plan: pásame las URLs Vercel o las despliego", k:"pending", url:""},
    ]},
    {emoji:"🍽️", name:"FonoMesa Lab", desc:"Mesa físico-digital · móvil como cámara · EN VIVO", items:[
      {p:1, nm:"VER · FonoMesa Lab", sub:"200 · mando móvil, QR, eventos", k:"verlive", url:"https://fonomesa-lab.vercel.app"},
@@ -151,10 +153,8 @@ const SECTIONS=[
      {p:1, nm:"VER · Misión Perfiles (Detective)", sub:"200 · 10 personajes, 15 casos, informe descargable", k:"verlive", url:PG+"mision-perfiles-nuevo.html"},
      {nm:"VER · Resuelve los casos / Maleta", sub:"jugable", k:"verjuego", url:PG+"index.html"},
    ]},
-   {emoji:"🎬", name:"CineMundos", desc:"Gemelo técnico de FonoMundos (Phaser)", items:[
-     {p:1, nm:"VER · Informe de avance", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049"},
-     {nm:"PENDIENTE DE DEPLOY", sub:"Vite+React+Phaser+Supabase · plan: desplegar preview en Vercel (tiene rama gh-pages)", k:"pending", url:""},
-     {nm:"Código", sub:"repo privado cinemundos", k:"repo", url:GH+"cinemundos"},
+   {emoji:"🎥", name:"FonoMundos · vídeos", desc:"Clips y promos (en tu Mac)", items:[
+     {p:1, nm:"PENDIENTE DE SUBIR", sub:"MP4 fonomundos-wow.mp4 / fonomundos-jose-epico.mp4 + clips y promos · en /Documents/FONOMUNDOS PARA CLAUDE · plan: subir los MP4 a codex-assets o enlazar YouTube", k:"pending", url:""},
    ]},
  ]},
 
@@ -249,7 +249,31 @@ const SECTIONS=[
    ]},
  ]},
 
- {title:"6 · Inventario, coordinación y cantera", boxes:[
+ {title:"6 · Rescate Codex · familias por publicar (viven en tu Mac)", boxes:[
+   {emoji:"🗣️", name:"Preta / Fluidez / Voz", desc:"Tartamudez y fluidez · varias versiones", items:[
+     {p:1, nm:"PENDIENTE · Preta Fluidez MVP v2 (Telegram)", sub:"tiene deploy Vercel (projectId prj_hJeh…) · plan: pásame la URL pública o la despliego. También: fonia-fluidez-telegram-cloud (prj_XJK4…)", k:"pending", url:""},
+     {nm:"PENDIENTE · Fluidez Clínica Lab", sub:"app clínica (requiere server.py Python) · plan: Railway + demo limpia", k:"pending", url:""},
+     {nm:"Versiones locales", sub:"preta-fluidez-mvp v1/v2/v3-android, preta-motor-beta, preta-fluidez-clinica-local · auditar cuál es la principal", k:"pending", url:""},
+     {nm:"Karaoke Tartamudez — YA jugable", sub:"esta sí está publicada (Suite POE)", k:"verjuego", url:PG+"codex-assets/suite-poe/karaoke-tartamudez/index.html"},
+   ]},
+   {emoji:"🎧", name:"Logopod", desc:"Entrenador · varias versiones", items:[
+     {p:1, nm:"PENDIENTE DE PUBLICAR", sub:"logopod-entrenador-app + landing/funcional/real/app.html · estáticos en tu Mac y en repo valencia · plan: subir a codex-assets/logopod + GitHub Pages", k:"pending", url:""},
+   ]},
+   {emoji:"🪞", name:"MirrorFono", desc:"Motor espejo (juego/herramienta clínica)", items:[
+     {p:1, nm:"PENDIENTE DE DEPLOY", sub:"mirrorfono-game (Vite: dist/public/src) · en tu Mac · plan: desplegar en Vercel o build+GitHub Pages", k:"pending", url:""},
+   ]},
+   {emoji:"🧰", name:"Herramientas clínicas HTML", desc:"Estáticos sueltos por subir", items:[
+     {p:1, nm:"PENDIENTE DE PUBLICAR (lote)", sub:"logopedia-dicta, logopedia-smb, fabricador-prompts, analizador-materiales, pictoia-adaptativo, arasecuencias-app, praxiasconnect, alfabeto-pnl · HTML estático · plan: subir a codex-assets/herramientas/ → URLs GitHub Pages", k:"pending", url:""},
+   ]},
+   {emoji:"🤖", name:"JELOU / Chatbot / Agentes", desc:"IA para familias · SENSIBLE", items:[
+     {p:1, nm:"PENDIENTE · demo limpia (no publicar tal cual)", sub:"JELOU skill, agente-logopedia, agent-bridge, chatbot_familias + base de conocimiento · puede tener datos/keys · plan: demo pública limpia o ficha privada, NO subir a repo público sin revisar", k:"pending", url:""},
+   ]},
+   {emoji:"🎬", name:"Curso IA · preventa", desc:"Curso y formación", items:[
+     {p:1, nm:"PENDIENTE DE DEPLOY", sub:"curso-ia-preventa (Flask local) · plan: Railway + Stripe. Monorepo del curso ya EN VIVO en sección 5", k:"pending", url:""},
+   ]},
+ ]},
+
+ {title:"7 · Inventario, coordinación y cantera", boxes:[
    {emoji:"🗂️", name:"Inventario Workia (socio)", desc:"Entrega curada + docs estratégicos", items:[
      {p:1, nm:"VER · Inventario estratégico", sub:"doc (revisar privacidad antes de difundir)", k:"verdoc", url:PG+"codex-assets/docs/INVENTARIO_ESTRATEGICO_ACADEMIA_2026.md"},
      {nm:"VER · Mapa de prototipos", sub:"doc", k:"verdoc", url:PG+"codex-assets/docs/MAPA_ACADEMIA_PROTOTIPOS_2026.md"},
@@ -264,7 +288,12 @@ const SECTIONS=[
    ]},
  ]},
 
- {title:"7 · Personal · fuera de logopedia", boxes:[
+ {title:"8 · Personal · fuera de logopedia (separado del escaparate)", boxes:[
+   {emoji:"🎬", name:"CineMundos", desc:"Cine/vídeo · gemelo técnico de FonoMundos", items:[
+     {p:1, nm:"VER · Informe de avance", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049"},
+     {nm:"PENDIENTE DE DEPLOY", sub:"Vite+React+Phaser+Supabase (mismo motor que FonoMundos) · tiene rama gh-pages · plan: desplegar preview Vercel", k:"pending", url:""},
+     {nm:"Código", sub:"repo privado cinemundos", k:"repo", url:GH+"cinemundos"},
+   ]},
    {emoji:"🕎", name:"Torá · Januká", desc:"Proyectos personales / estudio", items:[
      {p:1, nm:"VER · La Película de Januká", sub:"artefacto jugable", k:"verart", url:"https://claude.ai/code/artifact/e77d5f22-15e9-4d01-a645-e339263a5935"},
      {nm:"VER · Juego de Januká (Detective)", sub:"artefacto", k:"verart", url:"https://claude.ai/code/artifact/9626945a-f9d4-4a51-8c7b-b733408a58b4"},
