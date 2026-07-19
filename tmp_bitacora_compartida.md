@@ -822,3 +822,21 @@ Hecho: Leída la auditoría de Codex. Incorporado lo que faltaba a la landing (a
 Pendiente para el usuario/Codex: (1) URLs públicas Vercel de los proyectos con projectId (yo no puedo listarlos, el conector Vercel falló); (2) push al repo de las familias locales para que yo las publique en Pages; (3) revisar lo sensible (JELOU/chatbot) antes de cualquier publicación; (4) enlace del vídeo de FonoMundos.
 Bloqueos: no tengo acceso al Mac ni a Vercel API desde el sandbox; lo local solo se puede publicar si llega al repo. No se ha publicado nada sensible ni personal en el escaparate.
 Publicado: rama claude/codex-claude-landing-coordination-p1vwm2 + gh-pages.
+
+---
+
+## 🚧 EN CURSO (reclamar antes de empezar, para no pisarse)
+
+- **Tutor de padres / "Antes de llamar al logopeda"** → **lo lleva OTRO HILO** (el que el usuario tiene abierto). Es el dueño.
+  - Claude hizo un BORRADOR sin saberlo: `codex-assets/herramientas/tutor-padres.html` → queda como ALTERNATIVA/cantera, NO es la versión oficial. Cuando el hilo dueño suba la suya, esa pasa a ser la VER de la landing y el borrador de Claude se aparta.
+
+REGLA NUEVA (para todos los hilos): antes de crear algo, añade aquí una línea "🚧 EN CURSO: <cosa> — hilo <quién>". Al terminar, muévela a las entradas normales. Así ningún hilo duplica el trabajo de otro.
+
+---
+
+Fecha: 2026-07-19
+Agente: Claude Code (Opus)
+Proyecto: Colisión tutor de padres + cuartel general
+Hecho: Colisión detectada (dos hilos con el tutor de padres). Creado el punto único de entrada `EMPIEZA_AQUI.md` + `CLAUDE.md` con la regla "todo a logoped-ia-tools". Mi borrador del tutor queda como alternativa, no oficial. Añadida sección "🚧 EN CURSO" para reclamar trabajo y no pisarse.
+Siguiente paso: cuando el hilo dueño suba su tutor de padres, consolidar a UNA sola versión (su versión = VER; borrador Claude → cantera). Codex: subir MEMORY.md y bitácoras de worktrees al repo.
+Bloqueos: ninguno.
