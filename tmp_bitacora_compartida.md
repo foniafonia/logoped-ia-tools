@@ -840,3 +840,15 @@ Proyecto: Colisión tutor de padres + cuartel general
 Hecho: Colisión detectada (dos hilos con el tutor de padres). Creado el punto único de entrada `EMPIEZA_AQUI.md` + `CLAUDE.md` con la regla "todo a logoped-ia-tools". Mi borrador del tutor queda como alternativa, no oficial. Añadida sección "🚧 EN CURSO" para reclamar trabajo y no pisarse.
 Siguiente paso: cuando el hilo dueño suba su tutor de padres, consolidar a UNA sola versión (su versión = VER; borrador Claude → cantera). Codex: subir MEMORY.md y bitácoras de worktrees al repo.
 Bloqueos: ninguno.
+
+---
+
+Fecha: 2026-07-19
+Agente: Claude Code (Opus)
+Proyecto: CONSOLIDACIÓN tutor de padres → "ANTES DE CONSULTAR" (Fönia)
+Hecho: Recuperada la versión oficial del hilo dueño (leído el artefacto + verificada la rama). El tutor de padres real es "ANTES DE CONSULTAR" de Fönia, Fase 0 (Descubrimiento) con 20 documentos de arquitectura.
+  - FUENTE DE VERDAD: repo `foniafonia/logoped-ia-inventario-workia`, rama `claude/fonia-preconsulta-app-anfpln`, carpeta `antes-de-consultar/docs/00-descubrimiento/`. Rama verificada (existe). Artefacto consolidado (solo lectura): https://claude.ai/code/artifact/6d5a89ec-8ad6-4edc-b77c-53f0db651b68
+  - Es un producto serio: Next.js App Router + Supabase UE + RLS, orquestación IA server-side (claves solo servidor), 2 modos (anónimo local sin backend / identificado con bandeja profesional), privacidad y seguridad by design, NO diagnostica, marco de estado I/C/VJ/VC, accesibilidad WCAG 2.2 AA. Nada sensible en los docs (son arquitectura); pero NO va a producción sin validación jurídica (VJ) y clínica (VC).
+  - Landing consolidada: tarjeta "ANTES DE CONSULTAR · Fönia" con el diseño Fase 0 como principal + fuente (rama) + mi borrador degradado a "Boceto navegable (NO oficial)" + PENDIENTE construir MVP. Colisión resuelta: una sola versión oficial.
+Siguiente paso: construir el MVP desde la Fase 0 (empezar por Modo 1 anónimo, sin backend) cuando el usuario lo pida. Codex/otro hilo: la rama es la fuente viva; el artefacto se desfasa si cambian los docs.
+Bloqueos: ninguno. Nota: inventario-workia es privado (el enlace de la fuente abre logueado, no para un comprador).
