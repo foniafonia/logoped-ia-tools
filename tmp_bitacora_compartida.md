@@ -792,3 +792,18 @@ Actualizacion Codex:
 ✅ PR abierto: https://github.com/foniafonia/logoped-ia-tools/pull/1
 ✅ PR mergeable/clean.
 ✅ Se procede a mergear a `main` para que GitHub Pages pueda servir `LANDING_TODO_LOGOPED_IA.html` como enlace publico de reunion.
+
+---
+
+Fecha: 2026-07-19
+Agente: Claude Code (Opus)
+Proyecto: AUDITORÍA real + landing como PANEL DE DEMOSTRACIÓN
+Hecho: Reescrita la landing como escaparate para enseñar producto desde el móvil (no inventario técnico). Regla: cada caja lleva un enlace principal VER que abre la cosa; el repo pasa a secundario (CÓDIGO); lo sin demo se marca PENDIENTE con plan; nada muerto. Estado: 31 cajas, 46 enlaces VER que abren, 18 pendientes con plan de publicación.
+Auditoría con evidencia (no por nombre):
+- Colmenia = repo academia-logoped-ia con 2 ramas reales: `main` (producción, SIN Stripe) y `codex/renovacion-visual` (la avanzada). Leído `src/app/api/stripe/checkout/route.ts` en la rama renovación: checkout REAL en modo subscription (customer + price_data €/mes) + `/api/stripe/portal` + `/api/webhooks`. FALTA para cobrar: claves Stripe en env de Vercel y llevar el checkout a producción (main no lo tiene). `concept-vivo-b` NO está en GitHub (ni main ni renovación): solo en localhost del usuario → LOCAL PENDIENTE (push + preview Vercel).
+- Minados los MD de Codex (INVENTARIO_ESTRATEGICO, MAPA_ACADEMIA_PROTOTIPOS): recuperadas 14 URLs Vercel vivas verificadas 200 → FonoMundos, FonoMundos WOW, Sónica Runner, Kig&Find, Conciencia Fonológica Léxica, Constructor Sílabas Aire, Puzzle Agarre Aire, Lengua Runner, FonoMesa Lab, FoniaWatch Rehab, Colmena Melilla UPE, logoped-web, logoped-api-v2, Academia. + LectoViva v2 (GitHub Pages). Todas puestas como VER · EN VIVO.
+- Verificado que TODO lo estático de codex-assets existe en repo y se sirve por GitHub Pages → construidas URLs públicas https://foniafonia.github.io/logoped-ia-tools/RUTA como enlace principal: FonoSuika (+demo mp4), Bosque, modo-historia, Cognitiva, Rubi-IA, SAAC, Cribado adultos, Radar, Misión Perfiles, Maleta, y los 10 juegos de Suite POE (Letra Crush, Encuentra el Nuevo, LetraPang, LetraBlaster, Lupas y Linternas, Karaoke Tartamudez, S/Z, 194RRR, DonkeyFon, Querer Quest).
+- Inspeccionados ~30 repos por 5 exploradores (sin clonar, API GitHub): ramas, stack, stripe/supabase, deploys, jugables. Hallazgos: logoped-ia = curso-logoped-ia = CURSO-ONLINE-REPLIT (mismo código, dedupado a 1 caja); radar-clinico-digital VACÍO; vocalclinic-demo es monorepo con FoniaWatch (watchOS)+qr-sonoro; cinemundos = gemelo técnico de fonomundos.
+Pendiente (marcado en la landing con plan): examen (Railway), VocalTrack y Chatbot familias (backend→Railway), AdaPro/Imagine/Logopedia Generador/Lleno-Vacío/ARAIA/decks AELFA-Extremadura-Valencia/Logopod (estáticos→GitHub Pages), concept-vivo-b (push+Vercel), vídeo de FonoMundos (pásame enlace).
+Bloqueos: desde el sandbox no alcanzo github.io (proxy) para probar el render en vivo; verificado que los archivos existen en repo/gh-pages. Prueba visual final: el usuario abre la URL. No se ha publicado nada personal/sensible; POE off-topic queda en CANTERA, no borrado.
+Publicado: rama claude/codex-claude-landing-coordination-p1vwm2 + gh-pages.
