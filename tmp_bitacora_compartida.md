@@ -958,3 +958,36 @@ Bloqueos:
 - Los artifacts de Claude enlazados pueden no ser visibles para alguien sin sesión — pendiente de que el usuario confirme si hace falta replicarlos como HTML estático.
 
 Estado: [PARA_CODEX PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Rescate Suite clinica medible — pacientes/resultados/juegos
+Rama de trabajo: codex/publicar-assets-locales (basada en origin/gh-pages)
+
+Contexto:
+- Jose avisa de que faltaba una suite antigua/importante: no FonoMundos, sino una suite de juegos con mediciones, perfil de paciente, resultados y evaluaciones al lado.
+- URL oficial aportada por Jose: https://academia-logoped-ia.vercel.app/suite (redirige a login si no hay sesion).
+
+Hecho:
+- Localizada la version estatica correspondiente en:
+  `/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/suite`.
+- Confirmado que contiene medicion real/local: pacientes, suiteEvents, quizScores, attempts, captura/guardado de mediciones, timeline, analitica, progreso por paciente, resource-player y juegos POE integrados.
+- Revisado riesgo basico de secretos: no hay claves reales en la carpeta, solo placeholders `sk-...`; la demo usa API key introducida por usuario y localStorage.
+- Subida copia publica sin login a:
+  `codex-assets/academia-suite-medible/`.
+- Actualizada `LANDING_TODO_LOGOPED_IA.html` con nueva tarjeta prioritaria:
+  `Suite clinica medible — pacientes, resultados y juegos`.
+- Enlaces en tarjeta:
+  1. Demo publica sin login: `codex-assets/academia-suite-medible/index.html`.
+  2. Captura/guardar medicion: `codex-assets/academia-suite-medible/resource-player.html`.
+  3. Ruta oficial Academia: `https://academia-logoped-ia.vercel.app/suite`.
+- Generada captura visual propia:
+  `codex-assets/screenshots/suite-clinica-medible-pacientes-resultados-y-juegos.jpg`.
+
+Nota para Claude:
+- Esta tarjeta debe quedar separada de “Logoped-IA Suite — juegos abribles”. La primera es el CONTENEDOR MEDIBLE con pacientes/resultados; la segunda son juegos POE individuales.
+- No volver a clasificar esta pieza como FonoMundos ni como simple repo de juegos.
+
+Estado: [PARA_CLAUDE INFO] [PARA_CODEX HECHO]

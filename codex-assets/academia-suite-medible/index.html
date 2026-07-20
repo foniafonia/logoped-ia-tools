@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JuegosLogopedos Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=20260412f" />
+  </head>
+  <body class="clinical-focus">
+    <header class="topbar">
+      <a href="#hero-home" class="brand-lockup">
+        <span class="brand-orb"></span>
+        <span class="brand-name">JuegosLogopedos</span>
+      </a>
+
+      <nav class="topnav">
+        <a href="#hero-home">Inicio</a>
+        <a href="#games-showcase">Juegos</a>
+        <a href="#professionals">Profesionales</a>
+        <a href="#suite-clinic">Suite</a>
+        <a href="#blog">Blog</a>
+        <a href="#patient-drawer" id="nav-patients-link">Pacientes</a>
+      </nav>
+
+      <div class="topbar-tools">
+        <button id="toggle-public-view" class="toolbar-btn secondary" type="button">Ver web completa</button>
+        <button id="open-patient-drawer" class="toolbar-btn secondary" type="button">Pacientes</button>
+        <button id="open-patient-create" class="toolbar-btn" type="button">Nuevo paciente</button>
+        <button id="load-suite-demo" class="toolbar-btn" type="button">Modo demo</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero-home">
+        <div class="hero-copy">
+          <p class="eyebrow">Logopedia, educacion y tecnologia conectadas</p>
+          <h1>Una web viva para jugar, evaluar y medir de verdad</h1>
+          <p class="hero-lead">
+            Juegos terapeuticos, evaluacion logopedica, herramientas para profesionales y una
+            suite clinica conectada por paciente. La portada vuelve a ser escaparate y la
+            medicion queda en su espacio natural.
+          </p>
+
+          <div class="hero-pill-row">
+            <span class="hero-pill">Juegos terapeuticos</span>
+            <span class="hero-pill">Evaluacion profesional</span>
+            <span class="hero-pill">Graficas por paciente</span>
+            <span class="hero-pill">Navegacion unificada</span>
+          </div>
+
+          <div class="hero-actions">
+            <button id="tab-switch-suite" type="button">Ver suite clinica</button>
+            <button id="open-patient-drawer-hero" class="secondary" type="button">Gestionar paciente</button>
+          </div>
+        </div>
+
+        <div class="hero-stage">
+          <article class="hero-showcase-card">
+            <p class="hero-showcase-kicker">Catalogo conectado</p>
+            <h2>Nuestros juegos terapeuticos</h2>
+            <p>
+              La web publica vuelve a respirar como escaparate premium, mientras la suite sigue
+              guardando resultados y progreso real.
+            </p>
+            <div class="showcase-stats">
+              <span>55+ recursos detectados</span>
+              <span>Evaluacion y chatbot</span>
+              <span>Medicion por paciente</span>
+            </div>
+          </article>
+
+          <article class="hero-mini-card">
+            <span class="mini-orb orb-language"></span>
+            <h3>Juegos y apps</h3>
+            <p>Explora el ecosistema completo con tarjetas, filtros y acceso medible.</p>
+          </article>
+
+          <article class="hero-mini-card">
+            <span class="mini-orb orb-learning"></span>
+            <h3>Suite clinica</h3>
+            <p>Todo lo importante para el seguimiento queda separado del marketing visual.</p>
+          </article>
+
+          <article class="hero-mini-card auth-card">
+            <div class="auth-copy">
+              <p class="auth-kicker">Acceso local</p>
+              <h3>Entrar en la suite</h3>
+            </div>
+
+            <form id="login-form" class="hero-login-form">
+              <input id="student-name" placeholder="Tu nombre" required />
+              <input id="student-email" type="email" placeholder="tu@email.com" required />
+              <button type="submit">Entrar</button>
+            </form>
+
+            <div id="session-box" class="hidden session-inline">
+              <p id="session-user"></p>
+              <button id="logout-btn" class="secondary" type="button">Logout</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="trust-band" id="suite-intro">
+        <article class="trust-card">
+          <p class="trust-label">Consulta</p>
+          <h3>Lenguaje clinico claro</h3>
+          <p>La parte terapeutica deja de pelearse con la portada y gana jerarquia propia.</p>
+        </article>
+
+        <article class="trust-card">
+          <p class="trust-label">Aprendizaje</p>
+          <h3>Escaparate editorial</h3>
+          <p>Los juegos vuelven a sentirse como una coleccion valiosa y no como widgets pegados.</p>
+        </article>
+
+        <article class="trust-card">
+          <p class="trust-label">Seguimiento</p>
+          <h3>Todo conectado al paciente</h3>
+          <p>La suite se mantiene medible, con progreso transversal y lectura clara de resultados.</p>
+        </article>
+      </section>
+
+      <section class="catalog-shell" id="games-showcase">
+        <div class="section-head">
+          <p class="section-kicker">Catalogo de Juegos Educativos</p>
+          <h2>Nuestros Juegos Terapeuticos</h2>
+          <p>
+            La portada enseña una seleccion destacada. El catalogo completo y navegable vive en la
+            pestaña interna de <strong>Juegos</strong>.
+          </p>
+        </div>
+
+        <div class="catalog-preview-bar">
+          <p id="featured-games-stats" class="small catalog-stats">Cargando destacados...</p>
+          <button id="tab-switch-games" class="secondary" type="button">Abrir pestaña de juegos</button>
+        </div>
+
+        <div id="featured-games-list" class="activity-grid preview-grid"></div>
+      </section>
+
+      <section class="professionals-shell" id="professionals">
+        <div class="section-head">
+          <p class="section-kicker">Plataforma Profesional</p>
+          <h2>Herramientas para consulta y gabinete</h2>
+          <p>
+            Una capa diferenciada para evaluacion, anamnesis, seguimiento y apoyo a familias,
+            sin competir visualmente con el catalogo de juegos.
+          </p>
+        </div>
+
+        <div class="pro-grid">
+          <article class="pro-card tone-assessment">
+            <p class="pro-badge">Evaluacion</p>
+            <h3>Evaluacion Logopedica Integral Pro</h3>
+            <p>Flujo de evaluacion estructurado, con informe visual y potencial de integracion directa.</p>
+            <div class="feature-pills">
+              <span class="feature-pill">Registro</span>
+              <span class="feature-pill">Cribado</span>
+              <span class="feature-pill">Informe</span>
+            </div>
+          </article>
+
+          <article class="pro-card tone-anamnesis">
+            <p class="pro-badge">Anamnesis IA</p>
+            <h3>Entrada clinica con contexto real</h3>
+            <p>Ideal para abrir casos, recoger informacion y conectar el punto de partida del paciente.</p>
+            <div class="feature-pills">
+              <span class="feature-pill">Familias</span>
+              <span class="feature-pill">Contexto</span>
+              <span class="feature-pill">Seguimiento</span>
+            </div>
+          </article>
+
+          <article class="pro-card tone-chatbot">
+            <p class="pro-badge">Orientacion</p>
+            <h3>Chatbot para familias</h3>
+            <p>Apoyo no diagnostico, derivacion y entrada amable al ecosistema para padres y cuidadores.</p>
+            <div class="feature-pills">
+              <span class="feature-pill">FAQ</span>
+              <span class="feature-pill">Acompanamiento</span>
+              <span class="feature-pill">Primera orientacion</span>
+            </div>
+          </article>
+
+          <article class="pro-card tone-suite">
+            <p class="pro-badge">Suite clinica</p>
+            <h3>Panel interno de resultados</h3>
+            <p>Todo lo medible se concentra despues en la suite: hitos, precision, timeline y graficas.</p>
+            <div class="feature-pills">
+              <span class="feature-pill">Graficas</span>
+              <span class="feature-pill">Timeline</span>
+              <span class="feature-pill">Paciente</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="workspace-wrap" id="suite-clinic">
+        <div class="section-head workspace-head">
+          <p class="section-kicker">Zona Interna</p>
+          <h2>Suite Clinica Conectada</h2>
+          <p>
+            Aqui vive lo operativo: paciente, progreso, timeline y datos medibles. El laboratorio GPT
+            queda aparte para no emborronar la experiencia principal.
+          </p>
+        </div>
+
+        <div class="workspace-topbar">
+          <article class="suite-ribbon-card">
+            <p class="suite-ribbon-kicker">Paciente activo</p>
+            <div id="suite-patient-ribbon" class="suite-ribbon-summary">
+              Sin paciente activo. Abre el panel de pacientes para crear o seleccionar uno.
+            </div>
+          </article>
+
+          <div class="workspace-actions">
+            <button id="open-patient-drawer-suite" class="secondary" type="button">Gestionar paciente</button>
+            <button id="open-demos-hub" class="secondary" type="button">Demos y pruebas</button>
+            <button class="workspace-tab" id="tab-games" type="button" data-tab-target="games-workspace">Funcionales</button>
+            <button class="workspace-tab" id="tab-demos" type="button" data-tab-target="demos-workspace">Demos</button>
+            <button class="workspace-tab active" id="tab-suite" type="button" data-tab-target="suite-workspace">Suite clinica</button>
+            <button class="workspace-tab" id="tab-lab" type="button" data-tab-target="lab-workspace">Laboratorio GPT</button>
+          </div>
+        </div>
+
+        <section id="games-workspace" class="workspace-panel">
+          <div class="games-workspace-head">
+            <div>
+              <p class="section-kicker">Pestana de Juegos</p>
+              <h3>Todos los juegos y herramientas del ecosistema</h3>
+              <p class="small">Aqui vive el catalogo completo. La suite clinica solo mantiene un indice compacto.</p>
+            </div>
+          </div>
+
+          <div class="catalog-toolbar">
+            <label class="catalog-search">
+              <span>Buscar recurso</span>
+              <input id="catalog-search" type="search" placeholder="Nombre, habilidad, etiqueta o area..." />
+            </label>
+
+            <div class="catalog-filters" aria-label="Filtros de catalogo">
+              <button class="catalog-filter active" data-kind="all" type="button">Todo</button>
+              <button class="catalog-filter" data-kind="game" type="button">Juegos</button>
+              <button class="catalog-filter" data-kind="assessment" type="button">Evaluacion</button>
+              <button class="catalog-filter" data-kind="tool" type="button">Herramientas</button>
+              <button class="catalog-filter" data-kind="chatbot" type="button">Chatbots</button>
+            </div>
+          </div>
+
+          <p id="activity-catalog-stats" class="small catalog-stats">Cargando inventario...</p>
+          <div id="activity-catalog-list" class="activity-grid"></div>
+        </section>
+
+        <section id="demos-workspace" class="workspace-panel">
+          <div class="games-workspace-head demos-workspace-head">
+            <div>
+              <p class="section-kicker">Zona de pruebas</p>
+              <h3>Demos y prototipos en desarrollo</h3>
+              <p class="small">Aqui viven los experimentos, versiones demo y recursos externos que no forman parte de la capa clínica medible.</p>
+            </div>
+          </div>
+
+          <div class="development-block standalone">
+            <div class="section-head compact">
+              <p class="section-kicker">En desarrollo</p>
+              <h3>Demos separadas de los recursos funcionales</h3>
+              <p class="small">Incluye prototipos internos, demos externas y pruebas endurecidas como LectoViva v2.</p>
+            </div>
+            <p id="development-games-stats" class="small catalog-stats">Cargando demos...</p>
+            <div id="development-games-list" class="activity-grid"></div>
+          </div>
+        </section>
+
+        <section id="suite-workspace" class="workspace-panel active">
+          <div class="suite-layout">
+            <section class="card" id="suite-card">
+              <h2>Panel central de la suite</h2>
+              <p id="suite-summary" class="small">Sin datos transversales todavia.</p>
+              <div class="subtab-bar">
+                <button class="subtab-btn active" type="button" data-subtab-target="suite-overview-panel">Resumen</button>
+                <button class="subtab-btn" type="button" data-subtab-target="suite-analytics-panel">Analitica</button>
+                <button class="subtab-btn" type="button" data-subtab-target="suite-history-panel">Historial</button>
+                <button class="subtab-btn" type="button" data-subtab-target="suite-progress-panel">Progreso</button>
+              </div>
+
+              <div id="suite-overview-panel" class="subtab-panel active">
+                <div id="suite-demo-shortcut" class="suite-demo-shortcut"></div>
+                <div id="suite-heatmap-preview" class="suite-heatmap heatmap-sticky"></div>
+                <div id="suite-latest-save" class="attempt-item">Todavia no hay una accion registrada en la suite.</div>
+                <div id="suite-metrics" class="suite-metrics"></div>
+                <div id="suite-area-views" class="suite-area-views"></div>
+                <div id="suite-clinical-sheet" class="suite-clinical-sheet"></div>
+                <details class="fold-card" open>
+                  <summary>Indice compacto de juegos</summary>
+                  <div class="suite-compact-index">
+                    <div class="suite-compact-header">
+                      <h3>Indice compacto de juegos</h3>
+                      <button id="tab-switch-games-inline" class="secondary" type="button">Ver catalogo completo</button>
+                    </div>
+                    <div id="suite-resource-index" class="suite-resource-index"></div>
+                  </div>
+                </details>
+              </div>
+
+              <div id="suite-analytics-panel" class="subtab-panel">
+                <div id="suite-heatmap" class="suite-heatmap"></div>
+                <div id="suite-map" class="suite-map"></div>
+                <div id="suite-graph" class="suite-graph"></div>
+              </div>
+
+              <div id="suite-history-panel" class="subtab-panel">
+                <div id="suite-resource-history" class="suite-resource-history"></div>
+                <div id="suite-timeline" class="suite-timeline"></div>
+              </div>
+
+              <div id="suite-progress-panel" class="subtab-panel">
+                <h3>Progreso medible</h3>
+                <p id="progress-summary">Sin intentos todavia.</p>
+                <details class="fold-card compact-fold" open>
+                  <summary>Nota y barras</summary>
+                  <div id="student-grade" class="grade-box">Nota global: n/a</div>
+                  <div id="evolution-bars" class="bars"></div>
+                </details>
+                <details class="fold-card compact-fold">
+                  <summary>Intentos recientes</summary>
+                  <div id="attempt-list"></div>
+                </details>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="lab-workspace" class="workspace-panel">
+          <section class="roadmap card">
+            <h2>Ruta Formativa (00-07)</h2>
+            <p class="small">Todo lo experimental o formativo queda aqui aparte para no ensuciar la suite clinica.</p>
+            <div id="module-roadmap" class="roadmap-grid"></div>
+          </section>
+
+          <div class="lab-layout">
+            <section class="card lab-intro-card" id="lab-intro-card">
+              <h2>Laboratorio GPT</h2>
+              <p class="small">
+                Sigue disponible para practica, comparativas y aprendizaje, pero ya no compite con la
+                navegacion principal.
+              </p>
+            </section>
+
+            <section class="card" id="theory-card">
+              <h2>Teoria</h2>
+              <label for="module-select">Modulo</label>
+              <select id="module-select"></select>
+              <p id="module-status-text" class="small"></p>
+              <div id="lesson-tabs" class="tabs"></div>
+              <div id="lesson-content"></div>
+            </section>
+
+            <section class="card" id="quiz-card">
+              <h2>Quiz</h2>
+              <div id="quiz-container"></div>
+              <button id="submit-quiz" type="button">Corregir quiz</button>
+              <p id="quiz-result"></p>
+            </section>
+
+            <section class="card" id="api-card">
+              <h2>Conexion con API (opcional)</h2>
+              <p class="small">
+                Solo necesitas pegar tu API key (sk-...) y, si quieres, cambiar el modelo.
+                El endpoint ya esta fijo en el codigo.
+              </p>
+
+              <label for="api-key">API Key (solo prueba local)</label>
+              <input id="api-key" type="password" placeholder="sk-..." />
+
+              <label for="api-model">Model (opcional)</label>
+              <input id="api-model" placeholder="gpt-4.1-mini" />
+
+              <button id="save-api" class="secondary" type="button">Guardar configuracion</button>
+              <p id="api-status"></p>
+            </section>
+
+            <section class="card lab-practice-card" id="practice-card">
+              <h2>Practica con API</h2>
+              <p class="small">Tambien puedes usar <strong>Modo demo guiado</strong> para ver un caso completo sin API key.</p>
+              <label for="exercise-select">Ejercicio</label>
+              <select id="exercise-select"></select>
+
+              <p id="exercise-instruction" class="instruction"></p>
+
+              <label for="prompt-input">Tu prompt</label>
+              <textarea id="prompt-input" rows="7" placeholder="Escribe tu prompt aqui..."></textarea>
+
+              <label>Adaptacion sugerida para el paciente</label>
+              <pre id="patient-adaptation" class="adaptation-box"></pre>
+
+              <button id="run-prompt" type="button">Enviar a API</button>
+              <button id="run-demo" class="secondary" type="button">Modo demo guiado (sin API)</button>
+
+              <label for="internal-output">Respuesta API interna</label>
+              <textarea id="internal-output" rows="7" readonly></textarea>
+
+              <label for="external-output">Respuesta GPT externa (pegada por alumno)</label>
+              <textarea id="external-output" rows="7" placeholder="Pega aqui lo que te devolvio tu GPT externo..."></textarea>
+
+              <label for="self-analysis">Tu analisis comparativo</label>
+              <textarea id="self-analysis" rows="5" placeholder="Que diferencias hay? Cual es mejor y por que?"></textarea>
+
+              <button id="compare-outputs" type="button">Comparar respuestas con IA</button>
+              <label for="comparison-output">Analisis IA (mejor respuesta + por que + prompt mejorado)</label>
+              <textarea id="comparison-output" rows="9" readonly></textarea>
+              <div id="comparison-semaphore" class="semaphore hidden"></div>
+
+              <button id="save-attempt" class="secondary" type="button">Guardar intento y puntuar</button>
+              <button id="next-exercise" class="secondary" type="button">Siguiente ejercicio</button>
+              <p id="attempt-status"></p>
+            </section>
+          </div>
+        </section>
+      </section>
+
+      <section class="blog-shell" id="blog">
+        <div class="section-head">
+          <p class="section-kicker">Blog y pensamiento clinico</p>
+          <h2>Ultimas Publicaciones</h2>
+          <p>
+            La web tambien debe contar proyecto, investigacion, criterio y vision profesional.
+          </p>
+        </div>
+
+        <div class="blog-grid">
+          <article class="blog-card">
+            <div class="blog-date">28 de Diciembre, 2024</div>
+            <h3>IA conversacional en logopedia: hacia una terapia digital con criterio</h3>
+            <p>De los chatbots al analisis del lenguaje, que aporta de verdad y que no deberia prometerse.</p>
+            <a href="#suite-clinic" class="read-more">Leer enfoque →</a>
+          </article>
+
+          <article class="blog-card">
+            <div class="blog-date">22 de Diciembre, 2024</div>
+            <h3>Cuando el videojuego si puede tener valor terapeutico</h3>
+            <p>Que hace que un juego sea clinicamente util y no solo un envoltorio bonito con palabras de moda.</p>
+            <a href="#games-showcase" class="read-more">Ver catalogo →</a>
+          </article>
+
+          <article class="blog-card">
+            <div class="blog-date">18 de Diciembre, 2024</div>
+            <h3>El reto real: integrar todo sin perder claridad</h3>
+            <p>Unificar juegos, evaluaciones y pacientes exige una arquitectura visual y tecnica mucho mas limpia.</p>
+            <a href="#professionals" class="read-more">Ver herramientas →</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div id="patient-drawer-backdrop" class="drawer-backdrop hidden"></div>
+    <aside id="patient-drawer" class="patient-drawer hidden" aria-hidden="true">
+      <div class="patient-drawer-panel">
+        <div class="drawer-header">
+          <div>
+            <p class="section-kicker">Pacientes</p>
+            <h2>Gestion clinica de pacientes</h2>
+          </div>
+          <div class="drawer-header-actions">
+            <button id="open-patient-create-drawer" class="toolbar-btn" type="button">Crear paciente</button>
+            <button id="close-patient-drawer" class="secondary drawer-close" type="button">Cerrar</button>
+          </div>
+        </div>
+
+        <div class="patient-shell">
+          <div class="patient-tab-shell">
+            <div class="subtab-bar">
+              <button class="subtab-btn active" type="button" data-subtab-target="patient-overview-panel">Resumen</button>
+              <button class="subtab-btn" type="button" data-subtab-target="patient-report-panel">Informe</button>
+              <button class="subtab-btn" type="button" data-subtab-target="patient-create-panel">Crear paciente</button>
+            </div>
+
+            <div id="patient-overview-panel" class="subtab-panel active">
+              <article class="card">
+                <h2>Paciente seleccionado</h2>
+                <label for="patient-select">Seleccionar paciente</label>
+                <select id="patient-select"></select>
+                <div id="patient-summary" class="patient-summary"></div>
+              </article>
+            </div>
+
+            <div id="patient-report-panel" class="subtab-panel">
+              <article class="card">
+                <h2>Informe del paciente</h2>
+                <div id="patient-report-view" class="patient-summary"></div>
+              </article>
+            </div>
+
+            <div id="patient-create-panel" class="subtab-panel">
+              <article class="card">
+                <h2>Nuevo paciente</h2>
+                <form id="patient-form">
+                  <label for="patient-name">Nombre o alias</label>
+                  <input id="patient-name" placeholder="Ej. Marta / Paciente-01" required />
+
+                  <label for="patient-age">Edad</label>
+                  <input id="patient-age" type="number" min="1" max="99" placeholder="6" />
+
+                  <label for="patient-level">Nivel actual</label>
+                  <select id="patient-level">
+                    <option value="basico">Basico</option>
+                    <option value="intermedio">Intermedio</option>
+                    <option value="avanzado">Avanzado</option>
+                  </select>
+
+                  <label for="patient-goals">Objetivos (separados por comas)</label>
+                  <input id="patient-goals" placeholder="articulacion, vocabulario, lectoescritura" />
+
+                  <label for="patient-tags">Etiquetas clinicas (separadas por comas)</label>
+                  <input id="patient-tags" placeholder="dislexia, tea, tartamudez, seguimiento inicial" />
+
+                  <label for="patient-notes">Notas</label>
+                  <textarea id="patient-notes" rows="3" placeholder="Observaciones utiles para adaptar juegos y evaluaciones"></textarea>
+
+                  <button type="submit">Guardar paciente</button>
+                </form>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <script src="./app.js?v=20260412f"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-03-23T00:00:00+00:00",
+  "source_root": "/Users/joseaserraf/Desktop/Logoped-IA Suite",
+  "activities": [
+    {
+      "id": "poe-lupas-y-linternas",
+      "title": "Detective de Palabras",
+      "summary": "Juego medible de busqueda visual con tiempos, errores y progresion por dificultad.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/lupas y linternas/index.html",
+      "web_path": "/POE/lupas%20y%20linternas/index.html",
+      "tags": [
+        "atencion",
+        "busqueda visual",
+        "lectoescritura"
+      ],
+      "focus_areas": [
+        "atencion",
+        "lectoescritura"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-letra-crush",
+      "title": "Letra Crush",
+      "summary": "Juego tipo match-3 para trabajar letras, fonemas, silabas e imagenes con lectura funcional y control ejecutivo.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letra-crush/index.html",
+      "web_path": "/POE/letra-crush/index.html",
+      "tags": [
+        "dislexia",
+        "conciencia fonologica",
+        "lectoescritura",
+        "semantica"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "fonologia",
+        "atencion",
+        "funciones ejecutivas"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media-alta",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-encuentra-el-nuevo",
+      "title": "Encuentra el Nuevo",
+      "summary": "Juego de memoria y deteccion de novedad para terapia fonologica con seguimiento de reaccion, errores y carga de memoria.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/encuentra-el-nuevo/index.html",
+      "web_path": "/POE/encuentra-el-nuevo/index.html",
+      "tags": [
+        "articulacion",
+        "memoria de trabajo",
+        "deteccion de novedad",
+        "fonologia"
+      ],
+      "focus_areas": [
+        "articulacion",
+        "fonologia",
+        "atencion",
+        "memoria"
+      ],
+      "age_range": "4-10",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-letrablaster-demo",
+      "title": "LetraBlaster Demo",
+      "summary": "Shooter educativo de letras, silabas y palabras integrado solo como demo jugable en fase de desarrollo.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letrablaster-demo/index.html",
+      "web_path": "/POE/letrablaster-demo/index.html",
+      "tags": [
+        "lectoescritura",
+        "letras",
+        "silabas",
+        "palabras",
+        "demo"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "atencion",
+        "velocidad de respuesta"
+      ],
+      "age_range": "5-10",
+      "difficulty": "media",
+      "integration_status": "en-desarrollo"
+    },
+    {
+      "id": "poe-letrapang-demo",
+      "title": "LetraPang Demo",
+      "summary": "Versión demo de LetraPang para exploración jugable en fase de construcción, fuera de la capa clínica principal.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letrapang-demo/index.html",
+      "web_path": "/POE/letrapang-demo/index.html",
+      "tags": [
+        "lectoescritura",
+        "burbujas",
+        "letras",
+        "silabas",
+        "demo"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "atencion",
+        "velocidad de respuesta"
+      ],
+      "age_range": "5-10",
+      "difficulty": "media",
+      "integration_status": "en-desarrollo"
+    },
+    {
+      "id": "external-lectoviva-v2-demo",
+      "title": "LectoViva v2",
+      "summary": "Demo externo endurecido publicado en GitHub Pages, visible en la zona de pruebas y en desarrollo del ecosistema.",
+      "kind": "game",
+      "source": "external",
+      "rel_path": "externo · GitHub Pages",
+      "web_path": "https://foniafonia.github.io/lectoviva-v2/",
+      "repo_url": "https://github.com/foniafonia/lectoviva-v2",
+      "tags": [
+        "lectoescritura",
+        "demo",
+        "externo",
+        "pruebas"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "pruebas",
+        "prototipos"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "en-desarrollo"
+    }
+  ]
+}

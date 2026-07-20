@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recurso Medible - Logoped-IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #eff4ff;
+        --card: #ffffff;
+        --text: #18212f;
+        --muted: #617087;
+        --line: #d9e4f5;
+        --primary: #1d4ed8;
+        --accent: #0f766e;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 30%),
+          linear-gradient(180deg, #eff4ff 0%, #f8fbff 100%);
+      }
+
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(340px, 420px) 1fr;
+      }
+
+      .sidebar,
+      .viewer {
+        padding: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      }
+
+      .viewer {
+        padding-left: 0;
+      }
+
+      h1, h2, h3 { margin-top: 0; }
+      label {
+        display: block;
+        margin: 10px 0 6px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      input, select, textarea, button {
+        width: 100%;
+        font: inherit;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        padding: 10px 12px;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--primary), #2563eb);
+        color: white;
+        font-weight: 700;
+      }
+
+      button.secondary {
+        background: #e8f0ff;
+        color: var(--text);
+        border: 1px solid var(--line);
+      }
+
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .pill {
+        display: inline-flex;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: #e0ecff;
+        color: #1d4ed8;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-right: 6px;
+      }
+
+      .muted { color: var(--muted); }
+
+      .viewer-frame {
+        width: 100%;
+        min-height: calc(100vh - 40px);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: white;
+        overflow: hidden;
+      }
+
+      iframe {
+        width: 100%;
+        height: calc(100vh - 40px);
+        border: 0;
+        background: white;
+      }
+
+      .mini-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .mini-item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px;
+        background: #f8fbff;
+      }
+
+      .chrono {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+
+      @media (max-width: 980px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .viewer {
+          padding-left: 20px;
+          padding-top: 0;
+        }
+        .viewer-frame, iframe {
+          min-height: 70vh;
+          height: 70vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="card">
+          <p class="muted">Logoped-IA</p>
+          <h1 id="activity-title">Recurso medible</h1>
+          <p id="activity-summary" class="muted">Cargando recurso...</p>
+          <div id="activity-meta"></div>
+          <p id="patient-meta" class="muted"></p>
+        </div>
+
+        <div class="card" style="margin-top: 16px;">
+          <h2>Captura de resultado</h2>
+          <p class="muted">Todo lo guardado aqui entra directamente en la suite del paciente activo.</p>
+          <div class="chrono" id="timer">00:00</div>
+
+          <label for="metric-status">Estado</label>
+          <select id="metric-status">
+            <option value="in_progress">En progreso</option>
+            <option value="completed">Completado</option>
+            <option value="needs_review">Revisar</option>
+          </select>
+
+          <label for="metric-level-index">Nivel o bloque</label>
+          <input id="metric-level-index" type="number" min="1" value="1" />
+
+          <label for="metric-level-label">Hito alcanzado</label>
+          <input id="metric-level-label" placeholder="Ej. Nivel 1 superado" />
+
+          <label for="metric-score">Puntuacion global</label>
+          <input id="metric-score" type="number" min="0" max="100" placeholder="Se rellenara con captura real o manual" />
+
+          <label for="metric-accuracy">Precision / acierto</label>
+          <input id="metric-accuracy" type="number" min="0" max="100" placeholder="Opcional si el recurso lo aporta" />
+
+          <label for="metric-area">Area clinica</label>
+          <input id="metric-area" placeholder="articulacion, lectoescritura, evaluacion" />
+
+          <label for="metric-notes">Observaciones</label>
+          <textarea id="metric-notes" rows="5" placeholder="Que se ha hecho, errores vistos, ayudas usadas, etc."></textarea>
+
+          <p id="capture-status" class="muted">Intentaremos leer datos reales del recurso cuando existan.</p>
+
+          <div class="actions">
+            <button id="capture-metric" type="button" class="secondary">Capturar datos del recurso</button>
+            <button id="save-metric" type="button">Guardar en la suite</button>
+            <button id="save-return" type="button" class="secondary">Guardar y volver a la suite</button>
+            <button id="open-direct" type="button" class="secondary">Abrir recurso fuera del marco</button>
+          </div>
+          <p id="save-status" class="muted"></p>
+        </div>
+
+        <div class="card" style="margin-top: 16px;">
+          <h3>Ultimas mediciones de este recurso</h3>
+          <div id="recent-measurements" class="mini-list"></div>
+        </div>
+      </aside>
+
+      <main class="viewer">
+        <div class="viewer-frame">
+          <iframe id="resource-frame" title="Recurso medible"></iframe>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const STORAGE_KEYS = {
+        patients: "logopedia_course_patients",
+        activePatientId: "logopedia_course_active_patient_id",
+        suiteEvents: "logopedia_suite_events",
+      };
+
+      const CONTENT_ROOTS = ["./content", "/content"];
+      const FALLBACK_ACTIVITY_CATALOG = {
+  "generated_at": "2026-03-24T00:00:00+00:00",
+  "source_root": "/Users/joseaserraf/Desktop/Logoped-IA Suite",
+  "activities": [
+    {
+      "id": "poe-lupas-y-linternas",
+      "title": "Detective de Palabras",
+      "summary": "Juego medible de busqueda visual con tiempos, errores y progresion por dificultad.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/lupas y linternas/index.html",
+      "web_path": "/POE/lupas%20y%20linternas/index.html",
+      "tags": ["atencion", "busqueda visual", "lectoescritura"],
+      "focus_areas": ["atencion", "lectoescritura"],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-letra-crush",
+      "title": "Letra Crush",
+      "summary": "Juego tipo match-3 para trabajar letras, fonemas, silabas e imagenes con lectura funcional y control ejecutivo.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letra-crush/index.html",
+      "web_path": "/POE/letra-crush/index.html",
+      "tags": ["dislexia", "conciencia fonologica", "lectoescritura", "semantica"],
+      "focus_areas": ["lectoescritura", "fonologia", "atencion", "funciones ejecutivas"],
+      "age_range": "5-12",
+      "difficulty": "media-alta",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-encuentra-el-nuevo",
+      "title": "Encuentra el Nuevo",
+      "summary": "Juego de memoria y deteccion de novedad para terapia fonologica con seguimiento de reaccion, errores y carga de memoria.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/encuentra-el-nuevo/index.html",
+      "web_path": "/POE/encuentra-el-nuevo/index.html",
+      "tags": ["articulacion", "memoria de trabajo", "deteccion de novedad", "fonologia"],
+      "focus_areas": ["articulacion", "fonologia", "atencion", "memoria"],
+      "age_range": "4-10",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    }
+  ]
+};
+      const state = {
+        activity: null,
+        patient: null,
+        startedAt: Date.now(),
+        timerId: null,
+        captureTimerId: null,
+        lastCapture: null,
+      };
+
+      function safeParse(value, fallback) {
+        try {
+          return JSON.parse(value);
+        } catch (_) {
+          return fallback;
+        }
+      }
+
+      function byId(id) {
+        return document.getElementById(id);
+      }
+
+      function getPatients() {
+        return safeParse(localStorage.getItem(STORAGE_KEYS.patients) || "[]", []);
+      }
+
+      function getPatient() {
+        const patientId = localStorage.getItem(STORAGE_KEYS.activePatientId) || "";
+        return getPatients().find((patient) => patient.id === patientId) || null;
+      }
+
+      function getSuiteEvents() {
+        return safeParse(localStorage.getItem(STORAGE_KEYS.suiteEvents) || "[]", []);
+      }
+
+      function saveSuiteEvents(events) {
+        localStorage.setItem(STORAGE_KEYS.suiteEvents, JSON.stringify(events));
+      }
+
+      async function fetchCatalog() {
+        for (const root of CONTENT_ROOTS) {
+          try {
+            const response = await fetch(`${root}/activity-catalog.generated.json`);
+            if (!response.ok) continue;
+            return await response.json();
+          } catch (_) {}
+        }
+        return FALLBACK_ACTIVITY_CATALOG;
+      }
+
+      function getQueryParam(name) {
+        return new URLSearchParams(window.location.search).get(name);
+      }
+
+      function encodePathSegments(path) {
+        return String(path || "")
+          .split("/")
+          .map((segment) => encodeURIComponent(segment))
+          .join("/");
+      }
+
+      function getActivityUrl(activity) {
+        if (!activity?.rel_path) return "#";
+        if (window.location.protocol === "file:") {
+          return `./${encodePathSegments(activity.rel_path)}`;
+        }
+        return activity.web_path;
+      }
+
+      function formatTimer(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
+
+      function startTimer() {
+        clearInterval(state.timerId);
+        state.timerId = setInterval(() => {
+          byId("timer").textContent = formatTimer(Date.now() - state.startedAt);
+        }, 1000);
+        byId("timer").textContent = formatTimer(Date.now() - state.startedAt);
+      }
+
+      function parseNumber(value) {
+        if (value == null || String(value).trim() === "") return null;
+        const n = Number(value);
+        return Number.isFinite(n) ? n : null;
+      }
+
+      function parseTextNumber(text) {
+        const match = String(text || "").replace(",", ".").match(/-?\d+(\.\d+)?/);
+        return match ? Number(match[0]) : null;
+      }
+
+      function getFrameDocument() {
+        try {
+          const frame = byId("resource-frame");
+          return frame?.contentDocument || frame?.contentWindow?.document || null;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function setCaptureStatus(text) {
+        byId("capture-status").textContent = text;
+      }
+
+      function compactCapturePayload(data) {
+        if (!data || typeof data !== "object") return null;
+        return data.payload || data.raw || null;
+      }
+
+      function applyCapturedMeasurement(data) {
+        if (!data) return false;
+        state.lastCapture = data;
+
+        if (data.status) byId("metric-status").value = data.status;
+        if (data.level_index != null) byId("metric-level-index").value = data.level_index;
+        if (data.level_label) byId("metric-level-label").value = data.level_label;
+        if (data.score != null) byId("metric-score").value = Math.round(data.score);
+        if (data.accuracy != null) byId("metric-accuracy").value = Math.round(data.accuracy);
+        if (data.area) byId("metric-area").value = data.area;
+        if (data.notes) byId("metric-notes").value = data.notes;
+        setCaptureStatus(`Captura real detectada: ${data.summary || "datos del recurso actualizados"}.`);
+        return true;
+      }
+
+      function captureAssessmentStorage() {
+        try {
+          const raw = localStorage.getItem("evaluacion_logopedica_pro_v2");
+          if (!raw) return null;
+          const saved = JSON.parse(raw);
+          const fields = saved.fields || {};
+          const currentStep = Number(saved.currentStep || 1);
+          const totalSteps = 15;
+          const fonemaData = saved.fonemaData || {};
+          const scaleData = saved.scaleData || {};
+          const fonemas = Object.keys(fonemaData).length;
+          const fonemasCorrectos = Object.values(fonemaData).filter((value) => value === true).length;
+          const fonemasIncorrectos = Object.values(fonemaData).filter((value) => value === false).length;
+          const pctFonemas = fonemas ? Math.round((fonemasCorrectos / fonemas) * 100) : null;
+          const inteligibilidad = parseNumber(fields.inteligibilidadPorcentaje);
+          const grbasKeys = ["grbasG", "grbasR", "grbasB", "grbasA", "grbasS"];
+          const grbasTotal = grbasKeys.reduce((sum, key) => sum + (parseNumber(scaleData[key]) || 0), 0);
+          const grbasScore = 100 - Math.round((grbasTotal / 15) * 100);
+          const progressScore = Math.max(
+            7,
+            Math.min(
+              100,
+              Math.round(
+                currentStep >= totalSteps
+                  ? ((inteligibilidad ?? 70) * 0.45) + ((pctFonemas ?? 70) * 0.4) + (grbasScore * 0.15)
+                  : (currentStep / totalSteps) * 100
+              )
+            )
+          );
+          const durationSeconds = Number(saved.segundosCronometro || 0);
+          const payload = {
+            current_step: currentStep,
+            total_steps: totalSteps,
+            duration_seconds: durationSeconds,
+            intelligibility,
+            pct_fonemas: pctFonemas,
+            fonemas_correctos: fonemasCorrectos,
+            fonemas_incorrectos: fonemasIncorrectos,
+            grbas_total: grbasTotal,
+            primeras_palabras: parseNumber(fields.primerasPalabras),
+            primeras_frases: parseNumber(fields.primerasFrases),
+            saved_at: saved.savedAt || null,
+          };
+
+          return {
+            status: currentStep >= totalSteps ? "completed" : "in_progress",
+            level_index: currentStep,
+            level_label: `Paso ${currentStep} de ${totalSteps}`,
+            score: progressScore,
+            accuracy: pctFonemas ?? inteligibilidad ?? progressScore,
+            area: "evaluacion",
+            notes: `Sesion evaluativa guardada internamente. Fonemas revisados: ${fonemas}. Inteligibilidad: ${inteligibilidad ?? "n/d"}%. GRBAS: ${grbasTotal}/15. Cronometro: ${durationSeconds}s.`,
+            duration_seconds: durationSeconds,
+            payload,
+            summary: `paso ${currentStep}/${totalSteps} · inteligibilidad ${inteligibilidad ?? "n/d"}%`,
+          };
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function capture194RRR(doc) {
+        if (!doc) return null;
+        const score =
+          parseTextNumber(doc.getElementById("finalScore")?.textContent) ??
+          parseTextNumber(doc.getElementById("levelScore")?.textContent) ??
+          parseTextNumber(doc.getElementById("scoreDisplay")?.textContent);
+        const level =
+          parseTextNumber(doc.getElementById("finalLevel")?.textContent) ??
+          parseTextNumber(doc.getElementById("levelDisplay")?.textContent) ??
+          1;
+        const levelCompleteVisible = doc.getElementById("levelCompleteScreen")?.style.display === "flex";
+        const gameOverVisible = doc.getElementById("gameOverScreen")?.style.display === "flex";
+
+        if (score == null && level == null) return null;
+
+        return {
+          status: levelCompleteVisible ? "completed" : gameOverVisible ? "needs_review" : "in_progress",
+          level_index: level || 1,
+          level_label: levelCompleteVisible ? `Nivel ${level} superado` : gameOverVisible ? `Partida terminada en nivel ${level}` : `Nivel ${level} en curso`,
+          score,
+          accuracy: null,
+          area: "articulacion",
+          notes: `Arcade /r/ detectado automaticamente. Puntuacion actual: ${score ?? "n/d"}. Nivel: ${level ?? "n/d"}.`,
+          payload: {
+            level,
+            score,
+            level_complete_visible: levelCompleteVisible,
+            game_over_visible: gameOverVisible,
+          },
+          summary: `nivel ${level ?? "n/d"} · puntos ${score ?? "n/d"}`,
+        };
+      }
+
+      function captureSZ(doc) {
+        if (!doc) return null;
+        const ratio = parseTextNumber(doc.getElementById("ratio-value")?.textContent);
+        const sTime = parseTextNumber(doc.getElementById("s-time")?.textContent);
+        const zTime = parseTextNumber(doc.getElementById("z-time")?.textContent);
+        const grbas = doc.getElementById("grbas-result")?.textContent?.trim() || "";
+        const interpretation = doc.getElementById("ratio-interpretation")?.textContent?.trim() || "";
+
+        if (ratio == null && sTime == null && zTime == null && !grbas) return null;
+
+        const ratioScore =
+          ratio == null
+            ? null
+            : Math.max(0, Math.min(100, 100 - Math.round(Math.abs(ratio - 1) * 100)));
+
+        return {
+          status: ratio != null ? "completed" : "in_progress",
+          level_index: grbas ? 2 : 1,
+          level_label: grbas ? `Ratio S/Z y GRBAS completados (${grbas})` : "Medicion S/Z iniciada",
+          score: ratioScore,
+          accuracy: null,
+          area: "voz",
+          notes: `S: ${sTime ?? "n/d"}s | Z: ${zTime ?? "n/d"}s | Ratio: ${ratio ?? "n/d"} | GRBAS: ${grbas || "n/d"} | ${interpretation}`,
+          payload: {
+            s_time: sTime,
+            z_time: zTime,
+            ratio,
+            grbas,
+            interpretation,
+          },
+          summary: `ratio ${ratio ?? "n/d"} · GRBAS ${grbas || "n/d"}`,
+        };
+      }
+
+      function captureKaboom(doc) {
+        if (!doc) return null;
+        const levelText = doc.getElementById("levelBadge")?.textContent?.trim() || "";
+        const drawCount = parseTextNumber(doc.getElementById("drawCount")?.textContent);
+        const sticksLeft = parseTextNumber(doc.getElementById("sticksLeft")?.textContent);
+        const scoreValues = Array.from(doc.querySelectorAll(".team-score strong"))
+          .map((node) => parseTextNumber(node.textContent))
+          .filter((value) => value != null);
+        const maxScore = scoreValues.length ? Math.max(...scoreValues) : null;
+
+        if (!levelText && maxScore == null && drawCount == null) return null;
+
+        return {
+          status: sticksLeft === 0 ? "completed" : "in_progress",
+          level_index: /avanzado/i.test(levelText) ? 2 : 1,
+          level_label: levelText || "Partida Kaboom en curso",
+          score: maxScore,
+          accuracy: null,
+          area: "lectoescritura",
+          notes: `Kaboom detectado automaticamente. Turnos jugados: ${drawCount ?? "n/d"}. Palitos restantes: ${sticksLeft ?? "n/d"}. Mejor puntuacion actual: ${maxScore ?? "n/d"}.`,
+          payload: {
+            level_label: levelText,
+            draw_count: drawCount,
+            sticks_left: sticksLeft,
+            max_score: maxScore,
+          },
+          summary: `${levelText || "kaboom"} · mejor puntuacion ${maxScore ?? "n/d"}`,
+        };
+      }
+
+      function captureDetectivePalabras(doc) {
+        let payload = null;
+
+        try {
+          payload = JSON.parse(localStorage.getItem("detective_palabras_metrics_v1") || "null");
+        } catch (_) {}
+
+        if (!payload && doc?.defaultView?.__detectivePalabrasMetrics) {
+          payload = doc.defaultView.__detectivePalabrasMetrics;
+        }
+
+        if (!payload) return null;
+
+        return {
+          status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+          level_index: payload.level_index || 1,
+          level_label: payload.level_label || "Sesion detective en curso",
+          score: parseNumber(payload.score),
+          accuracy: parseNumber(payload.accuracy),
+          area: payload.area || "atencion",
+          notes: `Detector de palabras. Tipo: ${payload.search_type || "n/d"} | Categoria: ${payload.category || "n/d"} | Tiempo medio: ${payload.average_time_ms ? (payload.average_time_ms / 1000).toFixed(1) : "n/d"}s | Resistencia a distractores: ${payload.distractor_resistance ?? "n/d"}% | Acierto a la primera: ${payload.first_attempt_rate ?? "n/d"}% | Puntuacion bruta: ${payload.raw_score ?? "n/d"}.`,
+          duration_seconds: parseNumber(payload.duration_seconds),
+          payload,
+          summary: `${payload.level_label || "sesion"} · ${payload.accuracy ?? "n/d"}% acierto`,
+        };
+      }
+
+      function captureLetraCrush(doc) {
+        let payload = null;
+
+        try {
+          payload = JSON.parse(localStorage.getItem("letra_crush_metrics_v1") || "null");
+        } catch (_) {}
+
+        if (!payload && doc?.defaultView?.__letraCrushMetrics) {
+          payload = doc.defaultView.__letraCrushMetrics;
+        }
+
+        if (!payload) return null;
+
+        return {
+          status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+          level_index: payload.level_index || 1,
+          level_label: payload.level_label || "Sesion Letra Crush en curso",
+          score: parseNumber(payload.score),
+          accuracy: parseNumber(payload.accuracy),
+          area: payload.area || "lectoescritura",
+          notes: `Letra Crush. Modo: ${payload.mode_label || payload.mode || "n/d"} | Precision tactica: ${payload.accuracy ?? "n/d"}% | Objetivos: ${payload.objective_progress ?? "n/d"}% | Intercambios invalidos: ${payload.invalid_swaps ?? "n/d"} | Apoyo: ${payload.support_dependency ?? "n/d"}% | Flexibilidad: ${payload.flexibility_index ?? "n/d"}%.`,
+          duration_seconds: parseNumber(payload.duration_seconds),
+          payload,
+          summary: `${payload.mode_label || payload.mode || "letra crush"} · ${payload.level_label || "sesion"} · ${payload.score ?? "n/d"}/100`,
+        };
+      }
+
+      function captureEncuentraNuevo(doc) {
+        let payload = null;
+
+        try {
+          payload = JSON.parse(localStorage.getItem("encuentra_nuevo_metrics_v1") || "null");
+        } catch (_) {}
+
+        if (!payload && doc?.defaultView?.__encuentraNuevoMetrics) {
+          payload = doc.defaultView.__encuentraNuevoMetrics;
+        }
+
+        if (!payload) return null;
+
+        return {
+          status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+          level_index: payload.level_index || 1,
+          level_label: payload.level_label || "Sesion Encuentra el Nuevo en curso",
+          score: parseNumber(payload.score),
+          accuracy: parseNumber(payload.accuracy),
+          area: payload.area || "articulacion",
+          notes: `Encuentra el Nuevo. Fonema: ${payload.phoneme_label || payload.selected_phoneme || "n/d"} | Posicion: ${payload.selected_position || "n/d"} | Deteccion de novedad: ${payload.novelty_detection ?? "n/d"}% | Carga de memoria: ${payload.memory_load ?? "n/d"}% | Apoyo: ${payload.support_dependency ?? "n/d"}%.`,
+          duration_seconds: parseNumber(payload.duration_seconds),
+          payload,
+          summary: `${payload.phoneme_label || "fonema"} · ${payload.selected_position || "posicion"} · ${payload.score ?? "n/d"}/100`,
+        };
+      }
+
+      function applyExternalMeasurement(activityId, payload) {
+        if (!state.activity || state.activity.id !== activityId || !payload) return;
+        if (activityId === "poe-lupas-y-linternas") {
+          applyCapturedMeasurement({
+            status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+            level_index: payload.level_index || 1,
+            level_label: payload.level_label || "Sesion detective en curso",
+            score: parseNumber(payload.score),
+            accuracy: parseNumber(payload.accuracy),
+            area: payload.area || "atencion",
+            notes: `Detector de palabras. Tipo: ${payload.search_type || "n/d"} | Categoria: ${payload.category || "n/d"} | Tiempo medio: ${payload.average_time_ms ? (payload.average_time_ms / 1000).toFixed(1) : "n/d"}s | Resistencia a distractores: ${payload.distractor_resistance ?? "n/d"}% | Acierto a la primera: ${payload.first_attempt_rate ?? "n/d"}% | Puntuacion bruta: ${payload.raw_score ?? "n/d"}.`,
+            duration_seconds: parseNumber(payload.duration_seconds),
+            payload,
+            summary: `${payload.level_label || "sesion"} · ${payload.accuracy ?? "n/d"}% acierto`,
+          });
+        }
+        if (activityId === "poe-letra-crush") {
+          applyCapturedMeasurement({
+            status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+            level_index: payload.level_index || 1,
+            level_label: payload.level_label || "Sesion Letra Crush en curso",
+            score: parseNumber(payload.score),
+            accuracy: parseNumber(payload.accuracy),
+            area: payload.area || "lectoescritura",
+            notes: `Letra Crush. Modo: ${payload.mode_label || payload.mode || "n/d"} | Precision tactica: ${payload.accuracy ?? "n/d"}% | Objetivos: ${payload.objective_progress ?? "n/d"}% | Intercambios invalidos: ${payload.invalid_swaps ?? "n/d"} | Apoyo: ${payload.support_dependency ?? "n/d"}% | Flexibilidad: ${payload.flexibility_index ?? "n/d"}%.`,
+            duration_seconds: parseNumber(payload.duration_seconds),
+            payload,
+            summary: `${payload.mode_label || payload.mode || "letra crush"} · ${payload.level_label || "sesion"} · ${payload.score ?? "n/d"}/100`,
+          });
+          return;
+        }
+        if (activityId === "poe-encuentra-el-nuevo") {
+          applyCapturedMeasurement({
+            status: payload.status === "idle" ? "in_progress" : payload.status || "in_progress",
+            level_index: payload.level_index || 1,
+            level_label: payload.level_label || "Sesion Encuentra el Nuevo en curso",
+            score: parseNumber(payload.score),
+            accuracy: parseNumber(payload.accuracy),
+            area: payload.area || "articulacion",
+            notes: `Encuentra el Nuevo. Fonema: ${payload.phoneme_label || payload.selected_phoneme || "n/d"} | Posicion: ${payload.selected_position || "n/d"} | Deteccion de novedad: ${payload.novelty_detection ?? "n/d"}% | Carga de memoria: ${payload.memory_load ?? "n/d"}% | Apoyo: ${payload.support_dependency ?? "n/d"}%.`,
+            duration_seconds: parseNumber(payload.duration_seconds),
+            payload,
+            summary: `${payload.phoneme_label || "fonema"} · ${payload.selected_position || "posicion"} · ${payload.score ?? "n/d"}/100`,
+          });
+          return;
+        }
+      }
+
+      function captureResourceMetrics() {
+        const doc = getFrameDocument();
+        if (!state.activity) return null;
+        const activityId = state.activity.id;
+
+        if (
+          activityId === "anamnesis-ia" ||
+          activityId === "ponencia-murcia-05-proyecto-evaluacion-logopedica" ||
+          activityId === "ponencia-murcia-02-web-principal"
+        ) {
+          return captureAssessmentStorage();
+        }
+        if (activityId === "poe-194rrr") return capture194RRR(doc);
+        if (
+          activityId === "poe-midiendo-con-la-s-y-la-z-definitivo" ||
+          activityId === "poe-s-y-z" ||
+          activityId === "gemini-cli-midiendo-la-s-y-la-z" ||
+          activityId === "gemini-cli-ratioszapp"
+        ) {
+          return captureSZ(doc);
+        }
+        if (activityId === "poe-kaboom-lectoescritura-premium" || activityId === "kaboom-lectoescritura") {
+          return captureKaboom(doc);
+        }
+        if (activityId === "poe-lupas-y-linternas") {
+          return captureDetectivePalabras(doc);
+        }
+        if (activityId === "poe-letra-crush") {
+          return captureLetraCrush(doc);
+        }
+        if (activityId === "poe-encuentra-el-nuevo") {
+          return captureEncuentraNuevo(doc);
+        }
+        return null;
+      }
+
+      function tryCaptureMetrics() {
+        const captured = captureResourceMetrics();
+        if (captured) {
+          applyCapturedMeasurement(captured);
+          return true;
+        }
+        setCaptureStatus("Aun no hemos detectado datos estructurados en este recurso. Puedes completar la medicion manualmente.");
+        return false;
+      }
+
+      function renderRecentMeasurements() {
+        const patient = state.patient;
+        const activity = state.activity;
+        const container = byId("recent-measurements");
+        if (!patient || !activity) {
+          container.innerHTML = '<p class="muted">Sin paciente o recurso activo.</p>';
+          return;
+        }
+
+        const events = getSuiteEvents()
+          .filter((event) => event.patient_id === patient.id && event.activity_id === activity.id)
+          .sort((left, right) => new Date(right.date) - new Date(left.date))
+          .slice(0, 6);
+
+        container.innerHTML = events.length
+          ? events
+              .map(
+                (event) => `
+                  <article class="mini-item">
+                    <p><strong>${event.level_label}</strong></p>
+                    <p class="muted">${new Date(event.date).toLocaleString()} | ${event.score}/100</p>
+                    <p class="muted">${event.notes || ""}</p>
+                  </article>
+                `
+              )
+              .join("")
+          : '<p class="muted">Todavia no hay mediciones guardadas para este recurso.</p>';
+      }
+
+      function saveMeasurement(returnToSuite) {
+        if (!state.patient || !state.activity) {
+          byId("save-status").textContent = "No hay paciente o recurso activo.";
+          return;
+        }
+
+        tryCaptureMetrics();
+
+        const event = {
+          id: crypto.randomUUID(),
+          patient_id: state.patient.id,
+          patient_name: state.patient.name,
+          activity_id: state.activity.id,
+          activity_title: state.activity.title,
+          area: byId("metric-area").value.trim() || state.activity.focus_areas?.[0] || "general",
+          status: byId("metric-status").value,
+          level_index: Number(byId("metric-level-index").value || 1),
+          level_label: byId("metric-level-label").value.trim() || "Hito guardado",
+          score: parseNumber(byId("metric-score").value),
+          accuracy: parseNumber(byId("metric-accuracy").value),
+          duration_minutes: state.lastCapture?.duration_seconds
+            ? Math.max(1, Math.round(state.lastCapture.duration_seconds / 60))
+            : Math.max(1, Math.round((Date.now() - state.startedAt) / 60000)),
+          duration_seconds: state.lastCapture?.duration_seconds || Math.max(1, Math.round((Date.now() - state.startedAt) / 1000)),
+          notes: byId("metric-notes").value.trim(),
+          measurement_source: state.lastCapture ? "embedded_capture" : "manual_capture",
+          measurement_data: compactCapturePayload(state.lastCapture),
+          date: new Date().toISOString(),
+        };
+
+        const events = getSuiteEvents();
+        events.unshift(event);
+        saveSuiteEvents(events);
+        byId("save-status").textContent = `Medicion guardada para ${state.patient.name}.`;
+        renderRecentMeasurements();
+
+        if (returnToSuite) {
+          window.location.href = "./index.html";
+        }
+      }
+
+      async function init() {
+        const activityId = getQueryParam("activity");
+        const catalog = await fetchCatalog();
+        state.activity = (catalog.activities || []).find((activity) => activity.id === activityId) || null;
+        state.patient = getPatient();
+
+        if (!state.activity) {
+          byId("activity-title").textContent = "Recurso no encontrado";
+          byId("activity-summary").textContent = "Vuelve a la suite y abre el recurso desde el catalogo medible.";
+          return;
+        }
+
+        byId("activity-title").textContent = state.activity.title;
+        byId("activity-summary").textContent = state.activity.summary || "Sin resumen";
+        byId("activity-meta").innerHTML = `
+          <span class="pill">${state.activity.kind}</span>
+          <span class="pill">${state.activity.integration_status}</span>
+        `;
+        byId("patient-meta").textContent = state.patient
+          ? `Paciente activo: ${state.patient.name} (${state.patient.age || "n/d"} anos)`
+          : "No hay paciente activo. Vuelve a la suite y selecciona uno antes de medir.";
+
+        byId("metric-level-label").value = "";
+        byId("metric-area").value = state.activity.focus_areas?.[0] || "";
+        const activityUrl = getActivityUrl(state.activity);
+        byId("resource-frame").src = activityUrl;
+        byId("open-direct").onclick = () => window.open(activityUrl, "_blank", "noreferrer");
+        byId("capture-metric").onclick = () => tryCaptureMetrics();
+        byId("save-metric").onclick = () => saveMeasurement(false);
+        byId("save-return").onclick = () => saveMeasurement(true);
+        window.addEventListener("message", (event) => {
+          const data = event?.data;
+          if (!data || data.type !== "logopedia-measurement") return;
+          applyExternalMeasurement(data.activity, data.payload);
+        });
+        byId("resource-frame").addEventListener("load", () => {
+          clearTimeout(state.captureTimerId);
+          state.captureTimerId = setTimeout(() => {
+            tryCaptureMetrics();
+          }, 1200);
+        });
+
+        renderRecentMeasurements();
+        startTimer();
+      }
+
+      init();
+    </script>
+  </body>
+</html>
