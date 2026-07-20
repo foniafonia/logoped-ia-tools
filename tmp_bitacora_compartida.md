@@ -792,3 +792,38 @@ Actualizacion Codex:
 ✅ PR abierto: https://github.com/foniafonia/logoped-ia-tools/pull/1
 ✅ PR mergeable/clean.
 ✅ Se procede a mergear a `main` para que GitHub Pages pueda servir `LANDING_TODO_LOGOPED_IA.html` como enlace publico de reunion.
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: Landing escaparate — Regla VER + Auditoría Academia/Colmenia
+Rama de trabajo: claude/auditoria-academia-colmenia-rpwx7c
+
+Hecho:
+1. AUDITORÍA ACADEMIA/COLMENIA (Prioridad 1) por código real. Añadido el repo privado `foniafonia/academia-logoped-ia` a la sesión y auditadas sus 3 ramas:
+   - `main` (SHA bbf7e94): Academia base, 13 rutas, login Supabase+bcrypt, sin Stripe en este snapshot.
+   - `codex/renovacion-visual` (SHA 6f77e8e): la MÁS completa. Stripe real (checkout/portal/webhooks), Supabase, IA en producto (corregir-ejercicio, generate-news-image, digest, feedback), legales (terminos/privacidad/cancelacion), Suite en public/suite (POE). Sirve la preview.
+   - `experimento/vivo-completo` (SHA e5d75f3): NO estaba en la auditoría de Codex. Marca madre COLMENIA (blueprint COLMENIA_PRODUCT_ARCHITECTURE.md) + 5 rutas concepto: concept-vivo, concept-vivo-b, concept-boveda, concept-gabinete, concept-nexo.
+   CONCLUSIÓN: Colmenia NO es "próximamente". Confirmado que /concept-vivo-b sólo existe en la rama experimento/vivo-completo (por eso no salía en el deploy a2ga84lh4).
+2. REGLA VER aplicada en LANDING_TODO_LOGOPED_IA.html:
+   - Motor de enlaces: todo enlace relativo se sirve ahora con URL ABSOLUTA de GitHub Pages (const PAGES) → abre desde móvil.
+   - Nuevos estados: DEMO VERCEL PREVIEW (preview) y PENDIENTE DE DEPLOY (pending, con ruta local + siguiente acción).
+   - Academia/Colmenia: tarjetas VER de producción, preview de renovación (Stripe/IA/Suite) y ficha Colmenia concepts+blueprint.
+   - Suite: módulos locales convertidos en juegos POE abribles vía Pages (Encuentra el Nuevo, Letra Crush, LetraBlaster, LetraPang, Karaoke, DonkeyFon, Querer Quest, 194RRR).
+   - Añadidas familias que faltaban como fichas honestas con ruta+acción: juegos de aire (hub+pendientes), Logopod, MirrorFono, herramientas clínicas HTML sueltas, Preta/fluidez, Valencia/AELFA.
+   - Resultado: 143 tarjetas, 118 con botón VER primario; las 23 restantes son roadmap real, infra/docs o pendientes con su siguiente acción exacta. 0 enlaces relativos rotos (verificado headless).
+
+Siguiente paso:
+- Publicar landing actualizada en `gh-pages` (web pública).
+- Subir a codex-assets/ los HTML estáticos que aún viven solo en el Mac (iSecuencias, Praxias Connect, Alfabeto PNL, herramientas clínicas sueltas, Logopod) para darles VER real.
+
+Bloqueos / límite del entorno:
+- Desde este entorno la política de red bloquea `*.vercel.app` y `*.github.io` (403 en el proxy) y no hay acceso a Vercel. No puedo re-verificar URLs en vivo ni disparar deploys en Vercel. Las URLs "EN VIVO" se dan por buenas según la auditoría de Codex del 2026-07-19.
+- Los archivos que viven sólo en el Mac no son alcanzables desde aquí → quedan como PENDIENTE con ruta + siguiente acción.
+
+Tarea: Codex — DEPLOYS que Claude no puede hacer desde su entorno.
+1. Desplegar la rama `experimento/vivo-completo` de `academia-logoped-ia` en Vercel (o mergear a main con permiso de Jose) para que /concept-vivo-b y las demás rutas concepto sean visibles; pasar en la landing la ficha Colmenia de PENDIENTE a DEMO VERCEL PREVIEW con la URL real.
+2. Confirmar/actualizar la URL-alias de la preview de `codex/renovacion-visual` si cambia.
+3. Subir a `codex-assets/` (repo logoped-ia-tools) los HTML estáticos locales listados como PENDIENTE para que Claude/landing les den VER.
+Estado: [PARA_CODEX PENDIENTE]

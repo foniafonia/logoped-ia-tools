@@ -53,7 +53,9 @@
   .b{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);font-weight:600}
   .b.live{color:#052e12;background:var(--green);border-color:transparent}
   .b.repo{color:#04212f;background:var(--blue);border-color:transparent}
+  .b.preview{color:#fff;background:var(--purple);border-color:transparent}
   .b.local{color:#2a1a02;background:var(--gold);border-color:transparent}
+  .b.pending{color:#2a1a02;background:var(--gold);border-color:transparent}
   .b.soon{color:var(--muted);background:transparent}
   .b.cantera{color:#3a0f27;background:var(--pink);border-color:transparent}
   .b.tag{color:var(--muted);background:var(--card2)}
@@ -79,16 +81,18 @@
     <p class="sub">Índice vivo de todos los hilos y proyectos trabajados con <b>Claude</b> y <b>Codex</b>: membresía, Suite clínica, juegos, prototipos, curso, infraestructura y coordinación. Pensado para buscar, abrir y mostrar rápido. Nada se pierde: lo que aún vive en local o está por recuperar queda etiquetado, no borrado.</p>
     <div class="meta">
       <span class="chip">Repo: <b>foniafonia/logoped-ia-tools</b></span>
-      <span class="chip">Rama: <b>claude/codex-claude-landing-coordination-p1vwm2</b></span>
-      <span class="chip">Actualizado: <b>2026-07-19</b></span>
+      <span class="chip">Rama: <b>claude/auditoria-academia-colmenia-rpwx7c</b></span>
+      <span class="chip">Actualizado: <b>2026-07-20</b></span>
       <span class="chip">Mantienen: <b>Claude + Codex</b></span>
     </div>
     <div class="note">🧭 <b>Cómo leer los estados:</b>
       <span class="b live">EN VIVO</span> URL pública funcionando ·
-      <span class="b repo">EN ESTE REPO</span> abrible aquí mismo ·
-      <span class="b local">EN LOCAL</span> vive en el Mac (localhost / carpeta) ·
-      <span class="b soon">PRÓXIMAMENTE</span> en desarrollo ·
-      <span class="b cantera">CANTERA</span> por recuperar/podar.
+      <span class="b preview">DEMO VERCEL PREVIEW</span> preview viva (provisional) ·
+      <span class="b repo">EN ESTE REPO · VER</span> abrible ya desde Pages ·
+      <span class="b pending">PENDIENTE DE DEPLOY</span> existe pero falta publicar (ruta + siguiente acción) ·
+      <span class="b local">EN LOCAL</span> infra/doc en el Mac ·
+      <span class="b soon">PRÓXIMAMENTE</span> roadmap real ·
+      <span class="b cantera">CANTERA</span> por podar.
     </div>
   </header>
 
@@ -112,32 +116,51 @@
 /* Datos: inventario real reconstruido desde la bitácora compartida + archivos de este repo.
    status: live | repo | local | soon | cantera   →   cat: filtro de sección */
 const ITEMS = [
-  // ---- MEMBRESÍA / ACADEMIA ----
-  {cat:"Membresía", emoji:"🎓", title:"Academia Logoped-IA (membresía)", status:"live",
-   desc:"Área privada Next.js: dashboard, formación, prompts, herramientas, materiales, comunidad, ranking, plaza, perfil, biblioteca. Login con Supabase + bcrypt.",
-   tags:["Next.js","Vercel","Supabase"], links:[{t:"Abrir en vivo",u:"https://academia-logoped-ia.vercel.app",p:1}]},
+  // ---- MEMBRESÍA / ACADEMIA / COLMENIA (auditado por código en el repo privado academia-logoped-ia, 2026-07-20) ----
+  {cat:"Membresía", emoji:"🎓", title:"Academia Logoped-IA — producción", status:"live",
+   desc:"App Next.js en producción (rama main): dashboard, formación, prompts, herramientas, materiales, comunidad, ranking, plaza, perfil, biblioteca, prueba de nivel. Login Supabase + bcrypt. Requiere registro/login para el área privada.",
+   tags:["Next.js","Vercel","Supabase","login"], links:[
+     {t:"VER en vivo",u:"https://academia-logoped-ia.vercel.app",p:1},
+     {t:"Repo (privado)",u:"https://github.com/foniafonia/academia-logoped-ia",p:0}]},
+  {cat:"Membresía", emoji:"🐝", title:"Colmenia — Renovación visual (Stripe + IA + Suite)", status:"preview",
+   desc:"Preview viva de la rama codex/renovacion-visual: la versión MÁS completa. Stripe real (checkout, portal, webhooks), Supabase, IA en producto (corregir-ejercicio, generar imagen de noticias, digest, feedback), páginas legales (términos, privacidad, cancelación) y Suite clínica en /suite. Esto NO es 'próximamente'.",
+   tags:["Stripe","Supabase","IA","preview"], links:[
+     {t:"VER preview",u:"https://academia-logoped-ia-git-codex-renov-139c35-foniafonias-projects.vercel.app/",p:1},
+     {t:"Repo · rama codex/renovacion-visual",u:"https://github.com/foniafonia/academia-logoped-ia/tree/codex/renovacion-visual",p:0}]},
+  {cat:"Membresía", emoji:"🧭", title:"Colmenia — Experiencia viva (concepts) + blueprint", status:"pending",
+   desc:"Rama experimento/vivo-completo: marca madre COLMENIA (Logoped-IA queda como módulo Suite). Incluye blueprint de producto (COLMENIA_PRODUCT_ARCHITECTURE.md) y 5 rutas concepto: concept-vivo, concept-vivo-b, concept-boveda, concept-gabinete, concept-nexo. No sale en los deploys actuales porque estas rutas SOLO viven en esta rama.",
+   tags:["Colmenia","concepts","blueprint"], next:"desplegar la rama experimento/vivo-completo en Vercel (o mergear a main) para que /concept-vivo-b y demás sean visibles",
+   links:[{t:"Repo · rama experimento/vivo-completo",u:"https://github.com/foniafonia/academia-logoped-ia/tree/experimento/vivo-completo",p:0}]},
   {cat:"Membresía", emoji:"💳", title:"Pricing 2 planes + registro diferenciado", status:"live",
-   desc:"Membresía Base 4,95€/mes vs Membresía + Suite 9,94€/mes (4,95 base + 4,99 extra). Selector de plan en el registro, campo `plan` llega al backend.",
-   tags:["pricing","registro"], links:[{t:"Ver landing",u:"https://academia-logoped-ia.vercel.app",p:0}]},
-  {cat:"Membresía", emoji:"📝", title:"Prueba de Nivel (examen)", status:"live",
-   desc:"Examen en Railway integrado por iframe en /prueba-nivel; postMessage devuelve el nivel (básico/intermedio/avanzado/experto) a la Academia.",
-   tags:["Railway","iframe","postMessage"], links:[{t:"Repo examen",u:"https://github.com/foniafonia/logoped-ia-examen",p:0}]},
+   desc:"Membresía Base 4,95€/mes vs Membresía + Suite 9,94€/mes (4,95 base + 4,99 extra). Selector de plan en el registro, campo `plan` llega al backend. Checkout Stripe integrado en la rama de renovación.",
+   tags:["pricing","registro","Stripe"], links:[{t:"VER registro",u:"https://academia-logoped-ia.vercel.app/registro",p:1}]},
+  {cat:"Membresía", emoji:"📝", title:"Prueba de Nivel (examen IA)", status:"live",
+   desc:"Diagnóstico integrado en la Academia (/prueba-nivel): examen en Railway por iframe; postMessage devuelve el nivel (básico/intermedio/avanzado/experto).",
+   tags:["Railway","iframe","postMessage"], links:[
+     {t:"VER en la Academia",u:"https://academia-logoped-ia.vercel.app/prueba-nivel",p:1},
+     {t:"Repo examen",u:"https://github.com/foniafonia/logoped-ia-examen",p:0}]},
 
-  // ---- SUITE ----
-  {cat:"Suite", emoji:"🧩", title:"Logoped-IA Suite (contenedor clínico)", status:"local",
-   desc:"Suite integrada en el área privada (/suite). Módulos por área clínica, visor iframe. Dos entornos vivos: Suite Pruebas (8093) y Suite Membresía (8094).",
-   tags:["8093","8094","iframe"], links:[{t:"Localhost 8093",u:"http://localhost:8093",p:0},{t:"Localhost 8094",u:"http://localhost:8094",p:0}]},
-  {cat:"Suite", emoji:"🔤", title:"Módulo Lectoescritura", status:"local",
-   desc:"5 juegos: Detective de Palabras, Letra Crush, LetraBlaster (demo), LetraPang (demo), LectoViva v2.",
-   tags:["lectoescritura","juegos"], links:[]},
-  {cat:"Suite", emoji:"🔊", title:"Módulo Fonología — Encuentra el Nuevo", status:"local",
-   desc:"Juego de discriminación fonológica disponible dentro de la Suite.",
-   tags:["fonología"], links:[]},
-  {cat:"Suite", emoji:"🎤", title:"TerapiaFlu — Karaoke Tartamudez (POE)", status:"local",
-   desc:"Recurso de fluidez integrado en Suite Pruebas (poe-karaoke-tartamudez): cronómetro, PPM y captura de disfluencias desde el DOM.",
-   tags:["fluidez","tartamudez","POE"], links:[]},
+  // ---- SUITE (juegos abribles ya vía GitHub Pages) ----
+  {cat:"Suite", emoji:"🧩", title:"Logoped-IA Suite — juegos abribles", status:"repo",
+   desc:"Contenedor clínico. Los juegos POE ya están subidos al repo y se abren desde el móvil. En la Academia se sirven dentro de /suite; aquí abajo tienes cada juego con su propio botón VER.",
+   tags:["Suite","POE","juegos"], links:[
+     {t:"VER Encuentra el Nuevo",u:"codex-assets/suite-poe/encuentra-el-nuevo/index.html",p:1},
+     {t:"VER Letra Crush",u:"codex-assets/suite-poe/letra-crush/index.html",p:0}]},
+  {cat:"Suite", emoji:"🔤", title:"Módulo Lectoescritura", status:"repo",
+   desc:"Juegos de lectoescritura de la Suite: Letra Crush, LetraBlaster (demo), LetraPang (demo) y LectoViva v2. Abribles ya.",
+   tags:["lectoescritura","juegos"], links:[
+     {t:"VER Letra Crush",u:"codex-assets/suite-poe/letra-crush/index.html",p:1},
+     {t:"VER LetraBlaster",u:"codex-assets/suite-poe/letrablaster-demo/index.html",p:0},
+     {t:"VER LetraPang",u:"codex-assets/suite-poe/letrapang-demo/index.html",p:0},
+     {t:"VER LectoViva v2",u:"https://foniafonia.github.io/lectoviva-v2/",p:0}]},
+  {cat:"Suite", emoji:"🔊", title:"Módulo Fonología — Encuentra el Nuevo", status:"repo",
+   desc:"Juego de discriminación fonológica de la Suite. Abrible ya desde Pages.",
+   tags:["fonología"], links:[{t:"VER juego",u:"codex-assets/suite-poe/encuentra-el-nuevo/index.html",p:1}]},
+  {cat:"Suite", emoji:"🎤", title:"TerapiaFlu — Karaoke Tartamudez (POE)", status:"repo",
+   desc:"Recurso de fluidez (poe-karaoke-tartamudez): cronómetro, PPM y captura de disfluencias. Abrible ya desde Pages.",
+   tags:["fluidez","tartamudez","POE"], links:[{t:"VER recurso",u:"codex-assets/suite-poe/karaoke-tartamudez/index.html",p:1}]},
   {cat:"Suite", emoji:"🚧", title:"Módulos próximamente", status:"soon",
-   desc:"Morfosintaxis, Atención y Funciones Ejecutivas, Pragmática. Marcados como próximamente en la Suite privada.",
+   desc:"Morfosintaxis, Atención y Funciones Ejecutivas, Pragmática. Marcados como próximamente en la Suite privada (roadmap real, no producto todavía).",
    tags:["roadmap"], links:[]},
 
   // ---- JUEGOS / PROTOTIPOS (en este repo) ----
@@ -157,36 +180,40 @@ const ITEMS = [
    tags:["materiales"], links:[{t:"Abrir aquí",u:"radar-materiales-landing.html",p:1}]},
 
   // ---- ARAIA ----
-  {cat:"ARAIA", emoji:"🖼️", title:"iSecuencias (ARAIA)", status:"local",
-   desc:"Secuencias con pictogramas ARASAAC. Rescatada y estabilizada; creador acepta frase natural (\"me levanto, me lavo, desayuno…\") y genera pasos jugables. Bug de comillas tipográficas corregido.",
-   tags:["ARASAAC","secuencias"], links:[{t:"Ruta local",u:"#",p:0}], path:"/araia/isecuencias/index.html"},
+  {cat:"ARAIA", emoji:"🖼️", title:"iSecuencias (ARAIA)", status:"pending",
+   desc:"Secuencias con pictogramas ARASAAC. Rescatada y estabilizada; el creador acepta frase natural (\"me levanto, me lavo, desayuno…\") y genera pasos jugables. HTML estático — publicable en Pages.",
+   tags:["ARASAAC","secuencias"], path:"/araia/isecuencias/index.html",
+   next:"copiar araia/isecuencias a codex-assets/ y publicar en Pages (o confirmar deploy del repo público araia)", links:[]},
 
   // ---- BETA INNOVADORES ----
-  {cat:"Beta", emoji:"🧬", title:"Praxias Connect", status:"local",
-   desc:"Rehabilitación motora orofacial con MediaPipe + Canvas. Dentro de public/beta-innovadores/ de la membresía.",
-   tags:["MediaPipe","praxias"], links:[], path:"public/beta-innovadores/praxias-connect.html"},
-  {cat:"Beta", emoji:"🔠", title:"Alfabeto PNL", status:"local",
-   desc:"Sincronización neurológica / Web Speech. Segunda app del hub Beta Innovadores.",
-   tags:["Web Speech","PNL"], links:[], path:"public/beta-innovadores/alfabeto-pnl.html"},
+  {cat:"Beta", emoji:"🧬", title:"Praxias Connect", status:"pending",
+   desc:"Rehabilitación motora orofacial con MediaPipe + Canvas. HTML estático autocontenido. Vive en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
+   tags:["MediaPipe","praxias"], path:"public/beta-innovadores/praxias-connect.html",
+   next:"subir praxias-connect.html a codex-assets/herramientas/ y publicar en Pages", links:[]},
+  {cat:"Beta", emoji:"🔠", title:"Alfabeto PNL", status:"pending",
+   desc:"Sincronización neurológica / Web Speech. HTML estático autocontenido. Vive en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
+   tags:["Web Speech","PNL"], path:"public/beta-innovadores/alfabeto-pnl.html",
+   next:"subir alfabeto-pnl.html a codex-assets/herramientas/ y publicar en Pages", links:[]},
 
   // ---- CURSO IA ----
-  {cat:"Curso", emoji:"🎬", title:"Curso IA — Landing de preventa", status:"local",
-   desc:"Landing editorial nivel senior (Flask + SQLite, Stripe). Precios por tramos (10×49€ / 10×79€), copy profesional, branding Logoped-IA. Corre en localhost:5088.",
-   tags:["Flask","Stripe","preventa"], links:[{t:"Localhost 5088",u:"http://localhost:5088",p:0}], path:"/curso-ia-preventa/"},
-  {cat:"Curso", emoji:"🚀", title:"Deploy Curso IA (pendiente)", status:"soon",
-   desc:"Siguiente paso: llevar la preventa a Railway + PostgreSQL + Stripe en producción.",
-   tags:["Railway","roadmap"], links:[]},
+  {cat:"Curso", emoji:"🎬", title:"Curso IA — Landing de preventa", status:"pending",
+   desc:"Landing editorial nivel senior (Flask + SQLite, Stripe). Precios por tramos (10×49€ / 10×79€), copy profesional, branding Logoped-IA. Es una app con backend (no HTML estático), corre en localhost:5088.",
+   tags:["Flask","Stripe","preventa"], path:"/curso-ia-preventa/",
+   next:"deploy en Railway/Render (Flask + SQLite/PostgreSQL) para tener URL pública", links:[]},
 
   // ---- CANTERA / BOLSA GRANDE ----
-  {cat:"Cantera", emoji:"🧺", title:"POE masivo — 55 HTML", status:"cantera",
-   desc:"Bolsa grande de recursos POE como cantera. No perder de cara a mañana; luego se poda. Viven en el Mac, hay que subirlos al repo para alcanzarlos.",
-   tags:["POE","recuperar"], links:[]},
-  {cat:"Cantera", emoji:"🗂️", title:"17 descartados / no-referencia", status:"cantera",
-   desc:"Conjunto marcado como descartado o no-referencia. Se conserva por si acaso hasta después de la reunión.",
-   tags:["descartes"], links:[]},
-  {cat:"Cantera", emoji:"🎮", title:"Otros juegos mencionados", status:"cantera",
-   desc:"DonkeyFon, Querer Quest, 194RRR, Logopod, Detective de Palabras. Referenciados en el circuito de suite; confirmar ubicación y subir al repo.",
-   tags:["juegos","por confirmar"], links:[]},
+  {cat:"Cantera", emoji:"🧺", title:"POE masivo — 55 HTML", status:"repo",
+   desc:"Bolsa grande de recursos POE, ya subida al repo y abrible uno a uno (ver tarjetas 'POE masivo NN'). Cantera para podar tras la reunión.",
+   tags:["POE","cantera"], links:[{t:"VER ejemplo (Bingo educativo)",u:"codex-assets/poe-masivo/001__Bingo_educativo__lvqeckh5hcqxeht67g.html",p:1}]},
+  {cat:"Cantera", emoji:"🗂️", title:"17 descartados / no-referencia", status:"repo",
+   desc:"Conjunto descartado/no-referencia, ya en el repo y abrible (ver tarjetas 'POE descartado NN'). Se conserva por si acaso.",
+   tags:["descartes"], links:[{t:"VER ejemplo",u:"codex-assets/poe-descartados/Animales_Revueltos__36ooivrhjqxkt2l6pg.html",p:1}]},
+  {cat:"Cantera", emoji:"🎮", title:"Otros juegos mencionados (Suite)", status:"repo",
+   desc:"DonkeyFon, Verbo Querer Quest y 194RRR ya están en el repo como juegos POE de la Suite y se abren ya. (Logopod y Detective de Palabras siguen pendientes — ver sus tarjetas.)",
+   tags:["juegos","Suite"], links:[
+     {t:"VER DonkeyFon",u:"codex-assets/suite-poe/donkeyfon/index.html",p:1},
+     {t:"VER Querer Quest",u:"codex-assets/suite-poe/verbo-querer-quest/index.html",p:0},
+     {t:"VER 194RRR",u:"codex-assets/suite-poe/194RRR/index.html",p:0}]},
   {cat:"Cantera", emoji:"💬", title:"Hilos de chat + artefactos (Claude/Codex)", status:"cantera",
    desc:"Todo lo generado en conversaciones y artefactos que aún NO está en este repo. Regla para no perder nada: exportar/pegar cada artefacto o HTML al repo y darlo de alta aquí como una tarjeta más. Esta landing solo puede indexar lo que llega al repo.",
    tags:["artefactos","chats","exportar"], links:[]},
@@ -268,9 +295,10 @@ const CODEX_EXTRA_ITEMS = [
   {cat:"Herramientas", emoji:"💎", title:"Rubi-IA", status:"repo",
    desc:"Cuaderno Rubi-IA v2 rescatado desde local al repo. Es una herramienta distinta de Mision Perfiles.",
    tags:["Rubi-IA","cuaderno"], links:[{t:"Abrir copia repo",u:"codex-assets/rubi-ia/index.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/cuaderno-rub-ia-v2/index.html"},
-  {cat:"Herramientas", emoji:"🧾", title:"Anamnesis IA", status:"local",
-   desc:"Herramienta local de anamnesis IA localizada, pendiente de empaquetar/subir al repo si no contiene datos sensibles.",
-   tags:["anamnesis","revision"], links:[], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/anamnesis ia/index.html"},
+  {cat:"Herramientas", emoji:"🧾", title:"Anamnesis IA", status:"pending",
+   desc:"Herramienta de anamnesis IA. Vive solo en el Mac; no alcanzable desde esta sesión. Revisar que no incluya datos clínicos reales antes de publicar.",
+   tags:["anamnesis","revisión"], links:[], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/anamnesis ia/index.html",
+   next:"revisar datos y subir a codex-assets/herramientas/ (o crear demo limpia)"},
   {cat:"Herramientas", emoji:"🌐", title:"Logoped Web", status:"live",
    desc:"Frontend web general de Logoped-IA desplegado en Vercel.",
    tags:["web","Vercel"], links:[{t:"Abrir en vivo",u:"https://logoped-web.vercel.app",p:1}]},
@@ -287,9 +315,10 @@ const CODEX_EXTRA_ITEMS = [
      {t:"Banco pictogramas",u:"codex-assets/saac/banco-pictogramas.html",p:0},
      {t:"Secuenciador",u:"codex-assets/saac/secuenciador-visual.html",p:0},
      {t:"Tablero PECS",u:"codex-assets/saac/tablero-pecs.html",p:0}]},
-  {cat:"Curso", emoji:"🎓", title:"Curso GPT/logopedia para membresia", status:"local",
-   desc:"Linea de curso de IA/GPT para logopedia mencionada por el usuario. Hay que consolidar modelos, presentaciones, videos e imagenes antes de publicarlo.",
-   tags:["curso","GPT","membresia"], links:[], path:"buscar en membresia / curso IA / materiales de formacion"},
+  {cat:"Curso", emoji:"🎓", title:"Curso GPT/logopedia para membresía", status:"pending",
+   desc:"Línea de curso de IA/GPT para logopedia. Hay que consolidar modelos, presentaciones, vídeos e imágenes antes de publicarlo.",
+   tags:["curso","GPT","membresía"], links:[], path:"buscar en membresía / curso IA / materiales de formación",
+   next:"consolidar material y publicar landing de curso (Pages si es estático)"},
   {cat:"Docs", emoji:"🧭", title:"Inventario estrategico Academia 2026", status:"repo",
    desc:"MD migrado desde Codex con mapa de productos, areas, estados y narrativa para socios tecnologicos.",
    tags:["inventario","socios"], links:[{t:"Abrir MD",u:"codex-assets/docs/INVENTARIO_ESTRATEGICO_ACADEMIA_2026.md",p:1}]},
@@ -300,14 +329,45 @@ const CODEX_EXTRA_ITEMS = [
    desc:"Comunicacion sintesis para explicar volumen, fechas y potencia del ecosistema sin entrar en detalle sensible.",
    tags:["socios","comunicacion"], links:[{t:"Abrir MD",u:"codex-assets/docs/MENSAJE_SOCIOS_TECNOLOGICOS_ACADEMIA.md",p:1}]},
   {cat:"Infra", emoji:"🚢", title:"Netlify local / Supabase", status:"local",
-   desc:"Carpeta local con netlify.toml y guia DEPLOY_NETLIFY_SUPABASE. Pendiente de decidir si entra en este repo o solo como infraestructura.",
+   desc:"Carpeta local con netlify.toml y guía DEPLOY_NETLIFY_SUPABASE. Infraestructura, no producto de escaparate.",
    tags:["Netlify","Supabase"], links:[], path:"/Users/joseaserraf/Documents/New project 5/repo/DEPLOY_NETLIFY_SUPABASE.md"},
-  {cat:"Infra", emoji:"🧰", title:"JELOU Skill Logopedia", status:"local",
-   desc:"Entrega local de skill/base para logopedia. Revisar antes de publicar por posible contenido de configuracion.",
-   tags:["skill","base conocimiento"], links:[], path:"/Users/joseaserraf/Desktop/JELOU_SKILL_LOGOPEDIA_ENTREGA/00_LEEME_ENTREGA.md"},
-  {cat:"Infra", emoji:"🧠", title:"Base conocimiento chatbot logopedia", status:"local",
-   desc:"Base local de conocimiento para chatbot. Muy util para Academia, pero debe revisarse antes de subir a repo publico.",
-   tags:["chatbot","conocimiento"], links:[], path:"/Users/joseaserraf/Desktop/BASE_CONOCIMIENTO_LOGOPEDIA_CHATBOT/README.md"}
+  {cat:"Infra", emoji:"🧰", title:"JELOU Skill Logopedia", status:"pending",
+   desc:"Entrega de skill/base para logopedia. Potencialmente sensible (configuración/base de conocimiento). NO subir tal cual.",
+   tags:["skill","sensible"], links:[], path:"/Users/joseaserraf/Desktop/JELOU_SKILL_LOGOPEDIA_ENTREGA/00_LEEME_ENTREGA.md",
+   next:"crear demo limpia sin claves ni base privada antes de publicar"},
+  {cat:"Infra", emoji:"🧠", title:"Base conocimiento chatbot logopedia", status:"pending",
+   desc:"Base de conocimiento para chatbot. Muy útil para Academia, pero contiene contenido privado. NO subir a repo público tal cual.",
+   tags:["chatbot","sensible"], links:[], path:"/Users/joseaserraf/Desktop/BASE_CONOCIMIENTO_LOGOPEDIA_CHATBOT/README.md",
+   next:"crear demo limpia (chatbot de muestra) o ficha privada; no publicar la base real"},
+
+  // ---- FAMILIAS QUE FALTABAN (auditoría Codex/GPT) — pendientes de publicar/deploy ----
+  {cat:"Juegos", emoji:"💨", title:"Juegos de aire — hub + pendientes", status:"pending",
+   desc:"Motor de gesto/aire. YA en vivo: Constructor de sílabas, Puzzle Agarre y Lengua Runner/Gestos (ver sus tarjetas). Pendientes de deploy: Abecedario Mágico, Escritura Aire, Pintura Aire, Baloncesto/Tiro y el hub deploy-juegos-aire.",
+   tags:["aire","gestos","MediaPipe"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/deploy-juegos-aire",
+   next:"desplegar abecedario/escritura/pintura/baloncesto + hub en Vercel", links:[]},
+  {cat:"Juegos", emoji:"🎧", title:"Logopod — entrenador", status:"pending",
+   desc:"Entrenador tipo Logopod (app + landing + versión funcional/real). HTML/JS. Aparece también dentro de valenciacodex-live.",
+   tags:["Logopod","entrenador"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/logopod-entrenador-app",
+   next:"elegir versión principal, subir HTML a codex-assets/ y publicar en Pages", links:[]},
+  {cat:"Juegos", emoji:"🪞", title:"MirrorFono — motor espejo", status:"pending",
+   desc:"Juego/herramienta clínica de motor espejo (dist, public, src, index.html). Candidato claro a juego, no estaba en la landing.",
+   tags:["espejo","Vite/React"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/mirrorfono-game",
+   next:"build + deploy en Vercel/Netlify (o publicar dist/ en Pages)", links:[]},
+  {cat:"Herramientas", emoji:"🩺", title:"Herramientas clínicas HTML sueltas", status:"pending",
+   desc:"Lote de HTML estático clínico: logopedia-dicta, logopedia-smb, fabricador-prompts-logopédicos, pictoia-adaptativo, arasecuencias-app, praxiasconnect_FINAL, alfabeto-pnl-final. Todas publicables en Pages.",
+   tags:["clínica","HTML"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/herramientas-clinicas",
+   next:"subir el lote a codex-assets/herramientas/ y dar VER a cada una", links:[]},
+  {cat:"Herramientas", emoji:"🗣️", title:"Preta / fluidez clínica", status:"pending",
+   desc:"Familia de fluidez/tartamudez: preta-fluidez-mvp (v1/v2/v2-telegram/v3-android), preta-motor-beta, fluidez-clínica-lab, karaoke-tartamudez, vocalclinic-demo. FoniaWatch Rehab ya está en vivo (ver su tarjeta).",
+   tags:["fluidez","Preta","voz"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/preta-fluidez-mvp-v2-telegram",
+   next:"elegir versión principal y sacar deploy real (v2-telegram) o publicar demo limpia", links:[]},
+  {cat:"Curso", emoji:"🎤", title:"Valencia / AELFA / ponencias", status:"pending",
+   desc:"Familia de formación/difusión: valenciacodex-live, valencia-nadina-ia-logopedia, AELFA landing, slides de recuperación, vídeos de cluster IA. Varias URLs .vercel dieron 404; hay repos públicos.",
+   tags:["ponencias","formación","AELFA"],
+   next:"publicar HTML de ponencias en Pages y/o redeploy de aelfa-landing/valenciacodex en Vercel",
+   links:[
+     {t:"Repo AELFA landing",u:"https://github.com/foniafonia/aelfa-landing",p:0},
+     {t:"Repo Valencia Codex",u:"https://github.com/foniafonia/valenciacodex-live",p:0}]}
 ];
 
 const SUITE_POE_ITEMS = [
@@ -446,23 +506,38 @@ CATS.forEach(c=>{
   filtersEl.appendChild(b);
 });
 
+// Base pública de GitHub Pages: cualquier enlace relativo se sirve desde aquí,
+// para que TODO abra desde móvil u ordenador con una URL absoluta.
+const PAGES = "https://foniafonia.github.io/logoped-ia-tools/";
 function statusBadge(s){
-  const map={live:['live','EN VIVO'],repo:['repo','EN ESTE REPO'],local:['local','EN LOCAL'],soon:['soon','PRÓXIMAMENTE'],cantera:['cantera','CANTERA']};
+  const map={
+    live:['live','EN VIVO'],
+    preview:['preview','DEMO VERCEL PREVIEW'],
+    repo:['repo','EN ESTE REPO · VER'],
+    pending:['pending','PENDIENTE DE DEPLOY'],
+    local:['local','EN LOCAL'],
+    soon:['soon','PRÓXIMAMENTE'],
+    cantera:['cantera','CANTERA']
+  };
   const [cls,txt]=map[s]||['tag',s]; return `<span class="b ${cls}">${txt}</span>`;
 }
 function cardHTML(it){
   const badges = statusBadge(it.status) + (it.tags||[]).map(t=>`<span class="b tag">${t}</span>`).join('');
   const links = (it.links||[]).map(l=>{
-    if(l.u==='#') return '';
-    return `<a class="go ${l.p?'primary':''}" href="${l.u}" ${l.u.startsWith('http')?'target="_blank" rel="noopener"':''}>${l.t} ↗</a>`;
+    if(!l.u || l.u==='#') return '';
+    const abs = /^https?:/.test(l.u) ? l.u : (PAGES + l.u.replace(/^\.?\//,''));
+    return `<a class="go ${l.p?'primary':''}" href="${abs}" target="_blank" rel="noopener">${l.t} ↗</a>`;
   }).join('');
   const path = it.path?`<div class="path">📍 ${it.path}</div>`:'';
+  const fallback = it.next
+    ? `<span class="go muted">Pendiente · ${it.next}</span>`
+    : '<span class="go muted">Pendiente de publicar</span>';
   return `<article class="card">
     <h3><span class="emoji">${it.emoji}</span> ${it.title}</h3>
     <p class="desc">${it.desc}</p>
     <div class="badges">${badges}</div>
     ${path}
-    <div class="links">${links||'<span class="go muted">Sin enlace directo</span>'}</div>
+    <div class="links">${links||fallback}</div>
   </article>`;
 }
 function render(){
