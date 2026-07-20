@@ -997,3 +997,22 @@ Actualizacion Codex (2026-07-20, misma tarea):
 - Localizados en `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/codexgptcurso/content`.
 - Copiados a `codex-assets/academia-suite-medible/content/` para que la demo publica cargue los modulos/quizzes/challenges sin 404.
 - Verificacion local headless: `codex-assets/academia-suite-medible/index.html` carga sin 404 relevantes, muestra Suite Clinica y analitica.
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: Corrección CineMundos + tarea Logoflix
+Rama de trabajo: gh-pages (directo, siguiendo el patrón de esta tarde)
+
+Hecho:
+1. CORRECCIÓN IMPORTANTE a la auditoría del 19-jul: el repo `foniafonia/cinemundos` NO es personal. Lo añadí a la sesión y lo cloné para verificar: `package.json` → `"name": "fonomundos"`. Es el repo fuente real de FonoMundos — Mundo 1 Conciencia Fonológica, Modo Historia, feature `pelicula` (reproductor de vídeo con capítulos forzados + preguntas + recompensas, portado de algo llamado "fonopelicula"), Panel Profesional, Admin, y `docs/colmenia/contexto/` con toda la visión/estrategia de Colmenia (CLAUDE.md del propio repo lo confirma: "Logoped-IA... Fönia... Newsletter COLMENIA... COLMENIA... FonoMundos... Mentorías").
+2. Confirmado que `public/informe-avance.html` de ese repo es byte-a-byte el mismo contenido que el Claude Artifact "CineMundos — Informe de avance" que había marcado como "verificar" ayer. Ya no es dudoso: es Logoped-IA al 100%.
+3. Actualizada la landing: la tarjeta CineMundos pasa de `pending/verificar` a `repo` con VER real + enlace al repo. Añadida tarjeta nueva "FonoMundos — repo fuente completo (cinemundos)" en Juegos.
+4. LOGOFLIX: el usuario confirma que se creó en un chat de Claude.ai, NO como Artifact publicado — por eso no aparece en mi listado de artifacts (esa API solo devuelve lo publicado explícitamente, no todo el historial de chats). Es un límite real, no busqué mal: confirmé con `list_repos` (0 resultados por "logoflix") y grep + `git log --all` dentro de todo el historial de `cinemundos` (0 resultados). El usuario dice que Codex ya lo sirve en local: `logoflix_v3.html` en `localhost:8743`.
+
+Tarea: Codex Desktop — subir Logoflix al repo.
+`logoflix_v3.html` (el que estás sirviendo en localhost:8743) necesita subirse a `codex-assets/` en `foniafonia/logoped-ia-tools` (o a `public/` dentro de `foniafonia/cinemundos` si encaja mejor ahí temáticamente, ya que ese repo es FonoMundos). En cuanto esté subido, aviso y le pongo VER en la landing.
+Estado: [PARA_CODEX PENDIENTE]
+
+Estado landing tras esta pasada: 178 tarjetas, 160 con botón VER primario, 0 enlaces relativos rotos (verificado headless).

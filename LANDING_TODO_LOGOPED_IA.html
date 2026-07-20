@@ -453,10 +453,21 @@ const CODEX_EXTRA_ITEMS = [
    desc:"Documento de especificación detrás de la demo Fönia. Artifact de Claude, cuenta del usuario.",
    tags:["Fönia","spec","artifact"],
    links:[{t:"VER documento",u:"https://claude.ai/code/artifact/6d5a89ec-8ad6-4edc-b77c-53f0db651b68",p:1}]},
-  {cat:"Cantera", emoji:"🎬", title:"CineMundos — Informe de avance (verificar)", status:"pending",
-   desc:"Artifact encontrado en la cuenta de Claude, 2,5MB, tipografías embebidas. NO confirmado si es Logoped-IA/Colmenia o proyecto personal — la auditoría de Codex del 19-jul ya marcó el repo `cinemundos` como \"fuera de logopedia o personal\". No se publica sin que Jose confirme cuál es.",
-   tags:["por confirmar","artifact"],
-   next:"Jose confirma: ¿CineMundos es de Logoped-IA/Colmenia o es proyecto personal separado?", links:[]}
+  {cat:"Docs", emoji:"🎬", title:"CineMundos — Informe de avance", status:"repo",
+   desc:"CONFIRMADO Logoped-IA (corrige la auditoría del 19-jul, que marcó mal el repo `cinemundos` como personal): es literalmente el repo fuente de FonoMundos (`package.json` → \"name\": \"fonomundos\"), con docs/colmenia/ completo y el archivo public/informe-avance.html idéntico a este artifact.",
+   tags:["FonoMundos","Colmenia","artifact"],
+   links:[
+     {t:"VER informe",u:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049",p:1},
+     {t:"Repo (privado)",u:"https://github.com/foniafonia/cinemundos",p:0}]},
+  {cat:"Juegos", emoji:"🎬", title:"FonoMundos — repo fuente completo (cinemundos)", status:"repo",
+   desc:"El repo `foniafonia/cinemundos` es el código fuente real de FonoMundos: Mundo 1 Conciencia Fonológica, Modo Historia, feature \"pelicula\" (reproductor de vídeo con capítulos forzados + preguntas + recompensas, portado de \"fonopelicula\"), Panel Profesional, Admin, docs/colmenia/ (visión y estrategia completa).",
+   tags:["FonoMundos","React","Vite"],
+   links:[{t:"Repo (privado)",u:"https://github.com/foniafonia/cinemundos",p:1}]},
+  {cat:"Juegos", emoji:"🎞️", title:"Logoflix", status:"upload",
+   desc:"Prototipo tipo Netflix/YouTube explicador, creado en un chat de Claude.ai (no publicado como Artifact, por eso no es localizable por Claude vía GitHub ni por la API de artifacts). Codex Desktop ya lo sirve en local (logoflix_v3.html, localhost:8743).",
+   tags:["Netflix","explicador","chat Claude"],
+   path:"logoflix_v3.html (servido por Codex en local, no está en ningún repo todavía)",
+   next:"Codex Desktop: sube logoflix_v3.html a codex-assets/ (o al repo cinemundos/public) → Claude le da VER", links:[]}
 ];
 
 const SUITE_POE_ITEMS = [
