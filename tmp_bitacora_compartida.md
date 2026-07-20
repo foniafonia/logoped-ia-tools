@@ -1066,6 +1066,40 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Alias recuperado — Juego del Lince
+
+Contexto:
+- Jose avisa que falta "el juego del Lince", pieza que no aparecia por nombre en la landing.
+
+Hallazgo:
+- No existe archivo/repo con nombre literal `lince` en los barridos de local, GitHub y conversaciones parseadas como texto.
+- El candidato funcional coincide con `Detective de Palabras` / `Lupas y Linternas`:
+  - Objetivo: encontrar objeto/palabra escondida.
+  - Herramientas: linterna y lupa.
+  - Ruta directa: `codex-assets/academia-suite-medible/POE/lupas y linternas/index.html`
+  - Ruta medible: `codex-assets/academia-suite-medible/resource-player.html?activity=poe-lupas-y-linternas`
+  - Medicion interna: `detective_palabras_metrics_v1`
+  - postMessage a suite: `poe-lupas-y-linternas`
+
+Hecho:
+- Añadida tarjeta explicita en `LANDING_TODO_LOGOPED_IA.html`:
+  `El Lince — Detective de Palabras / Lupas y Linternas`
+- Añadidos botones:
+  - VER juego directo
+  - VER medible
+  - Copia Suite POE
+- Generada captura:
+  `codex-assets/screenshots/el-lince-detective-de-palabras-lupas-y-linternas.jpg`
+
+Pendiente consciente:
+- Si Jose recuerda otro "Lince" distinto, pedir pista visual/ruta/hilo y mantener este como alias, no como sustituto.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Suite clinica medible — comprobacion de juegos que no cargaban
 
 Contexto:
