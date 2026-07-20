@@ -1,0 +1,12 @@
+{
+  "id": "module-04",
+  "title": "Evaluacion, rubricas e iteracion",
+  "description": "Sistema de notas y mejora continua de prompts.",
+  "goal": "Estandarizar calidad y progreso del alumno.",
+  "lessons": [
+    {"id":"lesson-04-01","title":"Rubrica de calidad","duration_minutes":15,"theory":["Criterios: claridad, utilidad clinica, estructura, seguridad.","Pondera segun objetivo del modulo.","Mantener rubrica estable permite comparar avances."],"example":"Rubrica 25/25/25/25 para ejercicios base.","checklist":["Criterios definidos","Escala clara","Ponderacion","Consistencia"]},
+    {"id":"lesson-04-02","title":"Iteracion V1-V2-V3","duration_minutes":18,"theory":["Cada version responde a un feedback concreto.","No cambies todo a la vez.","Documenta que cambio y por que."],"example":"V2 mejora contexto; V3 mejora formato y seguridad.","checklist":["Hipotesis","Cambio concreto","Resultado","Aprendizaje"]},
+    {"id":"lesson-04-03","title":"Feedback accionable","duration_minutes":16,"theory":["Evita feedback generico.","Da 3 acciones ejecutables.","Relaciona acciones con nota esperada."],"example":"Para subir +15 puntos: define edad, formato tabla y limite no diagnostico.","checklist":["Especifico","Medible","Corto","Aplicable"]},
+    {"id":"lesson-04-04","title":"Plan de mejora semanal","duration_minutes":14,"theory":["Pequenos ciclos semanales.","Objetivo por semana.","Revisar metrica antes de avanzar."],"example":"Semana 1 claridad; semana 2 estructura; semana 3 seguridad.","checklist":["Objetivo semanal","Metrica","Revision","Siguiente paso"]}
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "module-00",
+  "title": "Fundamentos absolutos: Prompt y LLM en logopedia",
+  "description": "Base para empezar desde cero y crear prompts utiles en contexto logopedico.",
+  "goal": "Entender que es un prompt, que es un LLM y producir prompts iniciales con estructura.",
+  "lessons": [
+    {
+      "id": "lesson-00-01",
+      "title": "Que es un prompt",
+      "duration_minutes": 12,
+      "theory": [
+        "Un prompt es una instruccion escrita para que el modelo haga una tarea.",
+        "Cuanto mas claro y concreto sea el prompt, mejor sera la salida.",
+        "Un prompt util suele incluir: contexto, objetivo, formato y limites."
+      ],
+      "example": "Actua como logopeda infantil. Crea 5 actividades de vocabulario para un nino de 6 anos, con materiales caseros y pasos breves.",
+      "checklist": [
+        "Define rol o contexto.",
+        "Pide una tarea unica y concreta.",
+        "Especifica formato de salida.",
+        "Indica edad o perfil del paciente simulado."
+      ]
+    },
+    {
+      "id": "lesson-00-02",
+      "title": "Que es un LLM",
+      "duration_minutes": 15,
+      "theory": [
+        "LLM significa Large Language Model (modelo de lenguaje grande).",
+        "Un LLM predice texto en funcion del contexto y patrones aprendidos.",
+        "No sustituye evaluacion clinica ni juicio profesional; es una herramienta de apoyo."
+      ],
+      "example": "Usa un tono profesional y simple para explicar a una familia que haremos ejercicios de conciencia fonologica en casa 10 minutos al dia.",
+      "checklist": [
+        "Evita tratar la salida como diagnostico.",
+        "Pide lenguaje claro para familias.",
+        "Solicita limites y advertencias cuando aplique.",
+        "Usa revision humana final."
+      ]
+    },
+    {
+      "id": "lesson-00-03",
+      "title": "Primeros prompts aplicados a logopedia",
+      "duration_minutes": 20,
+      "theory": [
+        "En logopedia, el prompt debe incluir edad, objetivo terapeutico y nivel.",
+        "Una estructura repetible acelera resultados: objetivo + materiales + pasos + criterio de exito.",
+        "Iterar es obligatorio: version 1, feedback, version 2."
+      ],
+      "example": "Genera una actividad de articulacion del fonema /r/ para 7 anos, 15 minutos, con refuerzo positivo y nivel basico.",
+      "checklist": [
+        "Incluye objetivo medible.",
+        "Incluye duracion y recursos.",
+        "Incluye pasos secuenciados.",
+        "Incluye observaciones de seguridad y limites."
+      ]
+    }
+  ]
+}

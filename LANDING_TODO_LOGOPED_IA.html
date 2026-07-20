@@ -150,9 +150,16 @@ const ITEMS = [
      {t:"VER en la Academia",u:"https://academia-logoped-ia.vercel.app/prueba-nivel",p:1},
      {t:"Repo examen",u:"https://github.com/foniafonia/logoped-ia-examen",p:0}]},
 
-  // ---- SUITE (juegos abribles ya vía GitHub Pages) ----
+  // ---- SUITE (clinica medible + juegos abribles ya via GitHub Pages) ----
+  {cat:"Suite", emoji:"📊", title:"Suite clínica medible — pacientes, resultados y juegos", status:"live",
+   desc:"La suite que faltaba destacar: demo operativa con login local, pacientes, juegos/herramientas, captura de mediciones, timeline, analítica, evolución por intentos, resultados por paciente y panel de seguimiento. Es la capa de intervención/evaluación que mide lo que ocurre en sesión. También queda enlazada la ruta oficial de Academia (/suite), que puede pedir login.",
+   tags:["Suite","medición","pacientes","resultados","analytics","localStorage"], links:[
+     {t:"VER demo pública sin login",u:"codex-assets/academia-suite-medible/index.html",p:1},
+     {t:"Captura/guardar medición",u:"codex-assets/academia-suite-medible/resource-player.html",p:0},
+     {t:"VER en Academia /suite",u:"https://academia-logoped-ia.vercel.app/suite",p:0}],
+   path:"/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/suite"},
   {cat:"Suite", emoji:"🧩", title:"Logoped-IA Suite — juegos abribles", status:"repo",
-   desc:"Contenedor clínico. Los juegos POE ya están subidos al repo y se abren desde el móvil. En la Academia se sirven dentro de /suite; aquí abajo tienes cada juego con su propio botón VER.",
+   desc:"Juegos POE integrados dentro de la Suite. Ya están subidos al repo y se abren desde el móvil; la tarjeta anterior es el contenedor medible con pacientes/resultados.",
    tags:["Suite","POE","juegos"], links:[
      {t:"VER Encuentra el Nuevo",u:"codex-assets/suite-poe/encuentra-el-nuevo/index.html",p:1},
      {t:"VER Letra Crush",u:"codex-assets/suite-poe/letra-crush/index.html",p:0}]},
@@ -446,10 +453,21 @@ const CODEX_EXTRA_ITEMS = [
    desc:"Documento de especificación detrás de la demo Fönia. Artifact de Claude, cuenta del usuario.",
    tags:["Fönia","spec","artifact"],
    links:[{t:"VER documento",u:"https://claude.ai/code/artifact/6d5a89ec-8ad6-4edc-b77c-53f0db651b68",p:1}]},
-  {cat:"Cantera", emoji:"🎬", title:"CineMundos — Informe de avance (verificar)", status:"pending",
-   desc:"Artifact encontrado en la cuenta de Claude, 2,5MB, tipografías embebidas. NO confirmado si es Logoped-IA/Colmenia o proyecto personal — la auditoría de Codex del 19-jul ya marcó el repo `cinemundos` como \"fuera de logopedia o personal\". No se publica sin que Jose confirme cuál es.",
-   tags:["por confirmar","artifact"],
-   next:"Jose confirma: ¿CineMundos es de Logoped-IA/Colmenia o es proyecto personal separado?", links:[]}
+  {cat:"Docs", emoji:"🎬", title:"CineMundos — Informe de avance", status:"repo",
+   desc:"CONFIRMADO Logoped-IA (corrige la auditoría del 19-jul, que marcó mal el repo `cinemundos` como personal): es literalmente el repo fuente de FonoMundos (`package.json` → \"name\": \"fonomundos\"), con docs/colmenia/ completo y el archivo public/informe-avance.html idéntico a este artifact.",
+   tags:["FonoMundos","Colmenia","artifact"],
+   links:[
+     {t:"VER informe",u:"https://claude.ai/code/artifact/5a9a7a1c-6da6-4b9d-9a7a-c13162b3b049",p:1},
+     {t:"Repo (privado)",u:"https://github.com/foniafonia/cinemundos",p:0}]},
+  {cat:"Juegos", emoji:"🎬", title:"FonoMundos — repo fuente completo (cinemundos)", status:"repo",
+   desc:"El repo `foniafonia/cinemundos` es el código fuente real de FonoMundos: Mundo 1 Conciencia Fonológica, Modo Historia, feature \"pelicula\" (reproductor de vídeo con capítulos forzados + preguntas + recompensas, portado de \"fonopelicula\"), Panel Profesional, Admin, docs/colmenia/ (visión y estrategia completa).",
+   tags:["FonoMundos","React","Vite"],
+   links:[{t:"Repo (privado)",u:"https://github.com/foniafonia/cinemundos",p:1}]},
+  {cat:"Juegos", emoji:"🎞️", title:"Logoflix", status:"upload",
+   desc:"Prototipo tipo Netflix/YouTube explicador, creado en un chat de Claude.ai (no publicado como Artifact, por eso no es localizable por Claude vía GitHub ni por la API de artifacts). Codex Desktop ya lo sirve en local (logoflix_v3.html, localhost:8743).",
+   tags:["Netflix","explicador","chat Claude"],
+   path:"logoflix_v3.html (servido por Codex en local, no está en ningún repo todavía)",
+   next:"Codex Desktop: sube logoflix_v3.html a codex-assets/ (o al repo cinemundos/public) → Claude le da VER", links:[]}
 ];
 
 const SUITE_POE_ITEMS = [

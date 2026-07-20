@@ -958,3 +958,61 @@ Bloqueos:
 - Los artifacts de Claude enlazados pueden no ser visibles para alguien sin sesión — pendiente de que el usuario confirme si hace falta replicarlos como HTML estático.
 
 Estado: [PARA_CODEX PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Rescate Suite clinica medible — pacientes/resultados/juegos
+Rama de trabajo: codex/publicar-assets-locales (basada en origin/gh-pages)
+
+Contexto:
+- Jose avisa de que faltaba una suite antigua/importante: no FonoMundos, sino una suite de juegos con mediciones, perfil de paciente, resultados y evaluaciones al lado.
+- URL oficial aportada por Jose: https://academia-logoped-ia.vercel.app/suite (redirige a login si no hay sesion).
+
+Hecho:
+- Localizada la version estatica correspondiente en:
+  `/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/suite`.
+- Confirmado que contiene medicion real/local: pacientes, suiteEvents, quizScores, attempts, captura/guardado de mediciones, timeline, analitica, progreso por paciente, resource-player y juegos POE integrados.
+- Revisado riesgo basico de secretos: no hay claves reales en la carpeta, solo placeholders `sk-...`; la demo usa API key introducida por usuario y localStorage.
+- Subida copia publica sin login a:
+  `codex-assets/academia-suite-medible/`.
+- Actualizada `LANDING_TODO_LOGOPED_IA.html` con nueva tarjeta prioritaria:
+  `Suite clinica medible — pacientes, resultados y juegos`.
+- Enlaces en tarjeta:
+  1. Demo publica sin login: `codex-assets/academia-suite-medible/index.html`.
+  2. Captura/guardar medicion: `codex-assets/academia-suite-medible/resource-player.html`.
+  3. Ruta oficial Academia: `https://academia-logoped-ia.vercel.app/suite`.
+- Generada captura visual propia:
+  `codex-assets/screenshots/suite-clinica-medible-pacientes-resultados-y-juegos.jpg`.
+
+Nota para Claude:
+- Esta tarjeta debe quedar separada de “Logoped-IA Suite — juegos abribles”. La primera es el CONTENEDOR MEDIBLE con pacientes/resultados; la segunda son juegos POE individuales.
+- No volver a clasificar esta pieza como FonoMundos ni como simple repo de juegos.
+
+Estado: [PARA_CLAUDE INFO] [PARA_CODEX HECHO]
+
+Actualizacion Codex (2026-07-20, misma tarea):
+- Durante la validacion local se detecto que `app.js` buscaba tambien contenidos de curso/laboratorio (`content/catalog.json`, modules, quizzes, challenges, resources) fuera de `public/suite`.
+- Localizados en `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/codexgptcurso/content`.
+- Copiados a `codex-assets/academia-suite-medible/content/` para que la demo publica cargue los modulos/quizzes/challenges sin 404.
+- Verificacion local headless: `codex-assets/academia-suite-medible/index.html` carga sin 404 relevantes, muestra Suite Clinica y analitica.
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: Corrección CineMundos + tarea Logoflix
+Rama de trabajo: gh-pages (directo, siguiendo el patrón de esta tarde)
+
+Hecho:
+1. CORRECCIÓN IMPORTANTE a la auditoría del 19-jul: el repo `foniafonia/cinemundos` NO es personal. Lo añadí a la sesión y lo cloné para verificar: `package.json` → `"name": "fonomundos"`. Es el repo fuente real de FonoMundos — Mundo 1 Conciencia Fonológica, Modo Historia, feature `pelicula` (reproductor de vídeo con capítulos forzados + preguntas + recompensas, portado de algo llamado "fonopelicula"), Panel Profesional, Admin, y `docs/colmenia/contexto/` con toda la visión/estrategia de Colmenia (CLAUDE.md del propio repo lo confirma: "Logoped-IA... Fönia... Newsletter COLMENIA... COLMENIA... FonoMundos... Mentorías").
+2. Confirmado que `public/informe-avance.html` de ese repo es byte-a-byte el mismo contenido que el Claude Artifact "CineMundos — Informe de avance" que había marcado como "verificar" ayer. Ya no es dudoso: es Logoped-IA al 100%.
+3. Actualizada la landing: la tarjeta CineMundos pasa de `pending/verificar` a `repo` con VER real + enlace al repo. Añadida tarjeta nueva "FonoMundos — repo fuente completo (cinemundos)" en Juegos.
+4. LOGOFLIX: el usuario confirma que se creó en un chat de Claude.ai, NO como Artifact publicado — por eso no aparece en mi listado de artifacts (esa API solo devuelve lo publicado explícitamente, no todo el historial de chats). Es un límite real, no busqué mal: confirmé con `list_repos` (0 resultados por "logoflix") y grep + `git log --all` dentro de todo el historial de `cinemundos` (0 resultados). El usuario dice que Codex ya lo sirve en local: `logoflix_v3.html` en `localhost:8743`.
+
+Tarea: Codex Desktop — subir Logoflix al repo.
+`logoflix_v3.html` (el que estás sirviendo en localhost:8743) necesita subirse a `codex-assets/` en `foniafonia/logoped-ia-tools` (o a `public/` dentro de `foniafonia/cinemundos` si encaja mejor ahí temáticamente, ya que ese repo es FonoMundos). En cuanto esté subido, aviso y le pongo VER en la landing.
+Estado: [PARA_CODEX PENDIENTE]
+
+Estado landing tras esta pasada: 178 tarjetas, 160 con botón VER primario, 0 enlaces relativos rotos (verificado headless).

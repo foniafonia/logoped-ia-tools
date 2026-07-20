@@ -1,0 +1,16 @@
+{
+  "course": {
+    "id": "curso-gpt-logopedia",
+    "title": "Curso GPT para Logopedia",
+    "modules": [
+      {"id": "module-00", "title": "Fundamentos: prompt y LLM"},
+      {"id": "module-01", "title": "Anatomia del prompt profesional"},
+      {"id": "module-02", "title": "Aplicaciones logopedicas reales"},
+      {"id": "module-03", "title": "Practica con API (texto e imagen)"},
+      {"id": "module-04", "title": "Evaluacion, rubricas e iteracion"},
+      {"id": "module-05", "title": "Casos integradores"},
+      {"id": "module-06", "title": "Productividad y profesionalizacion"},
+      {"id": "module-07", "title": "Proyecto final y profesionalizacion"}
+    ]
+  }
+}

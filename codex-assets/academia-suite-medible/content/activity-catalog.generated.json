@@ -1,0 +1,897 @@
+{
+  "generated_at": "2026-03-17T18:30:45.170010+00:00",
+  "source_root": "/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS",
+  "activities": [
+    {
+      "id": "poe-letra-crush",
+      "title": "Letra Crush",
+      "summary": "Juego tipo match-3 para trabajar letras, fonemas, silabas e imagenes con lectura funcional y control ejecutivo.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letra-crush/index.html",
+      "web_path": "/POE/letra-crush/index.html",
+      "tags": ["dislexia", "conciencia fonologica", "lectoescritura", "semantica"],
+      "focus_areas": ["lectoescritura", "fonologia", "atencion", "funciones ejecutivas"],
+      "age_range": "5-12",
+      "difficulty": "media-alta",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-erre-que-erre-erre-directa",
+      "title": "Erre que Erre - Libro Interactivo",
+      "summary": "Version orientada a erre directa para practica repetida y refuerzo.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/erre que erre erre directa/index.html",
+      "web_path": "/POE/erre%20que%20erre%20erre%20directa/index.html",
+      "tags": [
+        "erre",
+        "automatizacion",
+        "articulacion"
+      ],
+      "focus_areas": [
+        "articulacion"
+      ],
+      "age_range": "6-12",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "ponencia-murcia-05-proyecto-evaluacion-logopedica",
+      "title": "Evaluación Logopédica Integral Pro",
+      "summary": "Prototipo de evaluacion logopedica con potencial de integracion.",
+      "kind": "assessment",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/05_proyecto_evaluacion_logopedica/index.html",
+      "web_path": "/ponencia%20murcia/05_proyecto_evaluacion_logopedica/index.html",
+      "tags": [
+        "evaluacion",
+        "cribado",
+        "registro"
+      ],
+      "focus_areas": [
+        "evaluacion",
+        "seguimiento"
+      ],
+      "age_range": "3-99",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "anamnesis-ia",
+      "title": "Evaluación Logopédica Integral Pro",
+      "summary": "Formulario y apoyo para anamnesis inicial del paciente.",
+      "kind": "assessment",
+      "source": "anamnesis ia",
+      "rel_path": "anamnesis ia/index.html",
+      "web_path": "/anamnesis%20ia/index.html",
+      "tags": [
+        "anamnesis",
+        "evaluacion",
+        "familias"
+      ],
+      "focus_areas": [
+        "evaluacion",
+        "seguimiento"
+      ],
+      "age_range": "3-99",
+      "difficulty": "baja",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "chatbot-familias-logopedia-landing",
+      "title": "Fonia Familia - Chatbot de Orientacion",
+      "summary": "Landing del chatbot para orientacion inicial a familias.",
+      "kind": "chatbot",
+      "source": "chatbot_familias_logopedia",
+      "rel_path": "chatbot_familias_logopedia/landing/index.html",
+      "web_path": "/chatbot_familias_logopedia/landing/index.html",
+      "tags": [
+        "familias",
+        "orientacion",
+        "faq"
+      ],
+      "focus_areas": [
+        "seguimiento",
+        "familias"
+      ],
+      "age_range": "3-99",
+      "difficulty": "baja",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-194rrr",
+      "title": "Juego de Fonemas - Aprende Jugando",
+      "summary": "Juego para entrenar fonema /r/ con foco en precision articulatoria.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/194RRR/index.html",
+      "web_path": "/POE/194RRR/index.html",
+      "tags": [
+        "erre",
+        "articulacion",
+        "fonologia"
+      ],
+      "focus_areas": [
+        "articulacion",
+        "fonologia"
+      ],
+      "age_range": "6-12",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "kaboom-lectoescritura",
+      "title": "KABOOM de Lectoescritura",
+      "summary": "Juego HTML standalone para lectoescritura y practica repetida.",
+      "kind": "game",
+      "source": "KABOOM_LECTOESCRITURA",
+      "rel_path": "KABOOM_LECTOESCRITURA/index.html",
+      "web_path": "/KABOOM_LECTOESCRITURA/index.html",
+      "tags": [
+        "lectoescritura",
+        "lectura",
+        "escritura"
+      ],
+      "focus_areas": [
+        "lectoescritura"
+      ],
+      "age_range": "5-10",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-kaboom-lectoescritura-premium",
+      "title": "KABOOM Lectoescritura Premium",
+      "summary": "Version premium orientada a lectura, silabas y automatizacion.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/kaboom-lectoescritura-premium/index.html",
+      "web_path": "/POE/kaboom-lectoescritura-premium/index.html",
+      "tags": [
+        "lectoescritura",
+        "silabas",
+        "fonologia"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "fonologia"
+      ],
+      "age_range": "5-10",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-letracrush",
+      "title": "Letra Crush - Juego Educativo",
+      "summary": "Actividad de lectoescritura con dinamica de reconocimiento rapido.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/letracrush/index.html",
+      "web_path": "/POE/letracrush/index.html",
+      "tags": [
+        "lectoescritura",
+        "conciencia fonologica",
+        "atencion"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "conciencia fonologica"
+      ],
+      "age_range": "6-10",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-midiendo-con-la-s-y-la-z-definitivo",
+      "title": "Midiendo con la S y la Z - Evaluación de Disfonía",
+      "summary": "Juego de contraste /s/ y /z/ para discriminacion y produccion.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/midiendo con la s y la z definitivo/index.html",
+      "web_path": "/POE/midiendo%20con%20la%20s%20y%20la%20z%20definitivo/index.html",
+      "tags": [
+        "s-z",
+        "articulacion",
+        "discriminacion auditiva"
+      ],
+      "focus_areas": [
+        "articulacion",
+        "discriminacion auditiva"
+      ],
+      "age_range": "6-12",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "poe-karaoke-tartamudez",
+      "title": "TerapiaFlu - Herramienta Completa de Terapia de Tartamudez",
+      "summary": "Propuesta ritmica para practica de fluidez con apoyo de karaoke.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/karaoke tartamudez/index.html",
+      "web_path": "/POE/karaoke%20tartamudez/index.html",
+      "tags": [
+        "tartamudez",
+        "fluidez",
+        "ritmo"
+      ],
+      "focus_areas": [
+        "fluidez",
+        "prosodia"
+      ],
+      "age_range": "7-16",
+      "difficulty": "media",
+      "integration_status": "prioridad-alta"
+    },
+    {
+      "id": "gemini-cli-otras-apps-fabircadas-con-gemini-cli-adapro-plus",
+      "title": "Adapro Plus - Procesador de Texto Adaptado",
+      "summary": "Recurso localizado en gemini cli/otras apps fabircadas con gemini cli/adapro_plus pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/otras apps fabircadas con gemini cli/adapro_plus/index.html",
+      "web_path": "/gemini%20cli/otras%20apps%20fabircadas%20con%20gemini%20cli/adapro_plus/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-alefbetcandy",
+      "title": "AleBet Candy - משחק חינוכי",
+      "summary": "Recurso localizado en POE/alefbetcandy pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/alefbetcandy/index.html",
+      "web_path": "/POE/alefbetcandy/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-ratioszapp",
+      "title": "Calculadora de Ratio S/Z",
+      "summary": "Herramienta especifica para relacion S/Z con posible uso clinico.",
+      "kind": "tool",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/RatioSZApp/index.html",
+      "web_path": "/gemini%20cli/RatioSZApp/index.html",
+      "tags": [
+        "s-z",
+        "articulacion",
+        "medicion"
+      ],
+      "focus_areas": [
+        "articulacion",
+        "seguimiento"
+      ],
+      "age_range": "6-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-github-juego-simple-plataforma-main",
+      "title": "CazaEstrellas",
+      "summary": "Recurso localizado en gemini cli/github/Juego_simple_plataforma-main pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/github/Juego_simple_plataforma-main/index.html",
+      "web_path": "/gemini%20cli/github/Juego_simple_plataforma-main/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-deglucion-atipica",
+      "title": "Deglución Atípica - Programa de Rehabilitación",
+      "summary": "Recurso localizado en POE/deglucion atipica pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/deglucion atipica/index.html",
+      "web_path": "/POE/deglucion%20atipica/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-lupas-y-linternas",
+      "title": "Detective de Palabras",
+      "summary": "Recurso localizado en POE/lupas y linternas pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/lupas y linternas/index.html",
+      "web_path": "/POE/lupas%20y%20linternas/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-disfagiacare",
+      "title": "DisfagiaCare Pro - Sistema Avanzado de Recetas Adaptadas",
+      "summary": "Recurso localizado en POE/disfagiacare pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/disfagiacare/index.html",
+      "web_path": "/POE/disfagiacare/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-10-proyecto-carga-informe-y-en-la-mente",
+      "title": "Documento Clínico de Estudio",
+      "summary": "Recurso localizado en ponencia murcia/10_proyecto_carga_informe_y_en_la_mente pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/10_proyecto_carga_informe_y_en_la_mente/index.html",
+      "web_path": "/ponencia%20murcia/10_proyecto_carga_informe_y_en_la_mente/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-03-variante-index2",
+      "title": "Documento Clínico de Estudio",
+      "summary": "Recurso localizado en ponencia murcia/03_variante_index2 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/03_variante_index2/index.html",
+      "web_path": "/ponencia%20murcia/03_variante_index2/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-donkeyfon",
+      "title": "Donkey Kong Fonemas",
+      "summary": "Recurso localizado en POE/donkeyfon pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/donkeyfon/index.html",
+      "web_path": "/POE/donkeyfon/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-otras-apps-fabircadas-con-gemini-cli-adapro-personal",
+      "title": "Editor de Texto para Dislexia",
+      "summary": "Recurso localizado en gemini cli/otras apps fabircadas con gemini cli/adapro personal  pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/otras apps fabircadas con gemini cli/adapro personal /index.html",
+      "web_path": "/gemini%20cli/otras%20apps%20fabircadas%20con%20gemini%20cli/adapro%20personal%20/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-emojitraductor",
+      "title": "Emojitraductor :: Comunicación sencilla con emojis",
+      "summary": "Recurso localizado en POE/emojitraductor pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/emojitraductor/index.html",
+      "web_path": "/POE/emojitraductor/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-emojitraductor-versiones-antiguas",
+      "title": "Emojitraductor :: Comunicación sencilla con emojis",
+      "summary": "Recurso localizado en POE/emojitraductor/versiones antiguas pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/emojitraductor/versiones antiguas/index.html",
+      "web_path": "/POE/emojitraductor/versiones%20antiguas/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-encuentra-el-nuevo",
+      "title": "Encuentra el Nuevo - Terapia Fonológica",
+      "summary": "Recurso localizado en POE/encuentra el nuevo pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/encuentra el nuevo/index.html",
+      "web_path": "/POE/encuentra%20el%20nuevo/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-erre-que-erre",
+      "title": "Erre que Erre &amp; Ese que Ese - Libro Interactivo",
+      "summary": "Recurso localizado en ponencia murcia/erre que erre pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/erre que erre/index.html",
+      "web_path": "/ponencia%20murcia/erre%20que%20erre/index.html",
+      "tags": [
+        "articulacion",
+        "erre"
+      ],
+      "focus_areas": [
+        "articulacion"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-02-web-principal",
+      "title": "Evaluación Logopédica Integral Pro",
+      "summary": "Recurso localizado en ponencia murcia/02_web_principal pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/02_web_principal/index.html",
+      "web_path": "/ponencia%20murcia/02_web_principal/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-chatbot-familias-landing",
+      "title": "Fonia Familia - Chatbot de Orientacion",
+      "summary": "Recurso localizado en ponencia murcia/chatbot_familias_landing pendiente de revision funcional y catalogacion fina.",
+      "kind": "chatbot",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/chatbot_familias_landing/index.html",
+      "web_path": "/ponencia%20murcia/chatbot_familias_landing/index.html",
+      "tags": [],
+      "focus_areas": [
+        "familias",
+        "orientacion"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-cronometro-fonia",
+      "title": "Fönia - Gabinete de Logopedia en Melilla | José Aserraf",
+      "summary": "Recurso localizado en POE/cronometro fonia pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/cronometro fonia/index.html",
+      "web_path": "/POE/cronometro%20fonia/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-propuesta-sunil-curso-mec",
+      "title": "IA para Docentes - José Aserraf | Educación Especial",
+      "summary": "Recurso localizado en POE/propuesta sunil curso mec pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/propuesta sunil curso mec/index.html",
+      "web_path": "/POE/propuesta%20sunil%20curso%20mec/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-landing-para-director-innovacion",
+      "title": "José Aserraf Cohen - Innovación Tecnológica y IA en Melilla",
+      "summary": "Recurso localizado en POE/landing para director innovacion pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/landing para director innovacion/index.html",
+      "web_path": "/POE/landing%20para%20director%20innovacion/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-github-gamejump-main",
+      "title": "Juego",
+      "summary": "Recurso localizado en gemini cli/github/GameJump-main pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/github/GameJump-main/index.html",
+      "web_path": "/gemini%20cli/github/GameJump-main/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-juegoslogopedosuci-septiembre-2025",
+      "title": "JuegosLogopedos - Videojuegos educativos para aprender jugando",
+      "summary": "Recurso localizado en POE/juegoslogopedosuci septiembre 2025 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/juegoslogopedosuci septiembre 2025/index.html",
+      "web_path": "/POE/juegoslogopedosuci%20septiembre%202025/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-demodaycare-juegoslogopedos",
+      "title": "JuegosLogopedos - Videojuegos educativos para aprender jugando",
+      "summary": "Recurso localizado en POE/demodaycare/juegoslogopedos pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/demodaycare/juegoslogopedos/index.html",
+      "web_path": "/POE/demodaycare/juegoslogopedos/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-victor-logopedos",
+      "title": "JuegosLogopedos - Videojuegos educativos para aprender jugando",
+      "summary": "Recurso localizado en gemini cli/victor/logopedos pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/victor/logopedos/index.html",
+      "web_path": "/gemini%20cli/victor/logopedos/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-logopedos-2",
+      "title": "JuegosLogopedos - Videojuegos educativos para aprender jugando",
+      "summary": "Recurso localizado en gemini cli/logopedos-2 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/logopedos-2/index.html",
+      "web_path": "/gemini%20cli/logopedos-2/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-github-keysforspeed-main",
+      "title": "Keys for Speed",
+      "summary": "Recurso localizado en gemini cli/github/KeysForSpeed-main pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/github/KeysForSpeed-main/index.html",
+      "web_path": "/gemini%20cli/github/KeysForSpeed-main/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-pararibiyaakov",
+      "title": "Kit Torah para Niños con Autismo - Solución Completa",
+      "summary": "Recurso localizado en POE/pararibiyaakov pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/pararibiyaakov/index.html",
+      "web_path": "/POE/pararibiyaakov/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-demodaycare-demoday",
+      "title": "Logoped-IA: La IA al servicio de la logopedia",
+      "summary": "Recurso localizado en POE/demodaycare/demoday pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/demodaycare/demoday/index.html",
+      "web_path": "/POE/demodaycare/demoday/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-logopedos-5",
+      "title": "Logopeda José Aserraf - Apoyo Experto para Padres y Profesionales",
+      "summary": "Recurso localizado en gemini cli/logopedos-5 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/logopedos-5/index.html",
+      "web_path": "/gemini%20cli/logopedos-5/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-logopedos-3",
+      "title": "Logopeda José Aserraf - Apoyo Experto para Padres y Profesionales",
+      "summary": "Recurso localizado en gemini cli/logopedos-3 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/logopedos-3/index.html",
+      "web_path": "/gemini%20cli/logopedos-3/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-logopedos-4",
+      "title": "Logopeda José Aserraf - Apoyo Experto para Padres y Profesionales",
+      "summary": "Recurso localizado en gemini cli/logopedos-4 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/logopedos-4/index.html",
+      "web_path": "/gemini%20cli/logopedos-4/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-simo-cluster",
+      "title": "Melilla en SIMO EDUCACIÓN 2025 - Clúster de Emprendimiento",
+      "summary": "Recurso localizado en POE/simo cluster pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/simo cluster/index.html",
+      "web_path": "/POE/simo%20cluster/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-s-y-z",
+      "title": "Midiendo con la S y la Z - Evaluación de Disfonía",
+      "summary": "Actividad complementaria para trabajar oposicion de fonemas /s/ y /z/.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/s y z/index.html",
+      "web_path": "/POE/s%20y%20z/index.html",
+      "tags": [
+        "s-z",
+        "fonologia"
+      ],
+      "focus_areas": [
+        "articulacion"
+      ],
+      "age_range": "6-12",
+      "difficulty": "baja",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-midiendo-la-s-y-la-z",
+      "title": "Midiendo con la S y la Z - Evaluación de Disfonía",
+      "summary": "Recurso localizado en gemini cli/midiendo la s y la z pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/midiendo la s y la z/index.html",
+      "web_path": "/gemini%20cli/midiendo%20la%20s%20y%20la%20z/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-06-proyecto-colegio-murcia-copia",
+      "title": "Modelando el futuro de la logopedia con IA | Colegio de Logopedas de Murcia",
+      "summary": "Recurso localizado en ponencia murcia/06_proyecto_colegio_murcia_copia pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/06_proyecto_colegio_murcia_copia/index.html",
+      "web_path": "/ponencia%20murcia/06_proyecto_colegio_murcia_copia/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "ponencia-murcia-07-proyecto-ponencia-coloan",
+      "title": "Modelando el futuro de la logopedia con IA | Colegio Oficial de Logopedas de Andalucía",
+      "summary": "Recurso localizado en ponencia murcia/07_proyecto_ponencia_coloan pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "ponencia murcia",
+      "rel_path": "ponencia murcia/07_proyecto_ponencia_coloan/index.html",
+      "web_path": "/ponencia%20murcia/07_proyecto_ponencia_coloan/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-mejoras-eoi",
+      "title": "Propuesta de Mejoras EOI Melilla - 3ª Edición | Estrategia de Optimización",
+      "summary": "Recurso localizado en POE/mejoras EOI pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/mejoras EOI/index.html",
+      "web_path": "/POE/mejoras%20EOI/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-github-html5-game-2d-and-php-main-public",
+      "title": "Public",
+      "summary": "Recurso localizado en gemini cli/github/html5-game-2d-and-php-main/public pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/github/html5-game-2d-and-php-main/public/index.html",
+      "web_path": "/gemini%20cli/github/html5-game-2d-and-php-main/public/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "gemini-cli-lectoescritura-game-public",
+      "title": "React App",
+      "summary": "Juego React de lectoescritura para evolucion por minijuegos.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/lectoescritura-game/public/index.html",
+      "web_path": "/gemini%20cli/lectoescritura-game/public/index.html",
+      "tags": [
+        "lectoescritura",
+        "react",
+        "minijuegos"
+      ],
+      "focus_areas": [
+        "lectoescritura",
+        "atencion"
+      ],
+      "age_range": "6-12",
+      "difficulty": "alta",
+      "integration_status": "en-revision"
+    },
+    {
+      "id": "gemini-cli-github-shooter2d-main",
+      "title": "Shooter Avance",
+      "summary": "Recurso localizado en gemini cli/github/shooter2d-main pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "gemini cli",
+      "rel_path": "gemini cli/github/shooter2d-main/index.html",
+      "web_path": "/gemini%20cli/github/shooter2d-main/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-telna-2024",
+      "title": "TELNA-2024 - Test Especializado de Lenguaje y Neuroaprendizaje",
+      "summary": "Recurso localizado en POE/telna 2024 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/telna 2024/index.html",
+      "web_path": "/POE/telna%202024/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-karaoke-tartamudez-version-4-0",
+      "title": "TerapiaFlu - Herramienta Completa de Terapia de Tartamudez",
+      "summary": "Recurso localizado en POE/karaoke tartamudez/version 4.0 pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/karaoke tartamudez/version 4.0/index.html",
+      "web_path": "/POE/karaoke%20tartamudez/version%204.0/index.html",
+      "tags": [
+        "fluidez",
+        "tartamudez"
+      ],
+      "focus_areas": [
+        "fluidez"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-toposlogopedos",
+      "title": "Whack-a-Mole 3D Cosmic Edition",
+      "summary": "Juego rapido para atencion, velocidad de respuesta y discriminacion.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/toposlogopedos/index.html",
+      "web_path": "/POE/toposlogopedos/index.html",
+      "tags": [
+        "atencion",
+        "velocidad",
+        "discriminacion"
+      ],
+      "focus_areas": [
+        "atencion",
+        "funciones ejecutivas"
+      ],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-toposlogopedosgeminicli",
+      "title": "Whack-a-Mole 3D Deluxe",
+      "summary": "Recurso localizado en POE/toposlogopedosgeminicli pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/toposlogopedosgeminicli/index.html",
+      "web_path": "/POE/toposlogopedosgeminicli/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    },
+    {
+      "id": "poe-pacman",
+      "title": "🎮 PAC-SEMÁNTICO MEJORADO",
+      "summary": "Recurso localizado en POE/pacman pendiente de revision funcional y catalogacion fina.",
+      "kind": "game",
+      "source": "POE",
+      "rel_path": "POE/pacman/index.html",
+      "web_path": "/POE/pacman/index.html",
+      "tags": [],
+      "focus_areas": [],
+      "age_range": "5-12",
+      "difficulty": "media",
+      "integration_status": "candidato"
+    }
+  ]
+}
