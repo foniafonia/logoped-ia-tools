@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Conquista de Israel — Película Jugable · Demo 60s</title>
+<style>
+/* ============================================================
+   ▓▓  CAPA DE MARCA  ▓▓
+   Cambia SOLO estas variables para adaptar la imagen de marca
+   del equipo de la película (colores + nombre del logo).
+   ============================================================ */
+:root{
+  --brand:        #c8952f;   /* dorado principal  */
+  --brand-2:      #7a1f1a;   /* rojo tierra       */
+  --brand-ink:    #f4e9d2;   /* texto sobre oscuro*/
+  --brand-name:   "LA CONQUISTA DE ISRAEL";
+  --hud:          #d9c9a3;
+  --ok:           #4caf6d;
+  --warn:         #d98a3a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:#0a0705;
+  color:var(--brand-ink);
+  font-family:"Trebuchet MS",Verdana,sans-serif;
+  overflow:hidden;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ---- Escenario / marco cinematográfico ---- */
+#stage{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  perspective:1200px;
+}
+
+/* El "hueco" donde va el CLIP o FOTOGRAMA real de la película */
+.shot{
+  position:absolute; inset:0;
+  opacity:0; transition:opacity .8s ease;
+  overflow:hidden;
+}
+.shot.active{opacity:1}
+
+/* Placeholder pintado con CSS (se sustituye por <video>/<img> real) */
+.frame{
+  position:absolute; inset:-4%;
+  background-position:center; background-size:cover;
+  transform:scale(1.05);
+  animation:kenburns 12s ease-out forwards;
+}
+@keyframes kenburns{
+  from{transform:scale(1.02) translate(0,0)}
+  to  {transform:scale(1.16) translate(-1.5%,-1.5%)}
+}
+
+/* Etiqueta del hueco (guía de producción, se quita en la versión final) */
+.slot-tag{
+  position:absolute; top:14px; left:14px; z-index:6;
+  font:600 11px/1.4 "Courier New",monospace; letter-spacing:.5px;
+  color:#fff; background:rgba(0,0,0,.55);
+  border-left:3px solid var(--brand);
+  padding:6px 9px; border-radius:0 6px 6px 0;
+  max-width:min(70vw,360px);
+}
+.slot-tag b{color:var(--brand)}
+
+/* ---- Marco de PRIMERA PERSONA (viñeta tipo casco/visor) ---- */
+#fpv{
+  position:fixed; inset:0; z-index:5; pointer-events:none;
+  box-shadow:inset 0 0 220px 60px rgba(0,0,0,.85),
+             inset 0 0 60px 10px rgba(0,0,0,.4);
+}
+#fpv::before{ /* respiración de cámara */
+  content:""; position:absolute; inset:0;
+  box-shadow:inset 0 -160px 120px -60px rgba(0,0,0,.7);
+  animation:breathe 6s ease-in-out infinite;
+}
+@keyframes breathe{50%{transform:translateY(6px)}}
+
+/* Antorcha en primera persona (aparece tras "tomar la antorcha") */
+#torch{
+  position:fixed; z-index:6; right:14%; bottom:-6%;
+  width:120px; height:260px; pointer-events:none;
+  opacity:0; transform:translateY(40px) rotate(6deg);
+  transition:opacity .6s, transform .6s;
+}
+#torch.on{opacity:1; transform:translateY(0) rotate(6deg)}
+#torch .stick{position:absolute;left:46px;bottom:0;width:22px;height:210px;
+  background:linear-gradient(#5a3a1c,#2c1a0c);border-radius:6px;transform:rotate(-6deg)}
+#torch .flame{position:absolute;left:30px;bottom:180px;width:60px;height:80px;
+  background:radial-gradient(circle at 50% 70%,#fff6c9,#ffb037 45%,#e2561d 75%,transparent 78%);
+  border-radius:50% 50% 45% 45%/60% 60% 40% 40%;
+  filter:blur(1px);animation:flick .18s infinite alternate}
+@keyframes flick{to{transform:scale(1.08,1.14) translateX(3px);opacity:.9}}
+#torchglow{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;
+  background:radial-gradient(60% 55% at 74% 78%,rgba(255,150,40,.28),transparent 60%);
+  transition:opacity .6s}
+#torchglow.on{opacity:1}
+
+/* ---- HUD ---- */
+#hud{
+  position:fixed; left:0; right:0; bottom:0; z-index:7;
+  padding:16px 20px calc(16px + env(safe-area-inset-bottom));
+  display:flex; flex-direction:column; gap:10px;
+  background:linear-gradient(transparent,rgba(0,0,0,.55) 55%);
+}
+.hud-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+#objective{
+  font-size:clamp(15px,2.4vw,19px); font-weight:600; color:var(--hud);
+  text-shadow:0 2px 8px #000; max-width:70%;
+}
+#objective small{display:block;font-size:.72em;font-weight:400;opacity:.7;letter-spacing:2px;text-transform:uppercase}
+#mode-badge{
+  font:600 11px/1 "Courier New",monospace; letter-spacing:1px;
+  color:#0a0705; background:var(--brand); padding:6px 10px; border-radius:20px;
+  white-space:nowrap;
+}
+#subtitle{
+  min-height:1.4em; text-align:center;
+  font-size:clamp(14px,2.2vw,18px); color:#fff;
+  text-shadow:0 2px 10px #000; letter-spacing:.3px;
+}
+
+/* Barra de tiempo 0:00 → 1:00 */
+#timeline{height:4px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden}
+#timebar{height:100%;width:0;background:linear-gradient(90deg,var(--brand-2),var(--brand));transition:width .25s linear}
+
+/* Pista de acción / botones */
+#actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;min-height:0}
+.btn{
+  font:600 15px/1 inherit; color:#0a0705; cursor:pointer;
+  background:var(--brand); border:none; border-radius:12px;
+  padding:14px 20px; box-shadow:0 6px 18px rgba(0,0,0,.4);
+  transition:transform .12s, filter .12s; position:relative;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn.recommended{animation:pulse 1.4s infinite}
+.btn.recommended::after{content:"◀ guiado";position:absolute;right:-64px;top:50%;
+  transform:translateY(-50%);font-size:11px;color:var(--brand);white-space:nowrap;opacity:.85}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,149,47,.6)}50%{box-shadow:0 0 0 12px rgba(200,149,47,0)}}
+
+.tap-hint{
+  font:600 14px/1 inherit;color:#fff;opacity:.9;cursor:pointer;
+  padding:14px 22px;border:1.5px dashed rgba(255,255,255,.5);border-radius:12px;
+  animation:pulse 1.4s infinite; background:rgba(0,0,0,.2);
+}
+
+/* Aviso flotante (corrección suave del modo guiado) */
+#toast{
+  position:fixed;top:22px;left:50%;transform:translate(-50%,-20px);z-index:9;
+  background:rgba(20,12,6,.92);border:1px solid var(--warn);color:#fff;
+  padding:12px 18px;border-radius:12px;font-size:14px;max-width:80vw;text-align:center;
+  opacity:0;transition:.4s;pointer-events:none;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---- Pantallas (intro / fin) ---- */
+.screen{
+  position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;gap:18px;padding:30px;
+  background:radial-gradient(120% 90% at 50% 0%,#1c130a,#0a0705 70%);
+}
+.screen.hidden{display:none}
+.logo{
+  font:800 clamp(22px,5vw,42px)/1.05 Georgia,serif; letter-spacing:2px;
+  color:var(--brand); text-shadow:0 3px 0 rgba(0,0,0,.5);
+}
+.logo span{display:block;font-size:.34em;letter-spacing:6px;color:var(--brand-ink);font-weight:400;margin-top:8px}
+.tag{max-width:520px;color:#d9c9a3;font-size:clamp(14px,2.4vw,17px);line-height:1.5;opacity:.9}
+.mode-pick{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.mode-card{
+  width:190px;background:rgba(255,255,255,.05);border:1px solid rgba(200,149,47,.35);
+  border-radius:16px;padding:18px 16px;cursor:pointer;transition:.15s;
+}
+.mode-card:hover{background:rgba(200,149,47,.12);transform:translateY(-3px)}
+.mode-card h3{color:var(--brand);font-size:17px;margin-bottom:6px}
+.mode-card p{font-size:12.5px;color:#cbb;line-height:1.4}
+.note{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-size:11px;color:#7a6a52;z-index:11}
+.pill{display:inline-block;font-size:12px;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:4px 12px;margin-top:4px}
+
+/* Botón de info "cómo meter el metraje real" */
+#howto{position:fixed;top:12px;right:12px;z-index:12;font-size:12px;color:#cbb;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);border-radius:20px;
+  padding:6px 12px;cursor:pointer}
+#howto-panel{position:fixed;inset:0;z-index:20;background:rgba(6,4,2,.94);
+  display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;gap:14px}
+#howto-panel.show{display:flex}
+#howto-panel .box{max-width:640px;text-align:left;background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,149,47,.3);border-radius:16px;padding:24px;line-height:1.6;font-size:14px;color:#e7dcc5}
+#howto-panel code{background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px;color:var(--brand);font-size:13px}
+#howto-panel h2{color:var(--brand);margin-bottom:6px}
+#howto-panel .btn{align-self:center;margin-top:8px}
+.win{color:var(--ok)} .lose{color:var(--warn)}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ ESCENARIO (huecos de la película) ══════════════ -->
+<div id="stage"></div>
+
+<!-- Primera persona -->
+<div id="torchglow"></div>
+<div id="fpv"></div>
+<div id="torch"><div class="stick"></div><div class="flame"></div></div>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-top">
+    <div id="objective"><small>Objetivo</small><span id="obj-text">—</span></div>
+    <div id="mode-badge">MODO</div>
+  </div>
+  <div id="subtitle"></div>
+  <div id="actions"></div>
+  <div id="timeline"><div id="timebar"></div></div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══════════════ INTRO ══════════════ -->
+<section class="screen" id="intro">
+  <div class="logo" id="brandlogo"><span>Película jugable · Demo 60&nbsp;s</span></div>
+  <div class="pill">Formato básico — primera persona</div>
+  <p class="tag">Vives en primera persona un fragmento de la película. En esta demo los planos
+     son <b>placeholders</b>: cada hueco se sustituye por el clip o fotograma real de la
+     película sin tocar el resto. Elige cómo quieres jugarlo:</p>
+  <div class="mode-pick">
+    <div class="mode-card" onclick="start('guiado')">
+      <h3>▶ Guiado</h3>
+      <p>Se te lleva de la mano. Aprendes, no puedes perder. Ideal para la primera toma de contacto.</p>
+    </div>
+    <div class="mode-card" onclick="start('libre')">
+      <h3>⚔ Libre</h3>
+      <p>Decides tú. Puedes equivocarte de camino, ir a otros sitios y <b>ganar o perder</b>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FIN ══════════════ -->
+<section class="screen hidden" id="end">
+  <div class="logo" id="endlogo" style="font-size:clamp(20px,4vw,34px)"></div>
+  <p class="tag" id="end-text"></p>
+  <p class="tag" id="learn-text" style="color:var(--brand)"></p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button class="btn" onclick="location.reload()">↻ Repetir</button>
+    <button class="btn ghost" onclick="toggleHowto(true)">ⓘ Cómo meter el metraje real</button>
+  </div>
+</section>
+
+<button id="howto" onclick="toggleHowto(true)">ⓘ Cómo funciona</button>
+<div id="howto-panel">
+  <div class="box">
+    <h2>Cómo sustituir los placeholders por la película real</h2>
+    <p>Cada escena tiene un <b>hueco</b> (<code>.frame</code>). Hoy está pintado con CSS.
+       Para la versión final solo cambias ese hueco por el material real:</p>
+    <p>• <b>Si tenéis la película montada</b> → metéis el <code>&lt;video&gt;</code> o el fotograma
+       (<code>background-image</code>) en ese hueco. Marca 1:1, es literalmente la peli.</p>
+    <p>• <b>Si os dan los prompts</b> → regeneráis ese plano (imagen/vídeo/3D) y podéis
+       <b>crear caminos nuevos</b> que no estaban en la peli.</p>
+    <p>El <b>motor es el mismo</b> en los dos casos: escenas conectadas + decisiones.
+       El modo <b>guiado</b> y el modo <b>libre</b> ya conviven aquí. La imagen de marca
+       se controla desde las variables <code>--brand</code> arriba del archivo.</p>
+    <button class="btn" onclick="toggleHowto(false)">Cerrar</button>
+  </div>
+</div>
+
+<div class="note">Demo técnica · los planos son placeholders sustituibles por el metraje real</div>
+
+<script>
+/* =========================================================================
+   GUION DE 60 SEGUNDOS  (formato básico · primera persona)
+   Cada escena = un "hueco" de la película + narración + acción.
+   type: 'auto'  -> avanza sola tras 'dur' segundos (con Ken Burns)
+         'tap'   -> espera un gesto del jugador (acción en 1ª persona)
+         'choice'-> decisión (guiado: se resalta la correcta; libre: consecuencias)
+   ========================================================================= */
+const SCENES = [
+  { id:'s1', dur:10, type:'auto', tag:'CLIP 01 · 0:00–0:10 · amanece en el campamento',
+    obj:'Despierta en el campamento', sub:'Amanece sobre las tiendas. Hoy cruzaréis hacia la ciudad.',
+    sky:['#20140a','#5a3410','#c8952f'], horizon:'camp' },
+
+  { id:'s2', dur:8, type:'tap', tag:'CLIP 02 · 0:10–0:18 · tomar la antorcha (1ª persona)',
+    obj:'Ponte en pie', sub:'Toma la antorcha antes de salir.',
+    action:'🔥 Tomar la antorcha', torch:true,
+    sky:['#160f08','#3a2410','#7a4a18'], horizon:'camp' },
+
+  { id:'s3', dur:10, type:'auto', tag:'CLIP 03 · 0:18–0:28 · el camino hacia el río',
+    obj:'Avanza hacia el río Jordán', sub:'El sendero baja entre acacias hacia el agua.',
+    sky:['#2a1c10','#6b4a1e','#d9a94a'], horizon:'path' },
+
+  { id:'s4', dur:14, type:'choice', tag:'CLIP 04 · 0:28–0:42 · DECISIÓN · cruzar el río',
+    obj:'El río baja crecido. ¿Por dónde cruzas?', sub:'Lee el terreno antes de dar un paso.',
+    sky:['#1a2230','#33506b','#7fa9c4'], horizon:'river',
+    choices:[
+      { text:'Por el vado poco profundo', correct:true,
+        okSub:'Buena lectura. El agua te llega a la rodilla y pasas firme.' },
+      { text:'Por la corriente abierta', correct:false,
+        badSub:'La corriente tira fuerte…',
+        guidedFix:'La corriente te arrastra. Retrocedes y buscas el vado.',
+        loseText:'La corriente te arrastra río abajo. La misión se pierde aquí.' }
+    ] },
+
+  { id:'s5', dur:10, type:'auto', tag:'CLIP 05 · 0:42–0:52 · ante las murallas',
+    obj:'Aproxímate a las murallas', sub:'La ciudad se alza enorme al otro lado de la llanura.',
+    sky:['#1a120c','#4a2c18','#a8632a'], horizon:'walls' },
+
+  { id:'s6', dur:8, type:'tap', tag:'CLIP 06 · 0:52–1:00 · suena el cuerno',
+    obj:'Suena el cuerno. Avanza', sub:'Es el momento. Da el paso al frente.',
+    action:'📯 Avanzar', torch:true,
+    sky:['#20140a','#7a1f1a','#c8952f'], horizon:'walls' },
+];
+
+/* ---------- Estado ---------- */
+let mode='guiado', idx=0, timer=null, tStart=0, elapsed=0, TOTAL=60, correctChoice=true;
+
+const $=s=>document.querySelector(s);
+const stage=$('#stage'), timebar=$('#timebar');
+
+/* ---------- Placeholder pintado con CSS (simula el fotograma) ---------- */
+function paintFrame(sc){
+  const [a,b,c]=sc.sky;
+  let extra='';
+  const silh='#0a0705';
+  if(sc.horizon==='camp')
+    extra=`radial-gradient(60px 60px at 22% 74%,${silh} 60%,transparent 62%),
+           radial-gradient(80px 80px at 38% 78%,${silh} 60%,transparent 62%),
+           radial-gradient(70px 70px at 70% 76%,${silh} 60%,transparent 62%),`;
+  if(sc.horizon==='path')
+    extra=`linear-gradient(100deg,transparent 42%,rgba(60,40,20,.5) 46%,rgba(60,40,20,.5) 54%,transparent 58%),`;
+  if(sc.horizon==='river')
+    extra=`repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 30px,transparent 30px 60px),
+           linear-gradient(0deg,#2c4a63 0 34%,transparent 34%),`;
+  if(sc.horizon==='walls')
+    extra=`repeating-linear-gradient(90deg,${silh} 0 44px,#170f08 44px 50px),
+           linear-gradient(0deg,${silh} 0 40%,transparent 40%),`;
+  return `${extra}linear-gradient(180deg,${a} 0%,${b} 45%,${c} 78%,${silh} 100%)`;
+}
+
+/* ---------- Motor ---------- */
+function start(m){
+  mode=m;
+  $('#intro').classList.add('hidden');
+  $('#mode-badge').textContent = m==='guiado'?'MODO GUIADO':'MODO LIBRE';
+  tStart=performance.now();
+  runGlobalClock();
+  show(0);
+}
+
+function runGlobalClock(){
+  clearInterval(window._clk);
+  window._clk=setInterval(()=>{
+    elapsed=(performance.now()-tStart)/1000;
+    timebar.style.width=Math.min(100,elapsed/TOTAL*100)+'%';
+  },200);
+}
+
+function show(i){
+  idx=i; const sc=SCENES[i];
+  // construir escena
+  const div=document.createElement('div');
+  div.className='shot';
+  div.innerHTML=`<div class="frame" style="background-image:${paintFrame(sc)}"></div>
+                 <div class="slot-tag"><b>▣ HUECO</b> · ${sc.tag}</div>`;
+  stage.appendChild(div);
+  requestAnimationFrame(()=>div.classList.add('active'));
+  // limpiar escena anterior
+  const shots=stage.querySelectorAll('.shot');
+  if(shots.length>1){const old=shots[0];old.classList.remove('active');setTimeout(()=>old.remove(),800);}
+  // reiniciar animación Ken Burns
+  const f=div.querySelector('.frame'); f.style.animation='none'; void f.offsetWidth;
+  f.style.animation=`kenburns ${sc.dur+2}s ease-out forwards`;
+
+  // HUD
+  $('#obj-text').textContent=sc.obj;
+  typeSub(sc.sub);
+  if(sc.torch){ $('#torch').classList.add('on'); $('#torchglow').classList.add('on'); }
+
+  renderActions(sc);
+}
+
+function renderActions(sc){
+  const box=$('#actions'); box.innerHTML='';
+  clearTimeout(timer);
+
+  if(sc.type==='auto'){
+    timer=setTimeout(next, sc.dur*1000);
+    return;
+  }
+  if(sc.type==='tap'){
+    const b=document.createElement('div');
+    b.className='tap-hint'; b.textContent=sc.action||'▶ Continuar';
+    b.onclick=next; box.appendChild(b);
+    return;
+  }
+  if(sc.type==='choice'){
+    sc.choices.forEach(ch=>{
+      const b=document.createElement('button');
+      b.className='btn'+((mode==='guiado'&&ch.correct)?' recommended':'');
+      b.textContent=ch.text;
+      b.onclick=()=>choose(sc,ch);
+      box.appendChild(b);
+    });
+  }
+}
+
+function choose(sc,ch){
+  $('#actions').innerHTML='';
+  if(ch.correct){
+    correctChoice=true; typeSub(ch.okSub); toast('Decisión acertada ✓','var(--ok)');
+    setTimeout(next,1900);
+  } else if(mode==='guiado'){
+    // guiado: corrección suave, no se puede perder
+    correctChoice=false; typeSub(ch.guidedFix); toast('El guía te reconduce','var(--warn)');
+    setTimeout(next,2100);
+  } else {
+    // libre: consecuencia real -> se pierde
+    typeSub(ch.badSub); toast('¡Camino equivocado!','var(--warn)');
+    setTimeout(()=>finish('lose',ch.loseText),1800);
+  }
+}
+
+function next(){
+  clearTimeout(timer);
+  if(idx+1<SCENES.length) show(idx+1);
+  else finish('win');
+}
+
+/* ---------- Subtítulos con efecto máquina ---------- */
+let typeT=null;
+function typeSub(txt){
+  const el=$('#subtitle'); clearInterval(typeT); el.textContent=''; let k=0;
+  typeT=setInterval(()=>{ el.textContent=txt.slice(0,++k); if(k>=txt.length)clearInterval(typeT); },18);
+}
+
+function toast(msg,color){
+  const t=$('#toast'); t.textContent=msg; t.style.borderColor=color||'var(--brand)';
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1700);
+}
+
+/* ---------- Final ---------- */
+function finish(result,customText){
+  clearInterval(window._clk); clearTimeout(timer);
+  $('#hud').style.display='none'; $('#fpv').style.display='none';
+  $('#torch').classList.remove('on'); $('#torchglow').classList.remove('on');
+  const end=$('#end'); end.classList.remove('hidden');
+  $('#endlogo').innerHTML=getComputedStyle(document.body).getPropertyValue('--brand-name');
+
+  if(result==='win'){
+    $('#end-text').innerHTML='<span class="win">▣ Fin de la demo · La aventura continúa…</span><br>'+
+      'Has cruzado el río y llegado a las murallas en primera persona.';
+    $('#learn-text').textContent = correctChoice
+      ? 'Aprendizaje: leer el terreno y elegir el paso seguro te llevó a buen puerto.'
+      : 'Aprendizaje: te equivocaste de paso, pero supiste rectificar y seguir.';
+  } else {
+    $('#end-text').innerHTML='<span class="lose">▣ Has perdido este intento</span><br>'+(customText||'La misión se detiene aquí.');
+    $('#learn-text').textContent='Aprendizaje: en el modo libre las decisiones cuentan. Prueba otro camino.';
+  }
+}
+
+/* ---------- Info ---------- */
+function toggleHowto(on){ $('#howto-panel').classList.toggle('show',on); }
+
+/* logo intro con nombre de marca */
+$('#brandlogo').insertAdjacentText('afterbegin',
+  getComputedStyle(document.body).getPropertyValue('--brand-name').replace(/"/g,''));
+</script>
+</body>
+</html>
