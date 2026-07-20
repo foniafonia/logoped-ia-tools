@@ -1066,6 +1066,44 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Auditoria GitHub repos sin Pages — VocalClinic, curso online y privados localizados
+
+Contexto:
+- Jose pide seguir buscando porque siguen faltando prototipos antiguos y recientes.
+- Prioridad: cada cosa enseñable debe tener boton VER y captura; lo que sea repo privado/deploy pendiente debe estar identificado sin esconderlo.
+
+Hecho:
+- Rescatado y publicado `foniafonia/vocalclinic-demo` completo dentro de:
+  `codex-assets/vocalclinic-demo/`
+- Añadidas tarjetas con captura y boton VER:
+  - VocalClinic Demo — entrenamiento vocal inteligente (`codex-assets/vocalclinic-demo/index.html`)
+  - QR Sonoro — misiones de lenguaje (`codex-assets/vocalclinic-demo/qr-sonoro/index.html` + `mision.html`)
+  - EthosFlow / FoniaWatch — apoyo a la fluidez (`codex-assets/vocalclinic-demo/FoniaWatchRehab/web-demo/index.html`)
+- Generadas capturas:
+  - `codex-assets/screenshots/vocalclinic-demo-entrenamiento-vocal-inteligente.jpg`
+  - `codex-assets/screenshots/qr-sonoro-misiones-de-lenguaje.jpg`
+  - `codex-assets/screenshots/ethosflow-foniawatch-apoyo-a-la-fluidez.jpg`
+- Localizados y dados de alta como pendientes/repos, con fechas de GitHub:
+  - `logoped-ia` / `CURSO-ONLINE-REPLIT` / `curso-logoped-ia`: curso online/preventa con landing, rutas `/gracias` y `/admin`, textos Stripe y docs de deploy.
+  - `vocaltrack`: analisis acustico vocal en tiempo real con pitch.
+  - `chatbot_familias_logopedia`: chatbot de familias con calendario social/publicacion programada.
+  - `logoped-ia-inventario-workia`: repo privado de continuidad/inventario.
+  - `valencia-nadina-ia-logopedia-codex`: repo privado territorial/formativo.
+
+Verificacion:
+- VocalClinic, QR Sonoro y FoniaWatch se copiaron como estaticos y tienen capturas generadas con Chrome headless.
+- Se intento compilar `artifacts/logoped-ia` con `pnpm`; el repo esta preparado para workspace/Replit/Linux y excluye binarios nativos Darwin en `pnpm-workspace.yaml`, por lo que en este Mac falla por bindings nativos (`rollup`, `esbuild`, `lightningcss`, `tailwindcss oxide`). No se marca como VER hasta desplegar/compilar en entorno adecuado.
+
+Pendiente consciente:
+- Curso online Logoped-IA necesita deploy real o build en Linux/Vercel.
+- VocalTrack y Chatbot familias son privados: no hay demo publica; si se quieren enseñar, crear demo limpia sin datos sensibles.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Auditoria GitHub Pages foniafonia — tanda de URLs vivas faltantes
 
 Contexto:
