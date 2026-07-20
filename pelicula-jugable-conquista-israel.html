@@ -155,14 +155,16 @@ body{background:#0a0705;color:var(--brand-ink);
 <!-- INTRO -->
 <section class="screen" id="intro">
   <div class="logo" id="brandlogo"><span>Película jugable · Demo 60&nbsp;s · 1ª persona</span></div>
-  <span class="pill">Formato básico — con tu película real</span>
+  <span class="pill">La misión de los espías · con tu película real</span>
+  <p class="tag" style="margin-bottom:-4px"><b>Eres uno de los dos espías</b> que Yoshúa envía a Jericó.
+     Tu misión: entrar sin que te vean, conseguir la ayuda de <b>Rahab</b> y volver con vida.
+     Cada decisión sigue la historia real de la película.</p>
   <div class="filebox">
     <p class="tag" style="margin:0">Carga <b>tu archivo de la película</b> (se queda en tu ordenador, no se sube a ningún sitio):</p>
     <input type="file" id="filepick" accept="video/*">
     <div id="film-status">Sin película cargada · se jugará con planos de muestra.</div>
   </div>
-  <p class="tag">Vives un fragmento en primera persona. El motor reproduce el trozo de la
-     película que toca en cada momento. Elige cómo jugarlo:</p>
+  <p class="tag">Elige cómo jugarlo:</p>
   <div class="mode-pick">
     <div class="mode-card" onclick="start('guiado')"><h3>▶ Guiado</h3>
       <p>Se te lleva de la mano. Aprendes, no puedes perder.</p></div>
@@ -222,24 +224,68 @@ body{background:#0a0705;color:var(--brand-ink);
 <div class="note">Tu película se reproduce en local · nada se sube a internet</div>
 
 <script>
-/* ===== Configuración por defecto (retimable en el editor) ===== */
+/* ===== LA MISIÓN DE LOS ESPÍAS =====================================
+   Sigue la HISTORIA REAL de la película (Yoshúa envía espías a Jericó,
+   Rahab los esconde, el cordón rojo, la huida por la colina). Los
+   tiempos (in/out, en segundos) están tomados de la transcripción de
+   TU película, así que al cargarla cada plano encaja solo.
+   Ajustables en el editor ⚙ si quieres afinarlos.
+   =================================================================== */
 const DEFAULT_BEATS=[
- {in:0, out:10, type:'auto',  obj:'Despierta en el campamento', sub:'Amanece sobre las tiendas. Hoy cruzaréis hacia la ciudad.'},
- {in:10,out:18, type:'tap',   obj:'Ponte en pie', sub:'Toma la antorcha antes de salir.', action:'🔥 Tomar la antorcha', torch:true},
- {in:18,out:28, type:'auto',  obj:'Avanza hacia el río', sub:'El sendero baja entre acacias hacia el agua.'},
- {in:28,out:42, type:'choice',obj:'El río baja crecido. ¿Por dónde cruzas?', sub:'Lee el terreno antes de dar un paso.',
+ {in:29, out:46, type:'auto', obj:'La conquista está por comenzar',
+   sub:'El pueblo de Israel avanza por el desierto hacia el río Jordán, guiado por Yoshúa.'},
+
+ {in:221, out:235, type:'tap', obj:'Acepta la misión de Yoshúa',
+   sub:'Yoshúa te elige: espía la ciudad de Jericó y vuelve con información. Sé discreto y valiente.',
+   action:'✔ Acepto la misión'},
+
+ {in:284, out:300, type:'choice', obj:'Entra en Jericó sin que te vean',
+   sub:'Es de noche. ¿Cómo te metes en la ciudad?',
    choices:[
-     {text:'Por el vado poco profundo', correct:true, okSub:'Buena lectura. Pasas firme.'},
-     {text:'Por la corriente abierta', correct:false, badSub:'La corriente tira fuerte…',
-       guidedFix:'La corriente te arrastra. Retrocedes y buscas el vado.',
-       loseText:'La corriente te arrastra río abajo. La misión se pierde aquí.'}
+     {text:'Pegado al muro, entre las sombras', correct:true, okSub:'Avanzas en silencio, sin que nadie te note.'},
+     {text:'Corriendo por el centro', correct:false, badSub:'Dejas huellas bien visibles…',
+       guidedFix:'Un guardia ve tus huellas: «¡vienen de fuera!». Vuelves a las sombras a tiempo.',
+       loseText:'Los guardias ven tus huellas: «¡ya están adentro, hay que atraparlos!». Te capturan.'}
    ]},
- {in:42,out:52, type:'auto',  obj:'Aproxímate a las murallas', sub:'La ciudad se alza enorme al otro lado de la llanura.'},
- {in:52,out:60, type:'tap',   obj:'Suena el cuerno. Avanza', sub:'Es el momento. Da el paso al frente.', action:'📯 Avanzar', torch:true},
+
+ {in:354, out:372, type:'tap', obj:'Te están buscando: escóndete',
+   sub:'«Israel va a enviar espías. Ojos bien abiertos.» Tienes que desaparecer ya.',
+   action:'🏃 Buscar dónde esconderte'},
+
+ {in:449, out:468, type:'choice', obj:'Encuentra un escondite seguro',
+   sub:'Necesitas ayuda dentro de Jericó. ¿A quién acudes?',
+   choices:[
+     {text:'A la mujer de la cafetería (Rahab)', correct:true, okSub:'Le pides refugio y acepta: «Pueden esconderse aquí».'},
+     {text:'Me escondo solo en un callejón', correct:false, badSub:'Estás demasiado a la vista…',
+       guidedFix:'En el callejón casi te pillan. Corres a buscar a Rahab, la del café.',
+       loseText:'En el callejón los guardias te descubren. Misión fallida.'}
+   ]},
+
+ {in:500, out:521, type:'tap', obj:'Quédate escondido y en silencio',
+   sub:'Los guardias registran la casa. No hagas ningún ruido…',
+   action:'🤫 Aguantar en silencio'},
+
+ {in:578, out:601, type:'tap', obj:'Sella el pacto con Rahab',
+   sub:'Rahab quiere unirse al pueblo. A cambio, le prometéis salvarla: un cordón rojo en su ventana.',
+   action:'🧵 Prometer el cordón rojo'},
+
+ {in:512, out:521, type:'choice', obj:'Escapa de Jericó con vida',
+   sub:'Rahab dijo: baja por la ventana y sigue el sendero por la colina. Pero los guardias fueron al río. ¿Por dónde huyes?',
+   choices:[
+     {text:'Por el sendero, hacia la colina, en silencio', correct:true, okSub:'Sigues el sendero en silencio. Nadie te ve. ¡A salvo!'},
+     {text:'Corriendo hacia el río', correct:false, badSub:'Corres hacia el río…',
+       guidedFix:'¡Los guardias fueron al río a buscarte! Das media vuelta al sendero de la colina.',
+       loseText:'Corres al río… justo donde te esperaban los guardias. Te atrapan.'}
+   ]},
+
+ {in:642, out:672, type:'auto', obj:'Vuelve con Yoshúa e informa',
+   sub:'Cruzas de vuelta con secretos que valen oro y una promesa que se cumplirá.'},
 ];
-const SKY=[['#20140a','#5a3410','#c8952f','camp'],['#160f08','#3a2410','#7a4a18','camp'],
- ['#2a1c10','#6b4a1e','#d9a94a','path'],['#1a2230','#33506b','#7fa9c4','river'],
- ['#1a120c','#4a2c18','#a8632a','walls'],['#20140a','#7a1f1a','#c8952f','walls']];
+const SKY=[['#1c1206','#5a3410','#c8952f','path'],['#20140a','#7a4a18','#d9a94a','camp'],
+ ['#0a0d16','#1a2740','#33506b','walls'],['#12100a','#3a2c18','#6b4a1e','walls'],
+ ['#160f08','#3a2410','#7a4a18','camp'],['#0d0a08','#241a10','#4a3418','walls'],
+ ['#1a120c','#4a2c18','#a8632a','camp'],['#0a0d16','#22303f','#5a7a94','river'],
+ ['#1c1206','#7a1f1a','#c8952f','path']];
 
 let BEATS = load();
 let mode='guiado', idx=0, elapsed=0, tStart=0, correctChoice=true;
@@ -249,8 +295,8 @@ const $=s=>document.querySelector(s);
 const film=$('#film'), stage=$('#stage');
 
 /* ---------- Persistencia ---------- */
-function load(){ try{const j=JSON.parse(localStorage.getItem('cji_beats'));if(Array.isArray(j)&&j.length)return j;}catch(e){} return structuredClone(DEFAULT_BEATS); }
-function save(){ localStorage.setItem('cji_beats', JSON.stringify(BEATS)); }
+function load(){ try{const j=JSON.parse(localStorage.getItem('cji_beats_v3'));if(Array.isArray(j)&&j.length)return j;}catch(e){} return structuredClone(DEFAULT_BEATS); }
+function save(){ localStorage.setItem('cji_beats_v3', JSON.stringify(BEATS)); }
 
 /* ---------- Carga de la película ---------- */
 $('#filepick').addEventListener('change',e=>{
@@ -361,11 +407,11 @@ function finish(res,custom){
   $('#end').classList.remove('hidden');
   $('#endlogo').textContent=brandName();
   if(res==='win'){
-    $('#end-text').innerHTML='<span class="win">▣ Fin de la demo · La aventura continúa…</span><br>Has recorrido el fragmento en primera persona.';
-    $('#learn-text').textContent=correctChoice?'Aprendizaje: leer el terreno y elegir el paso seguro te llevó a buen puerto.':'Aprendizaje: te equivocaste de paso, pero supiste rectificar y seguir.';
+    $('#end-text').innerHTML='<span class="win">▣ Misión cumplida · Los espías regresan</span><br>Traes la información y el pacto con Rahab. El pueblo cruzará el Jordán y, al sonar el shofar, las murallas de Jericó caerán.';
+    $('#learn-text').textContent=correctChoice?'Aprendizaje: la discreción, la fe y la promesa a Rahab hacen posible la conquista de Jericó.':'Aprendizaje: te equivocaste, pero supiste rectificar. Como los espías, aprendiste sobre la marcha.';
   }else{
-    $('#end-text').innerHTML='<span class="lose">▣ Has perdido este intento</span><br>'+(custom||'La misión se detiene aquí.');
-    $('#learn-text').textContent='Aprendizaje: en el modo libre las decisiones cuentan. Prueba otro camino.';
+    $('#end-text').innerHTML='<span class="lose">▣ Te han capturado</span><br>'+(custom||'La misión se detiene aquí.');
+    $('#learn-text').textContent='Aprendizaje: en el modo libre las decisiones cuentan. Vuelve a intentarlo y sigue la pista de Rahab.';
   }
 }
 
