@@ -1066,6 +1066,52 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: CineMundos/Januka/Anidjar + traspaso visual a FonoMundos
+
+Contexto:
+- Jose avisa de que faltaban CineMundos, la pelicula tipo Duolingo de Januka y el trabajo versionado desde FonoMundos con avatares/atracciones.
+- Tambien cita un hilo/proyecto en Claude llamado `iatv rab andijar` con varias opciones para Anidjar.
+
+Hecho:
+- Copiado el inventario tecnico de Claude desde `/Users/joseaserraf/Downloads/INVENTARIO_PARA_FONOMUNDOS.md` a:
+  `codex-assets/docs/INVENTARIO_PARA_FONOMUNDOS.md`.
+- Añadidas a `LANDING_TODO_LOGOPED_IA.html` tarjetas nuevas de FonoMundos/CineMundos:
+  - FonoMundos — traspaso visual desde CineMundos/Januka.
+  - CriatuMundos — mundo 3D reutilizable para FonoMundos.
+  - GeltMundos — armario y avatar personalizable.
+  - Pelicula jugable — motor tipo Duolingo para FonoMundos.
+  - CineMundos/Januka — minijuegos embebibles para suite.
+- Convertidas CriatuMundos y GeltMundos a `live` porque existen demos publicas en:
+  - `https://foniafonia.github.io/pelicula-januka/criatumundos/`
+  - `https://foniafonia.github.io/pelicula-januka/geltmundos/`
+- Añadidas tarjetas nuevas en seccion `Anidjar`:
+  - Para reunion con Anidjar — Pelicula jugable Januka.
+  - Para reunion con Anidjar — Presentacion CineMundos Januka.
+  - Para reunion con Anidjar — Mundos 3D CineMundos.
+  - Para reunion con Anidjar — Minijuegos Januka.
+  - Para reunion con Anidjar — iATV Rab Anidjar (hilo Claude), marcado local/pendiente de exportar.
+- Actualizada la tarjeta generica Januka/Tora para indicar que pelicula + presentacion ya estan enlazadas y que solo faltan variantes restantes del hilo.
+- Generadas capturas nuevas:
+  - `codex-assets/screenshots/pelicula-jugable-motor-tipo-duolingo-para-fonomundos.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-pelicula-jugable-januka.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-presentacion-cinemundos-januka.jpg`
+  - `codex-assets/screenshots/fonomundos-traspaso-visual-desde-cinemundos-januka.jpg`
+  - `codex-assets/screenshots/criatumundos-mundo-3d-reutilizable-para-fonomundos.jpg`
+  - `codex-assets/screenshots/geltmundos-armario-y-avatar-personalizable.jpg`
+  - `codex-assets/screenshots/cinemundos-januka-minijuegos-embebibles-para-suite.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-mundos-3d-cinemundos.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-minijuegos-januka.jpg`
+
+Pendiente para Claude:
+- Exportar o pasar enlaces del proyecto/hilo `iatv rab andijar`.
+- Si hay mas artefactos Januka/Tora no incluidos en `pelicula-januka`, pasar URLs exactas o HTML limpio para `codex-assets/anidjar/`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Sección curada "Para reunión con Anidjar"
 
 Contexto:
