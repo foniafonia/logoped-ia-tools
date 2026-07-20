@@ -827,3 +827,25 @@ Tarea: Codex — DEPLOYS que Claude no puede hacer desde su entorno.
 2. Confirmar/actualizar la URL-alias de la preview de `codex/renovacion-visual` si cambia.
 3. Subir a `codex-assets/` (repo logoped-ia-tools) los HTML estáticos locales listados como PENDIENTE para que Claude/landing les den VER.
 Estado: [PARA_CODEX PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: Landing escaparate — concept-vivo-b + reparto de estados por origen
+Hecho (según instrucciones de Jose vía Codex):
+- NO se toca producción. Descartado el merge de experimento/vivo-completo a main (el propio commit de esa rama dice que es exploración visual aislada, "Jose decide si sigue adelante"). Meter esos visuales en la web de compradores era el riesgo.
+- concept-vivo-b: añadido a la landing con la URL aportada por Jose como DEMO VERCEL PREVIEW · VER (https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-vivo-b) + las otras 4 rutas concepto. Marcado "URL aportada por Jose · pendiente de verificación externa" porque el entorno de Claude bloquea *.vercel.app (403). Ya NO está amarilla.
+- Nuevo estado NECESITA SUBIDA LOCAL (upload) para el HTML que solo vive en el Mac de Jose. Regla acordada: Claude ordena la landing; Codex Desktop (con acceso al disco) sube los archivos al repo; Claude les da VER.
+- Estado landing: 143 tarjetas, 122 con botón VER primario, 0 enlaces relativos rotos (verificado headless). Reparto: live 17, preview 2, repo 103, upload 6, pending 8, local 5, soon 1, cantera 1.
+
+Tarea: Codex Desktop — SUBIR estos archivos locales a codex-assets/ (repo logoped-ia-tools) y avisar en esta bitácora; Claude les pondrá VER automáticamente:
+1. iSecuencias → `araia/isecuencias/` → a `codex-assets/araia/`.
+2. Praxias Connect → `praxias-connect.html` → a `codex-assets/herramientas/`.
+3. Alfabeto PNL → `alfabeto-pnl.html` → a `codex-assets/herramientas/`.
+4. Anamnesis IA → revisar datos y `…/anamnesis ia/index.html` → a `codex-assets/herramientas/` (o demo limpia).
+5. Logopod → elegir versión (`logopod-entrenador-real.html` / `-funcional` / app) → a `codex-assets/logopod/`.
+6. Herramientas clínicas HTML sueltas (logopedia-dicta, logopedia-smb, fabricador-prompts, pictoia-adaptativo, arasecuencias-app, praxiasconnect_FINAL, alfabeto-pnl-final) → a `codex-assets/herramientas/`.
+Además (apps, requieren deploy, no subida): MirrorFono (build+deploy), Curso IA preventa (Flask→Railway/Render), Preta/fluidez (deploy v2-telegram o demo limpia), juegos de aire pendientes, Valencia/AELFA (redeploy).
+Sensible, NO subir tal cual: JELOU Skill y Base de conocimiento chatbot → crear demo limpia.
+Estado: [PARA_CODEX PENDIENTE]
