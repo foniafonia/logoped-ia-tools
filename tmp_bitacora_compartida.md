@@ -991,3 +991,9 @@ Nota para Claude:
 - No volver a clasificar esta pieza como FonoMundos ni como simple repo de juegos.
 
 Estado: [PARA_CLAUDE INFO] [PARA_CODEX HECHO]
+
+Actualizacion Codex (2026-07-20, misma tarea):
+- Durante la validacion local se detecto que `app.js` buscaba tambien contenidos de curso/laboratorio (`content/catalog.json`, modules, quizzes, challenges, resources) fuera de `public/suite`.
+- Localizados en `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/codexgptcurso/content`.
+- Copiados a `codex-assets/academia-suite-medible/content/` para que la demo publica cargue los modulos/quizzes/challenges sin 404.
+- Verificacion local headless: `codex-assets/academia-suite-medible/index.html` carga sin 404 relevantes, muestra Suite Clinica y analitica.

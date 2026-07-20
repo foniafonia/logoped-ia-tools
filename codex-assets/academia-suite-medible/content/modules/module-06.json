@@ -1,0 +1,12 @@
+{
+  "id": "module-06",
+  "title": "Productividad y profesionalizacion",
+  "description": "Escalar el uso de IA en practica profesional.",
+  "goal": "Construir un sistema sostenible y seguro.",
+  "lessons": [
+    {"id":"lesson-06-01","title":"Biblioteca de prompts","duration_minutes":16,"theory":["Clasifica por objetivo terapeutico.","Versiona cada prompt.","Etiqueta por edad y dificultad."],"example":"Repositorio con carpetas: articulacion, vocabulario, pragmatica.","checklist":["Taxonomia","Versionado","Etiquetas","Busqueda"]},
+    {"id":"lesson-06-02","title":"Automatizaciones utiles","duration_minutes":18,"theory":["Automatiza borradores, no decisiones clinicas.","Define revisiones humanas.","Controla calidad antes de enviar."],"example":"Generar resumen semanal para familias con plantilla.","checklist":["Objetivo","Control","Revision","Entrega"]},
+    {"id":"lesson-06-03","title":"Privacidad y limites","duration_minutes":17,"theory":["No incluir datos identificables.","Documentar consentimiento.","Respetar marco legal vigente."],"example":"Uso de casos anonimizados para entrenamiento.","checklist":["Anonimizacion","Consentimiento","Registro","Cumplimiento"]},
+    {"id":"lesson-06-04","title":"Plan profesional 90 dias","duration_minutes":20,"theory":["Definir metas trimestrales.","Elegir metricas clave.","Revisar impacto en eficiencia y calidad."],"example":"Plan 30-60-90 para integrar IA en consulta.","checklist":["Meta","Metrica","Ejecucion","Revision"]}
+  ]
+}

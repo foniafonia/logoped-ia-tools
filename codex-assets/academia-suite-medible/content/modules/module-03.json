@@ -1,0 +1,12 @@
+{
+  "id": "module-03",
+  "title": "Practica con API (texto e imagen)",
+  "description": "Ejecucion real de prompts y comparacion interna/externa.",
+  "goal": "Dominar la mejora iterativa basada en evidencia.",
+  "lessons": [
+    {"id":"lesson-03-01","title":"Prompting para texto","duration_minutes":16,"theory":["Pide estructura accionable.","Define longitud maxima.","Solicita tablas si necesitas aplicacion rapida."],"example":"Crea tabla de 7 dias para trabajo de /rr/ en casa.","checklist":["Formato","Longitud","Secuencia","Aplicabilidad"]},
+    {"id":"lesson-03-02","title":"Prompting para imagen","duration_minutes":22,"theory":["Describe escena, estilo, publico y objetivo.","Evita ambiguedad visual.","Incluye restricciones eticas y educativas."],"example":"Genera ilustracion infantil para juego de articulacion /s/ con tarjetas visuales.","checklist":["Escena","Estilo","Edad","Uso terapeutico"]},
+    {"id":"lesson-03-03","title":"Comparativa interna vs externa","duration_minutes":20,"theory":["Comparar no es copiar: es aprender.","Puntua por criterios fijos.","Itera prompt segun brechas detectadas."],"example":"Compara salida A y B y propone prompt v2 con mejoras.","checklist":["Rubrica","Ganador","Razon","Prompt mejorado"]},
+    {"id":"lesson-03-04","title":"Control de calidad","duration_minutes":18,"theory":["Revisa seguridad clinica.","Revisa lenguaje comprensible.","Revisa accionabilidad real en consulta."],"example":"Valida si la salida es usable en 15 minutos con materiales domesticos.","checklist":["Seguridad","Claridad","Factibilidad","Medicion"]}
+  ]
+}

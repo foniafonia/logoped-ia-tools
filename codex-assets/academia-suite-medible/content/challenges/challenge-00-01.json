@@ -1,0 +1,31 @@
+{
+  "id": "challenge-00-01",
+  "module_id": "module-00",
+  "title": "Practicas guiadas modulo 00",
+  "exercises": [
+    {
+      "id": "ex-00-01",
+      "title": "Prompt de actividad de vocabulario",
+      "instruction": "Escribe un prompt para generar una actividad de vocabulario para 6 anos, 10 minutos, materiales caseros.",
+      "expected_output_type": "text"
+    },
+    {
+      "id": "ex-00-02",
+      "title": "Prompt de explicacion para familia",
+      "instruction": "Escribe un prompt para explicar a una familia como reforzar conciencia fonologica en casa en lenguaje simple.",
+      "expected_output_type": "text"
+    },
+    {
+      "id": "ex-00-03",
+      "title": "Prompt de imagen logopedica",
+      "instruction": "Escribe un prompt para generar una imagen educativa de logopedia (escena de articulacion guiada, estilo claro, apta para ninos).",
+      "expected_output_type": "image"
+    }
+  ],
+  "rubric": {
+    "clarity": 25,
+    "clinical_relevance": 25,
+    "structure": 25,
+    "safety": 25
+  }
+}
