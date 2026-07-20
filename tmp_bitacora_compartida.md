@@ -849,3 +849,36 @@ Tarea: Codex Desktop — SUBIR estos archivos locales a codex-assets/ (repo logo
 Además (apps, requieren deploy, no subida): MirrorFono (build+deploy), Curso IA preventa (Flask→Railway/Render), Preta/fluidez (deploy v2-telegram o demo limpia), juegos de aire pendientes, Valencia/AELFA (redeploy).
 Sensible, NO subir tal cual: JELOU Skill y Base de conocimiento chatbot → crear demo limpia.
 Estado: [PARA_CODEX PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Landing escaparate — primera tanda SUBIDA LOCAL a GitHub Pages
+Rama de trabajo: codex/publicar-assets-locales (basada en origin/gh-pages)
+
+Hecho:
+- Leida la bitacora de Claude y la landing publicada `LANDING_TODO_LOGOPED_IA.html` en `origin/gh-pages`.
+- Sin tocar produccion Vercel ni mergear ramas experimentales.
+- Subidos a `codex-assets/` los elementos estaticos/locales que Codex Desktop si puede alcanzar:
+  1. iSecuencias desde `foniafonia/araia/isecuencias` hacia `codex-assets/araia/isecuencias/`, junto a `static/` y pictogramas necesarios.
+  2. Praxias Connect desde `New project 3/valencia-assets/importados-20260423/beta-innovadores/praxias-connect.html`.
+  3. Alfabeto PNL desde `New project 3/valencia-assets/importados-20260423/beta-innovadores/alfabeto-pnl.html`.
+  4. Hub Beta Innovadores + Myosinc desde la misma carpeta local.
+  5. Logopedia SMB + presentacion SMB desde `New project 3/ponencia-ia-melilla/`.
+  6. Logopod entrenador desde `foniafonia/valenciacodex-live/logopod-entrenador-landing.html`.
+  7. Fabricador de prompts logopedicos desde `foniafonia/valenciacodex-live/fabricador-prompts-logopedicos.html`.
+- Actualizada la landing para que iSecuencias, Praxias Connect, Alfabeto PNL, Logopod y Herramientas clinicas HTML sueltas pasen de `NECESITA SUBIDA LOCAL` a `EN ESTE REPO` con boton VER real.
+
+Pendiente / no subido en esta tanda:
+- Anamnesis IA: no se sube todavia. La busqueda local encontro PDFs de anamnesis con nombres de personas (`anamnesis paquito.pdf`, `anamnesis carlos.pdf`) y no un HTML limpio. Requiere demo anonima antes de publicar.
+- Herramientas citadas pero no localizadas aun con archivo claro: logopedia-dicta, pictoia-adaptativo, arasecuencias-app, praxiasconnect_FINAL, alfabeto-pnl-final.
+- Apps que requieren deploy o build: MirrorFono, Curso IA preventa, Preta/fluidez, juegos de aire pendientes, Valencia/AELFA.
+- Sensible, NO subir tal cual: JELOU Skill y Base conocimiento chatbot.
+
+Siguiente paso:
+1. Verificar localmente que los nuevos HTML abren desde la landing.
+2. Publicar esta rama en `gh-pages` para que la web publica tenga los nuevos botones VER.
+3. Continuar con la segunda tanda: localizar MirrorFono/builds, curso preventa, Preta/fluidez y herramientas sueltas faltantes.
+
+Estado: [PARA_CODEX EN PROGRESO]

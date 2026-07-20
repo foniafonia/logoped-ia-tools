@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logopod Entrenador - Ejercicio logopédico estructurado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .exercise-card {
+            border-left: 4px solid #667eea;
+        }
+        .limitation-badge {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">L</span>
+                </div>
+                <span class="font-bold text-lg">Logopod Entrenador</span>
+            </div>
+            <div class="hidden md:flex gap-8 items-center">
+                <a href="#como-funciona" class="text-sm text-gray-600 hover:text-gray-900">Cómo funciona</a>
+                <a href="#para-quien" class="text-sm text-gray-600 hover:text-gray-900">Para quién</a>
+                <a href="#limitaciones" class="text-sm text-gray-600 hover:text-gray-900">Honestidad</a>
+                <a href="#pricing" class="text-sm text-gray-600 hover:text-gray-900">Pricing</a>
+            </div>
+            <button class="hidden md:block bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                Comenzar
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-gradient text-white py-20 md:py-32">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                    Ejercicio logopédico estructurado.<br>En casa, en tiempo real.
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-blue-100">
+                    Feedback inmediato (visual + auditivo) + validación clínica + registro automático.
+                </p>
+                <p class="text-lg text-blue-100 mb-12">
+                    Complemento para tele-rehabilitación y adherencia domiciliaria. <strong>No reemplaza evaluación clínica.</strong>
+                </p>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button class="bg-white text-blue-600 font-bold px-8 py-3 rounded-lg hover:bg-blue-50 transition">
+                        Soy logopeda
+                    </button>
+                    <button class="border-2 border-white text-white font-bold px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+                        Quiero usarlo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEMA -->
+    <section class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="max-w-3xl">
+                <h2 class="text-3xl font-bold mb-8">El problema</h2>
+                <div class="space-y-6 text-lg text-gray-700">
+                    <p>
+                        <strong>Entre sesiones logopédicas hay vacío.</strong>
+                        El paciente espera una semana para volver. Sin estimulación estructurada en casa, el progreso se estanca.
+                    </p>
+                    <p>
+                        <strong>La tele-rehabilitación hoy es poco práctica.</strong>
+                        El logopeda no puede monitorizar ejercicios domiciliarios en tiempo real. Solo confía en lo que cuenta el paciente o la familia.
+                    </p>
+                    <p>
+                        <strong>Los datos de adherencia desaparecen.</strong>
+                        "¿Hizo los ejercicios?" "Sí..." → sin registro. Sin datos, sin seguimiento.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUCIÓN: 3 PILARES -->
+    <section class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-16 text-center">Cómo resuelve Logopod Entrenador</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Pilar 1 -->
+                <div class="bg-white p-8 rounded-xl card-hover shadow-sm">
+                    <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">🎯</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Logopeda diseña</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Tú defines el criterio clínico específico para cada paciente:
+                        <em>"Repite /pata/ con STT correcto"</em> o
+                        <em>"Intensidad > 70dB"</em>.
+                    </p>
+                    <p class="text-gray-500 text-sm mt-4">No es genérico. Es tuyo.</p>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="bg-white p-8 rounded-xl card-hover shadow-sm">
+                    <div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">⚙️</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Sistema valida</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        MediaPipe (boca) + Speech-to-Text (audio) + lógica clínica verifican si cumple en tiempo real.
+                    </p>
+                    <p class="text-gray-500 text-sm mt-4">On-device + cloud. Bajo latencia (<500ms).</p>
+                </div>
+
+                <!-- Pilar 3 -->
+                <div class="bg-white p-8 rounded-xl card-hover shadow-sm">
+                    <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">✅</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Paciente recibe feedback</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Visual (✓/✗ ícono) + Auditivo (voz clara) inmediato.
+                        Refuerzo positivo o corrección clara.
+                    </p>
+                    <p class="text-gray-500 text-sm mt-4">Engagement real. No aburrimiento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA: 5 EJERCICIOS -->
+    <section id="como-funciona" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-4">5 ejercicios para empezar</h2>
+            <p class="text-gray-600 mb-12 max-w-3xl">Cada uno valida un aspecto clínico diferente. Tú eliges cuál usar según el caso.</p>
+
+            <div class="space-y-6">
+                <!-- Ejercicio 1 -->
+                <div class="exercise-card bg-blue-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">1. Repetición con articulación</h3>
+                        <span class="text-sm bg-blue-200 text-blue-900 px-3 py-1 rounded">Apraxia, Disartria</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">Paciente repite palabra. STT valida si es correcta (ej: "pata").</p>
+                    <div class="bg-white p-3 rounded text-sm text-gray-600">
+                        <strong>Validador:</strong> Speech-to-Text match + reintentos (máx 3)
+                    </div>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="exercise-card bg-green-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">2. Control de intensidad</h3>
+                        <span class="text-sm bg-green-200 text-green-900 px-3 py-1 rounded">Hipofonía, Voz</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">Paciente habla "fuerte". Sistema mide dB en tiempo real.</p>
+                    <div class="bg-white p-3 rounded text-sm text-gray-600">
+                        <strong>Validador:</strong> Web Audio dB (rango 70-90dB esperado) + barra visual
+                    </div>
+                </div>
+
+                <!-- Ejercicio 3 -->
+                <div class="exercise-card bg-purple-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">3. Ritmo con metrónomo</h3>
+                        <span class="text-sm bg-purple-200 text-purple-900 px-3 py-1 rounded">Tartamudez, Apraxia</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">Paciente sigue metrónomo (1Hz). Sistema mide % sílabas "on beat".</p>
+                    <div class="bg-white p-3 rounded text-sm text-gray-600">
+                        <strong>Validador:</strong> Análisis de pausas + timeline visual de sincronización
+                    </div>
+                </div>
+
+                <!-- Ejercicio 4 -->
+                <div class="exercise-card bg-orange-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">4. Apertura bucal + sonido</h3>
+                        <span class="text-sm bg-orange-200 text-orange-900 px-3 py-1 rounded">Apraxia orofacial</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">Paciente abre boca al vocalizador /A/. MediaPipe + STT validan simultaneidad.</p>
+                    <div class="bg-white p-3 rounded text-sm text-gray-600">
+                        <strong>Validador:</strong> MediaPipe lip_distance (>20mm) + STT match temporal
+                    </div>
+                </div>
+
+                <!-- Ejercicio 5 -->
+                <div class="exercise-card bg-red-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">5. Variabilidad de pitch + entonación</h3>
+                        <span class="text-sm bg-red-200 text-red-900 px-3 py-1 rounded">Dispraxia, Monotonía</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">Paciente repite frase con entonación. Sistema mide rango F0 (Hz).</p>
+                    <div class="bg-white p-3 rounded text-sm text-gray-600">
+                        <strong>Validador:</strong> Web Audio FFT + análisis de contorno de pitch (>30Hz esperado)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARA QUIÉN -->
+    <section id="para-quien" class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">Para quién es</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Logopedas -->
+                <div class="bg-white p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4">👩‍⚕️ Logopedas</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>✓ Diseña ejercicios específicos para cada paciente</li>
+                        <li>✓ Monitoriza adherencia entre sesiones</li>
+                        <li>✓ Datos automáticos para seguimiento</li>
+                        <li>✓ Reduce tiempo de documentación manual</li>
+                        <li>✓ Escala tu oferta de tele-rehab</li>
+                    </ul>
+                </div>
+
+                <!-- Pacientes + Familias -->
+                <div class="bg-white p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4">👨‍👩‍👧 Pacientes y familias</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>✓ Ejercicios claros, no confusos</li>
+                        <li>✓ Feedback inmediato (saben si está bien)</li>
+                        <li>✓ Sesiones cortas (10-15 min)</li>
+                        <li>✓ Gamificación (engagement real)</li>
+                        <li>✓ Acceso desde casa, smartphone</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIMITACIONES / HONESTIDAD -->
+    <section id="limitaciones" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-4">Honestidad: lo que NO es</h2>
+            <p class="text-gray-600 mb-12 max-w-3xl">Porque la confianza clínica empieza aquí.</p>
+
+            <div class="space-y-4 max-w-3xl">
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">No diagnostica</h3>
+                    <p class="text-gray-700">
+                        Los números y métricas son feedback, no diagnóstico clínico. "% corrección" ≠ "está bien diagnosticado". Requiere evaluación formal.
+                    </p>
+                </div>
+
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">No reemplaza al logopeda</h3>
+                    <p class="text-gray-700">
+                        Tú diseñas cada ejercicio, tú validas cada sesión. La IA propone, el logopeda decide. Siempre.
+                    </p>
+                </div>
+
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">Speech-to-Text tiene límites</h3>
+                    <p class="text-gray-700">
+                        Con acento, habla muy lenta, o ruido ambiente, STT falla. Requiere validación manual frecuente.
+                    </p>
+                </div>
+
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">MediaPipe detecta movimiento grueso</h3>
+                    <p class="text-gray-700">
+                        No ve asimetría sutil, hipotonía leve, o patrones motores finos. Útil para lo obvio, no para lo fino.
+                    </p>
+                </div>
+
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">Criterios mal diseñados = ejercicios frustrantes</h3>
+                    <p class="text-gray-700">
+                        Si el logopeda define "F0 entre 110-130Hz" en un niño con resfriado, 0/3 intentos validan. Requiere calibración clínica.
+                    </p>
+                </div>
+
+                <div class="limitation-badge p-6 rounded-lg">
+                    <h3 class="font-bold mb-2">Privacidad de menores = crítica</h3>
+                    <p class="text-gray-700">
+                        Videos + audios de menores. Cifrado obligatorio, consentimiento dual (padre + menor), acceso auditado.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded mt-8 max-w-3xl">
+                <p class="text-gray-800">
+                    <strong>La regla de oro:</strong> Si el logopeda no valida manualmente cada sesión, Logopod Entrenador te puede meter en problemas clínicos reales. Úsalo como herramienta, no como sustituto.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">Pricing</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Plan Logopeda -->
+                <div class="bg-white p-8 rounded-xl border-2 border-gray-200">
+                    <h3 class="text-2xl font-bold mb-2">Para Logopedas</h3>
+                    <p class="text-gray-600 mb-6">Por paciente activo</p>
+                    <div class="text-4xl font-bold mb-6">€4.99<span class="text-lg text-gray-600">/mes</span></div>
+                    <ul class="space-y-3 mb-8 text-gray-700">
+                        <li>✓ 5 ejercicios estructurados</li>
+                        <li>✓ Diseño de criterios clínicos propios</li>
+                        <li>✓ Monitoreo de adherencia</li>
+                        <li>✓ Datos longitudinales por paciente</li>
+                        <li>✓ Validación manual en dashboard</li>
+                    </ul>
+                    <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700">
+                        Empezar prueba gratuita
+                    </button>
+                </div>
+
+                <!-- Plan Paciente -->
+                <div class="bg-white p-8 rounded-xl border-2 border-purple-300 relative">
+                    <div class="absolute top-4 right-4 bg-purple-600 text-white px-3 py-1 rounded text-xs font-bold">POPULAR</div>
+                    <h3 class="text-2xl font-bold mb-2">Para Pacientes</h3>
+                    <p class="text-gray-600 mb-6">Plan de ejercicios personalizados</p>
+                    <div class="text-4xl font-bold mb-6">€2.99<span class="text-lg text-gray-600">/mes</span></div>
+                    <ul class="space-y-3 mb-8 text-gray-700">
+                        <li>✓ Acceso a ejercicios personalizados</li>
+                        <li>✓ Sesiones de 10-15 minutos</li>
+                        <li>✓ Feedback en tiempo real</li>
+                        <li>✓ Registro automático de progreso</li>
+                        <li>✓ Compartir avances con logopeda</li>
+                    </ul>
+                    <button class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700">
+                        Empezar ahora
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 text-gray-600 max-w-3xl mx-auto">
+                <p>
+                    <strong>Primeros 2 meses gratis</strong> para ambos planes. Sin tarjeta de crédito.
+                    Cancela cuando quieras.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ RÁPIDO -->
+    <section class="py-16 md:py-24 bg-white">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12">Preguntas frecuentes</h2>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold mb-2">¿Necesito equipamiento especial?</h3>
+                    <p class="text-gray-700">No. Solo un smartphone o tablet con cámara y micrófono decente. MediaPipe y STT funcionan on-device o en cloud.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-2">¿Cuánto tarda en implementarlo en mi clínica?</h3>
+                    <p class="text-gray-700">Logopeda: 1-2 horas (conocer la plataforma + diseñar 3-5 ejercicios). Paciente: instalación en 2 minutos.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-2">¿Dónde están los datos?</h3>
+                    <p class="text-gray-700">Cloud seguro (Google Cloud, cifrado at-rest y in-transit). GDPR compliant. Acceso auditado solo para logopeda.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-2">¿Puedo integrar esto en mi app/clínica actual?</h3>
+                    <p class="text-gray-700">Sí. Ofrecemos API + webhooks. Consulta soporte para integración empresarial.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-2">¿Qué pasa si el paciente no mejora?</h3>
+                    <p class="text-gray-700">Es responsabilidad clínica tuya. Logopod es herramienta para medir adherencia y facilitar feedback, no garantiza mejoría. Requiere terapia presencial o supervisión real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="hero-gradient text-white py-16 md:py-24">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Comienza hoy</h2>
+            <p class="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
+                2 meses gratis. Sin tarjeta de crédito. Prueba real con tus pacientes.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button class="bg-white text-blue-600 font-bold px-10 py-4 rounded-lg hover:bg-blue-50 text-lg transition">
+                    Soy logopeda
+                </button>
+                <button class="border-2 border-white text-white font-bold px-10 py-4 rounded-lg hover:bg-blue-700 text-lg transition">
+                    Soy paciente
+                </button>
+            </div>
+
+            <div class="mt-12 pt-12 border-t border-blue-400">
+                <p class="text-blue-100 text-sm">
+                    ¿Preguntas? Escribe a <strong>hola@logopod.app</strong> o llama al <strong>+34 XXX XXX XXX</strong>
+                </p>
+                <p class="text-blue-100 text-xs mt-4">
+                    Logopod Entrenador es un complemento clínico, no un diagnóstico. Requiere supervisión de logopeda acreditado.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Logopod</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Entrenador</a></li>
+                        <li><a href="#" class="hover:text-white">Lectura asistida</a></li>
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Empresa</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Sobre nosotros</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white">Términos</a></li>
+                        <li><a href="#" class="hover:text-white">GDPR</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Social</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Twitter</a></li>
+                        <li><a href="#" class="hover:text-white">LinkedIn</a></li>
+                        <li><a href="#" class="hover:text-white">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm">
+                <p>© 2026 Logopod. Herramientas logopédicas basadas en Google AI. <br> Desarrollado con criterio clínico y honestidad científica.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
