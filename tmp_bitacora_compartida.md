@@ -1066,6 +1066,50 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Auditoria GitHub Pages foniafonia — tanda de URLs vivas faltantes
+
+Contexto:
+- Jose pide continuar buscando con metodo amplio, no solo por lo que ya esta en la landing.
+- Se cruza listado de repos `foniafonia` con URLs `https://foniafonia.github.io/<repo>/` y se compara contra `LANDING_TODO_LOGOPED_IA.html`.
+
+Hecho:
+- Listados 35 repos de `foniafonia` via GitHub CLI.
+- Probadas URLs GitHub Pages publicas. Pages vivos detectados, entre otros:
+  - `elevenlabs-pitch`
+  - `laboratorio-logoped-ia-landing`
+  - `zonacentro-ia-familia`
+  - `extremadura-landing`
+  - `lleno-vacio-teacch`
+  - `portfolio`
+  - `logopedia-generador`
+  - `adapro-personal`
+  - `adapro-plus`
+  - `imaginejuego`
+  - `araia`
+- Añadidas tarjetas propias a `LANDING_TODO_LOGOPED_IA.html` para esos Pages vivos.
+- Generadas capturas:
+  - `codex-assets/screenshots/elevenlabs-pitch-voz-clinica.jpg`
+  - `codex-assets/screenshots/laboratorio-logoped-ia-landing-ia-util-educacion.jpg`
+  - `codex-assets/screenshots/zona-centro-ia-familia-melilla.jpg`
+  - `codex-assets/screenshots/colegio-logopedas-extremadura-propuesta-formativa.jpg`
+  - `codex-assets/screenshots/lleno-vacio-teacch.jpg`
+  - `codex-assets/screenshots/portfolio-jose-aserraf-logopeda-ia-builder.jpg`
+  - `codex-assets/screenshots/logoped-ia-generador-de-contenido.jpg`
+  - `codex-assets/screenshots/adapro-personal-editor-dislexia.jpg`
+  - `codex-assets/screenshots/adapro-plus-procesador-adaptado.jpg`
+  - `codex-assets/screenshots/imagine-comunicacion-visual.jpg`
+  - `codex-assets/screenshots/araia-visualizador-web-publico.jpg`
+
+No añadido aun:
+- `joseaserraf.github.io`: responde 200, pero se deja fuera por ahora por posible duplicado/personal frente a `portfolio`.
+- Repos con Pages 404 quedan para siguiente capa: revisar si tienen Vercel/Netlify o si solo deben figurar como repo/deploy pendiente.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Añadido Torah para Abraham — fallo detectado por Jose
 
 Contexto:
