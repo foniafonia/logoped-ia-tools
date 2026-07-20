@@ -877,8 +877,12 @@ Pendiente / no subido en esta tanda:
 - Sensible, NO subir tal cual: JELOU Skill y Base conocimiento chatbot.
 
 Siguiente paso:
-1. Verificar localmente que los nuevos HTML abren desde la landing.
-2. Publicar esta rama en `gh-pages` para que la web publica tenga los nuevos botones VER.
-3. Continuar con la segunda tanda: localizar MirrorFono/builds, curso preventa, Preta/fluidez y herramientas sueltas faltantes.
+1. Continuar con la segunda tanda: localizar MirrorFono/builds, curso preventa, Preta/fluidez y herramientas sueltas faltantes.
+2. Si GitHub Pages sirve cache antigua durante unos minutos, usar cache-buster `?cb=253dd4d` en la landing o esperar refresco CDN.
 
-Estado: [PARA_CODEX EN PROGRESO]
+Verificacion:
+- Local HTTP: landing + iSecuencias + Praxias + Alfabeto + SMB + Fabricador + Logopod respondieron 200.
+- GitHub Pages: build `pages-build-deployment` completado correctamente para `gh-pages` en commit `253dd4d`.
+- GitHub Pages con cache-buster: landing + iSecuencias + Praxias + Logopod respondieron 200.
+
+Estado: [PARA_CODEX HECHO]
