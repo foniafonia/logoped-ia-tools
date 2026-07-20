@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+         
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuegosLogopedos - Videojuegos educativos para aprender jugando</title>
+    <meta name="description" content="Videojuegos educativos para logopedia, mejora del lenguaje, fonética y lectura. Dirigido por José Aserraf, logopeda del Gabinete Fönia con 18 años de experiencia.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <header id="header">
+        <nav class="container">
+            <a href="#inicio" class="logo">
+                <div class="logo-icon">🎮</div>
+                JuegosLogopedos
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#inicio"><span>Inicio</span></a></li>
+                <li><a href="sobre-nosotros.html"><span>Sobre mí</span></a></li>
+                <li><a href="index.html#juegos"><span>Juegos</span></a></li>
+                <li><a href="index.html#blog"><span>Blog</span></a></li>
+                <li><a href="contacto.html"><span>Contacto</span></a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="floating-elements">
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>🚀</span>
+                    Innovación en Logopedia Digital
+                </div>
+                <h1 class="heading-display">JuegosLogopedos</h1>
+                <p class="hero-subtitle">Videojuegos educativos para aprender jugando</p>
+                <p class="hero-description">
+                    Transformamos la terapia del lenguaje en aventuras interactivas. 
+                    Mejora la fonética, lectura y habilidades comunicativas mientras te diviertes 
+                    con nuestros juegos diseñados profesionalmente.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#juegos" class="btn btn-primary">
+                        <span>🎮</span>
+                        Explorar Juegos
+                    </a>
+                    <a href="#sobre-mi" class="btn btn-secondary">
+                        <span>👨‍⚕️</span>
+                        Conocer al Logopeda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-mi" class="about">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <span>👨‍⚕️</span>
+                    Profesional Certificado
+                </div>
+                <h2 class="section-title heading-xl">Sobre José Aserraf</h2>
+                <p class="section-description">
+                    Logopeda especializado en gamificación educativa y tecnología aplicada a la terapia del lenguaje
+                </p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="about-image-container">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/30100fe3c2894ecce628a1dfc5d101797fe77e4923af00d827f9daae9ae8bcad?w=337&h=337" alt="José Aserraf - Logopeda del Gabinete Fönia">
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">18+</span>
+                            <div class="stat-label">Años de experiencia</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">1000+</span>
+                            <div class="stat-label">Pacientes atendidos</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">20+</span>
+                            <div class="stat-label">Juegos desarrollados</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">95%</span>
+                            <div class="stat-label">Satisfacción</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-text">
+                    <h3>Logopeda del Gabinete Fönia</h3>
+                    <p>
+                        Soy José Aserraf, logopeda titulado y director del Gabinete Fönia. Con más de 18 años de experiencia 
+                        en el campo de la logopedia, mi pasión se centra en la intersección entre la educación, 
+                        la tecnología y la terapia del lenguaje.
+                    </p>
+                    
+                    <p>
+                        He desarrollado múltiples aplicaciones educativas para prestigiosas plataformas como 
+                        Rimud Logopedia, Fonadis y Asterolexia, revolucionando la forma en que se imparte 
+                        la terapia del lenguaje mediante herramientas digitales innovadoras.
+                    </p>
+                    
+                    <p>
+                        Mi misión es hacer que la logopedia sea accesible, divertida y efectiva para todos, 
+                        combinando mi vasta experiencia clínica con las posibilidades infinitas de la tecnología educativa.
+                    </p>
+                    
+                    <div class="specialties">
+                        <h4>Especialidades Clínicas</h4>
+                        <div class="specialty-grid">
+                            <div class="specialty-item">
+                                <div class="specialty-icon">🗣️</div>
+                                <span>Trastornos del lenguaje y habla</span>
+                            </div>
+                            <div class="specialty-item">
+                                <div class="specialty-icon">📚</div>
+                                <span>Dislexia y lectoescritura</span>
+                            </div>
+                            <div class="specialty-item">
+                                <div class="specialty-icon">💪</div>
+                                <span>Terapia miofuncional</span>
+                            </div>
+                            <div class="specialty-item">
+                                <div class="specialty-icon">🎮</div>
+                                <span>Gamificación en logopedia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="apps-developed">
+                        <h4>Aplicaciones Desarrolladas</h4>
+                        <div class="apps-grid">
+                            <div class="app-item">
+                                <div class="app-icon">🎯</div>
+                                <div>
+                                    <strong>Rimud Logopedia</strong>
+                                    <p>Plataforma integral de ejercicios</p>
+                                </div>
+                            </div>
+                            <div class="app-item">
+                                <div class="app-icon">🔊</div>
+                                <div>
+                                    <strong>Fonadis</strong>
+                                    <p>Herramientas de fonética</p>
+                                </div>
+                            </div>
+                            <div class="app-item">
+                                <div class="app-icon">⭐</div>
+                                <div>
+                                    <strong>Asterolexia</strong>
+                                    <p>Tratamiento de dislexia</p>
+                                </div>
+                            </div>
+                            <div class="app-item">
+                                <div class="app-icon">🎮</div>
+                                <div>
+                                    <strong>JuegosLogopedos</strong>
+                                    <p>Gamificación educativa</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="juegos" class="games">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <span>🎮</span>
+                    Catálogo de Juegos Educativos
+                </div>
+                <h2 class="section-title heading-xl">Nuestros Juegos Terapéuticos</h2>
+                <p class="section-description">
+                    Experiencias interactivas diseñadas específicamente para mejorar habilidades logopédicas 
+                    mientras los usuarios se divierten y aprenden de manera efectiva.
+                </p>
+            </div>
+            
+            <div class="games-search-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="gameSearch" placeholder="🔍 Buscar juegos por nombre o habilidad..." class="search-input">
+                        <button class="search-clear" id="searchClear">✖</button>
+                    </div>
+                </div>
+                
+                <div class="filter-categories">
+                    <h4 class="filter-title">Buscar por Área Terapéutica:</h4>
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">🎮 Todos los Juegos</button>
+                        <button class="filter-btn" data-category="conciencia-fonologica">🔤 Conciencia Fonológica</button>
+                        <button class="filter-btn" data-category="discriminacion-auditiva">🎵 Discriminación Auditiva</button>
+                        <button class="filter-btn" data-category="lectoescritura">📚 Lectoescritura</button>
+                        <button class="filter-btn" data-category="memoria-atencion">🧠 Memoria y Atención</button>
+                        <button class="filter-btn" data-category="coordinacion">👁️ Coordinación</button>
+                        <button class="filter-btn" data-category="procesamiento">⚡ Procesamiento</button>
+                        <button class="filter-btn" data-category="consulta-profesional">🏥 Consulta Profesional</button>
+                    </div>
+                </div>
+                
+                <div class="results-counter">
+                    <span id="resultsCount">9 herramientas disponibles</span>
+                </div>
+            </div>
+
+            <div class="games-grid" id="gamesGrid">
+                <div class="game-card" data-categories="conciencia-fonologica,discriminacion-auditiva,memoria-atencion,coordinacion,procesamiento" data-search-terms="auditory run pro discriminacion auditiva procesamiento fonologico reconocimiento palabras memoria auditiva temple run endless runner">
+                    <div class="game-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/b19912bbbc77ace4eb77fe857fc3a6f68d680ee89470032390a8da38ff06c67b?w=495&h=386" alt="Auditory Run Pro" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Discriminación Auditiva</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">AUDITORY RUN PRO</h3>
+                        <p class="game-description">
+                            Herramienta interactiva que combina la emoción del endless runner con entrenamiento de discriminación auditiva en español. 
+                            Ideal para desarrollar la percepción fonológica, mejorar el procesamiento auditivo y fortalecer las habilidades de distinción entre sonidos similares.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🎵 Discriminación Auditiva</span>
+                            <span class="stat">⚡ Procesamiento Fonológico</span>
+                            <span class="stat">🎯 Reconocimiento de Palabras</span>
+                            <span class="stat">🧠 Memoria Auditiva</span>
+                            <span class="stat">🎮 Aprendizaje Lúdico</span>
+                            <span class="stat">👁️ Coordinación Visomotora</span>
+                            <span class="stat">🚀 Reflejos Cognitivos</span>
+                            <span class="stat">🏆 Toma de Decisiones Rápidas</span>
+                            <span class="stat">🔤 Conciencia Fonológica</span>
+                            <span class="stat">🎧 Atención Auditiva Selectiva</span>
+                            <span class="stat">🏃‍♂️ Multitarea Cognitiva</span>
+                            <span class="stat">📊 Seguimiento de Progreso</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Especiales:</h5>
+                            <ul>
+                                <li>• Pares mínimos de palabras (b/p, d/t, l/r, etc.)</li>
+                                <li>• Síntesis de voz en español</li>
+                                <li>• Sistema de vidas y progresión</li>
+                                <li>• Efectos visuales de recompensa</li>
+                                <li>• Contador de distancia y precisión</li>
+                                <li>• Controles táctiles optimizados</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/Templerunlogopeda" class="play-button" style="text-decoration: none; display: block;">
+                            🏃‍♂️ Jugar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="conciencia-fonologica,lectoescritura,memoria-atencion,coordinacion,procesamiento" data-search-terms="silaba luxor pro conciencia fonologica velocidad lectura reconocimiento silabico memoria visual aprendizaje ludico coordinacion ojo mano reflejos cognitivos pensamiento estrategico">
+                    <div class="game-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/0ee6485e69b18c8549968afe63eb39d76845f7b875e92c37769d71823b5a20ef?w=793&h=599" alt="Sílaba Luxor Pro" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Conciencia Fonológica</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">SÍLABA LUXOR PRO</h3>
+                        <p class="game-description">
+                            Herramienta interactiva para aprender y practicar sílabas en español de forma divertida. 
+                            Ideal para desarrollar la conciencia fonológica, mejorar la velocidad de lectura y fortalecer las bases del aprendizaje del idioma.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">📚 Conciencia Fonológica</span>
+                            <span class="stat">⚡ Velocidad de Lectura</span>
+                            <span class="stat">🎯 Reconocimiento Silábico</span>
+                            <span class="stat">🧠 Memoria Visual</span>
+                            <span class="stat">🎮 Aprendizaje Lúdico</span>
+                            <span class="stat">👁️ Coordinación Ojo-Mano</span>
+                            <span class="stat">🚀 Reflejos Cognitivos</span>
+                            <span class="stat">🏆 Pensamiento Estratégico</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Especiales:</h5>
+                            <ul>
+                                <li>• Separación silábica interactiva en tiempo real</li>
+                                <li>• Niveles progresivos de dificultad adaptativa</li>
+                                <li>• Sistema de puntuación y recompensas visuales</li>
+                                <li>• Banco extenso de palabras en español clasificadas</li>
+                                <li>• Feedback inmediato con refuerzo positivo</li>
+                                <li>• Interfaz colorida y atractiva para todas las edades</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/luxorlogopeda" class="play-button" style="text-decoration: none; display: block;">
+                            📚 Jugar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="consulta-profesional" data-search-terms="gabinete fonia consulta virtual 3d entorno realista ia conversacional logopedia psicologia infantil analisis casos telemedicina screening melilla">
+                    <div class="game-image" style="background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/a196eb46ccfaaaeac40e5dcd11496666206fdd02d43d98ed1a6b85c5d11221a4?w=1607&h=635" alt="Gabinete Fönia - Consulta Virtual 3D" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Consulta Profesional</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Gabinete Fönia - Consulta Virtual 3D</h3>
+                        <p class="game-description">
+                            Consulta médica virtual interactiva que combina un entorno 3D profesional con inteligencia artificial conversacional para el sector sanitario. 
+                            Simula una visita real al Gabinete Fönia de Melilla, especializado en logopedia, psicología y atención temprana.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🎮 Entorno 3D Realista</span>
+                            <span class="stat">🤖 IA Conversacional</span>
+                            <span class="stat">🗣️ Voz Sintética Natural</span>
+                            <span class="stat">📱 Diseño Responsive</span>
+                            <span class="stat">🧒 Logopedia Infantil</span>
+                            <span class="stat">🧠 Psicología Pediátrica</span>
+                            <span class="stat">📊 Análisis Automático</span>
+                            <span class="stat">💬 Chat Profesional</span>
+                            <span class="stat">📅 Información de Citas</span>
+                            <span class="stat">🕒 Atención 24/7</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Técnicas:</h5>
+                            <ul>
+                                <li>• Entorno 3D realista con navegación libre (Three.js)</li>
+                                <li>• IA conversacional con voz sintética ultra-natural</li>
+                                <li>• Sistema autónomo sin dependencia de APIs externas</li>
+                                <li>• Screening inicial de casos antes de consulta presencial</li>
+                                <li>• Información completa de servicios y tarifas 2024</li>
+                                <li>• Gabinete Fönia, Melilla - 667 712 699</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/simslogoconsulta" class="play-button" style="text-decoration: none; display: block;">
+                            🏥 Acceder a Consulta
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="consulta-profesional" data-search-terms="phonovoicelab plataforma disfonía laura neira lax vox tracto vocal semiocluido reeducación vocal cantantes docentes rehabilitación">
+                    <div class="game-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/4ae7fc1359f34140c273aabb63b4681b2229f288f7575e09c94e9b1ab44bc199?w=1517&h=681" alt="PHONOVOICELAB" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Consulta Profesional</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">PHONOVOICELAB</h3>
+                        <p class="game-description">
+                            Plataforma interactiva integral para el tratamiento de la disfonía basada en el método de Laura Neira. 
+                            Combina teoría, práctica y seguimiento personalizado en un entorno visualmente atractivo e intuitivo. Ideal para logopedas, cantantes, docentes y pacientes en rehabilitación vocal.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🗣️ Reeducación Vocal</span>
+                            <span class="stat">📘 Método Laura Neira</span>
+                            <span class="stat">🎓 Aprendizaje Guiado</span>
+                            <span class="stat">🎮 Ejercicios Interactivos</span>
+                            <span class="stat">📈 Dashboard de Progreso</span>
+                            <span class="stat">⏱️ Temporizadores Visuales</span>
+                            <span class="stat">📋 Registro Automático</span>
+                            <span class="stat">📊 Historial de Niveles</span>
+                            <span class="stat">📚 Información Teórica</span>
+                            <span class="stat">🏆 Sistema de Recompensas</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Especiales:</h5>
+                            <ul>
+                                <li>• Método Laura Neira + Lax Vox + Tracto Vocal Semiocluido</li>
+                                <li>• Ejercicios gamificados con feedback en tiempo real</li>
+                                <li>• Dashboard personalizado para seguimiento de progreso</li>
+                                <li>• Compatible con dispositivos móviles y escritorio</li>
+                                <li>• Ideal para logopedas, cantantes y docentes</li>
+                                <li>• Sistema de puntuación y recompensas motivacional</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/PHONOVOICELAB" class="play-button" style="text-decoration: none; display: block;">
+                            🗣️ Acceder a Plataforma
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="consulta-profesional" data-search-terms="diagnostiapro evaluación disgrafía inteligencia artificial análisis gráfico motor algoritmos escritura niños adolescentes informes pdf">
+                    <div class="game-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/c6265040e3594c373454181e7cfce9fe3b4c02d34a58ec92fe6ce5685f8aac11?w=1447&h=707" alt="DiagnostIAPro" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Consulta Profesional</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">DiagnostIAPro</h3>
+                        <p class="game-description">
+                            Sistema inteligente para la detección temprana, análisis gráfico-motor y evaluación funcional de la disgrafía en niños y adolescentes. 
+                            Utiliza algoritmos de IA entrenados con patrones clínicos para ofrecer informes automáticos, objetivos y comparables.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🖊️ Evaluación Multidimensional</span>
+                            <span class="stat">📐 Análisis Espacial</span>
+                            <span class="stat">🧠 Perfil Neurofuncional</span>
+                            <span class="stat">📊 Informes PDF Automáticos</span>
+                            <span class="stat">📈 Escalas de Riesgo</span>
+                            <span class="stat">🧩 Pruebas Adaptativas</span>
+                            <span class="stat">👩‍⚕️ Modo Profesional</span>
+                            <span class="stat">🧒 Modo Escolar</span>
+                            <span class="stat">🔄 Seguimiento Longitudinal</span>
+                            <span class="stat">🔬 Validado Científicamente</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Técnicas:</h5>
+                            <ul>
+                                <li>• Algoritmos de IA entrenados con patrones clínicos</li>
+                                <li>• Análisis espacial, temporal y de presión de escritura</li>
+                                <li>• Informes clínicos automáticos en PDF profesional</li>
+                                <li>• Pruebas adaptativas según edad y nivel escolar</li>
+                                <li>• Sistema de reevaluación y seguimiento temporal</li>
+                                <li>• Modo profesional para terapeutas ocupacionales</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/DiagnostIAPro" class="play-button" style="text-decoration: none; display: block;">
+                            🔬 Acceder a Diagnóstico
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="conciencia-fonologica,discriminacion-auditiva,coordinacion" data-search-terms="ninja phonetics pro fruit ninja corte entrenamiento fonético discriminación visual reconocimiento letras sílabas palabras imágenes frases">
+                    <div class="game-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/a367d8db6e85118b85ee018fbfc78734581398fd1af2344a470af3263ca151bb?w=748&h=481" alt="Ninja Phonetics Pro" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Conciencia Fonológica</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">NINJA PHONETICS PRO</h3>
+                        <p class="game-description">
+                            Juego interactivo de corte tipo Fruit Ninja diseñado para entrenamiento fonético y discriminación visual. 
+                            Corta únicamente los elementos correctos entre distractores y mejora tu precisión fonológica con contenido 100% configurable.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🎯 Objetivo Personalizable</span>
+                            <span class="stat">📝 Letras y Sílabas</span>
+                            <span class="stat">📚 Palabras e Imágenes</span>
+                            <span class="stat">💬 Frases Completas</span>
+                            <span class="stat">✏️ Modo Personalizado</span>
+                            <span class="stat">🚫 Distractores Configurables</span>
+                            <span class="stat">🩷 Sistema de Vidas</span>
+                            <span class="stat">🔟 Combos Especiales</span>
+                            <span class="stat">🎮 Responsive Design</span>
+                            <span class="stat">🥷 Ninja Mejorado</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Especiales:</h5>
+                            <ul>
+                                <li>• Panel de control para personalización total</li>
+                                <li>• Contenido configurable: letras, sílabas, palabras, imágenes</li>
+                                <li>• Sistema de vidas con combos de recuperación</li>
+                                <li>• Distractores personalizables y símbolos malvados</li>
+                                <li>• Ninja con katana energética y animaciones suaves</li>
+                                <li>• Ideal para TDAH, dislexia, TEL y trastornos del lenguaje</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/ninjagamefono" class="play-button" style="text-decoration: none; display: block;">
+                            🥷 Jugar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="conciencia-fonologica,lectoescritura,memoria-atencion,coordinacion" data-search-terms="snake 3d palabras serpiente vocabulario español entrenamiento lingüístico cognitivo neurorehabilitación educación especial logopedia">
+                    <div class="game-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/06f3e6b61ac855448fdd4d103e0792ff55e6bda0bd8ae8319dd8e84127a4d7fd?w=424&h=401" alt="Snake 3D Palabras" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Lectoescritura</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">SNAKE 3D PALABRAS</h3>
+                        <p class="game-description">
+                            El clásico Snake reinventado para aprender y rehabilitar el lenguaje. 
+                            Controla una serpiente 3D en un mundo colorido mientras recoges palabras en español. Desarrolla vocabulario, atención, memoria y coordinación visual.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🎮 Juego 3D</span>
+                            <span class="stat">📚 +75 Palabras por Nivel</span>
+                            <span class="stat">🔤 Filtros Configurables</span>
+                            <span class="stat">🧠 Entrenamiento Cognitivo</span>
+                            <span class="stat">🎯 Power-ups Especiales</span>
+                            <span class="stat">💻 Acceso Universal</span>
+                            <span class="stat">📱 Controles Táctiles</span>
+                            <span class="stat">⚡ Carga Instantánea</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Especiales:</h5>
+                            <ul>
+                                <li>• Serpiente 3D en mundo colorido e inmersivo</li>
+                                <li>• Más de 75 palabras por nivel de dificultad</li>
+                                <li>• Filtros por letra, sílaba o contenido específico</li>
+                                <li>• Ideal para logopedia y educación especial</li>
+                                <li>• Controles táctiles o teclado adaptativos</li>
+                                <li>• Juego terapéutico que engancha y enseña</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/SNAKE3DPALABRAS" class="play-button" style="text-decoration: none; display: block;">
+                            🐍 Jugar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="consulta-profesional" data-search-terms="karaoke tartamudez terapia herramienta lectura palabra velocidad visual resaltado prosódicas respiración disfluencias trabalenguas">
+                    <div class="game-image" style="background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/57ecc6c1e732bf03019c8cbe4185596803795b86cf6bbe838876d591b14964b6?w=1381&h=707" alt="Karaoke Tartamudez" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Consulta Profesional</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Karaoke Tartamudez</h3>
+                        <p class="game-description">
+                            Herramienta web interactiva para terapia de tartamudez que combina tecnología avanzada con evidencia científica. 
+                            Basada en estudios de prosodia, control respiratorio y plasticidad neuronal para mejorar la fluidez del habla.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">📖 Lectura Palabra a Palabra</span>
+                            <span class="stat">🎨 5 Modos Visuales</span>
+                            <span class="stat">🔄 Alargamiento Configurable</span>
+                            <span class="stat">📊 Gráficas Prosódicas</span>
+                            <span class="stat">🫁 Guía de Respiración</span>
+                            <span class="stat">📋 Panel de Terapeuta</span>
+                            <span class="stat">🔬 Evaluación Inicial</span>
+                            <span class="stat">🗣️ 24 Trabalenguas</span>
+                            <span class="stat">📱 Optimizado Móvil</span>
+                            <span class="stat">🧠 Base Científica</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Características Terapéuticas:</h5>
+                            <ul>
+                                <li>• Lectura con velocidad ajustable y modos visuales</li>
+                                <li>• Gráficas prosódicas en tiempo real</li>
+                                <li>• Guía de respiración con círculo animado</li>
+                                <li>• Panel para registrar disfluencias (bloqueos, repeticiones)</li>
+                                <li>• Evaluación inicial que personaliza configuración</li>
+                                <li>• Basado en evidencia científica de neuroplasticidad</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/karaoketartamudez" class="play-button" style="text-decoration: none; display: block;">
+                            🎤 Acceder a Terapia
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card" data-categories="conciencia-fonologica,discriminacion-auditiva" data-search-terms="donkey kong fonemas letras similares p b d q mario escaleras barriles martillo plataformas educativo clásico">
+                    <div class="game-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <div class="game-icon">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/04b82169006df7bf2c90b7b355264d692d7f78a6f40fe4b451d3af9f90e9ee26?w=795&h=598" alt="Donkey Kong Fonemas" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                        <div class="game-category">Discriminación Auditiva</div>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">DONKEY KONG FONEMAS</h3>
+                        <p class="game-description">
+                            Juego educativo que combina el Donkey Kong clásico con aprendizaje de letras similares (P-B-D-Q, etc.). 
+                            Mario esquiva barriles con letras intrusas, recoge ítems con letra objetivo y usa el martillo para defenderse.
+                        </p>
+                        <div class="game-stats">
+                            <span class="stat">🦍 Donkey Kong Clásico</span>
+                            <span class="stat">🔤 Letras Similares</span>
+                            <span class="stat">🏃‍♂️ Mario Estable</span>
+                            <span class="stat">🪜 Escaleras Conectadas</span>
+                            <span class="stat">🛢️ Barriles Controlados</span>
+                            <span class="stat">🔨 Martillo Destructor</span>
+                            <span class="stat">📈 Niveles Progresivos</span>
+                            <span class="stat">🎯 Letra Objetivo</span>
+                        </div>
+                        <div class="game-features">
+                            <h5>Mecánicas Mejoradas:</h5>
+                            <ul>
+                                <li>• Escaleras que conectan rampas correctamente</li>
+                                <li>• Barriles controlados que siguen las rampas</li>
+                                <li>• Mario estable sin rebote molesto</li>
+                                <li>• Sistema de recolección de letras objetivo</li>
+                                <li>• Martillo para destruir barriles con letras intrusas</li>
+                                <li>• Enfoque en discriminación de letras similares (P-B-D-Q)</li>
+                            </ul>
+                        </div>
+                        <a href="https://poe.com/donkeykongfonemas" class="play-button" style="text-decoration: none; display: block;">
+                            🦍 Jugar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results-content">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>No se encontraron juegos</h3>
+                        <p>Intenta con otros términos de búsqueda o selecciona una categoría diferente.</p>
+                        <button class="btn btn-primary" onclick="clearAllFilters()">
+                            <span>🎮</span>
+                            Ver Todos los Juegos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <span>📝</span>
+                    Blog & Recursos Profesionales
+                </div>
+                <h2 class="section-title heading-xl">Últimas Publicaciones</h2>
+                <p class="section-description">
+                    Mantente al día con las últimas novedades, consejos profesionales, investigaciones 
+                    y lanzamientos de nuevos juegos educativos en el campo de la logopedia digital.
+                </p>
+            </div>
+            
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-date">
+                        <span>📅</span>
+                        15 de Enero, 2024
+                    </div>
+                    <h3 class="blog-title">18 años transformando la logopedia con tecnología</h3>
+                    <p class="blog-excerpt">
+                        Reflexiones sobre casi dos décadas desarrollando aplicaciones para Rimud Logopedia, 
+                        Fonadis y Asterolexia. Cómo la tecnología ha revolucionado la terapia del lenguaje 
+                        y qué nos depara el futuro con la inteligencia artificial y la realidad virtual.
+                    </p>
+                    <a href="#" class="read-more">
+                        Leer artículo completo
+                        <span>→</span>
+                    </a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">
+                        <span>🎮</span>
+                        8 de Enero, 2024
+                    </div>
+                    <h3 class="blog-title">Lanzamiento oficial: LOGOSHOOTER</h3>
+                    <p class="blog-excerpt">
+                        Presentamos nuestro primer juego oficial de JuegosLogopedos. Una herramienta innovadora 
+                        que combina creatividad y terapia del lenguaje para crear una experiencia de 
+                        aprendizaje única, efectiva y respaldada por investigación científica.
+                    </p>
+                    <a href="#" class="read-more">
+                        Conocer más detalles
+                        <span>→</span>
+                    </a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">
+                        <span>✈️</span>
+                        3 de Enero, 2024
+                    </div>
+                    <h3 class="blog-title">1942 Logopédico: Cuando la nostalgia encuentra la terapia</h3>
+                    <p class="blog-excerpt">
+                        Descubre cómo hemos adaptado el clásico videojuego de aviones para crear una 
+                        experiencia educativa única que combina diversión, nostalgia y ejercicios 
+                        logopédicos específicos con resultados medibles y comprobados.
+                    </p>
+                    <a href="#" class="read-more">
+                        Conocer el proyecto
+                        <span>→</span>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <span>📧</span>
+                    Contacto Profesional
+                </div>
+                <h2 class="section-title heading-xl">¿Hablamos?</h2>
+                <p class="section-description">
+                    ¿Tienes preguntas sobre nuestros juegos o necesitas asesoramiento logopédico profesional? 
+                    Con 18 años de experiencia y múltiples aplicaciones desarrolladas, estoy aquí para ayudarte.
+                </p>
+            </div>
+            
+            <div class="contact-content">
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Nombre completo</label>
+                        <input type="text" id="name" name="name" class="form-input" required="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" id="email" name="email" class="form-input" required="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Asunto</label>
+                        <input type="text" id="subject" name="subject" class="form-input" required="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Mensaje</label>
+                        <textarea id="message" name="message" class="form-input form-textarea" required="" placeholder="Cuéntame en qué puedo ayudarte..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">
+                        📤 Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>JuegosLogopedos</h3>
+                    <p>
+                        Videojuegos educativos innovadores desarrollados con 18 años de experiencia en logopedia. 
+                        Tecnología de vanguardia al servicio de la terapia del lenguaje con aplicaciones profesionales 
+                        para Rimud, Fonadis y Asterolexia.
+                    </p>
+                    <p><strong>📧 Email:</strong> gestionafonia@gmail.com</p>
+                    <p><strong>🏢 Gabinete:</strong> Fönia - Centro Logopédico</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="sobre-nosotros.html">Sobre José</a></li>
+                        <li><a href="#juegos">Juegos Educativos</a></li>
+                        <li><a href="#blog">Blog & Noticias</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="politica-de-privacidad.html">Política de Privacidad</a></li>
+                        <li><a href="politica-de-cookies.html">Política de Cookies</a></li>
+                        <li><a href="aviso-legal.html">Aviso Legal</a></li>
+                        <li><a href="terminos-y-condiciones.html">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <p>Mantente al día con las últimas novedades, consejos profesionales y avances en logopedia digital:</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="YouTube">📺</a>
+                        <a href="#" class="social-link" title="Instagram">📷</a>
+                        <a href="#" class="social-link" title="Twitter">🐦</a>
+                        <a href="#" class="social-link" title="LinkedIn">💼</a>
+                        <a href="#" class="social-link" title="TikTok">🎵</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 JuegosLogopedos - José Aserraf, Gabinete Fönia. Todos los derechos reservados.</p>
+                <p>Desarrollado con ❤️ para la comunidad logopédica • 18 años de experiencia en tecnología educativa</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

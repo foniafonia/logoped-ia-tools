@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendario Social Logopedia</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --panel: rgba(255, 251, 245, 0.92);
+      --ink: #1f2a1f;
+      --muted: #5d6a5d;
+      --line: rgba(31, 42, 31, 0.14);
+      --accent: #1f6f5f;
+      --accent-soft: rgba(31, 111, 95, 0.12);
+      --warning: #a44c1a;
+      --danger: #a12828;
+      --shadow: 0 18px 40px rgba(65, 49, 27, 0.12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(31,111,95,0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(164,76,26,0.12), transparent 28%),
+        linear-gradient(180deg, #f8f2e8 0%, #efe4d4 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1440px, calc(100% - 32px));
+      margin: 24px auto;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: minmax(320px, 430px) 1fr;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .composer {
+      position: sticky;
+      top: 20px;
+      padding: 24px;
+    }
+
+    .dashboard {
+      padding: 24px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 0.96;
+      margin-bottom: 8px;
+    }
+
+    .intro {
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stats {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      margin-top: 6px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    input, textarea, select, button {
+      font: inherit;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.92);
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .field + .field {
+      margin-top: 14px;
+    }
+
+    .channels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .channel-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+    }
+
+    .channel-pill input { margin: 0; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(31,42,31,0.06);
+    }
+
+    .status-published { background: rgba(31,111,95,0.12); color: var(--accent); }
+    .status-scheduled { background: rgba(164,76,26,0.12); color: var(--warning); }
+    .status-processing { background: rgba(44, 84, 140, 0.12); color: #2c548c; }
+    .status-failed { background: rgba(161,40,40,0.12); color: var(--danger); }
+    .status-partial { background: rgba(130,96,28,0.12); color: #7a5a1c; }
+    .status-draft { background: rgba(31,42,31,0.08); color: var(--muted); }
+
+    .calendar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .weekday,
+    .day-card {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.86);
+      min-height: 126px;
+      padding: 12px;
+    }
+
+    .weekday {
+      min-height: auto;
+      padding: 10px 12px;
+      font-weight: 700;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .day-card.muted {
+      opacity: 0.42;
+    }
+
+    .day-number {
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .event {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: rgba(31,111,95,0.08);
+      color: var(--ink);
+      border: 1px solid rgba(31,111,95,0.14);
+      border-radius: 14px;
+      padding: 8px 9px;
+      margin-top: 8px;
+    }
+
+    .event small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .queue {
+      display: grid;
+      gap: 12px;
+    }
+
+    .queue-item {
+      padding: 16px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+    }
+
+    .queue-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .mini {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .event-log {
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .channels-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .channel-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(31,42,31,0.06);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ready { color: var(--accent); }
+    .not-ready { color: var(--danger); }
+    .message {
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: rgba(31,111,95,0.1);
+      color: var(--accent);
+      display: none;
+    }
+
+    .guide {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+    }
+
+    .guide code,
+    .guide pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+    }
+
+    .guide pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #f7f4ee;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      max-height: 280px;
+      overflow: auto;
+    }
+
+    @media (max-width: 1080px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      .composer {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .calendar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .weekday {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel composer">
+      <p class="eyebrow">Centro editorial</p>
+      <h1>Programa una vez. Lanza en todos lados.</h1>
+      <p class="intro">Crea la pieza, adapta el texto por canal y deja la cola preparada para vacaciones. Telegram publica directo; LinkedIn, Facebook e Instagram salen por webhook.</p>
+      <div id="message" class="message"></div>
+      <form id="post-form">
+        <input type="hidden" id="post-id">
+        <div class="field">
+          <label for="title">Titulo interno</label>
+          <input id="title" type="text" placeholder="Ej. Reel conciencia fonologica semana 1" required>
+        </div>
+        <div class="field">
+          <label for="scheduled-for">Fecha y hora</label>
+          <input id="scheduled-for" type="datetime-local" required>
+        </div>
+        <div class="field">
+          <label>Canales</label>
+          <div class="channels">
+            <label class="channel-pill"><input type="checkbox" value="telegram"> Telegram</label>
+            <label class="channel-pill"><input type="checkbox" value="linkedin"> LinkedIn</label>
+            <label class="channel-pill"><input type="checkbox" value="facebook"> Facebook</label>
+            <label class="channel-pill"><input type="checkbox" value="instagram"> Instagram</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="master-text">Texto base</label>
+          <textarea id="master-text" placeholder="Idea madre del contenido, CTA, hashtags o enlace principal"></textarea>
+        </div>
+        <div class="field">
+          <label for="telegram-text">Telegram</label>
+          <textarea id="telegram-text" placeholder="Si lo dejas vacio, usara el texto base"></textarea>
+        </div>
+        <div class="field">
+          <label for="linkedin-text">LinkedIn</label>
+          <textarea id="linkedin-text" placeholder="Version profesional"></textarea>
+        </div>
+        <div class="field">
+          <label for="facebook-text">Facebook</label>
+          <textarea id="facebook-text" placeholder="Version mas cercana o divulgativa"></textarea>
+        </div>
+        <div class="field">
+          <label for="instagram-text">Instagram</label>
+          <textarea id="instagram-text" placeholder="Caption corta + CTA"></textarea>
+        </div>
+        <div class="field">
+          <label for="image-url">URL de imagen o recurso</label>
+          <input id="image-url" type="url" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label for="notes">Notas</label>
+          <textarea id="notes" placeholder="Objetivo del post, campaña, observaciones"></textarea>
+        </div>
+        <div class="actions">
+          <button type="submit" class="primary">Guardar en calendario</button>
+          <button type="button" id="publish-now" class="secondary">Publicar ahora</button>
+          <button type="button" id="reset-form" class="ghost">Nueva pieza</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel dashboard">
+      <div>
+        <p class="eyebrow">Estado general</p>
+        <div class="calendar-head">
+          <div>
+            <h2>Cola de publicaciones</h2>
+            <p class="mini" id="timezone-line"></p>
+          </div>
+          <button type="button" class="ghost" id="refresh-dashboard">Actualizar</button>
+        </div>
+      </div>
+
+      <div id="stats" class="grid stats"></div>
+
+      <div>
+        <h3>Canales conectados</h3>
+        <p class="mini">Telegram funciona con bot/token. Las otras redes salen por webhook para que puedas conectarlas a Make, n8n o tu automatizacion favorita.</p>
+        <div id="channel-status" class="grid stats" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="guide">
+        <div>
+          <h3>Preparacion Facebook</h3>
+          <p class="mini">Para activar Facebook solo necesitas pegar un webhook en <code>SOCIAL_FACEBOOK_WEBHOOK_URL</code>. El panel le enviara el post ya resuelto para Facebook.</p>
+        </div>
+        <div class="mini" id="facebook-env-line"></div>
+        <div class="mini">Payload que recibira tu automatizacion:</div>
+        <pre id="facebook-payload-preview"></pre>
+      </div>
+
+      <div>
+        <div class="calendar-head">
+          <div>
+            <h3>Calendario del mes</h3>
+            <p class="mini">Pulsa una pieza para editarla o lanzarla manualmente.</p>
+          </div>
+          <div class="actions" style="margin-top:0;">
+            <button type="button" class="ghost" id="prev-month">Anterior</button>
+            <button type="button" class="ghost" id="next-month">Siguiente</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+      </div>
+
+      <div>
+        <h3>Proximas piezas</h3>
+        <div id="queue" class="queue"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      posts: [],
+      overview: null,
+      currentMonth: new Date()
+    };
+
+    const statusLabels = {
+      draft: "Borrador",
+      scheduled: "Programada",
+      processing: "Publicando",
+      published: "Publicada",
+      partial: "Parcial",
+      failed: "Fallida"
+    };
+
+    function showMessage(text, type = "ok") {
+      const box = document.getElementById("message");
+      box.textContent = text;
+      box.style.display = "block";
+      box.style.background = type === "error" ? "rgba(161,40,40,0.12)" : "rgba(31,111,95,0.1)";
+      box.style.color = type === "error" ? "#a12828" : "#1f6f5f";
+      clearTimeout(showMessage.timer);
+      showMessage.timer = setTimeout(() => { box.style.display = "none"; }, 4000);
+    }
+
+    function toLocalInputValue(iso) {
+      if (!iso) return "";
+      const date = new Date(iso);
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function formatDateTime(iso) {
+      if (!iso) return "Sin fecha";
+      return new Date(iso).toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function renderStats() {
+      const stats = document.getElementById("stats");
+      const counts = state.overview?.counts || {};
+      const items = [
+        ["Total", counts.total || 0],
+        ["Programadas", counts.scheduled || 0],
+        ["Publicadas", counts.published || 0],
+        ["Parciales", counts.partial || 0],
+        ["Fallidas", counts.failed || 0]
+      ];
+      stats.innerHTML = items.map(([label, value]) => `
+        <div class="stat">
+          <span class="mini">${label}</span>
+          <strong>${value}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderChannels() {
+      const root = document.getElementById("channel-status");
+      const channels = state.overview?.channels || {};
+      root.innerHTML = Object.entries(channels).map(([name, info]) => `
+        <div class="stat">
+          <span class="mini">${name}</span>
+          <strong class="${info.ready ? "ready" : "not-ready"}">${info.ready ? "Listo" : "Pendiente"}</strong>
+          <div class="mini">Modo: ${info.mode}</div>
+          <div class="mini">${info.env_key || ""}</div>
+        </div>
+      `).join("");
+
+      const facebook = channels.facebook || {};
+      document.getElementById("facebook-env-line").textContent =
+        `Variable: ${facebook.env_key || "SOCIAL_FACEBOOK_WEBHOOK_URL"} · ${facebook.setup_hint || ""}`;
+      document.getElementById("facebook-payload-preview").textContent = JSON.stringify(
+        state.overview?.facebook_webhook_payload || {},
+        null,
+        2
+      );
+    }
+
+    function buildCalendar() {
+      const root = document.getElementById("calendar");
+      const month = new Date(state.currentMonth.getFullYear(), state.currentMonth.getMonth(), 1);
+      const monthLabel = month.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
+      document.getElementById("timezone-line").textContent = `${monthLabel} · zona ${state.overview?.timezone || "local"}`;
+
+      const start = new Date(month);
+      const firstDay = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - firstDay);
+
+      const weekdays = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
+      const cells = weekdays.map((day) => `<div class="weekday">${day}</div>`);
+
+      for (let i = 0; i < 42; i += 1) {
+        const current = new Date(start);
+        current.setDate(start.getDate() + i);
+        const isoDate = current.toISOString().slice(0, 10);
+        const items = state.posts.filter((post) => post.scheduled_for_local.slice(0, 10) === isoDate);
+        const muted = current.getMonth() !== month.getMonth() ? "muted" : "";
+        cells.push(`
+          <div class="day-card ${muted}">
+            <div class="day-number">${current.getDate()}</div>
+            ${items.slice(0, 3).map((post) => `
+              <button class="event" data-post-id="${post.id}">
+                ${post.title}
+                <small>${formatDateTime(post.scheduled_for_local)} · ${statusLabels[post.status] || post.status}</small>
+              </button>
+            `).join("")}
+          </div>
+        `);
+      }
+      root.innerHTML = cells.join("");
+
+      root.querySelectorAll("[data-post-id]").forEach((button) => {
+        button.addEventListener("click", () => loadPost(button.dataset.postId));
+      });
+    }
+
+    function renderQueue() {
+      const root = document.getElementById("queue");
+      const items = [...state.posts].sort((a, b) => a.scheduled_for.localeCompare(b.scheduled_for));
+      root.innerHTML = items.map((post) => `
+        <article class="queue-item">
+          <div class="queue-top">
+            <div>
+              <h3>${post.title}</h3>
+              <div class="mini">${formatDateTime(post.scheduled_for_local)}</div>
+            </div>
+            <span class="status-chip status-${post.status}">${statusLabels[post.status] || post.status}</span>
+          </div>
+          <div class="channels-line">
+            ${post.channels.map((channel) => `<span class="channel-tag">${channel}</span>`).join("")}
+          </div>
+          <div class="mini">${(post.master_text || post.telegram_text || post.linkedin_text || "").slice(0, 220) || "Sin texto todavia."}</div>
+          ${post.last_error ? `<div class="mini" style="color:#a12828;">${post.last_error}</div>` : ""}
+          <div class="actions" style="margin-top:0;">
+            <button type="button" class="ghost" data-edit-id="${post.id}">Editar</button>
+            <button type="button" class="secondary" data-publish-id="${post.id}">Publicar ahora</button>
+          </div>
+          <div class="event-log">
+            ${post.event_log.slice(0, 3).map((event) => `<div>${formatDateTime(event.created_at)} · ${event.channel} · ${event.status} · ${event.detail}</div>`).join("")}
+          </div>
+        </article>
+      `).join("");
+
+      root.querySelectorAll("[data-edit-id]").forEach((button) => {
+        button.addEventListener("click", () => loadPost(button.dataset.editId));
+      });
+      root.querySelectorAll("[data-publish-id]").forEach((button) => {
+        button.addEventListener("click", () => publishNow(button.dataset.publishId));
+      });
+    }
+
+    function formPayload() {
+      const channels = Array.from(document.querySelectorAll(".channel-pill input:checked")).map((input) => input.value);
+      return {
+        id: document.getElementById("post-id").value || null,
+        title: document.getElementById("title").value.trim(),
+        scheduled_for: document.getElementById("scheduled-for").value,
+        channels,
+        master_text: document.getElementById("master-text").value,
+        telegram_text: document.getElementById("telegram-text").value,
+        linkedin_text: document.getElementById("linkedin-text").value,
+        facebook_text: document.getElementById("facebook-text").value,
+        instagram_text: document.getElementById("instagram-text").value,
+        image_url: document.getElementById("image-url").value,
+        notes: document.getElementById("notes").value,
+        status: "scheduled"
+      };
+    }
+
+    async function savePost(event) {
+      event.preventDefault();
+      const payload = formPayload();
+      const response = await fetch("/social/api/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        showMessage(data.detail || "No pude guardar la pieza.", "error");
+        return;
+      }
+      showMessage("Pieza guardada en el calendario.");
+      await refreshDashboard();
+      fillForm(data);
+    }
+
+    async function publishNow(postId) {
+      const targetId = postId || document.getElementById("post-id").value;
+      if (!targetId) {
+        showMessage("Primero guarda la pieza o selecciona una existente.", "error");
+        return;
+      }
+      const response = await fetch(`/social/api/posts/${targetId}/publish`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force: true })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        showMessage(data.detail || "No pude publicar ahora mismo.", "error");
+        return;
+      }
+      const count = data.count || 0;
+      showMessage(count ? "Intento de publicacion lanzado." : "No habia nada pendiente para publicar.", count ? "ok" : "error");
+      await refreshDashboard();
+      if (targetId) {
+        const refreshed = state.posts.find((post) => post.id === targetId);
+        if (refreshed) fillForm(refreshed);
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("post-form").reset();
+      document.getElementById("post-id").value = "";
+      const nextHour = new Date(Date.now() + 60 * 60 * 1000);
+      document.getElementById("scheduled-for").value = toLocalInputValue(nextHour.toISOString());
+    }
+
+    function fillForm(post) {
+      document.getElementById("post-id").value = post.id || "";
+      document.getElementById("title").value = post.title || "";
+      document.getElementById("scheduled-for").value = toLocalInputValue(post.scheduled_for_local || post.scheduled_for);
+      document.getElementById("master-text").value = post.master_text || "";
+      document.getElementById("telegram-text").value = post.telegram_text || "";
+      document.getElementById("linkedin-text").value = post.linkedin_text || "";
+      document.getElementById("facebook-text").value = post.facebook_text || "";
+      document.getElementById("instagram-text").value = post.instagram_text || "";
+      document.getElementById("image-url").value = post.image_url || "";
+      document.getElementById("notes").value = post.notes || "";
+      document.querySelectorAll(".channel-pill input").forEach((input) => {
+        input.checked = post.channels.includes(input.value);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function loadPost(postId) {
+      const post = state.posts.find((item) => item.id === postId);
+      if (post) fillForm(post);
+    }
+
+    async function refreshDashboard() {
+      const response = await fetch("/social/api/overview");
+      const data = await response.json();
+      state.overview = data;
+      state.posts = data.posts || [];
+      renderStats();
+      renderChannels();
+      buildCalendar();
+      renderQueue();
+    }
+
+    document.getElementById("post-form").addEventListener("submit", savePost);
+    document.getElementById("publish-now").addEventListener("click", () => publishNow());
+    document.getElementById("reset-form").addEventListener("click", clearForm);
+    document.getElementById("refresh-dashboard").addEventListener("click", refreshDashboard);
+    document.getElementById("prev-month").addEventListener("click", () => {
+      state.currentMonth = new Date(state.currentMonth.getFullYear(), state.currentMonth.getMonth() - 1, 1);
+      buildCalendar();
+    });
+    document.getElementById("next-month").addEventListener("click", () => {
+      state.currentMonth = new Date(state.currentMonth.getFullYear(), state.currentMonth.getMonth() + 1, 1);
+      buildCalendar();
+    });
+
+    clearForm();
+    refreshDashboard();
+  </script>
+</body>
+</html>

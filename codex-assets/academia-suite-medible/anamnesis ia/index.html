@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluación Logopédica Integral Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .compact-card {
+      border-radius: 14px;
+      border: 1px solid rgb(226 232 240);
+      background: rgb(255 255 255);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .dark .compact-card {
+      border-color: rgb(51 65 85);
+      background: rgb(15 23 42);
+    }
+
+    .step-link[data-status="complete"] .step-status {
+      color: rgb(22 163 74);
+    }
+
+    .step-link[data-status="warning"] .step-status {
+      color: rgb(217 119 6);
+    }
+
+    .step-link[data-status="idle"] .step-status {
+      color: rgb(100 116 139);
+    }
+
+    .step-link.active {
+      background: rgb(219 234 254);
+      color: rgb(30 64 175);
+      border-color: rgb(147 197 253);
+    }
+
+    .dark .step-link.active {
+      background: rgba(30, 64, 175, 0.22);
+      color: rgb(191 219 254);
+      border-color: rgb(59 130 246);
+    }
+
+    .scale-pill {
+      transition: all 0.14s ease;
+    }
+
+    .scale-pill:hover {
+      transform: translateY(-1px);
+    }
+
+    .scale-pill.active {
+      color: white;
+      border-color: transparent;
+    }
+
+    .scale-pill.active.level-0 { background: rgb(22 163 74); }
+    .scale-pill.active.level-1 { background: rgb(234 179 8); }
+    .scale-pill.active.level-2 { background: rgb(249 115 22); }
+    .scale-pill.active.level-3 { background: rgb(220 38 38); }
+
+    .chrono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 1.85rem;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .fonema-btn {
+      transition: all 0.15s ease;
+    }
+
+    .fonema-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .fonema-btn.correct {
+      background: rgb(22 163 74);
+      border-color: rgb(22 163 74);
+      color: white;
+    }
+
+    .fonema-btn.incorrect {
+      background: rgb(220 38 38);
+      border-color: rgb(220 38 38);
+      color: white;
+    }
+
+    .sidebar-collapsed .step-text,
+    .sidebar-collapsed #sidebarTitle,
+    .sidebar-collapsed #sidebarHint {
+      display: none;
+    }
+
+    .sidebar-collapsed #sidebar {
+      width: 4.5rem;
+    }
+
+    .sidebar-collapsed .step-link {
+      justify-content: center;
+      padding-left: 0.35rem;
+      padding-right: 0.35rem;
+    }
+
+    .summary-badge {
+      font-size: 11px;
+      line-height: 1.2;
+      border: 1px solid rgb(191 219 254);
+      background: rgb(239 246 255);
+      color: rgb(30 64 175);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .toast {
+      animation: slideIn 0.2s ease;
+    }
+
+    .intro-screen {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.22), transparent 38%),
+        radial-gradient(circle at 85% 15%, rgba(167, 139, 250, 0.24), transparent 40%),
+        radial-gradient(circle at 45% 85%, rgba(251, 191, 36, 0.2), transparent 38%),
+        linear-gradient(135deg, #e2e8f0 0%, #f8fafc 55%, #e0f2fe 100%);
+    }
+
+    .dark .intro-screen {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.22), transparent 38%),
+        radial-gradient(circle at 85% 15%, rgba(167, 139, 250, 0.18), transparent 40%),
+        radial-gradient(circle at 45% 85%, rgba(251, 191, 36, 0.14), transparent 38%),
+        linear-gradient(135deg, #020617 0%, #0f172a 55%, #082f49 100%);
+    }
+
+    .texture-grid {
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+
+    .intro-glass {
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(8px);
+    }
+
+    .dark .intro-glass {
+      border-color: rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .word-card {
+      border: 1px solid rgb(203 213 225);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95));
+    }
+
+    .dark .word-card {
+      border-color: rgb(71 85 105);
+      background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
+    }
+
+    .word-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgb(203 213 225);
+      background: #f8fafc;
+    }
+
+    .dark .word-image {
+      border-color: rgb(71 85 105);
+      background: #1e293b;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen">
+  <script>
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      document.documentElement.classList.toggle('dark', event.matches);
+    });
+  </script>
+
+  <div id="toastContainer" class="fixed right-4 top-4 z-[60] space-y-2"></div>
+  <section id="introScreen" class="intro-screen texture-grid fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div class="max-w-5xl w-full intro-glass rounded-3xl p-6 md:p-10 shadow-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+        <div>
+          <p class="inline-flex text-xs tracking-wide uppercase font-semibold px-3 py-1 rounded-full border border-sky-200 dark:border-sky-800 bg-white/70 dark:bg-slate-900/60 text-sky-700 dark:text-sky-300">Anamnesis IA · Pro Clinical Suite</p>
+          <h1 class="mt-3 text-3xl md:text-5xl font-black leading-tight">Evaluación logopédica excepcional para niños y adultos</h1>
+          <p class="mt-3 text-sm md:text-base text-slate-700 dark:text-slate-200">Flujo clínico premium con escalas estructuradas, denominación con imágenes, informes visuales y PDF profesional orientado a consulta real.</p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <button onclick="startAnamnesis()" class="px-4 py-2 rounded-xl text-white bg-sky-600 hover:bg-sky-700 font-semibold">Iniciar anamnesis</button>
+            <button onclick="startWithDemo()" class="px-4 py-2 rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 font-semibold">Abrir demo con imágenes</button>
+            <button onclick="startAndRestore()" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-white/70 dark:hover:bg-slate-800/70 font-semibold">Continuar sesión</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-2xl p-4 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+            <h3 class="font-bold">Modo infantil</h3>
+            <p class="text-xs mt-1">Imágenes de denominación, visuales amigables y soporte para intervención temprana.</p>
+          </div>
+          <div class="rounded-2xl p-4 border border-violet-200 bg-violet-50 dark:border-violet-800 dark:bg-violet-900/20">
+            <h3 class="font-bold">Modo adulto</h3>
+            <p class="text-xs mt-1">Informe clínico estructurado, trazabilidad y exportación profesional.</p>
+          </div>
+          <div class="rounded-2xl p-4 border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20 col-span-2">
+            <h3 class="font-bold">Diseño senior de informe</h3>
+            <p class="text-xs mt-1">Texturas suaves, jerarquía editorial limpia y presentación lista para gabinete.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="mobileOverlay" class="fixed inset-0 bg-black/45 z-30 hidden lg:hidden" onclick="toggleSidebarMobile(false)"></div>
+
+  <div class="min-h-screen lg:flex">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full transition-transform duration-200 bg-white/96 dark:bg-slate-900/96 border-r border-slate-200 dark:border-slate-700 lg:static lg:translate-x-0 lg:shrink-0 lg:block">
+      <div class="h-full flex flex-col">
+        <div class="px-3 py-3 border-b border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between gap-2">
+            <h2 id="sidebarTitle" class="text-sm font-semibold tracking-wide uppercase text-slate-700 dark:text-slate-300">Índice clínico</h2>
+            <button onclick="toggleSidebarDesktop()" class="hidden lg:inline-flex text-xs px-2 py-1 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Colapsar índice">⇔</button>
+            <button onclick="toggleSidebarMobile(false)" class="lg:hidden text-xs px-2 py-1 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Cerrar índice">✕</button>
+          </div>
+          <p id="sidebarHint" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Estado por paso: ✓ completo · no iniciado ! pendiente crítico</p>
+        </div>
+        <nav id="stepNav" class="p-2 space-y-1 overflow-y-auto"></nav>
+      </div>
+    </aside>
+
+    <div class="flex-1">
+      <header class="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-700 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+          <div class="flex flex-wrap items-center gap-3 justify-between">
+            <div class="flex items-center gap-2 min-w-[250px]">
+              <button onclick="toggleSidebarMobile(true)" class="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Abrir índice">☰</button>
+              <div>
+                <h1 class="text-xl md:text-2xl font-bold leading-tight">Evaluación Logopédica Integral</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Versión Pro · flujo clínico compacto</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs sm:text-sm">
+              <div class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-600" id="saveIndicator">Sin guardar</div>
+              <button onclick="saveState(true)" class="px-3 py-2 rounded-md text-white bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500">Guardar ahora</button>
+              <button onclick="restoreLastSession()" class="px-3 py-2 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">Restaurar</button>
+              <button onclick="cargarDemo()" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Demo</button>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+              <div id="progressBar" class="h-2 rounded-full bg-blue-600 transition-all duration-200" style="width: 6.67%"></div>
+            </div>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Paso <span id="currentStep">1</span> de <span id="totalSteps">15</span></p>
+          </div>
+        </div>
+      </header>
+
+      <main class="max-w-5xl mx-auto px-4 py-4 md:py-5">
+        <section id="step1" class="step-content compact-card p-4 md:p-5">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">1. Datos Personales</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label for="nombre" class="block text-sm font-medium mb-1">Nombre completo *</label>
+              <input id="nombre" type="text" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+            </div>
+            <div>
+              <label for="edad" class="block text-sm font-medium mb-1">Edad *</label>
+              <input id="edad" type="number" min="0" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+            </div>
+            <div>
+              <label for="profesion" class="block text-sm font-medium mb-1">Profesión</label>
+              <input id="profesion" type="text" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+            </div>
+            <div>
+              <label for="idioma" class="block text-sm font-medium mb-1">Idioma materno</label>
+              <input id="idioma" type="text" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+            </div>
+            <div class="md:col-span-2">
+              <label for="contacto" class="block text-sm font-medium mb-1">Contacto</label>
+              <input id="contacto" type="text" placeholder="Teléfono / Email" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+            </div>
+          </div>
+        </section>
+
+        <section id="step2" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">2. Desarrollo del Lenguaje</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label for="primerasPalabras" class="block text-sm font-medium mb-1">Primeras palabras (meses) *</label>
+              <input id="primerasPalabras" type="number" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" placeholder="Normal 10-15" />
+              <p class="text-xs text-slate-500 mt-1">Normal: 10-15 meses</p>
+            </div>
+            <div>
+              <label for="primerasFrases" class="block text-sm font-medium mb-1">Primeras frases (meses) *</label>
+              <input id="primerasFrases" type="number" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" placeholder="Normal 18-24" />
+              <p class="text-xs text-slate-500 mt-1">Normal: 18-24 meses</p>
+            </div>
+            <div>
+              <label for="etapaLenguaje" class="block text-sm font-medium mb-1">Etapa actual</label>
+              <select id="etapaLenguaje" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800">
+                <option value="">Seleccionar...</option>
+                <option>Prelingüístico</option>
+                <option>Primeras palabras</option>
+                <option>Combinación de palabras</option>
+                <option>Frases simples</option>
+                <option>Desarrollo avanzado</option>
+              </select>
+            </div>
+            <div>
+              <label for="observacionesFamiliares" class="block text-sm font-medium mb-1">Observaciones familiares</label>
+              <textarea id="observacionesFamiliares" rows="3" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="step3" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">3. Evaluación Orofacial</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Escala 0-3: <strong>0 Normal</strong>, <strong>1 Leve</strong>, <strong>2 Moderado</strong>, <strong>3 Severo</strong>.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="orofacialScales"></div>
+        </section>
+
+        <section id="step4" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">4. Inteligibilidad</h2>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <div>
+              <h3 class="text-base font-semibold mb-1">Denominación de palabras con imágenes</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-300 mb-2">Puedes subir imagen personalizada por palabra. Se guardan en la sesión y se incluyen en el PDF.</p>
+              <div id="palabrasList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+              <div class="mt-3 rounded-md bg-blue-50 dark:bg-blue-900/20 p-3 border border-blue-200 dark:border-blue-800">
+                <div class="flex items-center justify-between text-sm">
+                  <span>Aciertos</span>
+                  <strong id="contadorPalabras">0/10</strong>
+                </div>
+                <div class="h-2 bg-blue-200 dark:bg-blue-900 rounded-full mt-2">
+                  <div id="progressPalabras" class="h-2 rounded-full bg-blue-600" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-base font-semibold mb-2">Frases cortas</h3>
+              <div id="frasesList" class="space-y-1"></div>
+              <div class="mt-3 rounded-md bg-emerald-50 dark:bg-emerald-900/20 p-3 border border-emerald-200 dark:border-emerald-800">
+                <div class="flex items-center justify-between text-sm">
+                  <span>Aciertos</span>
+                  <strong id="contadorFrases">0/10</strong>
+                </div>
+                <div class="h-2 bg-emerald-200 dark:bg-emerald-900 rounded-full mt-2">
+                  <div id="progressFrases" class="h-2 rounded-full bg-emerald-600" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <label for="inteligibilidadPorcentaje" class="block text-sm font-medium mb-1">Inteligibilidad en conversación (%) *</label>
+            <div class="flex flex-wrap gap-2 items-center">
+              <input id="inteligibilidadPorcentaje" type="number" min="0" max="100" class="field-input w-44 rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800" />
+              <button onclick="calcularPorcentajeAutomatico()" class="px-3 py-2 rounded-md text-white bg-purple-600 hover:bg-purple-700">Calcular Auto</button>
+              <span id="inteligibilidadInfo" class="text-xs text-slate-500 dark:text-slate-300">Introduce valor manual o usa cálculo automático.</span>
+            </div>
+            <div class="h-2 bg-purple-200 dark:bg-purple-900 rounded-full mt-2">
+              <div id="progressInteligibilidad" class="h-2 rounded-full bg-purple-600" style="width: 0%"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="step5" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">5. Escala GRBAS</h2>
+          <div class="rounded-md bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3 mb-4 text-sm">
+            G: Grado | R: Ronquera | B: Soplo | A: Astenia | S: Tensión
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="grbasScales"></div>
+        </section>
+
+        <section id="step6" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">6. Registro Fonológico Inducido</h2>
+
+          <div class="rounded-lg border border-indigo-200 dark:border-indigo-800 bg-indigo-50/70 dark:bg-indigo-950/30 p-4 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p class="text-sm text-indigo-700 dark:text-indigo-200">Cronómetro de evaluación</p>
+                <div id="cronometroDisplay" class="chrono text-indigo-700 dark:text-indigo-200">00:00</div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="iniciarCronometro()" class="px-3 py-2 rounded-md text-white bg-emerald-600 hover:bg-emerald-700">Iniciar</button>
+                <button onclick="pausarCronometro()" class="px-3 py-2 rounded-md text-white bg-amber-600 hover:bg-amber-700">Pausar</button>
+                <button onclick="reiniciarCronometro()" class="px-3 py-2 rounded-md text-white bg-rose-600 hover:bg-rose-700">Reiniciar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h3 class="text-base font-semibold">Fonología</h3>
+            <div class="inline-flex rounded-md border border-slate-300 dark:border-slate-600 overflow-hidden">
+              <button id="tabMapa" onclick="setFonologyView('mapa')" class="px-3 py-1.5 text-sm bg-slate-200 dark:bg-slate-700">Vista mapa</button>
+              <button id="tabAlterados" onclick="setFonologyView('alterados')" class="px-3 py-1.5 text-sm bg-white dark:bg-slate-900">Lista de alterados</button>
+            </div>
+          </div>
+
+          <div id="phonologyMapView">
+            <div id="phonologyMap" class="space-y-4"></div>
+          </div>
+
+          <div id="phonologyAlteredView" class="hidden">
+            <p class="text-sm text-slate-600 dark:text-slate-300 mb-2">Chips de fonemas alterados (incorrectos). Puedes eliminar un chip para dejarlo no evaluado.</p>
+            <div id="alteredChips" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+            <div class="rounded-md p-3 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+              <p class="text-xl font-bold text-emerald-700 dark:text-emerald-300" id="fonemasCorrecto">0</p>
+              <p class="text-xs">Correctos</p>
+            </div>
+            <div class="rounded-md p-3 border border-rose-200 bg-rose-50 dark:border-rose-800 dark:bg-rose-900/20">
+              <p class="text-xl font-bold text-rose-700 dark:text-rose-300" id="fonemasIncorrecto">0</p>
+              <p class="text-xs">Incorrectos</p>
+            </div>
+            <div class="rounded-md p-3 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+              <p class="text-xl font-bold text-blue-700 dark:text-blue-300" id="porcentajeFonemas">0%</p>
+              <p class="text-xs">Porcentaje</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="step7" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">7. Fluidez y Ritmo</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div><label for="fluidezRepeticiones" class="block text-sm mb-1">Repeticiones /min</label><input id="fluidezRepeticiones" type="number" min="0" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></div>
+            <div><label for="fluidezBloqueos" class="block text-sm mb-1">Bloqueos /min</label><input id="fluidezBloqueos" type="number" min="0" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></div>
+            <div><label for="fluidezProlongaciones" class="block text-sm mb-1">Prolongaciones /min</label><input id="fluidezProlongaciones" type="number" min="0" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></div>
+            <div><label for="fluidezMuletillas" class="block text-sm mb-1">Muletillas /min</label><input id="fluidezMuletillas" type="number" min="0" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+            <div><label for="velocidadHabla" class="block text-sm mb-1">Palabras por minuto</label><input id="velocidadHabla" type="number" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></div>
+            <div>
+              <label for="ritmoGeneral" class="block text-sm mb-1">Ritmo general</label>
+              <select id="ritmoGeneral" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800">
+                <option value="">Seleccionar...</option>
+                <option>Muy lento</option><option>Lento</option><option>Normal</option><option>Rápido</option><option>Muy rápido</option><option>Irregular</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3"><label for="observacionesFluidez" class="block text-sm mb-1">Observaciones</label><textarea id="observacionesFluidez" rows="4" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea></div>
+        </section>
+
+        <section id="step8" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">8. Discriminación Auditiva</h2>
+          <div id="discriminacionList" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm"></div>
+          <div class="mt-3 rounded-md bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3 flex justify-between items-center">
+            <span>Aciertos en discriminación</span>
+            <strong id="discriminacionScore">0/10</strong>
+          </div>
+        </section>
+
+        <section id="step9" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">9. Comprensión</h2>
+          <textarea id="evaluacionComprension" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step10" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">10. Expresión</h2>
+          <textarea id="evaluacionExpresion" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step11" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">11. Memoria y Atención</h2>
+          <textarea id="memoriaAtencion" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step12" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">12. Lectoescritura</h2>
+          <textarea id="lectoescritura" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step13" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">13. Aspectos Psicosociales</h2>
+          <textarea id="aspectosPsicosociales" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step14" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">14. Observaciones Adicionales</h2>
+          <textarea id="observacionesAdicionales" rows="7" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+        </section>
+
+        <section id="step15" class="step-content compact-card p-4 md:p-5 hidden">
+          <h2 class="text-lg md:text-xl font-semibold mb-4">15. Síntesis Final</h2>
+
+          <div class="grid grid-cols-1 gap-3">
+            <div>
+              <label for="conclusionClinica" class="block text-sm font-medium mb-1">Conclusión clínica *</label>
+              <textarea id="conclusionClinica" rows="3" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+            </div>
+            <div>
+              <label for="hipotesisDiagnostica" class="block text-sm font-medium mb-1">Hipótesis diagnóstica *</label>
+              <textarea id="hipotesisDiagnostica" rows="3" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+            </div>
+            <div>
+              <label for="recomendaciones" class="block text-sm font-medium mb-1">Recomendaciones *</label>
+              <textarea id="recomendaciones" rows="3" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h3 class="font-semibold">Resumen clínico automático</h3>
+              <span class="summary-badge">Borrador autogenerado</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mb-2">Este texto es editable y debe revisarse antes de emitir el informe.</p>
+            <textarea id="resumenAutomatico" rows="8" class="field-input w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 bg-white dark:bg-slate-800"></textarea>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <button onclick="generarResumenClinicoAuto()" class="px-3 py-2 rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Regenerar borrador</button>
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2">
+            <button onclick="mostrarInformeCompleto()" class="px-3 py-2 rounded-md text-white bg-emerald-600 hover:bg-emerald-700">Ver informe con gráficas</button>
+            <button onclick="generarPDF()" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Generar PDF básico</button>
+            <button onclick="generarPDFCompletoConGraficas()" class="px-3 py-2 rounded-md text-white bg-slate-700 hover:bg-slate-800">PDF con gráficas</button>
+          </div>
+        </section>
+
+        <div class="flex items-center justify-between mt-4 gap-2">
+          <button id="prevBtn" onclick="cambiarPaso(-1)" class="px-4 py-2 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 hidden">← Anterior</button>
+          <button id="nextBtn" onclick="cambiarPaso(1)" class="ml-auto px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Siguiente →</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="reportModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/45" onclick="cerrarInforme()"></div>
+    <div class="relative mx-auto mt-4 mb-4 max-w-6xl w-[95%] max-h-[92vh] overflow-auto rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 md:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div>
+          <h2 class="text-xl font-bold">Informe Completo de Evaluación</h2>
+          <p id="reportMeta" class="text-sm text-slate-500 dark:text-slate-300"></p>
+        </div>
+        <button onclick="cerrarInforme()" class="px-3 py-2 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">Cerrar</button>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div class="compact-card p-3"><h3 class="font-semibold mb-2">Desarrollo del Lenguaje</h3><div style="height: 260px"><canvas id="chartDesarrollo"></canvas></div><p id="interpDesarrollo" class="text-sm mt-2"></p></div>
+        <div class="compact-card p-3"><h3 class="font-semibold mb-2">Registro Fonológico</h3><div style="height: 260px"><canvas id="chartFonemas"></canvas></div><p id="interpFonemas" class="text-sm mt-2"></p></div>
+        <div class="compact-card p-3"><h3 class="font-semibold mb-2">Inteligibilidad</h3><div style="height: 260px"><canvas id="chartInteligibilidad"></canvas></div><p id="interpInteligibilidad" class="text-sm mt-2"></p></div>
+        <div class="compact-card p-3"><h3 class="font-semibold mb-2">Escala GRBAS</h3><div style="height: 260px"><canvas id="chartGRBAS"></canvas></div><p id="interpGRBAS" class="text-sm mt-2"></p></div>
+      </div>
+
+      <div class="compact-card p-3 mt-4">
+        <h3 class="font-semibold mb-2">Conclusiones y recomendaciones</h3>
+        <div id="reportConclusions" class="text-sm whitespace-pre-wrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 15;
+    const STORAGE_KEY = 'evaluacion_logopedica_pro_v2';
+
+    let scaleData = {};
+    let fonemaData = {};
+    let cronometroInterval = null;
+    let segundosCronometro = 0;
+    let cronometroActivo = false;
+    let autosaveTimer = null;
+    let lastSavedAt = 0;
+    let sidebarCollapsed = false;
+    let wordImages = {};
+    let defaultWordImages = {};
+
+    const stepConfig = [
+      { id: 1, title: 'Datos personales' },
+      { id: 2, title: 'Desarrollo lenguaje' },
+      { id: 3, title: 'Orofacial' },
+      { id: 4, title: 'Inteligibilidad' },
+      { id: 5, title: 'GRBAS' },
+      { id: 6, title: 'Fonología' },
+      { id: 7, title: 'Fluidez y ritmo' },
+      { id: 8, title: 'Discriminación auditiva' },
+      { id: 9, title: 'Comprensión' },
+      { id: 10, title: 'Expresión' },
+      { id: 11, title: 'Memoria y atención' },
+      { id: 12, title: 'Lectoescritura' },
+      { id: 13, title: 'Psicosocial' },
+      { id: 14, title: 'Observaciones adicionales' },
+      { id: 15, title: 'Síntesis final' }
+    ];
+
+    const words = ['casa', 'mesa', 'perro', 'agua', 'libro', 'flor', 'tren', 'plato', 'brazo', 'globo'];
+    const wordEmojiMap = {
+      casa: '🏠',
+      mesa: '🪑',
+      perro: '🐶',
+      agua: '💧',
+      libro: '📘',
+      flor: '🌸',
+      tren: '🚆',
+      plato: '🍽️',
+      brazo: '💪',
+      globo: '🎈'
+    };
+    const shortPhrases = [
+      'El gato está en la mesa',
+      'Me gusta comer helado',
+      'Vamos al parque a jugar',
+      'La niña tiene un globo rojo',
+      'Papá lee el periódico',
+      'Los peces nadan en el río',
+      'Compré pan en la panadería',
+      'El tren llega a las cinco',
+      'Mi hermana estudia en la universidad',
+      'Los pájaros vuelan en el cielo'
+    ];
+
+    const discriminacionPairs = [
+      '/p/ - /b/ (pala - bala)', '/t/ - /d/ (toma - doma)', '/k/ - /g/ (casa - gasa)', '/f/ - /θ/ (foco - zoco)', '/s/ - /θ/ (casa - caza)',
+      '/l/ - /r/ (pelo - pero)', '/r/ - /rr/ (caro - carro)', '/pl/ - /pr/ (plato - prato)', '/bl/ - /br/ (blanco - branco)', '/fl/ - /fr/ (flor - fror)'
+    ];
+
+    const scaleMeta = [
+      { value: 0, label: 'Normal' },
+      { value: 1, label: 'Leve' },
+      { value: 2, label: 'Moderado' },
+      { value: 3, label: 'Severo' }
+    ];
+
+    const orofacialFields = [
+      { id: 'labiosTono', title: 'Labios - Tono' },
+      { id: 'labiosMovilidad', title: 'Labios - Movilidad' },
+      { id: 'lenguaTono', title: 'Lengua - Tono' },
+      { id: 'lenguaMovilidad', title: 'Lengua - Movilidad' },
+      { id: 'deglucion', title: 'Deglución' },
+      { id: 'respiracion', title: 'Respiración' }
+    ];
+
+    const grbasFields = [
+      { id: 'grbasG', title: 'G (Grado)' },
+      { id: 'grbasR', title: 'R (Ronquera)' },
+      { id: 'grbasB', title: 'B (Soplo)' },
+      { id: 'grbasA', title: 'A (Astenia)' },
+      { id: 'grbasS', title: 'S (Tensión)' }
+    ];
+
+    const phonologyGroups = [
+      { title: 'Vocales', items: ['a', 'e', 'i', 'o', 'u'] },
+      { title: 'Consonantes', items: ['p', 'b', 't', 'd', 'k', 'g', 'f', 'θ', 's', 'x', 'm', 'n', 'ɲ', 'l', 'ʎ', 'r', 'rr', 'tʃ'] },
+      { title: 'Grupos consonánticos', items: ['pl', 'pr', 'bl', 'br', 'fl', 'fr', 'kl', 'kr', 'gl', 'gr', 'tl', 'tr', 'dl', 'dr'] }
+    ];
+
+    let reportCharts = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildDefaultWordImages();
+      wordImages = { ...defaultWordImages };
+      initDynamicLists();
+      renderScaleGroups('orofacialScales', orofacialFields);
+      renderScaleGroups('grbasScales', grbasFields);
+      renderStepNav();
+      setFonologyView('mapa');
+      renderPhonologyMap();
+      updateResumenFonemas();
+      updateProgress();
+      showStep(1);
+      bindInputEvents();
+      updateDiscriminacion();
+      setInterval(updateSaveIndicator, 1000);
+      updateSaveIndicator();
+      showIntroScreen(true);
+    });
+
+    function initDynamicLists() {
+      const previousWordChecks = Array.from(document.querySelectorAll('.palabra-checkbox')).map((el) => el.checked);
+      const wordsWrap = document.getElementById('palabrasList');
+      wordsWrap.innerHTML = words.map((word, i) => `
+        <article class="word-card p-2">
+          <img id="wordImg-${i}" src="${wordImages[word] || defaultWordImages[word]}" alt="Imagen para ${word}" class="word-image mb-2" />
+          <div class="flex items-start justify-between gap-2">
+            <label class="flex items-center gap-2 text-sm font-medium">
+              <input type="checkbox" class="palabra-checkbox" data-index="${i}" onchange="actualizarContador('palabras')" ${previousWordChecks[i] ? 'checked' : ''} />
+              <span>${word}</span>
+            </label>
+            <div class="flex gap-1">
+              <button type="button" onclick="triggerWordImageInput(${i})" class="text-[11px] px-2 py-1 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">Imagen</button>
+              <button type="button" onclick="resetWordImage(${i})" class="text-[11px] px-2 py-1 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">Reset</button>
+            </div>
+          </div>
+          <input id="wordInput-${i}" type="file" accept="image/*" class="hidden" onchange="onWordImageSelected(${i}, event)" />
+        </article>`).join('');
+
+      const previousPhraseChecks = Array.from(document.querySelectorAll('.frase-checkbox')).map((el) => el.checked);
+      const phrasesWrap = document.getElementById('frasesList');
+      phrasesWrap.innerHTML = shortPhrases.map((phrase, i) => `
+        <label class="flex items-start gap-2 text-sm rounded px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <input type="checkbox" class="frase-checkbox mt-1" data-index="${i}" onchange="actualizarContador('frases')" ${previousPhraseChecks[i] ? 'checked' : ''} />
+          <span>${phrase}</span>
+        </label>`).join('');
+
+      const previousDiscChecks = Array.from(document.querySelectorAll('.discriminacion-checkbox')).map((el) => el.checked);
+      const discWrap = document.getElementById('discriminacionList');
+      discWrap.innerHTML = discriminacionPairs.map((pair, i) => `
+        <label class="flex items-center gap-2 rounded px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <input type="checkbox" class="discriminacion-checkbox" data-index="${i}" onchange="updateDiscriminacion()" ${previousDiscChecks[i] ? 'checked' : ''} />
+          <span>${pair}</span>
+        </label>`).join('');
+    }
+
+    function buildDefaultWordImages() {
+      defaultWordImages = {};
+      words.forEach((word, idx) => {
+        defaultWordImages[word] = generateWordImageDataUrl(word, wordEmojiMap[word] || '🧠', idx, false);
+      });
+    }
+
+    function generateWordImageDataUrl(word, emoji, index = 0, demoMode = false) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 460;
+      canvas.height = 300;
+      const ctx = canvas.getContext('2d');
+      const palettes = [
+        ['#dbeafe', '#e0f2fe'],
+        ['#ede9fe', '#e0e7ff'],
+        ['#dcfce7', '#ccfbf1'],
+        ['#fef3c7', '#fde68a'],
+        ['#fee2e2', '#fecaca']
+      ];
+      const [c1, c2] = palettes[index % palettes.length];
+      const grd = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grd.addColorStop(0, c1);
+      grd.addColorStop(1, c2);
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Subtle texture pattern
+      ctx.fillStyle = demoMode ? 'rgba(15,23,42,0.08)' : 'rgba(15,23,42,0.05)';
+      for (let y = 14; y < canvas.height; y += 26) {
+        for (let x = 10; x < canvas.width; x += 26) {
+          ctx.fillRect(x, y, 2, 2);
+        }
+      }
+
+      ctx.fillStyle = demoMode ? 'rgba(30,41,59,0.1)' : 'rgba(30,41,59,0.08)';
+      ctx.beginPath();
+      ctx.arc(88, 72, 48, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(390, 228, 64, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '700 46px system-ui, -apple-system, Segoe UI, sans-serif';
+      ctx.fillText(emoji, 30, 72);
+      ctx.font = '700 35px system-ui, -apple-system, Segoe UI, sans-serif';
+      ctx.fillText(word.toUpperCase(), 30, 142);
+      ctx.font = '500 20px system-ui, -apple-system, Segoe UI, sans-serif';
+      ctx.fillText('Denominación visual', 30, 180);
+      return canvas.toDataURL('image/png', 0.95);
+    }
+
+    function triggerWordImageInput(index) {
+      const input = document.getElementById(`wordInput-${index}`);
+      if (input) input.click();
+    }
+
+    function onWordImageSelected(index, event) {
+      const file = event?.target?.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      const word = words[index];
+      reader.onload = () => {
+        wordImages[word] = String(reader.result);
+        const preview = document.getElementById(`wordImg-${index}`);
+        if (preview) preview.src = wordImages[word];
+        scheduleAutosave();
+        showToast(`Imagen actualizada: ${word}`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetWordImage(index) {
+      const word = words[index];
+      wordImages[word] = defaultWordImages[word];
+      const preview = document.getElementById(`wordImg-${index}`);
+      if (preview) preview.src = wordImages[word];
+      scheduleAutosave();
+    }
+
+    function generateDemoWordImages() {
+      const demo = {};
+      words.forEach((word, idx) => {
+        demo[word] = generateWordImageDataUrl(word, wordEmojiMap[word] || '⭐', idx + 2, true);
+      });
+      return demo;
+    }
+
+    function showIntroScreen(show) {
+      const intro = document.getElementById('introScreen');
+      if (!intro) return;
+      intro.classList.toggle('hidden', !show);
+    }
+
+    function startAnamnesis() {
+      showIntroScreen(false);
+    }
+
+    function startWithDemo() {
+      showIntroScreen(false);
+      cargarDemo();
+    }
+
+    function startAndRestore() {
+      showIntroScreen(false);
+      restoreLastSession();
+    }
+
+    function bindInputEvents() {
+      document.querySelectorAll('input, textarea, select').forEach((el) => {
+        el.addEventListener('input', () => {
+          onAnyDataChanged();
+        });
+        el.addEventListener('change', () => {
+          onAnyDataChanged();
+        });
+      });
+    }
+
+    function onAnyDataChanged() {
+      updateStepStatuses();
+      scheduleAutosave();
+    }
+
+    function renderStepNav() {
+      const nav = document.getElementById('stepNav');
+      nav.innerHTML = stepConfig.map((step) => `
+        <button id="navStep${step.id}" data-step="${step.id}" type="button"
+          class="step-link w-full text-left text-sm rounded-md border border-transparent px-2 py-2 flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+          onclick="goToStep(${step.id})">
+          <span class="step-status font-bold">·</span>
+          <span class="step-text">${step.id}. ${step.title}</span>
+        </button>`).join('');
+      updateStepStatuses();
+    }
+
+    function goToStep(step) {
+      currentStep = step;
+      showStep(step);
+      updateProgress();
+      updateStepStatuses();
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.step-content').forEach((el) => el.classList.add('hidden'));
+      const active = document.getElementById(`step${step}`);
+      if (!active) return;
+      active.classList.remove('hidden');
+      document.getElementById('prevBtn').classList.toggle('hidden', step === 1);
+      document.getElementById('nextBtn').textContent = step === totalSteps ? 'Finalizar' : 'Siguiente →';
+      if (step === 15 && !document.getElementById('resumenAutomatico').value.trim()) {
+        generarResumenClinicoAuto();
+      }
+    }
+
+    function cambiarPaso(direction) {
+      const target = currentStep + direction;
+      if (target < 1 || target > totalSteps) return;
+
+      if (direction > 0) {
+        const missing = getCriticalMissingFields(currentStep);
+        if (missing.length > 0) {
+          const ok = confirm(`Faltan datos críticos en este paso:\n- ${missing.join('\n- ')}\n\n¿Quieres continuar igualmente?`);
+          if (!ok) return;
+        }
+      }
+
+      currentStep = target;
+      showStep(currentStep);
+      updateProgress();
+      updateStepStatuses();
+      scheduleAutosave();
+    }
+
+    function updateProgress() {
+      const progress = (currentStep / totalSteps) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+      document.getElementById('currentStep').textContent = String(currentStep);
+      document.getElementById('totalSteps').textContent = String(totalSteps);
+    }
+
+    function updateStepStatuses() {
+      stepConfig.forEach((step) => {
+        const node = document.getElementById(`navStep${step.id}`);
+        if (!node) return;
+        const status = getStepStatus(step.id);
+        node.dataset.status = status;
+        node.classList.toggle('active', step.id === currentStep);
+        const symbol = status === 'complete' ? '✓' : status === 'warning' ? '!' : '·';
+        node.querySelector('.step-status').textContent = symbol;
+      });
+    }
+
+    function getStepStatus(step) {
+      const missing = getCriticalMissingFields(step);
+      const touched = isStepTouched(step);
+      if (missing.length === 0 && (touched || step === 1)) return 'complete';
+      if (missing.length > 0 && (touched || step === currentStep)) return 'warning';
+      return 'idle';
+    }
+
+    function isStepTouched(step) {
+      if (step === 3) return orofacialFields.some((f) => Number.isInteger(scaleData[f.id]));
+      if (step === 5) return grbasFields.some((f) => Number.isInteger(scaleData[f.id]));
+      if (step === 6) return Object.keys(fonemaData).length > 0 || segundosCronometro > 0;
+
+      const section = document.getElementById(`step${step}`);
+      if (!section) return false;
+      const fields = section.querySelectorAll('input, textarea, select');
+      for (const field of fields) {
+        if (field.type === 'checkbox' && field.checked) return true;
+        if (field.type !== 'checkbox' && field.value && field.value.trim() !== '') return true;
+      }
+      return false;
+    }
+
+    function getCriticalMissingFields(step) {
+      switch (step) {
+        case 1: {
+          const out = [];
+          if (!v('nombre')) out.push('Nombre completo');
+          if (!v('edad')) out.push('Edad');
+          return out;
+        }
+        case 2: {
+          const out = [];
+          if (!v('primerasPalabras')) out.push('Primeras palabras (meses)');
+          if (!v('primerasFrases')) out.push('Primeras frases (meses)');
+          return out;
+        }
+        case 3:
+          return orofacialFields.filter((f) => !Number.isInteger(scaleData[f.id])).map((f) => f.title);
+        case 4: {
+          const porcentaje = parseInt(v('inteligibilidadPorcentaje'), 10);
+          return Number.isNaN(porcentaje) ? ['Inteligibilidad en conversación (%)'] : [];
+        }
+        case 5:
+          return grbasFields.filter((f) => !Number.isInteger(scaleData[f.id])).map((f) => f.title);
+        case 6:
+          return Object.keys(fonemaData).length < 5 ? ['Evaluar al menos 5 fonemas'] : [];
+        case 8: {
+          const checked = document.querySelectorAll('.discriminacion-checkbox:checked').length;
+          return checked === 0 ? ['Marcar al menos 1 par mínimo'] : [];
+        }
+        case 15: {
+          const out = [];
+          if (!v('conclusionClinica')) out.push('Conclusión clínica');
+          if (!v('hipotesisDiagnostica')) out.push('Hipótesis diagnóstica');
+          if (!v('recomendaciones')) out.push('Recomendaciones');
+          return out;
+        }
+        default:
+          return [];
+      }
+    }
+
+    function v(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+
+    function renderScaleGroups(containerId, fields) {
+      const wrap = document.getElementById(containerId);
+      wrap.innerHTML = fields.map((field) => `
+        <div class="rounded-md border border-slate-200 dark:border-slate-700 p-3">
+          <p class="text-sm font-medium mb-2">${field.title}</p>
+          <div class="flex flex-wrap gap-1.5" id="scaleWrap-${field.id}"></div>
+        </div>
+      `).join('');
+      fields.forEach((field) => renderScaleButtons(field.id));
+    }
+
+    function renderScaleButtons(scaleId) {
+      const wrap = document.getElementById(`scaleWrap-${scaleId}`);
+      if (!wrap) return;
+      wrap.innerHTML = scaleMeta.map((item) => {
+        const active = scaleData[scaleId] === item.value ? 'active level-' + item.value : '';
+        return `<button type="button" class="scale-pill ${active} border border-slate-300 dark:border-slate-600 rounded-full px-2.5 py-1.5 text-xs"
+          title="${item.value} ${item.label}" aria-label="${item.value} ${item.label}" onclick="setScale('${scaleId}', ${item.value})">${item.value} ${item.label}</button>`;
+      }).join('');
+    }
+
+    function setScale(scaleId, value) {
+      scaleData[scaleId] = value;
+      renderScaleButtons(scaleId);
+      updateStepStatuses();
+      scheduleAutosave();
+    }
+
+    function iniciarCronometro() {
+      if (cronometroActivo) return;
+      cronometroActivo = true;
+      cronometroInterval = setInterval(() => {
+        segundosCronometro += 1;
+        actualizarDisplayCronometro();
+        if (segundosCronometro % 5 === 0) scheduleAutosave();
+      }, 1000);
+    }
+
+    function pausarCronometro() {
+      cronometroActivo = false;
+      if (cronometroInterval) {
+        clearInterval(cronometroInterval);
+        cronometroInterval = null;
+      }
+      scheduleAutosave();
+    }
+
+    function reiniciarCronometro() {
+      pausarCronometro();
+      segundosCronometro = 0;
+      actualizarDisplayCronometro();
+      scheduleAutosave();
+    }
+
+    function actualizarDisplayCronometro() {
+      const m = Math.floor(segundosCronometro / 60).toString().padStart(2, '0');
+      const s = (segundosCronometro % 60).toString().padStart(2, '0');
+      document.getElementById('cronometroDisplay').textContent = `${m}:${s}`;
+    }
+
+    function setFonologyView(view) {
+      document.getElementById('phonologyMapView').classList.toggle('hidden', view !== 'mapa');
+      document.getElementById('phonologyAlteredView').classList.toggle('hidden', view !== 'alterados');
+      document.getElementById('tabMapa').classList.toggle('bg-slate-200', view === 'mapa');
+      document.getElementById('tabMapa').classList.toggle('dark:bg-slate-700', view === 'mapa');
+      document.getElementById('tabAlterados').classList.toggle('bg-slate-200', view === 'alterados');
+      document.getElementById('tabAlterados').classList.toggle('dark:bg-slate-700', view === 'alterados');
+      renderAlteredChips();
+    }
+
+    function renderPhonologyMap() {
+      const wrap = document.getElementById('phonologyMap');
+      wrap.innerHTML = phonologyGroups.map((group) => {
+        const buttons = group.items.map((item) => {
+          const state = fonemaData[item];
+          const label = state === true ? 'Correcto' : state === false ? 'Incorrecto' : 'Evaluar';
+          const cls = state === true ? 'correct' : state === false ? 'incorrect' : '';
+          return `<button type="button" class="fonema-btn ${cls} text-xs rounded-md border border-slate-300 dark:border-slate-600 px-2 py-1" onclick="toggleFonema('${item}')">/${item}/ · ${label}</button>`;
+        }).join('');
+        return `
+          <div class="rounded-md border border-slate-200 dark:border-slate-700 p-3">
+            <h4 class="text-sm font-semibold mb-2">${group.title}</h4>
+            <div class="flex flex-wrap gap-1.5">${buttons}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleFonema(fonema) {
+      const current = fonemaData[fonema];
+      if (current === true) {
+        fonemaData[fonema] = false;
+      } else if (current === false) {
+        delete fonemaData[fonema];
+      } else {
+        fonemaData[fonema] = true;
+      }
+      renderPhonologyMap();
+      updateResumenFonemas();
+      updateStepStatuses();
+      scheduleAutosave();
+    }
+
+    function renderAlteredChips() {
+      const altered = Object.entries(fonemaData).filter(([, value]) => value === false).map(([key]) => key);
+      const wrap = document.getElementById('alteredChips');
+      if (altered.length === 0) {
+        wrap.innerHTML = '<span class="text-sm text-slate-500">Sin fonemas alterados.</span>';
+        return;
+      }
+      wrap.innerHTML = altered.map((fonema) => `
+        <span class="inline-flex items-center gap-2 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200 px-3 py-1 text-xs border border-rose-200 dark:border-rose-700">
+          /${fonema}/
+          <button type="button" onclick="removeAlteredFonema('${fonema}')" class="font-bold">✕</button>
+        </span>
+      `).join('');
+    }
+
+    function removeAlteredFonema(fonema) {
+      delete fonemaData[fonema];
+      renderPhonologyMap();
+      renderAlteredChips();
+      updateResumenFonemas();
+      scheduleAutosave();
+    }
+
+    function updateResumenFonemas() {
+      const values = Object.values(fonemaData);
+      const correctos = values.filter((v) => v === true).length;
+      const incorrectos = values.filter((v) => v === false).length;
+      const total = correctos + incorrectos;
+      const pct = total ? Math.round((correctos / total) * 100) : 0;
+      document.getElementById('fonemasCorrecto').textContent = String(correctos);
+      document.getElementById('fonemasIncorrecto').textContent = String(incorrectos);
+      document.getElementById('porcentajeFonemas').textContent = `${pct}%`;
+      renderAlteredChips();
+    }
+
+    function actualizarContador(tipo) {
+      if (tipo === 'palabras') {
+        const checked = document.querySelectorAll('.palabra-checkbox:checked').length;
+        document.getElementById('contadorPalabras').textContent = `${checked}/10`;
+        document.getElementById('progressPalabras').style.width = `${checked * 10}%`;
+      }
+      if (tipo === 'frases') {
+        const checked = document.querySelectorAll('.frase-checkbox:checked').length;
+        document.getElementById('contadorFrases').textContent = `${checked}/10`;
+        document.getElementById('progressFrases').style.width = `${checked * 10}%`;
+      }
+      if (!document.getElementById('inteligibilidadPorcentaje').value) calcularPorcentajeAutomatico();
+      onAnyDataChanged();
+    }
+
+    function calcularPorcentajeAutomatico() {
+      const p = document.querySelectorAll('.palabra-checkbox:checked').length;
+      const f = document.querySelectorAll('.frase-checkbox:checked').length;
+      const pPct = p * 10;
+      const fPct = f * 10;
+      const auto = Math.round((pPct * 0.3) + (fPct * 0.7));
+      document.getElementById('inteligibilidadPorcentaje').value = String(auto);
+      actualizarPorcentajeInteligibilidad();
+      document.getElementById('inteligibilidadInfo').textContent = `Auto: palabras ${pPct}% (30%) + frases ${fPct}% (70%) = ${auto}%`;
+      onAnyDataChanged();
+    }
+
+    function actualizarPorcentajeInteligibilidad() {
+      const value = parseInt(document.getElementById('inteligibilidadPorcentaje').value, 10) || 0;
+      document.getElementById('progressInteligibilidad').style.width = `${Math.max(0, Math.min(value, 100))}%`;
+      onAnyDataChanged();
+    }
+
+    function updateDiscriminacion() {
+      const checked = document.querySelectorAll('.discriminacion-checkbox:checked').length;
+      const total = discriminacionPairs.length;
+      document.getElementById('discriminacionScore').textContent = `${checked}/${total}`;
+      onAnyDataChanged();
+    }
+
+    function generarResumenClinicoAuto() {
+      const nombre = v('nombre') || 'Paciente';
+      const edad = v('edad') || 'N/D';
+      const inteligibilidad = parseInt(v('inteligibilidadPorcentaje'), 10);
+      const inteligibilidadTxt = Number.isNaN(inteligibilidad) ? 'sin dato' : `${inteligibilidad}%`;
+      const fonemasAlterados = Object.entries(fonemaData).filter(([, ok]) => ok === false).map(([f]) => `/${f}/`);
+      const grbasTotal = grbasFields.reduce((sum, item) => sum + (Number(scaleData[item.id]) || 0), 0);
+      const pp = parseInt(v('primerasPalabras'), 10);
+      const pf = parseInt(v('primerasFrases'), 10);
+      const retraso = (!Number.isNaN(pp) && pp > 15) || (!Number.isNaN(pf) && pf > 24);
+
+      const lines = [];
+      lines.push(`[BORRADOR AUTOGENERADO - REQUIERE REVISIÓN CLÍNICA]`);
+      lines.push(`Paciente: ${nombre}, ${edad} años.`);
+      lines.push(`Desarrollo del lenguaje: primeras palabras ${v('primerasPalabras') || 'N/D'} meses, primeras frases ${v('primerasFrases') || 'N/D'} meses.${retraso ? ' Se observa posible retraso evolutivo.' : ''}`);
+      lines.push(`Inteligibilidad conversacional: ${inteligibilidadTxt}.`);
+      lines.push(`Fonología: ${fonemasAlterados.length ? `alteraciones en ${fonemasAlterados.join(', ')}.` : 'sin alteraciones fonológicas relevantes registradas.'}`);
+      lines.push(`Calidad vocal (GRBAS total): ${grbasTotal}/15.`);
+      lines.push(`Impresión inicial: ${grbasTotal > 3 || (Number.isFinite(inteligibilidad) && inteligibilidad < 85) || fonemasAlterados.length > 0 ? 'perfil con necesidades de intervención logopédica focalizada.' : 'perfil funcional dentro de parámetros esperables.'}`);
+      lines.push(`Plan orientativo: trabajo articulatorio específico, control de ritmo/claridad y seguimiento funcional en conversación espontánea.`);
+
+      document.getElementById('resumenAutomatico').value = lines.join('\n');
+      scheduleAutosave();
+      showToast('Borrador clínico regenerado');
+    }
+
+    function collectMetrics() {
+      const palabrasChecked = document.querySelectorAll('.palabra-checkbox:checked').length;
+      const frasesChecked = document.querySelectorAll('.frase-checkbox:checked').length;
+      const conversacion = parseInt(v('inteligibilidadPorcentaje'), 10) || 0;
+
+      const fonemasCorrectos = Object.values(fonemaData).filter((v) => v === true).length;
+      const fonemasIncorrectos = Object.values(fonemaData).filter((v) => v === false).length;
+      const totalFonemas = fonemasCorrectos + fonemasIncorrectos;
+      const pctFonemas = totalFonemas ? Math.round((fonemasCorrectos / totalFonemas) * 100) : 0;
+
+      return {
+        nombre: v('nombre') || 'Paciente',
+        edad: parseInt(v('edad'), 10) || 0,
+        primerasPalabras: parseInt(v('primerasPalabras'), 10) || 0,
+        primerasFrases: parseInt(v('primerasFrases'), 10) || 0,
+        palabrasChecked,
+        frasesChecked,
+        conversacion,
+        fonemasCorrectos,
+        fonemasIncorrectos,
+        pctFonemas,
+        grbas: grbasFields.map((f) => Number(scaleData[f.id]) || 0),
+        words: words.map((word, idx) => ({
+          word,
+          checked: !!document.querySelector(`.palabra-checkbox[data-index="${idx}"]`)?.checked,
+          image: wordImages[word] || defaultWordImages[word]
+        }))
+      };
+    }
+
+    function mostrarInformeCompleto() {
+      if (typeof Chart === 'undefined') {
+        showToast('Chart.js no disponible', true);
+        return;
+      }
+
+      const data = collectMetrics();
+      document.getElementById('reportMeta').textContent = `${data.nombre} · ${data.edad || 'N/D'} años · ${new Date().toLocaleDateString('es-ES')}`;
+      document.getElementById('reportConclusions').textContent = [
+        `Conclusión clínica: ${v('conclusionClinica') || 'N/D'}`,
+        `Hipótesis diagnóstica: ${v('hipotesisDiagnostica') || 'N/D'}`,
+        `Recomendaciones: ${v('recomendaciones') || 'N/D'}`,
+        '',
+        `Resumen automático:`,
+        `${v('resumenAutomatico') || 'N/D'}`
+      ].join('\n');
+
+      destroyReportCharts();
+      reportCharts.push(new Chart(document.getElementById('chartDesarrollo').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Primeras palabras', 'Primeras frases'],
+          datasets: [{
+            data: [data.primerasPalabras, data.primerasFrases],
+            backgroundColor: [data.primerasPalabras <= 15 ? '#16a34a' : '#f59e0b', data.primerasFrases <= 24 ? '#16a34a' : '#f59e0b'],
+            borderRadius: 6
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      }));
+
+      reportCharts.push(new Chart(document.getElementById('chartFonemas').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Correctos', 'Incorrectos'], datasets: [{ data: [data.fonemasCorrectos, data.fonemasIncorrectos], backgroundColor: ['#16a34a', '#dc2626'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+      }));
+
+      reportCharts.push(new Chart(document.getElementById('chartInteligibilidad').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Palabras', 'Frases', 'Conversación'],
+          datasets: [{
+            data: [data.palabrasChecked * 10, data.frasesChecked * 10, data.conversacion],
+            backgroundColor: ['#3b82f6', '#22c55e', '#8b5cf6'],
+            borderRadius: 6
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100 } } }
+      }));
+
+      reportCharts.push(new Chart(document.getElementById('chartGRBAS').getContext('2d'), {
+        type: 'radar',
+        data: {
+          labels: ['G', 'R', 'B', 'A', 'S'],
+          datasets: [{ data: data.grbas, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.2)', pointBackgroundColor: '#ef4444' }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 3, ticks: { stepSize: 1 } } } }
+      }));
+
+      document.getElementById('interpDesarrollo').textContent = data.primerasPalabras <= 15 && data.primerasFrases <= 24 ? 'Desarrollo temprano dentro del rango esperado.' : 'Se observan indicadores de posible retraso en el desarrollo temprano.';
+      document.getElementById('interpFonemas').textContent = data.pctFonemas >= 90 ? 'Sistema fonológico funcional.' : 'Se observan alteraciones articulatorias relevantes.';
+      document.getElementById('interpInteligibilidad').textContent = data.conversacion >= 90 ? 'Inteligibilidad alta en conversación.' : 'Inteligibilidad reducida en conversación espontánea.';
+      document.getElementById('interpGRBAS').textContent = data.grbas.reduce((a, b) => a + b, 0) === 0 ? 'Calidad vocal conservada.' : 'Existen signos de alteración vocal que requieren seguimiento.';
+
+      document.getElementById('reportModal').classList.remove('hidden');
+    }
+
+    function cerrarInforme() {
+      document.getElementById('reportModal').classList.add('hidden');
+      destroyReportCharts();
+    }
+
+    function destroyReportCharts() {
+      reportCharts.forEach((chart) => chart.destroy());
+      reportCharts = [];
+    }
+
+    function drawPdfTexture(doc) {
+      const w = doc.internal.pageSize.getWidth();
+      const h = doc.internal.pageSize.getHeight();
+      doc.setFillColor(248, 250, 252);
+      doc.rect(0, 0, w, h, 'F');
+      doc.setFillColor(224, 242, 254);
+      doc.rect(0, 0, w, 42, 'F');
+      doc.setFillColor(236, 254, 255);
+      doc.rect(0, h - 24, w, 24, 'F');
+      doc.setDrawColor(226, 232, 240);
+      for (let y = 6; y < h; y += 10) {
+        for (let x = 4; x < w; x += 10) {
+          doc.circle(x, y, 0.12, 'S');
+        }
+      }
+    }
+
+    function drawPdfHero(doc, title, subtitle) {
+      const w = doc.internal.pageSize.getWidth();
+      doc.setFillColor(14, 116, 144);
+      doc.roundedRect(12, 12, w - 24, 34, 4, 4, 'F');
+      doc.setFillColor(79, 70, 229);
+      doc.roundedRect(12, 38, w - 24, 16, 4, 4, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text(title, 18, 27);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      doc.text(subtitle, 18, 44);
+      doc.setTextColor(15, 23, 42);
+    }
+
+    function addPdfFooter(doc, pageLabel) {
+      const h = doc.internal.pageSize.getHeight();
+      const w = doc.internal.pageSize.getWidth();
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(71, 85, 105);
+      doc.text(`Fecha: ${new Date().toLocaleDateString('es-ES')} · ${pageLabel}`, 12, h - 6);
+      doc.text('Gabinete de Logopedia', w - 52, h - 6);
+      doc.setTextColor(15, 23, 42);
+    }
+
+    function addWordImagesToPdf(doc, wordsData, startY) {
+      const maxItems = Math.min(wordsData.length, 6);
+      const cols = 3;
+      const cellW = 58;
+      const cellH = 38;
+      let y = startY;
+      for (let i = 0; i < maxItems; i += 1) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = 14 + (col * (cellW + 4));
+        y = startY + (row * (cellH + 10));
+        const item = wordsData[i];
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(x, y, cellW, cellH + 8, 2, 2, 'F');
+        doc.setDrawColor(203, 213, 225);
+        doc.roundedRect(x, y, cellW, cellH + 8, 2, 2, 'S');
+        try {
+          doc.addImage(item.image, 'PNG', x + 2, y + 2, cellW - 4, cellH - 10);
+        } catch (error) {
+          doc.setFontSize(8);
+          doc.text('Imagen no disponible', x + 4, y + 12);
+        }
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${item.checked ? '✓' : '·'} ${item.word}`, x + 3, y + cellH + 4);
+      }
+      return y + cellH + 12;
+    }
+
+    function generarPDF() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const metrics = collectMetrics();
+        const doc = new jsPDF({ format: 'a4', unit: 'mm' });
+        drawPdfTexture(doc);
+        drawPdfHero(doc, 'Anamnesis Logopédica Profesional', 'Diseño clínico senior · adaptable a población infantil y adulta');
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.text('Ficha principal', 14, 64);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Paciente: ${metrics.nombre}`, 14, 71);
+        doc.text(`Edad: ${metrics.edad || 'N/D'} años`, 14, 77);
+        doc.text(`Inteligibilidad conversación: ${metrics.conversacion}%`, 14, 83);
+        doc.text(`Fonología: ${metrics.pctFonemas}% de acierto`, 14, 89);
+
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(12, 96, 186, 55, 3, 3, 'F');
+        doc.setDrawColor(186, 230, 253);
+        doc.roundedRect(12, 96, 186, 55, 3, 3, 'S');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text('Resumen clínico (borrador editable)', 16, 104);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+        const summaryLines = doc.splitTextToSize(v('resumenAutomatico') || 'Sin resumen.', 178);
+        doc.text(summaryLines.slice(0, 14), 16, 110);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text('Denominación con apoyo visual', 14, 160);
+        addWordImagesToPdf(doc, metrics.words, 164);
+        addPdfFooter(doc, 'Informe básico');
+
+        doc.addPage();
+        drawPdfTexture(doc);
+        drawPdfHero(doc, 'Síntesis diagnóstica y plan', 'Conclusiones estructuradas para toma de decisiones');
+        let y = 62;
+        const blocks = [
+          { title: 'Conclusión clínica', value: v('conclusionClinica') || 'N/D' },
+          { title: 'Hipótesis diagnóstica', value: v('hipotesisDiagnostica') || 'N/D' },
+          { title: 'Recomendaciones', value: v('recomendaciones') || 'N/D' }
+        ];
+
+        blocks.forEach((b) => {
+          doc.setFillColor(255, 255, 255);
+          doc.roundedRect(12, y, 186, 46, 3, 3, 'F');
+          doc.setDrawColor(191, 219, 254);
+          doc.roundedRect(12, y, 186, 46, 3, 3, 'S');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(11);
+          doc.text(b.title, 16, y + 8);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9.5);
+          const lines = doc.splitTextToSize(b.value, 178);
+          doc.text(lines.slice(0, 8), 16, y + 14);
+          y += 52;
+        });
+        addPdfFooter(doc, 'Síntesis');
+
+        const filename = `anamnesis_pro_${metrics.nombre.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(filename);
+        showToast('PDF rediseñado generado');
+      } catch (error) {
+        console.error(error);
+        showToast('Error al generar PDF', true);
+      }
+    }
+
+    function generarPDFCompletoConGraficas() {
+      if (document.getElementById('reportModal').classList.contains('hidden')) {
+        mostrarInformeCompleto();
+      }
+
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ format: 'a4', unit: 'mm' });
+          const metrics = collectMetrics();
+          drawPdfTexture(doc);
+          drawPdfHero(doc, 'Informe Integral con Visualizaciones', 'Métricas clínicas + denominación visual + análisis gráfico');
+
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.text(`Paciente: ${metrics.nombre}`, 14, 62);
+          doc.text(`Edad: ${metrics.edad || 'N/D'} años`, 14, 68);
+          doc.text(`Fecha de evaluación: ${new Date().toLocaleDateString('es-ES')}`, 14, 74);
+          doc.text(`Índice fonológico: ${metrics.pctFonemas}% · Inteligibilidad: ${metrics.conversacion}%`, 14, 80);
+
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(11);
+          doc.text('Denominación visual (muestra)', 14, 90);
+          addWordImagesToPdf(doc, metrics.words, 94);
+          addPdfFooter(doc, 'Portada clínica');
+
+          const canvases = [
+            { id: 'chartDesarrollo', title: 'Desarrollo del lenguaje' },
+            { id: 'chartFonemas', title: 'Registro fonológico' },
+            { id: 'chartInteligibilidad', title: 'Inteligibilidad' },
+            { id: 'chartGRBAS', title: 'Escala GRBAS' }
+          ];
+
+          doc.addPage();
+          drawPdfTexture(doc);
+          drawPdfHero(doc, 'Panel de gráficas', 'Visualización profesional para revisión clínica');
+          let y = 62;
+          canvases.forEach((item, idx) => {
+            const canvas = document.getElementById(item.id);
+            if (!canvas) return;
+            if (y > 200) {
+              doc.addPage();
+              drawPdfTexture(doc);
+              drawPdfHero(doc, 'Panel de gráficas (continuación)', '');
+              y = 62;
+            }
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(12, y, 186, 66, 3, 3, 'F');
+            doc.setDrawColor(186, 230, 253);
+            doc.roundedRect(12, y, 186, 66, 3, 3, 'S');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10.5);
+            doc.text(`${idx + 1}. ${item.title}`, 16, y + 7);
+            const img = canvas.toDataURL('image/png', 1.0);
+            doc.addImage(img, 'PNG', 16, y + 10, 178, 52);
+            y += 72;
+          });
+          addPdfFooter(doc, 'Gráficas');
+
+          doc.addPage();
+          drawPdfTexture(doc);
+          drawPdfHero(doc, 'Conclusiones y recomendaciones', 'Documento final para seguimiento terapéutico');
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          const content = [
+            `Conclusión clínica: ${v('conclusionClinica') || 'N/D'}`,
+            '',
+            `Hipótesis diagnóstica: ${v('hipotesisDiagnostica') || 'N/D'}`,
+            '',
+            `Recomendaciones: ${v('recomendaciones') || 'N/D'}`,
+            '',
+            'Resumen automático (borrador):',
+            v('resumenAutomatico') || 'N/D'
+          ].join('\n');
+          const lines = doc.splitTextToSize(content, 182);
+          doc.text(lines, 14, 62);
+          addPdfFooter(doc, 'Cierre');
+
+          const file = `informe_integral_pro_${metrics.nombre.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+          doc.save(file);
+          showToast('PDF completo profesional generado');
+        } catch (error) {
+          console.error(error);
+          showToast('Error al generar PDF completo', true);
+        }
+      }, 220);
+    }
+
+    function scheduleAutosave() {
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => saveState(false), 700);
+    }
+
+    function saveState(manual) {
+      try {
+        const state = gatherState();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        lastSavedAt = Date.now();
+        updateSaveIndicator();
+        if (manual) showToast('Guardado');
+      } catch (error) {
+        console.error(error);
+        if (manual) showToast('No se pudo guardar', true);
+      }
+    }
+
+    function gatherState() {
+      const fields = {};
+      document.querySelectorAll('input[id], textarea[id], select[id]').forEach((el) => {
+        if (el.type === 'file') return;
+        if (el.type === 'checkbox') fields[el.id] = el.checked;
+        else fields[el.id] = el.value;
+      });
+
+      const palabras = Array.from(document.querySelectorAll('.palabra-checkbox')).map((el) => el.checked);
+      const frases = Array.from(document.querySelectorAll('.frase-checkbox')).map((el) => el.checked);
+      const discriminacion = Array.from(document.querySelectorAll('.discriminacion-checkbox')).map((el) => el.checked);
+
+      return {
+        currentStep,
+        fields,
+        scaleData,
+        fonemaData,
+        wordImages,
+        segundosCronometro,
+        palabras,
+        frases,
+        discriminacion,
+        savedAt: Date.now()
+      };
+    }
+
+    function restoreLastSession() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        showToast('No hay sesión guardada', true);
+        return;
+      }
+      try {
+        applyState(JSON.parse(raw));
+        showToast('Sesión restaurada');
+      } catch (error) {
+        console.error(error);
+        showToast('Error al restaurar', true);
+      }
+    }
+
+    function applyState(state) {
+      scaleData = state.scaleData || {};
+      fonemaData = state.fonemaData || {};
+      wordImages = state.wordImages || { ...defaultWordImages };
+      segundosCronometro = state.segundosCronometro || 0;
+      pausarCronometro();
+      actualizarDisplayCronometro();
+
+      const fields = state.fields || {};
+      Object.entries(fields).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'file') return;
+        if (el.type === 'checkbox') el.checked = !!value;
+        else el.value = value;
+      });
+
+      (state.palabras || []).forEach((checked, i) => {
+        const el = document.querySelector(`.palabra-checkbox[data-index="${i}"]`);
+        if (el) el.checked = !!checked;
+      });
+      (state.frases || []).forEach((checked, i) => {
+        const el = document.querySelector(`.frase-checkbox[data-index="${i}"]`);
+        if (el) el.checked = !!checked;
+      });
+      (state.discriminacion || []).forEach((checked, i) => {
+        const el = document.querySelector(`.discriminacion-checkbox[data-index="${i}"]`);
+        if (el) el.checked = !!checked;
+      });
+
+      orofacialFields.forEach((f) => renderScaleButtons(f.id));
+      grbasFields.forEach((f) => renderScaleButtons(f.id));
+      initDynamicLists();
+      renderPhonologyMap();
+      updateResumenFonemas();
+      actualizarContador('palabras');
+      actualizarContador('frases');
+      actualizarPorcentajeInteligibilidad();
+      updateDiscriminacion();
+
+      currentStep = Math.max(1, Math.min(totalSteps, state.currentStep || 1));
+      showStep(currentStep);
+      updateProgress();
+      updateStepStatuses();
+
+      lastSavedAt = state.savedAt || Date.now();
+      updateSaveIndicator();
+    }
+
+    function updateSaveIndicator() {
+      const node = document.getElementById('saveIndicator');
+      if (!lastSavedAt) {
+        node.textContent = 'Sin guardar';
+        return;
+      }
+      const sec = Math.max(0, Math.floor((Date.now() - lastSavedAt) / 1000));
+      if (sec < 5) node.textContent = 'Guardado hace instantes';
+      else node.textContent = `Guardado hace ${sec}s`;
+    }
+
+    function toggleSidebarMobile(open) {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('mobileOverlay');
+      const shouldOpen = typeof open === 'boolean' ? open : sidebar.classList.contains('-translate-x-full');
+      sidebar.classList.toggle('-translate-x-full', !shouldOpen);
+      overlay.classList.toggle('hidden', !shouldOpen);
+    }
+
+    function toggleSidebarDesktop() {
+      sidebarCollapsed = !sidebarCollapsed;
+      document.body.classList.toggle('sidebar-collapsed', sidebarCollapsed);
+    }
+
+    function showToast(message, isError = false) {
+      const wrap = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast px-3 py-2 rounded-md text-sm shadow border ${isError ? 'bg-rose-100 border-rose-300 text-rose-800 dark:bg-rose-900/50 dark:border-rose-700 dark:text-rose-200' : 'bg-emerald-100 border-emerald-300 text-emerald-800 dark:bg-emerald-900/50 dark:border-emerald-700 dark:text-emerald-200'}`;
+      toast.textContent = message;
+      wrap.appendChild(toast);
+      setTimeout(() => toast.remove(), 2400);
+    }
+
+    function cargarDemo() {
+      const demo = {
+        nombre: 'Ana García Martínez', edad: '28', profesion: 'Maestra de infantil', idioma: 'Español', contacto: 'ana.garcia@email.com',
+        primerasPalabras: '18', primerasFrases: '26', etapaLenguaje: 'Combinación de palabras',
+        observacionesFamiliares: 'Familia refiere dificultades con grupos consonánticos en conversación rápida.',
+        inteligibilidadPorcentaje: '78',
+        conclusionClinica: 'Se observan dificultades articulatorias en fonemas líquidos y grupos consonánticos con impacto en inteligibilidad conversacional.',
+        hipotesisDiagnostica: 'Dislalia evolutiva residual con afectación de fonemas líquidos y complejos.',
+        recomendaciones: 'Intervención de articulación, velocidad y claridad del habla en conversación funcional.'
+      };
+
+      Object.entries(demo).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = value;
+      });
+      wordImages = generateDemoWordImages();
+      initDynamicLists();
+
+      scaleData = {
+        labiosTono: 0, labiosMovilidad: 1, lenguaTono: 1, lenguaMovilidad: 1, deglucion: 1, respiracion: 0,
+        grbasG: 1, grbasR: 0, grbasB: 1, grbasA: 0, grbasS: 1
+      };
+
+      orofacialFields.forEach((f) => renderScaleButtons(f.id));
+      grbasFields.forEach((f) => renderScaleButtons(f.id));
+
+      document.querySelectorAll('.palabra-checkbox').forEach((el, idx) => el.checked = idx < 8);
+      document.querySelectorAll('.frase-checkbox').forEach((el, idx) => el.checked = idx < 7);
+      document.querySelectorAll('.discriminacion-checkbox').forEach((el, idx) => el.checked = idx < 6);
+
+      fonemaData = {
+        a: true, e: true, i: true, o: true, u: true,
+        p: true, b: true, t: true, d: true, k: true, g: true, f: true, θ: false, s: true, x: true,
+        m: true, n: true, ɲ: true, l: true, ʎ: false, r: false, rr: false, tʃ: true,
+        pl: false, pr: false, bl: true, br: false, fl: true, fr: false, kl: true, kr: false, gl: true, gr: false, tl: true, tr: false, dl: true, dr: false
+      };
+
+      renderPhonologyMap();
+      updateResumenFonemas();
+      actualizarContador('palabras');
+      actualizarContador('frases');
+      actualizarPorcentajeInteligibilidad();
+      updateDiscriminacion();
+      generarResumenClinicoAuto();
+
+      currentStep = 15;
+      showStep(currentStep);
+      updateProgress();
+      updateStepStatuses();
+      saveState(false);
+      showToast('Demo cargada');
+    }
+  </script>
+</body>
+</html>

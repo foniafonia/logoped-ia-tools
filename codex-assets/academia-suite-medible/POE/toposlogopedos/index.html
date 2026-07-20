@@ -1,0 +1,3629 @@
+<!DOCTYPE html><html lang="es" class="h-full"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack-a-Mole 3D Cosmic Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(180deg, #1a237e 0%, #283593 30%, #3949ab 60%, #4a90e2 100%);
+            overflow: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+        }
+        
+        /* Fondo espacial puro - sin parte verde */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(180deg, 
+                #1a237e 0%, 
+                #283593 30%, 
+                #3949ab 60%, 
+                #4a90e2 100%
+            );
+        }
+        
+        /* Estrellas más realistas */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 60%;
+            top: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+        
+        .star.sparkle {
+            background: white;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            border-radius: 0;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+        
+        .star:nth-child(odd) {
+            animation-delay: 1.5s;
+        }
+        
+        .star:nth-child(3n) {
+            animation-delay: 0.5s;
+        }
+        
+        .star:nth-child(4n) {
+            animation-delay: 2s;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+        }
+        
+        /* Luna creciente realista */
+        .moon {
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            width: 100px;
+            height: 100px;
+            background: 
+                radial-gradient(circle at 35% 35%, #fff3b8 0%, #f5deb3 30%, #daa520 100%),
+                radial-gradient(circle at 65% 35%, rgba(139, 69, 19, 0.3) 0%, transparent 40%);
+            border-radius: 50%;
+            position: relative;
+            animation: moonFloat 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(245, 222, 179, 0.6));
+        }
+        
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 120% 50%, rgba(26, 35, 126, 1) 40%, transparent 41%);
+            border-radius: 50%;
+        }
+        
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 30%;
+            width: 8px;
+            height: 6px;
+            background: rgba(139, 69, 19, 0.4);
+            border-radius: 50%;
+            box-shadow: 
+                15px 10px 0 -2px rgba(139, 69, 19, 0.3),
+                -5px 20px 0 -3px rgba(139, 69, 19, 0.2),
+                20px -5px 0 -1px rgba(139, 69, 19, 0.3);
+        }
+        
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        
+        /* Cometa más realista */
+        .comet {
+            position: absolute;
+            top: 25%;
+            left: -100px;
+            width: 12px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff6b35 0%, #ff8f65 50%, #fff3b8 100%);
+            border-radius: 50% 50% 50% 0;
+            animation: cometTravel 25s linear infinite;
+            filter: drop-shadow(0 0 10px #ff6b35);
+            transform: rotate(45deg);
+        }
+        
+        .comet::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.8) 0%, rgba(255, 143, 101, 0.6) 30%, rgba(255, 243, 184, 0.4) 60%, transparent 100%);
+            border-radius: 2px;
+            transform: translateY(-50%);
+        }
+        
+        .comet::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 243, 184, 0.7) 50%, transparent 100%);
+            transform: translateY(-50%) translateY(-3px);
+        }
+        
+        @keyframes cometTravel {
+            0% {
+                left: -100px;
+                top: 25%;
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                left: calc(100vw + 100px);
+                top: 70%;
+                opacity: 0;
+            }
+        }
+        
+        /* Layout lateral - paneles completos a los lados */
+        .integrated-layout {
+            display: grid;
+            grid-template-areas: 
+                "left-controls game-area right-stats";
+            grid-template-columns: 300px 1fr 300px;
+            grid-template-rows: 1fr;
+            height: 100vh;
+            height: 100dvh;
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        .top-header { grid-area: top-center; }
+        .top-left-controls { grid-area: top-left; }
+        .top-right-actions { grid-area: top-right; }
+        .left-controls { grid-area: left-controls; }
+        .game-area-center { grid-area: game-area; }
+        .right-stats { grid-area: right-stats; }
+        .bottom-objectives { grid-area: bottom-objectives; }
+        
+        /* Optimización para móviles en apaisado */
+        @media screen and (orientation: landscape) and (max-height: 600px) {
+            .integrated-layout {
+                grid-template-columns: 150px 1fr 150px;
+                grid-template-rows: 60px 1fr 80px;
+                gap: 4px;
+                padding: 4px;
+            }
+            
+            .logo-controller {
+                width: 30px !important;
+                height: 30px !important;
+            }
+            
+            .logo-controller::before {
+                font-size: 14px !important;
+            }
+            
+            h1 {
+                font-size: 1.2rem !important;
+            }
+            
+            .btn-3d {
+                padding: 6px 10px !important;
+                font-size: 0.7rem !important;
+            }
+            
+            .stat-card {
+                padding: 6px 8px !important;
+            }
+            
+            .stat-value {
+                font-size: 1rem !important;
+            }
+            
+            .hole {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            
+            .mole {
+                width: 80px !important;
+                height: 100px !important;
+            }
+            
+            .mole-element {
+                font-size: 16px !important;
+                padding: 6px 8px !important;
+            }
+        }
+        
+        /* Tabletas */
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .integrated-layout {
+                grid-template-columns: 180px 1fr 180px;
+                grid-template-rows: 80px 1fr 100px;
+            }
+        }
+        
+        /* MÓVILES - Layout completamente rediseñado */
+        @media screen and (max-width: 768px) {
+            .integrated-layout {
+                display: none !important;
+            }
+            
+            .mobile-layout {
+                display: block !important;
+            }
+        }
+        
+        /* Estilos móviles adicionales */
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            margin: 8px;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+            
+        .mobile-title {
+            font-size: 1.2rem !important;
+            font-weight: 900;
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .mobile-stats {
+            display: flex !important;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 8px;
+            margin: 8px;
+            gap: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .mobile-stat {
+            text-align: center;
+            flex: 1;
+            padding: 4px;
+        }
+        
+        .mobile-stat-label {
+            font-size: 0.6rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .mobile-stat-value {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-top: 2px;
+        }
+        
+        .game-area-center {
+            padding: 8px !important;
+            height: calc(100vh - 200px) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .game-board {
+            padding: 15px !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .hole {
+            width: 70px !important;
+            height: 70px !important;
+        }
+        
+        .mole {
+            width: 80px !important;
+            height: 100px !important;
+        }
+        
+        .mole-element {
+            font-size: 14px !important;
+            padding: 6px 8px !important;
+        }
+        
+        .mobile-controls {
+            display: flex !important;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 8px;
+            margin: 8px;
+            gap: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .mobile-btn {
+            flex: 1;
+            padding: 8px 4px !important;
+            font-size: 0.7rem !important;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .mobile-objectives {
+            display: flex !important;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 8px;
+            margin: 8px;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .mobile-objective-section {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .mobile-objective-title {
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .mobile-objective-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+        }
+        
+        .mobile-objective-item {
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        
+        /* Optimización para tablets */
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .control-panel {
+                padding: 12px;
+            }
+            
+            .stat-card {
+                padding: 12px 16px;
+            }
+            
+            .btn-3d {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .control-panel {
+            background: linear-gradient(145deg, 
+                rgba(255,255,255,0.12) 0%, 
+                rgba(255,255,255,0.06) 50%, 
+                rgba(0,0,0,0.15) 100%
+            );
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 
+                0 12px 40px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+        
+        .game-board {
+            perspective: 2000px;
+            transform-style: preserve-3d;
+            background: radial-gradient(ellipse at center, 
+                rgba(76, 175, 80, 0.3) 0%, 
+                rgba(45, 125, 50, 0.5) 50%, 
+                rgba(27, 94, 32, 0.7) 100%
+            );
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 
+                0 25px 80px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .hole {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto;
+            perspective: 800px;
+            transform-style: preserve-3d;
+        }
+        
+        .hole-opening {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                #1a1a1a 0%, 
+                #0d0d0d 30%, 
+                #2d2d2d 70%, 
+                #404040 100%
+            );
+            border-radius: 50%;
+            position: relative;
+            transform: rotateX(75deg);
+            box-shadow: 
+                inset 0 0 35px rgba(0,0,0,0.95),
+                inset 0 8px 20px rgba(0,0,0,0.9),
+                0 8px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 2px solid rgba(0,0,0,0.3);
+        }
+        
+        .mole {
+            position: absolute;
+            bottom: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 170px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            z-index: 10;
+            padding: 20px;
+        }
+        
+        .mole * {
+            pointer-events: none !important;
+        }
+        
+        /* Área clickeable MEGA GIGANTE - Todo el topo + mucho más */
+        .mole::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: -80px;
+            right: -80px;
+            bottom: -80px;
+            background: transparent;
+            border-radius: 50%;
+            z-index: 20;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        .mole::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            right: -100px;
+            bottom: -100px;
+            background: transparent;
+            border-radius: 50%;
+            z-index: 19;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        /* Área clickeable adicional en el hoyo */
+        .hole {
+            cursor: pointer;
+        }
+        
+        .hole-opening {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        .mole:hover {
+            transform: translateX(-50%) scale(1.1);
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(255,215,0,0.8));
+        }
+        
+        .mole.appearing {
+            bottom: 25%;
+            animation: moleWiggle 2s ease-in-out infinite;
+        }
+        
+        .mole.disappearing {
+            bottom: -100%;
+            transform: translateX(-50%) rotateX(15deg);
+        }
+        
+        .mole.hit {
+            animation: moleHit 0.6s ease-out forwards;
+        }
+        
+        @keyframes moleWiggle {
+            0%, 100% { transform: translateX(-50%) rotateY(0deg) rotateX(0deg); }
+            25% { transform: translateX(-50%) rotateY(-8deg) rotateX(3deg); }
+            75% { transform: translateX(-50%) rotateY(8deg) rotateX(-3deg); }
+        }
+        
+        @keyframes moleHit {
+            0% { transform: translateX(-50%) scale(1) rotateX(0deg); }
+            50% { transform: translateX(-50%) scale(1.3) rotateX(-20deg) rotateY(15deg); }
+            100% { 
+                transform: translateX(-50%) scale(0.6) rotateX(60deg) rotateY(-25deg); 
+                bottom: -100%;
+                opacity: 0;
+            }
+        }
+        
+        .mole-body {
+            width: 100%;
+            height: 90px;
+            background: linear-gradient(135deg, 
+                #D2691E 0%, 
+                #A0522D 20%,
+                #8B4513 40%, 
+                #654321 60%,
+                #5D4037 80%,
+                #3E2723 100%
+            );
+            border-radius: 50px 50px 35px 35px;
+            position: relative;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.6),
+                inset 0 4px 10px rgba(255,255,255,0.3),
+                inset 0 -4px 10px rgba(0,0,0,0.3);
+            transform: rotateX(-12deg);
+        }
+        
+        .mole-face {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+        }
+        
+        .mole-element {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            font-weight: 900;
+            font-size: 20px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 
+                0 8px 16px rgba(0,0,0,0.5),
+                inset 0 3px 0 rgba(255,255,255,0.6),
+                inset 0 -3px 6px rgba(0,0,0,0.2);
+            border: 3px solid #FF8C00;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            animation: elementGlow 1.8s ease-in-out infinite alternate;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        @keyframes elementGlow {
+            0% { 
+                box-shadow: 
+                    0 8px 16px rgba(0,0,0,0.5),
+                    inset 0 3px 0 rgba(255,255,255,0.6),
+                    0 0 20px rgba(255,215,0,0.6); 
+            }
+            100% { 
+                box-shadow: 
+                    0 8px 16px rgba(0,0,0,0.5),
+                    inset 0 3px 0 rgba(255,255,255,0.6),
+                    0 0 30px rgba(255,215,0,0.95); 
+            }
+        }
+        
+        .mole-ears {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .mole-ear {
+            width: 18px;
+            height: 25px;
+            background: linear-gradient(135deg, #8B4513, #654321);
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 
+                inset 0 2px 4px rgba(255,255,255,0.2),
+                0 3px 8px rgba(0,0,0,0.5);
+            transform: rotate(-15deg);
+        }
+        
+        .mole-ear:last-child {
+            transform: rotate(15deg);
+        }
+        
+        .mole-ear::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 10px;
+            height: 15px;
+            background: linear-gradient(135deg, #D2691E, #A0522D);
+            border-radius: 50% 50% 30% 30%;
+        }
+
+        .mole-eyes {
+            display: flex;
+            justify-content: space-between;
+            width: 35px;
+            margin: 0 auto 10px;
+            margin-top: 45px;
+        }
+        
+        .eye {
+            width: 10px;
+            height: 10px;
+            background: #000;
+            border-radius: 50%;
+            position: relative;
+            border: 1px solid #333;
+        }
+        
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        
+        .mole-nose {
+            width: 8px;
+            height: 5px;
+            background: #D32F2F;
+            border-radius: 50%;
+            margin: 0 auto;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .logo-controller {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.3),
+                inset 0 3px 8px rgba(255,255,255,0.3);
+        }
+        
+        .logo-controller::before {
+            content: '🎮';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            opacity: 0.8;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.25) 0%, 
+                rgba(255,255,255,0.12) 100%
+            );
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-shadow: 0 0 15px currentColor;
+            animation: statPulse 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes statPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        
+        .btn-3d {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 10px 0 #357a35,
+                0 15px 25px rgba(0,0,0,0.4);
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        
+        .btn-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 13px 0 #357a35,
+                0 18px 30px rgba(0,0,0,0.5);
+        }
+        
+        .btn-3d:active {
+            transform: translateY(6px);
+            box-shadow: 
+                0 4px 0 #357a35,
+                0 8px 15px rgba(0,0,0,0.4);
+        }
+        
+        .btn-3d:disabled {
+            opacity: 0.6;
+            transform: translateY(6px);
+            box-shadow: 
+                0 4px 0 #357a35,
+                0 8px 15px rgba(0,0,0,0.4);
+            cursor: not-allowed;
+        }
+        
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 28px;
+            animation: particleBurst 1.2s ease-out forwards;
+        }
+        
+        @keyframes particleBurst {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            60% {
+                transform: scale(1.3) rotate(200deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0.4) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .grid-glow {
+            box-shadow: 
+                0 0 80px rgba(76, 175, 80, 0.4),
+                inset 0 0 80px rgba(76, 175, 80, 0.15);
+        }
+        
+        /* Sistema de Logros */
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
+        }
+        
+        .achievement-notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Power-ups */
+        .powerup {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            animation: powerupFloat 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .powerup-double {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+            color: white;
+        }
+        
+        .powerup-time {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+        
+        .powerup-slow {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+        }
+        
+        @keyframes powerupFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+        
+        /* Modo oscuro/claro automático mejorado */
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Personalización de usuario */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Rankings simulados */
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .leaderboard-rank {
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        /* Configuraciones avanzadas */
+        .settings-panel {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .setting-slider {
+            width: 100px;
+            height: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.bd4eeeb8e8e02052ee92.js"></script></head>
+<body class="h-full font-orbitron">
+    <!-- Fondo espacial animado -->
+    <div class="space-background">
+        <div class="stars" id="starsContainer"></div>
+        <div class="moon"></div>
+        <div class="comet"></div>
+    </div>
+
+    <!-- Layout lateral solo - área de juego maximizada -->
+    <div class="integrated-layout text-white">
+        <!-- Panel lateral izquierdo - Controles completos -->
+        <div class="left-controls control-panel p-4 rounded-lg overflow-y-auto">
+            <!-- Perfil de usuario -->
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">🚀</div>
+                <div>
+                    <div class="user-name" id="userName">Jugador Cósmico</div>
+                    <div class="text-xs opacity-75" id="userLevel">Novato</div>
+                </div>
+            </div>
+
+            <!-- Título y logo -->
+            <div class="text-center mb-6">
+                <div class="logo-controller mx-auto mb-3"></div>
+                <h1 class="text-xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                    🌌 COSMIC WHACK-A-MOLE
+                </h1>
+            </div>
+
+            <!-- Configuración de juego -->
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 mb-2 block">MODO DE JUEGO</label>
+                    <select id="gameMode" class="w-full bg-white/90 border border-gray-300 rounded-lg px-3 py-2 text-gray-800 text-sm backdrop-blur-lg">
+                        <option value="vocales">🅰️ Vocales</option>
+                        <option value="letras">🔤 Letras</option>
+                        <option value="silabas">📝 Sílabas</option>
+                        <option value="palabras">📖 Palabras</option>
+                        <option value="numeros">🔢 Números</option>
+                        <option value="mixto">🎲 Mixto</option>
+                        <option value="matematicas">➕ Matemáticas</option>
+                        <option value="colores">🎨 Colores</option>
+                        <option value="formas">🔺 Formas</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-orange-400 mb-2 block">DIFICULTAD</label>
+                    <select id="difficulty" class="w-full bg-white/90 border border-gray-300 rounded-lg px-3 py-2 text-gray-800 text-sm backdrop-blur-lg">
+                        <option value="facil">🟢 Fácil</option>
+                        <option value="medio" selected="">🟡 Medio</option>
+                        <option value="dificil">🔴 Difícil</option>
+                        <option value="extremo">⚫ Extremo</option>
+                        <option value="cosmico">🌌 Cósmico</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-bold text-purple-400 mb-2 block">OBJETIVOS</label>
+                    <select id="targetCount" class="w-full bg-white/90 border border-gray-300 rounded-lg px-3 py-2 text-gray-800 text-sm backdrop-blur-lg">
+                        <option value="1" selected="">1️⃣ Súper Fácil</option>
+                        <option value="2">2️⃣ Fácil</option>
+                        <option value="3">3️⃣ Normal</option>
+                        <option value="4">4️⃣ Difícil</option>
+                        <option value="5">5️⃣ Extremo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Configuraciones avanzadas -->
+            <div class="settings-panel">
+                <h4 class="text-sm font-bold text-cyan-400 mb-3">⚙️ CONFIGURACIÓN</h4>
+                <div class="setting-item">
+                    <span class="text-xs">Volumen</span>
+                    <input type="range" id="volumeSlider" class="setting-slider" min="0" max="100" value="50">
+                </div>
+                <div class="setting-item">
+                    <span class="text-xs">Velocidad</span>
+                    <input type="range" id="speedSlider" class="setting-slider" min="50" max="200" value="100">
+                </div>
+                <div class="setting-item">
+                    <span class="text-xs">Efectos</span>
+                    <input type="checkbox" id="effectsToggle" checked="">
+                </div>
+            </div>
+
+            <!-- Estadísticas principales -->
+            <div class="space-y-3 mb-6">
+                <div class="stat-card">
+                    <div class="text-red-400 text-xs font-bold">TIEMPO</div>
+                    <div id="timer" class="text-3xl font-bold text-red-400">60</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-green-400 text-xs font-bold">NIVEL</div>
+                    <div id="level" class="text-3xl font-bold text-green-400">1</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-purple-400 text-xs font-bold">RACHA</div>
+                    <div id="streak" class="text-2xl font-bold text-purple-400">0</div>
+                </div>
+            </div>
+
+            <!-- Power-ups activos -->
+            <div class="mb-4">
+                <h4 class="text-xs font-bold text-yellow-400 mb-2">⚡ POWER-UPS</h4>
+                <div id="activePowerups" class="space-y-2">
+                    <!-- Power-ups activos aparecen aquí -->
+                </div>
+            </div>
+
+            <!-- Panel de objetivos actuales -->
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-cyan-400 mb-3">🎯 OBJETIVO ACTUAL</h3>
+                <div class="bg-gradient-to-r from-green-600 to-green-500 p-4 rounded-lg text-center mb-3">
+                    <div class="text-xs text-green-100 mb-1">GOLPEA ESTOS</div>
+                    <div id="currentTargetDisplay" class="text-2xl font-black text-white">
+                        A
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-red-600 to-red-500 p-4 rounded-lg text-center">
+                    <div class="text-xs text-red-100 mb-1">EVITA ESTOS</div>
+                    <div id="currentDistractorDisplay" class="text-lg font-bold text-white">
+                        B, C, D
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles de juego -->
+            <div class="space-y-3">
+                <button id="startBtn" class="btn-3d w-full">▶️ INICIAR JUEGO</button>
+                <button id="pauseBtn" class="btn-3d w-full" style="background: linear-gradient(135deg, #FF9800, #F57C00);" disabled="">⏸️ PAUSA</button>
+                <button id="stopBtn" class="btn-3d w-full" style="background: linear-gradient(135deg, #F44336, #D32F2F);" disabled="">⏹️ PARAR</button>
+                <button id="resetBtn" class="btn-3d w-full" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">🔄 RESET</button>
+                <button id="statsBtn" class="btn-3d w-full" style="background: linear-gradient(135deg, #2196F3, #1976D2);">📊 ESTADÍSTICAS</button>
+                <button id="achievementsBtn" class="btn-3d w-full" style="background: linear-gradient(135deg, #FFD700, #FFA500);">🏆 LOGROS</button>
+            </div>
+        </div>
+
+        <!-- Área de juego central maximizada -->
+        <div class="game-area-center flex items-center justify-center p-6">
+            <div class="game-board grid-glow w-full h-full max-w-4xl">
+                <div id="gameGrid" class="grid grid-cols-4 grid-rows-3 gap-4 md:gap-6 h-full place-items-center">
+                    <!-- Los agujeros se generan aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel lateral derecho - Estadísticas detalladas -->
+        <div class="right-stats control-panel p-4 rounded-lg overflow-y-auto">
+            <h3 class="text-lg font-bold text-cyan-400 mb-4 text-center">📊 ESTADÍSTICAS</h3>
+            
+            <div class="space-y-3">
+                <div class="stat-card">
+                    <div class="text-yellow-400 text-xs font-bold">PUNTOS</div>
+                    <div id="score" class="text-3xl font-bold text-yellow-400">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-blue-400 text-xs font-bold">ACIERTOS</div>
+                    <div id="hits" class="text-2xl font-bold text-blue-400">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-purple-400 text-xs font-bold">PRECISIÓN</div>
+                    <div id="accuracy" class="text-2xl font-bold text-purple-400">100%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-cyan-400 text-xs font-bold">VELOCIDAD</div>
+                    <div id="speed" class="text-xl font-bold text-cyan-400">0/min</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-pink-400 text-xs font-bold">FALLOS</div>
+                    <div id="misses" class="text-xl font-bold text-pink-400">0</div>
+                </div>
+            </div>
+
+            <!-- Rankings globales simulados -->
+            <div class="mt-6">
+                <h4 class="text-sm font-bold text-yellow-400 mb-3">🥇 RANKING GLOBAL</h4>
+                <div id="globalLeaderboard" class="space-y-2">
+                    <!-- Rankings aparecen aquí -->
+                </div>
+            </div>
+
+            <!-- Objetivos completos -->
+            <div class="mt-6">
+                <h4 class="text-sm font-bold text-green-400 mb-2">🎯 TODOS LOS OBJETIVOS</h4>
+                <div id="targetElements" class="flex flex-wrap gap-1 mb-4">
+                    <!-- Elementos objetivo aparecen aquí -->
+                </div>
+                
+                <h4 class="text-sm font-bold text-red-400 mb-2">❌ TODOS LOS DISTRACTORES</h4>
+                <div id="distractorElements" class="flex flex-wrap gap-1">
+                    <!-- Elementos distractor aparecen aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout móvil específico -->
+    <div class="mobile-layout hidden text-white">
+        <!-- Header móvil compacto -->
+        <div class="mobile-header">
+            <div class="mobile-title">🌌 COSMIC WHACK</div>
+            <select id="gameMode-mobile" class="bg-white/90 border border-gray-300 rounded-lg px-2 py-1 text-gray-800 text-xs backdrop-blur-lg">
+                <option value="vocales">🅰️ Vocales</option>
+                <option value="letras">🔤 Letras</option>
+                <option value="silabas">📝 Sílabas</option>
+                <option value="palabras">📖 Palabras</option>
+                <option value="numeros">🔢 Números</option>
+                <option value="mixto">🎲 Mixto</option>
+                <option value="matematicas">➕ Matemáticas</option>
+                <option value="colores">🎨 Colores</option>
+                <option value="formas">🔺 Formas</option>
+            </select>
+        </div>
+
+        <!-- Estadísticas móvil -->
+        <div class="mobile-stats">
+            <div class="mobile-stat">
+                <div class="mobile-stat-label text-yellow-400">PUNTOS</div>
+                <div id="score-mobile" class="mobile-stat-value text-yellow-400">0</div>
+            </div>
+            <div class="mobile-stat">
+                <div class="mobile-stat-label text-red-400">TIEMPO</div>
+                <div id="timer-mobile" class="mobile-stat-value text-red-400">60</div>
+            </div>
+            <div class="mobile-stat">
+                <div class="mobile-stat-label text-green-400">NIVEL</div>
+                <div id="level-mobile" class="mobile-stat-value text-green-400">1</div>
+            </div>
+            <div class="mobile-stat">
+                <div class="mobile-stat-label text-blue-400">HITS</div>
+                <div id="hits-mobile" class="mobile-stat-value text-blue-400">0</div>
+            </div>
+            <div class="mobile-stat">
+                <div class="mobile-stat-label text-purple-400">RACHA</div>
+                <div id="streak-mobile" class="mobile-stat-value text-purple-400">0</div>
+            </div>
+        </div>
+
+        <!-- Área de juego móvil -->
+        <div class="game-area-center">
+            <div class="game-board grid-glow">
+                <div id="gameGrid-mobile" class="grid grid-cols-3 gap-2">
+                    <!-- Los agujeros se generan aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles móvil -->
+        <div class="mobile-controls">
+            <button id="startBtn-mobile" class="mobile-btn btn-3d">▶️ INICIAR</button>
+            <button id="pauseBtn-mobile" class="mobile-btn btn-3d" style="background: linear-gradient(135deg, #FF9800, #F57C00);" disabled="">⏸️ PAUSA</button>
+            <button id="stopBtn-mobile" class="mobile-btn btn-3d" style="background: linear-gradient(135deg, #F44336, #D32F2F);" disabled="">⏹️ PARAR</button>
+            <button id="resetBtn-mobile" class="mobile-btn btn-3d" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">🔄 RESET</button>
+        </div>
+
+        <!-- Objetivos móvil -->
+        <div class="mobile-objectives">
+            <div class="mobile-objective-section">
+                <div class="mobile-objective-title text-green-400">🎯 GOLPEA</div>
+                <div id="targetElements-mobile" class="mobile-objective-items">
+                    <!-- Elementos objetivo aparecen aquí -->
+                </div>
+            </div>
+            <div class="mobile-objective-section">
+                <div class="mobile-objective-title text-red-400">❌ EVITA</div>
+                <div id="distractorElements-mobile" class="mobile-objective-items">
+                    <!-- Elementos distractor aparecen aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Logros -->
+    <div id="achievementsModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-4xl h-[80vh] mx-4 text-white transform scale-0 transition-transform duration-500">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h2 class="text-2xl font-black bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                    🏆 Logros Cósmicos
+                </h2>
+                <button id="closeAchievementsBtn" class="text-gray-400 hover:text-white text-3xl">×</button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto h-full">
+                <div id="achievementsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Logros aparecen aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Estadísticas Mejorado -->
+    <div id="statsModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-7xl h-[90vh] mx-4 text-white transform scale-0 transition-transform duration-500 flex flex-col">
+            <!-- Header fijo -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h2 class="text-2xl font-black bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">
+                    📊 Análisis Cósmico
+                </h2>
+                <button id="closeStatsBtn" class="text-gray-400 hover:text-white text-3xl">×</button>
+            </div>
+            
+            <!-- Contenido con scroll controlado -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Resumen General -->
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-gray-800 rounded-lg p-4 text-center">
+                        <div class="text-blue-400 text-sm font-medium">Partidas jugadas</div>
+                        <div id="totalGames" class="text-2xl font-bold text-blue-400">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-4 text-center">
+                        <div class="text-green-400 text-sm font-medium">Precisión promedio</div>
+                        <div id="avgAccuracy" class="text-2xl font-bold text-green-400">0%</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-4 text-center">
+                        <div class="text-yellow-400 text-sm font-medium">Mejor puntuación</div>
+                        <div id="bestScore" class="text-2xl font-bold text-yellow-400">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-4 text-center">
+                        <div class="text-purple-400 text-sm font-medium">Tiempo total</div>
+                        <div id="totalTime" class="text-2xl font-bold text-purple-400">0min</div>
+                    </div>
+                </div>
+
+                <!-- Mejores Puntuaciones -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-yellow-400 mb-4 flex items-center">
+                        🏆 Mejores puntuaciones
+                    </h3>
+                    <div id="topScores" class="space-y-2">
+                        <!-- Top scores aparecen aquí -->
+                    </div>
+                </div>
+                
+                <!-- Gráficas en Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Evolución de Precisión -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-bold text-center mb-4 text-green-400">📈 Evolución de precisión</h3>
+                        <div class="h-64">
+                            <canvas id="accuracyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipos de Errores -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-bold text-center mb-4 text-red-400">🎯 Tipos de errores</h3>
+                        <div class="h-64">
+                            <canvas id="errorsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Rendimiento por Modo -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-bold text-center mb-4 text-blue-400">🎮 Rendimiento por modo</h3>
+                        <div class="h-64">
+                            <canvas id="modeChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Rendimiento por Dificultad -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-bold text-center mb-4 text-orange-400">⚡ Rendimiento por dificultad</h3>
+                        <div class="h-64">
+                            <canvas id="difficultyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Elementos Más Confundidos -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-red-400 mb-4 flex items-center">
+                        ❌ Elementos más confundidos
+                    </h3>
+                    <div id="commonMistakes" class="grid grid-cols-4 gap-4">
+                        <!-- Los errores comunes aparecen aquí -->
+                    </div>
+                </div>
+                
+                <!-- Recomendaciones -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-4 flex items-center">
+                        💡 Recomendaciones cósmicas
+                    </h3>
+                    <div id="recommendations" class="space-y-3">
+                        <!-- Las recomendaciones aparecen aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Game Over -->
+    <div id="gameOverModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50">
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 max-w-lg w-full mx-4 text-white text-center transform scale-0 transition-transform duration-500">
+            <div class="text-8xl mb-6">🏆</div>
+            <h2 class="text-4xl font-black mb-6 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                ¡MISIÓN COMPLETADA!
+            </h2>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="stat-card">
+                    <div class="text-yellow-400 text-sm">PUNTOS FINALES</div>
+                    <div id="finalScore" class="text-2xl font-bold text-yellow-400">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-green-400 text-sm">NIVEL MÁXIMO</div>
+                    <div id="finalLevel" class="text-2xl font-bold text-green-400">1</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-purple-400 text-sm">PRECISIÓN</div>
+                    <div id="finalAccuracy" class="text-2xl font-bold text-purple-400">100%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-cyan-400 text-sm">RACHA MÁXIMA</div>
+                    <div id="finalStreak" class="text-2xl font-bold text-cyan-400">0</div>
+                </div>
+            </div>
+            <div id="newAchievements" class="mb-6">
+                <!-- Nuevos logros aparecen aquí -->
+            </div>
+            <button id="playAgainBtn" class="btn-3d text-xl px-8 py-4">
+                🔄 NUEVA MISIÓN
+            </button>
+        </div>
+    </div>
+
+    <!-- Notificación de logros -->
+    <div id="achievementNotification" class="achievement-notification">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl">🏆</span>
+            <div>
+                <div class="font-bold" id="achievementTitle">¡Nuevo Logro!</div>
+                <div class="text-sm" id="achievementDescription">Has desbloqueado un logro</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables del juego expandidas
+        let gameState = {
+            score: 0,
+            hits: 0,
+            misses: 0,
+            level: 1,
+            timeLeft: 60,
+            isActive: false,
+            isPaused: false,
+            startTime: null,
+            gameTimer: null,
+            spawnTimer: null,
+            activeMoles: new Set(),
+            currentTargets: [],
+            currentDistractors: [],
+            streak: 0,
+            maxStreak: 0,
+            powerUps: new Set(),
+            achievements: new Set(),
+            comboMultiplier: 1,
+            experiencePoints: 0,
+            playerLevel: 1
+        };
+
+        // Sistema de configuración avanzada
+        let gameSettings = {
+            volume: 50,
+            speed: 100,
+            effects: true,
+            theme: 'auto',
+            playerName: 'Jugador Cósmico',
+            playerAvatar: '🚀'
+        };
+
+        // Sistema de audio mejorado
+        let audioContext = null;
+        let masterVolume = 0.5;
+
+        // Inicializar contexto de audio
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                masterVolume = gameSettings.volume / 100;
+            } catch (e) {
+                console.log('Audio no disponible');
+                audioContext = null;
+            }
+        }
+
+        // Crear estrellas dinámicamente mejoradas
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const numStars = 80;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                const isSparkle = Math.random() < 0.2; // 20% son estrellas con forma
+                
+                star.className = isSparkle ? 'star sparkle' : 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 60 + '%'; // Solo en la parte superior
+                
+                if (isSparkle) {
+                    star.style.width = star.style.height = Math.random() * 8 + 6 + 'px';
+                } else {
+                    star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                }
+                
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Función base para crear tonos mejorada
+        function playTone(frequency, duration, volume = 0.1, type = 'sine') {
+            if (!audioContext || !gameSettings.effects) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                oscillator.type = type;
+                
+                const adjustedVolume = volume * masterVolume;
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(adjustedVolume, audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.log('Error reproduciendo sonido');
+            }
+        }
+
+        // Sonidos ultra-suaves y agradables
+        function playSuccessSound() {
+            if (!audioContext) return;
+            
+            // Acorde cristalino ultra-suave - como gotas de agua
+            const baseFreq = 523.25; // Do5
+            playTone(baseFreq, 0.25, 0.02, 'sine'); // Do5 cristalino
+            setTimeout(() => playTone(baseFreq * 1.25, 0.25, 0.018, 'sine'), 60); // Mi5
+            setTimeout(() => playTone(baseFreq * 1.5, 0.3, 0.015, 'triangle'), 120); // Sol5
+            
+            // Campanita celestial final
+            setTimeout(() => playTone(baseFreq * 2, 0.2, 0.012, 'triangle'), 200); // Do6
+        }
+
+        function playErrorSound() {
+            if (!audioContext) return;
+            
+            // Sonido melancólico muy suave - sin agresividad
+            playTone(349.23, 0.4, 0.015, 'sine'); // Fa4 melancólico
+            setTimeout(() => playTone(293.66, 0.5, 0.012, 'sine'), 120); // Re4 suave
+            setTimeout(() => playTone(261.63, 0.6, 0.01, 'sine'), 240); // Do4 muy suave
+        }
+
+        function playComboSound(comboLevel) {
+            if (!audioContext) return;
+            
+            // Sonido especial para combos - más mágico según el nivel
+            const baseFreq = 659.25; // Mi5
+            const intensity = Math.min(comboLevel / 10, 1); // Intensidad basada en combo
+            
+            // Secuencia ascendente mágica
+            const melody = [
+                { freq: baseFreq, duration: 0.15, volume: 0.02 * intensity },
+                { freq: baseFreq * 1.2, duration: 0.15, volume: 0.025 * intensity },
+                { freq: baseFreq * 1.4, duration: 0.15, volume: 0.03 * intensity },
+                { freq: baseFreq * 1.6, duration: 0.2, volume: 0.035 * intensity },
+                { freq: baseFreq * 2, duration: 0.25, volume: 0.04 * intensity }
+            ];
+            
+            melody.forEach((note, index) => {
+                setTimeout(() => {
+                    playTone(note.freq, note.duration, note.volume, 'triangle');
+                    // Eco sutil
+                    setTimeout(() => {
+                        playTone(note.freq, note.duration * 0.5, note.volume * 0.3, 'sine');
+                    }, 50);
+                }, index * 80);
+            });
+            
+            // Efecto final brillante para combos altos
+            if (comboLevel >= 10) {
+                setTimeout(() => {
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            playTone(baseFreq * 3 + (Math.random() * 200), 0.1, 0.01, 'triangle');
+                        }, i * 30);
+                    }
+                }, 400);
+            }
+        }
+
+        function playLevelUpSound() {
+            if (!audioContext) return;
+            
+            // Fanfarria de celebración
+            const melody = [
+                { freq: 523.25, duration: 0.15 }, // Do5
+                { freq: 659.25, duration: 0.15 }, // Mi5
+                { freq: 783.99, duration: 0.15 }, // Sol5
+                { freq: 1046.50, duration: 0.3 }, // Do6
+                { freq: 1318.51, duration: 0.4 }  // Mi6
+            ];
+            
+            melody.forEach((note, index) => {
+                setTimeout(() => {
+                    playTone(note.freq, note.duration, 0.08, 'triangle');
+                }, index * 100);
+            });
+        }
+
+        function playAchievementSound() {
+            if (!audioContext) return;
+            
+            // Sonido especial para logros
+            const frequencies = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+            frequencies.forEach((freq, index) => {
+                setTimeout(() => {
+                    playTone(freq, 0.2, 0.06, 'triangle');
+                }, index * 80);
+            });
+        }
+
+        function playPowerUpSound() {
+            if (!audioContext) return;
+            
+            // Sonido ascendente rápido
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    playTone(400 + i * 50, 0.05, 0.04, 'square');
+                }, i * 20);
+            }
+        }
+
+        function playStartSound() {
+            if (!audioContext) return;
+            
+            // Melodía de inicio ascendente
+            playTone(440, 0.1, 0.06); // La4
+            setTimeout(() => playTone(554.37, 0.1, 0.06), 80); // Do#5
+            setTimeout(() => playTone(659.25, 0.2, 0.06), 160); // Mi5
+        }
+
+        function playGameOverSound() {
+            if (!audioContext) return;
+            
+            // Secuencia descendente final
+            const endMelody = [
+                { freq: 659.25, duration: 0.2 }, // Mi5
+                { freq: 554.37, duration: 0.2 }, // Do#5
+                { freq: 440, duration: 0.2 },    // La4
+                { freq: 349.23, duration: 0.4 }  // Fa4
+            ];
+            
+            endMelody.forEach((note, index) => {
+                setTimeout(() => {
+                    playTone(note.freq, note.duration, 0.05, 'triangle');
+                }, index * 150);
+            });
+        }
+
+        // Sistema de logros expandido
+        const achievements = {
+            'first_hit': {
+                title: 'Primer Contacto',
+                description: 'Golpea tu primer topo cósmico',
+                icon: '🎯',
+                condition: (stats) => stats.hits >= 1
+            },
+            'perfect_accuracy': {
+                title: 'Precisión Perfecta',
+                description: 'Termina una partida con 100% de precisión',
+                icon: '🎯',
+                condition: (stats) => stats.hits > 5 && stats.misses === 0
+            },
+            'speed_demon': {
+                title: 'Demonio de la Velocidad',
+                description: 'Alcanza 60 aciertos por minuto',
+                icon: '⚡',
+                condition: (stats) => stats.speed >= 60
+            },
+            'level_master': {
+                title: 'Maestro del Nivel',
+                description: 'Alcanza el nivel 10',
+                icon: '🏆',
+                condition: (stats) => stats.level >= 10
+            },
+            'combo_master': {
+                title: 'Maestro del Combo',
+                description: 'Consigue una racha de 20 aciertos',
+                icon: '🔥',
+                condition: (stats) => stats.maxStreak >= 20
+            },
+            'point_collector': {
+                title: 'Coleccionista de Puntos',
+                description: 'Acumula 10,000 puntos',
+                icon: '💎',
+                condition: (stats) => stats.score >= 10000
+            },
+            'mathematician': {
+                title: 'Matemático Cósmico',
+                description: 'Completa 10 partidas en modo matemáticas',
+                icon: '🧮',
+                condition: (stats) => (stats.modeStats.matematicas?.games || 0) >= 10
+            },
+            'cosmic_explorer': {
+                title: 'Explorador Cósmico',
+                description: 'Juega en todos los modos disponibles',
+                icon: '🌌',
+                condition: (stats) => Object.keys(stats.modeStats).length >= 8
+            },
+            'time_master': {
+                title: 'Maestro del Tiempo',
+                description: 'Juega durante 60 minutos en total',
+                icon: '⏱️',
+                condition: (stats) => stats.totalPlayTime >= 60
+            },
+            'persistent': {
+                title: 'Persistente',
+                description: 'Juega 50 partidas',
+                icon: '🎮',
+                condition: (stats) => stats.totalGames >= 50
+            }
+        };
+
+        // Sistema de power-ups
+        const powerUpTypes = {
+            'double_points': {
+                name: 'Puntos Dobles',
+                icon: '2️⃣',
+                duration: 15000,
+                effect: () => gameState.comboMultiplier = 2,
+                reset: () => gameState.comboMultiplier = 1
+            },
+            'extra_time': {
+                name: 'Tiempo Extra',
+                icon: '⏰',
+                duration: 0,
+                effect: () => gameState.timeLeft += 15,
+                reset: () => {}
+            },
+            'slow_motion': {
+                name: 'Cámara Lenta',
+                icon: '🐌',
+                duration: 10000,
+                effect: () => {
+                    clearTimeout(gameState.spawnTimer);
+                    setTimeout(spawnMoles, difficultySettings[elements.difficulty.value].spawnRate * 1.5);
+                },
+                reset: () => {
+                    clearTimeout(gameState.spawnTimer);
+                    spawnMoles();
+                }
+            }
+        };
+
+        // Elementos del DOM expandidos
+        const elements = {
+            score: document.getElementById('score'),
+            timer: document.getElementById('timer'),
+            level: document.getElementById('level'),
+            hits: document.getElementById('hits'),
+            accuracy: document.getElementById('accuracy'),
+            speed: document.getElementById('speed'),
+            streak: document.getElementById('streak'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            gameGrid: document.getElementById('gameGrid'),
+            gameOverModal: document.getElementById('gameOverModal'),
+            gameMode: document.getElementById('gameMode'),
+            difficulty: document.getElementById('difficulty'),
+            targetCount: document.getElementById('targetCount'),
+            targetElements: document.getElementById('targetElements'),
+            distractorElements: document.getElementById('distractorElements'),
+            achievementsBtn: document.getElementById('achievementsBtn'),
+            achievementsModal: document.getElementById('achievementsModal'),
+            volumeSlider: document.getElementById('volumeSlider'),
+            speedSlider: document.getElementById('speedSlider'),
+            effectsToggle: document.getElementById('effectsToggle'),
+            userName: document.getElementById('userName'),
+            userAvatar: document.getElementById('userAvatar')
+        };
+
+        // Configuración de elementos por modo expandida
+        const gameElements = {
+            vocales: ['A', 'E', 'I', 'O', 'U'],
+            consonantes: ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'],
+            letras: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            silabas: ['BA', 'CA', 'DA', 'FA', 'GA', 'LA', 'MA', 'PA', 'RA', 'SA', 'TA', 'BE', 'CE', 'DE', 'FE', 'GE', 'LE', 'ME', 'PE', 'RE', 'SE', 'TE'],
+            palabras: ['CASA', 'PERRO', 'GATO', 'SOL', 'LUNA', 'AMOR', 'PAZ', 'VIDA', 'AGUA', 'FUEGO', 'AIRE', 'TIERRA'],
+            numeros: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+            pares: ['2', '4', '6', '8', '10', '12', '14', '16', '18', '20'],
+            impares: ['1', '3', '5', '7', '9', '11', '13', '15', '17', '19'],
+            matematicas: [
+                { question: '2+2', answer: '4' },
+                { question: '3×3', answer: '9' },
+                { question: '10-5', answer: '5' },
+                { question: '8÷2', answer: '4' },
+                { question: '5+3', answer: '8' },
+                { question: '6×2', answer: '12' },
+                { question: '15-7', answer: '8' },
+                { question: '16÷4', answer: '4' }
+            ],
+            colores: ['🔴', '🟢', '🔵', '🟡', '🟠', '🟣', '⚫', '⚪', '🟤', '🩷'],
+            formas: ['🔺', '🔴', '🟩', '🟨', '🔶', '🔷', '⭐', '💎', '🔸', '🔹']
+        };
+
+        // Configuración de dificultad expandida
+        const difficultySettings = {
+            facil: { spawnRate: 4000, lifetime: 5000, maxMoles: 2, targetRatio: 0.9, powerUpChance: 0.15 },
+            medio: { spawnRate: 2800, lifetime: 3800, maxMoles: 3, targetRatio: 0.7, powerUpChance: 0.12 },
+            dificil: { spawnRate: 2000, lifetime: 2800, maxMoles: 4, targetRatio: 0.5, powerUpChance: 0.1 },
+            extremo: { spawnRate: 1400, lifetime: 2000, maxMoles: 5, targetRatio: 0.4, powerUpChance: 0.08 },
+            cosmico: { spawnRate: 1000, lifetime: 1500, maxMoles: 6, targetRatio: 0.3, powerUpChance: 0.05 }
+        };
+
+        // Sistema de estadísticas avanzado expandido
+        let gameStats = {
+            totalGames: 0,
+            gamesHistory: [],
+            accuracyHistory: [],
+            errorsByType: {},
+            errorsByElement: {},
+            modeStats: {},
+            difficultyStats: {},
+            sessionStart: Date.now(),
+            totalPlayTime: 0,
+            achievements: new Set(),
+            maxStreak: 0,
+            totalExperience: 0,
+            playerLevel: 1
+        };
+
+        // Configuración de objetivos y distractores por modo expandida
+        const gameModeConfig = {
+            vocales: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.vocales).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.vocales.filter(v => !targets.includes(v))).slice(0, Math.max(targetCount + 1, 3));
+                    return { targets, distractors };
+                }
+            },
+            letras: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.vocales).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.consonantes).slice(0, Math.max(targetCount + 1, 4));
+                    return { targets, distractors };
+                }
+            },
+            silabas: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.silabas).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.silabas.filter(s => !targets.includes(s))).slice(0, Math.max(targetCount + 2, 4));
+                    return { targets, distractors };
+                }
+            },
+            palabras: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.palabras).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.palabras.filter(p => !targets.includes(p))).slice(0, Math.max(targetCount + 1, 3));
+                    return { targets, distractors };
+                }
+            },
+            numeros: {
+                getTargetsAndDistractors: () => {
+                    const isParsTarget = Math.random() < 0.5;
+                    const targets = isParsTarget ? [...gameElements.pares] : [...gameElements.impares];
+                    const distractors = isParsTarget ? [...gameElements.impares] : [...gameElements.pares];
+                    return { targets, distractors };
+                }
+            },
+            matematicas: {
+                getTargetsAndDistractors: () => {
+                    const selectedProblems = shuffleArray(gameElements.matematicas).slice(0, 3);
+                    const targets = selectedProblems.map(p => p.answer);
+                    const wrongAnswers = ['1', '2', '3', '6', '7', '10', '11', '13', '14', '15'];
+                    const distractors = shuffleArray(wrongAnswers.filter(a => !targets.includes(a))).slice(0, 4);
+                    
+                    // Mostrar las preguntas en el panel
+                    updateMathQuestions(selectedProblems);
+                    
+                    return { targets, distractors };
+                }
+            },
+            colores: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.colores).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.colores.filter(c => !targets.includes(c))).slice(0, Math.max(targetCount + 2, 4));
+                    return { targets, distractors };
+                }
+            },
+            formas: {
+                getTargetsAndDistractors: () => {
+                    const targetCount = parseInt(elements.targetCount.value);
+                    const targets = shuffleArray(gameElements.formas).slice(0, targetCount);
+                    const distractors = shuffleArray(gameElements.formas.filter(f => !targets.includes(f))).slice(0, Math.max(targetCount + 2, 4));
+                    return { targets, distractors };
+                }
+            },
+            mixto: {
+                getTargetsAndDistractors: () => {
+                    const modes = ['vocales', 'letras', 'silabas', 'palabras', 'numeros', 'colores', 'formas'];
+                    const selectedMode = modes[Math.floor(Math.random() * modes.length)];
+                    return gameModeConfig[selectedMode].getTargetsAndDistractors();
+                }
+            }
+        };
+
+        // Función auxiliar para mezclar arrays
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Actualizar preguntas matemáticas
+        function updateMathQuestions(problems) {
+            const display = document.getElementById('currentTargetDisplay');
+            if (display && problems.length > 0) {
+                display.innerHTML = problems.map(p => p.question).join(', ');
+            }
+        }
+
+        // Cargar estadísticas guardadas
+        function loadStats() {
+            try {
+                const saved = localStorage.getItem('whackMoleCosmicStats');
+                if (saved) {
+                    const loadedStats = JSON.parse(saved);
+                    gameStats = { ...gameStats, ...loadedStats };
+                    
+                    // Convertir Set de achievements
+                    if (loadedStats.achievements && Array.isArray(loadedStats.achievements)) {
+                        gameStats.achievements = new Set(loadedStats.achievements);
+                    }
+                }
+                
+                // Cargar configuraciones
+                const savedSettings = localStorage.getItem('whackMoleCosmicSettings');
+                if (savedSettings) {
+                    gameSettings = { ...gameSettings, ...JSON.parse(savedSettings) };
+                    applySettings();
+                }
+                
+                updateUserProfile();
+            } catch (e) {
+                console.log('No se pudieron cargar datos previos');
+            }
+        }
+
+        // Guardar estadísticas
+        function saveStats() {
+            try {
+                const statsToSave = {
+                    ...gameStats,
+                    achievements: Array.from(gameStats.achievements)
+                };
+                localStorage.setItem('whackMoleCosmicStats', JSON.stringify(statsToSave));
+                localStorage.setItem('whackMoleCosmicSettings', JSON.stringify(gameSettings));
+            } catch (e) {
+                console.log('No se pudieron guardar los datos');
+            }
+        }
+
+        // Aplicar configuraciones
+        function applySettings() {
+            masterVolume = gameSettings.volume / 100;
+            elements.volumeSlider.value = gameSettings.volume;
+            elements.speedSlider.value = gameSettings.speed;
+            elements.effectsToggle.checked = gameSettings.effects;
+            elements.userName.textContent = gameSettings.playerName;
+            elements.userAvatar.textContent = gameSettings.playerAvatar;
+        }
+
+        // Actualizar perfil de usuario
+        function updateUserProfile() {
+            const experience = gameStats.totalExperience || 0;
+            const level = Math.floor(experience / 1000) + 1;
+            gameStats.playerLevel = level;
+            
+            const levels = ['Novato', 'Aprendiz', 'Explorador', 'Veterano', 'Experto', 'Maestro', 'Leyenda', 'Cósmico'];
+            const userLevel = levels[Math.min(level - 1, levels.length - 1)];
+            
+            document.getElementById('userLevel').textContent = userLevel;
+        }
+
+        // Inicializar el juego
+        function initGame() {
+            createStars();
+            createGameGrid();
+            updateDisplay();
+            setupEventListeners();
+            loadGlobalLeaderboard();
+        }
+
+        // Crear grid de agujeros 3D - Solo 12 hoyos (sin fila inferior)
+        function createGameGrid() {
+            elements.gameGrid.innerHTML = '';
+            const numHoles = 12; // Eliminamos la fila inferior de 3 hoyos
+            
+            for (let i = 0; i < numHoles; i++) {
+                const holeContainer = document.createElement('div');
+                holeContainer.className = 'hole';
+                holeContainer.dataset.holeId = i;
+                
+                const holeOpening = document.createElement('div');
+                holeOpening.className = 'hole-opening';
+                
+                holeContainer.appendChild(holeOpening);
+                elements.gameGrid.appendChild(holeContainer);
+            }
+        }
+
+        // Configurar objetivos y distractores para el juego
+        function setupTargetsAndDistractors() {
+            const mode = elements.gameMode.value;
+            const config = gameModeConfig[mode].getTargetsAndDistractors();
+            
+            gameState.currentTargets = config.targets;
+            gameState.currentDistractors = config.distractors;
+            
+            updateObjectivePanel();
+        }
+
+        // Actualizar panel de objetivos
+        function updateObjectivePanel() {
+            // Actualizar panel completo de objetivos
+            elements.targetElements.innerHTML = '';
+            gameState.currentTargets.forEach(target => {
+                const element = document.createElement('span');
+                element.className = 'bg-green-500 text-white px-2 py-1 rounded-full font-bold text-sm shadow-lg';
+                element.textContent = target;
+                elements.targetElements.appendChild(element);
+            });
+            
+            elements.distractorElements.innerHTML = '';
+            gameState.currentDistractors.forEach(distractor => {
+                const element = document.createElement('span');
+                element.className = 'bg-red-500 text-white px-2 py-1 rounded-full font-bold text-sm shadow-lg';
+                element.textContent = distractor;
+                elements.distractorElements.appendChild(element);
+            });
+
+            // Actualizar el indicador de objetivo actual
+            updateCurrentObjectiveDisplay();
+        }
+
+        // Función para actualizar el display del objetivo actual
+        function updateCurrentObjectiveDisplay() {
+            const currentTargetDisplay = document.getElementById('currentTargetDisplay');
+            const currentDistractorDisplay = document.getElementById('currentDistractorDisplay');
+            
+            if (currentTargetDisplay && currentDistractorDisplay) {
+                // Mostrar los objetivos actuales de manera clara
+                if (gameState.currentTargets && gameState.currentTargets.length > 0) {
+                    if (elements.gameMode.value === 'matematicas') {
+                        // Ya se actualiza en updateMathQuestions
+                    } else {
+                        currentTargetDisplay.textContent = gameState.currentTargets.join(', ');
+                    }
+                } else {
+                    currentTargetDisplay.textContent = '---';
+                }
+                
+                // Mostrar los distractores actuales
+                if (gameState.currentDistractors && gameState.currentDistractors.length > 0) {
+                    currentDistractorDisplay.textContent = gameState.currentDistractors.slice(0, 5).join(', ');
+                } else {
+                    currentDistractorDisplay.textContent = '---';
+                }
+            }
+        }
+
+        // Obtener elemento aleatorio según objetivos y distractores
+        function getRandomElement() {
+            const difficulty = difficultySettings[elements.difficulty.value];
+            const isTarget = Math.random() < difficulty.targetRatio;
+            
+            let element, isTargetElement;
+            
+            if (isTarget && gameState.currentTargets.length > 0) {
+                element = gameState.currentTargets[Math.floor(Math.random() * gameState.currentTargets.length)];
+                isTargetElement = true;
+            } else if (gameState.currentDistractors.length > 0) {
+                element = gameState.currentDistractors[Math.floor(Math.random() * gameState.currentDistractors.length)];
+                isTargetElement = false;
+            } else {
+                element = gameState.currentTargets[Math.floor(Math.random() * gameState.currentTargets.length)];
+                isTargetElement = true;
+            }
+            
+            return { element, isTarget: isTargetElement };
+        }
+
+        // Crear power-up
+        function createPowerUp(holeIndex) {
+            const difficulty = difficultySettings[elements.difficulty.value];
+            if (Math.random() > difficulty.powerUpChance) return false;
+            
+            const hole = document.querySelector(`[data-hole-id="${holeIndex}"]`);
+            const powerUpTypes = Object.keys(powerUpTypes);
+            const randomType = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+            
+            const powerUp = document.createElement('div');
+            powerUp.className = `powerup powerup-${randomType.split('_')[0]}`;
+            powerUp.dataset.type = randomType;
+            powerUp.textContent = powerUpTypes[randomType].icon;
+            powerUp.style.top = '20%';
+            powerUp.style.left = '50%';
+            powerUp.style.transform = 'translate(-50%, -50%)';
+            
+            powerUp.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                activatePowerUp(randomType);
+                powerUp.remove();
+                playPowerUpSound();
+            });
+            
+            hole.appendChild(powerUp);
+            
+            setTimeout(() => {
+                if (powerUp.parentNode) powerUp.remove();
+            }, 5000);
+            
+            return true;
+        }
+
+        // Activar power-up
+        function activatePowerUp(type) {
+            const powerUp = powerUpTypes[type];
+            if (!powerUp) return;
+            
+            gameState.powerUps.add(type);
+            powerUp.effect();
+            
+            // Mostrar en UI
+            const activePowerupsDiv = document.getElementById('activePowerups');
+            const powerUpElement = document.createElement('div');
+            powerUpElement.className = 'flex items-center justify-between bg-white/10 rounded-lg p-2';
+            powerUpElement.innerHTML = `
+                <span class="text-sm">${powerUp.icon} ${powerUp.name}</span>
+                <span class="text-xs opacity-75">${powerUp.duration > 0 ? Math.round(powerUp.duration/1000) + 's' : 'Activo'}</span>
+            `;
+            powerUpElement.id = `powerup-${type}`;
+            activePowerupsDiv.appendChild(powerUpElement);
+            
+            if (powerUp.duration > 0) {
+                setTimeout(() => {
+                    gameState.powerUps.delete(type);
+                    powerUp.reset();
+                    const element = document.getElementById(`powerup-${type}`);
+                    if (element) element.remove();
+                }, powerUp.duration);
+            } else {
+                setTimeout(() => {
+                    const element = document.getElementById(`powerup-${type}`);
+                    if (element) element.remove();
+                }, 3000);
+            }
+        }
+
+        // Crear topo 3D mejorado
+        function createMole(holeIndex) {
+            const hole = document.querySelector(`[data-hole-id="${holeIndex}"]`);
+            if (hole.querySelector('.mole')) return false;
+
+            // Probabilidad de power-up
+            if (Math.random() < 0.15) {
+                createPowerUp(holeIndex);
+            }
+
+            const { element, isTarget } = getRandomElement();
+            const mole = document.createElement('div');
+            mole.className = 'mole';
+            mole.dataset.isTarget = isTarget;
+            mole.dataset.element = element;
+            
+            const moleBody = document.createElement('div');
+            moleBody.className = 'mole-body';
+            
+            const moleFace = document.createElement('div');
+            moleFace.className = 'mole-face';
+            
+            // Agregar orejas del topo
+            const moleEars = document.createElement('div');
+            moleEars.className = 'mole-ears';
+            moleEars.innerHTML = '<div class="mole-ear"></div><div class="mole-ear"></div>';
+            
+            const elementDisplay = document.createElement('div');
+            elementDisplay.className = 'mole-element';
+            elementDisplay.textContent = element;
+            
+            const eyes = document.createElement('div');
+            eyes.className = 'mole-eyes';
+            eyes.innerHTML = '<div class="eye"></div><div class="eye"></div>';
+            
+            const nose = document.createElement('div');
+            nose.className = 'mole-nose';
+            
+            moleBody.appendChild(moleEars);
+            moleFace.appendChild(elementDisplay);
+            moleFace.appendChild(eyes);
+            moleFace.appendChild(nose);
+            moleBody.appendChild(moleFace);
+            mole.appendChild(moleBody);
+            
+            hole.appendChild(mole);
+            
+            setTimeout(() => {
+                mole.classList.add('appearing');
+            }, 50);
+            
+            const speedMultiplier = gameSettings.speed / 100;
+            const lifetime = Math.max((4000 - (gameState.level * 150)) / speedMultiplier, 1500);
+            const disappearTimer = setTimeout(() => {
+                if (mole.parentNode && !mole.classList.contains('hit')) {
+                    removeMole(mole, true);
+                }
+            }, lifetime);
+            
+            // SÚPER DETECCIÓN SENSIBLE - Múltiples eventos para garantizar que SIEMPRE funcione
+            const handleMoleHit = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!mole.classList.contains('hit')) {
+                    clearTimeout(disappearTimer);
+                    hitMole(mole);
+                }
+            };
+            
+            // Eventos de click/touch
+            mole.addEventListener('click', handleMoleHit, { passive: false });
+            mole.addEventListener('touchstart', handleMoleHit, { passive: false });
+            mole.addEventListener('touchend', handleMoleHit, { passive: false });
+            mole.addEventListener('mousedown', handleMoleHit, { passive: false });
+            mole.addEventListener('mouseup', handleMoleHit, { passive: false });
+            mole.addEventListener('pointerdown', handleMoleHit, { passive: false });
+            mole.addEventListener('pointerup', handleMoleHit, { passive: false });
+            
+            // Eventos sobre el área extendida también - TODO EL HOYO ES CLICKEABLE
+            const extendedArea = mole.parentElement;
+            const holeOpening = extendedArea.querySelector('.hole-opening');
+            
+            // El hoyo completo también detecta clics del topo
+            [extendedArea, holeOpening].forEach(area => {
+                area.addEventListener('click', (e) => {
+                    if (e.target.closest('.mole') === mole || extendedArea.querySelector('.mole') === mole) {
+                        handleMoleHit(e);
+                    }
+                }, { passive: false });
+                
+                area.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.mole') === mole || extendedArea.querySelector('.mole') === mole) {
+                        handleMoleHit(e);
+                    }
+                }, { passive: false });
+                
+                area.addEventListener('touchend', (e) => {
+                    if (e.target.closest('.mole') === mole || extendedArea.querySelector('.mole') === mole) {
+                        handleMoleHit(e);
+                    }
+                }, { passive: false });
+            });
+            
+            gameState.activeMoles.add(mole);
+            return true;
+        }
+
+        // Golpear topo mejorado
+        function hitMole(mole) {
+            if (mole.classList.contains('hit')) return;
+            
+            mole.classList.add('hit');
+            
+            const isTarget = mole.dataset.isTarget === 'true';
+            const element = mole.dataset.element;
+            
+            if (isTarget) {
+                gameState.hits++;
+                gameState.streak++;
+                gameState.maxStreak = Math.max(gameState.maxStreak, gameState.streak);
+                
+                let points = 100 * gameState.level;
+                
+                // Multiplicador de combo
+                if (gameState.streak > 5) {
+                    const comboBonus = Math.floor(gameState.streak / 5) * 50;
+                    points += comboBonus;
+                }
+                
+                // Multiplicador de power-up
+                points *= gameState.comboMultiplier;
+                
+                gameState.score += points;
+                gameState.experiencePoints += Math.floor(points / 10);
+                
+                createHitEffect(mole, points, true);
+                playSuccessSound();
+                
+                // Reproducir sonido de combo si corresponde
+                if (gameState.streak > 5 && gameState.streak % 5 === 0) {
+                    setTimeout(() => playComboSound(gameState.streak), 100);
+                }
+                
+                // Verificar logros
+                checkAchievements();
+                
+            } else {
+                gameState.misses++;
+                gameState.streak = 0; // Reiniciar racha
+                gameState.score = Math.max(0, gameState.score - 50);
+                createHitEffect(mole, -50, false);
+                recordError(element, 'avoid');
+                playErrorSound();
+            }
+            
+            setTimeout(() => {
+                if (mole.parentNode) {
+                    mole.remove();
+                    gameState.activeMoles.delete(mole);
+                }
+            }, 600);
+            
+            updateDisplay();
+            checkLevelUp();
+        }
+
+        // Verificar logros
+        function checkAchievements() {
+            const currentStats = {
+                hits: gameState.hits,
+                misses: gameState.misses,
+                level: gameState.level,
+                score: gameState.score,
+                maxStreak: gameState.maxStreak,
+                speed: gameState.startTime ? Math.round(gameState.hits / ((Date.now() - gameState.startTime) / 1000 / 60)) : 0,
+                modeStats: gameStats.modeStats,
+                totalGames: gameStats.totalGames,
+                totalPlayTime: gameStats.totalPlayTime
+            };
+            
+            Object.entries(achievements).forEach(([key, achievement]) => {
+                if (!gameStats.achievements.has(key) && achievement.condition(currentStats)) {
+                    unlockAchievement(key, achievement);
+                }
+            });
+        }
+
+        // Desbloquear logro
+        function unlockAchievement(key, achievement) {
+            gameStats.achievements.add(key);
+            playAchievementSound();
+            
+            // Mostrar notificación
+            const notification = document.getElementById('achievementNotification');
+            document.getElementById('achievementTitle').textContent = achievement.title;
+            document.getElementById('achievementDescription').textContent = achievement.description;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+            
+            // Agregar experiencia bonus
+            gameState.experiencePoints += 500;
+            
+            saveStats();
+        }
+
+        // Mostrar modal de logros
+        function showAchievementsModal() {
+            updateAchievementsDisplay();
+            elements.achievementsModal.classList.remove('hidden');
+            setTimeout(() => {
+                elements.achievementsModal.querySelector('.bg-gray-900').style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        // Actualizar display de logros
+        function updateAchievementsDisplay() {
+            const container = document.getElementById('achievementsList');
+            container.innerHTML = '';
+            
+            Object.entries(achievements).forEach(([key, achievement]) => {
+                const isUnlocked = gameStats.achievements.has(key);
+                
+                const achievementCard = document.createElement('div');
+                achievementCard.className = `p-4 rounded-lg border-2 ${isUnlocked ? 'bg-yellow-500/20 border-yellow-500' : 'bg-gray-800 border-gray-600'} transition-all`;
+                
+                achievementCard.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2 ${isUnlocked ? '' : 'grayscale opacity-50'}">${achievement.icon}</div>
+                        <h3 class="font-bold text-lg ${isUnlocked ? 'text-yellow-400' : 'text-gray-400'}">${achievement.title}</h3>
+                        <p class="text-sm text-gray-300 mt-2">${achievement.description}</p>
+                        ${isUnlocked ? '<div class="text-xs text-green-400 mt-2">✅ Desbloqueado</div>' : '<div class="text-xs text-gray-500 mt-2">🔒 Bloqueado</div>'}
+                    </div>
+                `;
+                
+                container.appendChild(achievementCard);
+            });
+        }
+
+        // Cargar ranking global simulado
+        function loadGlobalLeaderboard() {
+            const leaderboard = [
+                { name: 'AstroPilot', score: 25000, level: 15 },
+                { name: 'CosmicMaster', score: 22000, level: 13 },
+                { name: 'SpaceExplorer', score: 19500, level: 12 },
+                { name: 'StarHunter', score: 18000, level: 11 },
+                { name: gameSettings.playerName, score: gameStats.gamesHistory.length > 0 ? Math.max(...gameStats.gamesHistory.map(g => g.score)) : 0, level: gameStats.playerLevel }
+            ];
+            
+            // Ordenar por puntuación
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            const container = document.getElementById('globalLeaderboard');
+            container.innerHTML = '';
+            
+            leaderboard.slice(0, 5).forEach((player, index) => {
+                const entry = document.createElement('div');
+                entry.className = `leaderboard-entry ${player.name === gameSettings.playerName ? 'bg-blue-500/20' : ''}`;
+                
+                entry.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="leaderboard-rank">#${index + 1}</span>
+                        <span class="text-sm ${player.name === gameSettings.playerName ? 'text-blue-400 font-bold' : ''}">${player.name}</span>
+                    </div>
+                    <div class="text-right text-xs">
+                        <div>${player.score.toLocaleString()}</div>
+                        <div class="opacity-75">Nv.${player.level}</div>
+                    </div>
+                `;
+                
+                container.appendChild(entry);
+            });
+        }
+
+        // Remover topo
+        function removeMole(mole, missed = false) {
+            if (mole.classList.contains('hit')) return;
+            
+            mole.classList.add('disappearing');
+            
+            if (missed) {
+                const isTarget = mole.dataset.isTarget === 'true';
+                if (isTarget) {
+                    gameState.misses++;
+                    gameState.streak = 0; // Reiniciar racha por objetivo perdido
+                    recordError(mole.dataset.element, 'hit');
+                }
+                updateDisplay();
+            }
+            
+            setTimeout(() => {
+                if (mole.parentNode) {
+                    mole.remove();
+                    gameState.activeMoles.delete(mole);
+                }
+            }, 400);
+        }
+
+        // Registrar estadísticas de una partida
+        function recordGameStats() {
+            const total = gameState.hits + gameState.misses;
+            const accuracy = total > 0 ? Math.round((gameState.hits / total) * 100) : 100;
+            const mode = elements.gameMode.value;
+            const difficulty = elements.difficulty.value;
+            const playTime = Math.round((Date.now() - gameState.startTime) / 1000 / 60);
+
+            // Registrar partida
+            gameStats.totalGames++;
+            gameStats.gamesHistory.push({
+                score: gameState.score,
+                accuracy: accuracy,
+                hits: gameState.hits,
+                misses: gameState.misses,
+                level: gameState.level,
+                mode: mode,
+                difficulty: difficulty,
+                playTime: playTime,
+                maxStreak: gameState.maxStreak,
+                date: new Date().toISOString()
+            });
+
+            // Mantener solo últimas 50 partidas
+            if (gameStats.gamesHistory.length > 50) {
+                gameStats.gamesHistory = gameStats.gamesHistory.slice(-50);
+            }
+
+            // Histórico de precisión
+            gameStats.accuracyHistory.push(accuracy);
+            if (gameStats.accuracyHistory.length > 50) {
+                gameStats.accuracyHistory = gameStats.accuracyHistory.slice(-50);
+            }
+
+            // Estadísticas por modo
+            if (!gameStats.modeStats[mode]) {
+                gameStats.modeStats[mode] = { games: 0, totalAccuracy: 0, bestScore: 0 };
+            }
+            gameStats.modeStats[mode].games++;
+            gameStats.modeStats[mode].totalAccuracy += accuracy;
+            gameStats.modeStats[mode].bestScore = Math.max(gameStats.modeStats[mode].bestScore, gameState.score);
+
+            // Estadísticas por dificultad
+            if (!gameStats.difficultyStats[difficulty]) {
+                gameStats.difficultyStats[difficulty] = { games: 0, totalAccuracy: 0, bestScore: 0 };
+            }
+            gameStats.difficultyStats[difficulty].games++;
+            gameStats.difficultyStats[difficulty].totalAccuracy += accuracy;
+            gameStats.difficultyStats[difficulty].bestScore = Math.max(gameStats.difficultyStats[difficulty].bestScore, gameState.score);
+
+            // Tiempo total jugado
+            gameStats.totalPlayTime += playTime;
+            
+            // Actualizar racha máxima global
+            gameStats.maxStreak = Math.max(gameStats.maxStreak, gameState.maxStreak);
+            
+            // Experiencia total
+            gameStats.totalExperience += gameState.experiencePoints;
+
+            saveStats();
+            updateUserProfile();
+        }
+
+        // Registrar errores específicos
+        function recordError(element, expectedAction) {
+            const errorType = expectedAction === 'hit' ? 'missed_target' : 'hit_distractor';
+            
+            if (!gameStats.errorsByType[errorType]) {
+                gameStats.errorsByType[errorType] = 0;
+            }
+            gameStats.errorsByType[errorType]++;
+
+            if (!gameStats.errorsByElement[element]) {
+                gameStats.errorsByElement[element] = 0;
+            }
+            gameStats.errorsByElement[element]++;
+
+            saveStats();
+        }
+
+        // Crear efecto de golpe mejorado
+        function createHitEffect(mole, points, isCorrect) {
+            const rect = mole.getBoundingClientRect();
+            
+            const pointsDisplay = document.createElement('div');
+            pointsDisplay.className = `fixed text-3xl font-bold z-50 pointer-events-none ${isCorrect ? 'text-green-400' : 'text-red-400'}`;
+            pointsDisplay.style.left = rect.left + rect.width/2 + 'px';
+            pointsDisplay.style.top = rect.top + 'px';
+            pointsDisplay.style.transform = 'translate(-50%, -50%)';
+            pointsDisplay.textContent = isCorrect ? `+${points}` : `${points}`;
+            pointsDisplay.style.animation = 'particleBurst 1.2s ease-out forwards';
+            
+            // Efecto de combo
+            if (isCorrect && gameState.streak > 5) {
+                const comboDisplay = document.createElement('div');
+                comboDisplay.className = 'fixed text-lg font-bold z-50 pointer-events-none text-yellow-400';
+                comboDisplay.style.left = rect.left + rect.width/2 + 'px';
+                comboDisplay.style.top = rect.top - 30 + 'px';
+                comboDisplay.style.transform = 'translate(-50%, -50%)';
+                comboDisplay.textContent = `COMBO x${Math.floor(gameState.streak / 5)}`;
+                comboDisplay.style.animation = 'particleBurst 1.5s ease-out forwards';
+                document.body.appendChild(comboDisplay);
+                
+                setTimeout(() => comboDisplay.remove(), 1500);
+            }
+            
+            document.body.appendChild(pointsDisplay);
+            
+            const particles = isCorrect ? ['🎉', '⭐', '✨', '🌟', '💫', '🎯', '🚀', '🌌'] : ['💥', '❌', '😰', '💔', '💀'];
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle fixed z-50';
+                particle.style.left = rect.left + rect.width/2 + (Math.random() - 0.5) * 120 + 'px';
+                particle.style.top = rect.top + rect.height/2 + (Math.random() - 0.5) * 120 + 'px';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                particle.style.animationDelay = Math.random() * 0.4 + 's';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1200);
+            }
+            
+            setTimeout(() => pointsDisplay.remove(), 1200);
+        }
+
+        // Actualizar display mejorado
+        function updateDisplay() {
+            elements.score.textContent = gameState.score.toLocaleString();
+            elements.timer.textContent = gameState.timeLeft;
+            elements.level.textContent = gameState.level;
+            elements.hits.textContent = gameState.hits;
+            elements.streak.textContent = gameState.streak;
+            
+            const total = gameState.hits + gameState.misses;
+            const accuracy = total > 0 ? Math.round((gameState.hits / total) * 100) : 100;
+            elements.accuracy.textContent = accuracy + '%';
+            
+            if (gameState.startTime) {
+                const timeElapsed = (Date.now() - gameState.startTime) / 1000 / 60;
+                const speed = timeElapsed > 0 ? Math.round(gameState.hits / timeElapsed) : 0;
+                elements.speed.textContent = speed + '/min';
+            }
+            
+            // Actualizar fallos
+            const missesElement = document.getElementById('misses');
+            if (missesElement) {
+                missesElement.textContent = gameState.misses;
+            }
+        }
+
+        // Verificar subida de nivel
+        function checkLevelUp() {
+            const newLevel = Math.floor(gameState.score / 500) + 1;
+            if (newLevel > gameState.level) {
+                gameState.level = newLevel;
+                showLevelUp();
+            }
+        }
+
+        // Mostrar subida de nivel mejorada
+        function showLevelUp() {
+            playLevelUpSound();
+            
+            const levelUpEl = document.createElement('div');
+            levelUpEl.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-8 py-4 rounded-2xl text-3xl font-black z-50 shadow-2xl border-4 border-yellow-300';
+            levelUpEl.innerHTML = `
+                <div class="text-center">
+                    <div class="text-6xl mb-2">🚀</div>
+                    <div>NIVEL ${gameState.level}</div>
+                    <div class="text-lg">¡Misión completada!</div>
+                </div>
+            `;
+            levelUpEl.style.animation = 'particleBurst 2s ease-out forwards';
+            
+            document.body.appendChild(levelUpEl);
+            
+            setTimeout(() => {
+                levelUpEl.remove();
+            }, 2000);
+        }
+
+        // Generar topos mejorado
+        function spawnMoles() {
+            if (!gameState.isActive || gameState.isPaused) return;
+            
+            const holes = document.querySelectorAll('.hole');
+            const availableHoles = Array.from(holes).filter(hole => !hole.querySelector('.mole') && !hole.querySelector('.powerup'));
+            
+            if (availableHoles.length > 0) {
+                const difficulty = difficultySettings[elements.difficulty.value];
+                const maxMoles = Math.min(Math.floor(gameState.level / 2) + 1, difficulty.maxMoles);
+                const numMoles = Math.min(maxMoles, availableHoles.length);
+                
+                for (let i = 0; i < numMoles; i++) {
+                    const randomIndex = Math.floor(Math.random() * availableHoles.length);
+                    const selectedHole = availableHoles.splice(randomIndex, 1)[0];
+                    createMole(parseInt(selectedHole.dataset.holeId));
+                }
+            }
+            
+            const speedMultiplier = gameSettings.speed / 100;
+            const spawnRate = Math.max((2500 - (gameState.level * 100)) / speedMultiplier, 1000);
+            gameState.spawnTimer = setTimeout(spawnMoles, spawnRate);
+        }
+
+        // Funciones de control del juego mejoradas
+        function startGame() {
+            gameState = {
+                ...gameState,
+                score: 0, hits: 0, misses: 0, level: 1, timeLeft: 60,
+                isActive: true, isPaused: false, startTime: Date.now(),
+                activeMoles: new Set(), streak: 0, maxStreak: 0,
+                powerUps: new Set(), comboMultiplier: 1, experiencePoints: 0
+            };
+            
+            playStartSound();
+            
+            setupTargetsAndDistractors();
+            
+            elements.startBtn.disabled = true;
+            elements.pauseBtn.disabled = false;
+            elements.stopBtn.disabled = false;
+            
+            syncMobileButtons();
+            
+            updateDisplay();
+            document.querySelectorAll('.mole').forEach(mole => mole.remove());
+            document.querySelectorAll('.powerup').forEach(powerup => powerup.remove());
+            
+            gameState.gameTimer = setInterval(() => {
+                if (!gameState.isPaused) {
+                    gameState.timeLeft--;
+                    updateDisplay();
+                    if (gameState.timeLeft <= 0) endGame();
+                }
+            }, 1000);
+            
+            spawnMoles();
+        }
+
+        function togglePause() {
+            gameState.isPaused = !gameState.isPaused;
+            
+            if (gameState.isPaused) {
+                clearTimeout(gameState.spawnTimer);
+                elements.pauseBtn.textContent = '▶️ REANUDAR';
+                gameState.activeMoles.forEach(mole => {
+                    mole.style.animationPlayState = 'paused';
+                });
+            } else {
+                spawnMoles();
+                elements.pauseBtn.textContent = '⏸️ PAUSA';
+                gameState.activeMoles.forEach(mole => {
+                    mole.style.animationPlayState = 'running';
+                });
+            }
+            
+            syncMobileButtons();
+        }
+
+        function endGame() {
+            gameState.isActive = false;
+            gameState.isPaused = false;
+            
+            clearInterval(gameState.gameTimer);
+            clearTimeout(gameState.spawnTimer);
+            
+            playGameOverSound();
+            
+            // Registrar estadísticas de la partida
+            recordGameStats();
+            
+            // Verificar logros finales
+            checkAchievements();
+            
+            elements.startBtn.disabled = false;
+            elements.pauseBtn.disabled = true;
+            elements.stopBtn.disabled = true;
+            elements.pauseBtn.textContent = '⏸️ PAUSA';
+            
+            gameState.activeMoles.forEach(mole => {
+                if (mole.parentNode) mole.remove();
+            });
+            gameState.activeMoles.clear();
+            
+            // Limpiar power-ups activos
+            document.getElementById('activePowerups').innerHTML = '';
+            
+            syncMobileButtons();
+            showGameOverModal();
+        }
+
+        function showGameOverModal() {
+            document.getElementById('finalScore').textContent = gameState.score.toLocaleString();
+            document.getElementById('finalLevel').textContent = gameState.level;
+            document.getElementById('finalAccuracy').textContent = elements.accuracy.textContent;
+            document.getElementById('finalStreak').textContent = gameState.maxStreak;
+            
+            // Mostrar nuevos logros si los hay
+            const newAchievementsDiv = document.getElementById('newAchievements');
+            newAchievementsDiv.innerHTML = '';
+            
+            // Actualizar ranking global
+            loadGlobalLeaderboard();
+            
+            elements.gameOverModal.classList.remove('hidden');
+            setTimeout(() => {
+                elements.gameOverModal.querySelector('.bg-white\\/10').style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        function hideGameOverModal() {
+            elements.gameOverModal.querySelector('.bg-white\\/10').style.transform = 'scale(0)';
+            setTimeout(() => {
+                elements.gameOverModal.classList.add('hidden');
+            }, 300);
+        }
+
+        function stopGame() {
+            if (gameState.isActive) endGame();
+        }
+
+        function resetGame() {
+            if (gameState.isActive) endGame();
+            
+            gameState = {
+                score: 0, hits: 0, misses: 0, level: 1, timeLeft: 60,
+                isActive: false, isPaused: false, startTime: null,
+                gameTimer: null, spawnTimer: null, activeMoles: new Set(),
+                currentTargets: [], currentDistractors: [], streak: 0,
+                maxStreak: 0, powerUps: new Set(), comboMultiplier: 1,
+                experiencePoints: 0
+            };
+            
+            document.querySelectorAll('.mole').forEach(mole => mole.remove());
+            document.querySelectorAll('.powerup').forEach(powerup => powerup.remove());
+            elements.targetElements.innerHTML = '';
+            elements.distractorElements.innerHTML = '';
+            document.getElementById('activePowerups').innerHTML = '';
+            
+            elements.startBtn.disabled = false;
+            elements.pauseBtn.disabled = true;
+            elements.stopBtn.disabled = true;
+            elements.pauseBtn.textContent = '⏸️ PAUSA';
+            
+            syncMobileButtons();
+            updateDisplay();
+        }
+
+        function changeGameMode() {
+            // Sincronizar selector móvil
+            const mobileSelector = document.getElementById('gameMode-mobile');
+            if (mobileSelector) {
+                mobileSelector.value = elements.gameMode.value;
+            }
+            
+            if (gameState.isActive && !gameState.isPaused) {
+                setupTargetsAndDistractors();
+            }
+        }
+
+        function changeDifficulty() {
+            if (gameState.isActive && !gameState.isPaused) {
+                clearTimeout(gameState.spawnTimer);
+                spawnMoles();
+            }
+        }
+
+        // Configuraciones avanzadas
+        function updateSettings() {
+            gameSettings.volume = parseInt(elements.volumeSlider.value);
+            gameSettings.speed = parseInt(elements.speedSlider.value);
+            gameSettings.effects = elements.effectsToggle.checked;
+            
+            masterVolume = gameSettings.volume / 100;
+            
+            saveStats();
+        }
+
+        // Event listeners expandidos
+        function setupEventListeners() {
+            elements.startBtn.addEventListener('click', () => {
+                initAudio();
+                startGame();
+            });
+            elements.pauseBtn.addEventListener('click', togglePause);
+            elements.stopBtn.addEventListener('click', stopGame);
+            elements.resetBtn.addEventListener('click', resetGame);
+            elements.gameMode.addEventListener('change', changeGameMode);
+            elements.difficulty.addEventListener('change', changeDifficulty);
+            elements.achievementsBtn.addEventListener('click', showAchievementsModal);
+            
+            // Configuraciones
+            elements.volumeSlider.addEventListener('input', updateSettings);
+            elements.speedSlider.addEventListener('input', updateSettings);
+            elements.effectsToggle.addEventListener('change', updateSettings);
+            
+            document.getElementById('playAgainBtn').addEventListener('click', () => {
+                hideGameOverModal();
+                setTimeout(startGame, 300);
+            });
+            
+            elements.gameOverModal.addEventListener('click', (e) => {
+                if (e.target === elements.gameOverModal) {
+                    hideGameOverModal();
+                }
+            });
+            
+            // Logros
+            document.getElementById('closeAchievementsBtn').addEventListener('click', () => {
+                elements.achievementsModal.querySelector('.bg-gray-900').style.transform = 'scale(0)';
+                setTimeout(() => {
+                    elements.achievementsModal.classList.add('hidden');
+                }, 300);
+            });
+            
+            elements.achievementsModal.addEventListener('click', (e) => {
+                if (e.target === elements.achievementsModal) {
+                    elements.achievementsModal.querySelector('.bg-gray-900').style.transform = 'scale(0)';
+                    setTimeout(() => {
+                        elements.achievementsModal.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        }
+
+        // Funciones de estadísticas (resto del código de estadísticas permanece igual)
+        function showStatsModal() {
+            updateStatsDisplay();
+            createCharts();
+            document.getElementById('statsModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('statsModal').querySelector('.bg-gray-900').style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        function hideStatsModal() {
+            document.getElementById('statsModal').querySelector('.bg-gray-900').style.transform = 'scale(0)';
+            setTimeout(() => {
+                document.getElementById('statsModal').classList.add('hidden');
+            }, 300);
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalGames').textContent = gameStats.totalGames;
+            
+            const avgAcc = gameStats.accuracyHistory.length > 0 
+                ? Math.round(gameStats.accuracyHistory.reduce((a, b) => a + b, 0) / gameStats.accuracyHistory.length)
+                : 0;
+            document.getElementById('avgAccuracy').textContent = avgAcc + '%';
+            
+            const bestScore = gameStats.gamesHistory.length > 0 
+                ? Math.max(...gameStats.gamesHistory.map(g => g.score))
+                : 0;
+            document.getElementById('bestScore').textContent = bestScore.toLocaleString();
+            
+            document.getElementById('totalTime').textContent = gameStats.totalPlayTime + 'min';
+
+            updateTopScores();
+            updateCommonMistakes();
+            updateRecommendations();
+        }
+
+        function updateTopScores() {
+            const container = document.getElementById('topScores');
+            container.innerHTML = '';
+            
+            const topScores = gameStats.gamesHistory
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5);
+            
+            if (topScores.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">¡No hay puntuaciones registradas aún!</p>';
+                return;
+            }
+            
+            topScores.forEach((game, index) => {
+                const scoreRow = document.createElement('div');
+                scoreRow.className = 'flex justify-between items-center py-2 px-3 bg-gray-700 rounded-lg';
+                scoreRow.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl font-bold text-yellow-400">#${index + 1}</span>
+                        <span class="text-lg font-bold text-white">${game.score.toLocaleString()}</span>
+                    </div>
+                    <div class="text-right text-sm text-gray-300">
+                        <div>Nivel ${game.level} • ${game.accuracy}%</div>
+                        <div class="text-xs">${game.mode.toUpperCase()} • ${game.difficulty.toUpperCase()}</div>
+                    </div>
+                `;
+                container.appendChild(scoreRow);
+            });
+        }
+
+        function updateCommonMistakes() {
+            const container = document.getElementById('commonMistakes');
+            container.innerHTML = '';
+            
+            const sortedErrors = Object.entries(gameStats.errorsByElement)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            if (sortedErrors.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 col-span-full text-center">¡No hay errores registrados aún!</p>';
+                return;
+            }
+            
+            sortedErrors.forEach(([element, count]) => {
+                const errorCard = document.createElement('div');
+                errorCard.className = 'text-center p-3 bg-red-500/20 rounded-lg border border-red-500/30';
+                errorCard.innerHTML = `
+                    <div class="text-2xl font-bold mb-1">${element}</div>
+                    <div class="text-sm text-red-400">${count} errores</div>
+                `;
+                container.appendChild(errorCard);
+            });
+        }
+
+        function updateRecommendations() {
+            const container = document.getElementById('recommendations');
+            container.innerHTML = '';
+            
+            const recommendations = [];
+            
+            const avgAcc = gameStats.accuracyHistory.length > 0 
+                ? gameStats.accuracyHistory.reduce((a, b) => a + b, 0) / gameStats.accuracyHistory.length
+                : 100;
+            
+            if (avgAcc < 70) {
+                recommendations.push({
+                    icon: '⚡',
+                    title: 'Mejora la Velocidad',
+                    text: 'Reduce la dificultad o practica con menos objetivos para mejorar la precisión.',
+                    color: 'text-red-400'
+                });
+            } else if (avgAcc > 90) {
+                recommendations.push({
+                    icon: '🚀',
+                    title: '¡Sube la Dificultad!',
+                    text: 'Tu precisión es excelente. Prueba el modo cósmico para mayor desafío.',
+                    color: 'text-green-400'
+                });
+            }
+            
+            const modePerf = Object.entries(gameStats.modeStats).map(([mode, stats]) => ({
+                mode,
+                avgAcc: stats.games > 0 ? stats.totalAccuracy / stats.games : 0,
+                games: stats.games
+            })).filter(m => m.games > 0).sort((a, b) => a.avgAcc - b.avgAcc);
+            
+            if (modePerf.length > 1) {
+                const weakestMode = modePerf[0];
+                recommendations.push({
+                    icon: '📚',
+                    title: `Practica ${weakestMode.mode.toUpperCase()}`,
+                    text: `Este modo necesita más práctica. Precisión actual: ${Math.round(weakestMode.avgAcc)}%`,
+                    color: 'text-orange-400'
+                });
+            }
+            
+            const errorElements = Object.entries(gameStats.errorsByElement)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+            
+            if (errorElements.length > 0) {
+                recommendations.push({
+                    icon: '🎯',
+                    title: 'Elementos Confusos',
+                    text: `Practica identificar: ${errorElements.map(e => e[0]).join(', ')}`,
+                    color: 'text-purple-400'
+                });
+            }
+            
+            if (gameStats.maxStreak < 10) {
+                recommendations.push({
+                    icon: '🔥',
+                    title: 'Mejora tus Rachas',
+                    text: 'Concéntrate en mantener rachas largas para obtener más puntos.',
+                    color: 'text-yellow-400'
+                });
+            }
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400">¡Sigue jugando para recibir recomendaciones cósmicas!</p>';
+            } else {
+                recommendations.forEach(rec => {
+                    const recEl = document.createElement('div');
+                    recEl.className = 'flex items-start space-x-3 p-3 bg-white/5 rounded-lg';
+                    recEl.innerHTML = `
+                        <span class="text-2xl">${rec.icon}</span>
+                        <div>
+                            <h4 class="font-bold ${rec.color}">${rec.title}</h4>
+                            <p class="text-sm text-gray-300">${rec.text}</p>
+                        </div>
+                    `;
+                    container.appendChild(recEl);
+                });
+            }
+        }
+
+        // Detectar si es dispositivo móvil
+        function isMobile() {
+            return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Crear gráficas optimizadas
+        function createCharts() {
+            if (isMobile()) {
+                createSimpleCharts();
+            } else {
+                createFullCharts();
+            }
+        }
+
+        // Gráficas simplificadas para móviles
+        function createSimpleCharts() {
+            createSimpleAccuracyChart();
+            createSimpleErrorsChart();
+            createSimpleModeChart();
+            createSimpleDifficultyChart();
+        }
+
+        // Gráficas completas para escritorio
+        function createFullCharts() {
+            createAccuracyChart();
+            createErrorsChart();
+            createModeChart();
+            createDifficultyChart();
+        }
+
+        // Implementación de gráficas (código completo de las gráficas permanece igual que antes)
+        function createAccuracyChart() {
+            const ctx = document.getElementById('accuracyChart').getContext('2d');
+            
+            if (window.accuracyChartInstance) {
+                window.accuracyChartInstance.destroy();
+            }
+            
+            const labels = gameStats.accuracyHistory.map((_, i) => `Partida ${i + 1}`);
+            
+            window.accuracyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Precisión (%)',
+                        data: gameStats.accuracyHistory,
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            min: 0,
+                            max: 100,
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createErrorsChart() {
+            const ctx = document.getElementById('errorsChart').getContext('2d');
+            
+            if (window.errorsChartInstance) {
+                window.errorsChartInstance.destroy();
+            }
+            
+            const errorLabels = ['Objetivos Perdidos', 'Distractores Golpeados'];
+            const errorData = [
+                gameStats.errorsByType.missed_target || 0,
+                gameStats.errorsByType.hit_distractor || 0
+            ];
+            
+            window.errorsChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: errorLabels,
+                    datasets: [{
+                        data: errorData,
+                        backgroundColor: ['#ef4444', '#f97316'],
+                        borderColor: ['#dc2626', '#ea580c'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createModeChart() {
+            const ctx = document.getElementById('modeChart').getContext('2d');
+            
+            if (window.modeChartInstance) {
+                window.modeChartInstance.destroy();
+            }
+            
+            const modeLabels = Object.keys(gameStats.modeStats);
+            const modeAccuracy = modeLabels.map(mode => {
+                const stats = gameStats.modeStats[mode];
+                return stats.games > 0 ? Math.round(stats.totalAccuracy / stats.games) : 0;
+            });
+            
+            window.modeChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: modeLabels.map(m => m.toUpperCase()),
+                    datasets: [{
+                        label: 'Precisión Promedio (%)',
+                        data: modeAccuracy,
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1', '#84cc16'],
+                        borderColor: ['#2563eb', '#7c3aed', '#0891b2', '#059669', '#d97706', '#dc2626', '#db2777', '#4f46e5', '#65a30d'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            min: 0,
+                            max: 100,
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createDifficultyChart() {
+            const ctx = document.getElementById('difficultyChart').getContext('2d');
+            
+            if (window.difficultyChartInstance) {
+                window.difficultyChartInstance.destroy();
+            }
+            
+            const diffLabels = Object.keys(gameStats.difficultyStats);
+            const diffAccuracy = diffLabels.map(diff => {
+                const stats = gameStats.difficultyStats[diff];
+                return stats.games > 0 ? Math.round(stats.totalAccuracy / stats.games) : 0;
+            });
+            
+            window.difficultyChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: diffLabels.map(d => d.toUpperCase()),
+                    datasets: [{
+                        label: 'Precisión (%)',
+                        data: diffAccuracy,
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#f97316',
+                        pointBorderColor: '#ea580c',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: { 
+                                color: '#ffffff',
+                                stepSize: 20
+                            },
+                            grid: { color: 'rgba(255,255,255,0.2)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Versiones simplificadas para móviles
+        function createSimpleAccuracyChart() {
+            const ctx = document.getElementById('accuracyChart').getContext('2d');
+            if (window.accuracyChartInstance) {
+                window.accuracyChartInstance.destroy();
+            }
+            
+            const lastFew = gameStats.accuracyHistory.slice(-10);
+            const labels = lastFew.map((_, i) => `P${i + 1}`);
+            
+            window.accuracyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Precisión %',
+                        data: lastFew,
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74, 222, 128, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#ffffff', maxTicksLimit: 5 },
+                            grid: { display: false }
+                        },
+                        y: { 
+                            min: 0, max: 100,
+                            ticks: { color: '#ffffff', maxTicksLimit: 5 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSimpleErrorsChart() {
+            const ctx = document.getElementById('errorsChart').getContext('2d');
+            if (window.errorsChartInstance) {
+                window.errorsChartInstance.destroy();
+            }
+            
+            const errorData = [
+                gameStats.errorsByType.missed_target || 0,
+                gameStats.errorsByType.hit_distractor || 0
+            ];
+            
+            window.errorsChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Perdidos', 'Mal click'],
+                    datasets: [{
+                        data: errorData,
+                        backgroundColor: ['#ef4444', '#f97316'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { 
+                            labels: { color: '#ffffff', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSimpleModeChart() {
+            const ctx = document.getElementById('modeChart').getContext('2d');
+            if (window.modeChartInstance) {
+                window.modeChartInstance.destroy();
+            }
+            
+            const modeLabels = Object.keys(gameStats.modeStats).slice(0, 6);
+            const modeAccuracy = modeLabels.map(mode => {
+                const stats = gameStats.modeStats[mode];
+                return stats.games > 0 ? Math.round(stats.totalAccuracy / stats.games) : 0;
+            });
+            
+            window.modeChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: modeLabels,
+                    datasets: [{
+                        data: modeAccuracy,
+                        backgroundColor: '#3b82f6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#ffffff', font: { size: 8 } },
+                            grid: { display: false }
+                        },
+                        y: { 
+                            min: 0, max: 100,
+                            ticks: { color: '#ffffff', maxTicksLimit: 3 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSimpleDifficultyChart() {
+            const ctx = document.getElementById('difficultyChart').getContext('2d');
+            if (window.difficultyChartInstance) {
+                window.difficultyChartInstance.destroy();
+            }
+            
+            const diffLabels = Object.keys(gameStats.difficultyStats);
+            const diffAccuracy = diffLabels.map(diff => {
+                const stats = gameStats.difficultyStats[diff];
+                return stats.games > 0 ? Math.round(stats.totalAccuracy / stats.games) : 0;
+            });
+            
+            window.difficultyChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: diffLabels,
+                    datasets: [{
+                        data: diffAccuracy,
+                        backgroundColor: '#f97316',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#ffffff', font: { size: 8 } },
+                            grid: { display: false }
+                        },
+                        y: { 
+                            min: 0, max: 100,
+                            ticks: { color: '#ffffff', maxTicksLimit: 3 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Optimización para móviles
+        function optimizeForMobile() {
+            if (isMobile()) {
+                document.body.style.animation = 'none';
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media (max-width: 768px) {
+                        .mole { transition: all 0.2s ease !important; }
+                        .particle { animation-duration: 0.6s !important; }
+                        .stat-value { animation: none !important; }
+                        .star { animation-duration: 5s !important; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Detectar y cambiar entre layouts
+        function handleLayoutChange() {
+            const isMobileDevice = window.innerWidth <= 768;
+            const desktopLayout = document.querySelector('.integrated-layout');
+            const mobileLayout = document.querySelector('.mobile-layout');
+            
+            if (isMobileDevice) {
+                desktopLayout.classList.add('hidden');
+                mobileLayout.classList.remove('hidden');
+                syncMobileGrid();
+                syncMobileElements();
+            } else {
+                mobileLayout.classList.add('hidden');
+                desktopLayout.classList.remove('hidden');
+            }
+        }
+
+        // Crear grid específico para móvil
+        function syncMobileGrid() {
+            const mobileGrid = document.getElementById('gameGrid-mobile');
+            if (!mobileGrid) return;
+            
+            mobileGrid.innerHTML = '';
+            const numHoles = 9;
+            
+            for (let i = 0; i < numHoles; i++) {
+                const holeContainer = document.createElement('div');
+                holeContainer.className = 'hole';
+                holeContainer.dataset.holeId = i;
+                
+                const holeOpening = document.createElement('div');
+                holeOpening.className = 'hole-opening';
+                
+                holeContainer.appendChild(holeOpening);
+                mobileGrid.appendChild(holeContainer);
+            }
+            
+            if (window.innerWidth <= 768) {
+                elements.gameGrid = mobileGrid;
+            }
+        }
+
+        // Sincronizar elementos móviles con desktop
+        function syncMobileElements() {
+            document.getElementById('score-mobile').textContent = elements.score.textContent;
+            document.getElementById('timer-mobile').textContent = elements.timer.textContent;
+            document.getElementById('level-mobile').textContent = elements.level.textContent;
+            document.getElementById('hits-mobile').textContent = elements.hits.textContent;
+            document.getElementById('streak-mobile').textContent = elements.streak.textContent;
+            
+            const targetsMobile = document.getElementById('targetElements-mobile');
+            const distractorsMobile = document.getElementById('distractorElements-mobile');
+            
+            targetsMobile.innerHTML = '';
+            gameState.currentTargets.forEach(target => {
+                const element = document.createElement('span');
+                element.className = 'mobile-objective-item bg-green-500 text-white';
+                element.textContent = target;
+                targetsMobile.appendChild(element);
+            });
+            
+            distractorsMobile.innerHTML = '';
+            gameState.currentDistractors.forEach(distractor => {
+                const element = document.createElement('span');
+                element.className = 'mobile-objective-item bg-red-500 text-white';
+                element.textContent = distractor;
+                distractorsMobile.appendChild(element);
+            });
+        }
+
+        // Actualizar display móvil
+        function updateDisplayMobile() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('score-mobile').textContent = gameState.score.toLocaleString();
+                document.getElementById('timer-mobile').textContent = gameState.timeLeft;
+                document.getElementById('level-mobile').textContent = gameState.level;
+                document.getElementById('hits-mobile').textContent = gameState.hits;
+                document.getElementById('streak-mobile').textContent = gameState.streak;
+            }
+        }
+
+        // Configurar event listeners móviles
+        function setupMobileEventListeners() {
+            document.getElementById('startBtn-mobile').addEventListener('click', () => {
+                initAudio();
+                startGame();
+            });
+            document.getElementById('pauseBtn-mobile').addEventListener('click', togglePause);
+            document.getElementById('stopBtn-mobile').addEventListener('click', stopGame);
+            document.getElementById('resetBtn-mobile').addEventListener('click', resetGame);
+            
+            document.getElementById('gameMode-mobile').addEventListener('change', (e) => {
+                elements.gameMode.value = e.target.value;
+                changeGameMode();
+            });
+        }
+
+        // Sincronizar botones móviles con estado del juego
+        function syncMobileButtons() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('startBtn-mobile').disabled = elements.startBtn.disabled;
+                document.getElementById('pauseBtn-mobile').disabled = elements.pauseBtn.disabled;
+                document.getElementById('stopBtn-mobile').disabled = elements.stopBtn.disabled;
+                document.getElementById('pauseBtn-mobile').textContent = elements.pauseBtn.textContent;
+            }
+        }
+
+        // Modificar updateDisplay para incluir móvil
+        const originalUpdateDisplay = updateDisplay;
+        updateDisplay = function() {
+            originalUpdateDisplay();
+            updateDisplayMobile();
+        };
+
+        // Inicializar cuando la página carga
+        document.addEventListener('DOMContentLoaded', () => {
+            optimizeForMobile();
+            loadStats();
+            initGame();
+            
+            handleLayoutChange();
+            setupMobileEventListeners();
+            
+            const enableAudio = () => {
+                initAudio();
+                document.removeEventListener('click', enableAudio);
+                document.removeEventListener('touchstart', enableAudio);
+            };
+            
+            document.addEventListener('click', enableAudio, { once: true });
+            document.addEventListener('touchstart', enableAudio, { once: true });
+            
+            window.addEventListener('resize', () => {
+                handleLayoutChange();
+                setTimeout(() => {
+                    if (window.innerWidth <= 768) {
+                        syncMobileGrid();
+                        syncMobileElements();
+                    }
+                }, 100);
+            });
+            
+            document.getElementById('statsBtn').addEventListener('click', showStatsModal);
+            document.getElementById('closeStatsBtn').addEventListener('click', hideStatsModal);
+            
+            document.getElementById('statsModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('statsModal')) {
+                    hideStatsModal();
+                }
+            });
+        });
+    </script>
+
+
+</body></html>

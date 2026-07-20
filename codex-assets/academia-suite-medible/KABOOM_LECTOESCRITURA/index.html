@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KABOOM de Lectoescritura</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <h1>KABOOM de Lectoescritura</h1>
+        <p>Juego educativo por turnos: Inicial y Avanzado, individual y por equipos.</p>
+      </header>
+
+      <section class="panel" id="setup-panel">
+        <h2>Configuración de partida</h2>
+        <div class="form-grid">
+          <label>
+            Nivel
+            <select id="level-select">
+              <option value="Inicial">Inicial</option>
+              <option value="Avanzado">Avanzado</option>
+            </select>
+          </label>
+
+          <label>
+            Número de equipos
+            <input id="teams-count" type="number" min="1" max="8" value="2" />
+          </label>
+
+          <label>
+            Fin de partida
+            <select id="end-mode">
+              <option value="sticks">Por agotamiento de palitos numerados</option>
+              <option value="turns">Por duración (turnos)</option>
+            </select>
+          </label>
+
+          <label id="turns-limit-wrap" class="hidden">
+            Duración (turnos totales)
+            <input id="turns-limit" type="number" min="1" value="20" />
+          </label>
+        </div>
+
+        <div id="team-names" class="team-names"></div>
+
+        <button id="start-game" class="btn btn-primary">Iniciar partida</button>
+      </section>
+
+      <section class="panel hidden" id="game-panel">
+        <div class="status-row">
+          <div>
+            <h2 id="current-team">Turno de:</h2>
+            <p id="pool-status"></p>
+          </div>
+          <div class="actions-inline">
+            <button id="draw-stick" class="btn btn-primary">Sacar palito</button>
+            <button id="draw-lightning" class="btn hidden">Siguiente reto relámpago</button>
+            <button id="restart" class="btn">Reiniciar partida</button>
+            <button id="new-config" class="btn">Nueva configuración</button>
+          </div>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+
+        <div class="layout-grid">
+          <article class="card">
+            <h3>Reto actual</h3>
+            <div id="challenge" class="challenge-box">
+              Pulsa <strong>Sacar palito</strong> para empezar.
+            </div>
+            <div class="actions-inline" id="resolve-actions">
+              <button id="success" class="btn btn-success hidden">Éxito</button>
+              <button id="fail" class="btn btn-danger hidden">Fallo</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Marcador e inventario</h3>
+            <div id="scoreboard" class="scoreboard"></div>
+          </article>
+        </div>
+
+        <article class="card">
+          <h3>Tablero</h3>
+          <div id="board" class="board-grid"></div>
+        </article>
+
+        <article class="card hidden" id="finish-card">
+          <h3>Resultado final</h3>
+          <p id="winner-text"></p>
+          <div class="actions-inline" id="tie-actions">
+            <button id="keep-tie" class="btn hidden">Mantener empate</button>
+            <button id="lightning" class="btn btn-primary hidden">Activar ronda relámpago</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

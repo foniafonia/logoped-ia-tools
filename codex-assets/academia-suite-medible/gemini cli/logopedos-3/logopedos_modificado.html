@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logopedos - Respuesta y Apoyo para Padres Preocupados</title>
+    <meta name="description" content="¿Preocupado por el desarrollo de tu hijo? Soy José Aserraf, logopeda con 18 años de experiencia. Ofrezco una evaluación inicial gratuita y un plan de acción personalizado.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos adicionales para la nueva sección de contacto */
+        .empathy-form-section {
+            background-color: #f4f7f9;
+            padding: 80px 0;
+        }
+        .empathy-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .empathy-form-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 10px;
+        }
+        .empathy-form-header p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        .empathy-form .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .empathy-form .form-group {
+            text-align: left;
+        }
+        .empathy-form .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .empathy-form .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .empathy-form .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .empathy-form .form-textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .empathy-form .submit-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .empathy-form .submit-button:hover {
+            transform: translateY(-2px);
+        }
+        .empathy-form .form-note {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <nav class="container">
+            <a href="#inicio" class="logo">
+                <div class="logo-icon">🎮</div>
+                JuegosLogopedos
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio"><span>Inicio</span></a></li>
+                <li><a href="#proceso"><span>Cómo Funciona</span></a></li>
+                <li><a href="#sobre-mi"><span>Sobre Mí</span></a></li>
+                <li><a href="#evaluacion"><span>Evaluación Gratuita</span></a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <h1 class="heading-display" style="font-size: 3.5rem; color: #2d3748;">¿Te Preocupa el Desarrollo del Lenguaje de tu Hijo?</h1>
+                <p class="hero-subtitle" style="font-size: 1.8rem; color: #4a5568; margin-top: 10px;">No estás solo. Sé exactamente cómo te sientes.</p>
+                <div style="margin: 30px 0; display: flex; justify-content: center; align-items: center;">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/30100fe3c2894ecce628a1dfc5d101797fe77e4923af00d827f9daae9ae8bcad?w=150&h=150" alt="José Aserraf" style="border-radius: 50%; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <p style="margin-left: 20px; font-size: 1.2rem; text-align: left; max-width: 400px;">
+                        "Soy José Aserraf. Durante 18 años, he ayudado a cientos de padres como tú a encontrar respuestas y a ver a sus hijos florecer. Mi misión es darte tranquilidad y un plan de acción claro."
+                    </p>
+                </div>
+                <p class="hero-description" style="font-size: 1.1rem;">
+                    Entiendo tu preocupación y la necesidad de una respuesta rápida y profesional. Por eso, he creado un sistema para darte la orientación que necesitas sin esperas innecesarias.
+                </p>
+                <div class="cta-buttons" style="margin-top: 30px;">
+                    <a href="#evaluacion" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.2rem;">
+                        <span>⚡</span>
+                        Obtener Respuesta Rápida
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proceso" class="about" style="background-color: #f9fafb; padding: 60px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title heading-xl">Un Proceso Sencillo para tu Tranquilidad</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center;">
+                <div class="step-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; background-color: #e9d8fd; color: #7c3aed; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">1</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Completa el Formulario</h3>
+                    <p>Tómate 5 minutos para compartir información clave sobre tu hijo. Es 100% confidencial.</p>
+                </div>
+                <div class="step-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; background-color: #dbeafe; color: #2563eb; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">2</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Recibe un Informe Inicial</h3>
+                    <p>En 24-48 horas, te enviaré un informe GRATUITO con mis primeras impresiones y recomendaciones.</p>
+                </div>
+                <div class="step-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; background-color: #d1fae5; color: #059669; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">3</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Agenda una Videoconferencia</h3>
+                    <p>Si lo deseas, programaremos una sesión personalizada para discutir el plan de juegos y resolver tus dudas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-mi" class="about">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <span>👨‍⚕️</span>
+                    Credibilidad y Experiencia Única
+                </div>
+                <h2 class="section-title heading-xl">18 Años Combinando Ciencia y Diversión</h2>
+                <p class="section-description">
+                    "Los niños aprenden mejor cuando se divierten". Esa es mi filosofía. No se trata solo de terapia, sino de crear momentos de alegría que impulsen el aprendizaje.
+                </p>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="about-image-container">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/30100fe3c2894ecce628a1dfc5d101797fe77e4923af00d827f9daae9ae8bcad?w=337&h=337" alt="José Aserraf - Logopeda del Gabinete Fönia">
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>Mi Compromiso Contigo</h3>
+                    <p>
+                        Mi experiencia no solo se basa en los títulos, sino en 18 años en las trincheras, viendo de primera mano qué funciona y qué no. He volcado todo ese conocimiento en herramientas digitales que realmente motivan a los niños.
+                    </p>
+                    <p>
+                        He tenido el privilegio de desarrollar aplicaciones para plataformas líderes como <strong>Rimud Logopedia, Fonadis y Asterolexia</strong>, pero mi verdadera pasión es el contacto directo con familias como la tuya.
+                    </p>
+                    <h4>Beneficios de Trabajar Juntos:</h4>
+                    <ul style="list-style-type: '✅ '; padding-left: 20px;">
+                        <li><strong>Respuesta rápida:</strong> Orientación inicial en 24-48h para tu tranquilidad.</li>
+                        <li><strong>Atención 1:1:</strong> Una videoconferencia para conocernos y trazar un plan.</li>
+                        <li><strong>Plan de juegos personalizado:</strong> Te diré qué juegos son los más adecuados para tu hijo.</li>
+                        <li><strong>Seguimiento continuo:</strong> No estarás solo en este proceso. Te acompañaré.</li>
+                        <li><strong>Apoyo práctico para casa:</strong> Estrategias que puedes aplicar desde el primer día.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="evaluacion" class="empathy-form-section">
+        <div class="empathy-form-container">
+            <div class="empathy-form-header">
+                <h2>Da el Primer Paso Hacia la Tranquilidad</h2>
+                <p>Completa este formulario. Me ayudará a entender tu situación para darte la mejor orientación posible. Es gratis y sin compromiso.</p>
+            </div>
+            <form id="empathyForm" class="empathy-form" action="mailto:gestionafonia@gmail.com" method="post" enctype="text/plain">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="parentName" class="form-label">Tu Nombre</label>
+                        <input type="text" id="parentName" name="Nombre del Padre/Madre" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="childName" class="form-label">Nombre del Niño/a</label>
+                        <input type="text" id="childName" name="Nombre del Niño/a" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="childAge" class="form-label">Edad del Niño/a</label>
+                        <input type="number" id="childAge" name="Edad del Niño/a" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Tu Correo Electrónico</label>
+                        <input type="email" id="email" name="Email de Contacto" class="form-input" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="mainConcern" class="form-label">¿Cuál es tu principal preocupación?</label>
+                        <textarea id="mainConcern" name="Principal Preocupación" class="form-input form-textarea" required placeholder="Ej: 'Mi hijo tiene 4 años y apenas habla', 'Le cuesta pronunciar la R', 'No sigue instrucciones sencillas'..." ></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="childHistory" class="form-label">¿Hay algo más que deba saber?</label>
+                        <textarea id="childHistory" name="Información Adicional" class="form-input form-textarea" placeholder="Ej: ¿Ha recibido terapia antes? ¿Tiene algún diagnóstico? ¿Cómo se comunica habitualmente?"></textarea>
+                    </div>
+                </div>
+                <input type="hidden" id="subjectLine" name="subject" value="">
+                <button type="submit" class="submit-button">✅ Enviar Información GRATIS</button>
+                <p class="form-note">Garantía: 100% confidencial y sin compromiso. Al hacer clic, se abrirá tu programa de correo para enviar la información.</p>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024 JuegosLogopedos - José Aserraf, Gabinete Fönia. Todos los derechos reservados.</p>
+                <p>Uniendo 18 años de experiencia y tecnología para la tranquilidad de los padres.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Script para el menú móvil
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Script para el formulario de empatía
+        const empathyForm = document.getElementById('empathyForm');
+        const subjectLine = document.getElementById('subjectLine');
+        empathyForm.addEventListener('submit', function(event) {
+            const parentName = document.getElementById('parentName').value;
+            const childName = document.getElementById('childName').value;
+            const subject = `[EVALUACIÓN URGENTE] Solicitud de ${parentName} para ${childName}`;
+            subjectLine.value = subject;
+        });
+    </script>
+</body>
+</html>

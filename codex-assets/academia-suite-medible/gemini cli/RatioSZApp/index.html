@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ratio S/Z</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Ratio S/Z</h1>
+        <p class="description">Mide el tiempo máximo de fonación para los sonidos /s/ y /z/ para calcular el ratio e identificar posibles patologías vocales.</p>
+        
+        <div class="timers-wrapper">
+            <!-- Cronómetro para el sonido /s/ -->
+            <div class="timer-box" id="s-box">
+                <h2>Sonido /s/</h2>
+                <div class="timer-display" id="s-timer-display">0.00s</div>
+                <div class="buttons">
+                    <button id="start-s">Iniciar</button>
+                    <button id="stop-s" disabled>Detener</button>
+                </div>
+                <div class="result-time">Tiempo máximo: <span id="s-time">0.00</span>s</div>
+            </div>
+
+            <!-- Cronómetro para el sonido /z/ -->
+            <div class="timer-box" id="z-box">
+                <h2>Sonido /z/</h2>
+                <div class="timer-display" id="z-timer-display">0.00s</div>
+                <div class="buttons">
+                    <button id="start-z">Iniciar</button>
+                    <button id="stop-z" disabled>Detener</button>
+                </div>
+                <div class="result-time">Tiempo máximo: <span id="z-time">0.00</span>s</div>
+            </div>
+        </div>
+
+        <div class="main-controls">
+            <button id="calculate">Calcular Ratio</button>
+            <button id="export-pdf" disabled>Exportar a PDF</button>
+        </div>
+
+        <div id="result-section" class="result-section hidden">
+            <h2>Resultado</h2>
+            <div id="ratio-value"></div>
+            <div id="ratio-interpretation"></div>
+        </div>
+    </div>
+
+    <!-- Librería para generar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Nuestro script -->
+    <script src="script.js"></script>
+</body>
+</html>

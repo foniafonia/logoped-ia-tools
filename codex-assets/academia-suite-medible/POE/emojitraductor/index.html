@@ -1,0 +1,1146 @@
+<!DOCTYPE html><html lang="es"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emojitraductor :: Comunicación sencilla con emojis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6',
+                        secondary: '#06B6D4',
+                        purple: {
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                            700: '#6D28D9'
+                        }
+                    },
+                    backgroundImage: {
+                        'emoji-gradient': 'linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%)',
+                        'intro-gradient': 'linear-gradient(135deg, #8B5CF6 0%, #A855F7 25%, #06B6D4 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .emoji-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .emoji-float:nth-child(2) { animation-delay: -1s; }
+        .emoji-float:nth-child(3) { animation-delay: -2s; }
+        .emoji-float:nth-child(4) { animation-delay: -3s; }
+        .emoji-float:nth-child(5) { animation-delay: -4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-20px) rotate(0deg); }
+            75% { transform: translateY(-10px) rotate(-2deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-gentle {
+            animation: pulseGentle 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .copy-success {
+            animation: fadeInOut 2s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .intro-hidden {
+            display: none;
+        }
+        
+        .app-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-intro-gradient text-white min-h-screen overflow-x-hidden">
+    
+    <!-- INTRO PAGE -->
+    <div id="introPage" class="min-h-screen flex flex-col">
+        <!-- Floating Emojis Background -->
+        <div class="fixed inset-0 pointer-events-none overflow-hidden">
+            <div class="emoji-float absolute top-20 left-10 text-4xl">🚀</div>
+            <div class="emoji-float absolute top-32 right-16 text-3xl">😊</div>
+            <div class="emoji-float absolute top-60 left-1/4 text-5xl">⭐</div>
+            <div class="emoji-float absolute bottom-40 right-20 text-4xl">💬</div>
+            <div class="emoji-float absolute bottom-60 left-12 text-3xl">🎉</div>
+            <div class="emoji-float absolute top-1/2 right-1/3 text-2xl">❤️</div>
+            <div class="emoji-float absolute bottom-1/3 left-1/3 text-4xl">🌟</div>
+            <div class="emoji-float absolute top-1/4 right-1/4 text-3xl">🏠</div>
+        </div>
+        
+        <!-- Main Intro Content -->
+        <div class="flex-1 flex items-center justify-center px-4 py-12 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <!-- Logo -->
+                <div class="fade-in mb-8">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/6cda30e9ea2def4273e88ba254bbaadda04340670c992cee957323ada8e4e878?w=1024&amp;h=1024" alt="Emojitraductor Logo" class="w-32 h-32 mx-auto mb-6 drop-shadow-2xl">
+                </div>
+                
+                <!-- Hero Image -->
+                <div class="fade-in mb-8">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/a03b6d3bd119ac067f785b8189741d193f7ab4e3cedb52ca3591ec4f8d406db9?w=1536&amp;h=1024" alt="Emojitraductor - Comunicación sencilla con emojis" class="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl">
+                </div>
+                
+                <!-- Title and Description -->
+                <div class="slide-up mb-12">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+                        Emojitraductor
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 text-purple-100 max-w-2xl mx-auto">
+                        Transforma cualquier texto en español a emojis de manera instantánea y divertida
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-6 text-lg text-purple-200 mb-12">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🧠</span>
+                            <span>Sistema Inteligente</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">⚡</span>
+                            <span>Traducción Instantánea</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🎨</span>
+                            <span>Interfaz Moderna</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA Button -->
+                <div class="slide-up">
+                    <button id="startBtn" class="pulse-gentle bg-white text-purple-600 px-12 py-4 rounded-full text-xl font-bold shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all duration-300">
+                        🚀 ¡Empezar a Traducir!
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Wave -->
+        <div class="relative">
+            <svg class="w-full h-24 text-white" fill="currentColor" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,50 C300,100 900,0 1200,50 L1200,120 L0,120 Z"></path>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- MAIN APP -->
+    <div id="mainApp" class="app-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+        <!-- Header -->
+        <header class="bg-emoji-gradient text-white shadow-2xl relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="emoji-float absolute top-4 left-10 text-3xl">😊</div>
+                <div class="emoji-float absolute top-8 right-20 text-2xl">🚀</div>
+                <div class="emoji-float absolute bottom-4 left-1/4 text-4xl">⭐</div>
+                <div class="emoji-float absolute bottom-6 right-1/3 text-3xl">💬</div>
+            </div>
+            
+            <div class="container mx-auto px-4 py-8 relative z-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h1 class="text-3xl md:text-4xl font-bold">🌟 Emojitraductor</h1>
+                    <button id="backToIntro" class="glass-effect px-4 py-2 rounded-lg hover:bg-white/20 transition-all duration-300">
+                        ← Intro
+                    </button>
+                </div>
+                <p class="text-center text-lg text-purple-100">Comunicación sencilla con emojis</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8 max-w-4xl">
+            <!-- Input Section -->
+            <div class="glass-effect bg-gradient-to-br from-purple-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 shadow-2xl mb-8 border border-purple-200 dark:border-gray-600">
+                <label for="textInput" class="block text-xl font-bold mb-4 text-purple-700 dark:text-purple-300">
+                    ✍️ Escribe tu texto:
+                </label>
+                <textarea id="textInput" placeholder="Ejemplo: Hola, ¿cómo estás? Me gusta tu casa nueva..." class="w-full h-32 p-4 text-base border-2 border-purple-300 dark:border-gray-600 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none resize-none bg-white dark:bg-gray-700 dark:text-white transition-all duration-300"></textarea>
+                
+                <!-- Panel de Control -->
+                <div class="mt-6 space-y-4">
+                    <!-- Modo de Visualización -->
+                    <div class="bg-white/20 dark:bg-gray-800/20 rounded-xl p-4 border border-purple-300/30">
+                        <h4 class="text-lg font-bold text-purple-700 dark:text-purple-300 mb-3 flex items-center gap-2">
+                            🎨 Modo de Visualización
+                        </h4>
+                        <div class="flex flex-wrap gap-3">
+                            <button id="modeTextEmoji" onclick="cambiarModo('text-emoji')" class="mode-btn active bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-all duration-300 flex items-center gap-2 font-medium">
+                                📝😊 Texto + Emoji
+                            </button>
+                            <button id="modeEmojiOnly" onclick="cambiarModo('emoji-only')" class="mode-btn bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300 flex items-center gap-2 font-medium">
+                                😊 Solo Emojis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Densidad por Fila -->
+                    <div class="bg-white/20 dark:bg-gray-800/20 rounded-xl p-4 border border-purple-300/30">
+                        <h4 class="text-lg font-bold text-purple-700 dark:text-purple-300 mb-3 flex items-center gap-2">
+                            📏 Palabras por Fila
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button data-density="3" onclick="cambiarDensidad(3)" class="density-btn bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300 font-medium text-sm">
+                                🔍 3 (Grande)
+                            </button>
+                            <button data-density="5" onclick="cambiarDensidad(5)" class="density-btn bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300 font-medium text-sm">
+                                📖 5 (Mediano)
+                            </button>
+                            <button data-density="8" onclick="cambiarDensidad(8)" class="density-btn active bg-purple-500 text-white px-3 py-2 rounded-lg hover:bg-purple-600 transition-all duration-300 font-medium text-sm">
+                                📄 8 (Normal)
+                            </button>
+                            <button data-density="12" onclick="cambiarDensidad(12)" class="density-btn bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300 font-medium text-sm">
+                                📋 12 (Compacto)
+                            </button>
+                            <button data-density="20" onclick="cambiarDensidad(20)" class="density-btn bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300 font-medium text-sm">
+                                🗂️ 20 (Denso)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button id="translateBtn" class="bg-emoji-gradient text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-bold text-lg shadow-md hover:scale-105 flex items-center gap-2">
+                            🔄 Traducir
+                        </button>
+                        <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition-all duration-300 font-bold text-lg shadow-md flex items-center gap-2">
+                            🗑️ Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="glass-effect bg-gradient-to-br from-cyan-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 shadow-2xl border border-cyan-200 dark:border-gray-600">
+                <div class="flex justify-between items-center mb-6">
+                    <label class="text-xl font-bold text-cyan-700 dark:text-cyan-300">
+                        ✨ Resultado:
+                    </label>
+                    <div class="flex gap-3 items-center">
+                        <button id="copyBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 font-bold flex items-center gap-2 shadow-md hover:scale-105">
+                            📋 Copiar
+                        </button>
+                        <span id="copySuccess" class="text-green-600 font-bold opacity-0 copy-success">¡Copiado! ✅</span>
+                    </div>
+                </div>
+                
+                <div id="output" class="min-h-32 p-6 border-2 border-cyan-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-2xl overflow-wrap-anywhere shadow-inner">
+                    <span class="text-gray-500 dark:text-gray-400 text-lg">Tu traducción aparecerá aquí... 🎯</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Instructions -->
+        <div class="container mx-auto px-4 pb-8 max-w-4xl">
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                    📚 Cómo usar Emojitraductor:
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <ul class="space-y-3 text-blue-700 dark:text-blue-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">📝</span>
+                            <span>Escribe tu mensaje en el área de texto</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">🔄</span>
+                            <span>Haz clic en "Traducir" para convertir palabras a emojis</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">⚙️</span>
+                            <span>Activa/desactiva "Mostrar texto + emoji" para cambiar el formato</span>
+                        </li>
+                    </ul>
+                    <ul class="space-y-3 text-blue-700 dark:text-blue-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">📋</span>
+                            <span>Usa "Copiar" para llevar el resultado al portapapeles</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">🧠</span>
+                            <span>El sistema detecta automáticamente diminutivos, plurales y conjugaciones</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-xl">🎯</span>
+                            <span>Las palabras sin emoji se representan con símbolos alternativos</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-emoji-gradient mt-12 py-8 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-lg">© 2024 Emojitraductor - Comunicación sencilla con emojis 😊✨</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Emoji dictionary - mapeo extenso de palabras a emojis
+        const emojiDict = {
+            // Saludos y expresiones básicas
+            'hola': '👋', 'hello': '👋', 'hi': '👋', 'adiós': '👋', 'bye': '👋', 'chao': '👋',
+            'gracias': '🙏', 'please': '🙏', 'por favor': '🙏', 'perdón': '🙏', 'disculpa': '🙏',
+            
+            // Palabras de lugar y posición
+            'aquí': '📍', 'acá': '📍', 'allí': '📍', 'allá': '📍', 'donde': '📍', 'lugar': '📍',
+            'cerca': '📍', 'lejos': '📍', 'dentro': '📍', 'fuera': '📍', 'encima': '⬆️', 'debajo': '⬇️',
+            'entre': '↔️', 'alrededor': '🔄', 'junto': '🤝', 'separado': '↔️',
+            
+            // Palabras temporales
+            'ahora': '⏰', 'hoy': '📅', 'ayer': '📅', 'mañana': '📅', 'siempre': '♾️', 'nunca': '🚫',
+            'antes': '⏪', 'después': '⏩', 'temprano': '🌅', 'tarde': '🌆', 'pronto': '⚡',
+            'luego': '⏩', 'ya': '✅', 'todavía': '⏳', 'mientras': '⏳', 'cuando': '⏰',
+            
+            // Personas y relaciones (MÁS RIGUROSO)
+            'yo': '👤', 'tú': '👤', 'él': '👨', 'ella': '👩', 'nosotros': '👥', 'ustedes': '👥', 'ellos': '👥',
+            'niño': '👦', 'niña': '👧', 'niños': '👶', 'niñas': '👧', 'bebé': '👶', 'bebés': '👶',
+            'hombre': '👨', 'mujer': '👩', 'persona': '👤', 'gente': '👥', 'personas': '👥',
+            'amigo': '👫', 'amiga': '👫', 'novio': '💑', 'novia': '💑', 'esposo': '👨', 'esposa': '👩',
+            'hermano': '👨‍👦', 'hermana': '👩‍👧', 'primo': '👨‍👦', 'prima': '👩‍👧', 'tío': '👨', 'tía': '👩',
+            'mamá': '👩', 'papá': '👨', 'madre': '👩', 'padre': '👨', 'padres': '👨‍👩‍👧‍👦', 'familia': '👨‍👩‍👧‍👦',
+            'abuela': '👵', 'abuelo': '👴', 'abuelos': '👴👵', 'hijo': '👦', 'hija': '👧', 'hijos': '👶',
+            'vecino': '🏘️', 'jefe': '👔', 'profesor': '👨‍🏫', 'estudiante': '👨‍🎓', 'doctor': '👨‍⚕️',
+            
+            // Estados y emociones expandidas (MÁS EMOJIS REALES)
+            'bien': '👍', 'mal': '👎', 'regular': '😐', 'perfecto': '💯', 'horrible': '😱',
+            'cansado': '😴', 'despierto': '😃', 'aburrido': '😑', 'emocionado': '🤩', 'nervioso': '😰',
+            'tranquilo': '😌', 'preocupado': '😟', 'sorprendido': '😲', 'confundido': '😕',
+            'seguro': '😎', 'inseguro': '😰', 'libre': '🕊️', 'ocupado': '💼', 'disponible': '✅',
+            
+            // EMOCIONES REALES CON CARAS
+            'feliz': '😊', 'alegre': '😄', 'contento': '😊', 'triste': '😢', 'infeliz': '😢', 'deprimido': '😞',
+            'enojado': '😠', 'molesto': '😤', 'furioso': '😡', 'riendo': '😂', 'sonriendo': '😊',
+            'llorando': '😭', 'asustado': '😨', 'tímido': '😳', 'enamorado': '😍', 'celoso': '😒',
+            'aburrido': '😴', 'chistoso': '😂', 'divertido': '😄', 'gracioso': '😂', 'serio': '😐',
+            'pensativo': '🤔', 'dudoso': '🤨', 'sospechoso': '🤨', 'inocente': '😇', 'travieso': '😏',
+            'coqueto': '😉', 'guiñando': '😉', 'besando': '😘', 'abrazo': '🤗', 'saludando': '👋',
+            
+            // Acciones y verbos comunes
+            'ser': '✨', 'estar': '📍', 'tener': '🤲', 'hacer': '🔨', 'decir': '💬', 'ir': '🚶',
+            'venir': '🔄', 'dar': '🤲', 'recibir': '📥', 'ver': '👀', 'mirar': '👀', 'escuchar': '👂',
+            'hablar': '💬', 'caminar': '🚶', 'correr': '🏃', 'saltar': '🦘', 'volar': '✈️',
+            'nadar': '🏊', 'escribir': '✍️', 'leer': '📖', 'pensar': '🤔', 'saber': '🧠',
+            'aprender': '📚', 'enseñar': '👨‍🏫', 'comprar': '🛒', 'vender': '💰', 'pagar': '💳',
+            'ganar': '🏆', 'perder': '😔', 'encontrar': '🔍', 'buscar': '🔍', 'guardar': '💾',
+            'abrir': '🔓', 'cerrar': '🔒', 'empezar': '▶️', 'terminar': '⏹️', 'continuar': '▶️',
+            'parar': '⏸️', 'ayudar': '🤝', 'trabajar': '💼', 'descansar': '😴', 'jugar': '🎮',
+            
+            // Lugares expandidos
+            'mundo': '🌍', 'país': '🏳️', 'ciudad': '🏙️', 'pueblo': '🏘️', 'barrio': '🏘️',
+            'calle': '🛣️', 'camino': '🛣️', 'puente': '🌉', 'edificio': '🏢', 'piso': '🏢',
+            'habitación': '🚪', 'cocina': '🍳', 'baño': '🚿', 'jardín': '🌻', 'patio': '🏡',
+            'oficina': '🏢', 'fábrica': '🏭', 'restaurante': '🍽️', 'café': '☕', 'bar': '🍺',
+            'museo': '🏛️', 'teatro': '🎭', 'cine': '🎬', 'biblioteca': '📚', 'banco': '🏦',
+            'correo': '📮', 'policía': '👮', 'bomberos': '🚒', 'aeropuerto': '✈️', 'estación': '🚉',
+            'mercado': '🛒', 'centro': '🏬', 'plaza': '🏛️', 'iglesia': '⛪', 'bosque': '🌲',
+            'río': '🌊', 'lago': '🏞️', 'mar': '🌊', 'océano': '🌊', 'desierto': '🏜️',
+            
+            // Objetos y cosas
+            'cosa': '📦', 'objeto': '📦', 'mesa': '🪑', 'silla': '🪑', 'cama': '🛏️', 'sofá': '🛋️',
+            'ventana': '🪟', 'puerta': '🚪', 'pared': '🧱', 'techo': '🏠', 'suelo': '🏠',
+            'luz': '💡', 'lámpara': '💡', 'fuego': '🔥', 'agua': '💧', 'aire': '💨',
+            'tierra': '🌍', 'piedra': '🪨', 'metal': '⚙️', 'madera': '🪵', 'papel': '📄',
+            'vidrio': '🪟', 'plástico': '🥤', 'tela': '🧵', 'ropa': '👕', 'zapatos': '👟',
+            'sombrero': '👒', 'gafas': '👓', 'reloj': '⌚', 'anillo': '💍', 'collar': '📿',
+            'bolsa': '👜', 'mochila': '🎒', 'caja': '📦', 'botella': '🍼', 'vaso': '🥛',
+            'plato': '🍽️', 'cuchara': '🥄', 'tenedor': '🍴', 'cuchillo': '🔪', 'servilleta': '🧻',
+            
+            // Tecnología y comunicación
+            'internet': '🌐', 'email': '📧', 'mensaje': '💬', 'carta': '💌', 'foto': '📷',
+            'video': '📹', 'televisión': '📺', 'radio': '📻', 'juego': '🎮', 'aplicación': '📱',
+            'programa': '💻', 'sitio': '🌐', 'página': '📄', 'archivo': '📁', 'documento': '📄',
+            
+            // Naturaleza y clima
+            'naturaleza': '🌿', 'planta': '🌱', 'árbol': '🌳', 'flor': '🌸', 'hierba': '🌱',
+            'hoja': '🍃', 'rama': '🌿', 'fruto': '🍎', 'semilla': '🌰', 'raíz': '🌱',
+            'clima': '🌤️', 'temperatura': '🌡️', 'calor': '🔥', 'frío': '❄️', 'caliente': '🔥',
+            'helado': '🧊', 'húmedo': '💧', 'seco': '🏜️', 'tormenta': '⛈️', 'trueno': '⚡',
+            
+            // COMIDA MEGA EXPANDIDA CON EMOJIS REALES
+            'comida': '🍽️', 'comer': '🍽️', 'comiendo': '🍽️', 'come': '🍽️', 'comes': '🍽️', 'comérselo': '🍽️',
+            'desayuno': '🥞', 'desayunar': '🥞', 'almuerzo': '🥙', 'almorzar': '🥙', 'cena': '🍽️', 'cenar': '🍽️',
+            'merienda': '🍪', 'merendar': '🍪', 'colación': '🍪', 'bocadillo': '🥪', 'snack': '🍪',
+            
+            // CARNES Y PROTEÍNAS
+            'carne': '🥩', 'pollo': '🍗', 'res': '🥩', 'cerdo': '🥓', 'jamón': '🥓', 'tocino': '🥓',
+            'pescado': '🐟', 'salmón': '🐟', 'atún': '🐟', 'camarón': '🦐', 'langosta': '🦞',
+            'huevo': '🥚', 'huevos': '🥚', 'tortilla': '🍳', 'revueltos': '🍳',
+            
+            // LÁCTEOS
+            'queso': '🧀', 'leche': '🥛', 'yogurt': '🥛', 'mantequilla': '🧈', 'crema': '🥛',
+            
+            // CARBOHIDRATOS
+            'arroz': '🍚', 'pasta': '🍝', 'espagueti': '🍝', 'fideos': '🍝', 'tallarines': '🍝',
+            'pan': '🍞', 'tostada': '🍞', 'tortilla': '🌮', 'arepa': '🫓', 'empanada': '🥟',
+            'pizza': '🍕', 'hamburguesa': '🍔', 'hot dog': '🌭', 'sándwich': '🥪', 'torta': '🥪',
+            
+            // SOPAS Y CALDOS
+            'sopa': '🍲', 'caldo': '🍲', 'consomé': '🍲', 'crema': '🍲', 'sancocho': '🍲',
+            
+            // VERDURAS Y VEGETALES
+            'ensalada': '🥗', 'verdura': '🥬', 'vegetal': '🥬', 'lechuga': '🥬', 'espinaca': '🥬',
+            'papa': '🥔', 'papas': '🥔', 'tomate': '🍅', 'tomates': '🍅', 'cebolla': '🧅', 'cebollas': '🧅',
+            'ajo': '🧄', 'ajos': '🧄', 'zanahoria': '🥕', 'zanahorias': '🥕', 'brócoli': '🥦',
+            'coliflor': '🥦', 'apio': '🥬', 'pepino': '🥒', 'pepinos': '🥒', 'pimiento': '🫑',
+            'chile': '🌶️', 'chiles': '🌶️', 'jalapeño': '🌶️', 'aguacate': '🥑', 'palta': '🥑',
+            
+            // FRUTAS
+            'fruta': '🍎', 'frutas': '🍎', 'manzana': '🍎', 'manzanas': '🍎', 'pera': '🍐', 'peras': '🍐',
+            'naranja': '🍊', 'naranjas': '🍊', 'limón': '🍋', 'limones': '🍋', 'lima': '🍋',
+            'plátano': '🍌', 'plátanos': '🍌', 'banana': '🍌', 'bananas': '🍌', 'uva': '🍇', 'uvas': '🍇',
+            'fresa': '🍓', 'fresas': '🍓', 'cereza': '🍒', 'cerezas': '🍒', 'durazno': '🍑', 'duraznos': '🍑',
+            'sandía': '🍉', 'melón': '🍈', 'piña': '🍍', 'mango': '🥭', 'mangos': '🥭',
+            'kiwi': '🥝', 'coco': '🥥', 'cocos': '🥥',
+            
+            // POSTRES Y DULCES
+            'dulce': '🍭', 'dulces': '🍭', 'chocolate': '🍫', 'galleta': '🍪', 'galletas': '🍪',
+            'torta': '🎂', 'pastel': '🎂', 'cake': '🎂', 'helado': '🍦', 'paleta': '🍭',
+            'caramelo': '🍬', 'caramelos': '🍬', 'chicle': '🍬', 'goma': '🍬', 'bombón': '🍫',
+            'flan': '🍮', 'pudín': '🍮', 'gelatina': '🍮', 'mousse': '🍮', 'mermelada': '🍯',
+            'miel': '🍯', 'azúcar': '🍯', 'jarabe': '🍯',
+            
+            // BEBIDAS
+            'bebida': '🥤', 'bebidas': '🥤', 'agua': '💧', 'jugo': '🧃', 'jugos': '🧃',
+            'refresco': '🥤', 'soda': '🥤', 'gaseosa': '🥤', 'coca': '🥤', 'pepsi': '🥤',
+            'café': '☕', 'té': '🍵', 'mate': '🧉', 'chocolate caliente': '☕',
+            'cerveza': '🍺', 'vino': '🍷', 'licor': '🍾', 'ron': '🍾', 'whisky': '🥃',
+            
+            // CONDIMENTOS Y ESPECIAS
+            'sal': '🧂', 'pimienta': '🧂', 'aceite': '🫒', 'vinagre': '🍶', 'especias': '🌶️',
+            'orégano': '🌿', 'albahaca': '🌿', 'perejil': '🌿', 'cilantro': '🌿', 'comino': '🌿',
+            'canela': '🌿', 'vainilla': '🌿', 'jengibre': '🫚',
+            
+            // ACCIONES DE COMER
+            'masticar': '😋', 'masticando': '😋', 'mordida': '😋', 'morder': '😋', 'mordiendo': '😋',
+            'tragar': '😋', 'tragando': '😋', 'saborear': '😋', 'saboreando': '😋', 'degustar': '😋',
+            'probar': '😋', 'probando': '😋', 'disfrutar': '😋', 'disfrutando': '😋',
+            'hambre': '🤤', 'hambriento': '🤤', 'apetito': '🤤', 'antojo': '🤤', 'ganas': '🤤',
+            'sed': '🥤', 'sediento': '🥤', 'saciar': '😋', 'satisfacer': '😋', 'llenar': '🤰',
+            'lleno': '🤰', 'satisfecho': '😋', 'harto': '🤢', 'empachado': '🤢',
+            
+            // Transporte expandido
+            'transporte': '🚌', 'viaje': '🧳', 'taxi': '🚕', 'uber': '🚗', 'metro': '🚇',
+            'camión': '🚛', 'moto': '🏍️', 'patineta': '🛹', 'scooter': '🛴', 'caminar': '🚶',
+            
+            // Salud y cuerpo
+            'salud': '🏥', 'enfermo': '🤒', 'sano': '💪', 'medicina': '💊', 'doctor': '👨‍⚕️',
+            'cabeza': '🗣️', 'cara': '😊', 'ojo': '👁️', 'nariz': '👃', 'boca': '👄',
+            'oreja': '👂', 'cuello': '🦒', 'brazo': '💪', 'mano': '✋', 'dedo': '👉',
+            'pierna': '🦵', 'pie': '🦶', 'espalda': '🫤', 'estómago': '🤰', 'corazón': '❤️',
+            'dolor': '😣', 'herida': '🩹', 'sangre': '🩸', 'hospital': '🏥', 'ambulancia': '🚑',
+            
+            // Dinero y trabajo
+            'dinero': '💰', 'moneda': '🪙', 'billete': '💵', 'precio': '💲', 'caro': '💸',
+            'barato': '💰', 'gratis': '🆓', 'cuenta': '🧾', 'factura': '🧾', 'descuento': '🏷️',
+            'trabajo': '💼', 'empleo': '💼', 'empresa': '🏢', 'negocio': '💼', 'cliente': '👤',
+            'jefe': '👔', 'empleado': '👷', 'sueldo': '💰', 'reunión': '👥', 'proyecto': '📋',
+            
+            // Educación
+            'escuela': '🏫', 'universidad': '🎓', 'colegio': '🏫', 'clase': '👨‍🏫', 'estudiante': '👨‍🎓',
+            'profesor': '👨‍🏫', 'maestro': '👨‍🏫', 'examen': '📝', 'tarea': '📝', 'nota': '📊',
+            'lápiz': '✏️', 'pluma': '🖊️', 'cuaderno': '📓', 'pizarra': '📋', 'borrador': '🗑️',
+            
+            // Adjetivos comunes
+            'grande': '📏', 'pequeño': '🤏', 'alto': '📏', 'bajo': '📏', 'largo': '📏', 'corto': '📏',
+            'ancho': '📏', 'delgado': '📏', 'gordo': '📏', 'flaco': '📏', 'fuerte': '💪', 'débil': '🤏',
+            'rápido': '⚡', 'lento': '🐌', 'fácil': '👍', 'difícil': '😤', 'simple': '✅', 'complicado': '🤯',
+            'limpio': '🧼', 'sucio': '🫤', 'nuevo': '🆕', 'viejo': '👴', 'joven': '👶', 'fresco': '🌿',
+            'caliente': '🔥', 'frío': '❄️', 'dulce': '🍭', 'salado': '🧂', 'amargo': '😖', 'picante': '🌶️',
+            'bonito': '😍', 'feo': '😖', 'rico': '😋', 'delicioso': '😋', 'horrible': '🤮',
+            
+            // PALABRAS ESPECÍFICAS DEL EJEMPLO (PRIORIDAD ALTA)
+            'vez': '⏰', 'veces': '⏰', 'cielo': '☁️', 'estrella': '⭐', 'estrellas': '⭐',
+            'lila': '💜', 'noche': '🌙', 'noches': '🌙', 'brillar': '✨', 'brillaban': '✨', 'brillo': '✨',
+            'luz': '💡', 'lucecita': '💡', 'búho': '🦉', 'bosque': '🌲', 'sombras': '🌑',
+            'día': '☀️', 'días': '☀️', 'camino': '🛤️', 'perdió': '😕', 'perdido': '😕',
+            'llamada': '📞', 'llamado': '📞', 'ver': '👀', 'miró': '👀', 'mirar': '👀',
+            'mostrado': '👆', 'mostrar': '👆', 'entendió': '💡', 'entender': '💡',
+            'pequeña': '🤏', 'pequeño': '🤏', 'pequeñita': '🤏', 'fuerte': '💪',
+            'especial': '⭐', 'feliz': '😊', 'ayudar': '🤝', 'sabiendo': '🧠',
+            
+            // ANIMALES EXPANDIDOS
+            'búho': '🦉', 'búhos': '🦉', 'pájaro': '🐦', 'pájaros': '🐦', 'ave': '🐦', 'aves': '🐦',
+            'gato': '🐱', 'gatos': '🐱', 'perro': '🐶', 'perros': '🐶',
+            'león': '🦁', 'tigre': '🐅', 'oso': '🐻', 'lobo': '🐺', 'zorro': '🦊',
+            'caballo': '🐴', 'vaca': '🐄', 'cerdo': '🐷', 'oveja': '🐑', 'pollo': '🐔',
+            'pez': '🐟', 'peces': '🐟', 'tiburón': '🦈', 'delfín': '🐬', 'ballena': '🐳',
+            'mariposa': '🦋', 'abeja': '🐝', 'araña': '🕷️', 'serpiente': '🐍',
+            
+            // TIEMPO Y NATURALEZA
+            'sol': '☀️', 'luna': '🌙', 'nube': '☁️', 'nubes': '☁️', 'lluvia': '🌧️',
+            'viento': '💨', 'tormenta': '⛈️', 'arcoíris': '🌈', 'rayo': '⚡',
+            'montaña': '⛰️', 'montañas': '⛰️', 'valle': '🏞️', 'río': '🌊', 'mar': '🌊',
+            'playa': '🏖️', 'isla': '🏝️', 'volcán': '🌋', 'desierto': '🏜️',
+            
+            // SOLO PALABRAS FUNCIONALES MUY BÁSICAS (REDUCIDAS)
+            'el': '🔹', 'la': '🔹', 'los': '🔹', 'las': '🔹',
+            'un': '🔸', 'una': '🔸', 'unos': '🔸', 'unas': '🔸',
+            'y': '➕', 'pero': '❗', 'porque': '❓', 'como': '⚡',
+            'de': '📍', 'en': '📍', 'con': '🤝', 'para': '👉', 'por': '🔄',
+            'no': '❌', 'sí': '✅', 'muy': '⬆️', 'más': '➕', 'menos': '➖',
+            'todo': '💯', 'todos': '👥', 'cada': '🔄', 'algo': '❔', 'nada': '🚫',
+            'que': '❓', 'qué': '❓', 'quien': '👤', 'quién': '👤', 'donde': '📍',
+            'cuando': '⏰', 'cómo': '❓', 'cuánto': '📊', 'cuál': '❓',
+            
+            // Preguntas
+            'qué': '❓', 'quién': '👤', 'cómo': '❓', 'cuándo': '⏰', 'dónde': '📍', 'por qué': '❓',
+            'cuál': '❓', 'cuánto': '❓', 'cuántos': '❓', 'cuántas': '❓',
+            
+            // Números expandidos
+            'cero': '0️⃣', 'once': '1️⃣1️⃣', 'doce': '1️⃣2️⃣', 'trece': '1️⃣3️⃣', 'catorce': '1️⃣4️⃣',
+            'quince': '1️⃣5️⃣', 'veinte': '2️⃣0️⃣', 'treinta': '3️⃣0️⃣', 'cien': '💯', 'mil': '1️⃣0️⃣0️⃣0️⃣',
+            'primero': '🥇', 'segundo': '🥈', 'tercero': '🥉', 'último': '🔚', 'siguiente': '▶️',
+            
+            // Animales expandidos
+            'animal': '🐾', 'mascota': '🐕', 'salvaje': '🦁', 'doméstico': '🐕', 'insecto': '🐛',
+            'mosca': '🪰', 'abeja': '🐝', 'mariposa': '🦋', 'araña': '🕷️', 'hormiga': '🐜',
+            'serpiente': '🐍', 'rana': '🐸', 'tortuga': '🐢', 'conejo': '🐰', 'ratón': '🐭',
+            'elefante': '🐘', 'jirafa': '🦒', 'mono': '🐵', 'oso': '🐻', 'lobo': '🐺',
+            'zorro': '🦊', 'ciervo': '🦌', 'panda': '🐼', 'koala': '🐨', 'pingüino': '🐧',
+            
+            // Deportes y ejercicio
+            'deporte': '⚽', 'fútbol': '⚽', 'básquet': '🏀', 'tenis': '🎾', 'natación': '🏊',
+            'correr': '🏃', 'caminar': '🚶', 'ejercicio': '💪', 'gimnasio': '🏋️', 'yoga': '🧘',
+            'bailar': '💃', 'baile': '💃', 'danza': '💃', 'danzar': '💃', 'saltar': '🦘',
+            
+            // Música y arte
+            'música': '🎵', 'canción': '🎵', 'instrumento': '🎸', 'guitarra': '🎸', 'piano': '🎹',
+            'violín': '🎻', 'tambor': '🥁', 'flauta': '🪈', 'arte': '🎨', 'pintura': '🎨',
+            'dibujo': '✏️', 'escultura': '🗿', 'fotografía': '📷', 'película': '🎬', 'libro': '📚',
+            
+            // Verbos de estado y ser
+            'es': '✨', 'son': '✨', 'está': '📍', 'están': '📍', 'fue': '⏪', 'será': '⏩',
+            'tiene': '🤲', 'tengo': '🤲', 'tienes': '🤲', 'hay': '📍', 'existe': '✅',
+            
+            // Expresiones de cantidad
+            'todos': '💯', 'algunos': '🤏', 'varios': '🤏', 'muchos': '💯', 'pocos': '🤏',
+            'bastante': '💯', 'suficiente': '✅', 'demasiado': '💯', 'apenas': '🤏',
+            
+            // Palabras de tiempo específicas
+            'segundo': '⏱️', 'minuto': '⏰', 'hora': '🕐', 'semana': '📅', 'mes': '📅', 'año': '📅',
+            'siglo': '📅', 'pasado': '⏪', 'presente': '📍', 'futuro': '⏩', 'eterno': '♾️',
+            
+            // Palabras relacionadas con sentimientos y relaciones
+            'amistad': '👫', 'amor': '❤️', 'odio': '💔', 'respeto': '🙏', 'confianza': '🤝',
+            'miedo': '😰', 'valor': '💪', 'esperanza': '🌟', 'fe': '🙏', 'paz': '☮️',
+            'guerra': '⚔️', 'problema': '❗', 'solución': '💡', 'oportunidad': '🎯', 'suerte': '🍀',
+            
+            // Palabras de aprobación/desaprobación
+            'excelente': '💯', 'fantástico': '🤩', 'increíble': '🤯', 'genial': '😎', 'perfecto': '✅',
+            'terrible': '😱', 'fatal': '💀', 'pésimo': '👎', 'regular': '😐', 'normal': '😐',
+            
+            // Conceptos abstractos con representación visual
+            'idea': '💡', 'pensamiento': '💭', 'sueño': '💭', 'realidad': '📍', 'verdad': '✅',
+            'mentira': '🤥', 'secreto': '🤫', 'sorpresa': '🎁', 'misterio': '❓', 'magia': '✨',
+            'ciencia': '🔬', 'tecnología': '💻', 'futuro': '🚀', 'progreso': '📈', 'desarrollo': '📈',
+            
+            // Palabras relacionadas con el clima expandidas
+            'clima': '🌤️', 'tiempo': '⏰', 'estación': '🌿', 'primavera': '🌸', 'verano': '☀️',
+            'otoño': '🍂', 'invierno': '❄️', 'brisa': '💨', 'huracán': '🌪️', 'tornado': '🌪️',
+            
+            // Mejor/peor y comparativos
+            'mejor': '🏆', 'peor': '👎', 'superior': '⬆️', 'inferior': '⬇️', 'mayor': '📏',
+            'menor': '📏', 'máximo': '📈', 'mínimo': '📉', 'óptimo': '💯', 'pésimo': '👎'
+        };
+
+        // FUNCIÓN INTELIGENTE QUE PRIORIZA EMOJIS REALES
+        function getAlternativeSymbol(word) {
+            // PRIMERA PRIORIDAD: Intentar adivinar emojis basado en patrones semánticos
+            const smartGuesses = {
+                // Emociones y sentimientos (palabras que terminan con patrones comunes)
+                patterns: [
+                    { regex: /(triste|depre|melancól|lágrima|llor)/, emoji: '😢' },
+                    { regex: /(alegr|content|feli|risue|sonr)/, emoji: '😊' },
+                    { regex: /(enoj|molest|furioso|airado|cabr)/, emoji: '😠' },
+                    { regex: /(asust|mied|terror|pánic|horror)/, emoji: '😨' },
+                    { regex: /(sorpren|asombr|impresion|shock)/, emoji: '😲' },
+                    { regex: /(confund|dudos|perplex|desconcert)/, emoji: '😕' },
+                    { regex: /(emocion|entusias|eufór|excitement)/, emoji: '🤩' },
+                    { regex: /(amor|enamorad|cariños|tier|dulc)/, emoji: '❤️' },
+                    { regex: /(vergüenza|tímid|apenado|avergon)/, emoji: '😳' },
+                    { regex: /(celos|envidi|resentim)/, emoji: '😒' },
+                    
+                    // Acciones de comer específicas
+                    { regex: /(masticar|mordisque|crunch|munch)/, emoji: '😋' },
+                    { regex: /(engullir|devorar|zampar|tragar)/, emoji: '🤤' },
+                    { regex: /(saborear|degustar|paladear)/, emoji: '😋' },
+                    { regex: /(banquete|festín|comilona)/, emoji: '🍽️' },
+                    { regex: /(ayuno|dieta|hambruna|abstinen)/, emoji: '🚫' },
+                    { regex: /(glotón|goloso|comelón|tragón)/, emoji: '🤤' },
+                    
+                    // Bebidas específicas
+                    { regex: /(sorber|beber|tomar|ingerir|sorbo)/, emoji: '🥤' },
+                    { regex: /(brindis|salud|chin|cheers)/, emoji: '🥂' },
+                    { regex: /(hidrat|refres|saciar)/, emoji: '💧' },
+                    
+                    // Actividades y acciones
+                    { regex: /(estudiar|aprend|enseñ|educar|capacit)/, emoji: '📚' },
+                    { regex: /(trabajar|labor|emplead|ocupac)/, emoji: '💼' },
+                    { regex: /(descansar|relajar|repos|siesta)/, emoji: '😴' },
+                    { regex: /(ejercitar|entrenar|deportiv|gimnasi)/, emoji: '💪' },
+                    { regex: /(viajar|tourist|excurs|aventur)/, emoji: '🧳' },
+                    { regex: /(celebrar|festejar|gozar|festival)/, emoji: '🎉' },
+                    { regex: /(crear|inventor|diseñar|construct)/, emoji: '🔨' },
+                    { regex: /(destruir|demoler|quebrar|dañar)/, emoji: '💥' },
+                    { regex: /(comunicar|conversar|dialogar|charlar)/, emoji: '💬' },
+                    { regex: /(escuchar|atender|prestar)/, emoji: '👂' },
+                    { regex: /(observar|contemplar|vigilar)/, emoji: '👁️' },
+                    
+                    // Objetos y cosas comunes
+                    { regex: /(herramienta|utensilio|implement|instrument)/, emoji: '🔧' },
+                    { regex: /(vehículo|transporte|automóv)/, emoji: '🚗' },
+                    { regex: /(electrón|digital|virtual|online)/, emoji: '💻' },
+                    { regex: /(medicin|fármaco|remedi|píldor)/, emoji: '💊' },
+                    { regex: /(vestimen|prenda|indument|atuen)/, emoji: '👕' },
+                    { regex: /(joya|collar|anillo|pendient)/, emoji: '💍' },
+                    { regex: /(mueble|mobiliari|ensere)/, emoji: '🪑' },
+                    
+                    // Lugares y espacios
+                    { regex: /(habitat|vivienda|domicili|residenc)/, emoji: '🏠' },
+                    { regex: /(establ|comerci|tienda|negoci)/, emoji: '🏪' },
+                    { regex: /(natural|ambient|paisaj|escenari)/, emoji: '🌿' },
+                    { regex: /(urban|metropolit|cosmopolit)/, emoji: '🏙️' },
+                    
+                    // Fenómenos naturales
+                    { regex: /(climát|meteorológ|atmosfér)/, emoji: '🌤️' },
+                    { regex: /(llovi|precipit|chubasco|aguacer)/, emoji: '🌧️' },
+                    { regex: /(solea|asola|radiaci|luminosid)/, emoji: '☀️' },
+                    { regex: /(vient|brisa|ráfaga|ventolera)/, emoji: '💨' },
+                    { regex: /(nevada|granizo|escarcha|hela)/, emoji: '❄️' },
+                    { regex: /(terremoto|sismo|temblor|sacudid)/, emoji: '🌍' },
+                    
+                    // Conceptos temporales
+                    { regex: /(rápid|veloz|acelera|ligero|express)/, emoji: '⚡' },
+                    { regex: /(lent|pausad|moroš|tardí|despaci)/, emoji: '🐌' },
+                    { regex: /(instant|inmedia|súbit|repentin)/, emoji: '⚡' },
+                    { regex: /(eterno|infinit|perpetuo|sempiter)/, emoji: '♾️' },
+                    { regex: /(tempor|efímer|pasajer|moment)/, emoji: '⏳' },
+                ]
+            };
+            
+            // Intentar coincidir con patrones inteligentes
+            for (let pattern of smartGuesses.patterns) {
+                if (pattern.regex.test(word)) {
+                    return pattern.emoji;
+                }
+            }
+            
+            // SEGUNDA PRIORIDAD: Emojis contextuales basados en características de la palabra
+            const contextualEmojis = {
+                // Palabras científicas/técnicas
+                science: ['🔬', '⚗️', '🧪', '🔭', '🧬', '⚛️', '🌡️', '📊', '📈', '📉'],
+                // Palabras de comunicación
+                communication: ['💬', '📢', '📣', '📯', '📻', '📡', '📞', '📱', '💌', '📧'],
+                // Palabras de tiempo/historia
+                time: ['⏰', '⏳', '⌛', '📅', '📆', '🕐', '⏰', '🗓️', '📜', '🕰️'],
+                // Palabras de lugar/geografía
+                places: ['🗺️', '🧭', '📍', '🌍', '🌎', '🌏', '🏔️', '🏞️', '🏜️', '🏖️'],
+                // Palabras abstractas/conceptuales
+                abstract: ['💭', '💡', '🌟', '✨', '🎯', '🔮', '💫', '🌈', '🎪', '🎭'],
+                // Palabras de arte/creatividad
+                art: ['🎨', '🖌️', '🖍️', '🎭', '🎪', '🎨', '🖼️', '📸', '🎬', '🎵'],
+                // Palabras de naturaleza
+                nature: ['🌱', '🌿', '🍃', '🌳', '🌲', '🌾', '🌻', '🌺', '🌸', '🌼'],
+                // Palabras de deportes/actividad
+                sports: ['⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏓', '🏸', '🥊', '🏋️']
+            };
+            
+            // Determinar categoría basada en características de la palabra
+            let selectedCategory;
+            if (/(científ|técnic|laboratori|experiment|investig)/.test(word)) {
+                selectedCategory = contextualEmojis.science;
+            } else if (/(comunic|inform|notici|mensaje|transmit)/.test(word)) {
+                selectedCategory = contextualEmojis.communication;
+            } else if (/(tiemp|histori|cronológ|temporal|fecha)/.test(word)) {
+                selectedCategory = contextualEmojis.time;
+            } else if (/(geograf|territori|región|ubicac|localizac)/.test(word)) {
+                selectedCategory = contextualEmojis.places;
+            } else if (/(artíst|creativ|estétic|belleza|diseño)/.test(word)) {
+                selectedCategory = contextualEmojis.art;
+            } else if (/(plant|vegetal|bosque|flor|jardín)/.test(word)) {
+                selectedCategory = contextualEmojis.nature;
+            } else if (/(deport|competenc|campeonat|entrena)/.test(word)) {
+                selectedCategory = contextualEmojis.sports;
+            } else {
+                selectedCategory = contextualEmojis.abstract;
+            }
+            
+            // Hash para consistencia
+            let hash = 0;
+            for (let i = 0; i < word.length; i++) {
+                hash = ((hash << 5) - hash + word.charCodeAt(i)) & 0xffffffff;
+            }
+            hash = Math.abs(hash);
+            
+            // Seleccionar emoji de la categoría
+            const emojiIndex = hash % selectedCategory.length;
+            return selectedCategory[emojiIndex];
+        }
+
+        // Dark mode setup
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Page navigation
+        const introPage = document.getElementById('introPage');
+        const mainApp = document.getElementById('mainApp');
+        const startBtn = document.getElementById('startBtn');
+        const backToIntro = document.getElementById('backToIntro');
+
+        startBtn.addEventListener('click', () => {
+            introPage.classList.add('intro-hidden');
+            mainApp.classList.remove('app-hidden');
+            // Enfocar el textarea después de la transición
+            setTimeout(() => {
+                textInput.focus();
+            }, 100);
+        });
+
+        backToIntro.addEventListener('click', () => {
+            mainApp.classList.add('app-hidden');
+            introPage.classList.remove('intro-hidden');
+        });
+
+        // Elements
+        const textInput = document.getElementById('textInput');
+        const output = document.getElementById('output');
+        const showTextCheckbox = document.getElementById('showText');
+        const translateBtn = document.getElementById('translateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const copySuccess = document.getElementById('copySuccess');
+
+        // Panel de Control Elements
+        const modeTextEmoji = document.getElementById('modeTextEmoji');
+        const modeEmojiOnly = document.getElementById('modeEmojiOnly');
+        const densityBtns = document.querySelectorAll('.density-btn');
+        
+        // Variables de configuración
+        let currentMode = 'text-emoji'; // 'text-emoji' o 'emoji-only'
+        let currentDensity = 8; // palabras por fila
+
+        // Función inteligente para encontrar la raíz de una palabra
+        function findWordRoot(word) {
+            // Primero buscar coincidencia exacta
+            if (emojiDict[word]) return emojiDict[word];
+            
+            // Definir sufijos comunes para remover (ordenados por prioridad)
+            const suffixes = [
+                // Diminutivos
+                'ísimo', 'ísima', 'ecito', 'ecita', 'cito', 'cita', 'ito', 'ita', 'ico', 'ica', 
+                'illo', 'illa', 'ín', 'ina', 'ete', 'eta', 'uelo', 'uela', 'ejo', 'eja',
+                // Aumentativos
+                'ísimo', 'ísima', 'azos', 'azas', 'otes', 'otas', 'ones', 'onas', 'azo', 'aza', 
+                'ote', 'ota', 'ón', 'ona', 'ucho', 'ucha',
+                // Plurales
+                'ces', 'zes', 'ses', 'nes', 'res', 'les', 'es', 's',
+                // Variaciones verbales comunes
+                'ando', 'endo', 'iendo', 'ado', 'ido', 'aba', 'ía', 'ará', 'erá', 'irá',
+                // Femeninos/masculinos
+                'as', 'os', 'a', 'o',
+                // Sufijos de calidad
+                'mente', 'dad', 'ción', 'sión', 'ancia', 'encia'
+            ];
+            
+            // Intentar remover sufijos para encontrar la raíz
+            for (let suffix of suffixes) {
+                if (word.length > suffix.length + 2 && word.endsWith(suffix)) {
+                    const root = word.slice(0, -suffix.length);
+                    
+                    // Buscar la raíz en el diccionario
+                    if (emojiDict[root]) return emojiDict[root];
+                    
+                    // Intentar variaciones comunes de la raíz
+                    const rootVariations = [
+                        root,
+                        root + 'o',  // gato
+                        root + 'a',  // gata
+                        root + 'e',  // verde
+                        root + 'r',  // correr
+                        root + 'ar', // caminar
+                        root + 'er', // comer
+                        root + 'ir'  // vivir
+                    ];
+                    
+                    for (let variation of rootVariations) {
+                        if (emojiDict[variation]) return emojiDict[variation];
+                    }
+                }
+            }
+            
+            // Buscar palabras que contengan la palabra (para palabras compuestas)
+            for (let dictWord in emojiDict) {
+                if (dictWord.includes(word) || word.includes(dictWord)) {
+                    // Solo si la coincidencia es significativa (más del 60%)
+                    const similarity = Math.max(dictWord.length, word.length) > 0 ? 
+                        Math.min(dictWord.length, word.length) / Math.max(dictWord.length, word.length) : 0;
+                    if (similarity > 0.6) {
+                        return emojiDict[dictWord];
+                    }
+                }
+            }
+            
+            // Si nada funciona, usar símbolos alternativos
+            return getAlternativeSymbol(word);
+        }
+
+        // Función para adaptar tamaños según densidad
+        function getDensityStyles(density) {
+            const densityStyles = {
+                3: {
+                    wordSize: 'text-xl md:text-2xl',
+                    emojiSize: 'text-5xl md:text-6xl',
+                    padding: 'px-4 py-3',
+                    gap: 'gap-4',
+                    minWidth: 'min-w-24'
+                },
+                5: {
+                    wordSize: 'text-lg md:text-xl',
+                    emojiSize: 'text-4xl md:text-5xl',
+                    padding: 'px-3 py-2',
+                    gap: 'gap-3',
+                    minWidth: 'min-w-20'
+                },
+                8: {
+                    wordSize: 'text-base md:text-lg',
+                    emojiSize: 'text-3xl md:text-4xl',
+                    padding: 'px-2 py-1',
+                    gap: 'gap-2',
+                    minWidth: 'min-w-16'
+                },
+                12: {
+                    wordSize: 'text-sm md:text-base',
+                    emojiSize: 'text-2xl md:text-3xl',
+                    padding: 'px-2 py-1',
+                    gap: 'gap-1',
+                    minWidth: 'min-w-12'
+                },
+                20: {
+                    wordSize: 'text-xs md:text-sm',
+                    emojiSize: 'text-xl md:text-2xl',
+                    padding: 'px-1 py-0.5',
+                    gap: 'gap-0.5',
+                    minWidth: 'min-w-8'
+                }
+            };
+            return densityStyles[density] || densityStyles[8];
+        }
+
+        // Function to translate text to emojis
+        function translateToEmojis(text) {
+            const styles = getDensityStyles(currentDensity);
+            
+            if (currentMode === 'text-emoji') {
+                // Dividir por líneas para preservar estructura
+                const lines = text.split('\n');
+                
+                const processedLines = lines.map(line => {
+                    if (line.trim() === '') {
+                        // Línea vacía - preservar espacio
+                        return '<div class="h-4"></div>';
+                    }
+                    
+                    // Dividir por palabras pero preservar espacios y puntuación
+                    const words = line.split(/(\s+)/);
+                    
+                    const wordEmojiPairs = words.map(word => {
+                        if (/^\s+$/.test(word)) {
+                            // Es solo espacio en blanco
+                            return `<span class="mx-1"></span>`;
+                        }
+                        
+                        if (word.trim() === '') {
+                            return '';
+                        }
+                        
+                        // Extraer puntuación del final
+                        const punctuationMatch = word.match(/([.,!?;:¿¡""''()]+)$/);
+                        const punctuation = punctuationMatch ? punctuationMatch[1] : '';
+                        
+                        // Limpiar palabra para buscar en diccionario
+                        const cleanWord = word.toLowerCase().replace(/[.,!?;:¿¡""''()]/g, '').trim();
+                        
+                        if (cleanWord === '') {
+                            // Solo puntuación
+                            return `<span class="${styles.wordSize} text-gray-600 dark:text-gray-400">${word}</span>`;
+                        }
+                        
+                        const emoji = findWordRoot(cleanWord);
+                        const originalWord = word.toLowerCase();
+                        
+                        return `
+                            <div class="inline-block text-center ${styles.minWidth} mx-1">
+                                <div class="bg-gray-100 dark:bg-gray-700 ${styles.padding} rounded-md text-gray-700 dark:text-gray-300 ${styles.wordSize} whitespace-nowrap">${originalWord}</div>
+                                <div class="${styles.emojiSize} mt-1">${emoji}${punctuation ? `<span class="text-sm">${punctuation}</span>` : ''}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    return `<div class="flex flex-wrap items-start ${styles.gap} mb-2">${wordEmojiPairs.join('')}</div>`;
+                });
+                
+                return processedLines.join('');
+            } else {
+                // Solo emojis - preservar estructura de líneas y puntuación
+                const lines = text.split('\n');
+                
+                const processedLines = lines.map(line => {
+                    if (line.trim() === '') {
+                        return '<div class="h-4"></div>';
+                    }
+                    
+                    // Dividir en palabras pero preservar puntuación
+                    const words = line.split(/\s+/);
+                    
+                    const emojisWithPunctuation = words.map(word => {
+                        // Extraer puntuación
+                        const punctuationMatch = word.match(/([.,!?;:¿¡""''()]+)$/);
+                        const punctuation = punctuationMatch ? punctuationMatch[1] : '';
+                        
+                        // Limpiar palabra
+                        const cleanWord = word.toLowerCase().replace(/[.,!?;:¿¡""''()]/g, '').trim();
+                        
+                        if (cleanWord === '') {
+                            return `<span class="${styles.emojiSize} opacity-50">${punctuation}</span>`;
+                        }
+                        
+                        const emoji = findWordRoot(cleanWord);
+                        return `<span class="${styles.emojiSize}">${emoji}${punctuation ? `<span class="text-sm opacity-75">${punctuation}</span>` : ''}</span>`;
+                    });
+                    
+                    // Agrupar por densidad manteniendo el flujo
+                    const rows = [];
+                    for (let i = 0; i < emojisWithPunctuation.length; i += currentDensity) {
+                        rows.push(emojisWithPunctuation.slice(i, i + currentDensity));
+                    }
+                    
+                    return rows.map(row => 
+                        `<div class="flex items-center flex-wrap ${styles.gap} mb-2 justify-start">
+                            ${row.join('')}
+                        </div>`
+                    ).join('');
+                });
+                
+                return processedLines.join('');
+            }
+        }
+
+        // Event listeners
+        translateBtn.addEventListener('click', () => {
+            const inputText = textInput.value.trim();
+            if (inputText) {
+                const translated = translateToEmojis(inputText);
+                output.innerHTML = translated;
+            } else {
+                output.innerHTML = '<span class="text-gray-500 dark:text-gray-400">Escribe algo para traducir... 🎯</span>';
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            output.innerHTML = '<span class="text-gray-500 dark:text-gray-400">Tu traducción aparecerá aquí... 🎯</span>';
+        });
+
+        copyBtn.addEventListener('click', async () => {
+            const text = output.textContent;
+            if (text && !text.includes('aparecerá aquí') && !text.includes('Escribe algo')) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    copySuccess.classList.remove('opacity-0');
+                    copySuccess.classList.add('copy-success');
+                    
+                    setTimeout(() => {
+                        copySuccess.classList.add('opacity-0');
+                        copySuccess.classList.remove('copy-success');
+                    }, 2000);
+                } catch (err) {
+                    // Fallback para navegadores que no soportan clipboard API
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    
+                    copySuccess.classList.remove('opacity-0');
+                    copySuccess.classList.add('copy-success');
+                    
+                    setTimeout(() => {
+                        copySuccess.classList.add('opacity-0');
+                        copySuccess.classList.remove('copy-success');
+                    }, 2000);
+                }
+            }
+        });
+
+        // Auto-translate while typing (with debounce)
+        let timeout;
+        textInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                const inputText = textInput.value.trim();
+                if (inputText) {
+                    const translated = translateToEmojis(inputText);
+                    output.innerHTML = translated;
+                }
+            }, 500);
+        });
+
+        // Re-translate when checkbox changes
+        showTextCheckbox.addEventListener('change', () => {
+            const inputText = textInput.value.trim();
+            if (inputText) {
+                const translated = translateToEmojis(inputText);
+                output.innerHTML = translated;
+            }
+        });
+
+        // Enter key to translate
+        textInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                translateBtn.click();
+            }
+        });
+
+        // === FUNCIONES GLOBALES SIMPLES ===
+        
+        // FUNCIÓN GLOBAL PARA CAMBIAR MODO
+        function cambiarModo(nuevoModo) {
+            console.log('🔴 CAMBIAR MODO A:', nuevoModo);
+            currentMode = nuevoModo;
+            
+            // Actualizar colores de botones
+            const btnTextEmoji = document.getElementById('modeTextEmoji');
+            const btnEmojiOnly = document.getElementById('modeEmojiOnly');
+            
+            if (nuevoModo === 'text-emoji') {
+                btnTextEmoji.style.backgroundColor = '#8B5CF6';
+                btnTextEmoji.style.color = 'white';
+                btnEmojiOnly.style.backgroundColor = '#9CA3AF';
+                btnEmojiOnly.style.color = '#374151';
+            } else {
+                btnEmojiOnly.style.backgroundColor = '#8B5CF6';
+                btnEmojiOnly.style.color = 'white';
+                btnTextEmoji.style.backgroundColor = '#9CA3AF';
+                btnTextEmoji.style.color = '#374151';
+            }
+            
+            // Retraducir
+            const texto = textInput.value.trim();
+            if (texto) {
+                const resultado = translateToEmojis(texto);
+                output.innerHTML = resultado;
+            }
+        }
+        
+        // FUNCIÓN GLOBAL PARA CAMBIAR DENSIDAD
+        function cambiarDensidad(nuevaDensidad) {
+            console.log('🔴 CAMBIAR DENSIDAD A:', nuevaDensidad);
+            currentDensity = nuevaDensidad;
+            
+            // Actualizar colores de botones
+            const densityBtns = document.querySelectorAll('[data-density]');
+            densityBtns.forEach(btn => {
+                const btnDensity = parseInt(btn.getAttribute('data-density'));
+                if (btnDensity === nuevaDensidad) {
+                    btn.style.backgroundColor = '#8B5CF6';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.backgroundColor = '#9CA3AF';
+                    btn.style.color = '#374151';
+                }
+            });
+            
+            // Retraducir
+            const texto = textInput.value.trim();
+            if (texto) {
+                const resultado = translateToEmojis(texto);
+                output.innerHTML = resultado;
+            }
+        }
+        
+        // INICIALIZAR COLORES AL CARGAR
+        setTimeout(() => {
+            const btnTextEmoji = document.getElementById('modeTextEmoji');
+            const btnEmojiOnly = document.getElementById('modeEmojiOnly');
+            const densityBtns = document.querySelectorAll('[data-density]');
+            
+            // Establecer colores iniciales
+            btnTextEmoji.style.backgroundColor = '#8B5CF6';
+            btnTextEmoji.style.color = 'white';
+            btnEmojiOnly.style.backgroundColor = '#9CA3AF';
+            btnEmojiOnly.style.color = '#374151';
+            
+            densityBtns.forEach(btn => {
+                const btnDensity = parseInt(btn.getAttribute('data-density'));
+                if (btnDensity === 8) {
+                    btn.style.backgroundColor = '#8B5CF6';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.backgroundColor = '#9CA3AF';
+                    btn.style.color = '#374151';
+                }
+            });
+            
+            // Texto de prueba
+            if (!textInput.value.trim()) {
+                textInput.value = 'Hola qué tal soy un niño triste que va al bosque siempre';
+                const resultado = translateToEmojis(textInput.value);
+                output.innerHTML = resultado;
+            }
+        }, 100);
+    </script>
+
+
+</body></html>

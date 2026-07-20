@@ -1034,3 +1034,30 @@ Tarea: Codex Desktop — subir Logoflix al repo.
 Estado: [PARA_CODEX PENDIENTE]
 
 Estado landing tras esta pasada: 178 tarjetas, 160 con botón VER primario, 0 enlaces relativos rotos (verificado headless).
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Reparacion Suite clinica medible — juegos cargan dentro del medidor
+
+Contexto:
+- Jose detecta en captura que `resource-player.html?activity=poe-erre-que-erre-erre-directa` mide, pero el iframe del juego carga un 404 de GitHub Pages.
+
+Causa:
+- La suite publicada tenia el medidor y el catalogo, pero no todas las carpetas de actividades del catalogo.
+- `resource-player.html` usaba `activity.web_path` en web publica, generando URLs absolutas tipo `/POE/...`, que en GitHub Pages apuntan fuera de `logoped-ia-tools` y devuelven 404.
+
+Hecho:
+- Corregido `resource-player.html`: ahora siempre abre `./${rel_path}` dentro del paquete de la suite.
+- Copiadas las carpetas reales de actividades desde:
+  `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/`
+  hacia `codex-assets/academia-suite-medible/`, preservando la estructura del catalogo.
+- Resultado: 56 actividades del catalogo, 56 rutas `rel_path` existentes en el paquete publicado.
+- Limpieza antes de commit: fuera `.git` anidados, `.env*` y `.DS_Store`; busqueda de claves reales sin hallazgos.
+
+Verificacion local headless:
+- `poe-erre-que-erre-erre-directa` carga dentro del iframe con titulo "Erre que Erre - Libro Interactivo"; ya no muestra 404.
+- `poe-194rrr`, `poe-midiendo-con-la-s-y-la-z-definitivo`, `poe-karaoke-tartamudez` y `ponencia-murcia-05-proyecto-evaluacion-logopedica` cargan dentro del medidor sin 404.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]

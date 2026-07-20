@@ -1,0 +1,235 @@
+:root {
+  --bg: #f7f4ea;
+  --bg-alt: #fffdf6;
+  --text: #1f2937;
+  --muted: #4b5563;
+  --primary: #0c6b58;
+  --primary-strong: #085948;
+  --danger: #b42318;
+  --success: #157f3f;
+  --card: #ffffff;
+  --line: #d9d4c7;
+  --accent: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+  background: radial-gradient(circle at top right, #fff9db, var(--bg));
+  color: var(--text);
+}
+
+.app-shell {
+  width: min(1100px, 94vw);
+  margin: 1.5rem auto 2rem;
+}
+
+.hero {
+  background: linear-gradient(130deg, #fff6c7 0%, #fde68a 55%, #f7d95f 100%);
+  border: 2px solid #eab308;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.hero h1 {
+  margin: 0;
+}
+
+.hero p {
+  margin: 0.4rem 0 0;
+  color: #5a3b05;
+}
+
+.panel,
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.8rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem;
+  font-size: 1rem;
+  background: var(--bg-alt);
+}
+
+.team-names {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.actions-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 0.72rem 1rem;
+  font-weight: 800;
+  background: #e5e7eb;
+  color: #111827;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-strong);
+}
+
+.btn-success {
+  background: var(--success);
+  color: #fff;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.feedback {
+  margin: 0.9rem 0;
+  font-weight: 800;
+  min-height: 1.2rem;
+}
+
+.feedback.success {
+  color: var(--success);
+}
+
+.feedback.fail {
+  color: var(--danger);
+}
+
+.feedback.kaboom {
+  color: #b91c1c;
+  font-size: 1.18rem;
+}
+
+.feedback.lightning {
+  color: #92400e;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.8rem;
+}
+
+.challenge-box {
+  background: #faf7ef;
+  border: 1px dashed #d6cdb8;
+  border-radius: 10px;
+  padding: 0.9rem;
+  line-height: 1.4;
+  min-height: 96px;
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+}
+
+.team-card {
+  background: #fffdf4;
+  border: 1px solid #e7dcc3;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.team-card.active {
+  border: 2px solid #d97706;
+  box-shadow: inset 0 0 0 1px #fcd34d;
+}
+
+.stick-list {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.55rem;
+}
+
+.cell {
+  border: 1px solid #ddd3bc;
+  border-radius: 10px;
+  padding: 0.55rem;
+  background: #fffdf7;
+  min-height: 80px;
+}
+
+.cell strong {
+  color: #854d0e;
+}
+
+.cell.current {
+  border: 2px solid var(--accent);
+  box-shadow: inset 0 0 0 1px #fcd34d;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: 95vw;
+    margin-top: 0.8rem;
+  }
+
+  .board-grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+}

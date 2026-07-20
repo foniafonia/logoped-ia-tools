@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adapro - Tu Procesador de Texto Adaptado</title>
+    <link rel="stylesheet" href="adapro_style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <img src="https://adapro.iter.es/wp-content/uploads/2020/07/logo-adapro-web.png" alt="Adapro Logo" class="logo">
+            <h1>Adapro: Procesador de Texto Adaptado</h1>
+            <p>Una herramienta gratuita para personas con dificultades de aprendizaje.</p>
+        </div>
+    </header>
+
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <h2>Facilitando la Lectura y Escritura para Todos</h2>
+            <p>Adapro es un procesador de texto diseñado para superar barreras, ofreciendo una interfaz intuitiva y herramientas visuales que transforman la experiencia de aprendizaje.</p>
+            <a href="#editor-section" class="btn-primary">Prueba Nuestro Editor Adaptado</a>
+        </div>
+    </section>
+
+    <section id="what-is-adapro" class="info-section">
+        <div class="container">
+            <h3>¿Qué es Adapro?</h3>
+            <p>Adapro es un procesador de texto libre y gratuito, creado para apoyar a personas con dislexia y otras dificultades de aprendizaje, así como a aquellos con diversidad funcional como el autismo. Su objetivo es hacer la lectura y escritura más accesible y comprensible.</p>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>Interfaz Adaptada</h4>
+                    <p>Diseño transparente y configurable que se ajusta a las necesidades individuales del usuario.</p>
+                </div>
+                <div class="info-item">
+                    <h4>Paradigma de Aprendizaje Visual</h4>
+                    <p>Herramientas que facilitan la comprensión a través de elementos visuales.</p>
+                </div>
+                <div class="info-item">
+                    <h4>Gestión Amigable de Documentos</h4>
+                    <p>Simplifica la creación y organización de tus textos.</p>
+                </div>
+                <div class="info-item">
+                    <h4>Multiplataforma</h4>
+                    <p>Compatible con diversos sistemas operativos para que puedas usarlo donde lo necesites.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="our-features" class="features-section">
+        <div class="container">
+            <h3>Nuestras Herramientas de Mejora de Lectura</h3>
+            <p>Además de las funcionalidades de Adapro, nuestro editor integra características avanzadas para una lectura aún más personalizada:</p>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>Guía de Líneas de Colores</h4>
+                    <p>Líneas de color distintivas debajo de cada renglón que cambian progresivamente para guiar tu vista al siguiente.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Puntuación Gráfica y Pausas</h4>
+                    <p>Comas, puntos y otros signos de puntuación son más grandes y con mayor espacio para mejorar el ritmo del discurso.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Musicalidad y Acentuación</h4>
+                    <p>Símbolos visuales (♫) indican palabras con acento, ayudando a la entonación y fluidez de la lectura.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Resaltado de Grafemas Difíciles</h4>
+                    <p>Opcionalmente, las letras 'b', 'd', 'p', 'q' se resaltan en negrita y color para evitar confusiones comunes.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Inicio de Frase Claro</h4>
+                    <p>La primera letra de cada nueva oración se destaca, señalando claramente el comienzo de una nueva idea.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Tipografía OpenDyslexic</h4>
+                    <p>Utiliza la fuente OpenDyslexic para una mayor claridad y reducción de la confusión de letras.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="editor-section" class="editor-section">
+        <div class="container">
+            <h2>Experimenta la Lectura Adaptada</h2>
+            <p>Pega tu texto y personaliza tu experiencia de lectura con nuestras herramientas.</p>
+            <div class="editor-wrapper">
+                <div class="controls">
+                    <label for="font-select">Fuente:</label>
+                    <select id="font-select">
+                        <option value="OpenDyslexic">OpenDyslexic</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Comic Sans MS">Comic Sans</option>
+                    </select>
+
+                    <label for="font-size">Tamaño:</label>
+                    <input type="number" id="font-size" value="20" min="10" max="100">
+
+                    <label for="highlight-color">Color de Resaltado:</label>
+                    <input type="color" id="highlight-color" value="#D0021B">
+
+                    <label for="highlight-toggle">Resaltar (b, d, p, q):</label>
+                    <input type="checkbox" id="highlight-toggle" checked>
+                    
+                    <button id="print-button">Imprimir</button>
+                </div>
+                <div class="editor-container">
+                    <textarea id="text-input" placeholder="Pega tu texto aquí..."></textarea>
+                    <div id="text-output" class="output-area"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Adapro. Todos los derechos reservados.</p>
+            <p>Inspirado en Adapro, desarrollado para la comunidad.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1571 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA para Docentes - José Aserraf | Educación Especial</title>
+    <meta name="description" content="Transforma tu práctica docente con IA. Curso práctico para PT y AL del Ministerio de Educación.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #059669;
+            --secondary: #10b981;
+            --accent: #14b8a6;
+            --dark: #064e3b;
+            --gray: #6b7280;
+            --light: #f0fdf4;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #navDropdown {
+            transition: all 0.3s;
+        }
+
+        #navDropdown:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+        }
+
+        #navDropdown:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: slide 30s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Section */
+        section {
+            padding: 6rem 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .gallery-content {
+            padding: 1.5rem;
+        }
+
+        .gallery-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .gallery-content p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Video */
+        .video-wrapper {
+            max-width: 900px;
+            margin: 3rem auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .stat h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat p {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        /* Instructor */
+        .instructor {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+            margin-top: 3rem;
+        }
+
+        .instructor-photo {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .instructor-photo img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .instructor-photo::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 6s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes audioWave {
+            0%, 100% { height: 10px; }
+            50% { height: 40px; }
+        }
+
+        .instructor-info h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-title {
+            font-size: 1.125rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .instructor-info ul {
+            list-style: none;
+        }
+
+        .instructor-info li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .instructor-info li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        .resource-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .resource-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: gap 0.3s;
+        }
+
+        .resource-link:hover {
+            gap: 0.75rem;
+        }
+
+        /* Contact */
+        .contact-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem;
+            border-radius: 24px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-box h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            text-align: left;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-item strong {
+            min-width: 80px;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.7;
+        }
+
+        /* Backgrounds */
+        .bg-light {
+            background: var(--light);
+        }
+
+        .bg-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .bg-gradient h2,
+        .bg-gradient h3 {
+            color: white;
+        }
+
+        .bg-gradient .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .bg-gradient .card h3 {
+            color: white;
+        }
+
+        .bg-gradient .card p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #navDropdown {
+                min-width: 150px;
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 6rem 0 4rem;
+            }
+
+            .instructor {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .contact-box {
+                padding: 2rem 1.5rem;
+            }
+
+            .contact-info {
+                text-align: center;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* FadeIn animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Díptico */
+        @media (max-width: 968px) {
+            #diptico-container .grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            #diptico-container > div > div > div {
+                grid-template-columns: 1fr !important;
+            }
+            #diptico-container > div > div > div > div {
+                border-right: none !important;
+                border-bottom: 2px solid #e5e7eb;
+            }
+        }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">IA para Docentes</div>
+            <select id="navDropdown" onchange="navigateToSection()" style="padding: 0.75rem 1.5rem; border-radius: 12px; border: 2px solid var(--primary); background: white; color: var(--dark); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; outline: none; min-width: 200px;">
+                <option value="">Ir a sección...</option>
+                <option value="#inicio">Inicio</option>
+                <option value="#curso">Curso</option>
+                <option value="#ejemplos">Ejemplos</option>
+                <option value="#recursos">Recursos</option>
+                <option value="#contacto">Contacto</option>
+            </select>
+        </div>
+    </nav>
+
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">✨ Formación Oficial del Ministerio de Educación</div>
+                <h1>Transforma la Educación Especial con Inteligencia Artificial</h1>
+                <p>Domina la IA educativa y crea materiales adaptados en minutos para PT, AL y NEE</p>
+
+                <!-- Díptico en Hero -->
+                <div style="max-width: 700px; margin: 3rem auto 0;">
+                    <button onclick="toggleDiptico()" style="width: 100%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 1.5rem 2rem; border-radius: 16px; font-size: 1.25rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; font-family: 'Sora', sans-serif;" onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)'">
+                        <span>📋 Ver Díptico Oficial del Curso</span>
+                        <span id="diptico-toggle-arrow" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                    </button>
+
+                    <div id="diptico-container" style="display: none; background: white; border-radius: 16px; padding: 2rem; margin-top: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.3); animation: fadeIn 0.3s;">
+                        <div style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 60px rgba(0,0,0,0.15);">
+                            <!-- Cabecera del Díptico -->
+                            <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 3rem; text-align: center; color: white;">
+                                <h2 style="font-family: 'Sora', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: white;">IA para Docentes</h2>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; color: rgba(255,255,255,0.95);">Crear, Adaptar y Transformar la Educación Especial</h3>
+                                <p style="font-size: 1.125rem; color: rgba(255,255,255,0.9);">Formación Oficial del Profesorado | Ministerio de Educación</p>
+                            </div>
+
+                            <!-- Contenido del Díptico -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 4px solid var(--primary);">
+                                <!-- Columna Izquierda -->
+                                <div style="padding: 3rem; border-right: 2px solid #e5e7eb;">
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">📚 PRESENTACIÓN</h4>
+                                        <p style="color: var(--gray); line-height: 1.8;">Curso práctico que capacita a docentes de PT y AL en el uso de Inteligencia Artificial para crear materiales educativos adaptados, videojuegos educativos y automatizar tareas administrativas.</p>
+                                    </div>
+
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">🎯 DESTINATARIOS</h4>
+                                        <ul style="color: var(--gray); line-height: 2; padding-left: 1.5rem;">
+                                            <li>Maestros de Pedagogía Terapéutica (PT)</li>
+                                            <li>Maestros de Audición y Lenguaje (AL)</li>
+                                            <li>Docentes de Educación Especial</li>
+                                            <li>Logopedas educativos</li>
+                                            <li>Orientadores educativos</li>
+                                        </ul>
+                                    </div>
+
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">🎓 OBJETIVOS</h4>
+                                        <ul style="color: var(--gray); line-height: 2; padding-left: 1.5rem;">
+                                            <li>Dominar herramientas de IA educativa</li>
+                                            <li>Crear materiales adaptados en minutos</li>
+                                            <li>Desarrollar videojuegos sin programar</li>
+                                            <li>Automatizar tareas administrativas</li>
+                                            <li>Generar contenido multimedia personalizado</li>
+                                            <li>Mejorar la motivación del alumnado</li>
+                                        </ul>
+                                    </div>
+
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">⏱️ DURACIÓN Y MODALIDAD</h4>
+                                        <div style="color: var(--gray); line-height: 2;">
+                                            <p><strong>Modalidad:</strong> Presencial/Online</p>
+                                            <p><strong>Duración:</strong> Por determinar según centro</p>
+                                            <p><strong>Certificación:</strong> Reconocida por el Ministerio de Educación</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Columna Derecha -->
+                                <div style="padding: 3rem;">
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">📖 CONTENIDOS DEL CURSO</h4>
+
+                                        <div style="margin-bottom: 1.5rem;">
+                                            <h5 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Módulo 1: Fundamentos de IA Educativa</h5>
+                                            <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem; font-size: 0.95rem;">
+                                                <li>Introducción a la IA aplicada a educación</li>
+                                                <li>Herramientas y plataformas principales</li>
+                                                <li>Consideraciones éticas y de privacidad</li>
+                                            </ul>
+                                        </div>
+
+                                        <div style="margin-bottom: 1.5rem;">
+                                            <h5 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Módulo 2: Materiales Imprimibles</h5>
+                                            <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem; font-size: 0.95rem;">
+                                                <li>Fichas adaptadas automáticamente</li>
+                                                <li>Lecturas en formato fácil</li>
+                                                <li>Material con pictogramas</li>
+                                                <li>Ejercicios personalizados por nivel</li>
+                                            </ul>
+                                        </div>
+
+                                        <div style="margin-bottom: 1.5rem;">
+                                            <h5 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Módulo 3: Videojuegos Educativos</h5>
+                                            <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem; font-size: 0.95rem;">
+                                                <li>Creación sin código (No-code)</li>
+                                                <li>Juegos de fonología y lectura</li>
+                                                <li>Adaptación de juegos clásicos</li>
+                                                <li>Plataforma JuegosLogopedos</li>
+                                            </ul>
+                                        </div>
+
+                                        <div style="margin-bottom: 1.5rem;">
+                                            <h5 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Módulo 4: Contenido Multimedia</h5>
+                                            <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem; font-size: 0.95rem;">
+                                                <li>Vídeos con avatares IA</li>
+                                                <li>Podcasts educativos</li>
+                                                <li>Presentaciones interactivas</li>
+                                                <li>Narraciones personalizadas</li>
+                                            </ul>
+                                        </div>
+
+                                        <div style="margin-bottom: 1.5rem;">
+                                            <h5 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Módulo 5: Automatización y Gestión</h5>
+                                            <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem; font-size: 0.95rem;">
+                                                <li>Informes y evaluaciones automáticas</li>
+                                                <li>ACI (Adaptaciones Curriculares)</li>
+                                                <li>Seguimiento del progreso</li>
+                                                <li>Comunicación con familias</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 2.5rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">🔧 METODOLOGÍA</h4>
+                                        <p style="color: var(--gray); line-height: 1.8; margin-bottom: 0.75rem;"><strong>80% Práctica - 20% Teoría</strong></p>
+                                        <ul style="color: var(--gray); line-height: 1.8; padding-left: 1.5rem;">
+                                            <li>Aprendizaje basado en proyectos</li>
+                                            <li>Casos reales del aula</li>
+                                            <li>Tutorización personalizada</li>
+                                            <li>Comunidad de aprendizaje</li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">👨‍🏫 FORMADOR</h4>
+                                        <p style="color: var(--gray); line-height: 1.8;"><strong>José Aserraf</strong><br>Logopeda colegiado y especialista en IA aplicada a la educación especial. Creador de la plataforma JuegosLogopedos y múltiples herramientas educativas con IA.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer del Díptico -->
+                            <div style="background: #f9fafb; padding: 2rem 3rem; border-top: 2px solid #e5e7eb; text-align: center;">
+                                <h4 style="font-family: 'Sora', sans-serif; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">📧 Contacto e Información</h4>
+                                <p style="color: var(--gray); line-height: 1.8;">
+                                    Email: <a href="mailto:gestionafonia@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">gestionafonia@gmail.com</a><br>
+                                    Formador: José Aserraf
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="curso" style="background: var(--light);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">El Curso</span>
+                <h2>Transforma tu Práctica Docente con IA</h2>
+                <p class="section-subtitle">Aprende a crear materiales educativos en minutos, no en horas</p>
+            </div>
+
+            <!-- Acordeón Problema/Solución -->
+            <div style="max-width: 900px; margin: 0 auto;">
+                <!-- Botón Problema -->
+                <div class="accordion-item" style="margin-bottom: 1.5rem;">
+                    <button onclick="toggleAccordion('problema')" style="width: 100%; background: linear-gradient(135deg, #dc2626, #ef4444); color: white; border: none; padding: 1.5rem 2rem; border-radius: 16px; font-size: 1.25rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; font-family: 'Sora', sans-serif;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(220, 38, 38, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        <span>⚠️ El Problema: Retos Diarios en PT y AL</span>
+                        <span id="problema-arrow" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                    </button>
+                    <div id="problema-content" style="display: none; background: white; border-radius: 16px; padding: 2rem; margin-top: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">📋</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Exceso de Burocracia</h4>
+                                    <p style="color: var(--gray);">Horas dedicadas a documentación que reducen el tiempo con el alumnado</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">⏰</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Falta de Tiempo</h4>
+                                    <p style="color: var(--gray);">Adaptar materiales para cada alumno consume tiempo que no tienes</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">🎨</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Necesidad de Diversificación</h4>
+                                    <p style="color: var(--gray);">Crear recursos variados que mantengan alta la motivación</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">📊</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Múltiples Niveles</h4>
+                                    <p style="color: var(--gray);">Atender diferentes niveles de competencia curricular simultáneamente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón Solución -->
+                <div class="accordion-item">
+                    <button onclick="toggleAccordion('solucion')" style="width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 1.5rem 2rem; border-radius: 16px; font-size: 1.25rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; font-family: 'Sora', sans-serif;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(5, 150, 105, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        <span>✅ La Solución: IA como tu Copiloto Docente</span>
+                        <span id="solucion-arrow" style="font-size: 1.5rem; transition: transform 0.3s;">▼</span>
+                    </button>
+                    <div id="solucion-content" style="display: none; background: white; border-radius: 16px; padding: 2rem; margin-top: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">⚡</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Materiales en Segundos</h4>
+                                    <p style="color: var(--gray);">Fichas, pictogramas, cuentos y lectura fácil personalizados al instante</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">🎮</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Videojuegos Educativos</h4>
+                                    <p style="color: var(--gray);">Crea juegos personalizados sin programar</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">📱</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Contenido Interactivo</h4>
+                                    <p style="color: var(--gray);">Transforma PDFs en actividades dinámicas</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; align-items: start;">
+                                <div style="font-size: 2rem;">📊</div>
+                                <div>
+                                    <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);">Automatización Completa</h4>
+                                    <p style="color: var(--gray);">Informes, seguimiento y evaluación automática</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Demostración</span>
+                <h2>El Juego de la Terapia</h2>
+                <p class="section-subtitle">Descubre cómo la IA crea experiencias interactivas</p>
+            </div>
+            <div class="video-wrapper">
+                <video controls="">
+                    <source src="https://pfst.cf2.poecdn.net/base/video/f60c58b566bf4cb1f2db05edc4bf85caf90c14004ed61a7483bbc81cec25c184" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección JuegosLogopedos -->
+    <section id="ejemplos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">La Joya de la Corona</span>
+                <h2>JuegosLogopedos</h2>
+                <p class="section-subtitle">Videojuegos educativos para aprender jugando. Transformamos la terapia del lenguaje en aventuras interactivas.</p>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <a href="https://logopedosparauci.netlify.app/" target="_blank" class="btn btn-primary">
+                    Explorar Juegos
+                </a>
+            </div>
+
+            <!-- Galería de juegos -->
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/e91c8cbc63ae42a9268f7a2e25ac0d602068571caced24cf8beb34a3e7935359?w=400&amp;h=400" alt="Plataforma JuegosLogopedos">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/41ae4f04ce0fdd766a79aaad0560a706e9b83b34696eb843cbeedcf327127b8c?w=400&amp;h=400" alt="Juego 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/759d610f93f5ba0cceb634b7170a1081d811b0592ab1e576efbc33ccd7c62f00?w=400&amp;h=400" alt="Juego 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/d04609dfc1f107553f3905a91ed19bba0e3790c9a72c3b68f75789d5ada53c97?w=400&amp;h=400" alt="Juego 3">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/1d4d1564ff9657a8d1bcf67e71de8f0a040d1dc311f3ccc9f74871b4d478673e?w=400&amp;h=400" alt="Juego 4">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/054093d840f4447e80d9c1b83d2d8f195aa56726495d9fdebf7952994ee1c1d0?w=400&amp;h=400" alt="Juego 5">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/37ad1903f328bcf9b5e9c71318c0153d6bd00c8808913bb99d66c600396131ee?w=400&amp;h=400" alt="Juego 6">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/9e63cee8274750fceaeca551220457a84301a285cd7f0c0ea77a55334121beee?w=400&amp;h=400" alt="Juego 7">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 1.125rem; color: var(--gray); font-weight: 600;">✨ Aprende a crear juegos como estos sin programar</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Recursos</span>
+                <h2>Materiales Educativos con IA</h2>
+                <p class="section-subtitle">Explora diferentes tipos de recursos generados automáticamente</p>
+            </div>
+            <!-- Avatar destacado -->
+            <div style="max-width: 900px; margin: 3rem auto 4rem;">
+                <div style="background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 8px 40px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-family: 'Sora', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem;">👩‍🏫 Avatar IA (Gioconda)</h3>
+                        <p style="color: var(--gray); font-size: 1.05rem;">Presentación del curso con avatar digital generado por IA</p>
+                    </div>
+                    <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
+                        <video controls="" style="width: 100%; display: block; background: #000;">
+                            <source src="https://pfst.cf2.poecdn.net/base/video/76e1ac5e3a426f202a252fbc3cbe10e9a6f90caa86c9100434951d44a0af46db" type="video/mp4">
+                            Tu navegador no soporta el elemento de video.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Podcast destacado -->
+            <div style="max-width: 800px; margin: 3rem auto 4rem;">
+                <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); padding: 2.5rem; border-radius: 24px; box-shadow: 0 8px 40px rgba(99, 102, 241, 0.15); border: 2px solid rgba(99, 102, 241, 0.2);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="audio-icon" style="display: flex; align-items: flex-end; gap: 4px; height: 40px;">
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out infinite;"></div>
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out 0.1s infinite;"></div>
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out 0.2s infinite;"></div>
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out 0.3s infinite;"></div>
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out 0.2s infinite;"></div>
+                                <div class="bar" style="width: 4px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 2px; animation: audioWave 0.8s ease-in-out 0.1s infinite;"></div>
+                            </div>
+                            <h3 style="font-family: 'Sora', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--dark); margin: 0;">🎙️ Podcast Explicativo</h3>
+                        </div>
+                        <p style="color: var(--gray); font-size: 1.05rem; margin: 0;">Audio generado con IA explicando el curso completo</p>
+                    </div>
+                    <audio controls="" style="width: 100%; border-radius: 12px; outline: none;">
+                        <source src="https://pfst.cf2.poecdn.net/base/audio/80af92beb5dcbae806ad0d6b2315ae52e4e0b510ec7f6c889d846a7d17ba1daa" type="audio/mp4">
+                        Tu navegador no soporta el elemento de audio.
+                    </audio>
+                </div>
+            </div>
+
+            <!-- Presentación Gamma destacada -->
+            <div style="max-width: 1000px; margin: 3rem auto 4rem;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h3 style="font-family: 'Sora', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem;">📊 Presentación Interactiva</h3>
+                    <p style="color: var(--gray); font-size: 1.05rem;">De consumidores a creadores: La revolución educativa con IA</p>
+                </div>
+                <a href="https://gamma.app/docs/IA-para-Docentes-Crear-Adaptar-y-Transformar-la-Educacion-Especia-3jsxj4e8nb655ll" target="_blank" style="text-decoration: none; display: block;">
+                    <div style="position: relative; overflow: hidden; border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)';">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/636ae58bae4aa1ba1a72e3540392271047044910e52a51318e0f9974722f1efb?w=2334&amp;h=1202" alt="Presentación del Curso" style="width: 100%; display: block; border-radius: 20px;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 2rem; text-align: center;">
+                            <div style="display: inline-flex; align-items: center; gap: 0.75rem; background: white; color: var(--primary); padding: 1rem 2rem; border-radius: 50px; font-weight: 700; font-size: 1.125rem; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                                <span>Ver Presentación Completa</span>
+                                <span style="font-size: 1.5rem;">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Cuestionario Interactivo -->
+            <div style="max-width: 800px; margin: 3rem auto 4rem;">
+                <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 8px 40px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h3 style="font-family: 'Sora', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem;">❓ Descubre tu Perfil Docente con IA</h3>
+                        <p style="color: var(--gray); font-size: 1.05rem;">Responde 8 preguntas y descubre cómo este curso puede transformar tu práctica educativa</p>
+                    </div>
+
+                    <div id="quiz-container">
+                        <div id="quiz-progress" style="background: #e5e7eb; height: 8px; border-radius: 50px; margin-bottom: 2rem; overflow: hidden;">
+                            <div id="progress-bar" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                        </div>
+
+                        <div id="question-container"></div>
+
+                        <div id="quiz-result" style="display: none;">
+                            <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; border: 2px solid var(--primary);">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                                <h4 style="font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--dark);">¡Cuestionario Completado!</h4>
+                                <p id="result-message" style="font-size: 1.125rem; color: var(--gray); margin-bottom: 1.5rem;"></p>
+                                <a href="#contacto" style="display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-weight: 700; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                    📩 Solicitar Información del Curso
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapa Mental Interactivo -->
+            <div style="max-width: 1000px; margin: 3rem auto 4rem;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h3 style="font-family: 'Sora', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem;">🗺️ Mapa Mental del Curso</h3>
+                    <p style="color: var(--gray); font-size: 1.05rem;">Haz clic para explorar el contenido completo del curso</p>
+                </div>
+
+                <!-- Vista previa del mapa mental -->
+                <div id="mindmap-preview" onclick="openMindmapModal()" style="position: relative; cursor: pointer; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)';">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/38ba126c97f182af4340d7e50ef1a10e5f3af1844c66be1f311aced5417b2250?w=2751&amp;h=1537" alt="Mapa Mental del Curso" style="width: 100%; display: block; filter: brightness(0.95);">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%); display: flex; align-items: flex-end; justify-content: center; padding: 2rem;">
+                        <div style="display: inline-flex; align-items: center; gap: 0.75rem; background: white; color: var(--primary); padding: 1rem 2rem; border-radius: 50px; font-weight: 700; font-size: 1.125rem; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                            <span>🔍 Explorar Mapa Mental Interactivo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal del Mapa Mental -->
+                <div id="mindmap-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; padding: 2rem; overflow-y: auto;">
+                    <div style="max-width: 1400px; margin: 0 auto; position: relative;">
+                        <button onclick="closeMindmapModal()" style="position: fixed; top: 2rem; right: 2rem; background: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1001; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            ✕
+                        </button>
+
+                        <div style="background: white; border-radius: 24px; padding: 3rem 2rem; margin-top: 4rem;">
+                            <h2 style="font-family: 'Sora', sans-serif; text-align: center; font-size: 2rem; font-weight: 800; color: var(--dark); margin-bottom: 3rem;">IA para Materiales Educativos y Gestión de Aula</h2>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                                <!-- Nodo 1 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #e0e7ff, #c7d2fe); border: 3px solid var(--primary); padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s; position: relative;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">📄 Materiales Imprimibles</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid var(--primary); animation: fadeIn 0.3s;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Fichas adaptadas al nivel del alumno</li>
+                                            <li>Ejercicios personalizados</li>
+                                            <li>Lecturas en formato fácil</li>
+                                            <li>Material con pictogramas</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 2 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border: 3px solid #3b82f6; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">🎮 Videojuegos Educativos</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #3b82f6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #3b82f6;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Sin necesidad de código</li>
+                                            <li>Pac-Man, Snake, Donkey Kong adaptados</li>
+                                            <li>Ejercicios de fonología interactivos</li>
+                                            <li>Karaoke de lectura palabra por palabra</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 3 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #fce7f3, #fbcfe8); border: 3px solid #ec4899; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">📋 Gestión de Aula</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #ec4899; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #ec4899;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Automatización de informes</li>
+                                            <li>Seguimiento del progreso</li>
+                                            <li>Planificación de sesiones</li>
+                                            <li>Comunicación con familias</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 4 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 3px solid #f59e0b; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">🎥 Material Audiovisual</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #f59e0b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #f59e0b;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Vídeos con avatares IA</li>
+                                            <li>Podcasts educativos</li>
+                                            <li>Narraciones personalizadas</li>
+                                            <li>Contenido multimedia adaptado</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 5 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 3px solid #10b981; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">📝 Documentación</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #10b981;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Informes en minutos</li>
+                                            <li>Evaluaciones psicopedagógicas</li>
+                                            <li>Adaptaciones curriculares (ACI)</li>
+                                            <li>Documentación administrativa</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 6 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe); border: 3px solid #8b5cf6; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">⚙️ Sistemas Completos</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #8b5cf6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #8b5cf6;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Plataformas educativas completas</li>
+                                            <li>Integración de herramientas</li>
+                                            <li>Gestión integral del aula</li>
+                                            <li>Ecosistema personalizado</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 7 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #fce4ec, #fbcfe8); border: 3px solid #e91e63; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">✨ Funcionalidades Avanzadas</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #e91e63; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #e91e63;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Análisis vocal en tiempo real</li>
+                                            <li>Gamificación avanzada</li>
+                                            <li>Realidad aumentada educativa</li>
+                                            <li>Personalización extrema</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Nodo 8 -->
+                                <div class="modal-node" onclick="toggleModalNode(this)" style="background: linear-gradient(135deg, #ddd6fe, #c4b5fd); border: 3px solid #7c3aed; padding: 1.5rem; border-radius: 16px; cursor: pointer; transition: all 0.3s;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 style="font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 700; color: var(--dark); margin: 0; flex: 1;">🎓 Temas del Curso</h4>
+                                        <div class="node-arrow" style="width: 30px; height: 30px; background: #7c3aed; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; transition: transform 0.3s;">›</div>
+                                    </div>
+                                    <div class="node-content" style="display: none; padding-top: 1rem; border-top: 2px solid #7c3aed;">
+                                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--gray); line-height: 2;">
+                                            <li>Fundamentos de IA educativa</li>
+                                            <li>Herramientas sin código</li>
+                                            <li>80% práctica / 20% teoría</li>
+                                            <li>Casos reales de transformación</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de recursos -->
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3>🎥 Resumen en Vídeo</h3>
+                    <p>Versión alternativa del resumen</p>
+                    <a href="https://notebooklm.google.com/notebook/3612926d-7019-4de1-bd3d-d341e685c146?artifactId=80818289-24bd-4739-a586-256634ab7b62" target="_blank" class="resource-link">Ver →</a>
+                </div>
+                <div class="resource-card">
+                    <h3>📖 Cuento Explicativo</h3>
+                    <p>Cuento para explicar conceptos</p>
+                    <a href="https://gemini.google.com/share/24c049475613" target="_blank" class="resource-link">Leer →</a>
+                </div>
+                <div class="resource-card">
+                    <h3>📝 Fichas Interactivas</h3>
+                    <p>Ejercicios adaptados automáticamente</p>
+                    <a href="https://notebooklm.google.com/notebook/b476588b-76c2-47b1-9f98-93110ef35dcb?authuser=2" target="_blank" class="resource-link">Ver →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Metodología</span>
+                <h2>Aprender Haciendo</h2>
+                <p class="section-subtitle">Un curso 100% práctico donde crearás tus propios materiales</p>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <h3>80%</h3>
+                    <p>Práctica</p>
+                </div>
+                <div class="stat">
+                    <h3>20%</h3>
+                    <p>Teoría</p>
+                </div>
+                <div class="stat">
+                    <h3>100%</h3>
+                    <p>Aplicable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ponente" class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Tu Formador</span>
+                <h2>José Aserraf</h2>
+                <p class="section-subtitle">Logopeda y especialista en IA aplicada a la educación especial</p>
+            </div>
+            <div class="instructor">
+                <div class="instructor-photo">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&amp;h=225" alt="José Aserraf">
+                </div>
+                <div class="instructor-info">
+                    <h3>José Aserraf</h3>
+                    <p class="instructor-title">Logopeda y Especialista en IA Educativa</p>
+                    <ul>
+                        <li>Logopeda colegiado con amplia experiencia en intervención</li>
+                        <li>Especialista en IA aplicada a la educación especial</li>
+                        <li>Creador de múltiples herramientas interactivas para NEE</li>
+                        <li>Desarrollador de recursos educativos adaptados</li>
+                        <li>Ponente en universidades y formación docente</li>
+                        <li>Experiencia real en PT, AL y aulas de educación especial</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 6rem 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2 style="color: white;">¿Listo para Transformar tu Práctica Docente?</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Únete a la revolución de la IA educativa</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: white; padding: 4rem; border-radius: 24px; text-align: center; margin-top: 3rem; border: 2px solid rgba(255,255,255,0.2);">
+                <h3 style="font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 2rem; color: white;">Información y Contacto</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 500px; margin: 0 auto 2rem; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.2); padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                        <strong style="min-width: 100px;">📧 Email:</strong>
+                        <a href="mailto:gestionafonia@gmail.com" style="color: white; text-decoration: none; font-weight: 600;">gestionafonia@gmail.com</a>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.2); padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                        <strong style="min-width: 100px;">👨‍🏫 Formador:</strong>
+                        <span style="color: white;">José Aserraf</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.2); padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                        <strong style="min-width: 100px;">🎓 Modalidad:</strong>
+                        <span style="color: white;">Formación Oficial del Profesorado</span>
+                    </div>
+                </div>
+                <a href="mailto:gestionafonia@gmail.com?subject=Consulta Curso IA para Docentes" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: all 0.3s; font-size: 1.05rem; background: white; color: var(--primary); box-shadow: 0 10px 40px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 15px 50px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 40px rgba(0,0,0,0.2)'">
+                    📩 Enviar Consulta
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p><strong>© 2025 José Aserraf - IA para Docentes</strong></p>
+            <p style="margin-top: 0.5rem;">Formación oficial para PT, AL y Educación Especial</p>
+            <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.2); opacity: 0.9;">
+                Proyecto que se nutre de la experiencia y profesionales del <a href="https://www.logopediafonia.com" target="_blank" style="color: var(--secondary); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--secondary);">Gabinete Fönia</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function navigateToSection() {
+            const dropdown = document.getElementById('navDropdown');
+            const selectedValue = dropdown.value;
+
+            if (selectedValue) {
+                // Scroll to the selected section
+                const targetElement = document.querySelector(selectedValue);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // Reset dropdown to placeholder
+                setTimeout(() => {
+                    dropdown.value = '';
+                }, 300);
+            }
+        }
+
+        // Cuestionario Interactivo
+        const quizQuestions = [
+            {
+                question: "¿Cuál es tu nivel actual de conocimiento sobre Inteligencia Artificial aplicada a la educación?",
+                options: [
+                    "Nulo - No he trabajado nunca con IA",
+                    "Básico - He escuchado sobre IA pero no la he usado",
+                    "Intermedio - He probado algunas herramientas de IA",
+                    "Avanzado - Uso IA regularmente en mi práctica docente"
+                ]
+            },
+            {
+                question: "¿Cuánto tiempo dedicas semanalmente a crear materiales educativos adaptados?",
+                options: [
+                    "Menos de 2 horas",
+                    "Entre 2-5 horas",
+                    "Entre 5-10 horas",
+                    "Más de 10 horas"
+                ]
+            },
+            {
+                question: "¿Cuál es tu mayor desafío como docente de PT/AL?",
+                options: [
+                    "Falta de tiempo para adaptar materiales",
+                    "Diversidad de niveles en el aula",
+                    "Mantener la motivación del alumnado",
+                    "Exceso de burocracia y documentación"
+                ]
+            },
+            {
+                question: "¿Qué tipo de recursos te gustaría crear con IA?",
+                options: [
+                    "Fichas y ejercicios personalizados",
+                    "Videojuegos educativos",
+                    "Contenido audiovisual (vídeos, podcasts)",
+                    "Todos los anteriores"
+                ]
+            },
+            {
+                question: "¿Con qué frecuencia necesitas diversificar tus recursos educativos?",
+                options: [
+                    "Diariamente",
+                    "Semanalmente",
+                    "Mensualmente",
+                    "Ocasionalmente"
+                ]
+            },
+            {
+                question: "¿Cuál es tu especialidad docente?",
+                options: [
+                    "Pedagogía Terapéutica (PT)",
+                    "Audición y Lenguaje (AL)",
+                    "Educación Especial",
+                    "Otra especialidad educativa"
+                ]
+            },
+            {
+                question: "¿Qué esperas conseguir con este curso?",
+                options: [
+                    "Ahorrar tiempo en la creación de materiales",
+                    "Mejorar la motivación de mi alumnado",
+                    "Aprender nuevas herramientas tecnológicas",
+                    "Todo lo anterior"
+                ]
+            },
+            {
+                question: "¿Qué tan importante es para ti hacer el aprendizaje más divertido para tus estudiantes?",
+                options: [
+                    "Muy importante - Es mi prioridad principal",
+                    "Importante - Me gustaría mejorarlo",
+                    "Moderadamente importante",
+                    "Poco importante - Me enfoco en otros aspectos"
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        const answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('question-container');
+            const question = quizQuestions[currentQuestion];
+            const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            container.innerHTML = `
+                <div style="margin-bottom: 2rem;">
+                    <div style="color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">Pregunta ${currentQuestion + 1} de ${quizQuestions.length}</div>
+                    <h4 style="font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 1.5rem;">${question.question}</h4>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        ${question.options.map((option, index) => `
+                            <button onclick="selectAnswer(${index})" style="background: white; border: 2px solid #e5e7eb; padding: 1rem 1.5rem; border-radius: 12px; text-align: left; cursor: pointer; transition: all 0.3s; font-size: 1rem; font-family: inherit;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(99, 102, 241, 0.05)'" onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='white'">
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(answerIndex) {
+            answers.push(answerIndex);
+            currentQuestion++;
+
+            if (currentQuestion < quizQuestions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('quiz-progress').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'block';
+
+            let message = "Basado en tus respuestas, este curso es perfecto para ti. ";
+
+            // Personalizar mensaje según respuestas
+            if (answers[0] <= 1) {
+                message += "Comenzarás desde lo básico y aprenderás a dominar la IA educativa paso a paso. ";
+            } else {
+                message += "Podrás llevar tus habilidades con IA al siguiente nivel. ";
+            }
+
+            if (answers[1] >= 2) {
+                message += "Aprenderás a reducir drásticamente el tiempo que dedicas a crear materiales. ";
+            }
+
+            if (answers[6] === 3) {
+                message += "Este curso cubre exactamente todo lo que buscas: eficiencia, motivación y tecnología práctica.";
+            } else {
+                message += "Descubrirás herramientas que transformarán tu práctica docente.";
+            }
+
+            document.getElementById('result-message').textContent = message;
+        }
+
+        // Iniciar cuestionario
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuestion();
+        });
+
+        // Mapa Mental Modal
+        function openMindmapModal() {
+            document.getElementById('mindmap-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMindmapModal() {
+            document.getElementById('mindmap-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleModalNode(element) {
+            const content = element.querySelector('.node-content');
+            const arrow = element.querySelector('.node-arrow');
+            const isOpen = content.style.display === 'block';
+
+            if (isOpen) {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+                element.style.transform = 'scale(1)';
+            } else {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(90deg)';
+                element.style.transform = 'scale(1.02)';
+                element.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            }
+        }
+
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMindmapModal();
+            }
+        });
+
+        // Acordeón Problema/Solución
+        function toggleAccordion(id) {
+            const content = document.getElementById(id + '-content');
+            const arrow = document.getElementById(id + '-arrow');
+            const isOpen = content.style.display === 'block';
+
+            if (isOpen) {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Díptico Toggle
+        function toggleDiptico() {
+            const container = document.getElementById('diptico-container');
+            const arrow = document.getElementById('diptico-toggle-arrow');
+            const isOpen = container.style.display === 'block';
+
+            if (isOpen) {
+                container.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                container.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+
+
+</body></html>

@@ -1,0 +1,1176 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erre que Erre - Libro Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Comic+Neue:wght@700&amp;display=swap">
+    <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --dark-bg: #1A1A2E;
+            --light-bg: #FFF5E6;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .dark body {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+        }
+
+        .r-letter {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.3em;
+            animation: pulse-r 1.5s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .r-letter:hover {
+            transform: scale(1.4) rotate(5deg);
+            color: #FF3838;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+        }
+
+        @keyframes pulse-r {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes rainbow {
+            0% { color: #FF6B6B; }
+            25% { color: #4ECDC4; }
+            50% { color: #FFE66D; }
+            75% { color: #95E1D3; }
+            100% { color: #FF6B6B; }
+        }
+
+        .rainbow-mode .r-letter {
+            animation: rainbow 2s linear infinite, pulse-r 1.5s ease-in-out infinite;
+        }
+
+        .word-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: visible;
+        }
+
+        .dark .word-card {
+            background: #2D3561;
+            color: white;
+        }
+
+        .word-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .word-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Tarjetas especiales para trabalenguas */
+        .tongue-twister-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: visible;
+        }
+
+        .dark .tongue-twister-card {
+            background: #2D3561;
+            color: white;
+        }
+
+        .tongue-twister-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .tongue-twister-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .tongue-twister-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        .separator {
+            color: #999;
+            font-size: 0.9em;
+            margin: 0 2px;
+        }
+
+        /* Pelota de fútbol */
+        .soccer-ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: -40px;
+            right: -10px;
+            font-size: 30px;
+            animation: ball-bounce 0.5s ease-in-out infinite, ball-move-rtl 3s linear infinite;
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        @keyframes ball-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+
+        @keyframes ball-move-rtl {
+            0% { right: -10px; }
+            100% { right: calc(100% + 10px); }
+        }
+
+        /* Modos de animación */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Karaoke de izquierda a derecha */
+        @keyframes karaoke-ltr {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Karaoke de derecha a izquierda */
+        @keyframes karaoke-rtl {
+            0% { background-position: 200% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .karaoke-mode {
+            background: linear-gradient(90deg, #333 0%, #333 50%, var(--primary-color) 50%, var(--primary-color) 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: karaoke-ltr 3s linear infinite;
+        }
+
+        /* Modo karaoke invertido (derecha a izquierda) */
+        .karaoke-rtl-mode {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color) 50%, #333 50%, #333 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: karaoke-rtl 3s linear infinite;
+        }
+
+        /* Control flotante compacto - botón inferior derecho */
+        .floating-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF3838 100%);
+            color: white;
+            cursor: pointer;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .control-menu {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dark .control-menu {
+            background: #2D3561;
+            color: white;
+        }
+
+        .control-menu.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .control-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .control-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(-3px);
+        }
+
+        .control-option.active {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF3838 100%);
+            color: white;
+        }
+
+        .control-option .icon {
+            font-size: 1.4rem;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .control-divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 8px 0;
+        }
+
+        .dark .control-divider {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Ajuste para móviles */
+        @media (max-width: 768px) {
+            .floating-controls {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .toggle-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+
+            .control-menu {
+                min-width: 200px;
+                padding: 12px;
+            }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF3838 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .page-title {
+            font-family: 'Comic Neue', cursive;
+            font-size: 3rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid-words {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Grid especial para logotomas (5 columnas) */
+        .grid-logotomas {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-logotomas {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-logotomas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Navegación de páginas */
+        .page-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .dark .page-btn {
+            background: #2D3561;
+            color: white;
+        }
+
+        .page-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF3838 100%);
+            color: white;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
+<body>
+    <div class="container-main">
+        <h1 class="page-title">⚽ Erre que Erre ⚽</h1>
+
+        <!-- Navegación de páginas -->
+        <div class="page-nav">
+            <button class="page-btn active" onclick="showPage(1)">Palabras</button>
+            <button class="page-btn" onclick="showPage(2)">Logotomas R</button>
+            <button class="page-btn" onclick="showPage(3)">RR Intermedia</button>
+            <button class="page-btn" onclick="showPage(4)">Logotomas RR</button>
+            <button class="page-btn" onclick="showPage(5)">R Final</button>
+            <button class="page-btn" onclick="showPage(6)">Frases</button>
+            <button class="page-btn" onclick="showPage(7)">Adivinanzas</button>
+            <button class="page-btn" onclick="showPage(8)">Trabalenguas</button>
+        </div>
+
+        <!-- Controles flotantes compactos -->
+        <div class="floating-controls" id="floatingControls">
+            <div class="control-menu" id="controlMenu">
+                <div class="control-option active" onclick="setMode('normal')" data-mode="normal">
+                    <span class="icon">📄</span>
+                    <span>Normal</span>
+                </div>
+                <div class="control-option" onclick="setMode('word-by-word')" data-mode="word-by-word">
+                    <span class="icon">📝</span>
+                    <span>Palabra por palabra</span>
+                </div>
+                <div class="control-option" onclick="setMode('slide')" data-mode="slide">
+                    <span class="icon">➡️</span>
+                    <span>Barrido</span>
+                </div>
+                <div class="control-option" onclick="setMode('karaoke')" data-mode="karaoke">
+                    <span class="icon">🎤</span>
+                    <span>Karaoke →</span>
+                </div>
+                <div class="control-option" onclick="setMode('karaoke-rtl')" data-mode="karaoke-rtl">
+                    <span class="icon">🎵</span>
+                    <span>Karaoke ←</span>
+                </div>
+                <div class="control-option" onclick="setMode('soccer')" data-mode="soccer">
+                    <span class="icon">⚽</span>
+                    <span>Pelota de fútbol</span>
+                </div>
+                <div class="control-divider"></div>
+                <div class="control-option" onclick="toggleRainbow()" id="rainbowOption">
+                    <span class="icon">🌈</span>
+                    <span>Arcoíris</span>
+                </div>
+                <div class="control-option" onclick="resetView()">
+                    <span class="icon">🔄</span>
+                    <span>Reiniciar</span>
+                </div>
+            </div>
+            <button class="toggle-btn" onclick="toggleControls()" title="Modos de visualización">
+                🎮
+            </button>
+        </div>
+
+        <!-- Página 1: Palabras con R inicial -->
+        <div id="page-1" class="page-content active">
+            <!-- Sección RA -->
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="r-letter" style="font-size: 2rem;">R</span>A
+                </div>
+                <div class="grid-words" id="section-ra"></div>
+            </div>
+
+            <!-- Sección RE -->
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="r-letter" style="font-size: 2rem;">R</span>E
+                </div>
+                <div class="grid-words" id="section-re"></div>
+            </div>
+
+            <!-- Sección RI -->
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="r-letter" style="font-size: 2rem;">R</span>I
+                </div>
+                <div class="grid-words" id="section-ri"></div>
+            </div>
+
+            <!-- Sección RO -->
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="r-letter" style="font-size: 2rem;">R</span>O
+                </div>
+                <div class="grid-words" id="section-ro"></div>
+            </div>
+
+            <!-- Sección RU -->
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    <span class="r-letter" style="font-size: 2rem;">R</span>U
+                </div>
+                <div class="grid-words" id="section-ru"></div>
+            </div>
+        </div>
+
+        <!-- Página 2: Logotomas -->
+        <div id="page-2" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Logotomas
+                </div>
+                <div class="grid-logotomas" id="section-logotomas"></div>
+            </div>
+        </div>
+
+        <!-- Página 3: RR Intermedia -->
+        <div id="page-3" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="r-letter" style="font-size: 2rem;">RR</span> en posición intermedia
+                </div>
+                <div class="grid-words" id="section-rr-intermedia"></div>
+            </div>
+        </div>
+
+        <!-- Página 4: Logotomas RR -->
+        <div id="page-4" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Logotomas con <span class="r-letter" style="font-size: 2rem;">RR</span>
+                </div>
+                <div class="grid-logotomas" id="section-logotomas-rr"></div>
+            </div>
+        </div>
+
+        <!-- Página 5: R Final -->
+        <div id="page-5" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Palabras con <span class="r-letter" style="font-size: 2rem;">R</span> en posición final
+                </div>
+                <div class="grid-words" id="section-r-final"></div>
+            </div>
+        </div>
+
+        <!-- Página 6: Frases -->
+        <div id="page-6" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Frases con <span class="r-letter" style="font-size: 2rem;">R</span> y <span class="r-letter" style="font-size: 2rem;">RR</span>
+                </div>
+                <div id="section-frases"></div>
+            </div>
+        </div>
+
+        <!-- Página 7: Adivinanzas -->
+        <div id="page-7" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Adivinanzas con <span class="r-letter" style="font-size: 2rem;">R</span> y <span class="r-letter" style="font-size: 2rem;">RR</span>
+                </div>
+                <div id="section-adivinanzas"></div>
+            </div>
+        </div>
+
+        <!-- Página 8: Trabalenguas -->
+        <div id="page-8" class="page-content">
+            <div class="section-container mb-8">
+                <div class="section-header">
+                    Trabalenguas
+                </div>
+                <div id="section-trabalenguas"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de palabras - Página 1
+        const wordsData = {
+            ra: ["Rábano", "rabia", "rabieta", "rabo", "racha", "racimo", "ración", "radio", "ráfaga", "raíz", "rama", "rambla", "ramillete", "ramo", "Ramón", "rampa", "rana", "rancho", "rape", "rapidez", "rápido", "raqueta", "raro", "rascar", "raspa", "rato", "ratón", "ratonera", "ravioli", "raya", "rayo", "raza", "razón"],
+            re: ["Real", "realidad", "rebaja", "rebanada", "rebaño", "rebelde", "rebotar", "rebuzno", "recado", "recambio", "receta", "recibir", "recibo", "recitar", "reclamar", "recoger", "recordar", "recuperar", "redacción", "redondo", "refrán", "regadera", "regalo", "regar", "régimen", "regla", "regordete", "regular", "reina", "reja", "relajación", "relámpago", "relato", "relevo", "relieve", "religión", "religioso", "rellenar", "reloj", "relojería", "relojero", "remar", "remedio", "remo", "remojar", "remolacha", "remolcar", "remolque", "rendija", "rendirse", "renglón", "reno", "reñir", "reparar", "repartir", "repaso", "repetir", "repisa", "reportaje", "reportero", "repostería", "reptil", "república", "repuesto", "requesón", "resbalar", "rescate", "reservado", "residuo", "resina", "respaldo", "respirar", "responder", "respuesta", "resta", "restaurante", "resuelve", "retal", "retirado", "reúma", "reunión", "revés", "revista", "revoltoso", "revolver", "rey", "rezar"],
+            ri: ["Ribera", "rico", "ridículo", "rienda", "riesgo", "rifa", "rifle", "rígido", "rima", "rincón", "rinde", "rinoceronte", "riña", "riñón", "río", "risa", "risueño", "ritmo", "rizar"],
+            ro: ["Robar", "roble", "robo", "robot", "robusto", "roca", "rociar", "rocío", "rodaballo", "rodado", "rodaja", "rodear", "rodeo", "rodilla", "roer", "rojo", "rollizo", "Roma", "romano", "romántico", "romería", "romero", "rompecabezas", "rompeolas", "romper", "ron", "roncar", "ronda", "rondalla", "ropa", "ropero", "roquefort", "rosa", "rosal", "rosaleda", "rosca", "rosquilla", "roto", "rotulador", "roza"],
+            ru: ["Rubeola", "rubí", "rubia", "rublo", "rudimento", "rueda", "rugby", "rugir", "ruido", "ruidoso", "ruín", "ruina", "ruiseñor", "ruleta", "rumbo", "rumiante", "rumor", "rural", "Rusia", "rústico", "rutina"]
+        };
+
+        // Datos de logotomas - Página 2
+        const logotomasData = [
+            "raba", "rebe", "ribi", "robo", "rubu",
+            "raca", "reque", "riqui", "roco", "rucu",
+            "racha", "reche", "richi", "rocho", "ruchu",
+            "rada", "rede", "ridi", "rodo", "rudu",
+            "rafa", "refe", "rifi", "rofo", "rufu",
+            "raga", "regue", "rigui", "rogo", "rugu",
+            "raja", "reje", "riji", "rojo", "ruju",
+            "rala", "rele", "rili", "rolo", "rulu",
+            "ralla", "relle", "rilli", "rollo", "rullu",
+            "rama", "reme", "rimi", "romo", "rumu",
+            "rana", "rene", "rini", "rono", "runu",
+            "raña", "reñe", "riñi", "roño", "ruñu",
+            "rapa", "repe", "ripi", "ropo", "rupu",
+            "rara", "rere", "riri", "roro", "ruru",
+            "rasa", "rese", "risi", "roso", "rusu",
+            "rata", "rete", "riti", "roto", "rutu",
+            "raya", "reye", "riyi", "royo", "ruyu",
+            "raza", "rece", "rici", "rozo", "ruzu"
+        ];
+
+        // Datos RR intermedia - Página 3
+        const rrIntermediaData = [
+            "Aburrido", "ahorro", "alrededor", "arrancar", "arreglar", "arriba", "arroyo", "arroz", "arruga", "arruinar", "aterriza",
+            "Barra", "barraca", "barre", "barricada", "barriga", "barril", "barrio", "barrizal", "barro", "barrote", "becerro", "berrea", "birrete", "borra", "borrasca", "borrego", "borroso", "burro",
+            "Cacharro", "carreta", "carretera", "carril", "carro", "carromato", "carroza", "carruaje", "carrusel", "cencerro", "cerrado", "cerrojo", "chorro", "cierra", "corral", "corre", "correcto",
+            "Desarrollo", "desenredar", "derrite", "derrocha", "derrota",
+            "Enredado", "enrejado", "Enrique", "enrollar", "enroscar", "errata", "erre", "error",
+            "Forrado", "forraje", "forro",
+            "Garra", "garrafa", "garrotazo", "garrote", "gorrión", "gorro", "guerra",
+            "Herradura", "herramienta", "herrero", "hierro", "honrado", "horrible",
+            "Incorrecto", "irregular",
+            "Jarra", "jarrón",
+            "Macarrones", "marrano", "marrón", "matorral", "mirra", "morro",
+            "Navarra",
+            "Parra", "párrafo", "parroquia", "perro", "porra", "porrazo", "porrón", "puerro",
+            "Serrucho", "sierra", "sonrisa",
+            "Tarragona", "tarro", "terraza", "terremoto", "terreno", "terrible", "tierra", "torre", "torreón", "turrón",
+            "Zamarra", "zorro", "zurra"
+        ];
+
+        // Datos R final - Página 4
+        const rFinalData = [
+            "Mar", "par", "lar", "car", "bar", "pajar", "pinar", "telar", "lagar", "azúcar", "calamar", "colocar",
+            "Por", "valor", "calor", "dolor", "pudor", "vapor", "sudor", "olor", "hedor", "mayor", "sopor", "señor", "tenedor", "comedor", "ganador",
+            "Sur", "abur",
+            "Ser", "ver", "coser", "tener", "comer", "saber", "caer", "amanecer", "anochecer",
+            "Ir", "sir", "mir", "venir", "teñir", "pedir", "vivir"
+        ];
+
+        // Datos logotomas RR - Página 4
+        const logotomasRRData = [
+            "barra", "berre", "birri", "borro", "burru",
+            "carra", "cerre", "cirri", "corro", "curru",
+            "charra", "cherre", "chirri", "chorro", "churru",
+            "darra", "derre", "dirri", "dorro", "durru",
+            "farra", "ferre", "firri", "forro", "furru",
+            "garra", "gerre", "girri", "gorro", "gurru",
+            "jarra", "jerre", "jirri", "jorro", "jurru",
+            "larra", "lerre", "lirri", "lorro", "lurru",
+            "marra", "merre", "mirri", "morro", "murru",
+            "narra", "nerre", "nirri", "norro", "nurru",
+            "ñarra", "ñerre", "ñirri", "ñorro", "ñurru",
+            "parra", "perre", "pirri", "porro", "purru",
+            "quarra", "querre", "quirri", "qorro", "qurru",
+            "rarra", "rerre", "rirri", "rorro", "rurru",
+            "sarra", "serre", "sirri", "sorro", "surru",
+            "tarra", "terre", "tirri", "torro", "turru",
+            "varra", "verre", "virri", "vorro", "vurru",
+            "zarra", "zerre", "zirri", "zorro", "zurru"
+        ];
+
+        // Datos de frases - Página 6
+        const frasesData = [
+            "El ratón corre rápido por el rincón.",
+            "Rosa riega las rosas rojas del jardín.",
+            "El perro marrón corre por la carretera.",
+            "Ramón tiene un regalo rojo y redondo.",
+            "Mi burro come berros en el arroyo.",
+            "La tierra roja es rica en hierro.",
+            "El carro arranca con un ruido raro.",
+            "Roberto repara la barrera rota.",
+            "El tarro de arroz está en el armario.",
+            "La rama del árbol roza la torre.",
+            "Ricardo arrastra el carrito por la arena.",
+            "El barril rueda por la rampa.",
+            "Raquel arranca raíces del terreno.",
+            "Elorro se esconde detrás de la roca.",
+            "Los ratones corren alrededor del granero.",
+            "El río recorre las tierras verdes.",
+            "Rita revuelve el arroz con las verduras.",
+            "La carrera de carros termina en la pista.",
+            "El burro rebuzna ruidosamente cerca del río.",
+            "Roberto recorre el sendero con su perro.",
+            "El serrucho corta la madera rápido.",
+            "La carretera atraviesa la sierra.",
+            "Enrique enrosca el tornillo en la pared.",
+            "El gorro rojo está en la terraza.",
+            "La guitarra resuena en la habitación.",
+            "Rodrigo recoge ramas del suelo.",
+            "Los niños ruedan por la hierba.",
+            "El loro repite las palabras con gracia.",
+            "La ardilla recoge nueces para el invierno.",
+            "Raúl repara el radiador del coche."
+        ];
+
+        // Datos de adivinanzas - Página 7
+        const adivinanzasData = [
+            "Tiene raíces que nadie ve, es más alto que los árboles. Arriba, arriba va, y jamás crecerá. ¿Qué es? (La montaña)",
+            "Corro y corro sin parar, por el río voy a dar. Nunca me puedo cansar. ¿Qué soy? (El agua del río)",
+            "Rojo por fuera, blanco por dentro, con puntitos negros en el centro. ¿Qué es? (La fresa)",
+            "Con el perro y el gato soy terrible, pero cuando río me vuelvo amable. ¿Quién soy? (La erre)",
+            "Tiene corona pero no es rey, tiene rayas pero no es cebra. ¿Qué es? (La piña)",
+            "Redondo, redondo, barril sin fondo. Rueda que te rueda por el suelo. ¿Qué es? (El aro)",
+            "Treinta y dos sierras blancas en un viejo comedor, y una vieja parlanchina que las mueve alrededor. ¿Qué es? (La boca con dientes y lengua)",
+            "Ronda que te ronda, rueda que te rueda, en el parque me encuentras y los niños juegan. ¿Qué soy? (El columpio o el carrusel)",
+            "Rápido corro por la carretera, llevo cuatro ruedas y un motor que ronronea. ¿Qué soy? (El carro)",
+            "Teje su tela en un rincón, atrapa moscas sin usar las manos. ¿Quién es? (La araña)",
+            "Verde fue mi nacimiento, amarillo mi vivir, y ahora me visten de rojo para hacerme morir. ¿Qué es? (El pimiento rojo)",
+            "Con mi cara roja alegro la huerta, y por dentro guardo semillas despiertas. ¿Qué soy? (El tomate)",
+            "Ladro y ladro sin parar, muevo la cola al jugar, soy el mejor amigo que puedes encontrar. ¿Quién soy? (El perro)",
+            "Sobre la tierra y bajo el cielo, ruedo y ruedo sin tener piernas. ¿Qué soy? (La rueda)",
+            "Con orejas largas y rabo corto, rebuzno fuerte en el corral, llevo carga de un lugar a otro. ¿Quién soy? (El burro)",
+            "Por un camino largo y estrecho va caminando un bicho, y al nombrar su nombre ya te lo he dicho. ¿Qué es? (La vaca - camino largo = ca-mino-largo)",
+            "Viste de chaleco rojo, sin ser frío ni calor, brinca y brinca por el campo, sin ser jugador. ¿Quién es? (El petirrojo)",
+            "De tierra soy y tierra volveré, pero mientras vivo en el barro estaré. ¿Qué soy? (El ladrillo)",
+            "Rueda sin llantas, tambor sin cuero, reloj sin manecillas. ¿Qué es? (El barril)",
+            "Cuatro torres con cuatro rincones, cuatro ramas y mil ramones. ¿Qué es? (El árbol)"
+        ];
+
+        // Datos trabalenguas - Página 7
+        const trabalenguasData = [
+            "El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha robado.",
+            "La clase está desorganizada, ¿quién la reorganizará? El reorganizador que la reorganice buen reorganizador será.",
+            "Corro y corro yo en el corro. Si en el corro caigo me rompo el morro.",
+            "Rabia, rabina tiene una piña con erre de riña y eñe de niña.",
+            "Rabia, rabiña, que tengo una piña, con siete piñones y tú no los comes.",
+            "El perro de San Roque no tiene cola, porque se la ha mordido la caracola.",
+            "Rosa Rosales cortó una rosa, ¡Qué roja la rosa de Rosa Rosales!",
+            "Un burro comía berros y un perro se los robó, el burro lanzó un rebuzno y el perro al barro cayó.",
+            "Un carro cargado de rocas iba por la carretera haciendo carric, carrac, carric, carrac.",
+            "Rosa Rizo reza ruso, ruso reza Rosa Rizo.",
+            "Recia la rajada rueda, rueda rugiendo rudamente rauda rauda rueda rugiendo rudamente la rajada rueda. ¡Rueda rauda, recia rueda, rauda reciamente rueda! ¡Rueda recia, rauda rueda, rugiente rajada rueda!",
+            "Parra tenía una perra. Guerra tenía una parra. La perra de Parra subió a la parra de Guerra. Guerra pegó con la porra a la perra de Parra. Y Parra le dijo a Guerra: - ¿Por qué ha pegado Guerra con la porra a la perra de Parra? Y Guerra le contestó: - Si la perra de Parra no hubiera subido a la parra de Guerra, Guerra no hubiese pegado con la porra a la perra de Parra.",
+            "Un podador podaba una parra, otro podador que por allí pasaba, al primer podador le preguntó: - ¿Qué podas, podador? No podo mi parra ni tu parra podo: podo la parra de mi tío Porro.",
+            "El cielo está emborregado, ¿Quién lo desemborregará? El desemborregador que lo desemborregue buen desemborregador será.",
+            "Rasquín era un rascón que rascaba en una risca, con un tosco rasca risca rascador, rasca que rasca acabó con el risco, rasca la risca rascó un rincón.",
+            "Tan caro es ese carro que por caro no compro el carro.",
+            "Tres raras ratas, dos ratones y un robot enrarecieron recientemente de repente. Un robot, dos ratones y tres raras ratas, de repente recientemente enrarecieron.",
+            "Un burro comía berros y un zorro lo estaba viendo. El burro lanzó un rebuzno y el zorro al barro cayó."
+        ];
+
+        let currentMode = 'normal';
+        let rainbowMode = false;
+        let currentPage = 1;
+
+        // Función para procesar texto y resaltar R o RR
+        function processText(text) {
+            // Procesar palabra por palabra preservando espacios y puntuación
+            return text.replace(/\b(\w*[rR]{1,2}\w*)\b/g, (match) => {
+                const lowerMatch = match.toLowerCase();
+                const rrIndex = lowerMatch.indexOf('rr');
+
+                if (rrIndex !== -1) {
+                    // Tiene RR (doble R)
+                    const before = match.substring(0, rrIndex);
+                    const rr = match.substring(rrIndex, rrIndex + 2);
+                    const after = match.substring(rrIndex + 2);
+                    return `${before}<span class="r-letter">${rr.toUpperCase()}</span>${after}`;
+                } else if (lowerMatch.charAt(0) === 'r') {
+                    // Empieza con R simple
+                    const r = match.charAt(0);
+                    const rest = match.substring(1);
+                    return `<span class="r-letter">${r.toUpperCase()}</span>${rest}`;
+                }
+
+                return match;
+            });
+        }
+
+        // Función para procesar palabras y resaltar R o RR
+        function processWord(word) {
+            const lowerWord = word.toLowerCase();
+
+            // Buscar RR en cualquier posición
+            const rrIndex = lowerWord.indexOf('rr');
+
+            if (rrIndex !== -1) {
+                // Tiene RR (doble R)
+                const before = word.substring(0, rrIndex);
+                const after = word.substring(rrIndex + 2);
+                return `${before}<span class="separator">-</span><span class="r-letter">RR</span><span class="separator">-</span>${after}`;
+            } else if (lowerWord.charAt(0) === 'r') {
+                // Empieza con R simple
+                const secondChar = word.charAt(1);
+                const remaining = word.substring(2);
+                return `<span class="r-letter">R</span><span class="separator">-</span>${secondChar.toUpperCase()}<span class="separator">-</span>${remaining}`;
+            } else if (lowerWord.charAt(lowerWord.length - 1) === 'r') {
+                // Termina con R simple
+                const beforeR = word.substring(0, word.length - 1);
+                const r = word.charAt(word.length - 1);
+                return `${beforeR}<span class="separator">-</span><span class="r-letter">${r.toUpperCase()}</span>`;
+            }
+
+            return word;
+        }
+
+        // Función para crear tarjeta de palabra
+        function createWordCard(word, index) {
+            const card = document.createElement('div');
+            card.className = 'word-card';
+            card.innerHTML = `<div class="word-text">${processWord(word)}</div>`;
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            // Click para reproducir palabra
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 300);
+            });
+
+            return card;
+        }
+
+        // Función para crear tarjeta de trabalenguas
+        function createTrabalenguasCard(text, index) {
+            const card = document.createElement('div');
+            card.className = 'tongue-twister-card';
+            card.innerHTML = `
+                <div class="tongue-twister-number">Trabalenguas ${index + 1}</div>
+                <div class="tongue-twister-text">${processText(text)}</div>
+            `;
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            // Click para reproducir trabalenguas
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 300);
+            });
+
+            return card;
+        }
+
+        // Renderizar palabras - Página 1
+        function renderWordsPage1() {
+            const sections = {
+                'section-ra': wordsData.ra,
+                'section-re': wordsData.re,
+                'section-ri': wordsData.ri,
+                'section-ro': wordsData.ro,
+                'section-ru': wordsData.ru
+            };
+
+            Object.keys(sections).forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                section.innerHTML = '';
+                sections[sectionId].forEach((word, index) => {
+                    section.appendChild(createWordCard(word, index));
+                });
+            });
+        }
+
+        // Renderizar logotomas - Página 2
+        function renderLogotomas() {
+            const section = document.getElementById('section-logotomas');
+            section.innerHTML = '';
+            logotomasData.forEach((word, index) => {
+                section.appendChild(createWordCard(word, index));
+            });
+        }
+
+        // Renderizar RR intermedia - Página 3
+        function renderRRIntermedia() {
+            const section = document.getElementById('section-rr-intermedia');
+            section.innerHTML = '';
+            rrIntermediaData.forEach((word, index) => {
+                section.appendChild(createWordCard(word, index));
+            });
+        }
+
+        // Renderizar logotomas RR - Página 4
+        function renderLogotomasRR() {
+            const section = document.getElementById('section-logotomas-rr');
+            section.innerHTML = '';
+            logotomasRRData.forEach((word, index) => {
+                section.appendChild(createWordCard(word, index));
+            });
+        }
+
+        // Renderizar R final - Página 5
+        function renderRFinal() {
+            const section = document.getElementById('section-r-final');
+            section.innerHTML = '';
+            rFinalData.forEach((word, index) => {
+                section.appendChild(createWordCard(word, index));
+            });
+        }
+
+        // Renderizar frases - Página 6
+        function renderFrases() {
+            const section = document.getElementById('section-frases');
+            section.innerHTML = '';
+            frasesData.forEach((text, index) => {
+                section.appendChild(createTrabalenguasCard(text, index));
+            });
+        }
+
+        // Renderizar adivinanzas - Página 7
+        function renderAdivinanzas() {
+            const section = document.getElementById('section-adivinanzas');
+            section.innerHTML = '';
+            adivinanzasData.forEach((text, index) => {
+                const card = document.createElement('div');
+                card.className = 'tongue-twister-card';
+                card.innerHTML = `
+                    <div class="tongue-twister-number">🤔 Adivinanza ${index + 1}</div>
+                    <div class="tongue-twister-text">${processText(text)}</div>
+                `;
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                card.addEventListener('click', () => {
+                    card.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                });
+
+                section.appendChild(card);
+            });
+        }
+
+        // Renderizar trabalenguas - Página 8
+        function renderTrabalenguas() {
+            const section = document.getElementById('section-trabalenguas');
+            section.innerHTML = '';
+            trabalenguasData.forEach((text, index) => {
+                section.appendChild(createTrabalenguasCard(text, index));
+            });
+        }
+
+        // Mostrar página
+        function showPage(pageNum) {
+            // Actualizar botones
+            const buttons = document.querySelectorAll('.page-btn');
+            buttons.forEach((btn, index) => {
+                if (index + 1 === pageNum) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Mostrar contenido de página
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach((page, index) => {
+                if (index + 1 === pageNum) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+
+            currentPage = pageNum;
+            resetView();
+        }
+
+        // Cambiar modo de visualización
+        function setMode(mode) {
+            currentMode = mode;
+
+            // Actualizar opciones activas
+            const options = document.querySelectorAll('.control-option[data-mode]');
+            options.forEach(opt => opt.classList.remove('active'));
+            const activeOption = document.querySelector(`.control-option[data-mode="${mode}"]`);
+            if (activeOption) {
+                activeOption.classList.add('active');
+            }
+
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+
+            // Limpiar animaciones y pelotas previas
+            cards.forEach(card => {
+                card.classList.remove('fade-in', 'slide-in', 'karaoke-mode');
+                card.style.opacity = '1';
+                const existingBall = card.querySelector('.soccer-ball');
+                if (existingBall) {
+                    existingBall.remove();
+                }
+                const wordText = card.querySelector('.word-text, .tongue-twister-text');
+                if (wordText) {
+                    wordText.classList.remove('karaoke-mode', 'karaoke-rtl-mode');
+                }
+            });
+
+            if (mode === 'word-by-word') {
+                playWordByWord();
+            } else if (mode === 'slide') {
+                playSlide();
+            } else if (mode === 'karaoke') {
+                playKaraoke();
+            } else if (mode === 'karaoke-rtl') {
+                playKaraokeRTL();
+            } else if (mode === 'soccer') {
+                playSoccer();
+            }
+        }
+
+        // Modo palabra por palabra
+        function playWordByWord() {
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.classList.add('fade-in');
+                }, index * 200);
+            });
+        }
+
+        // Modo barrido
+        function playSlide() {
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.classList.add('slide-in');
+                }, index * 150);
+            });
+        }
+
+        // Modo karaoke (izquierda a derecha)
+        function playKaraoke() {
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    const wordText = card.querySelector('.word-text, .tongue-twister-text');
+                    if (wordText) {
+                        wordText.classList.add('karaoke-mode');
+                    }
+                }, index * 500);
+            });
+        }
+
+        // Modo karaoke inverso (derecha a izquierda)
+        function playKaraokeRTL() {
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    const wordText = card.querySelector('.word-text, .tongue-twister-text');
+                    if (wordText) {
+                        wordText.classList.add('karaoke-rtl-mode');
+                    }
+                }, index * 500);
+            });
+        }
+
+        // Modo pelota de fútbol (derecha a izquierda)
+        function playSoccer() {
+            const cards = document.querySelectorAll('.page-content.active .word-card, .page-content.active .tongue-twister-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    ball.className = 'soccer-ball';
+                    ball.textContent = '⚽';
+                    card.appendChild(ball);
+
+                    // Remover la pelota después de la animación
+                    setTimeout(() => {
+                        ball.remove();
+                    }, 3500);
+                }, index * 500);
+            });
+        }
+
+        // Toggle modo arcoíris
+        function toggleRainbow() {
+            rainbowMode = !rainbowMode;
+            const container = document.querySelector('.page-content.active');
+            const option = document.getElementById('rainbowOption');
+
+            if (rainbowMode) {
+                container.classList.add('rainbow-mode');
+                option.classList.add('active');
+            } else {
+                container.classList.remove('rainbow-mode');
+                option.classList.remove('active');
+            }
+        }
+
+        // Toggle controles
+        function toggleControls() {
+            const menu = document.getElementById('controlMenu');
+            menu.classList.toggle('visible');
+        }
+
+        // Reiniciar vista
+        function resetView() {
+            if (currentPage === 1) {
+                renderWordsPage1();
+            } else if (currentPage === 2) {
+                renderLogotomas();
+            } else if (currentPage === 3) {
+                renderRRIntermedia();
+            } else if (currentPage === 4) {
+                renderLogotomasRR();
+            } else if (currentPage === 5) {
+                renderRFinal();
+            } else if (currentPage === 6) {
+                renderFrases();
+            } else if (currentPage === 7) {
+                renderAdivinanzas();
+            } else if (currentPage === 8) {
+                renderTrabalenguas();
+            }
+
+            rainbowMode = false;
+            const containers = document.querySelectorAll('.page-content');
+            containers.forEach(container => {
+                container.classList.remove('rainbow-mode');
+            });
+
+            // Resetear opción arcoíris
+            const rainbowOption = document.getElementById('rainbowOption');
+            if (rainbowOption) {
+                rainbowOption.classList.remove('active');
+            }
+
+            // Resetear modo normal
+            currentMode = 'normal';
+            const options = document.querySelectorAll('.control-option[data-mode]');
+            options.forEach(opt => opt.classList.remove('active'));
+            const normalOption = document.querySelector('.control-option[data-mode="normal"]');
+            if (normalOption) {
+                normalOption.classList.add('active');
+            }
+        }
+
+        // Detectar modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('controlMenu');
+            const controls = document.getElementById('floatingControls');
+
+            if (!controls.contains(event.target)) {
+                menu.classList.remove('visible');
+            }
+        });
+
+        // Inicializar
+        renderWordsPage1();
+        renderLogotomas();
+        renderRRIntermedia();
+        renderLogotomasRR();
+        renderRFinal();
+        renderFrases();
+        renderAdivinanzas();
+        renderTrabalenguas();
+    </script>
+
+
+</body></html>

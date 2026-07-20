@@ -1,0 +1,155 @@
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+}
+
+h1 {
+    color: #1c1e21;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #606770;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.timers-wrapper {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.timer-box {
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    padding: 20px;
+    width: 48%;
+    background-color: #f7f8fa;
+}
+
+.timer-box h2 {
+    font-size: 22px;
+    color: #1c1e21;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.timer-display {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1877f2;
+    margin-bottom: 20px;
+}
+
+.buttons button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-weight: 600;
+}
+
+button#start-s, button#start-z {
+    background-color: #42b72a;
+    color: white;
+}
+
+button#start-s:hover, button#start-z:hover {
+    background-color: #36a420;
+}
+
+button#stop-s, button#stop-z {
+    background-color: #fa3e3e;
+    color: white;
+}
+
+button#stop-s:hover, button#stop-z:hover {
+    background-color: #e03030;
+}
+
+button:disabled {
+    background-color: #ccd0d5;
+    color: #8a8d91;
+    cursor: not-allowed;
+}
+
+.result-time {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #606770;
+}
+
+.main-controls button {
+    font-size: 18px;
+    padding: 12px 25px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 10px;
+    background-color: #1877f2;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.main-controls button:hover {
+    background-color: #166fe5;
+}
+
+.result-section {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f7f8fa;
+    border: 1px solid #dddfe2;
+}
+
+.result-section.hidden {
+    display: none;
+}
+
+#ratio-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+#ratio-interpretation {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Colores para la interpretación */
+.normal {
+    color: #36a420; /* Verde */
+}
+
+.patologico {
+    color: #fa3e3e; /* Rojo */
+}
+
+.invalido {
+    color: #f5a623; /* Naranja */
+}

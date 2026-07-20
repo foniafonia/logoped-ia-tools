@@ -1,0 +1,1421 @@
+<!DOCTYPE html><html lang="es" class="scroll-smooth"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Mejoras EOI Melilla - 3ª Edición | Estrategia de Optimización</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eoi-blue': '#1e40af',
+                        'eoi-green': '#059669',
+                        'eoi-light-blue': '#3b82f6'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e40af 0%, #059669 100%);
+        }
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' %3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <!-- Cabecera fija -->
+    <header class="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-eoi-blue rounded-lg flex items-center justify-center">
+                            <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div class="text-sm">
+                            <div class="font-bold text-eoi-blue">EOI Melilla</div>
+                            <div class="text-gray-600 dark:text-gray-400">3ª Edición</div>
+                        </div>
+                    </div>
+                    <div class="hidden sm:flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-eoi-green rounded-lg flex items-center justify-center">
+                            <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div class="text-sm">
+                            <div class="font-bold text-eoi-green">Ciudad Autónoma</div>
+                            <div class="text-gray-600 dark:text-gray-400">de Melilla</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="scrollToContact()" class="hidden sm:inline-flex items-center px-4 py-2 text-eoi-blue hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg transition-colors">
+                        <i data-lucide="phone" class="w-4 h-4 mr-2"></i>
+                        Contacto
+                    </button>
+                    <button onclick="scrollToContact()" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Solicitar Información
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contador regresivo -->
+    <div class="fixed top-16 left-0 right-0 bg-gradient-to-r from-eoi-blue to-eoi-green text-white py-2 z-40">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center space-x-4 text-sm">
+                <span>🚀 Próximo inicio del programa:</span>
+                <div id="countdown" class="font-bold"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación por pestañas -->
+    <nav class="fixed top-24 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-40">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex overflow-x-auto scrollbar-hide">
+                <button class="tab-button active whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-eoi-blue text-eoi-blue" data-tab="inicio">
+                    Inicio
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="objetivos">
+                    Objetivos
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="coworking">
+                    Coworking Vivo
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="mentorias">
+                    Mentorías
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="incentivos">
+                    Incentivos
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="eventos">
+                    Eventos
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="resultados">
+                    Resultados
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="cronograma">
+                    Cronograma
+                </button>
+                <button class="tab-button whitespace-nowrap px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-eoi-blue" data-tab="contacto">
+                    Contacto
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="pt-32 min-h-screen">
+        <!-- Pestaña: Inicio -->
+        <div id="inicio" class="tab-content active animate-fade-in">
+            <section class="gradient-bg hero-pattern py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center text-white mb-12">
+                        <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
+                            Propuesta de Mejoras
+                            <span class="block text-eoi-green">EOI Melilla 3ª Edición</span>
+                        </h1>
+                        <p class="text-xl md:text-2xl mb-8 max-w-4xl mx-auto animate-slide-up">
+                            "Estrategia integral para optimizar el impacto y ROI del programa de emprendimiento"
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
+                            <button onclick="scrollToContact()" class="bg-white text-eoi-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                                Solicitar Reunión
+                            </button>
+                            <button onclick="downloadDossier()" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-eoi-blue transition-all duration-300">
+                                Descargar Propuesta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-16 bg-gray-50 dark:bg-gray-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-6 text-eoi-blue">Situación Actual y Oportunidad</h2>
+                            <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">
+                                Las dos primeras ediciones han demostrado el potencial del programa, pero es momento de optimizar el ROI 
+                                y maximizar el impacto en el ecosistema emprendedor de Melilla.
+                            </p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg shadow">
+                                    <div class="text-2xl font-bold text-eoi-blue">73%</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-300">Tasa de finalización actual</div>
+                                </div>
+                                <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg shadow">
+                                    <div class="text-2xl font-bold text-eoi-green">+40%</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-300">Mejora proyectada</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/af3d051ab57ab8d93423bdd2e74c37f126ea970fdaf99fdb6bb951afa48ad6a9" alt="Presentación EOI Melilla con responsables institucionales" class="w-full h-64 object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Logo oficial y segunda edición -->
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/4173a8d6000990f9d9ead2fb5dfc53dc5821bdb351f37dc39ef4341a8459b337" alt="FSE+ Coworking EOI en Melilla - II Edición" class="w-full h-64 object-cover">
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold mb-6 text-eoi-blue">Continuidad y Evolución</h2>
+                            <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">
+                                El éxito de la II Edición nos permite implementar mejoras estratégicas que multiplicarán 
+                                el impacto y la sostenibilidad del programa en su tercera edición.
+                            </p>
+                            <div class="bg-white dark:bg-gray-700 rounded-lg p-6 shadow">
+                                <h4 class="font-semibold text-eoi-green mb-3">Puntos Clave de Mejora:</h4>
+                                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <li>• Incrementar retención y participación activa</li>
+                                    <li>• Mejorar conexión con inversores reales</li>
+                                    <li>• Fortalecer impacto en la comunidad local</li>
+                                    <li>• Optimizar recursos y presupuesto</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Espacio de trabajo actual -->
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-eoi-blue">Infraestructura Actual y Potencial</h2>
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/da8510644567bdc8085c7425f2f860a4999667c0df814c33b15e59699e7b553a" alt="Espacio de formación EOI Melilla con participantes en sesión" class="w-full h-64 object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Optimización del Espacio</h3>
+                            <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">
+                                Las instalaciones actuales tienen un gran potencial sin explotar. La propuesta incluye mejoras en la dinamización 
+                                y aprovechamiento de estos espacios para maximizar la interacción y el networking.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="bg-gradient-to-r from-eoi-blue to-eoi-light-blue text-white rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Propuesta de Mejora</h4>
+                                    <ul class="text-sm space-y-1">
+                                        <li>• Distribución flexible para eventos gastronómicos</li>
+                                        <li>• Zonas de networking informal</li>
+                                        <li>• Tecnología audiovisual mejorada</li>
+                                        <li>• Espacios polivalentes para afterworks</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Objetivos -->
+        <div id="objetivos" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Objetivos 3ª Edición</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Llevamos el ecosistema emprendedor de Melilla al siguiente nivel
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                        <div class="text-center p-6 bg-gradient-to-br from-eoi-blue to-eoi-light-blue text-white rounded-lg">
+                            <i data-lucide="trending-up" class="w-12 h-12 mx-auto mb-4"></i>
+                            <div class="text-3xl font-bold mb-2">+40%</div>
+                            <div class="text-sm">Participación de emprendedores</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-eoi-green to-green-600 text-white rounded-lg">
+                            <i data-lucide="building" class="w-12 h-12 mx-auto mb-4"></i>
+                            <div class="text-lg font-bold mb-2">Ecosistema</div>
+                            <div class="text-sm">Social, cultural y empresarial</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg">
+                            <i data-lucide="handshake" class="w-12 h-12 mx-auto mb-4"></i>
+                            <div class="text-lg font-bold mb-2">Conexiones</div>
+                            <div class="text-sm">Inversores y mentores de alto nivel</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg">
+                            <i data-lucide="gift" class="w-12 h-12 mx-auto mb-4"></i>
+                            <div class="text-lg font-bold mb-2">Beneficios</div>
+                            <div class="text-sm">Inmediatos para participantes</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-center text-eoi-blue">Impacto Esperado</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-eoi-blue rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">Mayor Participación</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Incremento del 40% en emprendedores y startups participantes</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-eoi-green rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="heart" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">Mejor Conexión</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Fortalecimiento de lazos con la ciudadanía de Melilla</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="briefcase" class="w-8 h-8 text-white"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">Nuevas Empresas</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Creación de empleos y empresas sostenibles en Melilla</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-12">
+                        <button onclick="switchTab('coworking')" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Descubre el Coworking Vivo
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Coworking Vivo -->
+        <div id="coworking" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Coworking Vivo</h1>
+                        <p class="text-xl text-eoi-green font-semibold mb-4">"Un lugar donde trabajar, conectar y disfrutar"</p>
+                        <p class="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Transformamos el espacio de trabajo en un ecosistema experiencial donde cada momento aporta valor
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Experiencias Gastronómicas</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-green rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="coffee" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Coffee Breaks Temáticos</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Pausas especializadas en cada formación</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-green rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="utensils" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Brunchs de Trabajo</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Reuniones productivas con gastronomía</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-green rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="glass-water" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Afterworks Premium</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Tapas y bebida para networking</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-eoi-blue to-eoi-green rounded-lg h-64 flex items-center justify-center">
+                            <i data-lucide="chef-hat" class="w-24 h-24 text-white opacity-80"></i>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                        <div class="bg-gradient-to-br from-eoi-green to-green-600 rounded-lg h-64 flex items-center justify-center">
+                            <i data-lucide="calendar" class="w-24 h-24 text-white opacity-80"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Eventos Comunitarios</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-blue rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="mic" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Jornadas Abiertas</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Ponencias, música y espectáculos culturales</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-blue rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="truck" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Foodtrucks &amp; Showcooking</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Experiencias culinarias en eventos clave</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-eoi-blue rounded-full flex items-center justify-center mt-1">
+                                        <i data-lucide="shopping-bag" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">Pop-up Markets</h4>
+                                        <p class="text-gray-600 dark:text-gray-300">Exposiciones de proyectos locales</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
+                        <h3 class="text-2xl font-bold mb-4 text-eoi-blue">Cultura de Melilla Integrada</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                            Incorporamos experiencias culturales únicas de Melilla para crear un ambiente auténtico que atraiga tanto a locales como visitantes
+                        </p>
+                        <button onclick="switchTab('mentorias')" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Ver Mentorías y Conexiones
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Mentorías -->
+        <div id="mentorias" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Mentorías y Conexiones</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Red ampliada de mentores nacionales e internacionales con formatos innovadores de alta cercanía
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8 mb-16">
+                        <div class="bg-gradient-to-br from-eoi-blue to-eoi-light-blue text-white rounded-lg p-6 text-center">
+                            <i data-lucide="globe" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Red Internacional</h3>
+                            <p class="text-blue-100">Mentores de España, Europa y América</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-eoi-green to-green-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="brain" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Especialidades</h3>
+                            <p class="text-green-100">IA, E-commerce, Inversión, Internacionalización</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="star" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Alto Nivel</h3>
+                            <p class="text-purple-100">CEOs, inversores y expertos reconocidos</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Formatos Innovadores</h3>
+                            <div class="space-y-6">
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="sunrise" class="w-6 h-6 text-eoi-green mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Desayunos Exclusivos</h4>
+                                    </div>
+                                    <p class="text-gray-600 dark:text-gray-300">Grupos reducidos de 5-8 emprendedores con mentores especializados</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="footprints" class="w-6 h-6 text-eoi-green mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Walk &amp; Talk</h4>
+                                    </div>
+                                    <p class="text-gray-600 dark:text-gray-300">Mentorías caminando en entornos relajados y cercanos</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="users" class="w-6 h-6 text-eoi-green mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Sesiones Colectivas</h4>
+                                    </div>
+                                    <p class="text-gray-600 dark:text-gray-300">Temáticas especializadas: ventas, finanzas, liderazgo</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Conexiones con Inversores</h3>
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="utensils" class="w-6 h-6 mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Investor Dinners</h4>
+                                    </div>
+                                    <p class="text-orange-100">Cenas privadas donde emprendedores presentan proyectos a inversores</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="network" class="w-6 h-6 mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Networking Premium</h4>
+                                    </div>
+                                    <p class="text-purple-100">Rondas exclusivas para startups seleccionadas</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="handshake" class="w-6 h-6 mr-3"></i>
+                                        <h4 class="font-semibold text-lg">Conexiones Directas</h4>
+                                    </div>
+                                    <p class="text-blue-100">Facilitamos encuentros uno a uno con inversores afines</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-eoi-blue to-eoi-green rounded-lg p-8 text-center text-white">
+                        <h3 class="text-2xl font-bold mb-4">Valor Diferencial</h3>
+                        <p class="text-xl mb-6 max-w-3xl mx-auto">
+                            Atraemos inversión real y contactos estratégicos que pueden transformar tu proyecto en una empresa consolidada
+                        </p>
+                        <button onclick="switchTab('incentivos')" class="bg-white text-eoi-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                            Descubre los Incentivos
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Incentivos -->
+        <div id="incentivos" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Incentivos Únicos</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Beneficios directos que hacen que cada participante perciba valor desde el primer día
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="utensils" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-bold mb-2">Eventos Gastronómicos</h3>
+                            <p class="text-sm text-green-100">Acceso gratuito completo</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="crown" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-bold mb-2">Cenas Privadas</h3>
+                            <p class="text-sm text-purple-100">Con mentores e inversores</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="gamepad-2" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-bold mb-2">Gamificación</h3>
+                            <p class="text-sm text-blue-100">Puntos canjeables por ventajas</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="building" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-lg font-bold mb-2">Coworking Premium</h3>
+                            <p class="text-sm text-orange-100">Uso gratuito durante programa</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Sistema de Gamificación</h3>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                <h4 class="font-semibold mb-4 text-eoi-green">¿Cómo funciona?</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 bg-eoi-blue rounded-full flex items-center justify-center">
+                                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                                        </div>
+                                        <span>Asistencia a eventos: 10 puntos</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 bg-eoi-blue rounded-full flex items-center justify-center">
+                                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                                        </div>
+                                        <span>Participación activa: 15 puntos</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 bg-eoi-blue rounded-full flex items-center justify-center">
+                                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                                        </div>
+                                        <span>Networking efectivo: 20 puntos</span>
+                                    </div>
+                                </div>
+                                <h4 class="font-semibold mt-6 mb-4 text-eoi-green">Recompensas:</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div>• Material informático premium</div>
+                                    <div>• Asesoría especializada extra</div>
+                                    <div>• Visibilidad en eventos destacados</div>
+                                    <div>• Acceso prioritario a inversores</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Premios Finales</h3>
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="trophy" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Ayudas a Fondo Perdido</h4>
+                                    </div>
+                                    <p class="text-yellow-100">Hasta 15.000€ para los mejores proyectos</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-eoi-blue to-eoi-light-blue text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="laptop" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Pack Herramientas Digitales</h4>
+                                    </div>
+                                    <p class="text-blue-100">Software y licencias valoradas en +1.000€</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-eoi-green to-green-600 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="rocket" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Aceleración Personalizada</h4>
+                                    </div>
+                                    <p class="text-green-100">3 meses adicionales de mentoría intensiva</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
+                        <h3 class="text-2xl font-bold mb-4 text-eoi-blue">Todo Incluido</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                            Desde el primer día obtienes acceso a beneficios tangibles que hacen que tu inversión en tiempo se vea compensada inmediatamente
+                        </p>
+                        <button onclick="switchTab('eventos')" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Ver Eventos Abiertos
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Eventos -->
+        <div id="eventos" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Eventos Abiertos</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Acercamos la EOI y el coworking a toda la ciudadanía con experiencias únicas que combinan formación, networking y cultura
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8 mb-16">
+                        <div class="bg-gradient-to-br from-eoi-blue to-eoi-light-blue text-white rounded-lg p-6 text-center">
+                            <i data-lucide="mic" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Jornadas de Ponencias</h3>
+                            <p class="text-blue-100">Expertos nacionales e internacionales</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-eoi-green to-green-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="music" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Espectáculos Culturales</h3>
+                            <p class="text-green-100">Fusión de emprendimiento y arte</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
+                            <i data-lucide="code" class="w-12 h-12 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Hackathons</h3>
+                            <p class="text-purple-100">48h de innovación colaborativa</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-16">
+                        <h2 class="text-3xl font-bold text-center mb-8 text-eoi-blue">Calendario de Eventos</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-eoi-blue">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-eoi-blue mr-2"></i>
+                                    <span class="text-sm font-semibold text-eoi-blue">15 Marzo</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Día de Puertas Abiertas</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Conoce las instalaciones y el programa completo</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-eoi-green">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-eoi-green mr-2"></i>
+                                    <span class="text-sm font-semibold text-eoi-green">22 Marzo</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Hackathon Sostenible</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">48 horas creando soluciones para Melilla</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-purple-500 mr-2"></i>
+                                    <span class="text-sm font-semibold text-purple-500">5 Abril</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Tech Talk: IA y Futuro</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Conferencia magistral con Q&amp;A abierto</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-orange-500">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-orange-500 mr-2"></i>
+                                    <span class="text-sm font-semibold text-orange-500">18 Abril</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Networking Night</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Afterwork con música y gastronomía local</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-blue-500 mr-2"></i>
+                                    <span class="text-sm font-semibold text-blue-500">10 Mayo</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Demo Day</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Presentación pública de proyectos</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+                                <div class="flex items-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-red-500 mr-2"></i>
+                                    <span class="text-sm font-semibold text-red-500">25 Mayo</span>
+                                </div>
+                                <h3 class="font-bold mb-2">Pitch Day Final</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Gran final con inversores y premios</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Experiencias Únicas</h3>
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <h4 class="font-semibold mb-2 flex items-center">
+                                        <i data-lucide="sparkles" class="w-5 h-5 text-eoi-green mr-2"></i>
+                                        Cultural Fusion Nights
+                                    </h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Eventos que combinan networking empresarial con espectáculos de artistas locales</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <h4 class="font-semibold mb-2 flex items-center">
+                                        <i data-lucide="utensils" class="w-5 h-5 text-eoi-green mr-2"></i>
+                                        Showcooking Emprendedor
+                                    </h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Chefs locales preparan mientras emprendedores presentan sus proyectos</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <h4 class="font-semibold mb-2 flex items-center">
+                                        <i data-lucide="camera" class="w-5 h-5 text-eoi-green mr-2"></i>
+                                        Exposiciones Interactivas
+                                    </h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Muestra permanente de proyectos con tecnología inmersiva</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Impacto Comunitario</h3>
+                            <div class="bg-gradient-to-br from-eoi-blue to-eoi-green text-white rounded-lg p-6 mb-6">
+                                <h4 class="font-semibold text-lg mb-3">Objetivos Sociales</h4>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center">
+                                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                                        Acercar el emprendimiento a todas las edades
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                                        Mostrar oportunidades locales de negocio
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                                        Fomentar la cultura de innovación
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+                                        Crear comunidad emprendedora sólida
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-eoi-blue mb-2">5000+</div>
+                                <div class="text-gray-600 dark:text-gray-300">Visitantes esperados en eventos abiertos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
+                        <h3 class="text-2xl font-bold mb-4 text-eoi-blue">Para Toda la Familia</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                            Nuestros eventos están diseñados para ser accesibles e interesantes para toda la ciudadanía, desde estudiantes hasta profesionales senior
+                        </p>
+                        <button onclick="switchTab('resultados')" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Ver Resultados Esperados
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Resultados -->
+        <div id="resultados" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Resultados Esperados</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Impacto medible y sostenible en el ecosistema emprendedor de Melilla
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8 mb-16">
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-gradient-to-br from-eoi-blue to-eoi-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="trending-up" class="w-12 h-12 text-white"></i>
+                            </div>
+                            <div class="text-4xl font-bold text-eoi-blue mb-2">+40%</div>
+                            <h3 class="text-xl font-semibold mb-3">Incremento de Emprendedores</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Mayor participación activa en el ecosistema emprendedor local</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-gradient-to-br from-eoi-green to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="heart" class="w-12 h-12 text-white"></i>
+                            </div>
+                            <div class="text-4xl font-bold text-eoi-green mb-2">100%</div>
+                            <h3 class="text-xl font-semibold mb-3">Conexión Ciudadana</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Mejor relación entre la EOI, coworking y la comunidad de Melilla</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="briefcase" class="w-12 h-12 text-white"></i>
+                            </div>
+                            <div class="text-4xl font-bold text-purple-500 mb-2">25+</div>
+                            <h3 class="text-xl font-semibold mb-3">Nuevas Empresas</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Creación de empleos y empresas sostenibles en la región</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Métricas de Éxito</h3>
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold">Tasa de Finalización</span>
+                                        <span class="text-eoi-blue font-bold">85%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-eoi-blue h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold">Proyectos Viables</span>
+                                        <span class="text-eoi-green font-bold">70%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-eoi-green h-2 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold">Captación de Inversión</span>
+                                        <span class="text-purple-500 font-bold">40%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold">Satisfacción Participantes</span>
+                                        <span class="text-orange-500 font-bold">95%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-orange-500 h-2 rounded-full" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-eoi-blue">Impacto Económico</h3>
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="euro" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Inversión Atraída</h4>
+                                    </div>
+                                    <div class="text-2xl font-bold">2.5M€</div>
+                                    <p class="text-green-100">Objetivo de captación para startups</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="users" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Empleos Creados</h4>
+                                    </div>
+                                    <div class="text-2xl font-bold">120+</div>
+                                    <p class="text-blue-100">Nuevos puestos de trabajo directos</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6">
+                                    <div class="flex items-center mb-3">
+                                        <i data-lucide="building" class="w-8 h-8 mr-3"></i>
+                                        <h4 class="font-semibold text-xl">Empresas Consolidadas</h4>
+                                    </div>
+                                    <div class="text-2xl font-bold">15+</div>
+                                    <p class="text-purple-100">Con facturación superior a 100K€</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-eoi-blue to-eoi-green rounded-lg p-8 text-center text-white">
+                        <h3 class="text-2xl font-bold mb-4">Transformación de Melilla</h3>
+                        <p class="text-xl mb-6 max-w-3xl mx-auto">
+                            Convertimos Melilla en un referente nacional de emprendimiento, atrayendo talento, inversión y oportunidades para toda la comunidad
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                            <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                <div class="font-bold text-lg">Hub Regional</div>
+                                <div class="text-sm">Del emprendimiento</div>
+                            </div>
+                            <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                <div class="font-bold text-lg">Marca Ciudad</div>
+                                <div class="text-sm">Innovación y oportunidades</div>
+                            </div>
+                            <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                <div class="font-bold text-lg">Ecosistema</div>
+                                <div class="text-sm">Sostenible y próspero</div>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('cronograma')" class="mt-6 bg-white text-eoi-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                            Ver Cronograma y Presupuesto
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Cronograma -->
+        <div id="cronograma" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Cronograma y Presupuesto</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Planificación detallada y transparente de la tercera edición
+                        </p>
+                    </div>
+
+                    <div class="mb-16">
+                        <h2 class="text-3xl font-bold text-center mb-8 text-eoi-blue">Cronograma de Actividades</h2>
+                        <div class="space-y-6">
+                            <div class="relative">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-4 h-4 bg-eoi-blue rounded-full mr-4"></div>
+                                    <div class="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                            <div>
+                                                <h3 class="text-xl font-semibold text-eoi-blue">Mes 1-2: Campaña de Captación</h3>
+                                                <p class="text-gray-600 dark:text-gray-300 mt-2">Puertas abiertas, marketing digital y captación de participantes</p>
+                                            </div>
+                                            <div class="mt-4 md:mt-0">
+                                                <span class="bg-eoi-blue text-white px-4 py-2 rounded-full text-sm">Enero - Febrero</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-4 h-4 bg-eoi-green rounded-full mr-4"></div>
+                                    <div class="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                            <div>
+                                                <h3 class="text-xl font-semibold text-eoi-green">Mes 3-8: Programa Formativo</h3>
+                                                <p class="text-gray-600 dark:text-gray-300 mt-2">Mentorías, eventos experienciales, afterworks y formación intensiva</p>
+                                            </div>
+                                            <div class="mt-4 md:mt-0">
+                                                <span class="bg-eoi-green text-white px-4 py-2 rounded-full text-sm">Marzo - Agosto</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-4 h-4 bg-purple-500 rounded-full mr-4"></div>
+                                    <div class="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                            <div>
+                                                <h3 class="text-xl font-semibold text-purple-500">Mes 4-8: Investor Dinners</h3>
+                                                <p class="text-gray-600 dark:text-gray-300 mt-2">Hackathons, jornadas públicas y conexiones con inversores</p>
+                                            </div>
+                                            <div class="mt-4 md:mt-0">
+                                                <span class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm">Abril - Agosto</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-4 h-4 bg-orange-500 rounded-full mr-4"></div>
+                                    <div class="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                                            <div>
+                                                <h3 class="text-xl font-semibold text-orange-500">Mes 9: Pitch Day Final</h3>
+                                                <p class="text-gray-600 dark:text-gray-300 mt-2">Gran evento final con entrega de premios y presentaciones a inversores</p>
+                                            </div>
+                                            <div class="mt-4 md:mt-0">
+                                                <span class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm">Septiembre</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8 text-eoi-blue">Presupuesto Detallado</h2>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                                        <div>
+                                            <h4 class="font-semibold">Eventos Gastronómicos</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Afterworks, brunchs, coffee breaks</p>
+                                        </div>
+                                        <span class="font-bold text-eoi-blue">15.000€</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                                        <div>
+                                            <h4 class="font-semibold">Red de Mentores</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Honorarios e inversores</p>
+                                        </div>
+                                        <span class="font-bold text-eoi-green">20.000€</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                                        <div>
+                                            <h4 class="font-semibold">Comunicación</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Marketing y captación</p>
+                                        </div>
+                                        <span class="font-bold text-purple-500">10.000€</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                                        <div>
+                                            <h4 class="font-semibold">Premios e Incentivos</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Ayudas y herramientas</p>
+                                        </div>
+                                        <span class="font-bold text-orange-500">25.000€</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                                        <div>
+                                            <h4 class="font-semibold">Logística Coworking</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Material, espacios, tecnología</p>
+                                        </div>
+                                        <span class="font-bold text-blue-500">15.000€</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-4 bg-gradient-to-r from-eoi-blue to-eoi-green text-white rounded-lg px-4 mt-4">
+                                        <div>
+                                            <h4 class="font-bold text-lg">Total Estimado</h4>
+                                            <p class="text-sm text-blue-100">Ajustable según apoyos</p>
+                                        </div>
+                                        <span class="font-bold text-2xl">85.000€</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8 text-eoi-blue">Fuentes de Financiación</h2>
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-eoi-blue to-eoi-light-blue text-white rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold mb-2">Apoyo Institucional</h3>
+                                    <div class="text-2xl font-bold mb-2">50%</div>
+                                    <p class="text-blue-100">Ciudad Autónoma de Melilla y organismos públicos</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-eoi-green to-green-600 text-white rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold mb-2">Patrocinadores Privados</h3>
+                                    <div class="text-2xl font-bold mb-2">35%</div>
+                                    <p class="text-green-100">Empresas locales y nacionales comprometidas</p>
+                                </div>
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold mb-2">Fondos Europeos</h3>
+                                    <div class="text-2xl font-bold mb-2">15%</div>
+                                    <p class="text-purple-100">Programas de desarrollo regional y emprendimiento</p>
+                                </div>
+                            </div>
+                            <div class="mt-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 text-eoi-blue">ROI Esperado</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span>Inversión programa:</span>
+                                        <span class="font-semibold">85.000€</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Inversión atraída:</span>
+                                        <span class="font-semibold text-eoi-green">2.500.000€</span>
+                                    </div>
+                                    <div class="flex justify-between border-t pt-3">
+                                        <span class="font-bold">ROI:</span>
+                                        <span class="font-bold text-eoi-blue">2.900%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-16 text-center">
+                        <div class="bg-gradient-to-r from-eoi-blue to-eoi-green rounded-lg p-8 text-white">
+                            <h3 class="text-2xl font-bold mb-4">Transparencia Total</h3>
+                            <p class="text-xl mb-6 max-w-3xl mx-auto">
+                                Todos los gastos serán públicos y auditables. Nuestro compromiso es maximizar el impacto con cada euro invertido.
+                            </p>
+                            <button onclick="switchTab('contacto')" class="bg-white text-eoi-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                                Únete al Programa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Pestaña: Contacto -->
+        <div id="contacto" class="tab-content">
+            <section class="py-16 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold mb-6 text-eoi-blue">Solicitar Reunión Ejecutiva</h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Presentemos esta propuesta de mejoras que maximizará el impacto de la 3ª edición
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8 text-eoi-blue">Solicitud de Reunión</h2>
+                            <form class="space-y-6" onsubmit="submitForm(event)">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="nombre">Nombre Completo *</label>
+                                    <input type="text" id="nombre" name="nombre" required="" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-eoi-blue focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white" placeholder="Tu nombre y apellidos">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="email">Email *</label>
+                                    <input type="email" id="email" name="email" required="" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-eoi-blue focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white" placeholder="tu@email.com">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="telefono">Teléfono *</label>
+                                    <input type="tel" id="telefono" name="telefono" required="" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-eoi-blue focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white" placeholder="+34 600 000 000">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="proyecto">Describe tu Proyecto/Idea *</label>
+                                    <textarea id="proyecto" name="proyecto" required="" rows="4" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-eoi-blue focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white" placeholder="Cuéntanos tu idea de negocio, proyecto o área de interés..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="experiencia">Experiencia Emprendedora</label>
+                                    <select id="experiencia" name="experiencia" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-eoi-blue focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+                                        <option value="">Selecciona tu nivel</option>
+                                        <option value="principiante">Principiante - Primera vez</option>
+                                        <option value="intermedio">Intermedio - Alguna experiencia</option>
+                                        <option value="avanzado">Avanzado - Emprendedor serial</option>
+                                        <option value="inversor">Inversor/Mentor interesado</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="newsletter" name="newsletter" class="w-4 h-4 text-eoi-blue bg-gray-100 border-gray-300 rounded focus:ring-eoi-blue dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="newsletter" class="ml-2 text-sm text-gray-600 dark:text-gray-300">
+                                        Quiero recibir actualizaciones sobre el programa
+                                    </label>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-eoi-blue to-eoi-green text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                    Enviar Solicitud
+                                </button>
+                            </form>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold mb-8 text-eoi-blue">Información de Contacto</h2>
+                            <div class="space-y-6 mb-8">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-eoi-blue rounded-lg flex items-center justify-center">
+                                        <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-lg">Ubicación</h3>
+                                        <p class="text-gray-600 dark:text-gray-300">Coworking EOI Melilla<br>Calle Ejemplo, 123<br>52001 Melilla</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-eoi-green rounded-lg flex items-center justify-center">
+                                        <i data-lucide="phone" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-lg">Teléfono</h3>
+                                        <p class="text-gray-600 dark:text-gray-300">+34 952 000 000</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="mail" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-lg">Email</h3>
+                                        <p class="text-gray-600 dark:text-gray-300">info@eoimelilla.es</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-lg">Horario</h3>
+                                        <p class="text-gray-600 dark:text-gray-300">Lun-Vie: 9:00 - 18:00<br>Sáb: 10:00 - 14:00</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
+                                <h3 class="text-xl font-semibold mb-4 text-eoi-blue">Descarga el Dossier Completo</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                    Obtén toda la información detallada del programa, cronogramas y beneficios.
+                                </p>
+                                <button onclick="downloadDossier()" class="w-full bg-gradient-to-r from-eoi-blue to-eoi-green text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                                    <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                                    Descargar Dossier PDF
+                                </button>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-eoi-blue to-eoi-green rounded-lg p-6 text-white text-center">
+                                <h3 class="text-xl font-semibold mb-3">¿Tienes Dudas?</h3>
+                                <p class="mb-4">Programa una llamada gratuita con nuestro equipo</p>
+                                <button onclick="scheduleCall()" class="bg-white text-eoi-blue px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                                    Agendar Llamada
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Llamada a la acción final -->
+                    <div class="text-center bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
+                        <h2 class="text-3xl font-bold mb-4 text-eoi-blue">¡El Futuro de Melilla Comienza Contigo!</h2>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-6 max-w-3xl mx-auto">
+                            No pierdas la oportunidad de ser parte de la transformación emprendedora más importante de la historia de Melilla
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button onclick="scrollToForm()" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                Inscríbete Ahora
+                            </button>
+                            <button onclick="switchTab('inicio')" class="border-2 border-eoi-blue text-eoi-blue px-8 py-4 rounded-lg font-semibold hover:bg-eoi-blue hover:text-white transition-all duration-300">
+                                Volver al Inicio
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-eoi-blue rounded-lg flex items-center justify-center">
+                            <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div class="font-bold text-lg">EOI Melilla</div>
+                    </div>
+                    <p class="text-gray-400">Transformando el ecosistema emprendedor de Melilla con formación, conexiones y oportunidades reales.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Enlaces Útiles</h3>
+                    <div class="space-y-2">
+                        <button onclick="switchTab('objetivos')" class="block text-gray-400 hover:text-white transition-colors">Objetivos</button>
+                        <button onclick="switchTab('coworking')" class="block text-gray-400 hover:text-white transition-colors">Coworking</button>
+                        <button onclick="switchTab('mentorias')" class="block text-gray-400 hover:text-white transition-colors">Mentorías</button>
+                        <button onclick="switchTab('eventos')" class="block text-gray-400 hover:text-white transition-colors">Eventos</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Contacto</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <div>📍 Melilla, España</div>
+                        <div>📧 info@eoimelilla.es</div>
+                        <div>📞 +34 952 000 000</div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2024 EOI Melilla. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Detectar tema oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Inicializar iconos Lucide
+        lucide.createIcons();
+
+        // Contador regresivo
+        function updateCountdown() {
+            const startDate = new Date('2024-03-01T09:00:00');
+            const now = new Date();
+            const diff = startDate - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                document.getElementById('countdown').textContent = `${days}d ${hours}h ${minutes}m`;
+            } else {
+                document.getElementById('countdown').textContent = '¡Programa en marcha!';
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        // Sistema de pestañas
+        function switchTab(tabId) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Mostrar contenido seleccionado
+            document.getElementById(tabId).classList.add('active');
+            
+            // Actualizar botones de pestaña
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active', 'border-eoi-blue', 'text-eoi-blue');
+                button.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            // Activar botón de pestaña seleccionado
+            const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active', 'border-eoi-blue', 'text-eoi-blue');
+                activeButton.classList.remove('border-transparent', 'text-gray-500');
+            }
+
+            // Scroll al top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners para botones de pestañas
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // Funciones de navegación
+        function scrollToContact() {
+            switchTab('contacto');
+        }
+
+        function scrollToForm() {
+            switchTab('contacto');
+            setTimeout(() => {
+                document.getElementById('nombre').focus();
+            }, 500);
+        }
+
+        // Función para enviar formulario
+        function submitForm(event) {
+            event.preventDefault();
+            
+            // Simular envío exitoso
+            showSuccessDialog('¡Solicitud enviada con éxito!', 
+                'Te contactaremos pronto con más información sobre el programa. ¡Bienvenido a la revolución emprendedora de Melilla!');
+            
+            // Limpiar formulario
+            event.target.reset();
+        }
+
+        // Funciones auxiliares
+        function downloadDossier() {
+            showInfoDialog('Descarga Iniciada', 
+                'El dossier completo del programa se está descargando. Contiene toda la información detallada sobre objetivos, cronograma y beneficios.');
+        }
+
+        function scheduleCall() {
+            showInfoDialog('Agendar Llamada', 
+                'Te redirigiremos a nuestro calendario online donde podrás seleccionar el horario que mejor te convenga para una consulta gratuita.');
+        }
+
+        // Sistema de diálogos personalizados
+        function showSuccessDialog(title, message) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full mx-4 animate-slide-up">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="check" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">${title}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">${message}</p>
+                        <button onclick="this.closest('.fixed').remove()" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
+                            ¡Perfecto!
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            setTimeout(() => lucide.createIcons(), 100);
+        }
+
+        function showInfoDialog(title, message) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full mx-4 animate-slide-up">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-eoi-blue rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="info" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">${title}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">${message}</p>
+                        <button onclick="this.closest('.fixed').remove()" class="bg-gradient-to-r from-eoi-blue to-eoi-green text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            setTimeout(() => lucide.createIcons(), 100);
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar iconos
+            lucide.createIcons();
+            
+            // Activar primera pestaña
+            switchTab('inicio');
+        });
+    </script>
+
+
+</body></html>
