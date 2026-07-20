@@ -886,3 +886,54 @@ Verificacion:
 - GitHub Pages con cache-buster: landing + iSecuencias + Praxias + Logopod respondieron 200.
 
 Estado: [PARA_CODEX HECHO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: Inventario diferencial — faltantes en la landing + artefactos de Claude
+Rama de trabajo: claude/auditoria-academia-colmenia-rpwx7c (landing publicada directo sobre gh-pages, sincronizando con el trabajo de Codex de esta misma tarde)
+
+Hecho (auditoría a petición del usuario, "qué tengo yo que no está ya en la landing"):
+
+1. AÑADIDO YA A LA LANDING (bajo riesgo, archivos confirmados en el repo — verificado que existen antes de enlazar):
+   - Cognitiva: 7 vistas sueltas que solo tenían `index.html` enlazado — multitaller, diagnóstico, sesión, 3 perfiles (alumno/tutor/programador), cuaderno de vocales.
+   - Cognitiva: los 16 talleres individuales `alumno_obj*.html` / `alumno_<tema>.html`, cada uno con su propio VER.
+   - Tutor Padres (`codex-assets/herramientas/tutor-padres.html`) — ya estaba subido por Codex, sin tarjeta.
+   - EMPIEZA_AQUI.md (documento raíz del repo) — sin tarjeta.
+   - 3 documentos del repo privado `academia-logoped-ia` (rama `experimento/vivo-completo`), enlazados directo a GitHub (piden login con acceso al repo): `docs/ARQUITECTURA-COLMENIA.md` (segundo doc de arquitectura, distinto del blueprint ya enlazado), `BITACORA_AGENTES.md` (112KB, bitácora propia de Academia), `HANDOFF_VISUAL_V2.md`/`V3.md` + `CONTEXTO_COLMENIA_VISUAL.md`.
+   - Nota añadida a la ficha AELFA: el repo tiene rama por defecto `codex/aelfa-landing-final`, no `main` — el enlace ahora apunta ahí.
+   - Ficha nueva "Vídeos y decks Valencia/Melilla" (status upload) para lo que ninguna tarjeta cubría: 46 slides recuperación, entregas final/online valenciacodex, vídeo cluster IA 2026 Melilla, valencia-assets/*.mp4, kits de prompts.
+
+2. ARTEFACTOS DE CLAUDE — el usuario pidió "todos los artefactos". No generé ninguno en esta sesión (trabajo directo sobre archivos del repo), pero SÍ existe un listado real vinculado a la cuenta de Claude (`Artifact action:list`). Encontrados 10, ninguno llamado literalmente "Logoflix":
+   - **Añadidos a la landing** (contenido verificado, relevantes a Logoped-IA):
+     - "Antes de Consultar — Fönia" (demo anónima): cuestionario clínico pre-consulta, 7 áreas, muy currado. → Herramientas.
+     - "Difonómetro · Gran Final España vs Argentina": juego viral de higiene vocal con micro del móvil, branding Logoped-IA. → Juegos.
+     - "Colmenia — Qué falta para vender": auditoría de producto propia (6 jul), 18 páginas revisadas, bloqueantes ya resueltos vs cascarón vs sólido. Complementa mi auditoría de código. → Docs.
+     - "antes-de-consultar-fase0.md": spec detrás de la demo Fönia. → Docs.
+   - **NO añadido, verificar con Jose**: "CineMundos — Informe de avance" (2,5MB, tipografías embebidas) — la auditoría de Codex del 19-jul ya había marcado el repo `cinemundos` como "fuera de logopedia o personal". No lo publico sin confirmación de qué es exactamente (¿es esto el "Logoflix" que mencionaste? no until vi el contenido completo, es demasiado grande para inspeccionar entero).
+   - **NO añadido, deliberadamente fuera del escaparate**: 5 artifacts de temática Januká/religiosa (personales, no Logoped-IA) — respetando la regla de la auditoría de separar contenido personal.
+   - Nota técnica: los enlaces a `claude.ai/code/artifact/...` pueden requerir que quien los abre tenga sesión de Claude o que el artifact esté compartido — si un comprador no puede verlos, decidme y los replico como HTML estático en `codex-assets/`.
+
+3. Estado landing tras esta pasada: **175 tarjetas, 157 con botón VER primario**, 0 enlaces relativos rotos (verificado headless).
+
+FALTANTES QUE QUEDAN PARA CODEX (por prioridad, lo más accionable primero):
+
+| # | Producto | Tipo | Dónde está | Estado | Acción Codex Desktop |
+|---|---|---|---|---|---|
+| 1 | Kit de prompts (v2 mayo2026, fusión 2025-2026) | doc | local, `kit-prompts-*.html` | falta subir | subir a `codex-assets/valencia/` |
+| 2 | Vídeos/decks Valencia (46 slides, entregas final/online, vídeo cluster Melilla, `valencia-assets/*.mp4`) | vídeo/deck | local | falta subir | subir a `codex-assets/valencia/` |
+| 3 | aelfa-landing | landing | repo público, rama real `codex/aelfa-landing-final` | landing ya apunta a la rama; falta deploy real o publicar el HTML | confirmar deploy Vercel de esa rama o publicar HTML en Pages |
+| 4 | valenciacodex-live | landing/herramienta | repo público, sin auditar a fondo | desconocido | confirmar deploy real (la URL adivinada dio 404) |
+| 5 | fonomundos / lectoviva-v2 / curso-logoped-ia / CURSO-ONLINE-REPLIT / logoped-ia-examen | juego/formación/backend | repos listados en la auditoría del 19-jul, ramas no verificadas por mí | probablemente ya visibles pero sin verificación propia | confirmar rama/estado si hay dudas |
+| 6 | vocalclinic-demo, radar-clinico-digital, juegoslogopedos, vocaltrack, chatbot_familias_logopedia, valencia-nadina-ia-logopedia-codex, araia (repo completo, no solo isecuencias) | juego/herramienta/backend | repos sin auditar por mí | desconocido | confirmar estado o autorizar a Claude a añadirlos a la sesión y auditar |
+| 7 | CineMundos — Informe de avance | vídeo/deck o web (por confirmar) | Claude Artifact, cuenta del usuario | sin publicar, pendiente de saber qué es | Jose confirma si es Logoped-IA/Colmenia o proyecto personal aparte |
+| 8 | Anamnesis IA | herramienta | local, solo PDFs con nombres reales (`anamnesis paquito.pdf` etc., según hallazgo de Codex) | sensible, no publicar tal cual | crear demo anónima o ficha limpia |
+| 9 | JELOU Skill, Base conocimiento chatbot | sensible | local | no publicar tal cual | crear demo limpia |
+| 10 | logopedia-dicta, pictoia-adaptativo, arasecuencias-app, praxiasconnect_FINAL, alfabeto-pnl-final | herramienta | mencionadas pero sin archivo claro localizado (según nota de Codex) | por localizar | localizar y subir si existen, o descartar la referencia |
+
+Bloqueos:
+- Sigo sin poder abrir `*.vercel.app` ni `*.github.io` desde este entorno (proxy de red cerrado) — no puedo verificar en vivo las filas 3-6 de la tabla, solo señalar qué falta comprobar.
+- Los artifacts de Claude enlazados pueden no ser visibles para alguien sin sesión — pendiente de que el usuario confirme si hace falta replicarlos como HTML estático.
+
+Estado: [PARA_CODEX PENDIENTE]

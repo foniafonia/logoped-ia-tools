@@ -300,6 +300,24 @@ const CODEX_EXTRA_ITEMS = [
   {cat:"Herramientas", emoji:"🧪", title:"Cognitiva 2026", status:"repo",
    desc:"Prototipo cognitivo/clinico rescatado al repo. Incluye vistas y recursos estaticos para revision rapida.",
    tags:["cognitiva","repo"], links:[{t:"Abrir copia repo",u:"codex-assets/cognitiva/index.html",p:1}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva — Multitaller", status:"repo",
+   desc:"Panel con todos los talleres cognitivos accesibles desde un único lugar.",
+   tags:["cognitiva","multitaller"], links:[{t:"VER multitaller",u:"codex-assets/cognitiva/multitaller.html",p:1}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva — Diagnóstico", status:"repo",
+   desc:"Vista de diagnóstico inicial dentro de Cognitiva 2026.",
+   tags:["cognitiva","diagnóstico"], links:[{t:"VER diagnóstico",u:"codex-assets/cognitiva/diagnostico.html",p:1}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva — Sesión", status:"repo",
+   desc:"Vista de sesión de trabajo dentro de Cognitiva 2026.",
+   tags:["cognitiva","sesión"], links:[{t:"VER sesión",u:"codex-assets/cognitiva/sesion.html",p:1}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva — Perfiles (alumno/tutor/programador)", status:"repo",
+   desc:"Tres vistas de perfil de Cognitiva 2026 según el rol que entra: alumno, tutor o programador.",
+   tags:["cognitiva","perfiles"], links:[
+     {t:"VER perfil alumno",u:"codex-assets/cognitiva/perfil_alumno.html",p:1},
+     {t:"VER perfil tutor",u:"codex-assets/cognitiva/perfil_tutor.html",p:0},
+     {t:"VER perfil programador",u:"codex-assets/cognitiva/perfil_programador.html",p:0}]},
+  {cat:"Herramientas", emoji:"🧪", title:"Cognitiva — Cuaderno de vocales", status:"repo",
+   desc:"Taller específico de vocales dentro de Cognitiva 2026.",
+   tags:["cognitiva","vocales"], links:[{t:"VER cuaderno",u:"codex-assets/cognitiva/cuaderno_vocales.html",p:1}]},
   {cat:"Herramientas", emoji:"💎", title:"Rubi-IA", status:"repo",
    desc:"Cuaderno Rubi-IA v2 rescatado desde local al repo. Es una herramienta distinta de Mision Perfiles.",
    tags:["Rubi-IA","cuaderno"], links:[{t:"Abrir copia repo",u:"codex-assets/rubi-ia/index.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/cuaderno-rub-ia-v2/index.html"},
@@ -336,6 +354,24 @@ const CODEX_EXTRA_ITEMS = [
   {cat:"Docs", emoji:"🤝", title:"Mensaje socios tecnologicos", status:"repo",
    desc:"Comunicacion sintesis para explicar volumen, fechas y potencia del ecosistema sin entrar en detalle sensible.",
    tags:["socios","comunicacion"], links:[{t:"Abrir MD",u:"codex-assets/docs/MENSAJE_SOCIOS_TECNOLOGICOS_ACADEMIA.md",p:1}]},
+  {cat:"Docs", emoji:"🏠", title:"EMPIEZA AQUÍ (cuartel general)", status:"repo",
+   desc:"Documento raíz del repo canónico: mapa de los 4 sitios que importan y la regla de \"todo acaba en este repo\".",
+   tags:["cuartel general","mapa"], links:[{t:"VER documento",u:"EMPIEZA_AQUI.md",p:1}]},
+  {cat:"Docs", emoji:"🐝", title:"Arquitectura Colmenia (v2)", status:"repo",
+   desc:"Segundo documento de arquitectura de Colmenia, distinto del blueprint COLMENIA_PRODUCT_ARCHITECTURE.md ya enlazado. Vive en el repo privado academia-logoped-ia — el enlace pide login de GitHub con acceso al repo.",
+   tags:["Colmenia","arquitectura","repo privado"],
+   links:[{t:"VER en GitHub",u:"https://github.com/foniafonia/academia-logoped-ia/blob/experimento/vivo-completo/docs/ARQUITECTURA-COLMENIA.md",p:1}]},
+  {cat:"Docs", emoji:"📓", title:"Bitácora de agentes — Academia", status:"repo",
+   desc:"Bitácora propia del repo Academia (112KB), distinta de tmp_bitacora_compartida.md de este repo. Repo privado, pide login de GitHub con acceso.",
+   tags:["bitácora","Academia","repo privado"],
+   links:[{t:"VER en GitHub",u:"https://github.com/foniafonia/academia-logoped-ia/blob/experimento/vivo-completo/BITACORA_AGENTES.md",p:1}]},
+  {cat:"Docs", emoji:"🎨", title:"Handoffs visuales Colmenia (V2/V3) + contexto", status:"repo",
+   desc:"Documentos de traspaso de la exploración visual de Colmenia (paleta miel, cristal esmerilado). Repo privado, pide login de GitHub con acceso.",
+   tags:["Colmenia","visual","repo privado"],
+   links:[
+     {t:"VER Handoff V3",u:"https://github.com/foniafonia/academia-logoped-ia/blob/experimento/vivo-completo/HANDOFF_VISUAL_V3.md",p:1},
+     {t:"Handoff V2",u:"https://github.com/foniafonia/academia-logoped-ia/blob/experimento/vivo-completo/HANDOFF_VISUAL_V2.md",p:0},
+     {t:"Contexto visual",u:"https://github.com/foniafonia/academia-logoped-ia/blob/experimento/vivo-completo/CONTEXTO_COLMENIA_VISUAL.md",p:0}]},
   {cat:"Infra", emoji:"🚢", title:"Netlify local / Supabase", status:"local",
    desc:"Carpeta local con netlify.toml y guía DEPLOY_NETLIFY_SUPABASE. Infraestructura, no producto de escaparate.",
    tags:["Netlify","Supabase"], links:[], path:"/Users/joseaserraf/Documents/New project 5/repo/DEPLOY_NETLIFY_SUPABASE.md"},
@@ -369,17 +405,47 @@ const CODEX_EXTRA_ITEMS = [
           {t:"Fabricador prompts",u:"codex-assets/herramientas/fabricador-prompts/index.html",p:0},
           {t:"Beta Innovadores",u:"codex-assets/herramientas/beta-innovadores/index.html",p:0},
           {t:"Myosinc",u:"codex-assets/herramientas/beta-innovadores/myosinc.html",p:0}]},
+  {cat:"Herramientas", emoji:"👨‍👩‍👧", title:"Tutor Padres", status:"repo",
+   desc:"Herramienta para familias, ya publicada en el repo (fuera de la tanda de beta-innovadores).",
+   tags:["familias","tutor"], links:[{t:"VER Tutor Padres",u:"codex-assets/herramientas/tutor-padres.html",p:1}]},
   {cat:"Herramientas", emoji:"🗣️", title:"Preta / fluidez clínica", status:"pending",
    desc:"Familia de fluidez/tartamudez: preta-fluidez-mvp (v1/v2/v2-telegram/v3-android), preta-motor-beta, fluidez-clínica-lab, karaoke-tartamudez, vocalclinic-demo. FoniaWatch Rehab ya está en vivo (ver su tarjeta).",
    tags:["fluidez","Preta","voz"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/preta-fluidez-mvp-v2-telegram",
    next:"elegir versión principal y sacar deploy real (v2-telegram) o publicar demo limpia", links:[]},
   {cat:"Curso", emoji:"🎤", title:"Valencia / AELFA / ponencias", status:"pending",
-   desc:"Familia de formación/difusión: valenciacodex-live, valencia-nadina-ia-logopedia, AELFA landing, slides de recuperación, vídeos de cluster IA. Varias URLs .vercel dieron 404; hay repos públicos.",
+   desc:"Familia de formación/difusión: valenciacodex-live, valencia-nadina-ia-logopedia, AELFA landing, slides de recuperación, vídeos de cluster IA. Varias URLs .vercel dieron 404; hay repos públicos. AELFA landing: el repo tiene rama por defecto codex/aelfa-landing-final (no main) — revisar ahí antes de buscar deploy.",
    tags:["ponencias","formación","AELFA"],
-   next:"publicar HTML de ponencias en Pages y/o redeploy de aelfa-landing/valenciacodex en Vercel",
+   next:"publicar HTML de ponencias en Pages y/o redeploy de aelfa-landing (rama codex/aelfa-landing-final) / valenciacodex en Vercel",
    links:[
-     {t:"Repo AELFA landing",u:"https://github.com/foniafonia/aelfa-landing",p:0},
-     {t:"Repo Valencia Codex",u:"https://github.com/foniafonia/valenciacodex-live",p:0}]}
+     {t:"Repo AELFA landing",u:"https://github.com/foniafonia/aelfa-landing/tree/codex/aelfa-landing-final",p:0},
+     {t:"Repo Valencia Codex",u:"https://github.com/foniafonia/valenciacodex-live",p:0}]},
+  {cat:"Curso", emoji:"🎬", title:"Vídeos y decks Valencia/Melilla (sin subir)", status:"upload",
+   desc:"Slides de recuperación (46 slides), entregas final/online de valenciacodex, vídeo del cluster IA 2026 Melilla, valencia-assets/*.mp4 y kits de prompts (v2 mayo2026, fusión 2025-2026). Ninguna tarjeta los cubre todavía.",
+   tags:["vídeo","deck","Valencia"],
+   path:"valenciacodex-46slides-recuperacion.html, valenciacodex-ia-logopedia-final/online-*.html, video cluster ia 2026 melilla.mp4, valencia-assets/*.mp4, kit-prompts-*.html (Mac)",
+   next:"Codex Desktop: sube estos HTML/MP4 a codex-assets/valencia/ → Claude da VER", links:[]},
+
+  // ---- ARTEFACTOS CLAUDE (hallados 2026-07-20, listado real de la cuenta de Claude) ----
+  {cat:"Herramientas", emoji:"🩺", title:"Antes de Consultar — Fönia (demo anónima)", status:"live",
+   desc:"Cuestionario clínico previo a consulta: 7 áreas (habla, lenguaje, fluidez, voz, deglución, lectoescritura, comunicación), preguntas guiadas para que la familia observe y explique antes de ir al logopeda. Artifact de Claude, cuenta del usuario.",
+   tags:["Fönia","anamnesis","artifact"],
+   links:[{t:"VER demo",u:"https://claude.ai/code/artifact/7ca48a01-2f56-4e21-a9d2-1c3343747d29",p:1}]},
+  {cat:"Juegos", emoji:"🎙️", title:"Difonómetro — Gran Final España vs Argentina", status:"live",
+   desc:"Juego/demo viral de higiene vocal: mide el grito con el micro del móvil, visualiza \"incendio\" de dosis vocal, genera carta para Stories. Branding Logoped-IA, mensaje real de cuidado de la voz. Artifact de Claude, cuenta del usuario.",
+   tags:["voz","viral","artifact"],
+   links:[{t:"VER juego",u:"https://claude.ai/code/artifact/e4f1d3d4-a827-4af6-9dec-94cfe7016bf3",p:1}]},
+  {cat:"Docs", emoji:"🐝", title:"Colmenia — Qué falta para vender (auditoría 6 jul)", status:"repo",
+   desc:"Auditoría honesta de producto de Colmenia: 18 páginas privadas + portada, bloqueantes ya resueltos (móvil roto, perfil, cifras falsas), qué queda \"cascarón\" (comunidad, ranking, spaces, suite) y qué ya es sólido (pago, seguridad, Supabase, biblioteca, formación). Complementa la auditoría de código de esta sesión.",
+   tags:["Colmenia","auditoría","artifact"],
+   links:[{t:"VER auditoría",u:"https://claude.ai/code/artifact/7d1f5bd1-00ca-48f0-8763-cd2baf53b0da",p:1}]},
+  {cat:"Docs", emoji:"📋", title:"Antes de Consultar — Fase 0 (spec)", status:"repo",
+   desc:"Documento de especificación detrás de la demo Fönia. Artifact de Claude, cuenta del usuario.",
+   tags:["Fönia","spec","artifact"],
+   links:[{t:"VER documento",u:"https://claude.ai/code/artifact/6d5a89ec-8ad6-4edc-b77c-53f0db651b68",p:1}]},
+  {cat:"Cantera", emoji:"🎬", title:"CineMundos — Informe de avance (verificar)", status:"pending",
+   desc:"Artifact encontrado en la cuenta de Claude, 2,5MB, tipografías embebidas. NO confirmado si es Logoped-IA/Colmenia o proyecto personal — la auditoría de Codex del 19-jul ya marcó el repo `cinemundos` como \"fuera de logopedia o personal\". No se publica sin que Jose confirme cuál es.",
+   tags:["por confirmar","artifact"],
+   next:"Jose confirma: ¿CineMundos es de Logoped-IA/Colmenia o es proyecto personal separado?", links:[]}
 ];
 
 const SUITE_POE_ITEMS = [
@@ -478,6 +544,30 @@ const POE_DESCARTADOS_FILES = [
   "Testdetartamudez__3gl3b26e8zg730qokj.html"
 ];
 
+const COGNITIVA_TALLERES = [
+  ["alumno_conciencia_fonologica_obj008a.html","Conciencia fonológica (obj008a)"],
+  ["alumno_eficiencia_lectora_obj003a_004a.html","Eficiencia lectora (obj003a/004a)"],
+  ["alumno_escritura_productiva.html","Escritura productiva"],
+  ["alumno_lenguaje_abstracto.html","Lenguaje abstracto"],
+  ["alumno_obj001a.html","Taller obj001a"],
+  ["alumno_obj003a.html","Taller obj003a"],
+  ["alumno_obj006a_007a_012a.html","Taller obj006a/007a/012a"],
+  ["alumno_obj015j.html","Taller obj015j"],
+  ["alumno_obj015t.html","Taller obj015t"],
+  ["alumno_obj017b.html","Taller obj017b"],
+  ["alumno_obj020p.html","Taller obj020p"],
+  ["alumno_obj031a.html","Taller obj031a"],
+  ["alumno_obj041a.html","Taller obj041a"],
+  ["alumno_ortografia_bv_cloze.html","Ortografía B/V (cloze)"],
+  ["alumno_sinfones_liquidos.html","Sinfones líquidos"],
+  ["alumno_sinfones_vibrantes.html","Sinfones vibrantes"]
+].map(([file,title]) => ({
+  cat:"Herramientas", emoji:"🧪", title:`Cognitiva — ${title}`, status:"repo",
+  desc:"Taller individual de Cognitiva 2026, ya subido al repo y abrible desde el multitaller o directo.",
+  tags:["cognitiva","taller"],
+  links:[{t:"VER taller",u:`codex-assets/cognitiva/${file}`,p:1}]
+}));
+
 function poeTitle(file){
   return file
     .replace(/^\d+__/, "")
@@ -489,6 +579,7 @@ function poeTitle(file){
 ITEMS.push(
   ...CODEX_EXTRA_ITEMS,
   ...SUITE_POE_ITEMS,
+  ...COGNITIVA_TALLERES,
   ...POE_MASIVO_FILES.map((file, idx) => ({
     cat:"Cantera", emoji:"🧪", title:`POE masivo ${String(idx+1).padStart(2,"0")} — ${poeTitle(file)}`, status:"repo",
     desc:"HTML individual del lote POE masivo. Esta subido al repo para abrirlo, probarlo y decidir despues si se queda, se remezcla o se descarta.",
