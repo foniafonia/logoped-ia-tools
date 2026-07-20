@@ -56,6 +56,7 @@
   .b.preview{color:#fff;background:var(--purple);border-color:transparent}
   .b.local{color:#2a1a02;background:var(--gold);border-color:transparent}
   .b.pending{color:#2a1a02;background:var(--gold);border-color:transparent}
+  .b.upload{color:#3a0f27;background:var(--pink);border-color:transparent}
   .b.soon{color:var(--muted);background:transparent}
   .b.cantera{color:#3a0f27;background:var(--pink);border-color:transparent}
   .b.tag{color:var(--muted);background:var(--card2)}
@@ -89,7 +90,8 @@
       <span class="b live">EN VIVO</span> URL pública funcionando ·
       <span class="b preview">DEMO VERCEL PREVIEW</span> preview viva (provisional) ·
       <span class="b repo">EN ESTE REPO · VER</span> abrible ya desde Pages ·
-      <span class="b pending">PENDIENTE DE DEPLOY</span> existe pero falta publicar (ruta + siguiente acción) ·
+      <span class="b pending">PENDIENTE DE DEPLOY</span> app que falta desplegar (Vercel/Netlify/Railway) ·
+      <span class="b upload">NECESITA SUBIDA LOCAL</span> HTML que vive en el Mac → Codex Desktop lo sube ·
       <span class="b local">EN LOCAL</span> infra/doc en el Mac ·
       <span class="b soon">PRÓXIMAMENTE</span> roadmap real ·
       <span class="b cantera">CANTERA</span> por podar.
@@ -127,10 +129,14 @@ const ITEMS = [
    tags:["Stripe","Supabase","IA","preview"], links:[
      {t:"VER preview",u:"https://academia-logoped-ia-git-codex-renov-139c35-foniafonias-projects.vercel.app/",p:1},
      {t:"Repo · rama codex/renovacion-visual",u:"https://github.com/foniafonia/academia-logoped-ia/tree/codex/renovacion-visual",p:0}]},
-  {cat:"Membresía", emoji:"🧭", title:"Colmenia — Experiencia viva (concepts) + blueprint", status:"pending",
-   desc:"Rama experimento/vivo-completo: marca madre COLMENIA (Logoped-IA queda como módulo Suite). Incluye blueprint de producto (COLMENIA_PRODUCT_ARCHITECTURE.md) y 5 rutas concepto: concept-vivo, concept-vivo-b, concept-boveda, concept-gabinete, concept-nexo. No sale en los deploys actuales porque estas rutas SOLO viven en esta rama.",
-   tags:["Colmenia","concepts","blueprint"], next:"desplegar la rama experimento/vivo-completo en Vercel (o mergear a main) para que /concept-vivo-b y demás sean visibles",
-   links:[{t:"Repo · rama experimento/vivo-completo",u:"https://github.com/foniafonia/academia-logoped-ia/tree/experimento/vivo-completo",p:0}]},
+  {cat:"Membresía", emoji:"🧭", title:"Colmenia — Experiencia viva (concept-vivo-b)", status:"preview",
+   desc:"Marca madre COLMENIA (Logoped-IA queda como módulo Suite). Exploración visual viva: paleta miel, partículas en canvas, red de personas con pseudónimo+profesión, avatares de cristal. URL aportada por Jose · pendiente de verificación externa (mi entorno no puede abrir *.vercel.app). Rama experimento/vivo-completo, no tocar producción.",
+   tags:["Colmenia","concepts","preview"], links:[
+     {t:"VER concept-vivo-b",u:"https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-vivo-b",p:1},
+     {t:"concept-vivo",u:"https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-vivo",p:0},
+     {t:"concept-nexo",u:"https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-nexo",p:0},
+     {t:"concept-gabinete",u:"https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-gabinete",p:0},
+     {t:"concept-boveda",u:"https://academia-logoped-a2ga84lh4-foniafonias-projects.vercel.app/concept-boveda",p:0}]},
   {cat:"Membresía", emoji:"💳", title:"Pricing 2 planes + registro diferenciado", status:"live",
    desc:"Membresía Base 4,95€/mes vs Membresía + Suite 9,94€/mes (4,95 base + 4,99 extra). Selector de plan en el registro, campo `plan` llega al backend. Checkout Stripe integrado en la rama de renovación.",
    tags:["pricing","registro","Stripe"], links:[{t:"VER registro",u:"https://academia-logoped-ia.vercel.app/registro",p:1}]},
@@ -180,20 +186,20 @@ const ITEMS = [
    tags:["materiales"], links:[{t:"Abrir aquí",u:"radar-materiales-landing.html",p:1}]},
 
   // ---- ARAIA ----
-  {cat:"ARAIA", emoji:"🖼️", title:"iSecuencias (ARAIA)", status:"pending",
+  {cat:"ARAIA", emoji:"🖼️", title:"iSecuencias (ARAIA)", status:"upload",
    desc:"Secuencias con pictogramas ARASAAC. Rescatada y estabilizada; el creador acepta frase natural (\"me levanto, me lavo, desayuno…\") y genera pasos jugables. HTML estático — publicable en Pages.",
-   tags:["ARASAAC","secuencias"], path:"/araia/isecuencias/index.html",
-   next:"copiar araia/isecuencias a codex-assets/ y publicar en Pages (o confirmar deploy del repo público araia)", links:[]},
+   tags:["ARASAAC","secuencias"], path:"araia/isecuencias/ (Mac)",
+   next:"Codex Desktop: sube araia/isecuencias/ a codex-assets/araia/ y avisa → Claude le da VER", links:[]},
 
   // ---- BETA INNOVADORES ----
-  {cat:"Beta", emoji:"🧬", title:"Praxias Connect", status:"pending",
-   desc:"Rehabilitación motora orofacial con MediaPipe + Canvas. HTML estático autocontenido. Vive en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
-   tags:["MediaPipe","praxias"], path:"public/beta-innovadores/praxias-connect.html",
-   next:"subir praxias-connect.html a codex-assets/herramientas/ y publicar en Pages", links:[]},
-  {cat:"Beta", emoji:"🔠", title:"Alfabeto PNL", status:"pending",
-   desc:"Sincronización neurológica / Web Speech. HTML estático autocontenido. Vive en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
-   tags:["Web Speech","PNL"], path:"public/beta-innovadores/alfabeto-pnl.html",
-   next:"subir alfabeto-pnl.html a codex-assets/herramientas/ y publicar en Pages", links:[]},
+  {cat:"Beta", emoji:"🧬", title:"Praxias Connect", status:"upload",
+   desc:"Rehabilitación motora orofacial con MediaPipe + Canvas. HTML estático autocontenido. Vive solo en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
+   tags:["MediaPipe","praxias"], path:"public/beta-innovadores/praxias-connect.html (Mac)",
+   next:"Codex Desktop: sube praxias-connect.html a codex-assets/herramientas/ y avisa → Claude le da VER", links:[]},
+  {cat:"Beta", emoji:"🔠", title:"Alfabeto PNL", status:"upload",
+   desc:"Sincronización neurológica / Web Speech. HTML estático autocontenido. Vive solo en el Mac / repo ACADEMIA MEMBRESIA (fuera de este scope); no alcanzable desde esta sesión.",
+   tags:["Web Speech","PNL"], path:"public/beta-innovadores/alfabeto-pnl.html (Mac)",
+   next:"Codex Desktop: sube alfabeto-pnl.html a codex-assets/herramientas/ y avisa → Claude le da VER", links:[]},
 
   // ---- CURSO IA ----
   {cat:"Curso", emoji:"🎬", title:"Curso IA — Landing de preventa", status:"pending",
@@ -295,10 +301,10 @@ const CODEX_EXTRA_ITEMS = [
   {cat:"Herramientas", emoji:"💎", title:"Rubi-IA", status:"repo",
    desc:"Cuaderno Rubi-IA v2 rescatado desde local al repo. Es una herramienta distinta de Mision Perfiles.",
    tags:["Rubi-IA","cuaderno"], links:[{t:"Abrir copia repo",u:"codex-assets/rubi-ia/index.html",p:1}], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/cuaderno-rub-ia-v2/index.html"},
-  {cat:"Herramientas", emoji:"🧾", title:"Anamnesis IA", status:"pending",
-   desc:"Herramienta de anamnesis IA. Vive solo en el Mac; no alcanzable desde esta sesión. Revisar que no incluya datos clínicos reales antes de publicar.",
-   tags:["anamnesis","revisión"], links:[], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/anamnesis ia/index.html",
-   next:"revisar datos y subir a codex-assets/herramientas/ (o crear demo limpia)"},
+  {cat:"Herramientas", emoji:"🧾", title:"Anamnesis IA", status:"upload",
+   desc:"Herramienta de anamnesis IA. Vive solo en el Mac. Revisar que no incluya datos clínicos reales antes de publicar.",
+   tags:["anamnesis","revisión"], links:[], path:"…/anamnesis ia/index.html (Mac)",
+   next:"Codex Desktop: revisa datos y sube a codex-assets/herramientas/ (o crea demo limpia) → Claude le da VER"},
   {cat:"Herramientas", emoji:"🌐", title:"Logoped Web", status:"live",
    desc:"Frontend web general de Logoped-IA desplegado en Vercel.",
    tags:["web","Vercel"], links:[{t:"Abrir en vivo",u:"https://logoped-web.vercel.app",p:1}]},
@@ -345,18 +351,18 @@ const CODEX_EXTRA_ITEMS = [
    desc:"Motor de gesto/aire. YA en vivo: Constructor de sílabas, Puzzle Agarre y Lengua Runner/Gestos (ver sus tarjetas). Pendientes de deploy: Abecedario Mágico, Escritura Aire, Pintura Aire, Baloncesto/Tiro y el hub deploy-juegos-aire.",
    tags:["aire","gestos","MediaPipe"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/deploy-juegos-aire",
    next:"desplegar abecedario/escritura/pintura/baloncesto + hub en Vercel", links:[]},
-  {cat:"Juegos", emoji:"🎧", title:"Logopod — entrenador", status:"pending",
-   desc:"Entrenador tipo Logopod (app + landing + versión funcional/real). HTML/JS. Aparece también dentro de valenciacodex-live.",
-   tags:["Logopod","entrenador"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/logopod-entrenador-app",
-   next:"elegir versión principal, subir HTML a codex-assets/ y publicar en Pages", links:[]},
+  {cat:"Juegos", emoji:"🎧", title:"Logopod — entrenador", status:"upload",
+   desc:"Entrenador tipo Logopod (app + landing + versión funcional/real). HTML/JS estático. Aparece también dentro de valenciacodex-live.",
+   tags:["Logopod","entrenador"], path:"logopod-entrenador-app/ o logopod-entrenador-real.html (Mac)",
+   next:"Codex Desktop: elige versión principal y súbela a codex-assets/logopod/ → Claude le da VER", links:[]},
   {cat:"Juegos", emoji:"🪞", title:"MirrorFono — motor espejo", status:"pending",
    desc:"Juego/herramienta clínica de motor espejo (dist, public, src, index.html). Candidato claro a juego, no estaba en la landing.",
    tags:["espejo","Vite/React"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/mirrorfono-game",
    next:"build + deploy en Vercel/Netlify (o publicar dist/ en Pages)", links:[]},
-  {cat:"Herramientas", emoji:"🩺", title:"Herramientas clínicas HTML sueltas", status:"pending",
+  {cat:"Herramientas", emoji:"🩺", title:"Herramientas clínicas HTML sueltas", status:"upload",
    desc:"Lote de HTML estático clínico: logopedia-dicta, logopedia-smb, fabricador-prompts-logopédicos, pictoia-adaptativo, arasecuencias-app, praxiasconnect_FINAL, alfabeto-pnl-final. Todas publicables en Pages.",
-   tags:["clínica","HTML"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/herramientas-clinicas",
-   next:"subir el lote a codex-assets/herramientas/ y dar VER a cada una", links:[]},
+   tags:["clínica","HTML"], path:"herramientas-clinicas/ + HTML sueltos en raíz (Mac)",
+   next:"Codex Desktop: sube el lote a codex-assets/herramientas/ → Claude da VER a cada una", links:[]},
   {cat:"Herramientas", emoji:"🗣️", title:"Preta / fluidez clínica", status:"pending",
    desc:"Familia de fluidez/tartamudez: preta-fluidez-mvp (v1/v2/v2-telegram/v3-android), preta-motor-beta, fluidez-clínica-lab, karaoke-tartamudez, vocalclinic-demo. FoniaWatch Rehab ya está en vivo (ver su tarjeta).",
    tags:["fluidez","Preta","voz"], path:"/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/preta-fluidez-mvp-v2-telegram",
@@ -515,6 +521,7 @@ function statusBadge(s){
     preview:['preview','DEMO VERCEL PREVIEW'],
     repo:['repo','EN ESTE REPO · VER'],
     pending:['pending','PENDIENTE DE DEPLOY'],
+    upload:['upload','NECESITA SUBIDA LOCAL'],
     local:['local','EN LOCAL'],
     soon:['soon','PRÓXIMAMENTE'],
     cantera:['cantera','CANTERA']
