@@ -1066,6 +1066,34 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Suite clinica medible — comprobacion de juegos que no cargaban
+
+Contexto:
+- Jose detecta en captura que `resource-player.html?activity=poe-erre-que-erre-erre-directa` mide, pero el juego aparecia como 404 dentro del iframe.
+
+Hecho:
+- Verificado en publico que el iframe de `resource-player` para `poe-erre-que-erre-erre-directa` resuelve a:
+  `./POE/erre%20que%20erre%20erre%20directa/index.html`
+- Verificado que la ruta directa en GitHub Pages devuelve 200:
+  `codex-assets/academia-suite-medible/POE/erre%20que%20erre%20erre%20directa/index.html`
+- Actualizada la tarjeta `Suite clinica medible — pacientes, resultados y juegos` para incluir accesos directos medibles:
+  - Erre que Erre medible
+  - Letra Crush medible
+  - S/Z medible
+  - Anamnesis medible
+- Generada/actualizada captura reconocible de la Suite:
+  `codex-assets/screenshots/suite-clinica-medible-pacientes-resultados-y-juegos.jpg`
+
+Nota:
+- La suite medible tiene catalogadas unas 40 actividades en `content/activity-catalog.generated.json`; las primeras de prioridad alta incluyen Letra Crush, Erre que Erre, evaluacion/anamnesis, chatbot familias, 194RRR, Kaboom, S/Z y Karaoke Tartamudez.
+- Si vuelve a verse 404 en navegador, puede ser cache vieja de Pages o una copia distinta de `resource-player`; la version publicada actualmente apunta relativo, no a `/POE/...`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Auditoria GitHub repos sin Pages — VocalClinic, curso online y privados localizados
 
 Contexto:
