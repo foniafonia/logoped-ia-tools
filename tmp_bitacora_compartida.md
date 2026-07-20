@@ -1061,3 +1061,50 @@ Verificacion local headless:
 - `poe-194rrr`, `poe-midiendo-con-la-s-y-la-z-definitivo`, `poe-karaoke-tartamudez` y `ponencia-murcia-05-proyecto-evaluacion-logopedica` cargan dentro del medidor sin 404.
 
 Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Afinado de inventario — convertir locales/pending en demos visibles
+
+Contexto:
+- Jose pide seguir afinando porque faltan muchas cosas de Codex/GPT/Claude y necesita que todo lo enseñable se abra desde la landing, no solo que aparezca como repo o ruta local.
+- Prioridad actual: bajar amarillos/rosas y añadir capturas reconocibles.
+
+Hecho:
+- Rescatado Logoflix desde:
+  `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/logoflix.html`
+  hacia `codex-assets/logoflix/index.html`.
+- Publicados como demos estaticas:
+  - `codex-assets/juegos-aire/` (hub + Abecedario Magico, Escritura Aire, Pintura Aire, Constructor de Silabas, Puzzle Agarre, Lengua Runner/Gestos).
+  - `codex-assets/mirrorfono/` (build `dist` de MirrorFono; rutas Vite corregidas a relativas).
+  - `codex-assets/preta/` (frontend PRET-A Fluidez MVP v2 Telegram + anamnesis PRET-A).
+  - `codex-assets/curso-gpt-logopedia/` (MVP curso GPT/logopedia + `content/` real de modulos, quizzes, retos y recursos).
+  - `codex-assets/curso-ia-preventa/` (landing de preventa en modo demo estatica; sin backend, sin SQLite, sin `.env`, sin Stripe real).
+  - `codex-assets/valencia/` (3 HTML de ponencia/deck + `valencia-assets/` visual: 48 imagenes/posters/GIFs y 3 MP4 ligeros; se excluyen videos gigantes >100 MB).
+- Actualizadas las tarjetas correspondientes en `LANDING_TODO_LOGOPED_IA.html` de `pending/upload` a `repo` cuando ya tienen boton VER real.
+- Generadas capturas:
+  - `codex-assets/screenshots/logoflix.jpg`
+  - `codex-assets/screenshots/juegos-de-aire-hub-pendientes.jpg`
+  - `codex-assets/screenshots/mirrorfono-motor-espejo.jpg`
+  - `codex-assets/screenshots/preta-fluidez-clinica.jpg`
+  - `codex-assets/screenshots/curso-gpt-logopedia-para-membresia.jpg`
+  - `codex-assets/screenshots/curso-ia-landing-de-preventa.jpg`
+  - `codex-assets/screenshots/valencia-aelfa-ponencias.jpg`
+
+Verificacion local headless:
+- Logoflix carga con titulo `LogoFlix — Base de conocimiento logopedico`.
+- Juegos de aire hub y 6 subdemos cargan sin 404 locales.
+- MirrorFono carga interfaz y modo demo automatico sin camara.
+- PRET-A carga interfaz clinica/anamnesis sin 404.
+- Curso GPT carga con contenido real desde `./content`.
+- Curso IA preventa carga sin 404 y sin llamadas reales a API/pagos.
+- Valencia deck 46 slides carga con 0 errores locales tras copiar assets visuales y 3 videos ligeros.
+
+Pendiente consciente:
+- No se han subido videos grandes de Valencia/Melilla (hay archivos de 166 MB y 274 MB que no conviene meter en GitHub Pages).
+- JELOU, base de conocimiento chatbot y Anamnesis IA siguen sensibles: no subir sin demo limpia.
+- Curso IA preventa queda como escaparate visual; el backend Flask/Stripe real requiere deploy aparte si se quiere vender/cobrar desde ahi.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]

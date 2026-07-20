@@ -1,0 +1,12 @@
+{
+  "id": "module-05",
+  "title": "Casos integradores",
+  "description": "Resolver casos completos con IA asistida.",
+  "goal": "Aplicar todo el sistema en escenarios reales simulados.",
+  "lessons": [
+    {"id":"lesson-05-01","title":"Caso infantil articulatorio","duration_minutes":25,"theory":["Construir plan de 4 semanas.","Definir indicadores de progreso.","Ajustar segun respuesta del nino."],"example":"Caso de /r/ multiple con objetivos semanales.","checklist":["Plan","Indicadores","Adaptaciones","Seguimiento"]},
+    {"id":"lesson-05-02","title":"Caso lectoescritura","duration_minutes":24,"theory":["Integrar fonologia y comprension.","Combinar tareas cortas.","Evitar sobrecarga cognitiva."],"example":"Intervencion de conciencia fonologica + lectura guiada.","checklist":["Secuencia","Carga","Refuerzo","Evaluacion"]},
+    {"id":"lesson-05-03","title":"Caso familia + escuela","duration_minutes":22,"theory":["Coordinar mensajes coherentes.","Definir tareas semanales realistas.","Registrar adherencia."],"example":"Plan compartido con tutor y familia.","checklist":["Coordinacion","Simplicidad","Seguimiento","Retroalimentacion"]},
+    {"id":"lesson-05-04","title":"Defensa de propuesta","duration_minutes":18,"theory":["Justificar cada decision.","Mostrar comparativas y mejoras.","Presentar limites del modelo."],"example":"Informe final con evidencia de evolucion del prompt.","checklist":["Justificacion","Evidencia","Limites","Conclusiones"]}
+  ]
+}

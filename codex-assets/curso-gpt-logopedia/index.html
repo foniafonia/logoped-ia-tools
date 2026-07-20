@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curso GPT Logopedia - Modulo 00 (Local MVP)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Curso GPT para Logopedia</p>
+        <h1>Modulo 00: Prompt + LLM desde cero</h1>
+        <p>
+          Prototipo local para validar flujo: teoria, quiz, practica con API,
+          comparacion y progreso.
+        </p>
+        <p class="small"><strong>Version:</strong> Preview actualizada para escritorio (10/03/2026)</p>
+      </div>
+      <div class="auth-box">
+        <h2>Acceso local</h2>
+        <form id="login-form">
+          <label for="student-name">Nombre</label>
+          <input id="student-name" placeholder="Tu nombre" required />
+          <label for="student-email">Email</label>
+          <input id="student-email" type="email" placeholder="tu@email.com" required />
+          <button type="submit">Entrar</button>
+        </form>
+        <div id="session-box" class="hidden">
+          <p id="session-user"></p>
+          <button id="logout-btn" class="secondary">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="roadmap card">
+      <h2>Ruta Formativa (00-07)</h2>
+      <p class="small">Vista rápida del estado de cada módulo: bloqueado, activo o completado.</p>
+      <div id="module-roadmap" class="roadmap-grid"></div>
+    </section>
+
+    <main class="grid">
+      <section class="card" id="theory-card">
+        <h2>1) Teoria</h2>
+        <label for="module-select">Modulo</label>
+        <select id="module-select"></select>
+        <p id="module-status-text" class="small"></p>
+        <p id="module-data-text" class="small"></p>
+        <button id="unlock-next-module" class="secondary">Desbloquear siguiente modulo (prueba)</button>
+        <div id="lesson-tabs" class="tabs"></div>
+        <div id="lesson-content"></div>
+      </section>
+
+      <section class="card" id="quiz-card">
+        <h2>2) Quiz Modulo 00</h2>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz">Corregir quiz</button>
+        <p id="quiz-result"></p>
+      </section>
+
+      <section class="card" id="api-card">
+        <h2>3) Conexion con tu API (opcional)</h2>
+        <p class="small">
+          Solo necesitas pegar tu API key (sk-...) y, si quieres, cambiar el modelo.
+          El endpoint ya esta fijo en el codigo.
+        </p>
+
+        <label for="api-key">API Key (solo prueba local)</label>
+        <input id="api-key" type="password" placeholder="sk-..." />
+
+        <label for="api-model">Model (opcional)</label>
+        <input id="api-model" placeholder="gpt-4.1-mini" />
+
+        <button id="save-api" class="secondary">Guardar configuracion</button>
+        <p id="api-status"></p>
+      </section>
+
+      <section class="card" id="practice-card">
+        <h2>4) Practica con API</h2>
+        <label for="exercise-select">Ejercicio</label>
+        <select id="exercise-select"></select>
+
+        <p id="exercise-instruction" class="instruction"></p>
+
+        <label for="prompt-input">Tu prompt</label>
+        <textarea id="prompt-input" rows="7" placeholder="Escribe tu prompt aqui..."></textarea>
+
+        <button id="run-prompt">Enviar a API</button>
+
+        <label for="internal-output">Respuesta API interna</label>
+        <textarea id="internal-output" rows="7" readonly></textarea>
+
+        <label for="external-output">Respuesta GPT externa (pegada por alumno)</label>
+        <textarea id="external-output" rows="7" placeholder="Pega aqui lo que te devolvio tu GPT externo..."></textarea>
+
+        <label for="self-analysis">Tu analisis comparativo</label>
+        <textarea id="self-analysis" rows="5" placeholder="Que diferencias hay? Cual es mejor y por que?"></textarea>
+
+        <button id="compare-outputs">Comparar respuestas con IA</button>
+        <label for="comparison-output">Analisis IA (mejor respuesta + por que + prompt mejorado)</label>
+        <textarea id="comparison-output" rows="9" readonly></textarea>
+        <div id="comparison-semaphore" class="semaphore hidden"></div>
+
+        <button id="save-attempt" class="secondary">Guardar intento y puntuar</button>
+        <button id="next-exercise" class="secondary">Siguiente ejercicio</button>
+        <p id="attempt-status"></p>
+      </section>
+
+      <section class="card" id="progress-card">
+        <h2>5) Evolucion</h2>
+        <p id="progress-summary">Sin intentos todavia.</p>
+        <div id="student-grade" class="grade-box">Nota global: n/a</div>
+        <div id="evolution-bars" class="bars"></div>
+        <div id="attempt-list"></div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

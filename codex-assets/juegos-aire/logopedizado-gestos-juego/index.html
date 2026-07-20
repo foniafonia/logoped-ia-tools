@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logoped IA · Juego por gestos</title>
+  <link rel="stylesheet" href="./styles.css?v=6" />
+</head>
+<body>
+  <main class="shell">
+    <section class="game-card">
+      <header class="hud-top">
+        <div>
+          <span class="eyebrow">MediaPipe Hands + logopedia</span>
+          <h1>Lengua Runner</h1>
+        </div>
+        <div class="stats">
+          <div><strong id="score">0</strong><span>puntos</span></div>
+          <div><strong id="meters">0 m</strong><span>avance</span></div>
+          <div><strong id="timer">01:00</strong><span>tiempo</span></div>
+        </div>
+      </header>
+
+      <div class="play-area">
+        <canvas id="game" width="1200" height="620" aria-label="Videojuego de logopedia controlado por gestos"></canvas>
+
+        <div class="center-overlay" id="startOverlay">
+          <button class="play-button" id="playButton" aria-label="Iniciar juego">
+            <span></span>
+          </button>
+          <p>Pulsa play. En móvil también puedes tocar el juego: 1 dedo salta, 2 dedos dispara.</p>
+        </div>
+
+        <div class="gesture-panel">
+          <video id="camera" playsinline muted></video>
+          <canvas id="hands" width="220" height="150"></canvas>
+          <div class="gesture-info">
+            <strong id="gestureLabel">Sin cámara</strong>
+            <span id="cameraStatus">Puedes jugar con teclado o botones.</span>
+            <span class="debug-line" id="cameraDebug">frames 0 · mano 0 · acción 0</span>
+            <i class="gesture-meter"><b id="gestureMeter"></b></i>
+          </div>
+        </div>
+      </div>
+
+      <footer class="control-bar">
+        <div class="therapy-goal">
+          <span>Objetivo</span>
+          <strong id="targetSound">/r/ suave</strong>
+          <small id="promptText">Recoge RA · RE · RI y di la sílaba en voz alta.</small>
+          <label class="target-picker">
+            <span>Sílaba para disparar</span>
+            <select id="targetSyllable">
+              <option value="PA" selected>PA</option>
+              <option value="PE">PE</option>
+              <option value="PI">PI</option>
+              <option value="RA">RA</option>
+              <option value="RE">RE</option>
+              <option value="RI">RI</option>
+              <option value="SA">SA</option>
+              <option value="SE">SE</option>
+              <option value="SI">SI</option>
+            </select>
+          </label>
+        </div>
+        <div class="buttons">
+          <button id="cameraButton">Activar cámara</button>
+          <button id="jumpButton">Saltar</button>
+          <button id="shootButton">Burbuja sonora</button>
+          <button id="resetButton">Reiniciar</button>
+        </div>
+      </footer>
+    </section>
+
+    <aside class="instructions">
+      <h2>Gestos</h2>
+      <ul>
+        <li><b>✊ Puño</b> prepara el salto.</li>
+        <li><b>✋ Mano abierta</b> hace saltar al personaje.</li>
+        <li><b>✌️ Dos dedos</b> lanza una burbuja y rompe obstáculos.</li>
+      </ul>
+      <p class="mobile-tip"><b>En móvil:</b> usa la cámara frontal, enseña la palma completa dentro del recuadro y evita tener la mano pegada a la cara.</p>
+      <h2>Modo logopédico</h2>
+      <p>El juego refuerza sílabas objetivo. Cada estrella correcta suma, cada obstáculo pide coordinación entre gesto, atención y producción oral.</p>
+      <p class="fallback">Fallback: <kbd>Espacio</kbd> salta, <kbd>F</kbd> dispara.</p>
+    </aside>
+  </main>
+
+  <script src="../vendor/mediapipe/hands.js"></script>
+  <script src="../vendor/mediapipe/camera_utils.js"></script>
+  <script src="../vendor/mediapipe/drawing_utils.js"></script>
+  <script src="./app.js?v=6"></script>
+</body>
+</html>

@@ -1,0 +1,5376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA en Logopedia | ValenciaCodex | Presentación Matrix</title>
+  <style>
+    :root {
+      --bg: #03110a;
+      --bg-2: #071b11;
+      --panel: rgba(6, 24, 14, 0.82);
+      --panel-strong: rgba(5, 18, 11, 0.92);
+      --line: rgba(86, 255, 155, 0.18);
+      --glow: rgba(86, 255, 155, 0.4);
+      --text: #dfffe9;
+      --muted: #8ab79a;
+      --green: #56ff9b;
+      --green-2: #1fdc72;
+      --green-3: #0ea654;
+      --amber: #c7ff72;
+      --red: #ff7e7e;
+      --radius: 26px;
+      --shadow: 0 0 0 1px rgba(86, 255, 155, 0.08), 0 18px 40px rgba(0, 0, 0, 0.45);
+      --slide-w: 100vw;
+      --slide-h: 100vh;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top, rgba(31, 220, 114, 0.08), transparent 32%),
+        linear-gradient(180deg, var(--bg-2), var(--bg));
+      color: var(--text);
+      font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          rgba(86, 255, 155, 0.055) 0,
+          rgba(86, 255, 155, 0.055) 1px,
+          transparent 1px,
+          transparent 34px
+        );
+      opacity: 0.36;
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.22));
+    }
+
+    .matrix-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.22;
+      mix-blend-mode: screen;
+    }
+
+    .matrix-rain canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hud {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(2, 12, 7, 0.68);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .hud-left,
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .hud-left {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      width: min(520px, calc(100vw - 36px));
+      display: none;
+      align-items: stretch;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(2, 12, 7, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .hud.tools-open .hud-left {
+      display: flex;
+    }
+
+    .hud-tool-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(86, 255, 155, 0.12), rgba(86, 255, 155, 0.03));
+      color: var(--green);
+      text-shadow: 0 0 10px var(--glow);
+      font-weight: 700;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy strong,
+    .brand-copy span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-copy strong {
+      font-size: 0.95rem;
+    }
+
+    .brand-copy span,
+    .meta,
+    .hint {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .counter {
+      min-width: 82px;
+      text-align: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(86, 255, 155, 0.05);
+      color: var(--green);
+      text-shadow: 0 0 12px var(--glow);
+    }
+
+    .nav-btn {
+      border: 1px solid var(--line);
+      background: rgba(86, 255, 155, 0.05);
+      color: var(--text);
+      padding: 9px 13px;
+      border-radius: 999px;
+      font: inherit;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(86, 255, 155, 0.34);
+      box-shadow: 0 0 20px rgba(86, 255, 155, 0.12);
+    }
+
+    .nav-btn.primary {
+      background: rgba(199, 255, 114, 0.12);
+      color: var(--amber);
+    }
+
+    .slide-index {
+      position: fixed;
+      top: 96px;
+      left: 18px;
+      bottom: 18px;
+      width: 240px;
+      z-index: 19;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(2, 12, 7, 0.78);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+      transition: transform 220ms ease, opacity 220ms ease;
+    }
+
+    body.index-collapsed .slide-index {
+      transform: translateX(-270px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .index-toggle {
+      position: fixed;
+      left: 18px;
+      top: 96px;
+      z-index: 21;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(2, 12, 7, 0.88);
+      color: var(--green);
+      padding: 10px 13px;
+      font: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      display: none;
+    }
+
+    body.index-collapsed .index-toggle {
+      display: inline-flex;
+    }
+
+    .slide-index-head {
+      display: grid;
+      gap: 4px;
+    }
+
+    .slide-index-head strong {
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .slide-index-head span {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .slide-index-list {
+      overflow: auto;
+      display: grid;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .slide-index-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .slide-index-list::-webkit-scrollbar-thumb {
+      background: rgba(86, 255, 155, 0.16);
+      border-radius: 999px;
+    }
+
+    .slide-index-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(86, 255, 155, 0.08);
+      background: rgba(86, 255, 155, 0.03);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: 160ms ease;
+      display: grid;
+      gap: 3px;
+    }
+
+    .slide-index-btn:hover {
+      transform: translateX(2px);
+      border-color: rgba(86, 255, 155, 0.26);
+      background: rgba(86, 255, 155, 0.06);
+    }
+
+    .slide-index-btn.active {
+      border-color: rgba(199, 255, 114, 0.34);
+      background: rgba(199, 255, 114, 0.12);
+      box-shadow: 0 0 18px rgba(199, 255, 114, 0.08);
+    }
+
+    .slide-index-btn .idx-num {
+      color: var(--green);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .slide-index-btn .idx-title {
+      font-size: 0.84rem;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .deck::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      flex: 0 0 100vw;
+      scroll-snap-align: start;
+      padding: 70px 28px 26px;
+      display: grid;
+      align-items: center;
+      position: relative;
+    }
+
+    body.index-collapsed .slide {
+      padding-left: 28px;
+    }
+
+    .frame {
+      width: 100%;
+      max-width: min(1680px, calc(100vw - 56px));
+      height: calc(100vh - 96px);
+      margin: 0 auto;
+      padding: 36px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(86, 255, 155, 0.04), transparent 24%),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      gap: 22px;
+      position: relative;
+    }
+
+    .frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent, rgba(86, 255, 155, 0.03), transparent);
+      transform: translateX(-100%);
+      animation: scan 9s linear infinite;
+    }
+
+    @keyframes scan {
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    .terminal-line {
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.76rem;
+      opacity: 0.92;
+      text-shadow: 0 0 12px var(--glow);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      font-family: "Helvetica Neue", "Arial", sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6.6rem);
+      max-width: 10ch;
+    }
+
+    h2 {
+      font-size: clamp(2.3rem, 5vw, 4.6rem);
+      max-width: 12ch;
+    }
+
+    h3 {
+      font-size: 1.38rem;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .hero-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: end;
+      height: 100%;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-2.visual-priority {
+      grid-template-columns: minmax(220px, 0.58fr) minmax(0, 1.42fr);
+      align-items: stretch;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .lead {
+      font-size: 1.14rem;
+      max-width: 64ch;
+    }
+
+    .big-quote {
+      font-size: clamp(1.6rem, 2.5vw, 2.5rem);
+      line-height: 1.16;
+      color: var(--text);
+      max-width: 24ch;
+      text-shadow: 0 0 18px rgba(86, 255, 155, 0.12);
+    }
+
+    .panel,
+    .card,
+    .quote-box,
+    .agenda-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-strong);
+      padding: 20px;
+      box-shadow: inset 0 0 0 1px rgba(86, 255, 155, 0.04);
+    }
+
+    .card strong,
+    .panel strong,
+    .quote-box strong,
+    .agenda-box strong {
+      color: var(--text);
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(86, 255, 155, 0.04);
+      color: var(--green);
+      font-size: 0.82rem;
+      text-shadow: 0 0 12px var(--glow);
+    }
+
+    .metric {
+      display: grid;
+      gap: 6px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(86, 255, 155, 0.04);
+    }
+
+    .metric .value {
+      color: var(--green);
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-shadow: 0 0 14px var(--glow);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .icon-panel {
+      display: grid;
+      gap: 16px;
+      align-content: center;
+      justify-items: center;
+      min-height: 320px;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .icon-panel::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle, rgba(86, 255, 155, 0.16) 0, rgba(86, 255, 155, 0.05) 34%, transparent 68%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .stay-icon {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(6rem, 12vw, 9rem);
+      line-height: 1;
+      color: var(--green);
+      text-shadow: 0 0 22px rgba(86, 255, 155, 0.34), 0 0 56px rgba(86, 255, 155, 0.2);
+    }
+
+    .icon-caption {
+      position: relative;
+      z-index: 1;
+      max-width: 18ch;
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .impact-panel {
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(199, 255, 114, 0.14), transparent 46%),
+        var(--panel-strong);
+    }
+
+    .impact-burst {
+      position: absolute;
+      inset: 50%;
+      width: min(78%, 520px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent 0 8deg,
+          rgba(86, 255, 155, 0.22) 9deg 11deg,
+          transparent 12deg 28deg,
+          rgba(199, 255, 114, 0.2) 29deg 31deg,
+          transparent 32deg 48deg
+        );
+      opacity: 0.34;
+      filter: blur(0.2px);
+      animation: impact-burst 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .impact-burst::before,
+    .impact-burst::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+      border: 1px solid rgba(199, 255, 114, 0.24);
+      box-shadow: 0 0 42px rgba(86, 255, 155, 0.18);
+      animation: impact-ring 7s ease-in-out infinite;
+    }
+
+    .impact-burst::after {
+      inset: 32%;
+      border-color: rgba(86, 255, 155, 0.26);
+      animation-delay: 0.7s;
+    }
+
+    .impact-panel::before,
+    .impact-panel::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(86, 255, 155, 0.12);
+      border-radius: 24px;
+      pointer-events: none;
+      animation: impact-pulse 3.4s ease-in-out infinite;
+    }
+
+    .impact-panel::after {
+      inset: 34px;
+      opacity: 0.5;
+      animation-delay: 1.1s;
+    }
+
+    .impact-line {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 14px;
+      width: min(100%, 760px);
+      margin: 0;
+      color: var(--text);
+      font-family: "Helvetica Neue", "Arial", sans-serif;
+      font-size: clamp(2.2rem, 4.6vw, 5.1rem);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+      text-wrap: balance;
+      justify-items: center;
+    }
+
+    .impact-line span {
+      display: block;
+      opacity: 0;
+      transform: translateY(28px) scale(0.98);
+      filter: blur(8px);
+      animation: impact-reveal 7s ease-in-out infinite;
+      text-shadow: 0 0 28px rgba(86, 255, 155, 0.16);
+    }
+
+    .impact-line span:nth-child(2) {
+      color: var(--green);
+      animation-delay: 0.65s;
+      text-shadow: 0 0 30px rgba(86, 255, 155, 0.32);
+    }
+
+    .impact-line span:nth-child(3) {
+      color: var(--amber);
+      animation-delay: 1.3s;
+      text-shadow: 0 0 30px rgba(199, 255, 114, 0.28);
+    }
+
+    @keyframes impact-burst {
+      0%, 7% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.72);
+      }
+      18%, 66% {
+        opacity: 0.36;
+        transform: translate(-50%, -50%) rotate(42deg) scale(1);
+      }
+      78%, 100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(82deg) scale(1.18);
+      }
+    }
+
+    @keyframes impact-ring {
+      0%, 12% {
+        opacity: 0;
+        transform: scale(0.62);
+      }
+      25%, 62% {
+        opacity: 0.76;
+        transform: scale(1);
+      }
+      82%, 100% {
+        opacity: 0;
+        transform: scale(1.22);
+      }
+    }
+
+    @keyframes impact-reveal {
+      0% {
+        opacity: 0;
+        transform: translateY(28px) scale(0.98);
+        filter: blur(8px);
+      }
+      12%, 68% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+      78%, 100% {
+        opacity: 0;
+        transform: translateY(-16px) scale(1.02);
+        filter: blur(5px);
+      }
+    }
+
+    @keyframes impact-pulse {
+      0%, 100% {
+        transform: scale(0.98);
+        opacity: 0.28;
+      }
+      50% {
+        transform: scale(1.01);
+        opacity: 0.72;
+      }
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .bullet-list li {
+      padding-left: 18px;
+      position: relative;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .bullet-list li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      text-shadow: 0 0 10px var(--glow);
+    }
+
+    .tool-card .type,
+    .prototype-card .type,
+    .agenda-box .time {
+      color: var(--green);
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      text-shadow: 0 0 10px var(--glow);
+    }
+
+    .prototype-card .fit,
+    .tool-card .fit {
+      margin-top: 12px;
+      color: var(--amber);
+      font-size: 0.86rem;
+    }
+
+    .warning {
+      color: var(--red);
+    }
+
+    .prompt-box {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(86, 255, 155, 0.035);
+      padding: 16px;
+      color: var(--text);
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .mini-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--amber);
+      font-size: 0.76rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .workshop-callout {
+      color: var(--green);
+      text-shadow: 0 0 10px var(--glow);
+      font-size: 1rem;
+    }
+
+    .media-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(86, 255, 155, 0.03);
+      display: grid;
+      position: relative;
+    }
+
+    .media-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.18);
+      cursor: zoom-in;
+    }
+
+    .media-card video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .media-card.portrait-card {
+      align-content: start;
+      justify-items: center;
+      padding: 22px 22px 0;
+    }
+
+    .media-card.portrait-card img {
+      width: min(100%, 280px);
+      aspect-ratio: 1;
+      max-height: none;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid rgba(86, 255, 155, 0.28);
+      box-shadow: 0 0 0 10px rgba(86, 255, 155, 0.03), 0 0 36px rgba(86, 255, 155, 0.08);
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .media-card.portrait-card .media-caption {
+      width: calc(100% + 44px);
+      margin: 18px -22px 0;
+    }
+
+    .speaker-photo-card {
+      align-content: start;
+    }
+
+    .speaker-photo-card img {
+      width: min(100%, 340px);
+      aspect-ratio: 1;
+      max-height: none;
+      margin: 24px auto 8px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      border: 2px solid rgba(86, 255, 155, 0.28);
+      box-shadow: 0 0 0 10px rgba(86, 255, 155, 0.03), 0 0 42px rgba(86, 255, 155, 0.12);
+      background:
+        radial-gradient(circle at center, rgba(86, 255, 155, 0.08), rgba(0, 0, 0, 0.3) 62%),
+        rgba(0, 0, 0, 0.24);
+    }
+
+    .cover-video-card {
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: 0;
+    }
+
+    .cover-video-card video {
+      width: 100%;
+      height: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      object-position: center;
+      background:
+        radial-gradient(circle at center, rgba(86, 255, 155, 0.08), rgba(0, 0, 0, 0.34) 62%),
+        rgba(0, 0, 0, 0.34);
+    }
+
+    .hero-metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hero-metric-row .metric {
+      padding: 12px;
+    }
+
+    .hero-metric-row .metric .value {
+      font-size: 1.36rem;
+    }
+
+    .hero-metric-row .metric .label {
+      font-size: 0.72rem;
+    }
+
+    .hero-video-card {
+      margin-top: 8px;
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: 0;
+    }
+
+    .media-card.feature-media img {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      min-height: 0;
+      object-fit: contain;
+      object-position: center;
+      background:
+        radial-gradient(circle at center, rgba(86, 255, 155, 0.08), rgba(0, 0, 0, 0.3) 62%),
+        rgba(0, 0, 0, 0.24);
+    }
+
+    .media-card.feature-media {
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .agenda-visual-frame {
+      gap: 16px;
+      text-align: center;
+    }
+
+    .agenda-visual-frame h2 {
+      max-width: none;
+      font-size: clamp(2.1rem, 4.2vw, 4.6rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .agenda-visual-layout {
+      grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1.66fr);
+      align-items: stretch;
+      min-height: 0;
+      gap: 16px;
+    }
+
+    .agenda-visual-panel {
+      display: grid;
+      align-content: center;
+      padding: 16px;
+      text-align: left;
+    }
+
+    .agenda-visual-panel .compact-list {
+      gap: 11px;
+    }
+
+    .agenda-visual-panel .compact-list li {
+      line-height: 1.34;
+      font-size: 0.92rem;
+    }
+
+    .agenda-visual-media {
+      min-height: 0;
+      padding: 8px;
+      align-items: stretch;
+    }
+
+    .agenda-visual-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .agenda-visual-media .media-caption {
+      padding: 9px 11px;
+      font-size: 0.78rem;
+      line-height: 1.32;
+      text-align: left;
+    }
+
+    .report-visual-frame {
+      gap: 16px;
+      text-align: center;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+    }
+
+    .report-visual-frame h2 {
+      max-width: none;
+      font-size: clamp(2rem, 3.8vw, 4.2rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .report-visual-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.38fr) minmax(0, 1.62fr);
+      gap: 16px;
+      align-items: stretch;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .report-visual-copy {
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .report-visual-copy .panel {
+      padding: 16px;
+    }
+
+    .report-visual-copy p,
+    .report-visual-copy li {
+      font-size: 0.88rem;
+      line-height: 1.42;
+    }
+
+    .report-visual-copy .link-row {
+      margin-top: 10px;
+      gap: 8px;
+    }
+
+    .report-visual-copy .link-btn {
+      padding: 8px 11px;
+      font-size: 0.78rem;
+    }
+
+    .report-visual-media {
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 8px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .report-visual-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .report-visual-media .media-caption {
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .compact-list {
+      gap: 8px;
+    }
+
+    .compact-list li {
+      line-height: 1.28;
+    }
+
+    .panel.compact-panel {
+      padding: 16px 18px;
+    }
+
+    .poe-value-frame {
+      gap: 14px;
+    }
+
+    .poe-value-frame h2 {
+      max-width: 16ch;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+    }
+
+    .poe-value-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .poe-value-grid .card {
+      padding: 15px;
+    }
+
+    .poe-value-grid .card h3 {
+      font-size: 1.08rem;
+    }
+
+    .poe-value-grid .card p,
+    .poe-value-grid .fit {
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .poe-link-row {
+      margin-top: 0;
+      gap: 8px;
+    }
+
+    .poe-link-row .link-btn {
+      padding: 8px 11px;
+      font-size: 0.78rem;
+    }
+
+    .poe-value-frame .footer-strip {
+      padding: 10px 12px;
+      font-size: 0.78rem;
+    }
+
+    .hero-video-card video {
+      width: 100%;
+      height: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      object-position: center;
+      background:
+        radial-gradient(circle at center, rgba(86, 255, 155, 0.08), rgba(0, 0, 0, 0.38) 58%),
+        rgba(0, 0, 0, 0.42);
+    }
+
+    .video-focus-frame {
+      gap: 14px;
+    }
+
+    .video-focus-frame h2 {
+      max-width: 18ch;
+      font-size: clamp(2.1rem, 4vw, 3.9rem);
+    }
+
+    .video-focus-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .video-focus-card video {
+      max-height: 520px;
+    }
+
+    .speed-frame {
+      gap: 18px;
+      text-align: center;
+    }
+
+    .speed-title {
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+      max-width: none;
+      font-size: clamp(2.2rem, 4.4vw, 5.2rem);
+      line-height: 0.96;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .speed-title span {
+      display: block;
+    }
+
+    .speed-title .speed-change {
+      color: var(--green);
+      text-shadow: 0 0 28px rgba(86, 255, 155, 0.28);
+      animation: speed-flare 3.8s ease-in-out infinite;
+    }
+
+    .speed-layout {
+      display: grid;
+      grid-template-columns: minmax(210px, 0.44fr) minmax(0, 1.56fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "points video"
+        "caption video";
+      align-items: stretch;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .speed-points-panel {
+      grid-area: points;
+      display: grid;
+      align-content: center;
+      padding: 16px;
+    }
+
+    .speed-points-panel .grid-3 {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .speed-points-panel .card {
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    .speed-points-panel h3 {
+      font-size: 1.12rem;
+    }
+
+    .speed-points-panel p {
+      font-size: 0.88rem;
+      line-height: 1.42;
+    }
+
+    .speed-video-card {
+      grid-area: video;
+      margin-top: 0;
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr);
+    }
+
+    .speed-video-card video {
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .speed-video-caption {
+      grid-area: caption;
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      margin: 0;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.88rem;
+      line-height: 1.42;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(86, 255, 155, 0.04);
+    }
+
+    @keyframes speed-flare {
+      0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      45% {
+        transform: scale(1.025);
+        filter: brightness(1.22);
+      }
+    }
+
+    .prompt-master-frame {
+      gap: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .prompt-master-frame h2 {
+      max-width: none;
+      font-size: clamp(2rem, 3.7vw, 4rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .prompt-master-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.42fr) minmax(0, 1.58fr);
+      grid-template-areas: "copy media";
+      gap: 16px;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .prompt-master-copy {
+      grid-area: copy;
+      display: grid;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .prompt-master-copy > .panel {
+      padding: 16px;
+      text-align: left;
+    }
+
+    .prompt-master-copy h3 {
+      font-size: 1.08rem;
+    }
+
+    .prompt-master-copy .bullet-list {
+      gap: 9px;
+    }
+
+    .prompt-master-copy li {
+      font-size: 0.84rem;
+      line-height: 1.34;
+    }
+
+    .prompt-master-panel {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 12px;
+      min-height: 0;
+      padding: 16px;
+    }
+
+    .prompt-master-panel .prompt-box {
+      padding: 13px;
+      font-size: 0.82rem;
+      line-height: 1.42;
+    }
+
+    .prompt-master-media {
+      grid-area: media;
+      margin-top: 0;
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-self: stretch;
+      padding: 8px;
+    }
+
+    .prompt-master-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .prompt-master-media .media-caption {
+      padding: 9px 11px;
+      font-size: 0.76rem;
+      line-height: 1.32;
+    }
+
+    .prompt-master-panel .link-row {
+      margin-top: 0;
+    }
+
+    .prompt-anatomy-frame {
+      gap: 12px;
+      padding: 26px;
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    }
+
+    .prompt-anatomy-frame h2 {
+      max-width: none;
+      font-size: clamp(2rem, 3.6vw, 3.7rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .prompt-version-grid {
+      gap: 10px;
+    }
+
+    .prompt-version-grid .card {
+      padding: 13px 15px;
+      text-align: left;
+    }
+
+    .prompt-version-grid h3 {
+      font-size: 1.02rem;
+    }
+
+    .prompt-version-grid p {
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .prompt-media-grid {
+      gap: 12px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .prompt-media-card {
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 8px;
+      align-items: stretch;
+    }
+
+    .prompt-media-card img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .prompt-media-card .media-caption {
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .prompt-anatomy-frame .footer-strip {
+      padding-top: 8px;
+      font-size: 0.76rem;
+    }
+
+    .materials-game-frame {
+      gap: 16px;
+      text-align: center;
+    }
+
+    .materials-game-frame h2 {
+      max-width: none;
+      font-size: clamp(2.1rem, 4vw, 4.15rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .materials-game-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.42fr) minmax(0, 1.58fr);
+      gap: 16px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .materials-game-copy {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+      text-align: left;
+    }
+
+    .materials-game-copy .panel,
+    .materials-game-copy .quote-box {
+      padding: 16px;
+    }
+
+    .materials-game-copy li,
+    .materials-game-copy p {
+      font-size: 0.88rem;
+      line-height: 1.38;
+    }
+
+    .materials-game-media {
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 8px;
+      align-items: stretch;
+    }
+
+    .materials-game-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .materials-game-media .media-caption {
+      padding: 8px 10px;
+      font-size: 0.76rem;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .auditory-task-frame {
+      gap: 14px;
+      text-align: center;
+    }
+
+    .auditory-task-frame h2 {
+      max-width: none;
+      font-size: clamp(2rem, 3.7vw, 4rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .auditory-task-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.36fr) minmax(0, 1.64fr);
+      gap: 14px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .auditory-task-copy {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+      text-align: left;
+    }
+
+    .auditory-task-copy .panel {
+      padding: 15px;
+    }
+
+    .auditory-task-copy p,
+    .auditory-task-copy li {
+      font-size: 0.84rem;
+      line-height: 1.36;
+    }
+
+    .doc-button-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .auditory-image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .auditory-image-card {
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 7px;
+      align-items: stretch;
+    }
+
+    .auditory-image-card img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .auditory-image-card .media-caption {
+      padding: 8px 9px;
+      font-size: 0.72rem;
+      line-height: 1.22;
+      text-align: left;
+    }
+
+    .prompt-builder-links {
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .experiment-frame {
+      gap: 14px;
+      text-align: center;
+    }
+
+    .experiment-frame h2 {
+      max-width: none;
+      font-size: clamp(2.1rem, 4vw, 4.2rem);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .experiment-layout {
+      display: grid;
+      grid-template-columns: minmax(250px, 0.38fr) minmax(0, 1.62fr);
+      gap: 16px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .experiment-copy {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+      text-align: left;
+    }
+
+    .experiment-copy .panel {
+      padding: 16px;
+    }
+
+    .experiment-copy li,
+    .experiment-copy p {
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .experiment-media {
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 8px;
+      min-height: 0;
+    }
+
+    .experiment-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .experiment-media .media-caption {
+      padding: 8px 10px;
+      font-size: 0.76rem;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .practice-compare-frame {
+      gap: 14px;
+      text-align: center;
+    }
+
+    .practice-compare-frame h2 {
+      max-width: none;
+      text-align: center;
+      font-size: clamp(2.1rem, 4vw, 4.1rem);
+      text-wrap: balance;
+    }
+
+    .practice-compare-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      gap: 16px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .practice-compare-grid .panel {
+      padding: 18px;
+      text-align: left;
+      align-content: center;
+    }
+
+    .practice-compare-grid .prompt-box {
+      font-size: 0.88rem;
+      line-height: 1.36;
+    }
+
+    .practice-compare-flow {
+      display: grid;
+      gap: 10px;
+    }
+
+    .practice-compare-flow .card {
+      padding: 14px;
+      text-align: left;
+    }
+
+    .demos-frame {
+      gap: 12px;
+      padding: 26px;
+    }
+
+    .demos-frame h2 {
+      max-width: none;
+      text-align: center;
+      font-size: clamp(2rem, 3.55vw, 3.85rem);
+    }
+
+    .demos-frame .grid-4 {
+      gap: 10px;
+    }
+
+    .demos-frame .prototype-card {
+      padding: 13px;
+    }
+
+    .demos-frame .prototype-card h3 {
+      font-size: 1rem;
+    }
+
+    .demos-frame .prototype-card p,
+    .demos-frame .prototype-card .fit {
+      font-size: 0.78rem;
+      line-height: 1.28;
+    }
+
+    .demos-frame .grid-3 {
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .demos-frame .media-card {
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: 0;
+      padding: 6px;
+    }
+
+    .demos-frame .media-card img {
+      height: 100%;
+      max-height: 210px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .demos-frame .media-caption {
+      padding: 7px 9px;
+      font-size: 0.72rem;
+      line-height: 1.22;
+    }
+
+    .demos-frame .link-row {
+      margin-top: 0;
+      gap: 8px;
+    }
+
+    .demos-frame .link-btn {
+      padding: 8px 10px;
+      font-size: 0.76rem;
+    }
+
+    .prestart-frame,
+    .massive-past-frame,
+    .clinical-case-frame,
+    .socratic-frame,
+    .visualizer-frame,
+    .radar-frame {
+      gap: 14px;
+      text-align: center;
+    }
+
+    .clinical-case-frame {
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    }
+
+    .clinical-case-frame h2 {
+      max-width: none;
+      font-size: clamp(2rem, 3.8vw, 4.05rem);
+      text-wrap: balance;
+    }
+
+    .clinical-case-frame .quote-box {
+      padding: 16px 20px;
+    }
+
+    .clinical-case-frame .big-quote {
+      max-width: none;
+      font-size: clamp(1.75rem, 2.9vw, 3.05rem);
+      line-height: 1.08;
+    }
+
+    .prestart-media,
+    .visualizer-media,
+    .radar-media {
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: 0;
+      padding: 8px;
+    }
+
+    .prestart-media img,
+    .visualizer-media img,
+    .radar-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .poe-dense-links {
+      gap: 7px;
+      justify-content: center;
+    }
+
+    .poe-dense-links .link-btn {
+      padding: 7px 9px;
+      font-size: 0.72rem;
+    }
+
+    .effect-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .effect-card {
+      padding: 16px;
+      border-color: rgba(199, 255, 114, 0.26);
+      box-shadow: inset 0 0 28px rgba(86, 255, 155, 0.035), 0 0 24px rgba(86, 255, 155, 0.06);
+    }
+
+    .effect-card strong {
+      display: block;
+      color: var(--green);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    .visualizer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .visualizer-feature img {
+      max-height: none;
+    }
+
+    .story-frame,
+    .exam-adapt-frame,
+    .radar-showcase-frame {
+      gap: 14px;
+      text-align: center;
+    }
+
+    .story-frame h2,
+    .exam-adapt-frame h2,
+    .radar-showcase-frame h2 {
+      max-width: none;
+      text-wrap: balance;
+      font-size: clamp(2.1rem, 4vw, 4.25rem);
+    }
+
+    .story-grid,
+    .exam-adapt-grid,
+    .radar-showcase-grid {
+      display: grid;
+      gap: 14px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .story-grid,
+    .exam-adapt-grid {
+      grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+    }
+
+    .radar-showcase-grid {
+      grid-template-columns: minmax(300px, 0.48fr) minmax(0, 1.52fr);
+    }
+
+    .story-flow,
+    .exam-flow,
+    .radar-prompt-stack {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      text-align: left;
+    }
+
+    .story-media,
+    .exam-media,
+    .radar-showcase-media {
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 8px;
+      align-items: stretch;
+    }
+
+    .story-media img,
+    .exam-media img,
+    .radar-showcase-media img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .radar-prompt-stack .prompt-box {
+      font-size: 0.78rem;
+      line-height: 1.28;
+      padding: 12px;
+    }
+
+    .link-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .link-card-grid.featured-links {
+      gap: 12px;
+    }
+
+    .link-card {
+      display: grid;
+      gap: 6px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(86, 255, 155, 0.035);
+      color: var(--text);
+      text-decoration: none;
+      text-align: left;
+    }
+
+    .link-card.featured-link {
+      min-height: 118px;
+      padding: 15px;
+      border-color: rgba(199, 255, 114, 0.34);
+      background:
+        linear-gradient(135deg, rgba(199, 255, 114, 0.08), rgba(86, 255, 155, 0.035)),
+        rgba(86, 255, 155, 0.035);
+      box-shadow: inset 0 0 0 1px rgba(86, 255, 155, 0.06), 0 0 22px rgba(86, 255, 155, 0.055);
+    }
+
+    .link-card strong {
+      color: var(--green);
+      font-size: 0.9rem;
+    }
+
+    .link-card.featured-link strong {
+      font-size: 1rem;
+      color: var(--amber);
+    }
+
+    .link-card span {
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.28;
+    }
+
+    .link-card.featured-link span {
+      font-size: 0.82rem;
+      line-height: 1.34;
+    }
+
+    .support-links {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(86, 255, 155, 0.12);
+    }
+
+    .legacy-links {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(199, 255, 114, 0.16);
+    }
+
+    .legacy-label {
+      margin-bottom: 8px;
+      color: var(--amber);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-align: left;
+    }
+
+    .legacy-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .legacy-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 7px 9px;
+      border: 1px solid rgba(199, 255, 114, 0.22);
+      border-radius: 999px;
+      background: rgba(199, 255, 114, 0.055);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.72rem;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .legacy-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .legacy-visual-grid .media-card {
+      min-height: 0;
+      padding: 8px;
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-items: stretch;
+    }
+
+    .legacy-visual-grid .media-card img {
+      height: 100%;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .legacy-visual-grid .media-caption {
+      padding: 8px 10px;
+      font-size: 0.68rem;
+      line-height: 1.22;
+    }
+
+    .change-stamp {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
+      padding: 7px 10px;
+      border: 1px solid rgba(199, 255, 114, 0.28);
+      border-radius: 999px;
+      background: rgba(199, 255, 114, 0.07);
+      color: var(--amber);
+      font-size: 0.7rem;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: normal;
+    }
+
+    .change-stamp.corner {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 3;
+      max-width: min(360px, calc(100% - 36px));
+    }
+
+    .audit-frame {
+      gap: 14px;
+    }
+
+    .audit-frame h2 {
+      max-width: none;
+      font-size: clamp(2.1rem, 4.1vw, 4.35rem);
+      text-wrap: balance;
+    }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+      gap: 14px;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .audit-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .audit-item {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.28fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 12px;
+      border: 1px solid rgba(86, 255, 155, 0.14);
+      border-radius: 14px;
+      background: rgba(86, 255, 155, 0.035);
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .audit-time {
+      color: var(--amber);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .audit-copy strong {
+      display: block;
+      color: var(--green);
+      font-size: 0.88rem;
+      margin-bottom: 3px;
+    }
+
+    .audit-copy span {
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.25;
+    }
+
+    .audit-go {
+      color: var(--amber);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .three-paths-frame {
+      gap: 12px;
+      padding: 26px;
+    }
+
+    .three-paths-frame h2 {
+      max-width: 22ch;
+      font-size: clamp(2rem, 3.45vw, 3.45rem);
+    }
+
+    .three-paths-grid,
+    .three-paths-media-grid {
+      gap: 12px;
+    }
+
+    .three-paths-grid .card {
+      padding: 15px;
+    }
+
+    .three-paths-grid h3 {
+      font-size: 1.05rem;
+    }
+
+    .three-paths-grid p,
+    .three-paths-grid .fit {
+      font-size: 0.82rem;
+      line-height: 1.36;
+    }
+
+    .three-paths-media-grid .media-card img {
+      max-height: 190px;
+    }
+
+    .three-paths-media-grid .media-caption {
+      padding: 9px 11px;
+      font-size: 0.76rem;
+      line-height: 1.32;
+    }
+
+    .live-dialogue {
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .game-build-frame {
+      gap: 16px;
+      grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+    }
+
+    .game-build-frame > .terminal-line,
+    .game-build-frame > h2,
+    .game-build-frame > .footer-strip,
+    .game-build-frame > .slide-number {
+      grid-column: 1 / -1;
+    }
+
+    .game-build-frame > h2 {
+      max-width: none;
+      text-align: center;
+      font-size: clamp(2.1rem, 4vw, 4.1rem);
+      text-wrap: balance;
+    }
+
+    .game-link-card {
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      z-index: 4;
+      width: min(360px, 31vw);
+      border: 1px solid rgba(199, 255, 114, 0.28);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(3, 16, 10, 0.9);
+      color: var(--text);
+      text-decoration: none;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3), 0 0 24px rgba(199, 255, 114, 0.08);
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .game-link-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(199, 255, 114, 0.48);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.34), 0 0 28px rgba(199, 255, 114, 0.14);
+    }
+
+    .game-link-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .game-link-card span {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      color: var(--amber);
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-shadow: 0 0 10px rgba(199, 255, 114, 0.16);
+    }
+
+    .game-build-frame .game-link-card {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-self: stretch;
+      justify-self: stretch;
+    }
+
+    .game-build-frame .game-link-card img {
+      height: 100%;
+      aspect-ratio: auto;
+      object-fit: contain;
+      background:
+        radial-gradient(circle at center, rgba(199, 255, 114, 0.1), rgba(0, 0, 0, 0.28) 64%),
+        rgba(0, 0, 0, 0.22);
+    }
+
+    .game-build-frame .game-link-card span {
+      font-size: 0.9rem;
+      padding: 12px 14px;
+    }
+
+    .game-build-frame .live-dialogue {
+      min-height: 0;
+      height: 100%;
+    }
+
+    .game-build-frame .dialogue-step .a {
+      font-size: clamp(1.45rem, 2.8vw, 3.25rem);
+    }
+
+    .prompt-popup-trigger {
+      justify-self: start;
+      border-color: rgba(199, 255, 114, 0.34);
+      color: var(--amber);
+      background: rgba(199, 255, 114, 0.1);
+    }
+
+    .prompt-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(1, 8, 4, 0.86);
+      backdrop-filter: blur(12px);
+    }
+
+    .prompt-modal.open {
+      display: flex;
+    }
+
+    .prompt-modal-card {
+      width: min(980px, 94vw);
+      max-height: 86vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid rgba(199, 255, 114, 0.28);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(199, 255, 114, 0.06), transparent 26%),
+        rgba(3, 16, 10, 0.97);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), 0 0 40px rgba(199, 255, 114, 0.1);
+      overflow: hidden;
+    }
+
+    .prompt-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .prompt-modal-head strong {
+      color: var(--amber);
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .prompt-modal-body {
+      overflow: auto;
+      padding: 20px;
+    }
+
+    .prompt-modal-body pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: var(--text);
+      font: 0.92rem/1.55 "SF Mono", "Menlo", "Consolas", monospace;
+    }
+
+    .doc-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 72;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(1, 8, 4, 0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .doc-modal.open {
+      display: flex;
+    }
+
+    .doc-modal-card {
+      width: min(1120px, 94vw);
+      height: min(86vh, 900px);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border: 1px solid rgba(199, 255, 114, 0.28);
+      border-radius: 26px;
+      background: rgba(3, 16, 10, 0.97);
+      overflow: hidden;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), 0 0 40px rgba(199, 255, 114, 0.1);
+    }
+
+    .doc-modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-modal-head strong {
+      margin-right: auto;
+      color: var(--amber);
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .doc-modal-head a {
+      text-decoration: none;
+    }
+
+    .doc-modal-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #ffffff;
+    }
+
+    .dialogue-step {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
+      max-width: 900px;
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .dialogue-step.active {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+
+    .dialogue-control {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 3;
+    }
+
+    .dialogue-step .q {
+      color: var(--green);
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .dialogue-step .a {
+      color: var(--text);
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      font-family: "Helvetica Neue", "Arial", sans-serif;
+    }
+
+    @keyframes dialogue-sequence {
+      0%, 8% {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      12%, 20% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      24%, 100% {
+        opacity: 0;
+        transform: scale(1.03);
+      }
+    }
+
+    .media-caption {
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+      border-top: 1px solid var(--line);
+    }
+
+    .quick-tools,
+    .media-tools {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-tools {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 6;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: 160ms ease;
+      pointer-events: none;
+    }
+
+    .frame:hover .quick-tools,
+    .frame:focus-within .quick-tools {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .media-tools {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 5;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: 160ms ease;
+      pointer-events: none;
+    }
+
+    .media-card:hover .media-tools,
+    .media-card:focus-within .media-tools {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .edit-chip {
+      border: 1px solid rgba(86, 255, 155, 0.22);
+      border-radius: 999px;
+      background: rgba(2, 12, 7, 0.86);
+      color: var(--green);
+      font: inherit;
+      font-size: 0.72rem;
+      padding: 7px 10px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(86, 255, 155, 0.08);
+    }
+
+    .edit-chip:hover {
+      border-color: rgba(199, 255, 114, 0.34);
+      color: var(--amber);
+    }
+
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: rgba(1, 8, 4, 0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .image-lightbox.open {
+      display: flex;
+    }
+
+    .image-lightbox img {
+      display: block;
+      max-width: min(92vw, 1500px);
+      max-height: 86vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 22px;
+      border: 1px solid rgba(86, 255, 155, 0.18);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .image-lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(86, 255, 155, 0.08);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .link-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(86, 255, 155, 0.05);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .link-btn:hover {
+      border-color: rgba(86, 255, 155, 0.3);
+      box-shadow: 0 0 18px rgba(86, 255, 155, 0.12);
+    }
+
+    .footer-strip {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .progress {
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(86, 255, 155, 0.08);
+      border: 1px solid rgba(86, 255, 155, 0.12);
+      z-index: 20;
+    }
+
+    .progress > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-3), var(--green), var(--amber));
+      box-shadow: 0 0 18px var(--glow);
+      transition: width 180ms ease;
+    }
+
+    .slide-number {
+      position: absolute;
+      right: 34px;
+      bottom: 26px;
+      color: rgba(223, 255, 233, 0.44);
+      font-size: 0.88rem;
+    }
+
+    .iter-drawer {
+      position: fixed;
+      top: 76px;
+      right: 18px;
+      width: min(420px, calc(100vw - 24px));
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      z-index: 30;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(3, 16, 10, 0.95);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: none;
+    }
+
+    .iter-drawer.open {
+      display: grid;
+      gap: 14px;
+    }
+
+    .iter-drawer h3,
+    .iter-drawer h4 {
+      margin: 0;
+    }
+
+    .iter-form,
+    .iter-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .iter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .iter-input,
+    .iter-select,
+    .iter-textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(86, 255, 155, 0.04);
+      color: var(--text);
+      font: inherit;
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    .iter-textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .iter-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(86, 255, 155, 0.03);
+      display: grid;
+      gap: 8px;
+    }
+
+    .iter-item-top,
+    .iter-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .iter-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--green);
+      font-size: 0.75rem;
+    }
+
+    .iter-small {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .iter-path-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(86, 255, 155, 0.05);
+      display: grid;
+      gap: 6px;
+    }
+
+    .iter-path-label {
+      color: var(--green);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .iter-path {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .iter-file-box {
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(86, 255, 155, 0.03);
+      display: grid;
+      gap: 10px;
+    }
+
+    .iter-file-input {
+      width: 100%;
+      color: var(--muted);
+      font: inherit;
+    }
+
+    .iter-file-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .iter-file-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(86, 255, 155, 0.04);
+    }
+
+    .iter-empty {
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        padding: 84px 18px 40px;
+      }
+
+      .frame {
+        height: calc(100vh - 142px);
+        padding: 22px;
+        overflow: auto;
+      }
+
+      .hud {
+        left: 10px;
+        right: 10px;
+      }
+
+      .hint {
+        display: none;
+      }
+
+      .iter-drawer {
+        top: 72px;
+        right: 10px;
+      }
+
+      .slide-index {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="index-collapsed">
+  <div class="matrix-rain" id="matrixRain" aria-hidden="true">
+    <canvas id="matrixCanvas"></canvas>
+  </div>
+  <div class="hud">
+    <div class="hud-left">
+      <div class="brand">
+        <div class="brand-mark">IA</div>
+        <div class="brand-copy">
+          <strong>UV Valencia | ValenciaCodex | Logoped-IA</strong>
+          <span>Presentación HTML horizontal · matrix mode</span>
+        </div>
+      </div>
+      <div class="meta">29 abril 2026 · 16:00-18:00</div>
+      <div class="hint">flechas, espacio o botones</div>
+      <div class="hud-tool-row">
+        <button class="nav-btn primary" id="iterToggle" type="button">Iterar aquí</button>
+        <button class="nav-btn" id="topUndo" type="button">Deshacer nota</button>
+        <button class="nav-btn" id="topRedo" type="button">Rehacer nota</button>
+      </div>
+    </div>
+    <div class="hud-right">
+      <button class="nav-btn" id="toolsToggle" type="button">Herramientas</button>
+      <button class="nav-btn" id="prevBtn" type="button">Anterior</button>
+      <div class="counter" id="counter">1 / 10</div>
+      <button class="nav-btn" id="nextBtn" type="button">Siguiente</button>
+    </div>
+  </div>
+
+  <button class="index-toggle" id="indexToggle" type="button">Índice</button>
+  <aside class="slide-index" aria-label="Índice de slides">
+    <div class="slide-index-head">
+      <strong>Índice de la ponencia</strong>
+      <span>Pulsa cualquier slide para navegar</span>
+      <button class="nav-btn" id="indexCollapse" type="button">Ocultar índice</button>
+    </div>
+    <div class="slide-index-list" id="slideIndexList"></div>
+  </aside>
+
+  <aside class="iter-drawer" id="iterDrawer">
+    <div class="iter-item-top">
+      <div>
+        <h3>Panel de iteración</h3>
+        <div class="iter-small">Anota aquí cambios para esta misma presentación y luego cópiamelos o exportalos.</div>
+      </div>
+      <button class="nav-btn" id="iterClose" type="button">Cerrar</button>
+    </div>
+
+    <div class="iter-form">
+      <div class="iter-grid">
+        <input class="iter-input" id="iterSlide" type="text" placeholder="Slide o bloque">
+        <select class="iter-select" id="iterPriority">
+          <option value="alta">Prioridad alta</option>
+          <option value="media">Prioridad media</option>
+          <option value="baja">Prioridad baja</option>
+        </select>
+      </div>
+      <input class="iter-input" id="iterTitle" type="text" placeholder="Titulo corto del cambio">
+      <input class="iter-input" id="iterLinks" type="text" placeholder="Enlaces o rutas relevantes (separados por |)">
+      <input class="iter-input" id="iterDocs" type="text" placeholder="Documentos, PDFs o rutas locales que quieres sumar">
+      <div class="iter-file-box">
+        <div class="iter-path-label">Adjuntar apoyo visual o video</div>
+        <input class="iter-file-input" id="iterFiles" type="file" accept="video/*,image/*,.pdf,.ppt,.pptx,.mp4,.mov,.m4v,.webm" multiple>
+        <div class="iter-small">Puedes elegir video, imagen o PDF para que luego yo lo integre mejor. Si quieres que yo tenga la ruta exacta del archivo local, pégala también en el campo de documentos.</div>
+        <div class="iter-file-list" id="iterFilesList">
+          <div class="iter-small">Todavía no has seleccionado archivos de apoyo.</div>
+        </div>
+      </div>
+      <textarea class="iter-textarea" id="iterBody" placeholder="Qué quieres cambiar, añadir, quitar o probar..."></textarea>
+      <div class="iter-actions">
+        <button class="nav-btn primary" id="iterAdd" type="button">Guardar nota</button>
+        <button class="nav-btn" id="iterUndo" type="button">Deshacer</button>
+        <button class="nav-btn" id="iterRedo" type="button">Rehacer</button>
+        <button class="nav-btn" id="iterExport" type="button">Copiar notas</button>
+        <button class="nav-btn" id="iterSaveFile" type="button">Guardar en archivo</button>
+        <button class="nav-btn" id="iterClear" type="button">Vaciar todo</button>
+      </div>
+      <div class="iter-path-box">
+        <div class="iter-path-label">Guardar siempre en esta carpeta</div>
+        <div class="iter-path" id="iterExportDirView"></div>
+        <div class="iter-path-label">Ruta completa sugerida para el siguiente JSON</div>
+        <div class="iter-path" id="iterExportPathView"></div>
+      </div>
+      <div class="iter-small">Importante: el navegador guarda esto aquí mismo, pero yo no puedo leer ese almacenamiento interno. Si pulsas “Guardar en archivo”, se creará una entrada nueva de bitácora con fecha y hora para no pisar iteraciones anteriores.</div>
+    </div>
+
+    <div class="iter-list" id="iterList"></div>
+  </aside>
+
+  <div class="image-lightbox" id="imageLightbox" aria-hidden="true">
+    <button class="image-lightbox-close" id="imageLightboxClose" type="button" aria-label="Cerrar imagen">×</button>
+    <img id="imageLightboxImg" alt="">
+  </div>
+  <input id="quickAssetInput" type="file" accept="image/*,video/*,.pdf,.ppt,.pptx,.mp4,.mov,.m4v,.webm" style="display:none">
+
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="frame prestart-frame">
+        <div class="terminal-line">antes de empezar / contexto visual</div>
+        <h2>Antes de empezar: de esto va la sesión.</h2>
+        <div class="media-card prestart-media">
+          <img src="valencia-assets/antes-de-empezar-captura.png" alt="Contexto visual antes de empezar">
+          <div class="media-caption">La idea de fondo: transformar criterio clínico en recursos visibles, probables y enseñables.</div>
+        </div>
+        <div class="slide-number">00</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="hero-grid">
+          <div class="stack">
+            <div class="terminal-line">sesión online / inteligencia artificial / logopedia / criterio profesional</div>
+            <h1>Modelando el futuro de la logopedia con IA.</h1>
+            <p class="lead">
+              Hoy vais a ver una versión ampliada de esta sesión convertida en presentación HTML.
+              Ya no es un resumen corto: recoge evaluación asistida, materiales personalizados, informes,
+              comunicación profesional, asistentes informativos, ética aplicada y cierre estratégico.
+            </p>
+            <div class="tag-row">
+              <span class="tag">sesión ampliada</span>
+              <span class="tag">matrix mode</span>
+              <span class="tag">presentación horizontal</span>
+              <span class="tag">Logoped-IA</span>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="media-card cover-video-card">
+              <video controls muted playsinline preload="metadata" poster="valencia-assets/slide01-portada-poster.jpg">
+                <source src="valencia-assets/slide01-portada-demo-optimized.mp4" type="video/mp4">
+                <a href="valencia-assets/slide01-portada-demo-optimized.mp4" target="_blank" rel="noreferrer">Abrir vídeo de portada</a>
+              </video>
+              <div class="media-caption">Demo visual integrada desde la portada: una muestra directa de cómo una idea puede convertirse en recurso usable.</div>
+            </div>
+            <div class="hero-metric-row">
+              <div class="metric">
+                <div class="value">46</div>
+                <div class="label">slides</div>
+              </div>
+              <div class="metric">
+                <div class="value">100%</div>
+                <div class="label">práctico</div>
+              </div>
+              <div class="metric">
+                <div class="value">1</div>
+                <div class="label">idea fuerza</div>
+              </div>
+            </div>
+            <div class="quote-box">
+              <p class="big-quote">“La IA no viene a sustituir al logopeda. Viene a exigir más criterio y más capacidad real de acción.”</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">01</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 02 / contexto</div>
+        <h2>Quién habla y desde dónde.</h2>
+        <div class="grid-3">
+          <div class="media-card speaker-photo-card">
+            <img src="valencia-assets/jose-aserrraf-unknown-8.jpeg" alt="José Aserraf">
+            <div class="media-caption">José Aserraf · logopeda clínico · voz · Logoped-IA</div>
+          </div>
+          <div class="panel">
+            <h3>José Aserraf</h3>
+            <ul class="bullet-list">
+              <li>Logopeda clínico.</li>
+              <li>Experto en voz.</li>
+              <li>Responsable del proyecto Logoped-IA.</li>
+              <li>Integracion real de IA en salud, educación y contenido digital.</li>
+            </ul>
+          </div>
+          <div class="quote-box">
+            <p class="big-quote">“No vamos a hablar de futurismo abstracto. Vamos a hablar de práctica profesional, criterio y herramientas útiles.”</p>
+          </div>
+        </div>
+        <div class="slide-number">02</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 03 / apertura</div>
+        <h2>La IA llega para quedarse.</h2>
+        <div class="grid-2">
+          <div class="panel icon-panel">
+            <div class="stay-icon" aria-hidden="true">⚓</div>
+            <p class="icon-caption">No es una moda pasajera. Ya está anclada en cómo vamos a estudiar, crear y trabajar.</p>
+          </div>
+          <div class="panel impact-panel">
+            <div class="impact-burst" aria-hidden="true"></div>
+            <p class="impact-line" aria-label="La inteligencia artificial llega para quedarse. Y no lo podemos obviar.">
+              <span>La inteligencia artificial</span>
+              <span>llega para quedarse.</span>
+              <span>Y no lo podemos obviar.</span>
+            </p>
+          </div>
+          <div class="panel">
+            <h3>Objetivo de esta frase</h3>
+            <ul class="bullet-list">
+              <li>Quiero que salgáis de aquí entendiendo que ignorarla ya no es una opción profesional.</li>
+              <li>No os pido entusiasmo ciego, os pido criterio.</li>
+              <li>La pregunta ya no es si llega, sino cómo la integráis con sentido.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-number">03</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame video-focus-frame">
+        <div class="terminal-line">slide 04 / problema histórico</div>
+        <h2>Muchas buenas ideas se quedaron sin desarrollar.</h2>
+        <div class="video-focus-layout">
+          <div class="media-card hero-video-card video-focus-card">
+            <video controls muted playsinline preload="metadata" poster="valencia-assets/slide04-prototipo-poster.jpg">
+              <source src="valencia-assets/slide04-prototipo-compatible.mp4" type="video/mp4">
+              <a href="valencia-assets/slide04-prototipo-compatible.mp4" target="_blank" rel="noreferrer">Abrir vídeo compatible</a>
+            </video>
+            <div class="media-caption">Ejemplo visual de una idea que hoy puede aterrizarse mejor y más rápido cuando por fin tienes herramienta, criterio y ejecución. <a href="valencia-assets/slide04-prototipo-compatible.mp4" target="_blank" rel="noreferrer">Abrir vídeo si el navegador lo bloquea</a>.</div>
+          </div>
+          <div class="panel">
+            <h3>Lo que esto significa</h3>
+            <p style="margin-bottom: 14px;">Durante mucho tiempo, muchas ideas se quedaban en intuición o boceto. Este tipo de prototipo enseña lo que antes costaba demasiado arrancar.</p>
+            <ul class="bullet-list">
+              <li>Ideas clínicas guardadas en cajones.</li>
+              <li>Materiales que nunca llegaron a convertirse en herramienta.</li>
+              <li>Intervenciones personalizadas frenadas por falta de desarrollo.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-number">04</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame speed-frame">
+        <div class="terminal-line">slide 05 / tesis principal</div>
+        <h2 class="speed-title">
+          <span>Lo que cambia no es la clínica.</span>
+          <span class="speed-change">Lo que cambia es la velocidad.</span>
+        </h2>
+        <div class="grid-2 speed-layout">
+          <div class="panel speed-points-panel">
+            <div class="grid-3">
+              <div class="card">
+                <h3>De semanas a horas</h3>
+                <p>Lo que antes requería desarrollo, encargos o meses de prueba ahora puede aterrizarse en tiempo récord.</p>
+              </div>
+              <div class="card">
+                <h3>De genérico a específico</h3>
+                <p>Es viable pasar de material amplio a material adaptado a un caso, edad o perfil concreto.</p>
+              </div>
+              <div class="card">
+                <h3>De idea a prototipo</h3>
+                <p>Se puede probar una primera versión funcional de una intuición clínica sin esperar una infraestructura enorme.</p>
+              </div>
+            </div>
+          </div>
+          <div class="speed-video-caption">Apoyo visual para explicar la diferencia de velocidad: de intuición a prototipo en una misma sesión de trabajo.</div>
+          <div class="media-card hero-video-card speed-video-card">
+            <video controls muted playsinline preload="metadata" poster="valencia-assets/video-velocidad-poster.jpg">
+              <source src="valencia-assets/video-velocidad.mp4" type="video/mp4">
+              <a href="valencia-assets/video-velocidad.mp4" target="_blank" rel="noreferrer">Abrir vídeo velocidad</a>
+            </video>
+          </div>
+        </div>
+        <div class="slide-number">05</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame agenda-visual-frame">
+        <div class="terminal-line">slide 06 / índice</div>
+        <h2>Índice completo de la ponencia.</h2>
+        <div class="grid-2 visual-priority agenda-visual-layout">
+          <div class="panel compact-panel agenda-visual-panel">
+            <ul class="bullet-list compact-list">
+              <li>Evaluación logopédica asistida.</li>
+              <li>Materiales terapéuticos personalizados.</li>
+              <li>Informes clínicos comprensibles.</li>
+              <li>Comunicación profesional.</li>
+              <li>Intervención práctica con casos y prompts.</li>
+            </ul>
+          </div>
+          <div class="media-card feature-media agenda-visual-media">
+            <img src="valencia-assets/resumen-ponencia.jpg" alt="Imagen resumen de la ponencia">
+            <div class="media-caption">Mapa visual de la sesión: de la evaluación y la intervención a los prompts, prototipos y criterio clínico.</div>
+          </div>
+        </div>
+        <div class="slide-number">06</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 07 / evaluación</div>
+        <h2>Evaluación logopédica asistida.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Uso de IA en evaluación</h3>
+            <ul class="bullet-list">
+              <li>Anamnesis automatizada.</li>
+              <li>Seguimiento de objetivos terapéuticos.</li>
+              <li>Correccion automática de test.</li>
+              <li>Generación de informes base para familias.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Mensaje a remarcar</h3>
+            <p>
+              La IA no sustituye la evaluación. La estructura, la acelera y la hace más trazable.
+              Puede ayudarte a registrar, ordenar y preformatear, pero no a interpretar sola.
+            </p>
+            <div class="link-row">
+              <a class="link-btn" href="https://ianamnesis.netlify.app" target="_blank" rel="noreferrer">Abrir iAnamnesis</a>
+              <a class="link-btn" href="https://telna2024.netlify.app" target="_blank" rel="noreferrer">Telna 2024</a>
+              <a class="link-btn" href="https://clinicost.netlify.app" target="_blank" rel="noreferrer">Clinicost</a>
+              <a class="link-btn" href="https://deglucionatipica.netlify.app" target="_blank" rel="noreferrer">Deglución atípica</a>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">07</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame report-visual-frame">
+        <div class="terminal-line">slide 08 / informes clínicos</div>
+        <h2>Informes clínicos comprensibles.</h2>
+        <div class="report-visual-layout">
+          <div class="report-visual-copy">
+            <div class="panel">
+              <p>
+                Evaluación estructurada con IA: anamnesis guiada paso a paso, registro clínico con escalas y visualización automática de patrones del lenguaje.
+              </p>
+              <p style="margin-top: 12px;">
+                El informe se genera en segundos, pero la interpretación sigue siendo del logopeda.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Demo sugerida</h3>
+              <ul class="bullet-list">
+                <li>Landing clínica con API conectada.</li>
+                <li>Analiza informes en segundos.</li>
+                <li>Carga el caso, genera plan completo y PDF final.</li>
+              </ul>
+              <div class="link-row">
+                <a class="link-btn" href="https://cargainformesapy.netlify.app" target="_blank" rel="noreferrer">Cargar informes</a>
+                <a class="link-btn" href="https://ianamnesis.netlify.app" target="_blank" rel="noreferrer">Ver anamnesis</a>
+              </div>
+            </div>
+          </div>
+          <div class="media-card report-visual-media">
+            <img src="valencia-assets/informe-completo-evaluacion-captura.png" alt="Informe completo de evaluación con gráficas clínicas">
+            <div class="media-caption">Ejemplo visual de informe completo: desarrollo del lenguaje, registro fonológico, inteligibilidad y escala GRBAS en una vista comprensible.</div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>Esta parte encaja perfecto con Fluidez Clínica Lab y herramientas de anamnesis.</span>
+          <span>evaluación + informe</span>
+        </div>
+        <div class="slide-number">08</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 09 / herramientas por función</div>
+        <h2>Qué herramienta sirve para qué.</h2>
+        <div class="grid-4">
+          <div class="card tool-card">
+            <div class="type">crear materiales</div>
+            <h3>ChatGPT</h3>
+            <p>Idear actividades, adaptar consignas, generar materiales base y refinar prompts.</p>
+            <div class="fit">Empieza rápido y demuestra aplicación inmediata.</div>
+          </div>
+          <div class="card tool-card">
+            <div class="type">estructurar</div>
+            <h3>Claude</h3>
+            <p>Comparar versiones, ordenar mejor y convertir una primera respuesta en algo más fino.</p>
+            <div class="fit">Sirve para criterio, matiz e iteración.</div>
+          </div>
+          <div class="card tool-card">
+            <div class="type">documentos</div>
+            <h3>NotebookLM</h3>
+            <p>Convertir canales, apuntes y protocolos en un mentor interactivo para preguntar con criterio.</p>
+            <div class="fit">IA que organiza, no solo genera.</div>
+            <div class="link-row">
+              <a class="link-btn" href="https://youtu.be/TwqbWN079no" target="_blank" rel="noreferrer">Vídeo NotebookLM</a>
+              <a class="link-btn" href="https://notebooklm.google.com/" target="_blank" rel="noreferrer">NotebookLM</a>
+              <a class="link-btn" href="https://chromewebstore.google.com/detail/kobncfkmjelbefaoohoblamnbackjggk?utm_source=item-share-cb" target="_blank" rel="noreferrer">Extensión YouTube</a>
+            </div>
+          </div>
+          <div class="card tool-card">
+            <div class="type">prototipar</div>
+            <h3>Codex / GPT-4</h3>
+            <p>Pasar de una idea clínica a una mini herramienta, juego o landing funcional.</p>
+            <div class="fit">Ahí nace Logoped-IA como ecosistema.</div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>También mencionar: Gemini como contraste, Napkin/Gamma como salida visual y Whisper para voz y transcripción.</span>
+          <span>función &gt; moda</span>
+        </div>
+        <div class="slide-number">09</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">taller 01 / fundamentos</div>
+        <h2>Parada práctica 1: qué es un prompt útil.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Idea del curso GPT</h3>
+            <ul class="bullet-list">
+              <li>Un prompt es una instrucción para que el modelo haga una tarea.</li>
+              <li>Cuanto más claro sea el prompt, mejor suele ser la respuesta.</li>
+              <li>Incluye contexto, objetivo y formato de salida.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Hazlo con ellos en vivo</h3>
+            <div class="prompt-box"><span class="mini-label">Plantilla base</span>
+Actúa como logopeda.
+Necesito:
+- perfil o edad
+- objetivo terapéutico
+- duración
+- materiales
+- formato de salida
+            </div>
+            <p style="margin-top:12px;" class="workshop-callout">Ahora os pediría que lo mejoréis entre todos en 30 segundos.</p>
+          </div>
+        </div>
+        <div class="slide-number">10</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame game-build-frame">
+        <div class="terminal-line">taller / slide dentro de slide</div>
+        <h2>Construimos el juego con preguntas, no con magia.</h2>
+        <a class="game-link-card" href="https://hayunomasfonemaerre.netlify.app" target="_blank" rel="noreferrer">
+          <img src="valencia-assets/encuentra-el-nuevo-captura.png" alt="Encuentra el Nuevo - terapia fonológica">
+          <span>Jugar a Encuentra el Nuevo <strong>Abrir</strong></span>
+        </a>
+        <div class="panel live-dialogue" data-dialogue="game-build">
+          <div class="dialogue-step active">
+            <div class="q">Qué quiero conseguir?</div>
+            <div class="a">Entrenar fonemas activando atención, memoria y producción.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Para quién es?</div>
+            <div class="a">Niños de 6 a 12 años con dificultades fonológicas.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Qué problema resuelve?</div>
+            <div class="a">La repetición aislada no automatiza ni mantiene atención.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Qué hace el niño?</div>
+            <div class="a">Memorizar, detectar lo nuevo y pronunciar.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Por qué esta mecánica?</div>
+            <div class="a">Integra memoria, atención y producción fonológica.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Qué puedo adaptar?</div>
+            <div class="a">Fonema, posición y nivel de dificultad.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Qué partes necesita?</div>
+            <div class="a">Inicio, configuración, juego y feedback.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Cómo refuerza?</div>
+            <div class="a">Feedback inmediato y progresión de niveles.</div>
+          </div>
+          <div class="dialogue-step">
+            <div class="q">Qué hemos construido?</div>
+            <div class="a">Una tarea cognitivo-fonológica disfrazada de juego.</div>
+          </div>
+          <button class="nav-btn primary dialogue-control" type="button" data-dialogue-next>Click: siguiente</button>
+        </div>
+        <div class="footer-strip">
+          <span>Lanza la pregunta, pausa, deja que contesten y luego aparece la respuesta.</span>
+          <button class="nav-btn prompt-popup-trigger" type="button" data-prompt-open="game-master">Prompt Lovable / Manus</button>
+          <span>método socrático</span>
+        </div>
+        <div class="slide-number">11</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame prompt-master-frame">
+        <div class="terminal-line">taller / prompt maestro</div>
+        <h2>Prompt maestro: memoria, detección y pronunciación.</h2>
+        <div class="prompt-master-grid">
+          <div class="prompt-master-copy">
+            <div class="panel">
+              <h3>Mecánica que no se toca</h3>
+              <ul class="bullet-list">
+                <li>Mostrar varios elementos unos segundos.</li>
+                <li>Añadir un elemento nuevo.</li>
+                <li>Identificar cuál es el nuevo.</li>
+                <li>Pronunciar la palabra en voz alta.</li>
+                <li>Repetir el loop con dificultad creciente.</li>
+              </ul>
+            </div>
+            <div class="panel prompt-master-panel">
+              <div class="prompt-box"><span class="mini-label">Nucleo del prompt</span>
+Actúa como desarrollador experto en juegos web educativos y logopeda clínico.
+Crea un juego de memoria de trabajo, atención selectiva y producción fonológica.
+Debe permitir elegir fonema, posición y dificultad.
+No lo conviertas en quiz ni repetición simple.
+Cada decisión de diseño debe justificarse desde el objetivo clínico.
+              </div>
+              <div class="link-row">
+                <a class="link-btn" href="https://youtu.be/AreNGhCJVr8" target="_blank" rel="noreferrer">Proyecto GPT dislexia</a>
+              </div>
+            </div>
+          </div>
+          <div class="media-card prompt-master-media">
+            <img src="valencia-assets/proyecto-gpt-dislexia-captura.png" alt="Videotutorial configurar proyecto GPT en dislexia">
+            <div class="media-caption">Videotutorial: configurar un proyecto GPT en dislexia como entorno estructurado y estable.</div>
+          </div>
+        </div>
+        <div class="slide-number">12</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame materials-game-frame">
+        <div class="terminal-line">slide 10 / intervención</div>
+        <h2>Materiales terapéuticos personalizados.</h2>
+        <div class="materials-game-layout">
+          <div class="materials-game-copy">
+            <div class="panel">
+              <ul class="bullet-list">
+                <li>Videojuegos educativos.</li>
+                <li>Adaptación por patología, edad y perfil.</li>
+                <li>Personalización rápida de ejercicios.</li>
+                <li>Intervención más específica y menos genérica.</li>
+              </ul>
+              <div class="link-row">
+                <a class="link-btn" href="https://mibarriodelreal.netlify.app" target="_blank" rel="noreferrer">Mi barrio del Real</a>
+                <a class="link-btn" href="https://hayunomasfonemaerre.netlify.app" target="_blank" rel="noreferrer">Hay uno más /r/</a>
+                <a class="link-btn" href="https://letracrusheducativo.netlify.app" target="_blank" rel="noreferrer">Letra Crush</a>
+              </div>
+            </div>
+            <div class="quote-box">
+              <p class="big-quote">“Sin una sola letra de código. Solo prompts e iteraciones.”</p>
+            </div>
+          </div>
+          <div class="media-card materials-game-media">
+            <img src="valencia-assets/letra-crush-captura.png" alt="Letra Crush educativo">
+            <div class="media-caption">Ejemplo de material terapéutico convertido en juego visual: práctica con letras, fonemas, sílabas e imágenes con feedback inmediato.</div>
+          </div>
+        </div>
+        <div class="slide-number">10</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame auditory-task-frame">
+        <div class="terminal-line">tarea práctica / discriminación auditiva</div>
+        <h2>Discriminación auditiva con IA: cuando el prompt cambia la intervención.</h2>
+        <div class="auditory-task-layout">
+          <div class="auditory-task-copy">
+            <div class="panel">
+              <h3>Qué estamos viendo</h3>
+              <p>
+                La IA no falla por generar pares mínimos. Falla cuando el planteamiento clínico es demasiado genérico:
+                no define contraste, proceso perceptivo, edad, nivel ni condiciones de la tarea.
+              </p>
+              <ul class="bullet-list" style="margin-top:10px;">
+                <li>El error no está en “la lista”.</li>
+                <li>Está en no pedir una tarea logopédica bien diseñada.</li>
+                <li>El prompt clínico transforma una ocurrencia en material usable.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Documentos de apoyo</h3>
+              <div class="doc-button-grid">
+                <a class="nav-btn primary" href="valencia-assets/pares-minimos-discriminacion-auditiva.pdf" target="_blank" rel="noreferrer" data-doc-title="Pares mínimos completos" data-doc-src="valencia-assets/pares-minimos-discriminacion-auditiva.pdf">Abrir pares mínimos</a>
+                <a class="nav-btn" href="valencia-assets/prompt-clinico-discriminacion-auditiva.pdf" target="_blank" rel="noreferrer" data-doc-title="Prompt clínico maestro" data-doc-src="valencia-assets/prompt-clinico-discriminacion-auditiva.pdf">Abrir prompt clínico</a>
+              </div>
+            </div>
+          </div>
+          <div class="auditory-image-grid">
+            <div class="media-card auditory-image-card">
+              <img src="valencia-assets/discriminacion-auditiva-prompt-resultado.jpg" alt="Discriminación auditiva con IA - planteamiento y resultado">
+              <div class="media-caption">El prompt pobre parece correcto, pero no controla el proceso clínico que queremos observar.</div>
+            </div>
+            <div class="media-card auditory-image-card">
+              <img src="valencia-assets/discriminacion-auditiva-prompt-clinico.jpg" alt="Prompt clínico para discriminación auditiva">
+              <div class="media-caption">El prompt clínico define contraste, estructura silábica, dificultad, salida esperada y criterios de observación.</div>
+            </div>
+            <div class="media-card auditory-image-card">
+              <img src="valencia-assets/discriminacion-auditiva-documento.jpg" alt="Guía de intervención logopédica con pares mínimos">
+              <div class="media-caption">El resultado final se convierte en una guía de intervención con pares mínimos y criterios de diseño.</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">13</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">taller 02 / actividad de vocabulario</div>
+        <h2>Parada práctica 2: escribir un prompt de actividad.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Ejercicio del curso</h3>
+            <p>Escribe un prompt para generar una actividad de vocabulario para 6 años, 10 minutos, materiales caseros.</p>
+            <ul class="bullet-list" style="margin-top:14px;">
+              <li>Edad.</li>
+              <li>Objetivo.</li>
+              <li>Tiempo total.</li>
+              <li>Materiales disponibles.</li>
+              <li>Criterio de éxito.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="prompt-box"><span class="mini-label">Ejemplo bueno</span>
+Actúa como logopeda infantil y crea una actividad de vocabulario para un niño de 6 años.
+Objetivo: ampliar vocabulario semantico de animales.
+Duracion: 10 minutos.
+Materiales: papel, lapices y objetos caseros.
+Devuélvelo con pasos, adaptación básica y criterio de éxito observable.
+            </div>
+            <p style="margin-top:12px;" class="workshop-callout">Aquí pueden escribir uno y compararlo con este.</p>
+            <div class="link-row prompt-builder-links">
+              <a class="link-btn" href="fabricador-prompts-logopedicos.html" target="_blank" rel="noreferrer">Fabricador de prompts</a>
+              <a class="link-btn" href="https://ingenieriapromptslogopedia.netlify.app" target="_blank" rel="noreferrer">Ingeniería de prompts</a>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">11</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame experiment-frame">
+        <div class="terminal-line">slide 11 / experimentación</div>
+        <h2>Ideas, experimentos, prototipos.</h2>
+        <div class="experiment-layout">
+          <div class="experiment-copy">
+            <div class="panel">
+              <p>
+                Aquí no vendes “juegos bonitos”. Enseñas el salto profesional: una idea clínica se convierte en una mecánica que entrena una habilidad concreta.
+              </p>
+              <ul class="bullet-list" style="margin-top: 14px;">
+                <li>Objetivo perceptivo definido.</li>
+                <li>Mecánica simple, repetible y medible.</li>
+                <li>Feedback inmediato para sostener atención.</li>
+                <li>Identidad visual para que el recurso se recuerde.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Traducción para Valencia</h3>
+              <p>El prototipo sirve para explicar que la IA acelera, pero el criterio clínico decide qué se entrena y por qué.</p>
+              <div class="link-row">
+                <a class="link-btn" href="https://194rrdisparos.netlify.app" target="_blank" rel="noreferrer">1942 Logopédico</a>
+                <a class="link-btn" href="https://foniafonia.github.io/imaginejuego/" target="_blank" rel="noreferrer">Imagine Juego</a>
+                <a class="link-btn" href="https://errequeerrev7.netlify.app" target="_blank" rel="noreferrer">Erre que erre</a>
+              </div>
+            </div>
+          </div>
+          <div class="media-card experiment-media">
+            <img src="valencia-assets/1942-logopedico-captura.png" alt="1942 Logopédico gamificación de discriminación fonológica">
+            <div class="media-caption">Una mecánica arcade puede transformarse en entrenamiento perceptivo: discriminar fonema-palabra, sostener atención y responder rápido con feedback inmediato.</div>
+          </div>
+        </div>
+        <div class="slide-number">11</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame practice-compare-frame">
+        <div class="terminal-line">taller 03 / arena de comparación</div>
+        <h2>Parada práctica 3: aprender a elegir la mejor respuesta.</h2>
+        <div class="practice-compare-grid">
+          <div class="panel">
+            <h3>Dinámica en directo</h3>
+            <ul class="bullet-list">
+              <li>Plantea una misma necesidad clínica a dos modelos o dos prompts.</li>
+              <li>No preguntes “cuál suena mejor”: pregunta cuál se puede usar mañana en sesión.</li>
+              <li>Votad con cuatro criterios: claridad, seguridad, estructura y transferencia.</li>
+              <li>Cerrad convirtiendo la mejor respuesta en una versión todavía más concreta.</li>
+            </ul>
+            <div class="link-row" style="margin-top:14px;">
+              <a class="link-btn" href="https://arena.ai/c/019db47a-4687-743a-bb05-7553aad5ce7c" target="_blank" rel="noreferrer">Abrir Arena AI</a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Prompt para comparar</h3>
+            <div class="prompt-box">Compara estas dos respuestas como logopeda docente.
+Valora:
+1) utilidad clínica real
+2) precisión del objetivo
+3) seguridad y límites
+4) facilidad de aplicación
+5) qué habría que pedir en la siguiente iteración
+
+Devuelve una decisión clara y una versión mejorada del prompt.</div>
+          </div>
+        </div>
+        <div class="practice-compare-flow">
+          <div class="card"><strong>Idea clave:</strong> comparar respuestas entrena criterio. La IA no decide por ti; te obliga a justificar mejor.</div>
+        </div>
+        <div class="slide-number">12</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame demos-frame">
+        <div class="terminal-line">slide 12 / demos principales</div>
+        <h2>Demos que sostienen toda la ponencia.</h2>
+        <div class="grid-4">
+          <div class="card prototype-card">
+            <div class="type">conversión</div>
+            <h3>Verbo Querer Quest</h3>
+            <p>De material tradicional a experiencia jugable, visual y medible.</p>
+            <div class="fit">La mejor pieza para el bloque de materiales personalizados.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">clínica</div>
+            <h3>Fluidez Clínica Lab</h3>
+            <p>Audio real, Whisper, análisis heurístico y apoyo a evaluación.</p>
+            <div class="fit">La mejor para la parte seria de evaluación e informes.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">adherencia</div>
+            <h3>Karaoke Tartamudez</h3>
+            <p>Ritmo, práctica guiada y engagement.</p>
+            <div class="fit">Demuestra que la terapia también puede entrar por juego.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">lenguaje</div>
+            <h3>iSecuencias</h3>
+            <p>Narrativa, secuenciación y ecosistema de herramientas visuales.</p>
+            <div class="fit">Muy buena para alumnado y muy fácil de entender.</div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="media-card">
+            <img src="valencia-assets/arcade-pro-competicion-captura.png" alt="Arcade Pro competición fonemas y sílabas">
+            <div class="media-caption">Arcade Pro: gamificación directa para fonemas, sílabas y competición con identidad visual clara.</div>
+          </div>
+          <div class="media-card">
+            <img src="valencia-assets/speechviewer-captura.png" alt="SpeechViewer apoyo visual de voz">
+            <div class="media-caption">SpeechViewer: puente histórico perfecto para explicar visualización de voz, feedback y adherencia.</div>
+          </div>
+          <div class="media-card">
+            <img src="valencia-assets/trazado-colores-captura.png" alt="Actividad digital de trazado y colores">
+            <div class="media-caption">Actividad interactiva simple: instrucciones visuales, acción motora y feedback inmediato.</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://karaokeritmotartamudez.netlify.app" target="_blank" rel="noreferrer">Karaoke ritmo tartamudez</a>
+          <a class="link-btn" href="verbo-querer-quest/index.html" target="_blank" rel="noreferrer">Verbo Querer Quest</a>
+          <a class="link-btn" href="fluidez-clinica-lab/index.html" target="_blank" rel="noreferrer">Fluidez Clínica Lab</a>
+          <a class="link-btn" href="https://foniafonia.github.io/araia/isecuencias/" target="_blank" rel="noreferrer">iSecuencias</a>
+          <a class="link-btn" href="logopod-entrenador-landing.html" target="_blank" rel="noreferrer">Logopod Entrenador</a>
+        </div>
+        <div class="slide-number">12</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame poe-value-frame">
+        <div class="terminal-line">archivo poe masivo / valor real</div>
+        <h2>Una fábrica real de prototipos.</h2>
+        <div class="poe-value-grid">
+          <div class="card prototype-card">
+            <div class="type">evaluación</div>
+            <h3>Escala Tartamudez Infantil</h3>
+            <p>Formulario serio, progresivo, con informe y salida en PDF.</p>
+            <div class="fit">Demuestra estructura clínica, no solo creatividad.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">intervención</div>
+            <h3>Karaoke Ritmo</h3>
+            <p>Trabajo de fluidez con ritmo, lectura guiada y engagement.</p>
+            <div class="fit">Muy potente para mostrar adherencia terapéutica.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">morfosintaxis</div>
+            <h3>Morfosintaxis Videojuego</h3>
+            <p>Objetivo linguistico convertido en experiencia jugable completa.</p>
+            <div class="fit">Prueba que se podía pasar de idea a juego funcional.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">híbrido</div>
+            <h3>PDF Interactivo</h3>
+            <p>Puente entre material clásico y experiencia interactiva usable.</p>
+            <div class="fit">Muy bueno para explicar papel + digital en un mismo flujo.</div>
+          </div>
+        </div>
+        <div class="link-row poe-link-row">
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/017__Escala_Tartamudez_Infantil__x5mit7olndok7bgq91.html" target="_blank" rel="noreferrer">Abrir Escala Tartamudez Infantil</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/046__Karaoke_ritmo__ngr0e7amaoqz8kedzu.html" target="_blank" rel="noreferrer">Abrir Karaoke Ritmo</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/049__Morfosintaxis_Videojuego__2cdoyk6m8yxd60at9f.html" target="_blank" rel="noreferrer">Abrir Morfosintaxis Videojuego</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/050__PDF_Interactivo__otoej7wx80azmnfmkg.html" target="_blank" rel="noreferrer">Abrir PDF Interactivo</a>
+        </div>
+        <div class="link-row poe-dense-links">
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/001__Bingo_educativo__lvqeckh5hcqxeht67g.html" target="_blank" rel="noreferrer">Bingo educativo</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/005__Auditory_Run_Pro__ngqne23r77fzvu5aj6.html" target="_blank" rel="noreferrer">Auditory Run Pro</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/012__Pac-Man_Logopedia__s657w8nyf87fzwqzen.html" target="_blank" rel="noreferrer">Pac-Man Logopedia</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/027__Ruleta_Morfosintaxis__33ae9jp1x82p4dcifx.html" target="_blank" rel="noreferrer">Ruleta Morfosintaxis</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/034__Erre_S_Pro__3gq18d3t0i4vsr4218.html" target="_blank" rel="noreferrer">Erre S Pro</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/035__kaboom__57oojoskvp4i31tki7.html" target="_blank" rel="noreferrer">Kaboom</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/048__Logopedia_Domino_Juego__2qwa5takdmxzu77sds.html" target="_blank" rel="noreferrer">Dominó logopedia</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/054__Visualizador_Onda_Audio__3dsg7p6wwznteafk0e.html" target="_blank" rel="noreferrer">Visualizador onda</a>
+        </div>
+        <div class="footer-strip">
+          <span>No hace falta saber programar para llegar aquí. Hace falta criterio, ensayo, volumen y capacidad de dirigir bien la herramienta.</span>
+          <span>poe masivo = evidencia</span>
+        </div>
+        <div class="slide-number">12</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame massive-past-frame">
+        <div class="terminal-line">archivo poe masivo / lectura estratégica</div>
+        <h2>Qué demuestra de verdad ese archivo histórico.</h2>
+        <div class="effect-grid">
+          <div class="panel effect-card">
+            <strong>Pasado masivo</strong>
+            <p>55 prototipos: juegos, escalas, informes, calculadoras, visualizadores y recursos clínicos.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>Lectura correcta</strong>
+            <p>No es nostalgia. Es evidencia de volumen, criterio, ensayo y dirección de IA.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>Mensaje para alumnado</strong>
+            <p>La barrera no era “saber programar”; era saber pedir, probar, comparar y mejorar.</p>
+          </div>
+        </div>
+        <div class="quote-box">
+          <p class="big-quote">“La IA democratiza convertir una intuición clínica en objeto real.”</p>
+        </div>
+        <div class="link-row poe-dense-links">
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo" target="_blank" rel="noreferrer">Abrir carpeta POE masivo</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/010__Web_JuegosLogopedos__mzu0p5kcvj8yjgdx2b.html" target="_blank" rel="noreferrer">Web JuegosLogopedos</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/045__Juegoslogopedos2025__qg7exu31xosjcoobhd.html" target="_blank" rel="noreferrer">Juegoslogopedos 2025</a>
+          <a class="link-btn" href="/Users/joseaserraf/Desktop/poe masivo/032__Juego_Visual__3sc0gk0739sabv61wx.html" target="_blank" rel="noreferrer">Juego visual</a>
+        </div>
+        <div class="footer-strip">
+          <span>Este apartado no es nostalgia: es una prueba de capacidad acumulada.</span>
+          <span>historial = credibilidad</span>
+        </div>
+        <div class="slide-number">12</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame clinical-case-frame">
+        <div class="terminal-line">slide 13 / caso práctico de intervención</div>
+        <h2>Caso real de taller: paciente de 5 años con retraso del lenguaje y conciencia fonológica baja.</h2>
+        <div class="effect-grid">
+          <div class="panel effect-card">
+            <strong>Perfil</strong>
+            <p>Vocabulario limitado, frases cortas y baja conciencia fonológica.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>Objetivo</strong>
+            <p>Activar vocabulario, sílabas y sonido inicial con apoyo visual y juego.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>Salida IA</strong>
+            <p>Material en papel, recurso digital y propuesta jugable para la misma necesidad.</p>
+          </div>
+        </div>
+        <div class="quote-box">
+          <p class="big-quote">“La pregunta no es qué herramienta tengo. Es qué intervención sigue sin optimizar.”</p>
+        </div>
+        <div class="footer-strip">
+          <span>Del pasado masivo aprendemos el método: caso claro, objetivo observable, formato útil.</span>
+          <span>caso clínico &gt; prompt genérico</span>
+        </div>
+        <div class="slide-number">13</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame socratic-frame">
+        <div class="terminal-line">taller 04 / método socrático</div>
+        <h2>Parada práctica 4: método socrático para construir un buen prompt clínico.</h2>
+        <div class="effect-grid">
+          <div class="panel effect-card">
+            <strong>1. Paciente</strong>
+            <p>Edad, perfil, dificultad principal, apoyos y límites.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>2. Objetivo</strong>
+            <p>Qué conducta observable quiero provocar en sesión.</p>
+          </div>
+          <div class="panel effect-card">
+            <strong>3. Formato</strong>
+            <p>Ficha, juego oral, recurso digital, videojuego o tarea para casa.</p>
+          </div>
+        </div>
+        <div class="prompt-box"><span class="mini-label">Remate en vivo</span>Solo después de estas preguntas escribimos el prompt. La IA no sustituye el razonamiento: lo obliga a hacerse explícito.</div>
+        <div class="slide-number">14</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">taller 05 / prompt completo de intervención</div>
+        <h2>Del caso clínico al prompt que sí sirve.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Prompt base para practicar con cualquier IA</h3>
+            <div class="prompt-box">Actúa como logopeda infantil con experiencia en retraso del lenguaje y conciencia fonológica.
+Tengo un paciente de 5 años con vocabulario limitado, frases cortas y dificultades para identificar sílabas y sonidos iniciales.
+Quiero una propuesta de intervención de 15 minutos, motivadora y funcional.
+Necesito 3 versiones del mismo objetivo:
+1) material en papel
+2) actividad digital interactiva
+3) idea de videojuego terapéutico
+Incluye pasos, materiales, adaptaciones, criterio de éxito y una tarea corta para casa.</div>
+          </div>
+          <div class="panel">
+            <h3>Lo que yo les haría iterar</h3>
+            <ul class="bullet-list">
+              <li>Añadir intereses del paciente.</li>
+              <li>Restringir tiempo y nivel de ayuda.</li>
+              <li>Pedir solo una habilidad concreta por versión.</li>
+              <li>Obligar a que la salida sea observable y medible.</li>
+            </ul>
+            <p style="margin-top:14px;">Aquí es donde aprenden que iterar no es “probar otra vez”, sino afinar el pensamiento clínico.</p>
+          </div>
+        </div>
+        <div class="slide-number">15</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame three-paths-frame">
+        <div class="terminal-line">slide 16 / tres salidas para un mismo objetivo</div>
+        <h2>Un mismo objetivo terapéutico puede convertirse en papel, digital o videojuego.</h2>
+        <div class="grid-3 three-paths-grid">
+          <div class="card prototype-card">
+            <div class="type">papel</div>
+            <h3>Prototipo imprimible</h3>
+            <p>Ficha de categorías, lotos de sonido inicial, tarjetas de sílabas, secuencias y tarea para familia.</p>
+            <div class="fit">Rápido de imprimir y muy fácil de llevar a consulta.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">digital</div>
+            <h3>Recurso interactivo</h3>
+            <p>Pantallas clicables, feedback, refuerzo visual, narrativa sencilla y adaptación inmediata.</p>
+            <div class="fit">Ideal para captar atención y variar estímulo.</div>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">videojuego</div>
+            <h3>Juego terapéutico</h3>
+            <p>Mismo objetivo clínico, pero envuelto en misiones, ritmo, puntuación y progresión.</p>
+            <div class="fit">Mejora adherencia y da identidad al material.</div>
+          </div>
+        </div>
+        <div class="grid-3 three-paths-media-grid">
+          <div class="media-card">
+            <img src="valencia-assets/encuentra-el-nuevo.jpeg" alt="Prototipo de actividad visual">
+            <div class="media-caption">Muy buen ejemplo de cómo un objetivo fonológico puede traducirse a dinámica concreta.</div>
+          </div>
+          <div class="media-card">
+            <img src="valencia-assets/juegoslogopedos.jpeg" alt="Juegos logopédicos">
+            <div class="media-caption">No es decoración: es una forma de aumentar entrada, foco y recuerdo del material.</div>
+          </div>
+          <div class="media-card">
+            <img src="valencia-assets/donkeyfon.jpeg" alt="Videojuego terapéutico">
+            <div class="media-caption">Cuando el formato engancha, el objetivo clínico tiene más oportunidades de repetirse.</div>
+          </div>
+        </div>
+        <div class="slide-number">16</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 17 / arsenal práctico de intervención</div>
+        <h2>Herramientas que aquí sí encajan para intervención práctica.</h2>
+        <div class="grid-4">
+          <div class="card prototype-card">
+            <div class="type">fluidez</div>
+            <h3>Karaoke Tartamudez</h3>
+            <p>Ritmo, lectura guiada, apoyo visual y trabajo de adherencia.</p>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">morfosintaxis</div>
+            <h3>Verbo Querer Quest</h3>
+            <p>Transforma estructura verbal en experiencia jugable y visible.</p>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">narrativa</div>
+            <h3>iSecuencias</h3>
+            <p>Secuenciación, lenguaje y organización del discurso.</p>
+          </div>
+          <div class="card prototype-card">
+            <div class="type">casa</div>
+            <h3>Logopod Entrenador</h3>
+            <p>Práctica guiada y continuidad entre sesiones.</p>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://karaokeritmotartamudez.netlify.app" target="_blank" rel="noreferrer">Karaoke ritmo tartamudez</a>
+          <a class="link-btn" href="verbo-querer-quest/index.html" target="_blank" rel="noreferrer">Verbo Querer Quest</a>
+          <a class="link-btn" href="https://foniafonia.github.io/araia/isecuencias/" target="_blank" rel="noreferrer">iSecuencias</a>
+          <a class="link-btn" href="logopod-entrenador-landing.html" target="_blank" rel="noreferrer">Logopod Entrenador</a>
+        </div>
+        <div class="footer-strip">
+          <span>Lo importante aquí es que vean variedad de formato, no una única plantilla de actividad.</span>
+          <span>intervención aplicada</span>
+        </div>
+        <div class="slide-number">17</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">taller 04 / familia</div>
+        <h2>Parada práctica 4: explicar a una familia.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Ejercicio del curso</h3>
+            <p>Escribe un prompt para explicar a una familia cómo reforzar conciencia fonológica en casa en lenguaje simple.</p>
+            <ul class="bullet-list" style="margin-top:14px;">
+              <li>Lenguaje claro.</li>
+              <li>Pasos concretos.</li>
+              <li>Sin tecnicismos innecesarios.</li>
+              <li>Con limite profesional.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="prompt-box"><span class="mini-label">Versión mejorada</span>
+Actúa como logopeda y explica a una familia, en lenguaje sencillo, cómo reforzar conciencia fonológica en casa con juegos de 5 minutos.
+Incluye 3 ejemplos fáciles, tono cercano y una nota final aclarando que es apoyo orientativo y no sustitución de seguimiento profesional.
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">13</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 13 / asistentes</div>
+        <h2>Chatbots y asistentes informativos.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul class="bullet-list">
+              <li>Orientación y derivación.</li>
+              <li>Limites claros.</li>
+              <li>La IA no diagnostica.</li>
+              <li>La IA no interviene.</li>
+              <li>La IA no sustituye al profesional.</li>
+            </ul>
+          </div>
+          <div class="quote-box">
+            <p class="big-quote">“Puede informar, orientar y ordenar. No puede asumir el lugar clínico del logopeda.”</p>
+          </div>
+        </div>
+        <div class="slide-number">13</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">taller 05 / imagen educativa</div>
+        <h2>Parada práctica 5: prompt para imagen logopédica.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Ejercicio del curso</h3>
+            <p>Escribe un prompt para generar una imagen educativa de logopedia: escena de articulación guiada, estilo claro, apta para niños.</p>
+          </div>
+          <div class="panel">
+            <div class="prompt-box"><span class="mini-label">Prompt mejorado</span>
+Ilustración educativa de logopedia infantil en consulta luminosa.
+Logopeda mostrando posición lingual para fonema /r/ a un niño de 6 años.
+Estilo amigable, colores pastel, apoyo visual articulatorio en pared, composición limpia, alta legibilidad, sin logos ni texto clínico.
+            </div>
+            <p style="margin-top:12px;" class="workshop-callout">Aquí demuestras que un prompt pobre genera humo visual y uno bueno genera material didáctico.</p>
+          </div>
+        </div>
+        <div class="slide-number">14</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 14 / ética</div>
+        <h2>Ética aplicada al uso de IA.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul class="bullet-list">
+              <li>Privacidad.</li>
+              <li>Sesgos.</li>
+              <li>Alucinaciones.</li>
+              <li>Falsos positivos y falsos negativos.</li>
+              <li>Dependencia y errores.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Frases clave</h3>
+            <p class="warning">“Una respuesta fluida no significa que sea válida clínicamente.”</p>
+            <p style="margin-top: 12px;">“Sin un prompt bien planteado, lo único que puedes hacer es fallar y ser poco profesional.”</p>
+            <div class="link-row">
+              <a class="link-btn" href="https://ingenieriapromptslogopedia.netlify.app" target="_blank" rel="noreferrer">Ingeniería de prompts</a>
+              <a class="link-btn" href="https://radarclinico.netlify.app" target="_blank" rel="noreferrer">Radar Clínico</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>Si quieres mencionar un recurso aquí, encaja muy bien nombrar Radar Clínico.</span>
+          <span>ética + prompt</span>
+        </div>
+        <div class="slide-number">14</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame prompt-anatomy-frame">
+        <div class="terminal-line">taller 06 / anatomía del prompt profesional</div>
+        <h2>Parada práctica 6: por qué iteramos un prompt.</h2>
+        <div class="grid-3 prompt-version-grid">
+          <div class="card">
+            <h3>Versión 1</h3>
+            <p>Genera actividad para fonema /r/.</p>
+          </div>
+          <div class="card">
+            <h3>Versión 2</h3>
+            <p>Genera actividad para fonema /r/ de 15 minutos, nivel básico.</p>
+          </div>
+          <div class="card">
+            <h3>Versión 3</h3>
+            <p>Actúa como logopeda infantil y crea una sesión de 15 minutos para fonema /r/, nivel básico, con materiales caseros, pasos, adaptaciones y criterio de éxito.</p>
+          </div>
+        </div>
+        <div class="grid-2 prompt-media-grid">
+          <div class="media-card prompt-media-card">
+            <img src="valencia-assets/ingenieria-prompts.jpeg" alt="Ingeniería de prompts aplicada a la logopedia">
+            <div class="media-caption">Esto resume muy bien lo que quiero que os quede: prompt con criterio clínico y educativo, no prompt improvisado.</div>
+          </div>
+          <div class="media-card prompt-media-card">
+            <img src="valencia-assets/radar-clinico.jpeg" alt="Radar Clínico">
+            <div class="media-caption">Una forma visual de pensar evaluación, intervención, ética, coherencia y datos como partes del mismo sistema.</div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>La idea del taller es que vean en directo cómo mejora la salida al mejorar la instrucción.</span>
+          <span>iteración = calidad</span>
+        </div>
+        <div class="slide-number">15</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 15 / comunicación</div>
+        <h2>Comunicación profesional y divulgación.</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Alcance</h3>
+            <p>La IA también ayuda a ampliar alcance, organizar mensajes y adaptar explicaciones a distintos públicos.</p>
+          </div>
+          <div class="card">
+            <h3>Redes y divulgación</h3>
+            <p>Permite comunicar mejor, sintetizar mejor y presentar información compleja de forma más clara.</p>
+          </div>
+          <div class="card">
+            <h3>Diferentes formas de comunicar</h3>
+            <p>Página, recurso, guion, historia, pieza visual o apoyo para familias y pacientes.</p>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://app.heygen.com/videos/clinicost-costes-reales-cl-nicos-f60b7d2cbb0c421daf1a6b5c3f61bf6f" target="_blank" rel="noreferrer">Vídeo HeyGen</a>
+          <a class="link-btn" href="https://www.youtube.com/shorts/X3orVfMoqpI" target="_blank" rel="noreferrer">Short divulgativo</a>
+        </div>
+        <div class="slide-number">15</div>
+      </div>
+    </section>
+
+    <section class="slide" id="correccion-storywizard">
+      <div class="frame story-frame">
+        <div class="change-stamp corner">nuevo · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">cuentos con IA / Storywizard</div>
+        <h2>Storywizard: cuentos con IA para explicar, adaptar y conversar.</h2>
+        <div class="story-grid">
+          <div class="story-flow">
+            <div class="panel">
+              <h3>Qué enseña esta demo</h3>
+              <ul class="bullet-list compact-list">
+                <li>Transforma una intención educativa en una historia entendible.</li>
+                <li>Permite adaptar lenguaje, tono, edad y foco terapéutico.</li>
+                <li>Sirve como puente entre familia, niño y objetivo clínico.</li>
+              </ul>
+            </div>
+            <div class="quote-box">
+              <p class="big-quote">“Un cuento no es adorno: puede ser estructura, regulación y lenguaje compartido.”</p>
+            </div>
+          </div>
+          <div class="media-card story-media">
+            <img src="valencia-assets/canva-storywizard-cuento.jpeg" alt="Storywizard cuento Las Palabras Crecen Sin Miedo">
+            <div class="media-caption">Recuperado del Canva anterior: un cuento ya montado como experiencia de comprensión, lenguaje y conversación.</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://www.storywizard.ai/p/35267bcbcdbb4e11" target="_blank" rel="noreferrer">Abrir cuento en Storywizard</a>
+        </div>
+        <div class="slide-number">15</div>
+      </div>
+    </section>
+
+    <section class="slide" id="correccion-manus-examen">
+      <div class="frame exam-adapt-frame">
+        <div class="change-stamp corner">nuevo · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">Manus / adaptar examen real</div>
+        <h2>Adaptar el examen de un niño sin perder el objetivo.</h2>
+        <div class="exam-adapt-grid">
+          <div class="exam-flow">
+            <div class="panel">
+              <h3>Lo que quiero que vean</h3>
+              <ul class="bullet-list compact-list">
+                <li>La IA puede reescribir una prueba para hacerla más accesible.</li>
+                <li>El objetivo no es bajar exigencia: es ajustar barreras de lenguaje, lectura o formato.</li>
+                <li>La adaptación necesita criterio profesional, no automatismo.</li>
+              </ul>
+            </div>
+            <div class="prompt-box"><span class="mini-label">Idea para demo</span>Subir o describir el examen, indicar edad, dificultad, barreras observadas y pedir una versión adaptada con justificación de cambios.</div>
+          </div>
+          <div class="media-card exam-media">
+            <img src="valencia-assets/radar-clinico.jpeg" alt="Adaptación de examen con criterio clínico y educativo">
+            <div class="media-caption">Manus sirve aquí para enseñar adaptación práctica: mismo aprendizaje, menor fricción de acceso, más claridad en la tarea.</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://manus.go.link/iW6sB?action=open-subscription" target="_blank" rel="noreferrer">Abrir demo Manus</a>
+        </div>
+        <div class="slide-number">15</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame radar-showcase-frame">
+        <div class="terminal-line">taller 07 / Radar Clínico</div>
+        <h2>Parada práctica 7: detectar prompt pobre vs profesional.</h2>
+        <div class="radar-showcase-grid">
+          <div class="radar-prompt-stack">
+            <div class="panel">
+              <h3>Prompt pobre</h3>
+              <div class="prompt-box">Haz algo sobre afasia.</div>
+            </div>
+            <div class="panel">
+              <h3>Prompt profesional</h3>
+              <div class="prompt-box">Actúa como experto en logopedia y desarrollo web. Crea una página sencilla sobre afasia para pacientes y familiares. Incluye inicio claro, 5 consejos prácticos de comunicación diaria y recursos de apoyo. Usa tono cercano, profesional y colores suaves.</div>
+            </div>
+          </div>
+          <div class="media-card radar-showcase-media">
+            <img src="valencia-assets/afasia-ia.jpeg" alt="Afasia e IA">
+            <div class="media-caption">La imagen manda en esta slide: queremos que se entienda que un prompt profesional puede aterrizar en una pieza clara, útil y enseñable.</div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>Esto engancha con divulgación, familias y criterio de prompt.</span>
+          <span>de ambiguo a accionable</span>
+        </div>
+        <div class="slide-number">16</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 16 / ejemplo divulgación</div>
+        <h2>Concienciar y alcanzar.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <p>
+              Aquí teneis un ejemplo muy claro: pedir a la IA una página profesional y sencilla sobre afasia, para pacientes y familiares,
+              con explicacion inicial, consejos prácticos y recursos de apoyo en tono cercano y profesional.
+            </p>
+            <div class="link-row">
+              <a class="link-btn" href="https://afasiaai-crvvoceb.manus.space" target="_blank" rel="noreferrer">Abrir ejemplo Afasia e IA</a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Por qué esto importa</h3>
+            <ul class="bullet-list">
+              <li>No todo uso de IA es diagnóstico o intervención.</li>
+              <li>También hay educación, acceso y apoyo a familias.</li>
+              <li>Comunicación clara también es cuidado.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="media-card">
+          <img src="valencia-assets/afasia-ia.jpeg" alt="Sitio Afasia e IA">
+          <div class="media-caption">Fijaos en esto: la IA aquí no está diagnosticando. Esta ayudando a traducir conocimiento en una web clara para pacientes y familias.</div>
+        </div>
+        <div class="slide-number">16</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 17 / desgaste</div>
+        <h2>Tareas que desgastan y que no son logopedia.</h2>
+        <div class="grid-2">
+          <div class="quote-box">
+            <p class="big-quote">La IA tiene mucho sentido cuando libera tiempo de tareas repetitivas, administrativas o mecánicas.</p>
+          </div>
+          <div class="panel">
+            <ul class="bullet-list">
+              <li>Ordenar información.</li>
+              <li>Preparar borradores.</li>
+              <li>Explicar mejor a familias.</li>
+              <li>Transformar ideas en recursos sin perder semanas.</li>
+            </ul>
+            <div class="media-card" style="margin-top:14px;">
+              <img src="valencia-assets/control-consistencia.jpeg" alt="Control de consistencia">
+              <div class="media-caption">Hasta en tareas de control y consistencia podeis usar IA para reforzar método, no para sustituir vuestra responsabilidad.</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">17</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 18 / cierre largo</div>
+        <h2>Precisión, humanidad y criterio digital.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <p>
+              La logopedia es una profesión de precisión y humanidad. La inteligencia artificial exige más criterio, no menos.
+              El futuro de la logopedia no depende de la tecnología que adoptemos. Depende del criterio con el que decidamos utilizarla.
+            </p>
+            <p style="margin-top: 12px;">
+              No será IA contra logopedas. Será logopedas con criterio digital frente a logopedas sin estrategia digital.
+            </p>
+          </div>
+          <div class="panel">
+            <ul class="bullet-list">
+              <li>La anamnesis asistida va a existir.</li>
+              <li>El seguimiento inteligente va a crecer.</li>
+              <li>Los apoyos conversacionales van a proliferar.</li>
+              <li>La pregunta es si lo lideramos nosotros con criterio clínico.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-number">18</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="hero-grid">
+          <div class="stack">
+            <div class="terminal-line">slide 19 / despedida</div>
+            <h2>La invitación final.</h2>
+            <p class="lead">
+              Durante años, muchas buenas ideas se quedaban en cajones por falta de tiempo, recursos o desarrollo.
+              Hoy podemos aterrizarlas en tiempo récord. No para quedar bien ni solo para ser más rápidos. Para hacer mejor clínica.
+            </p>
+            <div class="quote-box">
+              <p class="big-quote">“Preguntad, probad, aprended, compartid y construid criterio digital clínico.”</p>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="metric">
+              <div class="value">+ criterio</div>
+              <div class="label">no menos</div>
+            </div>
+            <div class="metric">
+              <div class="value">+ método</div>
+              <div class="label">sin método hay riesgo</div>
+            </div>
+            <div class="metric">
+              <div class="value">+ rigor</div>
+              <div class="label">asi entra la IA en logopedia</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-strip">
+          <span>La IA llega para quedarse. Y nosotros decidimos cómo entra en la logopedia.</span>
+          <span>con rigor · con ética · con práctica real</span>
+        </div>
+        <div class="slide-number">19</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="hero-grid">
+          <div class="stack">
+            <div class="terminal-line">slide 20 / gracias</div>
+            <h2>Muchas gracias.</h2>
+            <p class="lead">
+              Cierre limpio para preguntas, transición a demo en vivo o paso a debate con alumnado.
+            </p>
+            <div class="tag-row">
+              <span class="tag">preguntas</span>
+              <span class="tag">casos reales</span>
+              <span class="tag">demos</span>
+              <span class="tag">debate</span>
+            </div>
+          </div>
+          <div class="quote-box">
+            <p class="big-quote">“La pregunta no es si llegara. La pregunta es si lo lideramos nosotros.”</p>
+          </div>
+        </div>
+        <div class="slide-number">20</div>
+      </div>
+    </section>
+
+    <section class="slide" id="herramientas-correcciones">
+      <div class="frame audit-frame">
+        <div class="change-stamp corner">nuevo · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">herramientas / registro operativo</div>
+        <h2>Correcciones y material nuevo, con fecha y enlace.</h2>
+        <div class="audit-grid">
+          <div class="panel">
+            <h3>Para no perdernos</h3>
+            <ul class="bullet-list compact-list">
+              <li>Cada cambio visible lleva fecha y hora dentro de su slide.</li>
+              <li>Esta slide funciona como índice de lo corregido o añadido.</li>
+              <li>Los enlaces saltan a la zona exacta de la ponencia.</li>
+            </ul>
+            <div class="change-stamp">criterio operativo · no más cambios invisibles</div>
+          </div>
+          <div class="audit-list">
+            <a class="audit-item" href="#herramientas-correcciones" data-jump-to="herramientas-correcciones">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Registro de herramientas/correcciones</strong><span>Creada esta slide para controlar qué se añade, corrige o recoloca.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+            <a class="audit-item" href="#correccion-storywizard" data-jump-to="correccion-storywizard">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Storywizard como slide propia</strong><span>Separado como cuentos con IA y enlazado a su demo.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+            <a class="audit-item" href="#correccion-manus-examen" data-jump-to="correccion-manus-examen">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Manus / adaptación de examen</strong><span>Añadida demo para mostrar adaptación de prueba infantil.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+            <a class="audit-item" href="#correccion-evaluacion" data-jump-to="correccion-evaluacion">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Banco evaluación</strong><span>Integrados TELNA, CliniCost y Carga informes desde el Canva anterior.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+            <a class="audit-item" href="#correccion-intervencion" data-jump-to="correccion-intervencion">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Banco intervención/juego</strong><span>Recuperados prototipos antiguos y dos visuales del PPTX.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+            <a class="audit-item" href="#correccion-visualizador" data-jump-to="correccion-visualizador">
+              <span class="audit-time">2026-04-22 17:48</span>
+              <span class="audit-copy"><strong>Visualizador narrativo</strong><span>Corregidas imágenes y reforzado el encuadre terapéutico.</span></span>
+              <span class="audit-go">ir</span>
+            </a>
+          </div>
+        </div>
+        <div class="slide-number">21</div>
+      </div>
+    </section>
+
+    <section class="slide" id="correccion-evaluacion">
+      <div class="frame">
+        <div class="change-stamp corner">corregido · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">slide 21 / banco evaluación</div>
+        <h2>Banco de enlaces: evaluación e informes.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Para explorar después</h3>
+            <div class="link-card-grid featured-links">
+              <a class="link-card featured-link" href="https://disgafiaparanovatos.netlify.app" target="_blank" rel="noreferrer"><strong>Disgrafía para novatos</strong><span>Recurso propio para traducir la dificultad grafomotora a familias y alumnado: señales, ejemplos y orientación inicial sin lenguaje críptico.</span></a>
+              <a class="link-card featured-link" href="https://deglucionatipica.netlify.app" target="_blank" rel="noreferrer"><strong>Deglución atípica</strong><span>Material clínico-divulgativo para explicar patrones orofaciales, señales observables y por qué el trabajo miofuncional necesita método.</span></a>
+            </div>
+            <div class="link-card-grid support-links">
+              <a class="link-card" href="https://ianamnesis.netlify.app" target="_blank" rel="noreferrer"><strong>iAnamnesis</strong><span>Recogida ordenada de información antes de evaluar o intervenir.</span></a>
+              <a class="link-card" href="https://radarclinico.netlify.app" target="_blank" rel="noreferrer"><strong>Radar Clínico</strong><span>Marco para revisar coherencia, riesgos y utilidad clínica de la IA.</span></a>
+            </div>
+            <div class="legacy-links">
+              <div class="legacy-label">rescatado del Canva anterior</div>
+              <div class="legacy-link-row">
+                <a class="legacy-link" href="https://telna2024.netlify.app" target="_blank" rel="noreferrer">TELNA 2024</a>
+                <a class="legacy-link" href="https://clinicost.netlify.app" target="_blank" rel="noreferrer">CliniCost</a>
+                <a class="legacy-link" href="https://cargainformesapy.netlify.app" target="_blank" rel="noreferrer">Carga informes API</a>
+              </div>
+            </div>
+          </div>
+          <div class="legacy-visual-grid">
+            <div class="media-card">
+              <img src="valencia-assets/canva-telna-2024.jpeg" alt="TELNA 2024 evaluación de afasia">
+              <div class="media-caption">TELNA entra como ejemplo histórico de evaluación especializada convertida en recurso visible.</div>
+            </div>
+            <div class="media-card">
+              <img src="valencia-assets/canva-clinicost.jpeg" alt="CliniCost modelo económico clínico">
+              <div class="media-caption">CliniCost completa el banco: no solo clínica, también gestión y explicación económica.</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">21</div>
+      </div>
+    </section>
+
+    <section class="slide" id="correccion-intervencion">
+      <div class="frame">
+        <div class="change-stamp corner">corregido · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">slide 22 / banco intervención</div>
+        <h2>Banco de enlaces: intervención y juego.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="link-card-grid featured-links">
+              <a class="link-card featured-link" href="https://toposlogopedostopos.netlify.app" target="_blank" rel="noreferrer"><strong>Topos</strong><span>Juego propio para trabajar atención sostenida, búsqueda visual, turnos y velocidad de respuesta con una mecánica fácil de enseñar en directo.</span></a>
+              <a class="link-card featured-link" href="https://emojitraductor.netlify.app" target="_blank" rel="noreferrer"><strong>Emoji Traductor</strong><span>Puente visual para inferencias, vocabulario y reformulación: convierte códigos simples en lenguaje, explicación y conversación clínica.</span></a>
+            </div>
+            <div class="link-card-grid support-links">
+              <a class="link-card" href="https://hayunomasfonemaerre.netlify.app" target="_blank" rel="noreferrer"><strong>Hay uno más /r/</strong><span>Memoria, detección del elemento nuevo y producción fonológica.</span></a>
+              <a class="link-card" href="https://letracrusheducativo.netlify.app" target="_blank" rel="noreferrer"><strong>Letra Crush</strong><span>Letras, sílabas, fonemas e imágenes con feedback inmediato.</span></a>
+              <a class="link-card" href="https://karaokeritmotartamudez.netlify.app" target="_blank" rel="noreferrer"><strong>Karaoke tartamudez</strong><span>Ritmo, lectura guiada y fluidez con apoyo visual.</span></a>
+              <a class="link-card" href="https://foniafonia.github.io/imaginejuego/" target="_blank" rel="noreferrer"><strong>Imagine Juego</strong><span>Convertir una idea clínica en mecánica jugable.</span></a>
+            </div>
+            <div class="legacy-links">
+              <div class="legacy-label">más prototipos del Canva anterior</div>
+              <div class="legacy-link-row">
+                <a class="legacy-link" href="https://mibarriodelreal.netlify.app" target="_blank" rel="noreferrer">Mi barrio del real</a>
+                <a class="legacy-link" href="https://lupasylinteras.netlify.app" target="_blank" rel="noreferrer">Lupas y linternas</a>
+                <a class="legacy-link" href="https://arcadepropac.netlify.app" target="_blank" rel="noreferrer">Arcade Pro PAC</a>
+                <a class="legacy-link" href="https://donkeyfon.netlify.app" target="_blank" rel="noreferrer">DonkeyFon</a>
+                <a class="legacy-link" href="https://errequeerrev7.netlify.app" target="_blank" rel="noreferrer">Erre que erre</a>
+                <a class="legacy-link" href="https://194rrdisparos.netlify.app" target="_blank" rel="noreferrer">1942 /r/</a>
+              </div>
+            </div>
+          </div>
+          <div class="legacy-visual-grid">
+            <div class="media-card">
+              <img src="valencia-assets/canva-arcade-pro.jpeg" alt="Arcade Pro PAC semántico">
+              <div class="media-caption">Arcade Pro PAC: del juego clásico a tareas semánticas y fonológicas.</div>
+            </div>
+            <div class="media-card">
+              <img src="valencia-assets/canva-donkeyfon.jpeg" alt="DonkeyFon recurso">
+              <div class="media-caption">DonkeyFon refuerza la idea central: mecánica conocida, objetivo terapéutico claro.</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-number">22</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">inventario ampliado / cámara y suite</div>
+        <h2>Más recursos listos para demo o mención rápida.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="link-card-grid">
+              <a class="link-card" href="/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/beta-innovadores/praxias-connect.html" target="_blank" rel="noreferrer"><strong>PraxiasConnect</strong><span>Cámara en vivo para praxias orofaciales: muy visual para abrir debate clínico.</span></a>
+              <a class="link-card" href="/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/beta-innovadores/myosinc.html" target="_blank" rel="noreferrer"><strong>MyoSync</strong><span>Miofuncional con ejercicios guiados y feedback visual.</span></a>
+              <a class="link-card" href="/Users/joseaserraf/Desktop/ACADEMIA MEMBRESIA LOGOPED-IA DESDE CENTRO/public/beta-innovadores/alfabeto-pnl.html" target="_blank" rel="noreferrer"><strong>Alfabeto PNL</strong><span>Sincronización visual-motora y atención con cámara.</span></a>
+              <a class="link-card" href="https://logopac.netlify.app" target="_blank" rel="noreferrer"><strong>PAC-Semántico</strong><span>Juego semántico publicado, directo y fácil de enseñar.</span></a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Inventario local</h3>
+            <ul class="bullet-list">
+              <li>LetraPang, LetraBlaster, Detective de Palabras y Letra Crush dentro de la Suite.</li>
+              <li>Calculadora S/Z, FluxLab y TerapiaFlu para utilidad clínica inmediata.</li>
+              <li>POE masivo aporta decenas de prototipos para enseñar volumen y evolución.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-number">23</div>
+      </div>
+    </section>
+
+    <section class="slide" id="correccion-visualizador">
+      <div class="frame visualizer-frame">
+        <div class="change-stamp corner">corregido · 2026-04-22 17:48 CEST</div>
+        <div class="terminal-line">gpt personalizado / visualización narrativa</div>
+        <h2>Visualizador narrativo simbólico.</h2>
+        <div class="visualizer-grid">
+          <div class="media-card visualizer-media visualizer-feature">
+            <img src="valencia-assets/visualizador-narrativo-simbolico-portada.png" alt="Generador de imágenes sintéticas para intervención narrativa y reminiscencia">
+            <div class="media-caption">Portada conceptual: imágenes sintéticas para intervención narrativa y reminiscencia, siempre como uso terapéutico, no documental.</div>
+          </div>
+          <div class="media-card visualizer-media">
+            <img src="valencia-assets/visualizador-narrativo-simbolico-guia.png" alt="Guía práctica del Visualizador Narrativo Simbólico">
+            <div class="media-caption">Guía práctica: usar la imagen como andamiaje conversacional, validar emoción y evitar convertirla en prueba de memoria.</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn" href="https://chatgpt.com/g/g-697fc28509e0819199179bfb0352b6e6-visualizador-narrativo-simbolico" target="_blank" rel="noreferrer">Abrir visualizador narrativo</a>
+        </div>
+        <div class="slide-number">23</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <div class="terminal-line">slide 23 / banco comunicación</div>
+        <h2>Banco de enlaces: prompts, divulgación y formatos.</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="link-row">
+              <a class="link-btn" href="https://ingenieriapromptslogopedia.netlify.app" target="_blank" rel="noreferrer">Ingeniería de prompts</a>
+              <a class="link-btn" href="https://app.heygen.com/videos/clinicost-costes-reales-cl-nicos-f60b7d2cbb0c421daf1a6b5c3f61bf6f" target="_blank" rel="noreferrer">HeyGen</a>
+              <a class="link-btn" href="https://www.youtube.com/shorts/X3orVfMoqpI" target="_blank" rel="noreferrer">YouTube Short</a>
+              <a class="link-btn" href="https://www.storywizard.ai/p/35267bcbcdbb4e11" target="_blank" rel="noreferrer">Storywizard</a>
+              <a class="link-btn" href="https://chatgpt.com/g/g-697fc28509e0819199179bfb0352b6e6-visualizador-narrativo-simbolico" target="_blank" rel="noreferrer">Visualizador narrativo</a>
+              <a class="link-btn" href="https://afasiaai-crvvoceb.manus.space" target="_blank" rel="noreferrer">Afasia e IA</a>
+              <a class="link-btn" href="https://www.youtube.com/watch?v=AreNGhCJVr8" target="_blank" rel="noreferrer">Vídeo YouTube</a>
+            </div>
+          </div>
+          <div class="media-card">
+            <img src="valencia-assets/ingenieria-prompts.jpeg" alt="Prompts y divulgación">
+            <div class="media-caption">Lo importante no es solo generar. También es explicar, traducir, visualizar y llegar mejor.</div>
+          </div>
+        </div>
+        <div class="slide-number">23</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="prompt-modal" id="gamePromptModal" aria-hidden="true">
+    <div class="prompt-modal-card" role="dialog" aria-modal="true" aria-labelledby="gamePromptTitle">
+      <div class="prompt-modal-head">
+        <strong id="gamePromptTitle">Prompt maestro para Lovable o Manus</strong>
+        <button class="nav-btn" type="button" id="gamePromptClose">Cerrar</button>
+      </div>
+      <div class="prompt-modal-body">
+        <pre>🧠 PROMPT MAESTRO — JUEGO TERAPÉUTICO “MEMORIA + DETECCIÓN + PRONUNCIACIÓN”
+
+Copia y pega tal cuál:
+
+⸻
+
+Actúa como un desarrollador experto en juegos web educativos y un logopeda clínico.
+
+Quiero que diseñes y construyas un juego web interactivo enfocado en intervención logopédica, basado en una mecánica específica que NO debes alterar:
+
+El juego debe combinar:
+
+* memoria de trabajo
+* atención selectiva
+* producción fonológica
+
+MECÁNICA CENTRAL (OBLIGATORIA)
+
+1. Mostrar en pantalla varios elementos (imágenes o palabras) durante unos segundos
+2. Ocultarlos o mantenerlos
+3. Añadir UN elemento nuevo
+4. El usuario debe identificar cuál es el elemento nuevo
+5. Tras seleccionarlo, el usuario debe PRONUNCIAR la palabra en voz alta
+
+Esta secuencia debe repetirse como loop principal del juego.
+
+NO conviertas esto en un juego de repetición simple ni en un quiz.
+
+⸻
+
+OBJETIVO TERAPÉUTICO
+
+El objetivo es automatizar fonemas mientras se activan funciones cognitivas.
+
+Debe trabajar:
+
+* memoria de trabajo
+* atención selectiva
+* funciones ejecutivas
+* producción fonológica
+
+⸻
+
+CONFIGURACIÓN DEL JUEGO
+
+Permitir al usuario seleccionar:
+
+* Fonema: R, S, L, Z/C, J/G, R suave
+* Posición del fonema: inicial, media o final
+* Nivel de dificultad: de 3 a 20 elementos
+
+Debe existir:
+
+* modo rápido (configuración automática)
+* modo personalizado
+
+⸻
+
+ESTRUCTURA DE PANTALLAS
+
+1. Pantalla de inicio (dos opciónes: rápido / personalizado)
+2. Pantalla de configuración
+3. Pantalla de juego
+4. Sistema de feedback
+
+⸻
+
+LÓGICA DE PROGRESIÓN
+
+* Cada nivel aumenta el número de elementos
+* Mantener equilibrio entre dificultad y jugabilidad
+* Feedback inmediato tras cada acierto o error
+* Sensación clara de progreso
+
+⸻
+
+FEEDBACK
+
+* Visual (acierto/error)
+* Sonido
+* Avance de nivel
+
+NO saturar con estímulos innecesarios.
+
+⸻
+
+DISEÑO
+
+* Interfaz limpia, minimalista y clara
+* Optimizado para móvil y tablet
+* Botones grandes y accesibles
+* Evitar distracciones visuales
+
+⸻
+
+CONTENIDO
+
+Generar o usar listas de palabras adaptadas a cada fonema y posición.
+
+⸻
+
+NIVEL TÉCNICO
+
+* Generar código funcional completo (HTML, CSS, JS)
+* Sin dependencias complejas
+* Fácil de desplegar en Netlify
+* Código estructurado y comentado</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-modal" id="docModal" aria-hidden="true">
+    <div class="doc-modal-card" role="dialog" aria-modal="true" aria-labelledby="docModalTitle">
+      <div class="doc-modal-head">
+        <strong id="docModalTitle">Documento</strong>
+        <a class="nav-btn" id="docModalExternal" href="#" target="_blank" rel="noreferrer">Abrir en pestaña</a>
+        <button class="nav-btn" type="button" id="docModalClose">Cerrar</button>
+      </div>
+      <iframe class="doc-modal-frame" id="docModalFrame" title="Documento de apoyo"></iframe>
+    </div>
+  </div>
+
+  <div class="progress"><span id="progressBar"></span></div>
+
+  <script>
+    const deck = document.getElementById("deck");
+    const matrixRain = document.getElementById("matrixRain");
+    const matrixCanvas = document.getElementById("matrixCanvas");
+    const hud = document.querySelector(".hud");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const counter = document.getElementById("counter");
+    const progressBar = document.getElementById("progressBar");
+    const iterToggle = document.getElementById("iterToggle");
+    const toolsToggle = document.getElementById("toolsToggle");
+    const iterDrawer = document.getElementById("iterDrawer");
+    const iterClose = document.getElementById("iterClose");
+    const iterSlide = document.getElementById("iterSlide");
+    const iterPriority = document.getElementById("iterPriority");
+    const iterTitle = document.getElementById("iterTitle");
+    const iterLinks = document.getElementById("iterLinks");
+    const iterDocs = document.getElementById("iterDocs");
+    const iterFiles = document.getElementById("iterFiles");
+    const iterFilesList = document.getElementById("iterFilesList");
+    const iterBody = document.getElementById("iterBody");
+    const iterAdd = document.getElementById("iterAdd");
+    const iterUndo = document.getElementById("iterUndo");
+    const iterRedo = document.getElementById("iterRedo");
+    const topUndo = document.getElementById("topUndo");
+    const topRedo = document.getElementById("topRedo");
+    const iterExport = document.getElementById("iterExport");
+    const iterSaveFile = document.getElementById("iterSaveFile");
+    const iterClear = document.getElementById("iterClear");
+    const iterList = document.getElementById("iterList");
+    const iterExportDirView = document.getElementById("iterExportDirView");
+    const iterExportPathView = document.getElementById("iterExportPathView");
+    const slideIndexList = document.getElementById("slideIndexList");
+    const indexCollapse = document.getElementById("indexCollapse");
+    const indexToggle = document.getElementById("indexToggle");
+    const imageLightbox = document.getElementById("imageLightbox");
+    const imageLightboxImg = document.getElementById("imageLightboxImg");
+    const imageLightboxClose = document.getElementById("imageLightboxClose");
+    const quickAssetInput = document.getElementById("quickAssetInput");
+    const gamePromptModal = document.getElementById("gamePromptModal");
+    const gamePromptClose = document.getElementById("gamePromptClose");
+    const docModal = document.getElementById("docModal");
+    const docModalTitle = document.getElementById("docModalTitle");
+    const docModalFrame = document.getElementById("docModalFrame");
+    const docModalClose = document.getElementById("docModalClose");
+    const docModalExternal = document.getElementById("docModalExternal");
+    const ITER_STORAGE_KEY = "valenciacodex_iteracion_notas_v1";
+    const ITER_UNDO_KEY = "valenciacodex_iteracion_undo_v1";
+    const ITER_REDO_KEY = "valenciacodex_iteracion_redo_v1";
+    const ITER_EXPORT_DIR = "/Users/joseaserraf/Desktop/iteraciones de landing valencia";
+
+    let currentIndex = 0;
+    let iterNotes = [];
+    let iterAttachedFiles = [];
+    let iterEditingIndex = null;
+    let pendingQuickAssetAction = null;
+    let iterUndoStack = [];
+    let iterRedoStack = [];
+    let matrixCtx;
+    let matrixColumns = [];
+    let matrixAnimationFrame = null;
+    const matrixChars = "01<>/[]{}+-*logIA";
+
+    function setupMatrixRain() {
+      if (!matrixCanvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      matrixCanvas.width = Math.floor(width * dpr);
+      matrixCanvas.height = Math.floor(height * dpr);
+      matrixCtx = matrixCanvas.getContext("2d");
+      matrixCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      matrixCtx.font = '16px "SF Mono", "Menlo", monospace';
+      matrixCtx.textBaseline = "top";
+
+      const fontSize = 16;
+      const columnGap = 18;
+      const count = Math.ceil(width / columnGap);
+      matrixColumns = Array.from({ length: count }, (_, index) => ({
+        x: index * columnGap,
+        y: Math.random() * -height,
+        speed: 1.5 + Math.random() * 2,
+        length: 8 + Math.floor(Math.random() * 20),
+      }));
+    }
+
+    function drawMatrixRain() {
+      if (!matrixCtx) return;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      matrixCtx.fillStyle = "rgba(2, 8, 4, 0.1)";
+      matrixCtx.fillRect(0, 0, width, height);
+
+      matrixColumns.forEach((column) => {
+        for (let i = 0; i < column.length; i += 1) {
+          const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+          const y = column.y - i * 16;
+          if (y < -24 || y > height + 24) continue;
+          const alpha = Math.max(0.05, 0.34 - i * 0.02);
+          matrixCtx.fillStyle = `rgba(86, 255, 155, ${alpha})`;
+          matrixCtx.fillText(char, column.x, y);
+        }
+
+        column.y += column.speed;
+        if (column.y - column.length * 16 > height) {
+          column.y = -40 - Math.random() * height * 0.35;
+          column.speed = 1.5 + Math.random() * 2;
+          column.length = 8 + Math.floor(Math.random() * 20);
+        }
+      });
+
+      matrixAnimationFrame = window.requestAnimationFrame(drawMatrixRain);
+    }
+
+    function renderMatrixRain() {
+      if (!matrixRain || !matrixCanvas) return;
+      if (matrixAnimationFrame) {
+        window.cancelAnimationFrame(matrixAnimationFrame);
+      }
+      setupMatrixRain();
+      drawMatrixRain();
+    }
+
+    document.querySelectorAll(".slide-number").forEach((node, index) => {
+      node.textContent = String(index + 1).padStart(2, "0");
+    });
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function goToSlide(index) {
+      currentIndex = clamp(index, 0, slides.length - 1);
+      deck.scrollTo({
+        left: currentIndex * window.innerWidth,
+        behavior: "smooth"
+      });
+      updateHud();
+    }
+
+    function updateHud() {
+      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+      const percent = ((currentIndex + 1) / slides.length) * 100;
+      progressBar.style.width = `${percent}%`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === slides.length - 1;
+      prevBtn.style.opacity = currentIndex === 0 ? "0.45" : "1";
+      nextBtn.style.opacity = currentIndex === slides.length - 1 ? "0.45" : "1";
+
+      document.querySelectorAll(".slide-index-btn").forEach((button, index) => {
+        button.classList.toggle("active", index === currentIndex);
+      });
+    }
+
+    function renderSlideIndex() {
+      if (!slideIndexList) return;
+      slideIndexList.innerHTML = slides.map((slide, index) => {
+        const titleNode = slide.querySelector("h1, h2");
+        const title = titleNode ? titleNode.textContent.trim() : `Slide ${index + 1}`;
+        return `
+          <button class="slide-index-btn" type="button" data-slide-index="${index}">
+            <span class="idx-num">${String(index + 1).padStart(2, "0")}</span>
+            <span class="idx-title">${escapeHtml(title)}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function loadIterNotes() {
+      try {
+        iterNotes = JSON.parse(localStorage.getItem(ITER_STORAGE_KEY) || "[]");
+      } catch {
+        iterNotes = [];
+      }
+
+      try {
+        iterUndoStack = JSON.parse(localStorage.getItem(ITER_UNDO_KEY) || "[]");
+        iterRedoStack = JSON.parse(localStorage.getItem(ITER_REDO_KEY) || "[]");
+      } catch {
+        iterUndoStack = [];
+        iterRedoStack = [];
+      }
+    }
+
+    function saveIterNotes() {
+      localStorage.setItem(ITER_STORAGE_KEY, JSON.stringify(iterNotes));
+      localStorage.setItem(ITER_UNDO_KEY, JSON.stringify(iterUndoStack.slice(-30)));
+      localStorage.setItem(ITER_REDO_KEY, JSON.stringify(iterRedoStack.slice(-30)));
+      syncIterFormState();
+    }
+
+    function snapshotIterNotes() {
+      iterUndoStack.push(JSON.stringify(iterNotes));
+      if (iterUndoStack.length > 30) iterUndoStack.shift();
+      iterRedoStack = [];
+    }
+
+    function restoreIterNotesFrom(serialized) {
+      try {
+        iterNotes = JSON.parse(serialized);
+      } catch {
+        iterNotes = [];
+      }
+      saveIterNotes();
+      renderIterNotes();
+      resetIterForm();
+    }
+
+    function addIterationNote(note, options = {}) {
+      snapshotIterNotes();
+      iterNotes.unshift({
+        slide: note.slide || `slide ${String(currentIndex + 1).padStart(2, "0")}`,
+        priority: note.priority || "alta",
+        title: note.title || "Cambio desde la slide",
+        links: note.links || "",
+        docs: note.docs || "",
+        attachments: note.attachments || [],
+        body: note.body || "",
+        created_from_inline_editor: true,
+        created_at: new Date().toISOString(),
+      });
+      saveIterNotes();
+      renderIterNotes();
+      if (options.openDrawer) openIterDrawer({ preserveForm: true });
+    }
+
+    function undoIterNotes() {
+      if (!iterUndoStack.length) return;
+      iterRedoStack.push(JSON.stringify(iterNotes));
+      const previous = iterUndoStack.pop();
+      restoreIterNotesFrom(previous);
+    }
+
+    function redoIterNotes() {
+      if (!iterRedoStack.length) return;
+      iterUndoStack.push(JSON.stringify(iterNotes));
+      const next = iterRedoStack.pop();
+      restoreIterNotesFrom(next);
+    }
+
+    function renderIterNotes() {
+      if (!iterNotes.length) {
+        iterList.innerHTML = '<div class="iter-empty">Todavía no has guardado notas. Usa este panel mientras revisas la presentación y luego pegame el resumen en el chat.</div>';
+        return;
+      }
+
+      iterList.innerHTML = iterNotes.map((note, index) => `
+        <article class="iter-item">
+          <div class="iter-item-top">
+            <strong>${escapeHtml(note.title || "Cambio sin título")}</strong>
+            <span class="iter-pill">${escapeHtml(note.priority)}</span>
+          </div>
+          <div class="iter-small">Slide: ${escapeHtml(note.slide || "sin especificar")}</div>
+          ${note.links ? `<div class="iter-small">Enlaces/rutas: ${escapeHtml(note.links)}</div>` : ""}
+          ${note.docs ? `<div class="iter-small">Documentos: ${escapeHtml(note.docs)}</div>` : ""}
+          ${note.attachments?.length ? `<div class="iter-small">Archivos: ${escapeHtml(note.attachments.map((file) => file.name).join(" | "))}</div>` : ""}
+          <div>${escapeHtml(note.body || "")}</div>
+          <div class="iter-actions">
+            <button class="nav-btn" type="button" data-edit="${index}">Editar</button>
+            <button class="nav-btn" type="button" data-delete="${index}">Borrar</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function buildIterExportFileName(date = new Date()) {
+      const pad = (value) => String(value).padStart(2, "0");
+      const stamp = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}_${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}-${String(date.getMilliseconds()).padStart(3, "0")}`;
+      return `valenciacodex-bitácora-${stamp}.json`;
+    }
+
+    function renderIterExportPathPreview() {
+      const fileName = buildIterExportFileName();
+      iterExportDirView.textContent = ITER_EXPORT_DIR;
+      iterExportPathView.textContent = `${ITER_EXPORT_DIR}/${fileName}`;
+    }
+
+    function formatFileSize(size) {
+      if (!Number.isFinite(size) || size <= 0) return "tamaño no disponible";
+      if (size < 1024) return `${size} B`;
+      if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+      if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+      return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+    }
+
+    function renderAttachedFiles() {
+      if (!iterAttachedFiles.length) {
+        iterFilesList.innerHTML = '<div class="iter-small">Todavía no has seleccionado archivos de apoyo.</div>';
+        return;
+      }
+
+      iterFilesList.innerHTML = iterAttachedFiles.map((file) => `
+        <div class="iter-file-item">
+          <strong>${escapeHtml(file.name)}</strong>
+          <div class="iter-small">${escapeHtml(file.type || "tipo no detectado")} · ${escapeHtml(formatFileSize(file.size))}</div>
+        </div>
+      `).join("");
+    }
+
+    function syncIterFormState() {
+      iterAdd.textContent = iterEditingIndex === null ? "Guardar nota" : "Actualizar nota";
+      if (iterUndo) iterUndo.disabled = !iterUndoStack.length;
+      if (iterRedo) iterRedo.disabled = !iterRedoStack.length;
+      if (topUndo) topUndo.disabled = !iterUndoStack.length;
+      if (topRedo) topRedo.disabled = !iterRedoStack.length;
+    }
+
+    function resetIterForm() {
+      iterEditingIndex = null;
+      iterSlide.value = `slide ${String(currentIndex + 1).padStart(2, "0")}`;
+      iterPriority.value = "alta";
+      iterTitle.value = "";
+      iterLinks.value = "";
+      iterDocs.value = "";
+      iterBody.value = "";
+      iterFiles.value = "";
+      iterAttachedFiles = [];
+      renderAttachedFiles();
+      syncIterFormState();
+    }
+
+    function openIterDrawer(options = {}) {
+      const { preserveForm = false } = options;
+      iterDrawer.classList.add("open");
+      if (!preserveForm || !iterSlide.value.trim()) {
+        iterSlide.value = `slide ${String(currentIndex + 1).padStart(2, "0")}`;
+      }
+      renderIterExportPathPreview();
+      syncIterFormState();
+    }
+
+    function closeIterDrawer() {
+      iterDrawer.classList.remove("open");
+    }
+
+    function openImageLightbox(src, alt) {
+      if (!imageLightbox || !imageLightboxImg) return;
+      imageLightboxImg.src = src;
+      imageLightboxImg.alt = alt || "Imagen ampliada";
+      imageLightbox.classList.add("open");
+      imageLightbox.setAttribute("aria-hidden", "false");
+    }
+
+    function closeImageLightbox() {
+      if (!imageLightbox || !imageLightboxImg) return;
+      imageLightbox.classList.remove("open");
+      imageLightbox.setAttribute("aria-hidden", "true");
+      imageLightboxImg.src = "";
+    }
+
+    function openGamePromptModal() {
+      if (!gamePromptModal) return;
+      gamePromptModal.classList.add("open");
+      gamePromptModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeGamePromptModal() {
+      if (!gamePromptModal) return;
+      gamePromptModal.classList.remove("open");
+      gamePromptModal.setAttribute("aria-hidden", "true");
+    }
+
+    function openDocModal(src, title) {
+      if (!docModal || !docModalFrame || !docModalTitle) return;
+      const resolvedSrc = src?.startsWith("/Users/") ? `file://${encodeURI(src)}` : src;
+      docModalTitle.textContent = title || "Documento";
+      docModalFrame.src = resolvedSrc;
+      if (docModalExternal) docModalExternal.href = resolvedSrc || "#";
+      docModal.classList.add("open");
+      docModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDocModal() {
+      if (!docModal || !docModalFrame) return;
+      docModal.classList.remove("open");
+      docModal.setAttribute("aria-hidden", "true");
+      docModalFrame.src = "";
+      if (docModalExternal) docModalExternal.href = "#";
+    }
+
+    function exportIterNotes() {
+      const text = iterNotes.length
+        ? iterNotes.map((note, index) => `${index + 1}. [${note.priority}] ${note.slide || "sin slide"} - ${note.title}\nEnlaces/rutas: ${note.links || "-"}\nDocumentos: ${note.docs || "-"}\n${note.body}`).join("\n\n")
+        : "No hay notas guardadas.";
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+      alert("Notas copiadas. Pégamelas en el chat y sigo iterando sobre la presentación.");
+    }
+
+    function getSlideLabel(slide) {
+      const index = slides.indexOf(slide);
+      return `slide ${String(index + 1).padStart(2, "0")}`;
+    }
+
+    function getMediaDescription(mediaCard) {
+      const media = mediaCard.querySelector("img, video");
+      const caption = mediaCard.querySelector(".media-caption")?.textContent.trim() || "";
+      const src = media?.currentSrc || media?.src || media?.querySelector?.("source")?.src || "";
+      const type = media?.tagName === "VIDEO" ? "video" : "imagen";
+      return { type, src, caption };
+    }
+
+    function promptForInlineNote(kind, context) {
+      const defaults = {
+        replace_media: "Sustituir este recurso por: ",
+        edit_caption: "Editar texto/pie de este recurso: ",
+        edit_texts: "Editar textos de esta slide: ",
+        insert_media: "Insertar nuevo recurso en esta slide: ",
+        general_note: "Nota para esta slide: ",
+      };
+      const text = window.prompt(defaults[kind] || "Describe el cambio:", context.body || "");
+      if (text === null) return;
+      addIterationNote({
+        slide: context.slide,
+        title: context.title,
+        links: context.links || "",
+        docs: context.docs || "",
+        body: text.trim() || context.body || "",
+      }, { openDrawer: true });
+    }
+
+    function fileToAttachment(file) {
+      return {
+        name: file.name,
+        type: file.type || "",
+        size: file.size || 0,
+        last_modified: file.lastModified || null,
+      };
+    }
+
+    function requestQuickAsset(kind, context) {
+      pendingQuickAssetAction = { kind, context };
+      if (!quickAssetInput) return;
+      quickAssetInput.value = "";
+      quickAssetInput.click();
+    }
+
+    function handleQuickAssetSelection() {
+      const file = quickAssetInput?.files?.[0];
+      if (!file || !pendingQuickAssetAction) return;
+
+      const { kind, context } = pendingQuickAssetAction;
+      const attachment = fileToAttachment(file);
+      const actionLabel = kind === "replace_media" ? "Sustituir recurso" : "Insertar recurso";
+      const sourceLine = context.links ? `\nRecurso actual: ${context.links}` : "";
+      const noteBody = `${actionLabel} con archivo seleccionado: ${attachment.name}.${sourceLine}\nTipo: ${attachment.type || "no detectado"}\nTamaño: ${formatFileSize(attachment.size)}\nNota: el navegador no expone la ruta absoluta del archivo; si hace falta, pégala en Documentos antes de exportar.`;
+
+      addIterationNote({
+        slide: context.slide,
+        title: `${actionLabel}: ${attachment.name}`,
+        links: context.links || "",
+        docs: context.docs || "",
+        attachments: [attachment],
+        body: noteBody,
+      }, { openDrawer: true });
+
+      pendingQuickAssetAction = null;
+    }
+
+    function installInlineEditTools() {
+      slides.forEach((slide) => {
+        const frame = slide.querySelector(".frame");
+        if (!frame || frame.querySelector(":scope > .quick-tools")) return;
+        const slideLabel = getSlideLabel(slide);
+        const title = slide.querySelector("h1, h2")?.textContent.trim() || slideLabel;
+        const tools = document.createElement("div");
+        tools.className = "quick-tools";
+        tools.innerHTML = `
+          <button class="edit-chip" type="button" data-slide-action="edit_texts">Editar textos</button>
+          <button class="edit-chip" type="button" data-slide-action="insert_media">Insertar imagen/video</button>
+          <button class="edit-chip" type="button" data-slide-action="general_note">Nota</button>
+        `;
+        frame.appendChild(tools);
+        tools.addEventListener("click", (event) => {
+          const action = event.target.getAttribute("data-slide-action");
+          if (!action) return;
+          event.stopPropagation();
+          if (action === "insert_media") {
+            requestQuickAsset(action, {
+              slide: slideLabel,
+              title: `Insertar recurso: ${title}`,
+              body: "",
+            });
+            return;
+          }
+          promptForInlineNote(action, {
+            slide: slideLabel,
+            title: action === "edit_texts" ? `Editar textos: ${title}` : action === "insert_media" ? `Insertar recurso: ${title}` : `Nota: ${title}`,
+            body: action === "edit_texts" ? `Texto actual de referencia: ${title}` : "",
+          });
+        });
+      });
+
+      document.querySelectorAll(".media-card").forEach((card) => {
+        if (card.querySelector(".media-tools")) return;
+        const slide = card.closest(".slide");
+        const slideLabel = slide ? getSlideLabel(slide) : "";
+        const tools = document.createElement("div");
+        tools.className = "media-tools";
+        tools.innerHTML = `
+          <button class="edit-chip" type="button" data-media-action="replace_media">Sustituir</button>
+          <button class="edit-chip" type="button" data-media-action="edit_caption">Editar texto</button>
+        `;
+        card.appendChild(tools);
+        tools.addEventListener("click", (event) => {
+          const action = event.target.getAttribute("data-media-action");
+          if (!action) return;
+          event.stopPropagation();
+          const media = getMediaDescription(card);
+          if (action === "replace_media") {
+            requestQuickAsset(action, {
+              slide: slideLabel,
+              title: `Sustituir ${media.type}`,
+              links: media.src,
+              docs: media.caption,
+            });
+            return;
+          }
+          promptForInlineNote(action, {
+            slide: slideLabel,
+            title: action === "replace_media" ? `Sustituir ${media.type}` : `Editar texto de ${media.type}`,
+            links: media.src,
+            docs: media.caption,
+            body: action === "replace_media"
+              ? `Recurso actual: ${media.src}\nNuevo recurso/ruta deseada:`
+              : media.caption,
+          });
+        });
+      });
+    }
+
+    async function saveIterNotesToFile() {
+      const fileName = buildIterExportFileName();
+      const payload = {
+        exported_at: new Date().toISOString(),
+        source: "valenciacodex-ia-logopedia.html",
+        mode: "bitácora",
+        expected_save_folder: ITER_EXPORT_DIR,
+        suggested_full_path: `${ITER_EXPORT_DIR}/${fileName}`,
+        notes: iterNotes,
+      };
+
+      if (!iterNotes.length) {
+        alert("No hay notas guardadas para exportar.");
+        return;
+      }
+
+      if (!window.showSaveFilePicker) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+        alert(`Se ha descargado una entrada nueva de bitácora. Guárdala en ${ITER_EXPORT_DIR} y yo podré leerla.`);
+        return;
+      }
+
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          types: [
+            {
+              description: "Archivo JSON",
+              accept: { "application/json": [".json"] },
+            },
+          ],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(JSON.stringify(payload, null, 2));
+        await writable.close();
+        alert(`Entrada de bitácora guardada. Ruta esperada: ${payload.suggested_full_path}. Cuando quieras que la lea, dímelo y buscaré la más reciente.`);
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        alert("No se pudo guardar el archivo desde el navegador.");
+      }
+    }
+
+    prevBtn.addEventListener("click", () => goToSlide(currentIndex - 1));
+    nextBtn.addEventListener("click", () => goToSlide(currentIndex + 1));
+    iterToggle.addEventListener("click", openIterDrawer);
+    toolsToggle?.addEventListener("click", () => {
+      hud?.classList.toggle("tools-open");
+    });
+    iterClose.addEventListener("click", closeIterDrawer);
+
+    iterAdd.addEventListener("click", () => {
+      const note = {
+        slide: iterSlide.value.trim(),
+        priority: iterPriority.value,
+        title: iterTitle.value.trim(),
+        links: iterLinks.value.trim(),
+        docs: iterDocs.value.trim(),
+        attachments: iterAttachedFiles.map((file) => ({ ...file })),
+        body: iterBody.value.trim(),
+      };
+
+      if (!note.title && !note.body) {
+        alert("Escribe al menos un título o una descripción.");
+        return;
+      }
+
+      snapshotIterNotes();
+      if (iterEditingIndex !== null && iterNotes[iterEditingIndex]) {
+        iterNotes.splice(iterEditingIndex, 1, note);
+      } else {
+        iterNotes.unshift(note);
+      }
+      saveIterNotes();
+      renderIterNotes();
+      resetIterForm();
+    });
+
+    iterFiles.addEventListener("change", () => {
+      iterAttachedFiles = Array.from(iterFiles.files || []).map((file) => ({
+        name: file.name,
+        type: file.type || "",
+        size: file.size || 0,
+        last_modified: file.lastModified || null,
+      }));
+      renderAttachedFiles();
+    });
+
+    quickAssetInput?.addEventListener("change", handleQuickAssetSelection);
+
+    iterExport.addEventListener("click", exportIterNotes);
+    iterSaveFile.addEventListener("click", saveIterNotesToFile);
+    iterUndo?.addEventListener("click", undoIterNotes);
+    iterRedo?.addEventListener("click", redoIterNotes);
+    topUndo?.addEventListener("click", undoIterNotes);
+    topRedo?.addEventListener("click", redoIterNotes);
+    iterClear.addEventListener("click", () => {
+      if (!iterNotes.length) return;
+      if (!confirm("Quieres borrar todas las notas de iteración guardadas?")) return;
+      snapshotIterNotes();
+      iterNotes = [];
+      saveIterNotes();
+      renderIterNotes();
+      resetIterForm();
+    });
+
+    iterList.addEventListener("click", (event) => {
+      const editIndex = event.target.getAttribute("data-edit");
+      const deleteIndex = event.target.getAttribute("data-delete");
+
+      if (editIndex !== null) {
+        const note = iterNotes[Number(editIndex)];
+        if (!note) return;
+        iterEditingIndex = Number(editIndex);
+        iterSlide.value = note.slide || "";
+        iterPriority.value = note.priority || "alta";
+        iterTitle.value = note.title || "";
+        iterLinks.value = note.links || "";
+        iterDocs.value = note.docs || "";
+        iterBody.value = note.body || "";
+        iterFiles.value = "";
+        iterAttachedFiles = Array.isArray(note.attachments) ? note.attachments.map((file) => ({ ...file })) : [];
+        renderAttachedFiles();
+        openIterDrawer({ preserveForm: true });
+      }
+
+      if (deleteIndex !== null) {
+        snapshotIterNotes();
+        iterNotes.splice(Number(deleteIndex), 1);
+        saveIterNotes();
+        renderIterNotes();
+      }
+    });
+
+    slideIndexList?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-slide-index]");
+      if (!button) return;
+      goToSlide(Number(button.getAttribute("data-slide-index")));
+      document.body.classList.add("index-collapsed");
+    });
+
+    document.querySelectorAll("[data-jump-to]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const targetId = link.getAttribute("data-jump-to");
+        const targetSlide = targetId ? document.getElementById(targetId) : null;
+        if (!targetSlide) return;
+        const index = slides.indexOf(targetSlide);
+        if (index >= 0) goToSlide(index);
+      });
+    });
+
+    indexCollapse?.addEventListener("click", () => {
+      document.body.classList.add("index-collapsed");
+    });
+
+    indexToggle?.addEventListener("click", () => {
+      document.body.classList.remove("index-collapsed");
+    });
+
+    deck.addEventListener("click", (event) => {
+      const image = event.target.closest(".media-card img");
+      if (!image) return;
+      openImageLightbox(image.currentSrc || image.src, image.alt);
+    });
+
+    imageLightboxClose?.addEventListener("click", closeImageLightbox);
+    imageLightbox?.addEventListener("click", (event) => {
+      if (event.target === imageLightbox) {
+        closeImageLightbox();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!hud?.classList.contains("tools-open")) return;
+      if (event.target.closest(".hud")) return;
+      hud.classList.remove("tools-open");
+    });
+
+    document.querySelectorAll("[data-prompt-open='game-master']").forEach((button) => {
+      button.addEventListener("click", openGamePromptModal);
+    });
+
+    document.querySelectorAll("[data-doc-src]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        openDocModal(button.dataset.docSrc, button.dataset.docTitle);
+      });
+    });
+
+    document.querySelectorAll("[data-dialogue='game-build']").forEach((dialogue) => {
+      const steps = Array.from(dialogue.querySelectorAll(".dialogue-step"));
+      const nextButton = dialogue.querySelector("[data-dialogue-next]");
+      let activeDialogueStep = Math.max(0, steps.findIndex((step) => step.classList.contains("active")));
+
+      function showDialogueStep(index) {
+        activeDialogueStep = (index + steps.length) % steps.length;
+        steps.forEach((step, stepIndex) => {
+          step.classList.toggle("active", stepIndex === activeDialogueStep);
+        });
+        if (nextButton) {
+          nextButton.textContent = activeDialogueStep === steps.length - 1 ? "Reiniciar" : "Click: siguiente";
+        }
+      }
+
+      showDialogueStep(activeDialogueStep);
+      nextButton?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        showDialogueStep(activeDialogueStep + 1);
+      });
+      dialogue.addEventListener("click", () => showDialogueStep(activeDialogueStep + 1));
+    });
+
+    gamePromptClose?.addEventListener("click", closeGamePromptModal);
+    gamePromptModal?.addEventListener("click", (event) => {
+      if (event.target === gamePromptModal) {
+        closeGamePromptModal();
+      }
+    });
+
+    docModalClose?.addEventListener("click", closeDocModal);
+    docModal?.addEventListener("click", (event) => {
+      if (event.target === docModal) {
+        closeDocModal();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && hud?.classList.contains("tools-open")) {
+        event.preventDefault();
+        hud.classList.remove("tools-open");
+        return;
+      }
+
+      if (event.key === "Escape" && gamePromptModal?.classList.contains("open")) {
+        event.preventDefault();
+        closeGamePromptModal();
+        return;
+      }
+
+      if (event.key === "Escape" && docModal?.classList.contains("open")) {
+        event.preventDefault();
+        closeDocModal();
+        return;
+      }
+
+      if (event.key === "Escape" && imageLightbox?.classList.contains("open")) {
+        event.preventDefault();
+        closeImageLightbox();
+        return;
+      }
+
+      const activeTag = document.activeElement?.tagName;
+      const isTypingContext =
+        activeTag === "INPUT" ||
+        activeTag === "TEXTAREA" ||
+        activeTag === "SELECT" ||
+        document.activeElement?.isContentEditable;
+
+      if (isTypingContext) {
+        return;
+      }
+
+      if (["ArrowRight", "PageDown", " ", "Enter"].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(currentIndex + 1);
+      }
+      if (["ArrowLeft", "PageUp", "Backspace"].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(currentIndex - 1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        goToSlide(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        goToSlide(slides.length - 1);
+      }
+    });
+
+    let scrollTimeout;
+    deck.addEventListener("scroll", () => {
+      window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        const rawIndex = Math.round(deck.scrollLeft / window.innerWidth);
+        currentIndex = clamp(rawIndex, 0, slides.length - 1);
+        updateHud();
+      }, 60);
+    });
+
+    window.addEventListener("resize", () => {
+      goToSlide(currentIndex);
+      renderMatrixRain();
+    });
+
+    loadIterNotes();
+    renderSlideIndex();
+    installInlineEditTools();
+    renderIterNotes();
+    renderAttachedFiles();
+    renderIterExportPathPreview();
+    syncIterFormState();
+    renderMatrixRain();
+    updateHud();
+  </script>
+</body>
+</html>

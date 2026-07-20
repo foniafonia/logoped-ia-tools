@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso IA para Logopedas · Jose Aserraf Cohen</title>
+    <meta name="description" content="20 plazas. Dos tramos de precio. Se cierra cuando se llena. Sin grabación, sin segunda oportunidad.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+    <!-- BARRA DE ANUNCIO -->
+    <div class="announce-bar">
+        <span>Tramo 1: <strong>10 plazas × 49 €</strong> · Tramo 2: <strong>10 plazas × 79 €</strong> · Sin grabación. Se cierra cuando se llena.</span>
+        <a href="#reserva" class="announce-cta">Reservar ahora</a>
+    </div>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-brand">
+                <img src="./logo-matrix.png" alt="Logoped-IA" class="header-logo">
+            </div>
+            <nav class="header-nav">
+                <a href="#programa">Programa</a>
+                <a href="#instructor">Instructor</a>
+                <a href="#reserva">Reservar</a>
+            </nav>
+            <a href="#reserva" class="btn btn-primary btn-sm">Reservar plaza</a>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-copy">
+                    <p class="hero-pre">Curso introductorio en directo · 2 sesiones · Junio 2026</p>
+                    <h1 class="hero-h1">
+                        Deja de escuchar<br>
+                        hablar de IA.<br>
+                        <em>Empieza a usarla</em><br>
+                        en tu práctica.
+                    </h1>
+                    <p class="hero-lead">
+                        3 horas en directo para logopedas, maestros y psicólogos que quieren resultados reales. Sin código, con mapa claro y primeros prototipos propios antes de terminar la primera sesión.
+                    </p>
+                    <div class="hero-proof">
+                        <div class="proof-item">
+                            <strong><span id="seats-left-hero">20</span></strong>
+                            <span>plazas totales</span>
+                        </div>
+                        <div class="proof-divider"></div>
+                        <div class="proof-item">
+                            <strong id="hero-discount-price">49 €</strong>
+                            <span>primer tramo</span>
+                        </div>
+                        <div class="proof-divider"></div>
+                        <div class="proof-item">
+                            <strong>cerrado</strong>
+                            <span>sin grabación</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <a href="#reserva" class="btn btn-primary">Quiero mi plaza</a>
+                        <a href="#programa" class="btn btn-ghost">Ver programa</a>
+                    </div>
+                </div>
+
+                <aside class="hero-card-wrap">
+                    <div class="offer-card">
+                        <div class="offer-card-top">
+                            <p class="offer-card-pretitle">Precio de lanzamiento · Dos tramos</p>
+                            <div class="tiers">
+                                <div class="tier tier--active">
+                                    <div class="tier-header">
+                                        <span class="tier-badge">Tramo 1 · Activo</span>
+                                    </div>
+                                    <div class="tier-price-row">
+                                        <span class="tier-price" id="discount-price">49 €</span>
+                                        <span class="tier-seats">10 plazas</span>
+                                    </div>
+                                    <p class="tier-note">Primeras 10 personas. El precio más bajo que existirá.</p>
+                                </div>
+                                <div class="tier tier--next">
+                                    <div class="tier-header">
+                                        <span class="tier-badge tier-badge--muted">Tramo 2 · Siguiente</span>
+                                    </div>
+                                    <div class="tier-price-row">
+                                        <span class="tier-price tier-price--muted" id="full-price">79 €</span>
+                                        <span class="tier-seats tier-seats--muted">10 plazas</span>
+                                    </div>
+                                    <p class="tier-note tier-note--muted">Cuando se agoten las 10 del tramo 1.</p>
+                                </div>
+                            </div>
+                            <div class="offer-close-note">
+                                Después de las 20 plazas, el curso se cierra. No hay grabación ni segunda edición confirmada.
+                            </div>
+                        </div>
+                        <div class="offer-stats">
+                            <div class="offer-stat">
+                                <span class="stat-label">Estado</span>
+                                <span class="stat-value" id="phase-label">Preventa</span>
+                            </div>
+                            <div class="offer-stat">
+                                <span class="stat-label">Plazas libres</span>
+                                <span class="stat-value stat-green"><span id="seats-left-panel">20</span> / <span id="seat-limit-panel">20</span></span>
+                            </div>
+                            <div class="offer-stat">
+                                <span class="stat-label">Tu plaza se guarda</span>
+                                <span class="stat-value" id="hold-hours-label">72 h</span>
+                            </div>
+                            <div class="offer-stat">
+                                <span class="stat-label">Pago</span>
+                                <span class="stat-value" id="stripe-status-label">Preparado</span>
+                            </div>
+                        </div>
+                        <div class="offer-card-actions">
+                            <a href="#reserva" class="btn btn-primary btn-full">Reservar sin pagar ahora</a>
+                            <p class="offer-guarantee">Sin compromisos. Tu posición queda guardada.</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- FRANJA DE CIERRE DEFINITIVO -->
+        <div class="close-strip">
+            <div class="close-inner">
+                <div class="close-text">
+                    <strong>Sin grabación. Sin segunda edición.</strong> 20 plazas en total, dos tramos de precio. Cuando se llena, se cierra. El material queda reservado para la academia.
+                </div>
+                <a href="#reserva" class="deadline-cta">Reservar mi plaza</a>
+            </div>
+        </div>
+
+        <!-- PARA QUIÉN -->
+        <section class="for-who">
+            <div class="section-inner">
+                <p class="eyebrow">Para quien es esto</p>
+                <div class="fw-list">
+                    <span>Logopedas</span>
+                    <span class="fw-sep">·</span>
+                    <span>Maestros y docentes</span>
+                    <span class="fw-sep">·</span>
+                    <span>Psicólogos</span>
+                    <span class="fw-sep">·</span>
+                    <span>Orientadores</span>
+                    <span class="fw-sep">·</span>
+                    <span>Terapeutas</span>
+                    <span class="fw-sep">·</span>
+                    <span>Profesionales de ayuda</span>
+                </div>
+                <p class="fw-note">Sin conocimientos técnicos previos. Solo disposición a probar desde el primer día.</p>
+            </div>
+        </section>
+
+        <!-- PROBLEMA / SOLUCIÓN -->
+        <section class="split-section">
+            <div class="section-inner">
+                <div class="split-grid">
+                    <div class="split-block">
+                        <p class="eyebrow">Lo que está pasando</p>
+                        <h2>Mucha gente habla de IA. Pocos saben qué abrir primero.</h2>
+                        <p class="split-body">En clínica y educación escuchamos hablar de IA cada semana. Pero la mayoría sigue sin saber qué herramienta usar, cómo pedirle algo útil o cómo integrarlo en un día de trabajo real sin volverse técnico. <strong>La brecha no es de acceso: es de orientación.</strong></p>
+                    </div>
+                    <div class="split-divider"></div>
+                    <div class="split-block">
+                        <p class="eyebrow">Lo que resuelve este curso</p>
+                        <h2>Un mapa real y primeras pruebas propias antes de salir.</h2>
+                        <ul class="check-list">
+                            <li>Claridad sobre qué hace la IA de verdad y qué no puede hacer.</li>
+                            <li>Las herramientas que merece la pena usar ahora en tu campo específico.</li>
+                            <li>Primeros prompts y prototipos adaptados a tu trabajo real, no a ejemplos genéricos.</li>
+                            <li>Seguimiento una semana después para revisar resultados con el grupo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSTRUCTOR -->
+        <section id="instructor" class="instructor-section">
+            <div class="section-inner">
+                <div class="instructor-inner">
+                    <div class="instructor-visual">
+                        <img src="./foto-jose.jpg" alt="Jose Aserraf Cohen" class="instructor-img">
+                        <div class="instructor-badges">
+                            <span class="instructor-badge">Logopeda clínico</span>
+                            <span class="instructor-badge">Fundador Logoped-IA</span>
+                        </div>
+                    </div>
+                    <div class="instructor-copy">
+                        <p class="eyebrow">Tu instructor</p>
+                        <h2 class="instructor-name">Jose Aserraf Cohen</h2>
+                        <p class="instructor-lead">Llevo trabajando con tecnología desde 2010 y aplicando IA de forma intensa en mi práctica clínica desde hace dos años. Lo que aprenderás es lo que yo uso, lo que he descartado y lo que ha cambiado mi manera de trabajar de verdad.</p>
+                        <ul class="instructor-facts">
+                            <li>Logopeda con experiencia clínica real en ámbito sanitario y educativo.</li>
+                            <li>Fundador de Logoped-IA, primer ecosistema profesional de IA aplicada a la logopedia en español.</li>
+                            <li>Creador de herramientas clínicas con IA ya en uso por profesionales del sector.</li>
+                            <li>Sin hype, sin promesas vacías. Criterio clínico aplicado a cada herramienta.</li>
+                        </ul>
+                        <p class="instructor-close">Si buscas a alguien que hable desde dentro de la profesión, estás en el sitio correcto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMA -->
+        <section id="programa" class="program-section">
+            <div class="section-inner">
+                <p class="eyebrow">Programa</p>
+                <h2 class="section-h2">Dos sesiones. De la curiosidad a los primeros resultados.</h2>
+
+                <div class="program-grid">
+                    <div class="program-card">
+                        <div class="program-card-header">
+                            <span class="program-number">01</span>
+                            <div>
+                                <p class="program-label">Sesión 1</p>
+                                <h3 class="program-date">30 de junio de 2026</h3>
+                                <p class="program-duration">90 minutos en directo</p>
+                            </div>
+                        </div>
+                        <ul class="program-list">
+                            <li>Qué es realmente la IA y dónde está el humo.</li>
+                            <li>Qué herramientas merece la pena abrir ahora mismo.</li>
+                            <li>Cómo pedir bien para obtener algo útil.</li>
+                            <li>Primeros flujos de trabajo y prototipos propios.</li>
+                        </ul>
+                        <p class="program-result">Saldrás con tus primeras pruebas reales funcionando.</p>
+                    </div>
+
+                    <div class="program-bridge">
+                        <div class="bridge-dot"></div>
+                        <div class="bridge-line"></div>
+                        <span class="bridge-label">1 semana<br>después</span>
+                        <div class="bridge-line"></div>
+                        <div class="bridge-dot"></div>
+                    </div>
+
+                    <div class="program-card program-card--alt">
+                        <div class="program-card-header">
+                            <span class="program-number program-number--alt">02</span>
+                            <div>
+                                <p class="program-label program-label--alt">Sesión 2</p>
+                                <h3 class="program-date">7 de julio de 2026</h3>
+                                <p class="program-duration">90 minutos en directo</p>
+                            </div>
+                        </div>
+                        <ul class="program-list">
+                            <li>Revisión de tus resultados y los del grupo en directo.</li>
+                            <li>Dudas y bloqueos reales resueltos en tiempo real.</li>
+                            <li>Cómo mejorar lo que ya has probado.</li>
+                            <li>Tu siguiente paso según tu perfil y objetivos.</li>
+                        </ul>
+                        <p class="program-result">Saldrás con claridad sobre qué hacer a continuación.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUÉ TE LLEVAS -->
+        <section class="outcomes-section">
+            <div class="section-inner">
+                <div class="outcomes-header">
+                    <p class="eyebrow">Lo que te llevas</p>
+                    <h2 class="section-h2">Cuatro cambios concretos<br>en tu manera de trabajar.</h2>
+                </div>
+                <div class="outcomes-list">
+                    <div class="outcome-item">
+                        <span class="outcome-num">01</span>
+                        <div class="outcome-text">
+                            <strong>Un mapa claro de herramientas</strong>
+                            <p>Sabes qué existe, qué merece tu tiempo y qué descartar en tu práctica específica. Sin sobrecargar, sin humo.</p>
+                        </div>
+                    </div>
+                    <div class="outcome-item">
+                        <span class="outcome-num">02</span>
+                        <div class="outcome-text">
+                            <strong>Primeros prototipos funcionando</strong>
+                            <p>Sales de la sesión 1 con prompts y flujos de trabajo reales, no ejemplos genéricos de manual.</p>
+                        </div>
+                    </div>
+                    <div class="outcome-item">
+                        <span class="outcome-num">03</span>
+                        <div class="outcome-text">
+                            <strong>Seguimiento con el grupo</strong>
+                            <p>Una semana después, revisión en directo de lo que funcionó, lo que no, y por qué. Con el grupo real.</p>
+                        </div>
+                    </div>
+                    <div class="outcome-item">
+                        <span class="outcome-num">04</span>
+                        <div class="outcome-text">
+                            <strong>Tu siguiente paso concreto</strong>
+                            <p>Sabes qué formación te conviene a continuación según tu perfil y tus objetivos reales. Sin rodeos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FORMULARIO DE RESERVA -->
+        <section id="reserva" class="reserve-section">
+            <div class="section-inner">
+                <div class="reserve-inner">
+                    <div class="reserve-copy">
+                        <p class="eyebrow">Reserva tu plaza</p>
+                        <h2 class="section-h2">20 plazas.<br>Se cierra<br>cuando se llenan.</h2>
+                        <p class="reserve-lead">La pre-reserva no te cobra ahora. Guarda tu posición y confirma el pago antes de que se agote tu tramo.</p>
+                        <div class="reserve-pills">
+                            <div class="reserve-pill reserve-pill--active">
+                                <span class="pill-label">Tramo 1 · Activo</span>
+                                <strong id="discount-box-label">49 €</strong>
+                            </div>
+                            <div class="reserve-pill">
+                                <span class="pill-label">Tramo 2 · Siguiente</span>
+                                <strong id="full-price-box-label">79 €</strong>
+                            </div>
+                            <div class="reserve-pill">
+                                <span class="pill-label">Sesión 1</span>
+                                <strong>30 jun 2026</strong>
+                            </div>
+                            <div class="reserve-pill">
+                                <span class="pill-label">Sesión 2</span>
+                                <strong>7 jul 2026</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-wrap">
+                        <form id="reservation-form" class="reservation-form">
+                            <div class="form-group">
+                                <label>Nombre y apellidos</label>
+                                <input type="text" name="full_name" placeholder="Tu nombre completo" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email profesional</label>
+                                <input type="email" name="email" placeholder="nombre@correo.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>¿A qué te dedicas?</label>
+                                <input type="text" name="profession" placeholder="Ej. logopeda, maestra AL, psicóloga clínica…" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Centro u organización <span class="optional">opcional</span></label>
+                                    <input type="text" name="organization" placeholder="Tu centro o clínica">
+                                </div>
+                                <div class="form-group">
+                                    <label>WhatsApp o teléfono <span class="optional">opcional</span></label>
+                                    <input type="text" name="whatsapp" placeholder="+34 600 000 000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>¿Qué quieres conseguir con este curso?</label>
+                                <textarea name="goals" rows="3" placeholder="Cuéntame qué quieres entender, probar o aplicar primero."></textarea>
+                            </div>
+                            <label class="consent-row">
+                                <input type="checkbox" name="consent" value="1" required>
+                                <span>Acepto que mis datos se usen para gestionar la pre-reserva y comunicaciones sobre este curso.</span>
+                            </label>
+                            <button type="submit" class="btn btn-primary btn-full">Guardar pre-reserva sin pagar</button>
+                            <button type="button" id="checkout-button" class="btn btn-secondary btn-full" disabled>Pago desactivado por seguridad</button>
+                        </form>
+                        <div id="form-feedback" class="form-feedback hidden"></div>
+                        <p class="form-note">Sin compromisos · Tu plaza se guarda <span id="hold-hours-label">72 horas</span> · Cancela antes de confirmar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="./logo-matrix.png" alt="Logoped-IA" class="footer-logo">
+                <span>Logoped-IA · Jose Aserraf Cohen</span>
+            </div>
+            <p class="footer-note">Formación profesional en IA aplicada a logopedia y profesiones de ayuda.</p>
+        </div>
+    </footer>
+
+    <script src="./app.js"></script>
+</body>
+</html>

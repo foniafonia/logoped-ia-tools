@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Juegos con cámara y mano</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #142033;
+      --muted: #5c6878;
+      --line: rgba(20, 32, 51, .14);
+      --panel: rgba(255, 255, 255, .9);
+      --blue: #2563eb;
+      --green: #16a34a;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --violet: #7c3aed;
+      --cyan: #0891b2;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(255,255,255,.92) 0 80px, transparent 82px),
+        radial-gradient(circle at 86% 8%, rgba(255,255,255,.72) 0 120px, transparent 122px),
+        linear-gradient(135deg, #dff7ff 0%, #fff3c4 43%, #dcfce7 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(1240px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 0 16px;
+    }
+
+    .eyebrow {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: .78rem;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.8rem);
+      line-height: .95;
+    }
+
+    .summary {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(.98rem, 1.6vw, 1.12rem);
+      line-height: 1.45;
+      text-align: right;
+    }
+
+    .notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 4px 0 18px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      box-shadow: 0 14px 38px rgba(20, 32, 51, .1);
+    }
+
+    .notice strong {
+      font-size: .98rem;
+    }
+
+    .notice span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .notice a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--blue);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      position: relative;
+      display: grid;
+      grid-template-rows: 160px auto;
+      min-height: 332px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 18px 46px rgba(20, 32, 51, .14);
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      border-color: color-mix(in srgb, var(--accent) 60%, white);
+      box-shadow: 0 24px 60px rgba(20, 32, 51, .18);
+      outline: 0;
+      transform: translateY(-3px);
+    }
+
+    .preview {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.24)),
+        color-mix(in srgb, var(--accent) 24%, white);
+    }
+
+    .preview::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .72);
+      transform: translateY(-52px) scaleX(1.35);
+    }
+
+    .shape {
+      position: absolute;
+      filter: drop-shadow(0 14px 18px rgba(20, 32, 51, .18));
+    }
+
+    .shape.hand {
+      left: 18px;
+      bottom: 24px;
+      width: 74px;
+      height: 88px;
+      border-radius: 34px 34px 22px 22px;
+      background: #ffd7b0;
+      transform: rotate(-12deg);
+    }
+
+    .shape.hand::before,
+    .shape.hand::after {
+      content: "";
+      position: absolute;
+      top: -28px;
+      width: 18px;
+      height: 50px;
+      border-radius: 999px;
+      background: #ffd7b0;
+    }
+
+    .shape.hand::before {
+      left: 13px;
+    }
+
+    .shape.hand::after {
+      right: 15px;
+      height: 44px;
+    }
+
+    .shape.target {
+      right: 26px;
+      top: 34px;
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #fff;
+      border: 12px solid var(--accent);
+      color: var(--accent);
+      font-size: 2.1rem;
+      font-weight: 950;
+    }
+
+    .shape.paint {
+      right: 34px;
+      bottom: 26px;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 30%, rgba(255,255,255,.7) 0 13%, transparent 14%),
+        var(--accent);
+    }
+
+    .shape.tile {
+      right: 28px;
+      bottom: 26px;
+      width: 92px;
+      height: 92px;
+      border-radius: 10px;
+      background: var(--accent);
+      transform: rotate(10deg);
+    }
+
+    .shape.line {
+      right: 18px;
+      bottom: 36px;
+      width: 116px;
+      height: 16px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform: rotate(-24deg);
+      box-shadow: 0 28px 0 rgba(255,255,255,.74), -22px -24px 0 color-mix(in srgb, var(--accent) 70%, white);
+    }
+
+    .shape.ball {
+      right: 30px;
+      bottom: 28px;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 34%, rgba(255,255,255,.84) 0 18%, transparent 19%),
+        var(--accent);
+    }
+
+    .body {
+      display: grid;
+      align-content: space-between;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .body h2 {
+      margin: 0 0 8px;
+      font-size: 1.22rem;
+      line-height: 1.08;
+    }
+
+    .body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .94rem;
+      line-height: 1.38;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--accent) 72%, #111827);
+      background: color-mix(in srgb, var(--accent) 14%, white);
+      font-size: .74rem;
+      font-weight: 900;
+    }
+
+    .open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 950;
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 14px 0 4px;
+      color: var(--muted);
+      font-size: .9rem;
+      text-align: center;
+    }
+
+    .feedback-panel {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      box-shadow: 0 18px 46px rgba(20, 32, 51, .14);
+    }
+
+    .feedback-panel h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.4rem, 2.7vw, 2.2rem);
+      line-height: 1.05;
+    }
+
+    .feedback-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .feedback-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--ink);
+      font-size: .86rem;
+      font-weight: 900;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 650;
+    }
+
+    input,
+    select {
+      min-height: 42px;
+      padding: 0 10px;
+    }
+
+    textarea {
+      min-height: 92px;
+      padding: 10px;
+      resize: vertical;
+    }
+
+    .feedback-form button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--blue);
+      font: inherit;
+      font-weight: 950;
+      cursor: pointer;
+    }
+
+    .feedback-form button:disabled {
+      cursor: default;
+      opacity: .66;
+    }
+
+    .feedback-status {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 800;
+    }
+
+    .feedback-status.ok {
+      color: var(--green);
+    }
+
+    .feedback-status.warn {
+      color: var(--amber);
+    }
+
+    .feedback-status.bad {
+      color: var(--red);
+    }
+
+    @media (max-width: 1120px) {
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .summary {
+        text-align: left;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .feedback-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        padding: 10px;
+      }
+
+      .notice {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        grid-template-rows: 132px auto;
+        min-height: 290px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <span class="eyebrow">Logoped IA · Cámara y mano real</span>
+        <h1>Juegos en el aire</h1>
+      </div>
+      <p class="summary">Un acceso único para abrir los prototipos que usan cámara, MediaPipe Tasks Vision y gestos de mano. Cada tarjeta lleva a su carpeta y conserva sus iteraciones.</p>
+    </header>
+
+    <section class="notice" aria-label="Aviso de uso">
+      <strong>Consejo rápido</strong>
+      <span>Abre cada juego, pulsa “Activar cámara” y concede permiso. En local usa `127.0.0.1`; en Vercel funcionará con HTTPS.</span>
+      <a href="./feedback.html">Ver feedback</a>
+    </section>
+
+    <section class="grid" aria-label="Aplicaciones disponibles">
+      <a class="card" style="--accent: var(--red)" href="./pintura-aire-colores/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape paint"></span>
+          <span class="shape target">R</span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Pintura en el aire</h2>
+            <p>Agarrar pintura con la mano y lanzarla al objeto correcto para aprender colores.</p>
+          </div>
+          <div class="meta"><span class="tag">2 manos</span><span class="tag">colores</span><span class="tag">agarre</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+      <a class="card" style="--accent: var(--blue)" href="./puzzle-agarre-aire/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape tile"></span>
+          <span class="shape target">4</span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Puzzle con agarre real</h2>
+            <p>Piezas grandes que se agarran cerrando la mano y se sueltan en su hueco.</p>
+          </div>
+          <div class="meta"><span class="tag">puzzle</span><span class="tag">puño</span><span class="tag">motricidad</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+      <a class="card" style="--accent: var(--green)" href="./logopedizado-gestos-juego/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape line"></span>
+          <span class="shape target">+</span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Lengua Runner</h2>
+            <p>Juego por gestos para responder, avanzar y trabajar atención con movimiento.</p>
+          </div>
+          <div class="meta"><span class="tag">gestos</span><span class="tag">runner</span><span class="tag">atención</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+      <a class="card" style="--accent: var(--violet)" href="./abecedario-magico/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape target">A</span>
+          <span class="shape line"></span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Abecedario Mágico</h2>
+            <p>Lectura de letras y respuestas con movimiento guiado por cámara o terapeuta.</p>
+          </div>
+          <div class="meta"><span class="tag">letras</span><span class="tag">ritmo</span><span class="tag">lectura</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+      <a class="card" style="--accent: var(--cyan)" href="./constructor-silabas-aire/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape target">SI</span>
+          <span class="shape line"></span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Constructor de sílabas</h2>
+            <p>Construcción de palabras y sílabas usando selección por gestos en el aire.</p>
+          </div>
+          <div class="meta"><span class="tag">sílabas</span><span class="tag">palabras</span><span class="tag">mano</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+      <a class="card" style="--accent: var(--amber)" href="./escritura-aire-rotulador/">
+        <div class="preview">
+          <span class="shape hand"></span>
+          <span class="shape line"></span>
+          <span class="shape target">O</span>
+        </div>
+        <div class="body">
+          <div>
+            <h2>Escritura en el aire</h2>
+            <p>Rotulador virtual para trazar vocales o letras con el movimiento de la mano.</p>
+          </div>
+          <div class="meta"><span class="tag">trazo</span><span class="tag">vocales</span><span class="tag">rotulador</span></div>
+          <span class="open">Abrir juego</span>
+        </div>
+      </a>
+
+    </section>
+
+    <section class="feedback-panel" aria-labelledby="feedbackTitle">
+      <div>
+        <span class="eyebrow">Beta comunidad</span>
+        <h2 id="feedbackTitle">Decir qué falla o qué mejorarías</h2>
+        <p>Este buzón guarda feedback de uso real: juego probado, tiempo de sesión, errores de cámara, confusión del niño, ideas de mejora o actividades nuevas. Sirve para decidir las siguientes iteraciones sin perder comentarios.</p>
+      </div>
+
+      <form class="feedback-form" id="feedbackForm">
+        <div class="form-row">
+          <label>
+            Juego usado
+            <select name="app" required>
+              <option value="pintura-aire-colores">Pintura en el aire</option>
+              <option value="puzzle-agarre-aire">Puzzle con agarre real</option>
+              <option value="logopedizado-gestos-juego">Lengua Runner</option>
+              <option value="abecedario-magico">Abecedario Mágico</option>
+              <option value="constructor-silabas-aire">Constructor de sílabas</option>
+              <option value="escritura-aire-rotulador">Escritura en el aire</option>
+            </select>
+          </label>
+
+          <label>
+            Tiempo de sesión
+            <select name="sessionTime">
+              <option value="menos_2_min">Menos de 2 min</option>
+              <option value="2_5_min">2-5 min</option>
+              <option value="5_10_min">5-10 min</option>
+              <option value="mas_10_min">Más de 10 min</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Tipo de reporte
+            <select name="type">
+              <option value="fallo_camara">Fallo de cámara/mano</option>
+              <option value="mecanica">Mecánica confusa</option>
+              <option value="contenido">Contenido/consigna</option>
+              <option value="diseno">Diseño o accesibilidad</option>
+              <option value="actividad_nueva">Actividad nueva</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+
+          <label>
+            Perfil
+            <select name="role">
+              <option value="logopeda">Logopeda</option>
+              <option value="docente">Docente</option>
+              <option value="familia">Familia</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Qué falla o qué mejorarías
+          <textarea name="message" required placeholder="Ej.: La pintura sale muy rápida, el niño no entiende cuándo cerrar la mano, añadiría animales, etc."></textarea>
+        </label>
+
+        <label>
+          Contacto opcional
+          <input name="contact" type="text" placeholder="Nombre, centro o email si quieres que te responda" />
+        </label>
+
+        <button type="submit">Enviar feedback</button>
+        <div class="feedback-status" id="feedbackStatus" role="status"></div>
+      </form>
+    </section>
+
+    <footer class="footer">Hub online de prototipos. Las iteraciones pueden seguir haciéndose dentro de cada carpeta.</footer>
+  </main>
+  <script>
+    const feedbackForm = document.querySelector('#feedbackForm');
+    const feedbackStatus = document.querySelector('#feedbackStatus');
+    const visitStartedAt = Date.now();
+
+    function feedbackId() {
+      return globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    function setFeedbackStatus(text, tone) {
+      feedbackStatus.textContent = text;
+      feedbackStatus.className = `feedback-status ${tone || ''}`.trim();
+    }
+
+    feedbackForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = feedbackForm.querySelector('button');
+      const data = Object.fromEntries(new FormData(feedbackForm).entries());
+      const entry = {
+        id: feedbackId(),
+        created_at: new Date().toISOString(),
+        app: data.app,
+        type: data.type,
+        role: data.role,
+        sessionTime: data.sessionTime,
+        message: String(data.message || '').trim(),
+        contact: String(data.contact || '').trim(),
+        page: location.href,
+        userAgent: navigator.userAgent,
+        elapsedMs: Date.now() - visitStartedAt,
+        version: 'juegos-aire-feedback-v1',
+      };
+
+      if (!entry.message) {
+        setFeedbackStatus('Escribe al menos una frase para poder guardarlo.', 'bad');
+        return;
+      }
+
+      button.disabled = true;
+      setFeedbackStatus('Enviando...', '');
+      try {
+        const res = await fetch('./api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || !body.ok) throw new Error(body.error || 'No se pudo guardar');
+        feedbackForm.reset();
+        setFeedbackStatus('Recibido. Gracias, esto alimenta las próximas mejoras.', 'ok');
+      } catch (error) {
+        const pending = JSON.parse(localStorage.getItem('juegosAire.feedbackPendiente') || '[]');
+        pending.push(entry);
+        localStorage.setItem('juegosAire.feedbackPendiente', JSON.stringify(pending));
+        setFeedbackStatus('Guardado en este dispositivo. Falta revisar la conexión/backend.', 'warn');
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

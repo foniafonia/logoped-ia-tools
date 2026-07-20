@@ -1,0 +1,128 @@
+{
+  "id": "quiz-00-01",
+  "lesson_id": "lesson-00-03",
+  "title": "Quiz modulo 00",
+  "passing_score": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Que es un prompt?",
+      "options": [
+        "Un archivo de audio",
+        "Una instruccion para guiar la respuesta del modelo",
+        "Un tipo de cuenta de correo",
+        "Una base de datos clinica"
+      ],
+      "correct_option": 1,
+      "explanation": "El prompt es la instruccion que orienta la tarea del modelo."
+    },
+    {
+      "id": "q2",
+      "question": "LLM significa:",
+      "options": [
+        "Large Learning Memory",
+        "Long Language Machine",
+        "Large Language Model",
+        "Logic Language Method"
+      ],
+      "correct_option": 2,
+      "explanation": "LLM es Large Language Model."
+    },
+    {
+      "id": "q3",
+      "question": "Que mejora normalmente la calidad de una respuesta?",
+      "options": [
+        "Dar instrucciones ambiguas",
+        "Pedir muchas tareas a la vez sin orden",
+        "Definir objetivo, contexto y formato",
+        "No indicar publico objetivo"
+      ],
+      "correct_option": 2,
+      "explanation": "Contexto + objetivo + formato suele mejorar consistencia."
+    },
+    {
+      "id": "q4",
+      "question": "En contexto logopedico, un prompt inicial debe incluir:",
+      "options": [
+        "Solo el nombre del nino",
+        "Edad y objetivo terapeutico",
+        "Solo un titulo creativo",
+        "Ningun dato de contexto"
+      ],
+      "correct_option": 1,
+      "explanation": "Edad y objetivo orientan mejor la generacion."
+    },
+    {
+      "id": "q5",
+      "question": "Cual de estas es una buena practica de seguridad?",
+      "options": [
+        "Usar la IA como diagnostico automatico",
+        "Evitar revision profesional",
+        "Anadir limite: material orientativo, no diagnostico",
+        "Publicar datos sensibles"
+      ],
+      "correct_option": 2,
+      "explanation": "Hay que marcar limites y mantener supervision profesional."
+    },
+    {
+      "id": "q6",
+      "question": "Por que iteramos un prompt?",
+      "options": [
+        "Para empeorar la salida",
+        "Para mejorar precision y utilidad",
+        "Para evitar feedback",
+        "No hay que iterar"
+      ],
+      "correct_option": 1,
+      "explanation": "Iterar permite refinar salida y adaptarla al objetivo."
+    },
+    {
+      "id": "q7",
+      "question": "Que formato suele ayudar en resultados accionables?",
+      "options": [
+        "Sin estructura",
+        "Lista de pasos y criterio de exito",
+        "Texto aleatorio",
+        "Respuesta de una palabra"
+      ],
+      "correct_option": 1,
+      "explanation": "Estructura en pasos facilita aplicacion practica."
+    },
+    {
+      "id": "q8",
+      "question": "Cuando se compara salida interna vs externa, el objetivo es:",
+      "options": [
+        "Copiar literalmente",
+        "Aprender diferencias y mejorar",
+        "Evitar analizar",
+        "Elegir la mas larga siempre"
+      ],
+      "correct_option": 1,
+      "explanation": "La comparacion sirve para aprendizaje y mejora."
+    },
+    {
+      "id": "q9",
+      "question": "Que NO debe contener un prompt para entrenamiento basico?",
+      "options": [
+        "Objetivo de sesion",
+        "Duracion estimada",
+        "Datos sensibles identificables",
+        "Nivel del ejercicio"
+      ],
+      "correct_option": 2,
+      "explanation": "No deben usarse datos identificables sensibles."
+    },
+    {
+      "id": "q10",
+      "question": "Resultado esperado del modulo 00:",
+      "options": [
+        "Diagnosticar automaticamente",
+        "Escribir prompts basicos utiles y seguros",
+        "Eliminar supervision humana",
+        "Sustituir la intervencion logopedica"
+      ],
+      "correct_option": 1,
+      "explanation": "El objetivo es dominar fundamentos de prompt, no diagnosticar."
+    }
+  ]
+}

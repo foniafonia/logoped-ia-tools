@@ -1,0 +1,100 @@
+{
+  "id": "module-01",
+  "title": "Anatomia del prompt profesional",
+  "description": "Diseñar prompts robustos, medibles y reutilizables.",
+  "goal": "Convertir prompts basicos en prompts profesionales.",
+  "lessons": [
+    {
+      "id": "lesson-01-01",
+      "title": "Bloques del prompt",
+      "duration_minutes": 18,
+      "theory": [
+        "Todo prompt profesional incluye rol, contexto, tarea, formato y limites.",
+        "Separar cada bloque reduce ambiguedad.",
+        "Define criterio de calidad antes de pedir respuesta."
+      ],
+      "example": "Actua como logopeda escolar. Contexto: nino 7 anos, objetivo articulacion /s/. Tarea: crear plan de 15 minutos. Formato: tabla. Limites: no diagnostico.",
+      "checklist": ["Rol claro", "Contexto minimo", "Salida estructurada", "Limites profesionales"],
+      "prompt_base": "Ayudame con un plan de logopedia.",
+      "prompt_improved": "Actua como logopeda escolar. Contexto: nino 7 anos con dificultad /s/. Tarea: plan de 15 minutos. Formato: tabla en 4 columnas. Limite: no diagnostico automatico.",
+      "refinement_phrases": [
+        "Separa el resultado en objetivo-materiales-pasos.",
+        "Hazlo apto para consulta de 15 minutos.",
+        "Incluye criterio observable de exito."
+      ],
+      "reflection_questions": [
+        "Que bloque del prompt tiene mayor impacto en claridad?",
+        "Que pasa si no defines formato?"
+      ]
+    },
+    {
+      "id": "lesson-01-02",
+      "title": "Prompt malo vs bueno",
+      "duration_minutes": 20,
+      "theory": [
+        "Un prompt largo no es necesariamente bueno.",
+        "Un prompt bueno pide una sola salida concreta.",
+        "Usar ejemplos de referencia mejora consistencia."
+      ],
+      "example": "Malo: ayudame con logopedia. Bueno: crea 6 pares minimos para /r/ vs /l/ con dificultad progresiva.",
+      "checklist": ["Tarea unica", "Variables concretas", "Sin ruido", "Con validacion"],
+      "prompt_base": "Dame algo para r y l.",
+      "prompt_improved": "Genera 6 pares minimos /r/ vs /l/ para nino de 8 anos, ordenados de facil a dificil, con ejemplo de uso en frase.",
+      "refinement_phrases": [
+        "Reduce la respuesta a 6 items maximo.",
+        "Ordena por dificultad progresiva.",
+        "Incluye mini-ejemplo por item."
+      ],
+      "reflection_questions": [
+        "Que hace al prompt mejorado mas accionable?",
+        "Que ruido eliminaste?"
+      ]
+    },
+    {
+      "id": "lesson-01-03",
+      "title": "Plantillas reutilizables",
+      "duration_minutes": 22,
+      "theory": [
+        "Usa placeholders: {edad}, {objetivo}, {duracion}.",
+        "Las plantillas aceleran trabajo diario.",
+        "Versionar plantillas evita perder mejoras."
+      ],
+      "example": "Genera actividad para {edad} anos, objetivo {objetivo}, duracion {duracion}, con 3 niveles.",
+      "checklist": ["Placeholder correcto", "Instrucciones fijas", "Espacio para personalizar", "Control de seguridad"],
+      "prompt_base": "Crea una actividad para un nino.",
+      "prompt_improved": "Genera actividad para {edad} anos, objetivo {objetivo}, duracion {duracion}, nivel {nivel}, con formato tabla y criterio de exito.",
+      "refinement_phrases": [
+        "Devuelve plantilla editable.",
+        "Incluye variables obligatorias y opcionales.",
+        "Agrega version corta para consulta rapida."
+      ],
+      "reflection_questions": [
+        "Que ventaja tiene una plantilla reusable?",
+        "Que variable falta para tu contexto real?"
+      ]
+    },
+    {
+      "id": "lesson-01-04",
+      "title": "Verificacion del resultado",
+      "duration_minutes": 16,
+      "theory": [
+        "Pide autochequeo al modelo.",
+        "Solicita errores potenciales y mejoras.",
+        "Establece una rubrica de salida."
+      ],
+      "example": "Antes de responder, valida si la propuesta es adecuada para 6-8 anos y explica por que.",
+      "checklist": ["Chequeo interno", "Advertencias", "Justificacion", "Formato de evaluacion"],
+      "prompt_base": "Dame una actividad para vocabulario.",
+      "prompt_improved": "Genera actividad de vocabulario y antes de finalizar realiza autochequeo: claridad, utilidad clinica, estructura, seguridad; luego sugiere 2 mejoras.",
+      "refinement_phrases": [
+        "Evalua la salida con rubrica 0-10.",
+        "Indica 2 riesgos y como mitigarlos.",
+        "Propone V2 del prompt para mejorar calidad."
+      ],
+      "reflection_questions": [
+        "Como cambia el resultado al pedir autochequeo?",
+        "Que criterio te cuesta mas optimizar?"
+      ]
+    }
+  ]
+}
