@@ -41,6 +41,24 @@ Cuando la tarea se complete, el estado cambia a [PARA_CLAUDE HECHO] o [PARA_CODE
 
 ---
 
+## AGUJERO ESTRUCTURAL PERMANENTE: chats de Claude.ai sin publicar (caso Logoflix, 2026-07-20)
+
+Como Logoflix (Netflix/YouTube explicador), es casi seguro que hay MÁS prototipos/HTML/juegos generados en conversaciones de Claude.ai que nunca se publicaron como Artifact.
+
+**Por qué Claude (sesión de código) no los puede encontrar solo:**
+- `Artifact action:list` solo devuelve lo que se PUBLICÓ explícitamente (botón compartir/publicar) desde algún chat.
+- Todo lo generado en un chat de Claude.ai que se quedó sin publicar vive únicamente dentro de esa conversación. No existe herramienta para listar/buscar el historial completo de conversaciones desde una sesión de código.
+- Esto es un límite estructural, no un fallo de búsqueda puntual.
+
+**Cómo se cierra, cada vez que aparezca uno nuevo:**
+1. Jose (o quien tenga acceso a esos chats) revisa conversaciones viejas de Claude.ai con código/HTML generado.
+2. Para cada una: o le da a "Publicar" en el panel del artifact (así una sesión de Claude sí lo ve con `Artifact action:list` y lo puede enlazar directo a la landing), o lo descarga y se lo pasa a Codex para subirlo al repo (mismo patrón que Praxias/Alfabeto/Logopod/Logoflix).
+3. Se avisa por nombre/tema en esta bitácora y la sesión de Claude que la lea lo engancha a `LANDING_TODO_LOGOPED_IA.html`.
+
+No se puede automatizar la búsqueda; sí se puede automatizar el enganche una vez que algo sale a la luz. Cualquier agente (Codex o Claude) que se tope con "esto viene de un chat viejo de Claude" debe seguir este proceso, no intentar rebuscar por su cuenta.
+
+---
+
 ## Entradas
 
 Fecha: 2026-04-15
