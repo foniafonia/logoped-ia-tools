@@ -1112,6 +1112,36 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE PENDIENTE]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Correccion CineMundos Anidjar — Bet HaMikdash real
+
+Contexto:
+- Jose corrige que Codex habia puesto CriatuMundos en Anidjar, pero la pieza que queria enseñar era otro juego muy similar, con Bet HaMikdash y tematica judia.
+- Jose aporta URLs correctas:
+  - `https://cinemundos.vercel.app`
+  - `https://cinemundos.vercel.app/informe-avance.html`
+
+Hecho:
+- Verificado que ambas URLs devuelven 200.
+- Cambiada la ficha de Anidjar:
+  - antes: `Para reunion con Anidjar — Mundos 3D CineMundos` apuntando a CriatuMundos/GeltMundos.
+  - ahora: `Para reunion con Anidjar — CineMundos Bet HaMikdash` apuntando a `https://cinemundos.vercel.app`.
+- Añadida ficha principal en Juegos:
+  - `CineMundos — mundo judio Bet HaMikdash`.
+- Actualizada ficha `CineMundos — Informe de avance` para usar la URL publica de Vercel como enlace principal.
+- Generadas capturas reales:
+  - `codex-assets/screenshots/cinemundos-mundo-judio-bet-hamikdash.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-cinemundos-bet-hamikdash.jpg`
+  - `codex-assets/screenshots/cinemundos-informe-de-avance.jpg`
+
+Nota:
+- CriatuMundos y GeltMundos quedan como piezas tecnicas/reutilizables para FonoMundos, pero no deben confundirse con la demo judia principal para Anidjar.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Sección curada "Para reunión con Anidjar"
 
 Contexto:
