@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabricador de Prompts Logopédicos</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0f1117;
+  color: #e8eaf0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.topbar {
+  width: 100%;
+  max-width: 720px;
+  padding: 20px 20px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.topbar h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #a5b4fc;
+}
+.topbar span {
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+.chat-wrap {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  overflow-y: auto;
+  padding: 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.msg {
+  display: flex;
+  gap: 12px;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.msg.user { flex-direction: row-reverse; }
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.avatar.bot { background: #1e1f3a; color: #a5b4fc; border: 1px solid #3730a3; }
+.avatar.user { background: #1a2a1a; color: #86efac; border: 1px solid #166534; }
+.bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+.bubble.bot {
+  background: #1a1d2e;
+  border: 1px solid #2a2d3e;
+  border-bottom-left-radius: 4px;
+  color: #d1d5e8;
+}
+.bubble.user {
+  background: #1a2a1a;
+  border: 1px solid #1f3a27;
+  border-bottom-right-radius: 4px;
+  color: #dcfce7;
+}
+.bubble b { color: #c4b5fd; }
+.bubble em { color: #86efac; font-style: normal; font-weight: 500; }
+.bubble .tag {
+  display: inline-block;
+  background: #1e1f3a;
+  border: 1px solid #6366f1;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  color: #a5b4fc;
+  margin: 2px 3px;
+}
+.thinking {
+  display: flex; gap: 5px; align-items: center; padding: 14px 16px;
+}
+.thinking span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #6366f1; animation: bounce 1.2s infinite;
+}
+.thinking span:nth-child(2) { animation-delay: 0.2s; }
+.thinking span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+/* Prompt final */
+.prompt-card {
+  background: #0d0f1a;
+  border: 1px solid #3730a3;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.prompt-header {
+  background: #1e1f3a;
+  padding: 10px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.78rem;
+  color: #a5b4fc;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.prompt-body {
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #c4c9e2;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.copy-mini {
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.copy-mini:hover { background: #4f46e5; }
+.justif-card {
+  background: #0d1a10;
+  border: 1px solid #166534;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.87rem;
+  color: #86efac;
+  line-height: 1.65;
+  margin-top: 8px;
+}
+.justif-card .justif-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #4ade80;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Input */
+.input-zone {
+  width: 100%;
+  max-width: 720px;
+  padding: 16px 20px 24px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.input-zone textarea {
+  flex: 1;
+  background: #1a1d2e;
+  border: 1px solid #2a2d3e;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #e8eaf0;
+  font-size: 0.93rem;
+  font-family: inherit;
+  resize: none;
+  min-height: 48px;
+  max-height: 140px;
+  overflow-y: auto;
+  line-height: 1.5;
+  transition: border-color 0.15s;
+}
+.input-zone textarea:focus { outline: none; border-color: #6366f1; }
+.input-zone textarea::placeholder { color: #4b5563; }
+.send-btn {
+  width: 44px; height: 44px;
+  background: #6366f1;
+  border: none; border-radius: 10px;
+  color: white; font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.send-btn:hover { background: #4f46e5; }
+.send-btn:disabled { background: #2a2d3e; cursor: not-allowed; }
+.restart-link {
+  font-size: 0.78rem;
+  color: #4b5563;
+  text-align: center;
+  padding: 0 20px 8px;
+  max-width: 720px;
+  width: 100%;
+  cursor: pointer;
+}
+.restart-link:hover { color: #6b7280; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Fabricador de Prompts Logopédicos</h1>
+  <span>diálogo socrático</span>
+</div>
+
+<div class="chat-wrap" id="chat"></div>
+
+<div class="restart-link" id="restartLink" onclick="restart()" style="display:none">Empezar de nuevo</div>
+
+<div class="input-zone">
+  <textarea id="inp" placeholder="Escribe aquí..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <button class="send-btn" id="sendBtn" onclick="send()">↑</button>
+</div>
+
+<script>
+// ---- ESTADO ----
+let state = {
+  step: 0,
+  data: {
+    tipo_raw: '', perfil_raw: '', edad_raw: '', objetivo_raw: '',
+    preservado_raw: '', restricciones_raw: '', formato_raw: '',
+    tipo: '', perfil: '', edad: '', objetivo: '', preservado: '', formato: ''
+  },
+  waitingUser: true,
+  done: false
+};
+
+// ---- DETECCIÓN DE KEYWORDS ----
+function detectTipo(txt) {
+  const t = txt.toLowerCase();
+  if (/ant[oó]nim|sin[oó]nim|opuest/.test(t)) return { key: 'relaciones_semanticas', label: 'relaciones semánticas (antónimos/sinónimos)' };
+  if (/listado|lista|palabras/.test(t)) return { key: 'listado_palabras', label: 'listado de palabras' };
+  if (/actividad|juego|dinámica/.test(t)) return { key: 'actividad', label: 'actividad terapéutica' };
+  if (/lectura|leer/.test(t)) return { key: 'lectoescritura', label: 'ejercicio de lectura' };
+  if (/escritura|escribir|dictado/.test(t)) return { key: 'lectoescritura', label: 'ejercicio de escritura' };
+  if (/oral|hablar|expresi[oó]n|narrat/.test(t)) return { key: 'expresion_oral', label: 'expresión oral' };
+  if (/comprens/.test(t)) return { key: 'comprension', label: 'comprensión lingüística' };
+  if (/fonoló|fonema|articulaci[oó]n|pronunciaci[oó]n/.test(t)) return { key: 'fonologia', label: 'ejercicio fonológico' };
+  if (/memoria|procesamiento/.test(t)) return { key: 'memoria', label: 'tarea de memoria verbal' };
+  if (/ficha|imprim/.test(t)) return { key: 'fichas', label: 'fichas imprimibles' };
+  return null;
+}
+
+function detectPerfil(txt) {
+  const t = txt.toLowerCase();
+  if (/\btel\b|trastorno.*lenguaje|dld/.test(t)) return { key: 'TEL', label: 'TEL/DLD' };
+  if (/dislex/.test(t)) return { key: 'dislexia', label: 'dislexia' };
+  if (/dislal|fonoló|articulaci[oó]n/.test(t)) return { key: 'dislalia', label: 'trastorno fonológico/dislalia' };
+  if (/tartam|disflu/.test(t)) return { key: 'tartamudez', label: 'tartamudez' };
+  if (/\btea\b|autis/.test(t)) return { key: 'TEA', label: 'TEA' };
+  if (/\btdah\b|atenci[oó]n|hiperact/.test(t)) return { key: 'TDAH', label: 'TDAH' };
+  if (/afas/.test(t)) return { key: 'afasia', label: 'afasia' };
+  if (/retraso|retraso.*lenguaje/.test(t)) return { key: 'retraso', label: 'retraso del lenguaje' };
+  if (/\d.*a[ñn]o|\bni[ñn]o\b|\bpeq/.test(t)) return { key: 'infantil_general', label: 'perfil infantil' };
+  return null;
+}
+
+function detectEdad(txt) {
+  const t = txt.toLowerCase();
+  const m = t.match(/(\d+)\s*a[ñn]/);
+  if (m) {
+    const n = parseInt(m[1]);
+    if (n <= 4) return { key: '2_4', label: n + ' años (etapa preescolar temprana)' };
+    if (n <= 6) return { key: '4_6', label: n + ' años (preescolar)' };
+    if (n <= 9) return { key: '6_9', label: n + ' años (primaria inicial)' };
+    if (n <= 12) return { key: '9_12', label: n + ' años (primaria)' };
+    if (n <= 16) return { key: '12_16', label: n + ' años (adolescente)' };
+    if (n <= 40) return { key: 'adulto_joven', label: n + ' años (adulto)' };
+    return { key: 'adulto_mayor', label: n + ' años (adulto mayor)' };
+  }
+  if (/preescolar|infantil|pequ/.test(t)) return { key: '4_6', label: 'edad preescolar' };
+  if (/primaria/.test(t)) return { key: '6_9', label: 'edad de primaria' };
+  if (/adolescente|secund|instituto/.test(t)) return { key: '12_16', label: 'adolescente' };
+  if (/adulto/.test(t)) return { key: 'adulto_joven', label: 'adulto' };
+  return null;
+}
+
+function detectFormato(txt) {
+  const t = txt.toLowerCase();
+  if (/casa|autón|familiar|familia/.test(t)) return { key: 'tarea_casa', label: 'tarea para casa' };
+  if (/imprim|ficha|papel/.test(t)) return { key: 'ficha_impresa', label: 'ficha impresa' };
+  if (/sesi[oó]n|consul|cl[ií]nica/.test(t)) return { key: 'digital_sesion', label: 'uso en sesión' };
+  if (/grupo|aula|clase/.test(t)) return { key: 'grupo', label: 'uso en grupo' };
+  if (/ia|chatgpt|claude|modelo|ia/.test(t)) return { key: 'ia_directo', label: 'input directo a IA' };
+  return { key: 'digital_sesion', label: 'uso en sesión' };
+}
+
+// ---- FLUJO SOCRÁTICO ----
+// Arquitectura: cada entrada tiene process() que guarda la respuesta del usuario,
+// y nextBot() que genera la SIGUIENTE pregunta (con acceso a lo ya guardado).
+// La bienvenida se muestra en start() fuera del array.
+// generate() se llama cuando state.step >= QUESTIONS.length.
+
+const QUESTIONS = [
+  // Q0: tipo de tarea
+  {
+    process: (txt, d) => {
+      d.tipo_raw = txt;
+      const tipo = detectTipo(txt);
+      const perfilDetectado = detectPerfil(txt);
+      d.tipo = tipo ? tipo.key : 'material';
+      d.tipo_label = tipo ? tipo.label : txt;
+      if (perfilDetectado) {
+        d.perfil = perfilDetectado.key;
+        d.perfil_label = perfilDetectado.label;
+        d._perfil_ya_detectado = true;
+      }
+    },
+    nextBot: (d) => {
+      let resp = d.tipo_label !== d.tipo_raw
+        ? `<em>${d.tipo_label}</em> — perfecto. `
+        : `De acuerdo. `;
+      if (d._perfil_ya_detectado) {
+        resp += `Y detecto que mencionas <em>${d.perfil_label}</em>.\n\n`;
+        resp += `<b>¿Qué edad tiene el paciente, o en qué nivel está?</b>`;
+        state.step++; // saltar la pregunta de perfil
+      } else {
+        resp += `\n\n<b>¿Para quién es?</b> Dime el perfil o diagnóstico — formal o clínicamente, como prefieras.`;
+      }
+      return resp;
+    }
+  },
+  // Q1: perfil clínico
+  {
+    process: (txt, d) => {
+      d.perfil_raw = txt;
+      const perfil = detectPerfil(txt);
+      d.perfil = perfil ? perfil.key : 'general';
+      d.perfil_label = perfil ? perfil.label : txt;
+    },
+    nextBot: (d) => {
+      const eco = d.perfil_label !== d.perfil_raw ? `<em>${d.perfil_label}</em>` : `"${d.perfil_raw}"`;
+      return `${eco}, anotado.\n\n<b>¿Qué edad tiene, o en qué nivel educativo está?</b>`;
+    }
+  },
+  // Q2: edad
+  {
+    process: (txt, d) => {
+      d.edad_raw = txt;
+      const edad = detectEdad(txt);
+      d.edad = edad ? edad.key : 'no_especificada';
+      d.edad_label = edad ? edad.label : txt;
+    },
+    nextBot: (d) => {
+      const comentario = getComentarioEdadPerfil(d.edad, d.perfil);
+      return `${comentario}\n\n<b>¿Cuál es el objetivo terapéutico concreto?</b> No hace falta que sea formal — dime qué quieres que el paciente trabaje o mejore con esta tarea.`;
+    }
+  },
+  // Q3: objetivo
+  {
+    process: (txt, d) => { d.objetivo_raw = txt; },
+    nextBot: (d) => {
+      const reencuadre = reencuadrarObjetivo(d.objetivo_raw, d.tipo, d.perfil);
+      return `${reencuadre}\n\n<b>¿Qué tiene bien este paciente?</b> Habilidades conservadas, puntos fuertes, qué tipo de apoyo le ayuda. Esto me permite construir el andamiaje correcto.`;
+    }
+  },
+  // Q4: preservado
+  {
+    process: (txt, d) => { d.preservado_raw = txt; },
+    nextBot: (d) => {
+      return `Bien. Diseñar desde la capacidad, no solo desde el déficit.\n\n<b>Última pregunta:</b> ¿hay alguna restricción importante o contexto de uso? Por ejemplo: es para tarea en casa, lo mediará la familia, es para pasarlo directamente a una IA, tiene que ser imprimible, tiempo máximo de sesión... Si no hay nada especial, escribe "ninguna".`;
+    }
+  },
+  // Q5: restricciones / formato
+  {
+    process: (txt, d) => {
+      d.restricciones_raw = txt;
+      const fmt = detectFormato(txt);
+      d.formato = fmt.key;
+      d.formato_label = fmt.label;
+    },
+    nextBot: null // trigger generate
+  }
+];
+
+function getComentarioEdadPerfil(edad, perfil) {
+  if (perfil === 'TEL' && ['6_9','9_12'].includes(edad))
+    return `Edad escolar con TEL — zona crítica para el acceso léxico y la morfosintaxis. Bien.`;
+  if (perfil === 'TEL' && ['4_6'].includes(edad))
+    return `Preescolar con TEL — aquí el vocabulario receptivo y la representación fonológica son la prioridad.`;
+  if (perfil === 'dislexia' && ['6_9','9_12'].includes(edad))
+    return `Primaria con dislexia — etapa donde el impacto en la ruta subléxica ya es muy visible.`;
+  if (perfil === 'afasia')
+    return `Adulto con afasia — importante controlar qué ruta léxica está preservada.`;
+  if (['adulto_joven','adulto_mayor'].includes(edad))
+    return `Adulto — evitaremos infantilizar el material en cualquier caso.`;
+  return `Anotado.`;
+}
+
+function reencuadrarObjetivo(raw, tipo, perfil) {
+  const t = raw.toLowerCase();
+  if (/ant[oó]nim/.test(t))
+    return `Las relaciones de antonimia trabajan la organización del léxico semántico y la activación de campos relacionales. Es especialmente útil en perfiles con léxico reducido o poco flexible.`;
+  if (/sin[oó]nim/.test(t))
+    return `Los sinónimos trabajan la densidad del campo semántico y la flexibilidad léxica — muy relevante cuando el paciente tiene acceso léxico estrecho.`;
+  if (/vocabulario|l[eé]xico/.test(t))
+    return `El léxico semántico es la base de todo. Bien encuadrado como objetivo.`;
+  if (/morfosintax|frases|oraciones/.test(t))
+    return `Morfosintaxis — importante definir si trabajamos comprensión, producción o ambas, y qué estructura concreta.`;
+  if (/fonol|s[ií]laba|conciencia/.test(t))
+    return `Conciencia fonológica — el nivel de granularidad (sílaba, fonema, rima) determina el tipo de estímulo.`;
+  if (/lectura|leer/.test(t))
+    return `Lectura — hay que distinguir si el foco es la ruta léxica (palabras familiares) o subléxica (decodificación). Eso cambia el diseño completamente.`;
+  if (/fluide|velocidad/.test(t))
+    return `Fluidez léxica — trabajar velocidad sin perder precisión es un equilibrio delicado que el prompt debe controlar.`;
+  return `Objetivo claro. Lo encuadraré en términos de conducta observable y mecanismo cognitivo.`;
+}
+
+// ---- GENERADOR DE PROMPT ----
+function buildPrompt(d) {
+  const formatoTextos = {
+    ficha_impresa: 'Formatea el material como ficha imprimible, con instrucciones autónomas para el logopeda y el paciente.',
+    digital_sesion: 'Material para usar en sesión clínica directa. Sin decoración innecesaria.',
+    tarea_casa: 'Diseñado para uso autónomo en casa. Instrucciones claras para el paciente o familia.',
+    familia: 'Lo mediará la familia. Incluye guía breve de uso para cuidadores.',
+    grupo: 'Uso en grupo pequeño. Incluye sistema de turno y variante de participación.',
+    ia_directo: 'Prompt para usar directamente en ChatGPT, Claude u otro modelo de lenguaje.'
+  };
+
+  const restricciones = d.restricciones_raw && !/ninguna|nada|no hay/.test(d.restricciones_raw.toLowerCase())
+    ? `\n- ${d.restricciones_raw}` : '';
+
+  return `Actúa como logopeda clínico experto en planificación terapéutica basada en evidencia.
+
+PERFIL DEL PACIENTE:
+- Diagnóstico / perfil clínico: ${d.perfil_label || d.perfil_raw}
+- Edad / nivel: ${d.edad_label || d.edad_raw}
+- Habilidades preservadas (andamiaje): ${d.preservado_raw}
+
+ENCARGO:
+Crea ${d.tipo_label || d.tipo_raw} con el siguiente objetivo terapéutico:
+"${d.objetivo_raw}"
+
+REQUISITOS OBLIGATORIOS (incluir todos):
+1. Nombre técnico del ejercicio
+2. Objetivo clínico (conducta observable + condición + criterio de éxito medible)
+3. Lista completa de estímulos — mínimo 20 ítems, ordenados por dificultad creciente, con justificación del criterio de graduación
+4. Pasos operacionales detallados: qué hace el logopeda, qué hace el paciente, paso a paso
+5. Formato exacto de presentación de cada ítem (oral, escrito, con soporte visual, etc.)
+6. Errores típicos esperados en este perfil y protocolo de corrección inmediata
+7. Variante de regresión (si el paciente falla consistentemente)
+8. Variante de progresión (cuando domina la tarea)
+9. Criterios de éxito medibles (% de aciertos mínimo, número de ensayos)
+
+RESTRICCIONES:${restricciones}
+- Nivel lingüístico y cognitivo ajustado a ${d.edad_label || d.edad_raw}
+- Apoyarse en las habilidades preservadas: ${d.preservado_raw}
+- No infantilizar el material${['adulto_joven','adulto_mayor'].includes(d.edad) ? ' (paciente adulto)' : ''}
+- Cada estímulo debe ser justificable clínicamente — sin relleno
+- No acumular variables deficitarias sin control explícito
+
+FORMATO DE USO:
+${formatoTextos[d.formato] || 'Material para uso en sesión clínica.'}
+
+ANTES DE GENERAR EL MATERIAL:
+Declara en 2-3 líneas el mecanismo cognitivo-lingüístico que estás trabajando y por qué este diseño es el más adecuado para este perfil.`;
+}
+
+function buildJustif(d) {
+  const perfilMap = {
+    TEL: 'En TEL/DLD el acceso léxico es lento y las representaciones fonológicas son frágiles. Controlar longitud silábica y frecuencia léxica de los estímulos es imprescindible.',
+    dislexia: 'En dislexia la ruta subléxica (grafema→fonema) está comprometida. Los estímulos deben graduar la regularidad ortográfica y la longitud de la palabra.',
+    dislalia: 'En trastorno fonológico interesa maximizar los contextos fonéticos donde aparece el fonema diana: posición inicial, media y final, con estructura silábica controlada.',
+    afasia: 'En afasia es crítico distinguir qué ruta léxica está preservada. El prompt fuerza esa decisión antes de generar estímulos.',
+    TEA: 'En TEA la previsibilidad del formato reduce la carga cognitiva y favorece el acceso lingüístico. El prompt explicita estructura y rutina.',
+    TDAH: 'En TDAH los bloques deben ser cortos (3–5 min), con variación frecuente. El prompt controla la longitud y el ritmo de la tarea.',
+    tartamudez: 'En disfluencia la presión temporal y la complejidad lingüística son variables críticas a declarar explícitamente en el diseño.',
+    retraso: 'Partir de estructuras conocidas y apoyarse en contexto familiar maximiza la generalización en retraso del lenguaje sin diagnóstico diferencial.',
+    afasia: 'En afasia es crítico distinguir vía léxica preservada antes de elegir el tipo de estímulo.',
+  };
+  const formatMap = {
+    tarea_casa: 'La tarea en casa requiere instrucciones a prueba de mala interpretación. El formato explicitado garantiza que la familia sepa qué reforzar.',
+    ficha_impresa: 'La ficha impresa debe ser autoinstruccional. El logopeda no puede estar explicando mientras observa la ejecución.',
+    grupo: 'El uso en grupo requiere un sistema de turno claro. Observar al compañero puede ser en sí mismo terapéutico.',
+    ia_directo: 'Al pasar el prompt a una IA, la especificidad clínica evita que el modelo rellene con estímulos genéricos no controlados.',
+  };
+
+  const p1 = perfilMap[d.perfil] || 'El diseño parte del perfil específico declarado, priorizando el control de variables y la replicabilidad.';
+  const p2 = `Al declarar explícitamente las habilidades preservadas (<em>${d.preservado_raw}</em>), el modelo de IA construirá andamiaje desde la capacidad — no solo desde el déficit.`;
+  const p3 = formatMap[d.formato] || 'El formato elegido condiciona el diseño del material: la IA ajustará estructura, instrucciones y nivel de autonomía en consecuencia.';
+
+  return `<div class="justif-title">Por qué funciona este prompt</div>
+<b>Sobre el perfil (${d.perfil_label || d.perfil}):</b> ${p1}<br><br>
+<b>Sobre el andamiaje:</b> ${p2}<br><br>
+<b>Sobre el formato (${d.formato_label || d.formato}):</b> ${p3}`;
+}
+
+// ---- MOTOR DE CHAT ----
+function addMsg(content, role) {
+  const chat = document.getElementById('chat');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + role;
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar ' + role;
+  avatar.textContent = role === 'bot' ? 'L' : 'T';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble ' + role;
+  bubble.innerHTML = content.replace(/\n/g, '<br>');
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+  return msg;
+}
+
+function addThinking() {
+  const chat = document.getElementById('chat');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.id = 'thinking';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar bot';
+  avatar.textContent = 'L';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble bot thinking';
+  bubble.innerHTML = '<span></span><span></span><span></span>';
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeThinking() {
+  const el = document.getElementById('thinking');
+  if (el) el.remove();
+}
+
+function botSay(text, delay = 700) {
+  return new Promise(resolve => {
+    addThinking();
+    setTimeout(() => {
+      removeThinking();
+      addMsg(text, 'bot');
+      resolve();
+    }, delay);
+  });
+}
+
+function addPromptCard(promptText) {
+  const chat = document.getElementById('chat');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar bot';
+  avatar.textContent = 'L';
+  const wrap = document.createElement('div');
+  wrap.style.maxWidth = '90%';
+
+  const card = document.createElement('div');
+  card.className = 'prompt-card';
+  const header = document.createElement('div');
+  header.className = 'prompt-header';
+  header.innerHTML = `<span>PROMPT LISTO</span>`;
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'copy-mini';
+  copyBtn.textContent = 'Copiar';
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(promptText).then(() => {
+      copyBtn.textContent = 'Copiado';
+      setTimeout(() => copyBtn.textContent = 'Copiar', 2000);
+    });
+  };
+  header.appendChild(copyBtn);
+  const body = document.createElement('div');
+  body.className = 'prompt-body';
+  body.textContent = promptText;
+  card.appendChild(header);
+  card.appendChild(body);
+
+  const justif = document.createElement('div');
+  justif.className = 'justif-card';
+  justif.innerHTML = buildJustif(state.data);
+
+  wrap.appendChild(card);
+  wrap.appendChild(justif);
+  msg.appendChild(avatar);
+  msg.appendChild(wrap);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ---- ENVÍO ----
+async function send() {
+  if (state.done) return;
+  const inp = document.getElementById('inp');
+  const txt = inp.value.trim();
+  if (!txt) return;
+
+  inp.value = '';
+  inp.style.height = 'auto';
+  inp.disabled = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  addMsg(txt, 'user');
+
+  // Procesar respuesta del step actual
+  const q = QUESTIONS[state.step];
+  q.process(txt, state.data);
+  state.step++;
+
+  // ¿Terminamos?
+  if (state.step >= QUESTIONS.length) {
+    // Eco de la última respuesta + generar
+    const sinRestricciones = /ninguna|nada|no hay|sin restricci/.test(txt.toLowerCase());
+    const ecoFinal = sinRestricciones
+      ? `Sin restricciones especiales.`
+      : `Anotado: <em>${txt}</em>.`;
+    await botSay(`${ecoFinal}\n\nTengo todo lo que necesito. Construyendo el prompt...`, 600);
+
+    addThinking();
+    await new Promise(r => setTimeout(r, 1300));
+    removeThinking();
+
+    const prompt = buildPrompt(state.data);
+    addPromptCard(prompt);
+
+    await botSay(`Prompt listo. Incluye los 9 campos clínicos: objetivo observable, estímulos graduados, protocolo de corrección, variantes de regresión y progresión, y criterios de éxito medibles.\n\n¿Quieres ajustar algo?`, 800);
+
+    state.done = true;
+    document.getElementById('restartLink').style.display = 'block';
+    inp.disabled = false;
+    inp.placeholder = 'Pide ajustes si quieres...';
+    document.getElementById('sendBtn').disabled = false;
+    return;
+  }
+
+  // Siguiente pregunta
+  const nextMsg = QUESTIONS[state.step - 1].nextBot(state.data);
+  await botSay(nextMsg, 650);
+
+  inp.disabled = false;
+  inp.focus();
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function restart() {
+  state = { step: 0, data: {
+    tipo_raw:'', perfil_raw:'', edad_raw:'', objetivo_raw:'',
+    preservado_raw:'', restricciones_raw:'', formato_raw:'',
+    tipo:'', perfil:'', edad:'', objetivo:'', preservado:'', formato:'',
+    _perfil_ya_detectado: false
+  }, waitingUser: true, done: false };
+  document.getElementById('chat').innerHTML = '';
+  document.getElementById('restartLink').style.display = 'none';
+  const inp = document.getElementById('inp');
+  inp.disabled = false;
+  inp.placeholder = 'Escribe aquí...';
+  document.getElementById('sendBtn').disabled = false;
+  start();
+}
+
+// ---- INICIO ----
+async function start() {
+  await botSay(`Hola. Soy tu asistente para construir prompts logopédicos de precisión clínica.\n\n<b>¿Qué quieres crear hoy?</b> Cuéntame con tus propias palabras — tipo de material, para quién, lo que se te ocurra.`, 400);
+  state.step = 0;
+}
+
+start();
+</script>
+</body>
+</html>

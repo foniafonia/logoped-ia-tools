@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antes de llamar al logopeda · Guía para familias · Logoped-IA</title>
+<style>
+  :root{
+    --green:#22c55e; --green-d:#16a34a; --gold:#eab308; --ink:#16202c; --muted:#5a6b7d;
+    --bg:#f6faf7; --card:#ffffff; --line:#e2e8f0; --soft:#eef7f0;
+    --shadow:0 8px 26px rgba(20,60,40,.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#e9eef5; --muted:#9fb0c0; --bg:#0e1512; --card:#141c18; --line:#26332c; --soft:#16241c; --shadow:0 10px 30px rgba(0,0,0,.4);}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:20px 16px 70px}
+  header{background:linear-gradient(135deg,var(--green),var(--green-d));color:#062012;border-radius:20px;padding:24px 20px;box-shadow:var(--shadow)}
+  header .k{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;background:rgba(255,255,255,.25);padding:4px 10px;border-radius:999px}
+  h1{margin:12px 0 6px;font-size:clamp(22px,5vw,29px);line-height:1.15}
+  header p{margin:0;opacity:.92;font-size:15px}
+  .disclaimer{margin-top:14px;font-size:12.5px;background:rgba(255,255,255,.22);padding:9px 12px;border-radius:10px}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px;box-shadow:var(--shadow)}
+  h2{font-size:16px;margin:0 0 4px}
+  .hint{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+  label.field{display:block;font-weight:600;margin:8px 0 6px;font-size:14.5px}
+  input[type=number]{width:120px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{cursor:pointer;user-select:none;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 12px;font-size:14px;display:flex;align-items:center;gap:8px}
+  .chip.on{background:var(--soft);border-color:var(--green);font-weight:700}
+  .chip .e{font-size:18px}
+  .qblock{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--bg)}
+  .qblock h3{margin:0 0 8px;font-size:14.5px;display:flex;align-items:center;gap:8px}
+  .q{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+  .q:first-of-type{border-top:0}
+  .opts{display:flex;gap:6px;flex-shrink:0}
+  .opt{cursor:pointer;font-size:12.5px;padding:6px 9px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);white-space:nowrap}
+  .opt.on{background:var(--green);color:#062012;border-color:transparent;font-weight:700}
+  .go{display:block;width:100%;margin-top:18px;padding:15px;border:0;border-radius:14px;font-size:16px;font-weight:800;
+    background:linear-gradient(135deg,var(--green),var(--gold));color:#062012;cursor:pointer}
+  #result{display:none}
+  .res-block{margin-top:14px}
+  .res-block h3{font-size:15px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+  ul.clean{margin:0;padding-left:20px}
+  ul.clean li{margin:5px 0;font-size:14.5px}
+  .flag{background:#fff4f4;border:1px solid #f3c6c6;border-radius:12px;padding:12px;color:#8a1c1c;font-size:14px}
+  @media (prefers-color-scheme: dark){.flag{background:#2a1414;border-color:#5a2a2a;color:#ffb4b4}}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn2{flex:1;min-width:140px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;cursor:pointer;font-size:14px}
+  .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
+  @media print{header,.go,.actions,.foot,#form-note{display:none}.card{box-shadow:none;border:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="k">LOGOPED-IA · FAMILIAS</span>
+    <h1>Antes de llamar al logopeda</h1>
+    <p>Prepara tu primera consulta: qué observar en casa y qué preguntar. En 2 minutos tienes una guía lista para llevar.</p>
+    <div class="disclaimer">⚠️ Esto es una <b>orientación para familias</b>, no un diagnóstico. Solo un logopeda colegiado puede evaluar a tu hijo/a.</div>
+  </header>
+
+  <section class="card" id="form">
+    <h2>1 · Cuéntanos un poco</h2>
+    <p class="hint">Marca lo que encaje. Cuanto más concreto, mejor guía.</p>
+
+    <label class="field">¿Qué edad tiene? (años)</label>
+    <input type="number" id="edad" min="0" max="18" placeholder="Ej: 4">
+
+    <label class="field" style="margin-top:16px">¿Qué es lo que más te preocupa? (puedes marcar varias)</label>
+    <div class="chips" id="areas"></div>
+
+    <div id="qcontainer"></div>
+
+    <label class="field" style="margin-top:16px">Un par de cosas más</label>
+    <div class="qblock" id="universal"></div>
+
+    <button class="go" id="gen">Generar mi guía para la consulta →</button>
+    <p class="hint" id="form-note" style="margin-top:10px">Nada se envía a ningún sitio: se genera en tu móvil.</p>
+  </section>
+
+  <section class="card" id="result">
+    <h2>Tu guía para la primera consulta</h2>
+    <p class="hint">Cópiala o imprímela y llévala a la llamada o a la cita.</p>
+    <div id="resumen" class="res-block"></div>
+    <div id="preguntas" class="res-block"></div>
+    <div id="llevar" class="res-block"></div>
+    <div id="banderas" class="res-block"></div>
+    <div class="actions">
+      <button class="btn2" id="copiar">📋 Copiar guía</button>
+      <button class="btn2" id="imprimir">🖨️ Imprimir / PDF</button>
+      <button class="btn2" id="reiniciar">↺ Empezar de nuevo</button>
+    </div>
+  </section>
+
+  <p class="foot">Logoped-IA · Herramienta de orientación para familias · No sustituye la valoración de un profesional colegiado.</p>
+</div>
+
+<script>
+const AREAS=[
+ {id:"habla", e:"🗣️", label:"Pronuncia mal algunos sonidos",
+  qs:["¿Se le entiende poco al hablar para su edad?","¿Cambia u omite sonidos (ej: 'tota' por 'copa', la /r/)?","¿Le frustra que no le entiendan?"],
+  ask:["¿Los errores de pronunciación son normales para su edad o conviene intervenir?","¿Qué sonidos deberían estar ya adquiridos a esta edad?","¿Cuántas sesiones y de qué tipo recomienda?"]},
+ {id:"lenguaje", e:"💬", label:"Habla poco o le cuesta juntar palabras",
+  qs:["¿Usa menos palabras que otros niños de su edad?","¿Le cuesta formar frases o contar algo?","¿Tira de gestos o señala en vez de hablar?"],
+  ask:["¿Su nivel de lenguaje está dentro de lo esperado?","¿Es un retraso o hay que descartar algo más?","¿Qué puedo hacer en casa para estimular el lenguaje?"]},
+ {id:"comprension", e:"👂", label:"No entiende bien lo que se le dice",
+  qs:["¿Le cuesta seguir instrucciones sencillas?","¿Parece 'no escuchar' aunque oiga bien?","¿Le han revisado la audición?"],
+  ask:["¿Conviene una revisión auditiva antes o a la vez?","¿La comprensión está acorde a su edad?","¿Cómo trabajamos la comprensión en casa?"]},
+ {id:"fluidez", e:"🔁", label:"Se atasca o repite al hablar (tartamudez)",
+  qs:["¿Repite sílabas o sonidos ('pe-pe-pero')?","¿Se bloquea o alarga sonidos?","¿Aparecen tensión, gestos o evita hablar?"],
+  ask:["¿Es una disfluencia normal de la edad o tartamudez a tratar?","¿Cómo debo reaccionar cuando se atasca?","¿Qué NO debo hacer para no empeorarlo?"]},
+ {id:"voz", e:"🎙️", label:"Voz ronca o rara a menudo",
+  qs:["¿Tiene la voz ronca muchos días sin estar resfriado?","¿Grita o fuerza mucho la voz?","¿Se queda 'sin voz' a veces?"],
+  ask:["¿Conviene revisión ORL de las cuerdas vocales?","¿Cómo cuidamos la voz en casa?","¿Qué hábitos hay que cambiar?"]},
+ {id:"lectoescritura", e:"📖", label:"Le cuesta leer o escribir",
+  qs:["¿Va por detrás en lectura/escritura respecto a su clase?","¿Confunde letras o lee muy lento?","¿En el cole os han comentado algo?"],
+  ask:["¿Podría haber dislexia u otra dificultad? ¿Cómo se confirma?","¿Qué evaluación hace falta?","¿Cómo se coordina con el colegio?"]},
+ {id:"oral", e:"👅", label:"Babea o le cuesta masticar/tragar",
+  qs:["¿Babea más de lo normal para su edad?","¿Le cuesta masticar o tragar ciertos alimentos?","¿Respira mucho por la boca?"],
+  ask:["¿Hay que valorar la deglución y la musculatura de la boca?","¿Conviene coordinarse con odontología/ORL?","¿Qué ejercicios se pueden hacer?"]},
+ {id:"social", e:"🤝", label:"Poco contacto, no señala, no responde al nombre",
+  qs:["¿Responde poco cuando le llamas por su nombre?","¿Señala o mira lo que le enseñas?","¿Busca compartir cosas contigo (juego, miradas)?"],
+  ask:["¿Conviene una valoración más amplia del desarrollo y la comunicación?","¿A qué otros profesionales debería acudir?","¿Cómo favorezco la comunicación en casa?"]},
+];
+const UNIVERSAL=[
+ {id:"desde", q:"¿Lo notas desde hace bastante tiempo?"},
+ {id:"cole", q:"¿En el cole os han comentado algo?"},
+ {id:"familia", q:"¿Hay antecedentes parecidos en la familia?"},
+];
+const OPTS=[["si","Sí"],["aveces","A veces"],["no","No"]];
+
+const state={areas:new Set(), answers:{}};
+const areasEl=document.getElementById('areas');
+const qc=document.getElementById('qcontainer');
+const uni=document.getElementById('universal');
+
+AREAS.forEach(a=>{
+  const c=document.createElement('div');
+  c.className='chip'; c.innerHTML=`<span class="e">${a.e}</span>${a.label}`;
+  c.onclick=()=>{ if(state.areas.has(a.id)){state.areas.delete(a.id);c.classList.remove('on');} else {state.areas.add(a.id);c.classList.add('on');} renderQuestions(); };
+  areasEl.appendChild(c);
+});
+function qRow(key,q){
+  const optsHTML=OPTS.map(([v,l])=>`<span class="opt" data-k="${key}" data-v="${v}">${l}</span>`).join('');
+  return `<div class="q"><span>${q}</span><span class="opts">${optsHTML}</span></div>`;
+}
+function wireOpts(root){
+  root.querySelectorAll('.opt').forEach(o=>{
+    o.onclick=()=>{
+      const k=o.dataset.k;
+      root.querySelectorAll(`.opt[data-k="${k}"]`).forEach(x=>x.classList.remove('on'));
+      o.classList.add('on'); state.answers[k]=o.dataset.v;
+    };
+  });
+}
+function renderQuestions(){
+  qc.innerHTML='';
+  AREAS.filter(a=>state.areas.has(a.id)).forEach(a=>{
+    const b=document.createElement('div'); b.className='qblock';
+    b.innerHTML=`<h3><span>${a.e}</span> ${a.label}</h3>`+a.qs.map((q,i)=>qRow(a.id+"_"+i,q)).join('');
+    qc.appendChild(b); wireOpts(b);
+  });
+}
+uni.innerHTML=UNIVERSAL.map(u=>qRow("u_"+u.id,u.q)).join(''); wireOpts(uni);
+
+document.getElementById('gen').onclick=()=>{
+  const edad=document.getElementById('edad').value;
+  const chosen=AREAS.filter(a=>state.areas.has(a.id));
+  if(!chosen.length){ alert("Marca al menos una preocupación para generar tu guía."); return; }
+
+  // Resumen
+  let res=`<h3>📝 Resumen</h3><ul class="clean">`;
+  res+=`<li><b>Edad:</b> ${edad?edad+" años":"(sin indicar)"}</li>`;
+  res+=`<li><b>Lo que más preocupa:</b> ${chosen.map(a=>a.label.toLowerCase()).join("; ")}</li>`;
+  chosen.forEach(a=>{
+    a.qs.forEach((q,i)=>{ const v=state.answers[a.id+"_"+i]; if(v&&v!=="no"){ res+=`<li>${q} → <b>${v==="si"?"Sí":"A veces"}</b></li>`; }});
+  });
+  UNIVERSAL.forEach(u=>{ const v=state.answers["u_"+u.id]; if(v&&v!=="no"){ res+=`<li>${u.q} → <b>${v==="si"?"Sí":"A veces"}</b></li>`; }});
+  res+=`</ul>`;
+  document.getElementById('resumen').innerHTML=res;
+
+  // Preguntas para el logopeda
+  const preguntas=[...new Set(chosen.flatMap(a=>a.ask))];
+  document.getElementById('preguntas').innerHTML=`<h3>❓ Preguntas que puedes hacer al logopeda</h3><ul class="clean">`+preguntas.map(p=>`<li>${p}</li>`).join('')+`<li>¿Cada cuánto revisamos si hay avances?</li><li>¿Qué puedo hacer yo en casa para ayudar?</li></ul>`;
+
+  // Qué llevar
+  document.getElementById('llevar').innerHTML=`<h3>🎒 Qué llevar a la primera cita</h3><ul class="clean">
+    <li>Un vídeo corto (1-2 min) de tu hijo/a hablando o jugando en casa.</li>
+    <li>Informes del colegio o de otros profesionales, si los hay.</li>
+    <li>La cartilla de salud / revisiones (audición, si se ha revisado).</li>
+    <li>Este resumen que acabas de generar.</li></ul>`;
+
+  // Banderas para no esperar
+  const edadN=parseInt(edad||"99",10);
+  const flags=[];
+  if(state.areas.has('social')) flags.push("Poca respuesta al nombre, no señala ni comparte miradas.");
+  if(edadN<=2 && (state.areas.has('lenguaje')||state.areas.has('habla'))) flags.push("A los 2 años dice muy pocas palabras.");
+  if(state.areas.has('oral')) flags.push("Atragantamientos frecuentes o rechazo importante de alimentos.");
+  flags.push("Si notas que ha perdido habilidades que antes tenía, consulta pronto.");
+  document.getElementById('banderas').innerHTML=`<h3>🚩 Señales para no esperar</h3><div class="flag"><ul class="clean" style="color:inherit">`+flags.map(f=>`<li>${f}</li>`).join('')+`</ul>Si ves alguna, pide cita cuanto antes con un logopeda colegiado.</div>`;
+
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+};
+
+function plainText(){
+  return document.getElementById('result').innerText.replace(/\n{3,}/g,"\n\n");
+}
+document.getElementById('copiar').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(plainText()); alert("Guía copiada. Ya puedes pegarla en un mensaje o nota."); }
+  catch(e){ alert("Copia manualmente seleccionando el texto."); }
+};
+document.getElementById('imprimir').onclick=()=>window.print();
+document.getElementById('reiniciar').onclick=()=>location.reload();
+</script>
+</body>
+</html>

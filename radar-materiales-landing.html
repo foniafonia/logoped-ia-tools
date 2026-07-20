@@ -767,8 +767,8 @@ body::before {
         <p>Sube un material educativo. El Radar escanea las demandas cognitivas, detecta qué perfiles pueden fallar, y te orienta sobre qué observar antes y después de usarlo.</p>
         <p style="font-size: 0.9rem; color: var(--ink-dim); margin-bottom: 16px;">Análisis a priori (antes) • Análisis a posteriori (después) • Hipótesis funcionales • Sin diagnóstico • Con criterio clínico.</p>
         <div class="hero-actions">
-          <button class="btn" onclick="document.querySelector('[data-tab=\"herramienta\"]').click()">📡 Usar Radar</button>
-          <button class="btn secondary" onclick="document.querySelector('[data-tab=\"ejemplos\"]').click()">Ver ejemplos →</button>
+          <button class="btn" onclick="document.querySelectorAll('[data-tab]')[5].click()">📡 Usar Radar</button>
+          <button class="btn secondary" onclick="document.querySelectorAll('[data-tab]')[2].click()">Ver ejemplos →</button>
         </div>
       </div>
 
@@ -1051,9 +1051,14 @@ body::before {
       <p style="font-size: 0.9rem; color: var(--ink-muted); max-width: 500px; margin: 0 auto 32px; line-height: 1.7;">
         Sube un PDF educativo o terapéutico. El Radar analiza las demandas cognitivas, detecta perfiles en riesgo y ofrece orientación clínico-pedagógica funcional.
       </p>
-      <a href="https://chatgpt.com/g/g-6a097a4c73548191aa0e4d5d027bc4dc-radar-de-materiales-terapeuticos-y-educativos" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: var(--marker-blue); color: white; border: none; border-radius: 3px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 4px 4px 0 rgba(37,99,168,0.25); transition: transform 0.15s, box-shadow 0.15s;">
-        🚀 Abrir Radar en ChatGPT
-      </a>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://chatgpt.com/g/g-6a097a4c73548191aa0e4d5d027bc4dc-radar-de-materiales-terapeuticos-y-educativos" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: var(--marker-blue); color: white; border: none; border-radius: 3px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 4px 4px 0 rgba(37,99,168,0.25); transition: transform 0.15s, box-shadow 0.15s;">
+          🚀 Abrir Radar en ChatGPT
+        </a>
+        <a href="https://t.me/logopedIACHAT" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: var(--marker-teal); color: white; border: none; border-radius: 3px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 4px 4px 0 rgba(26,138,122,0.25); transition: transform 0.15s, box-shadow 0.15s;">
+          💬 Compartir opinión
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -1140,3 +1145,4 @@ navTabs.forEach(tab => {
 
 </body>
 </html>
+<!-- Force rebuild -->
