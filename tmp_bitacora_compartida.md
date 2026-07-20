@@ -193,6 +193,27 @@ Proyecto: Membresia / Suite
 Hecho: Suite integrada como diferenciador visible en landing pública. Añadida tarjeta "Logoped-IA Suite" con badge ACCESO AMPLIADO (+4,99€/mes) en sección "Todo lo que incluye". Pricing 2 columnas y FAQ Suite ya estaban. Push a main → Vercel desplegando.
 Estado: [PARA_CODEX HECHO]
 
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Landing escaparate — capturas visuales para tarjetas VER
+Rama de trabajo: codex/publicar-assets-locales (basada en origin/gh-pages)
+
+Hecho:
+- Añadido soporte de miniaturas en `LANDING_TODO_LOGOPED_IA.html`: cada tarjeta con enlace principal `VER` busca su captura en `codex-assets/screenshots/<slug>.jpg`.
+- Generadas 127 capturas JPG, una por cada tarjeta con enlace principal usable.
+- Las capturas cubren Academia/Colmenia, Suite, juegos, herramientas, FonoMundos, ARAIA, Beta Innovadores, Logopod, herramientas clinicas, POE masivo y POE descartados.
+- Peso total de capturas: 5.6 MB.
+- Verificado: 127 tarjetas con `VER`, 127 capturas presentes, 0 capturas faltantes.
+
+Notas:
+- Algunas URLs externas pueden mostrar login, pantalla de carga o estado de preview; aun asi sirven como referencia visual para reconocer la tarjeta.
+- Las tarjetas sin `VER` principal no llevan captura porque aun no son algo abrible/usable.
+- Revision visual importante: las previews de Academia/Colmenia protegidas por Vercel pueden mostrar "Log in to Vercel" en vez del producto. Codex intento generar share link temporal con el conector de Vercel para `academia-logoped-ia-git-codex-renov-139c35...` y `academia-logoped-a2ga84lh4.../concept-vivo-b`, pero Vercel devolvio 403. Para comprador externo hay que hacer deploy publico, quitar proteccion o generar share link desde la cuenta Vercel de Jose.
+
+Estado: [PARA_CODEX HECHO]
+
 Fecha: 2026-04-12
 Agente: Usuario (móvil)
 Proyecto: General
