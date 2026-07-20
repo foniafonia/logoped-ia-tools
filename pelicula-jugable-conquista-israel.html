@@ -6,203 +6,134 @@
 <title>La Conquista de Israel — Película Jugable · Demo 60s</title>
 <style>
 /* ============================================================
-   ▓▓  CAPA DE MARCA  ▓▓
-   Cambia SOLO estas variables para adaptar la imagen de marca
-   del equipo de la película (colores + nombre del logo).
+   ▓▓  CAPA DE MARCA  ▓▓  (cambia solo esto para adaptar la marca)
    ============================================================ */
 :root{
-  --brand:        #c8952f;   /* dorado principal  */
-  --brand-2:      #7a1f1a;   /* rojo tierra       */
-  --brand-ink:    #f4e9d2;   /* texto sobre oscuro*/
-  --brand-name:   "LA CONQUISTA DE ISRAEL";
-  --hud:          #d9c9a3;
-  --ok:           #4caf6d;
-  --warn:         #d98a3a;
+  --brand:#c8952f; --brand-2:#7a1f1a; --brand-ink:#f4e9d2;
+  --brand-name:"LA CONQUISTA DE ISRAEL";
+  --hud:#d9c9a3; --ok:#4caf6d; --warn:#d98a3a;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  background:#0a0705;
-  color:var(--brand-ink);
-  font-family:"Trebuchet MS",Verdana,sans-serif;
-  overflow:hidden;
-  user-select:none;
-  -webkit-tap-highlight-color:transparent;
-}
+body{background:#0a0705;color:var(--brand-ink);
+  font-family:"Trebuchet MS",Verdana,sans-serif;overflow:hidden;
+  -webkit-tap-highlight-color:transparent}
 
-/* ---- Escenario / marco cinematográfico ---- */
-#stage{
-  position:fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  perspective:1200px;
-}
-
-/* El "hueco" donde va el CLIP o FOTOGRAMA real de la película */
-.shot{
-  position:absolute; inset:0;
-  opacity:0; transition:opacity .8s ease;
-  overflow:hidden;
-}
+/* ---- Escenario ---- */
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+/* El vídeo real de la película */
+#film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;display:none}
+#film.on{display:block}
+/* Placeholder CSS (cuando aún no se ha cargado la película) */
+.shot{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;overflow:hidden}
 .shot.active{opacity:1}
-
-/* Placeholder pintado con CSS (se sustituye por <video>/<img> real) */
-.frame{
-  position:absolute; inset:-4%;
-  background-position:center; background-size:cover;
-  transform:scale(1.05);
-  animation:kenburns 12s ease-out forwards;
-}
-@keyframes kenburns{
-  from{transform:scale(1.02) translate(0,0)}
-  to  {transform:scale(1.16) translate(-1.5%,-1.5%)}
-}
-
-/* Etiqueta del hueco (guía de producción, se quita en la versión final) */
-.slot-tag{
-  position:absolute; top:14px; left:14px; z-index:6;
-  font:600 11px/1.4 "Courier New",monospace; letter-spacing:.5px;
-  color:#fff; background:rgba(0,0,0,.55);
-  border-left:3px solid var(--brand);
-  padding:6px 9px; border-radius:0 6px 6px 0;
-  max-width:min(70vw,360px);
-}
+.frame{position:absolute;inset:-4%;background-position:center;background-size:cover;transform:scale(1.05)}
+@keyframes kenburns{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.16) translate(-1.5%,-1.5%)}}
+.slot-tag{position:absolute;top:14px;left:14px;z-index:6;
+  font:600 11px/1.4 "Courier New",monospace;letter-spacing:.5px;color:#fff;
+  background:rgba(0,0,0,.55);border-left:3px solid var(--brand);padding:6px 9px;border-radius:0 6px 6px 0;max-width:min(70vw,360px)}
 .slot-tag b{color:var(--brand)}
 
-/* ---- Marco de PRIMERA PERSONA (viñeta tipo casco/visor) ---- */
-#fpv{
-  position:fixed; inset:0; z-index:5; pointer-events:none;
-  box-shadow:inset 0 0 220px 60px rgba(0,0,0,.85),
-             inset 0 0 60px 10px rgba(0,0,0,.4);
-}
-#fpv::before{ /* respiración de cámara */
-  content:""; position:absolute; inset:0;
-  box-shadow:inset 0 -160px 120px -60px rgba(0,0,0,.7);
-  animation:breathe 6s ease-in-out infinite;
-}
+/* ---- Primera persona ---- */
+#fpv{position:fixed;inset:0;z-index:5;pointer-events:none;
+  box-shadow:inset 0 0 220px 60px rgba(0,0,0,.8),inset 0 0 60px 10px rgba(0,0,0,.35)}
+#fpv::before{content:"";position:absolute;inset:0;
+  box-shadow:inset 0 -160px 120px -60px rgba(0,0,0,.65);animation:breathe 6s ease-in-out infinite}
 @keyframes breathe{50%{transform:translateY(6px)}}
-
-/* Antorcha en primera persona (aparece tras "tomar la antorcha") */
-#torch{
-  position:fixed; z-index:6; right:14%; bottom:-6%;
-  width:120px; height:260px; pointer-events:none;
-  opacity:0; transform:translateY(40px) rotate(6deg);
-  transition:opacity .6s, transform .6s;
-}
-#torch.on{opacity:1; transform:translateY(0) rotate(6deg)}
-#torch .stick{position:absolute;left:46px;bottom:0;width:22px;height:210px;
-  background:linear-gradient(#5a3a1c,#2c1a0c);border-radius:6px;transform:rotate(-6deg)}
+#torch{position:fixed;z-index:6;right:14%;bottom:-6%;width:120px;height:260px;pointer-events:none;
+  opacity:0;transform:translateY(40px) rotate(6deg);transition:opacity .6s,transform .6s}
+#torch.on{opacity:1;transform:translateY(0) rotate(6deg)}
+#torch .stick{position:absolute;left:46px;bottom:0;width:22px;height:210px;background:linear-gradient(#5a3a1c,#2c1a0c);border-radius:6px;transform:rotate(-6deg)}
 #torch .flame{position:absolute;left:30px;bottom:180px;width:60px;height:80px;
   background:radial-gradient(circle at 50% 70%,#fff6c9,#ffb037 45%,#e2561d 75%,transparent 78%);
-  border-radius:50% 50% 45% 45%/60% 60% 40% 40%;
-  filter:blur(1px);animation:flick .18s infinite alternate}
+  border-radius:50% 50% 45% 45%/60% 60% 40% 40%;filter:blur(1px);animation:flick .18s infinite alternate}
 @keyframes flick{to{transform:scale(1.08,1.14) translateX(3px);opacity:.9}}
 #torchglow{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;
-  background:radial-gradient(60% 55% at 74% 78%,rgba(255,150,40,.28),transparent 60%);
-  transition:opacity .6s}
+  background:radial-gradient(60% 55% at 74% 78%,rgba(255,150,40,.28),transparent 60%);transition:opacity .6s}
 #torchglow.on{opacity:1}
 
 /* ---- HUD ---- */
-#hud{
-  position:fixed; left:0; right:0; bottom:0; z-index:7;
+#hud{position:fixed;left:0;right:0;bottom:0;z-index:7;
   padding:16px 20px calc(16px + env(safe-area-inset-bottom));
-  display:flex; flex-direction:column; gap:10px;
-  background:linear-gradient(transparent,rgba(0,0,0,.55) 55%);
-}
+  display:none;flex-direction:column;gap:10px;
+  background:linear-gradient(transparent,rgba(0,0,0,.55) 55%)}
+#hud.on{display:flex}
 .hud-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-#objective{
-  font-size:clamp(15px,2.4vw,19px); font-weight:600; color:var(--hud);
-  text-shadow:0 2px 8px #000; max-width:70%;
-}
+#objective{font-size:clamp(15px,2.4vw,19px);font-weight:600;color:var(--hud);text-shadow:0 2px 8px #000;max-width:66%}
 #objective small{display:block;font-size:.72em;font-weight:400;opacity:.7;letter-spacing:2px;text-transform:uppercase}
-#mode-badge{
-  font:600 11px/1 "Courier New",monospace; letter-spacing:1px;
-  color:#0a0705; background:var(--brand); padding:6px 10px; border-radius:20px;
-  white-space:nowrap;
-}
-#subtitle{
-  min-height:1.4em; text-align:center;
-  font-size:clamp(14px,2.2vw,18px); color:#fff;
-  text-shadow:0 2px 10px #000; letter-spacing:.3px;
-}
-
-/* Barra de tiempo 0:00 → 1:00 */
+.hud-right{display:flex;gap:8px;align-items:center}
+#mode-badge{font:600 11px/1 "Courier New",monospace;letter-spacing:1px;color:#0a0705;background:var(--brand);padding:6px 10px;border-radius:20px;white-space:nowrap}
+#mute{cursor:pointer;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:20px;padding:5px 10px;font-size:13px}
+#subtitle{min-height:1.4em;text-align:center;font-size:clamp(14px,2.2vw,18px);color:#fff;text-shadow:0 2px 10px #000}
 #timeline{height:4px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden}
-#timebar{height:100%;width:0;background:linear-gradient(90deg,var(--brand-2),var(--brand));transition:width .25s linear}
-
-/* Pista de acción / botones */
-#actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;min-height:0}
-.btn{
-  font:600 15px/1 inherit; color:#0a0705; cursor:pointer;
-  background:var(--brand); border:none; border-radius:12px;
-  padding:14px 20px; box-shadow:0 6px 18px rgba(0,0,0,.4);
-  transition:transform .12s, filter .12s; position:relative;
-}
+#timebar{height:100%;width:0;background:linear-gradient(90deg,var(--brand-2),var(--brand));transition:width .2s linear}
+#actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{font:600 15px/1 inherit;color:#0a0705;cursor:pointer;background:var(--brand);border:none;border-radius:12px;
+  padding:14px 20px;box-shadow:0 6px 18px rgba(0,0,0,.4);transition:transform .12s,filter .12s;position:relative}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
 .btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
 .btn.recommended{animation:pulse 1.4s infinite}
-.btn.recommended::after{content:"◀ guiado";position:absolute;right:-64px;top:50%;
-  transform:translateY(-50%);font-size:11px;color:var(--brand);white-space:nowrap;opacity:.85}
+.btn.recommended::after{content:"◀ guiado";position:absolute;right:-62px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--brand);white-space:nowrap;opacity:.85}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,149,47,.6)}50%{box-shadow:0 0 0 12px rgba(200,149,47,0)}}
-
-.tap-hint{
-  font:600 14px/1 inherit;color:#fff;opacity:.9;cursor:pointer;
-  padding:14px 22px;border:1.5px dashed rgba(255,255,255,.5);border-radius:12px;
-  animation:pulse 1.4s infinite; background:rgba(0,0,0,.2);
-}
-
-/* Aviso flotante (corrección suave del modo guiado) */
-#toast{
-  position:fixed;top:22px;left:50%;transform:translate(-50%,-20px);z-index:9;
-  background:rgba(20,12,6,.92);border:1px solid var(--warn);color:#fff;
-  padding:12px 18px;border-radius:12px;font-size:14px;max-width:80vw;text-align:center;
-  opacity:0;transition:.4s;pointer-events:none;
-}
+.tap-hint{font:600 14px/1 inherit;color:#fff;opacity:.9;cursor:pointer;padding:14px 22px;
+  border:1.5px dashed rgba(255,255,255,.5);border-radius:12px;animation:pulse 1.4s infinite;background:rgba(0,0,0,.2)}
+#toast{position:fixed;top:22px;left:50%;transform:translate(-50%,-20px);z-index:9;
+  background:rgba(20,12,6,.92);border:1px solid var(--warn);color:#fff;padding:12px 18px;border-radius:12px;
+  font-size:14px;max-width:80vw;text-align:center;opacity:0;transition:.4s;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* ---- Pantallas (intro / fin) ---- */
-.screen{
-  position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;gap:18px;padding:30px;
-  background:radial-gradient(120% 90% at 50% 0%,#1c130a,#0a0705 70%);
-}
+/* ---- Pantallas ---- */
+.screen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:16px;padding:30px;background:radial-gradient(120% 90% at 50% 0%,#1c130a,#0a0705 70%);overflow:auto}
 .screen.hidden{display:none}
-.logo{
-  font:800 clamp(22px,5vw,42px)/1.05 Georgia,serif; letter-spacing:2px;
-  color:var(--brand); text-shadow:0 3px 0 rgba(0,0,0,.5);
-}
+.logo{font:800 clamp(22px,5vw,42px)/1.05 Georgia,serif;letter-spacing:2px;color:var(--brand);text-shadow:0 3px 0 rgba(0,0,0,.5)}
 .logo span{display:block;font-size:.34em;letter-spacing:6px;color:var(--brand-ink);font-weight:400;margin-top:8px}
-.tag{max-width:520px;color:#d9c9a3;font-size:clamp(14px,2.4vw,17px);line-height:1.5;opacity:.9}
-.mode-pick{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-.mode-card{
-  width:190px;background:rgba(255,255,255,.05);border:1px solid rgba(200,149,47,.35);
-  border-radius:16px;padding:18px 16px;cursor:pointer;transition:.15s;
-}
+.tag{max-width:540px;color:#d9c9a3;font-size:clamp(14px,2.4vw,17px);line-height:1.5;opacity:.92}
+.pill{display:inline-block;font-size:12px;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:4px 12px}
+.filebox{display:flex;flex-direction:column;gap:8px;align-items:center;background:rgba(255,255,255,.04);
+  border:1px dashed rgba(200,149,47,.5);border-radius:16px;padding:18px 22px;max-width:520px}
+#film-status{font-size:13px;color:#bfae8c}
+.mode-pick{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.mode-card{width:190px;background:rgba(255,255,255,.05);border:1px solid rgba(200,149,47,.35);border-radius:16px;
+  padding:16px 14px;cursor:pointer;transition:.15s}
 .mode-card:hover{background:rgba(200,149,47,.12);transform:translateY(-3px)}
+.mode-card.disabled{opacity:.4;pointer-events:none}
 .mode-card h3{color:var(--brand);font-size:17px;margin-bottom:6px}
 .mode-card p{font-size:12.5px;color:#cbb;line-height:1.4}
-.note{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-size:11px;color:#7a6a52;z-index:11}
-.pill{display:inline-block;font-size:12px;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:4px 12px;margin-top:4px}
+.linkrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:13px}
+.linkrow a,.linkrow button{color:#cbb;background:none;border:none;cursor:pointer;text-decoration:underline;font:inherit;font-size:13px}
+.win{color:var(--ok)}.lose{color:var(--warn)}
 
-/* Botón de info "cómo meter el metraje real" */
-#howto{position:fixed;top:12px;right:12px;z-index:12;font-size:12px;color:#cbb;
-  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);border-radius:20px;
-  padding:6px 12px;cursor:pointer}
-#howto-panel{position:fixed;inset:0;z-index:20;background:rgba(6,4,2,.94);
-  display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;gap:14px}
-#howto-panel.show{display:flex}
-#howto-panel .box{max-width:640px;text-align:left;background:rgba(255,255,255,.04);
-  border:1px solid rgba(200,149,47,.3);border-radius:16px;padding:24px;line-height:1.6;font-size:14px;color:#e7dcc5}
-#howto-panel code{background:rgba(0,0,0,.5);padding:2px 6px;border-radius:5px;color:var(--brand);font-size:13px}
-#howto-panel h2{color:var(--brand);margin-bottom:6px}
-#howto-panel .btn{align-self:center;margin-top:8px}
-.win{color:var(--ok)} .lose{color:var(--warn)}
+/* ---- Editor de planos ---- */
+#editor{position:fixed;inset:0;z-index:30;background:rgba(6,4,2,.97);display:none;flex-direction:column;padding:18px;gap:12px;overflow:auto}
+#editor.on{display:flex}
+#editor h2{color:var(--brand);font-size:20px}
+#editor .sub{font-size:13px;color:#bfae8c;line-height:1.5;max-width:760px}
+.beat{background:rgba(255,255,255,.04);border:1px solid rgba(200,149,47,.28);border-radius:12px;padding:12px;display:grid;
+  grid-template-columns:26px 78px 78px 1fr 118px 90px;gap:8px;align-items:center}
+.beat .n{color:var(--brand);font-weight:700;text-align:center}
+.beat input,.beat select{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.18);color:#f4e9d2;
+  border-radius:7px;padding:7px 8px;font:inherit;font-size:13px;width:100%}
+.beat .mini{display:flex;gap:4px}
+.beat .mini button{flex:1;font-size:11px;padding:6px 4px;background:rgba(200,149,47,.18);color:var(--brand);border:none;border-radius:6px;cursor:pointer}
+.beat-head{display:grid;grid-template-columns:26px 78px 78px 1fr 118px 90px;gap:8px;font-size:11px;color:#8a7a5c;padding:0 12px;letter-spacing:.5px;text-transform:uppercase}
+.ed-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.ed-actions button{font:600 14px/1 inherit;padding:12px 18px;border-radius:10px;border:none;cursor:pointer}
+.ed-actions .primary{background:var(--brand);color:#0a0705}
+.ed-actions .sec{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+#preview-video{position:fixed;right:18px;bottom:18px;width:260px;max-width:40vw;border:2px solid var(--brand);border-radius:10px;z-index:31;display:none;background:#000}
+#topbtns{position:fixed;top:12px;right:12px;z-index:12;display:flex;gap:8px}
+#topbtns button{font-size:12px;color:#cbb;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 12px;cursor:pointer}
+.note{position:fixed;bottom:10px;left:0;right:0;text-align:center;font-size:11px;color:#7a6a52;z-index:11;pointer-events:none}
 </style>
 </head>
 <body>
 
-<!-- ══════════════ ESCENARIO (huecos de la película) ══════════════ -->
-<div id="stage"></div>
+<!-- Escenario -->
+<div id="stage">
+  <video id="film" playsinline preload="auto"></video>
+</div>
+<video id="preview-video" playsinline muted></video>
 
 <!-- Primera persona -->
 <div id="torchglow"></div>
@@ -213,261 +144,275 @@ body{
 <div id="hud">
   <div class="hud-top">
     <div id="objective"><small>Objetivo</small><span id="obj-text">—</span></div>
-    <div id="mode-badge">MODO</div>
+    <div class="hud-right"><button id="mute" onclick="toggleMute()">🔊</button><div id="mode-badge">MODO</div></div>
   </div>
   <div id="subtitle"></div>
   <div id="actions"></div>
   <div id="timeline"><div id="timebar"></div></div>
 </div>
-
 <div id="toast"></div>
 
-<!-- ══════════════ INTRO ══════════════ -->
+<!-- INTRO -->
 <section class="screen" id="intro">
-  <div class="logo" id="brandlogo"><span>Película jugable · Demo 60&nbsp;s</span></div>
-  <div class="pill">Formato básico — primera persona</div>
-  <p class="tag">Vives en primera persona un fragmento de la película. En esta demo los planos
-     son <b>placeholders</b>: cada hueco se sustituye por el clip o fotograma real de la
-     película sin tocar el resto. Elige cómo quieres jugarlo:</p>
+  <div class="logo" id="brandlogo"><span>Película jugable · Demo 60&nbsp;s · 1ª persona</span></div>
+  <span class="pill">Formato básico — con tu película real</span>
+  <div class="filebox">
+    <p class="tag" style="margin:0">Carga <b>tu archivo de la película</b> (se queda en tu ordenador, no se sube a ningún sitio):</p>
+    <input type="file" id="filepick" accept="video/*">
+    <div id="film-status">Sin película cargada · se jugará con planos de muestra.</div>
+  </div>
+  <p class="tag">Vives un fragmento en primera persona. El motor reproduce el trozo de la
+     película que toca en cada momento. Elige cómo jugarlo:</p>
   <div class="mode-pick">
-    <div class="mode-card" onclick="start('guiado')">
-      <h3>▶ Guiado</h3>
-      <p>Se te lleva de la mano. Aprendes, no puedes perder. Ideal para la primera toma de contacto.</p>
-    </div>
-    <div class="mode-card" onclick="start('libre')">
-      <h3>⚔ Libre</h3>
-      <p>Decides tú. Puedes equivocarte de camino, ir a otros sitios y <b>ganar o perder</b>.</p>
-    </div>
+    <div class="mode-card" onclick="start('guiado')"><h3>▶ Guiado</h3>
+      <p>Se te lleva de la mano. Aprendes, no puedes perder.</p></div>
+    <div class="mode-card" onclick="start('libre')"><h3>⚔ Libre</h3>
+      <p>Decides tú: puedes equivocarte y <b>ganar o perder</b>.</p></div>
+  </div>
+  <div class="linkrow">
+    <button onclick="openEditor()">⚙ Ajustar los planos (códigos de tiempo)</button>
+    <button onclick="toggleHowto(true)">ⓘ Cómo funciona</button>
   </div>
 </section>
 
-<!-- ══════════════ FIN ══════════════ -->
+<!-- FIN -->
 <section class="screen hidden" id="end">
   <div class="logo" id="endlogo" style="font-size:clamp(20px,4vw,34px)"></div>
   <p class="tag" id="end-text"></p>
   <p class="tag" id="learn-text" style="color:var(--brand)"></p>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+  <div class="linkrow" style="gap:12px">
     <button class="btn" onclick="location.reload()">↻ Repetir</button>
-    <button class="btn ghost" onclick="toggleHowto(true)">ⓘ Cómo meter el metraje real</button>
+    <button class="btn ghost" onclick="openEditor()">⚙ Ajustar planos</button>
   </div>
 </section>
 
-<button id="howto" onclick="toggleHowto(true)">ⓘ Cómo funciona</button>
-<div id="howto-panel">
-  <div class="box">
-    <h2>Cómo sustituir los placeholders por la película real</h2>
-    <p>Cada escena tiene un <b>hueco</b> (<code>.frame</code>). Hoy está pintado con CSS.
-       Para la versión final solo cambias ese hueco por el material real:</p>
-    <p>• <b>Si tenéis la película montada</b> → metéis el <code>&lt;video&gt;</code> o el fotograma
-       (<code>background-image</code>) en ese hueco. Marca 1:1, es literalmente la peli.</p>
-    <p>• <b>Si os dan los prompts</b> → regeneráis ese plano (imagen/vídeo/3D) y podéis
-       <b>crear caminos nuevos</b> que no estaban en la peli.</p>
-    <p>El <b>motor es el mismo</b> en los dos casos: escenas conectadas + decisiones.
-       El modo <b>guiado</b> y el modo <b>libre</b> ya conviven aquí. La imagen de marca
-       se controla desde las variables <code>--brand</code> arriba del archivo.</p>
-    <button class="btn" onclick="toggleHowto(false)">Cerrar</button>
+<!-- Editor -->
+<section id="editor">
+  <h2>⚙ Ajustar los planos a tu película</h2>
+  <p class="sub">Cada fila es un momento del juego. Pon el <b>segundo de inicio</b> y de <b>fin</b>
+     del trozo de tu película que quieres en ese momento. Con la peli cargada puedes darle a
+     <b>“⇤ ahora”</b>/<b>“ahora ⇥”</b> para capturar el tiempo mientras la ves en la esquina.
+     Se guarda en tu navegador. Exporta el JSON para no perderlo.</p>
+  <div class="beat-head"><div>#</div><div>Inicio (s)</div><div>Fin (s)</div><div>Qué pasa / narración</div><div>Objetivo</div><div>Tipo</div></div>
+  <div id="beatlist"></div>
+  <div class="ed-actions">
+    <button class="sec" onclick="addBeat()">＋ Añadir plano</button>
+    <button class="sec" onclick="exportCfg()">⭳ Exportar JSON</button>
+    <label class="sec" style="display:inline-flex;align-items:center;cursor:pointer">⭱ Importar JSON
+      <input type="file" id="impcfg" accept="application/json" style="display:none"></label>
+    <button class="sec" onclick="resetCfg()">↺ Valores por defecto</button>
+    <button class="primary" onclick="saveEditor()">✓ Guardar y volver</button>
+  </div>
+</section>
+
+<div id="topbtns"><button onclick="toggleHowto(true)">ⓘ</button></div>
+
+<div id="howto-panel" class="screen hidden" style="z-index:40;background:rgba(6,4,2,.95)">
+  <div style="max-width:640px;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(200,149,47,.3);border-radius:16px;padding:24px;line-height:1.6;font-size:14px;color:#e7dcc5">
+    <h2 style="color:var(--brand);margin-bottom:6px">Cómo funciona</h2>
+    <p>1 · <b>Carga tu película</b> en la pantalla de inicio (se queda en tu equipo, no se sube).</p>
+    <p>2 · En <b>⚙ Ajustar los planos</b> dices qué segundos de la peli van en cada momento del juego.</p>
+    <p>3 · Juega en <b>Guiado</b> (no se puede perder) o <b>Libre</b> (decides y puedes perder).</p>
+    <p style="margin-top:8px;opacity:.8">El mismo motor sirve tanto si usas la peli tal cual como si algún día
+       metéis planos nuevos generados. La imagen de marca se controla desde las variables <code style="color:var(--brand)">--brand</code> del archivo.</p>
+    <button class="btn" style="margin-top:10px" onclick="toggleHowto(false)">Cerrar</button>
   </div>
 </div>
 
-<div class="note">Demo técnica · los planos son placeholders sustituibles por el metraje real</div>
+<div class="note">Tu película se reproduce en local · nada se sube a internet</div>
 
 <script>
-/* =========================================================================
-   GUION DE 60 SEGUNDOS  (formato básico · primera persona)
-   Cada escena = un "hueco" de la película + narración + acción.
-   type: 'auto'  -> avanza sola tras 'dur' segundos (con Ken Burns)
-         'tap'   -> espera un gesto del jugador (acción en 1ª persona)
-         'choice'-> decisión (guiado: se resalta la correcta; libre: consecuencias)
-   ========================================================================= */
-const SCENES = [
-  { id:'s1', dur:10, type:'auto', tag:'CLIP 01 · 0:00–0:10 · amanece en el campamento',
-    obj:'Despierta en el campamento', sub:'Amanece sobre las tiendas. Hoy cruzaréis hacia la ciudad.',
-    sky:['#20140a','#5a3410','#c8952f'], horizon:'camp' },
-
-  { id:'s2', dur:8, type:'tap', tag:'CLIP 02 · 0:10–0:18 · tomar la antorcha (1ª persona)',
-    obj:'Ponte en pie', sub:'Toma la antorcha antes de salir.',
-    action:'🔥 Tomar la antorcha', torch:true,
-    sky:['#160f08','#3a2410','#7a4a18'], horizon:'camp' },
-
-  { id:'s3', dur:10, type:'auto', tag:'CLIP 03 · 0:18–0:28 · el camino hacia el río',
-    obj:'Avanza hacia el río Jordán', sub:'El sendero baja entre acacias hacia el agua.',
-    sky:['#2a1c10','#6b4a1e','#d9a94a'], horizon:'path' },
-
-  { id:'s4', dur:14, type:'choice', tag:'CLIP 04 · 0:28–0:42 · DECISIÓN · cruzar el río',
-    obj:'El río baja crecido. ¿Por dónde cruzas?', sub:'Lee el terreno antes de dar un paso.',
-    sky:['#1a2230','#33506b','#7fa9c4'], horizon:'river',
-    choices:[
-      { text:'Por el vado poco profundo', correct:true,
-        okSub:'Buena lectura. El agua te llega a la rodilla y pasas firme.' },
-      { text:'Por la corriente abierta', correct:false,
-        badSub:'La corriente tira fuerte…',
-        guidedFix:'La corriente te arrastra. Retrocedes y buscas el vado.',
-        loseText:'La corriente te arrastra río abajo. La misión se pierde aquí.' }
-    ] },
-
-  { id:'s5', dur:10, type:'auto', tag:'CLIP 05 · 0:42–0:52 · ante las murallas',
-    obj:'Aproxímate a las murallas', sub:'La ciudad se alza enorme al otro lado de la llanura.',
-    sky:['#1a120c','#4a2c18','#a8632a'], horizon:'walls' },
-
-  { id:'s6', dur:8, type:'tap', tag:'CLIP 06 · 0:52–1:00 · suena el cuerno',
-    obj:'Suena el cuerno. Avanza', sub:'Es el momento. Da el paso al frente.',
-    action:'📯 Avanzar', torch:true,
-    sky:['#20140a','#7a1f1a','#c8952f'], horizon:'walls' },
+/* ===== Configuración por defecto (retimable en el editor) ===== */
+const DEFAULT_BEATS=[
+ {in:0, out:10, type:'auto',  obj:'Despierta en el campamento', sub:'Amanece sobre las tiendas. Hoy cruzaréis hacia la ciudad.'},
+ {in:10,out:18, type:'tap',   obj:'Ponte en pie', sub:'Toma la antorcha antes de salir.', action:'🔥 Tomar la antorcha', torch:true},
+ {in:18,out:28, type:'auto',  obj:'Avanza hacia el río', sub:'El sendero baja entre acacias hacia el agua.'},
+ {in:28,out:42, type:'choice',obj:'El río baja crecido. ¿Por dónde cruzas?', sub:'Lee el terreno antes de dar un paso.',
+   choices:[
+     {text:'Por el vado poco profundo', correct:true, okSub:'Buena lectura. Pasas firme.'},
+     {text:'Por la corriente abierta', correct:false, badSub:'La corriente tira fuerte…',
+       guidedFix:'La corriente te arrastra. Retrocedes y buscas el vado.',
+       loseText:'La corriente te arrastra río abajo. La misión se pierde aquí.'}
+   ]},
+ {in:42,out:52, type:'auto',  obj:'Aproxímate a las murallas', sub:'La ciudad se alza enorme al otro lado de la llanura.'},
+ {in:52,out:60, type:'tap',   obj:'Suena el cuerno. Avanza', sub:'Es el momento. Da el paso al frente.', action:'📯 Avanzar', torch:true},
 ];
+const SKY=[['#20140a','#5a3410','#c8952f','camp'],['#160f08','#3a2410','#7a4a18','camp'],
+ ['#2a1c10','#6b4a1e','#d9a94a','path'],['#1a2230','#33506b','#7fa9c4','river'],
+ ['#1a120c','#4a2c18','#a8632a','walls'],['#20140a','#7a1f1a','#c8952f','walls']];
 
-/* ---------- Estado ---------- */
-let mode='guiado', idx=0, timer=null, tStart=0, elapsed=0, TOTAL=60, correctChoice=true;
+let BEATS = load();
+let mode='guiado', idx=0, elapsed=0, tStart=0, correctChoice=true;
+let hasFilm=false, watcher=null, segTimer=null;
 
 const $=s=>document.querySelector(s);
-const stage=$('#stage'), timebar=$('#timebar');
+const film=$('#film'), stage=$('#stage');
 
-/* ---------- Placeholder pintado con CSS (simula el fotograma) ---------- */
-function paintFrame(sc){
-  const [a,b,c]=sc.sky;
-  let extra='';
-  const silh='#0a0705';
-  if(sc.horizon==='camp')
-    extra=`radial-gradient(60px 60px at 22% 74%,${silh} 60%,transparent 62%),
-           radial-gradient(80px 80px at 38% 78%,${silh} 60%,transparent 62%),
-           radial-gradient(70px 70px at 70% 76%,${silh} 60%,transparent 62%),`;
-  if(sc.horizon==='path')
-    extra=`linear-gradient(100deg,transparent 42%,rgba(60,40,20,.5) 46%,rgba(60,40,20,.5) 54%,transparent 58%),`;
-  if(sc.horizon==='river')
-    extra=`repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 30px,transparent 30px 60px),
-           linear-gradient(0deg,#2c4a63 0 34%,transparent 34%),`;
-  if(sc.horizon==='walls')
-    extra=`repeating-linear-gradient(90deg,${silh} 0 44px,#170f08 44px 50px),
-           linear-gradient(0deg,${silh} 0 40%,transparent 40%),`;
-  return `${extra}linear-gradient(180deg,${a} 0%,${b} 45%,${c} 78%,${silh} 100%)`;
-}
+/* ---------- Persistencia ---------- */
+function load(){ try{const j=JSON.parse(localStorage.getItem('cji_beats'));if(Array.isArray(j)&&j.length)return j;}catch(e){} return structuredClone(DEFAULT_BEATS); }
+function save(){ localStorage.setItem('cji_beats', JSON.stringify(BEATS)); }
+
+/* ---------- Carga de la película ---------- */
+$('#filepick').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const url=URL.createObjectURL(f);
+  film.src=url; $('#preview-video').src=url; hasFilm=true;
+  $('#film-status').innerHTML='🎬 <b>'+f.name+'</b> cargada. Ajusta los planos si hace falta.';
+  ['g','l'].forEach((_,i)=>document.querySelectorAll('.mode-card')[i]?.classList.remove('disabled'));
+});
 
 /* ---------- Motor ---------- */
+function totalDur(){ return BEATS.reduce((s,b)=>s+Math.max(0,(+b.out)-(+b.in)),0); }
+
 function start(m){
-  mode=m;
-  $('#intro').classList.add('hidden');
-  $('#mode-badge').textContent = m==='guiado'?'MODO GUIADO':'MODO LIBRE';
+  mode=m; $('#intro').classList.add('hidden');
+  $('#mode-badge').textContent=m==='guiado'?'MODO GUIADO':'MODO LIBRE';
+  $('#hud').classList.add('on');
+  if(hasFilm){ film.classList.add('on'); film.muted=false; $('#mute').textContent='🔊'; }
   tStart=performance.now();
-  runGlobalClock();
+  clearInterval(window._clk);
+  const TOT=totalDur();
+  window._clk=setInterval(()=>{ elapsed=(performance.now()-tStart)/1000;
+    $('#timebar').style.width=Math.min(100,elapsed/TOT*100)+'%'; },200);
   show(0);
 }
 
-function runGlobalClock(){
-  clearInterval(window._clk);
-  window._clk=setInterval(()=>{
-    elapsed=(performance.now()-tStart)/1000;
-    timebar.style.width=Math.min(100,elapsed/TOTAL*100)+'%';
-  },200);
+function paintFrame(i){
+  const s=SKY[i%SKY.length], silh='#0a0705'; let ex='';
+  if(s[3]==='camp')ex=`radial-gradient(70px 70px at 30% 78%,${silh} 60%,transparent 62%),radial-gradient(80px 80px at 62% 76%,${silh} 60%,transparent 62%),`;
+  if(s[3]==='path')ex=`linear-gradient(100deg,transparent 42%,rgba(60,40,20,.5) 46%,rgba(60,40,20,.5) 54%,transparent 58%),`;
+  if(s[3]==='river')ex=`repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 30px,transparent 30px 60px),linear-gradient(0deg,#2c4a63 0 34%,transparent 34%),`;
+  if(s[3]==='walls')ex=`repeating-linear-gradient(90deg,${silh} 0 44px,#170f08 44px 50px),linear-gradient(0deg,${silh} 0 40%,transparent 40%),`;
+  return `${ex}linear-gradient(180deg,${s[0]} 0%,${s[1]} 45%,${s[2]} 78%,${silh} 100%)`;
 }
 
 function show(i){
-  idx=i; const sc=SCENES[i];
-  // construir escena
-  const div=document.createElement('div');
-  div.className='shot';
-  div.innerHTML=`<div class="frame" style="background-image:${paintFrame(sc)}"></div>
-                 <div class="slot-tag"><b>▣ HUECO</b> · ${sc.tag}</div>`;
-  stage.appendChild(div);
-  requestAnimationFrame(()=>div.classList.add('active'));
-  // limpiar escena anterior
-  const shots=stage.querySelectorAll('.shot');
-  if(shots.length>1){const old=shots[0];old.classList.remove('active');setTimeout(()=>old.remove(),800);}
-  // reiniciar animación Ken Burns
-  const f=div.querySelector('.frame'); f.style.animation='none'; void f.offsetWidth;
-  f.style.animation=`kenburns ${sc.dur+2}s ease-out forwards`;
+  idx=i; const b=BEATS[i]; const dur=Math.max(1,(+b.out)-(+b.in));
+  $('#obj-text').textContent=b.obj||'';
+  typeSub(b.sub||'');
+  if(b.torch){ $('#torch').classList.add('on'); $('#torchglow').classList.add('on'); }
 
-  // HUD
-  $('#obj-text').textContent=sc.obj;
-  typeSub(sc.sub);
-  if(sc.torch){ $('#torch').classList.add('on'); $('#torchglow').classList.add('on'); }
-
-  renderActions(sc);
+  // Fuente visual: película real o placeholder
+  clearTimeout(segTimer); if(watcher){cancelAnimationFrame(watcher);watcher=null;}
+  if(hasFilm){
+    playSegment(+b.in,+b.out,()=>onBeatReady(b));
+  } else {
+    stage.querySelectorAll('.shot').forEach(s=>{s.classList.remove('active');setTimeout(()=>s.remove(),800);});
+    const d=document.createElement('div'); d.className='shot';
+    d.innerHTML=`<div class="frame" style="background-image:${paintFrame(i)};animation:kenburns ${dur+2}s ease-out forwards"></div>
+      <div class="slot-tag"><b>▣ HUECO</b> · plano ${i+1} · ${fmt(b.in)}–${fmt(b.out)} · aquí va tu película</div>`;
+    stage.appendChild(d); requestAnimationFrame(()=>d.classList.add('active'));
+    segTimer=setTimeout(()=>onBeatReady(b), dur*1000);
+  }
+  renderActions(b);
 }
 
-function renderActions(sc){
-  const box=$('#actions'); box.innerHTML='';
-  clearTimeout(timer);
+/* reproduce [inS,outS] de la película y llama cb() al llegar al final */
+function playSegment(inS,outS,cb){
+  const seek=()=>{ film.currentTime=inS;
+    film.play().catch(()=>{});
+    const check=()=>{
+      const endOfFilm = film.duration && film.currentTime>=film.duration-0.05 || film.ended;
+      if(film.currentTime>=outS-0.05 || endOfFilm){ film.pause(); cb&&cb(); return; }
+      watcher=requestAnimationFrame(check); };
+    watcher=requestAnimationFrame(check);
+  };
+  if(film.readyState>=1) seek();
+  else film.addEventListener('loadedmetadata',seek,{once:true});
+}
+function onBeatReady(b){ if(b.type==='auto') next(); } // tap/choice esperan al jugador
 
-  if(sc.type==='auto'){
-    timer=setTimeout(next, sc.dur*1000);
-    return;
-  }
-  if(sc.type==='tap'){
-    const b=document.createElement('div');
-    b.className='tap-hint'; b.textContent=sc.action||'▶ Continuar';
-    b.onclick=next; box.appendChild(b);
-    return;
-  }
-  if(sc.type==='choice'){
-    sc.choices.forEach(ch=>{
-      const b=document.createElement('button');
-      b.className='btn'+((mode==='guiado'&&ch.correct)?' recommended':'');
-      b.textContent=ch.text;
-      b.onclick=()=>choose(sc,ch);
-      box.appendChild(b);
+function renderActions(b){
+  const box=$('#actions'); box.innerHTML='';
+  if(b.type==='tap'){
+    const el=document.createElement('div'); el.className='tap-hint'; el.textContent=b.action||'▶ Continuar';
+    el.onclick=next; box.appendChild(el);
+  } else if(b.type==='choice'){
+    (b.choices||[]).forEach(ch=>{
+      const bt=document.createElement('button');
+      bt.className='btn'+((mode==='guiado'&&ch.correct)?' recommended':'');
+      bt.textContent=ch.text; bt.onclick=()=>choose(b,ch); box.appendChild(bt);
     });
   }
 }
 
-function choose(sc,ch){
+function choose(b,ch){
   $('#actions').innerHTML='';
-  if(ch.correct){
-    correctChoice=true; typeSub(ch.okSub); toast('Decisión acertada ✓','var(--ok)');
-    setTimeout(next,1900);
-  } else if(mode==='guiado'){
-    // guiado: corrección suave, no se puede perder
-    correctChoice=false; typeSub(ch.guidedFix); toast('El guía te reconduce','var(--warn)');
-    setTimeout(next,2100);
-  } else {
-    // libre: consecuencia real -> se pierde
-    typeSub(ch.badSub); toast('¡Camino equivocado!','var(--warn)');
-    setTimeout(()=>finish('lose',ch.loseText),1800);
-  }
+  if(ch.correct){ correctChoice=true; typeSub(ch.okSub||'¡Bien!'); toast('Decisión acertada ✓','var(--ok)'); setTimeout(next,1700); }
+  else if(mode==='guiado'){ correctChoice=false; typeSub(ch.guidedFix||'El guía te reconduce.'); toast('El guía te reconduce','var(--warn)'); setTimeout(next,1900); }
+  else { typeSub(ch.badSub||'Mal camino…'); toast('¡Camino equivocado!','var(--warn)'); setTimeout(()=>finish('lose',ch.loseText),1600); }
 }
 
-function next(){
-  clearTimeout(timer);
-  if(idx+1<SCENES.length) show(idx+1);
-  else finish('win');
-}
+function next(){ clearTimeout(segTimer); if(watcher)cancelAnimationFrame(watcher);
+  if(idx+1<BEATS.length) show(idx+1); else finish('win'); }
 
-/* ---------- Subtítulos con efecto máquina ---------- */
 let typeT=null;
-function typeSub(txt){
-  const el=$('#subtitle'); clearInterval(typeT); el.textContent=''; let k=0;
-  typeT=setInterval(()=>{ el.textContent=txt.slice(0,++k); if(k>=txt.length)clearInterval(typeT); },18);
-}
+function typeSub(t){ const el=$('#subtitle'); clearInterval(typeT); el.textContent=''; let k=0;
+  typeT=setInterval(()=>{el.textContent=t.slice(0,++k); if(k>=t.length)clearInterval(typeT);},18); }
+function toast(m,c){ const t=$('#toast'); t.textContent=m; t.style.borderColor=c||'var(--brand)';
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1700); }
+function toggleMute(){ film.muted=!film.muted; $('#mute').textContent=film.muted?'🔇':'🔊'; }
 
-function toast(msg,color){
-  const t=$('#toast'); t.textContent=msg; t.style.borderColor=color||'var(--brand)';
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1700);
-}
-
-/* ---------- Final ---------- */
-function finish(result,customText){
-  clearInterval(window._clk); clearTimeout(timer);
-  $('#hud').style.display='none'; $('#fpv').style.display='none';
+function finish(res,custom){
+  clearInterval(window._clk); clearTimeout(segTimer); if(watcher)cancelAnimationFrame(watcher);
+  try{film.pause();}catch(e){}
+  $('#hud').classList.remove('on'); $('#fpv').style.display='none'; film.classList.remove('on');
   $('#torch').classList.remove('on'); $('#torchglow').classList.remove('on');
-  const end=$('#end'); end.classList.remove('hidden');
-  $('#endlogo').innerHTML=getComputedStyle(document.body).getPropertyValue('--brand-name');
-
-  if(result==='win'){
-    $('#end-text').innerHTML='<span class="win">▣ Fin de la demo · La aventura continúa…</span><br>'+
-      'Has cruzado el río y llegado a las murallas en primera persona.';
-    $('#learn-text').textContent = correctChoice
-      ? 'Aprendizaje: leer el terreno y elegir el paso seguro te llevó a buen puerto.'
-      : 'Aprendizaje: te equivocaste de paso, pero supiste rectificar y seguir.';
-  } else {
-    $('#end-text').innerHTML='<span class="lose">▣ Has perdido este intento</span><br>'+(customText||'La misión se detiene aquí.');
+  $('#end').classList.remove('hidden');
+  $('#endlogo').textContent=brandName();
+  if(res==='win'){
+    $('#end-text').innerHTML='<span class="win">▣ Fin de la demo · La aventura continúa…</span><br>Has recorrido el fragmento en primera persona.';
+    $('#learn-text').textContent=correctChoice?'Aprendizaje: leer el terreno y elegir el paso seguro te llevó a buen puerto.':'Aprendizaje: te equivocaste de paso, pero supiste rectificar y seguir.';
+  }else{
+    $('#end-text').innerHTML='<span class="lose">▣ Has perdido este intento</span><br>'+(custom||'La misión se detiene aquí.');
     $('#learn-text').textContent='Aprendizaje: en el modo libre las decisiones cuentan. Prueba otro camino.';
   }
 }
 
-/* ---------- Info ---------- */
-function toggleHowto(on){ $('#howto-panel').classList.toggle('show',on); }
+/* ---------- Editor ---------- */
+function brandName(){ return getComputedStyle(document.body).getPropertyValue('--brand-name').replace(/"/g,'').trim(); }
+function fmt(s){ s=Math.max(0,+s||0); const m=Math.floor(s/60),x=Math.floor(s%60); return m+':'+String(x).padStart(2,'0'); }
 
-/* logo intro con nombre de marca */
-$('#brandlogo').insertAdjacentText('afterbegin',
-  getComputedStyle(document.body).getPropertyValue('--brand-name').replace(/"/g,''));
+function openEditor(){ $('#intro').classList.add('hidden'); $('#end').classList.add('hidden');
+  $('#editor').classList.add('on'); renderBeats();
+  if(hasFilm){ $('#preview-video').style.display='block'; } }
+function renderBeats(){
+  const L=$('#beatlist'); L.innerHTML='';
+  BEATS.forEach((b,i)=>{
+    const row=document.createElement('div'); row.className='beat';
+    row.innerHTML=`<div class="n">${i+1}</div>
+      <div class="mini"><input type="number" step="0.1" value="${b.in}" onchange="upd(${i},'in',this.value)">
+        ${hasFilm?`<button title="capturar inicio" onclick="cap(${i},'in')">⇤</button>`:''}</div>
+      <div class="mini"><input type="number" step="0.1" value="${b.out}" onchange="upd(${i},'out',this.value)">
+        ${hasFilm?`<button title="capturar fin" onclick="cap(${i},'out')">⇥</button>`:''}</div>
+      <input value="${(b.sub||'').replace(/"/g,'&quot;')}" onchange="upd(${i},'sub',this.value)">
+      <input value="${(b.obj||'').replace(/"/g,'&quot;')}" onchange="upd(${i},'obj',this.value)">
+      <div class="mini"><select onchange="upd(${i},'type',this.value)">
+        ${['auto','tap','choice'].map(t=>`<option ${b.type===t?'selected':''}>${t}</option>`).join('')}</select>
+        <button title="probar" onclick="tryBeat(${i})">▶</button>
+        <button title="borrar" onclick="delBeat(${i})">🗑</button></div>`;
+    L.appendChild(row);
+  });
+}
+function upd(i,k,v){ BEATS[i][k]=(k==='in'||k==='out')?parseFloat(v)||0:v; save(); }
+function cap(i,k){ if(!hasFilm)return; BEATS[i][k]=Math.round($('#preview-video').currentTime*10)/10; save(); renderBeats(); }
+function tryBeat(i){ if(!hasFilm){toast('Carga primero la película','var(--warn)');return;}
+  const pv=$('#preview-video'); pv.style.display='block'; pv.currentTime=+BEATS[i].in; pv.play();
+  const stop=()=>{ if(pv.currentTime>=+BEATS[i].out){pv.pause();return;} requestAnimationFrame(stop); }; requestAnimationFrame(stop); }
+function addBeat(){ BEATS.push({in:0,out:5,type:'auto',obj:'Nuevo plano',sub:''}); save(); renderBeats(); }
+function delBeat(i){ BEATS.splice(i,1); save(); renderBeats(); }
+function resetCfg(){ BEATS=structuredClone(DEFAULT_BEATS); save(); renderBeats(); }
+function saveEditor(){ save(); $('#editor').classList.remove('on'); $('#preview-video').style.display='none';
+  $('#intro').classList.remove('hidden'); }
+function exportCfg(){ const blob=new Blob([JSON.stringify(BEATS,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='planos-pelicula-jugable.json'; a.click(); }
+$('#impcfg').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=()=>{ try{const j=JSON.parse(r.result); if(Array.isArray(j)){BEATS=j;save();renderBeats();toast('Planos importados ✓','var(--ok)');}}catch(err){toast('JSON no válido','var(--warn)');} }; r.readAsText(f); });
+
+function toggleHowto(on){ $('#howto-panel').classList.toggle('hidden',!on); }
+
+/* init */
+$('#brandlogo').insertAdjacentText('afterbegin', brandName());
 </script>
 </body>
 </html>
