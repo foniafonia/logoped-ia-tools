@@ -1066,6 +1066,32 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Añadido Torah para Abraham — fallo detectado por Jose
+
+Contexto:
+- Jose señala que faltaba `https://foniafonia.github.io/torah-para-abraham/`.
+- Es una pieza claramente relevante para Anidjar/judaísmo y no había sido detectada por la auditoría anterior.
+
+Hecho:
+- Verificada URL pública: `https://foniafonia.github.io/torah-para-abraham/` devuelve 200.
+- Verificado repo: `foniafonia/torah-para-abraham`, rama `main`.
+- Detectado contenido: `Perashá Interactiva | Yitró`, acceso alumno, ruta de estudio, hebreo/español, exámenes tipo test, progresión y memoria de clase de Abraham.
+- Añadidas dos fichas a `LANDING_TODO_LOGOPED_IA.html`:
+  - `Torah para Abraham — Perashá interactiva` en Curso.
+  - `Para reunión con Anidjar — Torah para Abraham` en Anidjar.
+- Generadas capturas:
+  - `codex-assets/screenshots/torah-para-abraham-perasha-interactiva.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-torah-para-abraham.jpg`
+
+Lección de auditoría:
+- Hay que auditar también repos publicados como `https://foniafonia.github.io/<repo>/`, no solo `logoped-ia-tools`, `cinemundos`, Vercel y archivos locales. Esta omisión explica que Torah para Abraham no saliera antes.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: CineMundos/Januka/Anidjar + traspaso visual a FonoMundos
 
 Contexto:
