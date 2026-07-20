@@ -608,7 +608,37 @@ function poeTitle(file){
     .trim();
 }
 
+const ANIDJAR_ITEMS = [
+  {cat:"Anidjar", emoji:"🕍", title:"Para reunión con Anidjar — Judería Melilla Game", status:"repo",
+   desc:"Selección curada para reunión: juego/prototipo sobre la Judería de Melilla. Duplicado aquí aunque también exista en POE masivo, para tener a mano lo cultural/judío sin buscar por todo el inventario.",
+   tags:["Anidjar","judaísmo","Melilla","cantera"],
+   links:[{t:"VER Judería Game",u:"codex-assets/poe-masivo/043__Judería_Melilla_Game__2zths54i82iq60i8b7.html",p:1}]},
+  {cat:"Anidjar", emoji:"🕍", title:"Para reunión con Anidjar — Judería Melilla Gamificada", status:"repo",
+   desc:"Segunda variante gamificada de Judería Melilla, útil para enseñar posibilidad de patrimonio, narrativa local y juego educativo.",
+   tags:["Anidjar","judaísmo","Melilla","gamificación"],
+   links:[{t:"VER gamificada",u:"codex-assets/poe-masivo/044__Judería_Melilla_Gamificada__2zootzcrzia6xe0i17.html",p:1},
+          {t:"Variante descartados",u:"codex-assets/poe-descartados/Judería_Melilla_Gamificada__2zootzcrzia6xe0i17.html",p:0}]},
+  {cat:"Anidjar", emoji:"🇮🇱", title:"Para reunión con Anidjar — App Equito Israel", status:"repo",
+   desc:"Prototipo localizado en POE masivo con referencia directa a Israel. Se duplica en esta bandeja porque puede servir para conversación cultural/comunitaria.",
+   tags:["Anidjar","Israel","POE"],
+   links:[{t:"VER App Equito Israel",u:"codex-assets/poe-masivo/008__App_Equito_Israel__p73s76sr7y4vprf7ck.html",p:1}]},
+  {cat:"Anidjar", emoji:"🏙️", title:"Para reunión con Anidjar — Barrio Melilla Juego", status:"repo",
+   desc:"Juego de barrio/Melilla dentro de la cantera POE. No es necesariamente judío en sí, pero encaja en conversación de identidad local y patrimonio.",
+   tags:["Anidjar","Melilla","patrimonio"],
+   links:[{t:"VER Barrio Melilla",u:"codex-assets/poe-masivo/018__Barrio_Melilla_Juego__13mthzgx8wopjvuvlj.html",p:1}]},
+  {cat:"Anidjar", emoji:"🐝", title:"Para reunión con Anidjar — Colmena Melilla UPE", status:"live",
+   desc:"Prototipo Colmena/Melilla ya en vivo. No es judaísmo explícito, pero puede servir como pieza puente para explicar comunidad, territorio y academia.",
+   tags:["Anidjar","Colmena","Melilla"],
+   links:[{t:"VER Colmena Melilla",u:"https://colmena-melilla-upe.vercel.app",p:1}]},
+  {cat:"Anidjar", emoji:"🕎", title:"Para reunión con Anidjar — Januká / Torá / artefactos religiosos", status:"local",
+   desc:"Claude detectó 5 artefactos de temática Januká/religiosa y los dejó fuera del escaparate principal por prudencia. Se registra aquí como recordatorio explícito para recuperarlos si la reunión lo requiere.",
+   tags:["Anidjar","Januká","Torá","pendiente"],
+   path:"Claude artifacts personales/religiosos detectados el 2026-07-20; falta recuperar enlaces o exportar HTML limpio.",
+   next:"pedir a Claude los 5 enlaces exactos de Januká/religioso o exportarlos a codex-assets/anidjar/", links:[]}
+];
+
 ITEMS.push(
+  ...ANIDJAR_ITEMS,
   ...CODEX_EXTRA_ITEMS,
   ...SUITE_POE_ITEMS,
   ...COGNITIVA_TALLERES,
@@ -626,7 +656,7 @@ ITEMS.push(
   }))
 );
 
-const CATS = ["Todos","Membresía","Suite","Juegos","Herramientas","ARAIA","Beta","Curso","Cantera","Docs","Infra"];
+const CATS = ["Todos","Anidjar","Membresía","Suite","Juegos","Herramientas","ARAIA","Beta","Curso","Cantera","Docs","Infra"];
 const board = document.getElementById('board');
 const filtersEl = document.getElementById('filters');
 const qEl = document.getElementById('q');

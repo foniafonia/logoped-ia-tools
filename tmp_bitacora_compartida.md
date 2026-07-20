@@ -1066,6 +1066,32 @@ Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
 
 Fecha: 2026-07-20
 Agente: Codex Desktop
+Proyecto: Sección curada "Para reunión con Anidjar"
+
+Contexto:
+- Jose pide que, aunque haya duplicados, exista una sección específica con cosas relacionadas con judaísmo/identidad judía/Melilla para una reunión con Anidjar.
+
+Hecho:
+- Añadido filtro/categoría `Anidjar` en `LANDING_TODO_LOGOPED_IA.html`.
+- Añadidas tarjetas duplicadas y curadas:
+  - Para reunión con Anidjar — Judería Melilla Game.
+  - Para reunión con Anidjar — Judería Melilla Gamificada.
+  - Para reunión con Anidjar — App Equito Israel.
+  - Para reunión con Anidjar — Barrio Melilla Juego.
+  - Para reunión con Anidjar — Colmena Melilla UPE.
+  - Para reunión con Anidjar — Januká / Torá / artefactos religiosos (pendiente de recuperar enlaces/exportar HTML).
+- Reutilizadas capturas existentes con nombres propios de la sección Anidjar para que se vea visualmente en la landing.
+
+Nota:
+- La sección Anidjar duplica piezas existentes por intención curatorial; no sustituye la clasificación principal.
+- Claude había detectado 5 artefactos Januká/religiosos y los dejó fuera del escaparate principal por prudencia. Si Jose quiere enseñarlos a Anidjar, siguiente paso: pedir a Claude los enlaces exactos o exportarlos como HTML limpio a `codex-assets/anidjar/`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
 Proyecto: Afinado de inventario — convertir locales/pending en demos visibles
 
 Contexto:
