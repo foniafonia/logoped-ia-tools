@@ -10,6 +10,9 @@ import { AudioManager } from './audio/AudioManager';
 import { ShofarInteraction } from './interactions/ShofarInteraction';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
+import { buildCrowd } from './world/Crowd';
+import { buildScenery } from './world/Scenery';
+import { Dust } from './effects/Dust';
 
 const app = document.getElementById('app')!;
 
@@ -36,7 +39,7 @@ if (QUALITY.envMap) {
 }
 
 // ---- Cámara ----
-const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 500);
+const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 62 : 52, innerWidth / innerHeight, 0.1, 500);
 camera.position.set(0, 6, 24);
 const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 
@@ -77,8 +80,13 @@ if (IS_MOBILE || 'ontouchstart' in window) new TouchControls(controller);
 (window as any).__spy = spy; // depuración
 (window as any).__ctrl = controller;
 
-// === ENTORNO (cielo de atardecer + dunas) ===
+// === ENTORNO (cielo de atardecer + dunas + suelo) ===
 setupEnvironment(scene);
+
+// === ÉPICO: ejército, palmeras y polvo ===
+scene.add(buildCrowd());
+scene.add(buildScenery());
+const dust = new Dust(scene);
 
 // === AUDIO (se activa con el primer gesto del usuario) ===
 const audio = new AudioManager();
@@ -108,7 +116,7 @@ startEl.addEventListener('pointerdown', startGame, { once: true });
 addEventListener('keydown', () => audio.init(), { once: true });
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
-const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos);
+const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos, dust);
 void jericho.wallWidth;
 (window as any).__jericho = jericho;
 
@@ -126,6 +134,7 @@ function animate(now: number): void {
   last = now;
   controller.update(dt, tpcam.yaw);
   shofarGame.update(dt);
+  dust.update(dt);
   tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }

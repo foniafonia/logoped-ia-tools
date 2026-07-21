@@ -14,5 +14,5 @@ export interface QualitySettings {
 }
 
 export const QUALITY: QualitySettings = IS_MOBILE
-  ? { pixelRatio: Math.min(devicePixelRatio, 1.3), shadows: true, shadowMap: 1024, envMap: false, fogFar: 90, brickSegments: 1, studSegments: 10 }
-  : { pixelRatio: Math.min(devicePixelRatio, 2), shadows: true, shadowMap: 2048, envMap: true, fogFar: 160, brickSegments: 3, studSegments: 20 };
+  ? { pixelRatio: Math.min(devicePixelRatio, 1.3), shadows: true, shadowMap: 1024, envMap: false, fogFar: 170, brickSegments: 1, studSegments: 10 }
+  : { pixelRatio: Math.min(devicePixelRatio, 2), shadows: true, shadowMap: 2048, envMap: true, fogFar: 260, brickSegments: 3, studSegments: 20 };

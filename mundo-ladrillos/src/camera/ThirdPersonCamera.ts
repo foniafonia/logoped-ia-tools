@@ -3,8 +3,8 @@ import * as THREE from 'three';
 /** Cámara en tercera persona: sigue al objetivo, orbita con arrastre, zoom con rueda. */
 export class ThirdPersonCamera {
   yaw = 0;
-  pitch = 0.42;
-  dist = 15;
+  pitch = 0.5;
+  dist = 26;
   private dragging = false;
   private lastX = 0;
   private lastY = 0;
@@ -20,7 +20,7 @@ export class ThirdPersonCamera {
       this.lastX = e.clientX; this.lastY = e.clientY;
     });
     dom.addEventListener('wheel', (e) => {
-      this.dist = Math.max(7, Math.min(28, this.dist + Math.sign(e.deltaY) * 1.2));
+      this.dist = Math.max(8, Math.min(46, this.dist + Math.sign(e.deltaY) * 1.6));
     }, { passive: true });
   }
 

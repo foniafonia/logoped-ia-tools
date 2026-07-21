@@ -4,6 +4,7 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { BrickPalette } from '../materials/BrickPalette';
 import { AudioManager } from '../audio/AudioManager';
 import { JerichoBuild } from '../structures/BrickStructureBuilder';
+import { Dust } from '../effects/Dust';
 
 interface Rubble { mesh: THREE.Mesh; vel: THREE.Vector3; rot: THREE.Vector3; active: boolean; settled: boolean; }
 
@@ -38,7 +39,8 @@ export class ShofarInteraction {
     private plastic: PlasticMaterialFactory,
     private audio: AudioManager,
     jericho: JerichoBuild,
-    private getSpy: () => THREE.Vector3
+    private getSpy: () => THREE.Vector3,
+    private dust?: Dust
   ) {
     this.jgroup = jericho.group;
     this.bands = jericho.bands;
@@ -58,16 +60,25 @@ export class ShofarInteraction {
     const bell = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.35, 16, 1, true), this.plastic.get(0x7a5730));
     bell.position.set(1.05, 0.28, 0); bell.rotation.z = -1.0;
     this.shofar.add(horn, bell);
-    this.shofar.position.set(-9, 1.4, 16);
+    this.shofar.position.set(0, 1.8, 16); // al fondo de la avenida, junto a la muralla
+    this.shofar.scale.setScalar(1.5);
     this.scene.add(this.shofar);
 
     this.ring = new THREE.Mesh(
-      new THREE.TorusGeometry(0.9, 0.06, 10, 32),
+      new THREE.TorusGeometry(1.3, 0.09, 10, 32),
       new THREE.MeshBasicMaterial({ color: 0xffcf6a, transparent: true, opacity: 0.9 })
     );
     this.ring.rotation.x = Math.PI / 2;
     this.ring.position.copy(this.shofar.position).setY(0.15);
     this.scene.add(this.ring);
+
+    // Haz de luz dorado para verlo desde lejos
+    const beam = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 2.0, 30, 16, 1, true),
+      new THREE.MeshBasicMaterial({ color: 0xffd97a, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false })
+    );
+    beam.position.set(0, 15, 16);
+    this.scene.add(beam);
 
     // --- Grietas ocultas repartidas por todo el muro ---
     const nCracks = Math.max(6, Math.round(this.halfW / 14));
@@ -139,15 +150,22 @@ export class ShofarInteraction {
       setTimeout(() => {
         band.visible = false;
         const y = this.wallTop - i * (this.wallTop / this.bands.length);
-        this.spawnWave(14, y);
-        this.shakePulse(0.3);
+        this.spawnWave(16, y);
+        this.shakePulse(0.35);
+        // grandes nubes de polvo repartidas por todo el muro
+        const bursts = Math.max(4, Math.round(this.halfW / 22));
+        for (let k = 0; k < bursts; k++) {
+          const bx = -this.halfW + (this.halfW * 2 * (k + 0.5)) / bursts;
+          this.dust?.burst(bx, y, 1.5, 30);
+        }
       }, 400 + i * step);
     });
-    // torres al final
+    // torres al final: gran estallido
     setTimeout(() => {
       this.towers.forEach((t) => { t.visible = false; });
-      this.spawnWave(26, 8);
-      this.shakePulse(0.55);
+      this.spawnWave(30, 8);
+      this.shakePulse(0.6);
+      for (let k = 0; k < 8; k++) this.dust?.burst((Math.random() - 0.5) * this.halfW * 2, 6, 1.5, 30);
     }, 400 + this.bands.length * step);
   }
 

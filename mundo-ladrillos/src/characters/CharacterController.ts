@@ -15,7 +15,7 @@ function lerpAngle(a: number, b: number, t: number): number {
  * de andar. La física completa (Rapier) llegará en su fase.
  */
 export class CharacterController {
-  pos = new THREE.Vector3(0, 0, 14);
+  pos = new THREE.Vector3(0, 0, 52);
   touch = { x: 0, z: 0, jump: false }; // entrada táctil (joystick + botón)
   private vy = 0;
   private facing = Math.PI; // mira hacia la cámara al empezar
