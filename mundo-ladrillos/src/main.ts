@@ -82,14 +82,30 @@ setupEnvironment(scene);
 
 // === AUDIO (se activa con el primer gesto del usuario) ===
 const audio = new AudioManager();
-const initAudio = (): void => {
-  audio.init();
-  removeEventListener('keydown', initAudio);
-  removeEventListener('pointerdown', initAudio);
-};
-addEventListener('keydown', initAudio);
-addEventListener('pointerdown', initAudio);
 (window as any).__audio = audio;
+
+// Pantalla de inicio: el toque desbloquea el sonido (clave en móvil/artifact)
+const startEl = document.createElement('div');
+startEl.innerHTML =
+  '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px">' +
+  '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b;letter-spacing:2px">LA CONQUISTA DE ISRAEL</div>' +
+  '<div style="opacity:.8;margin:10px 0 22px">Mundo de ladrillos · demo jugable</div>' +
+  '<button id="startBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)">▶ Tocar para empezar</button>' +
+  '<div style="opacity:.7;font-size:13px;margin-top:14px">🔊 Activa el sonido · sube el volumen</div></div>';
+Object.assign(startEl.style, {
+  position: 'fixed', inset: '0', zIndex: '50', display: 'flex', alignItems: 'center',
+  justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #241708, #0a0705 72%)',
+  transition: 'opacity .4s'
+} as CSSStyleDeclaration);
+document.body.appendChild(startEl);
+const startGame = (): void => {
+  audio.init();                 // desbloquea + decodifica dentro del gesto
+  startEl.style.opacity = '0';
+  setTimeout(() => startEl.remove(), 420);
+};
+startEl.addEventListener('pointerdown', startGame, { once: true });
+// respaldo: cualquier tecla/toque también activa el audio
+addEventListener('keydown', () => audio.init(), { once: true });
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
 const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos);

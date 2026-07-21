@@ -19,6 +19,12 @@ export class AudioManager {
     if (this.ac) { void this.ac.resume(); return; }
     this.ac = new (window.AudioContext || (window as any).webkitAudioContext)();
     void this.ac.resume(); // móvil/artifact: arranca suspendido
+    // "empujón" silencioso para desbloquear WebAudio en iOS/Safari
+    try {
+      const b = this.ac.createBuffer(1, 1, 22050);
+      const s = this.ac.createBufferSource();
+      s.buffer = b; s.connect(this.ac.destination); s.start(0);
+    } catch { /* noop */ }
     for (const [name, url] of Object.entries(CLIPS)) {
       try {
         const a = base64ToArrayBuffer(url);
