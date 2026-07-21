@@ -31,6 +31,7 @@ export class ShofarInteraction {
   private towers: THREE.Group[];
   private base: THREE.Vector3;
   private wallTop: number;
+  private halfW: number;
 
   constructor(
     private scene: THREE.Scene,
@@ -43,6 +44,7 @@ export class ShofarInteraction {
     this.bands = jericho.bands;
     this.towers = jericho.towers;
     this.wallTop = jericho.wallTop;
+    this.halfW = jericho.wallWidth / 2;
     this.base = this.jgroup.position.clone();
 
     // --- Shofar flotando con anillo brillante ---
@@ -67,11 +69,15 @@ export class ShofarInteraction {
     this.ring.position.copy(this.shofar.position).setY(0.15);
     this.scene.add(this.ring);
 
-    // --- Grietas ocultas repartidas por el muro largo ---
-    for (const x of [-40, -28, -16, -4, 8, 20, 32, 42]) this.cracks.push(this.makeCrack(x));
+    // --- Grietas ocultas repartidas por todo el muro ---
+    const nCracks = Math.max(6, Math.round(this.halfW / 14));
+    for (let i = 0; i < nCracks; i++) {
+      const x = -this.halfW + 6 + ((this.halfW * 2 - 12) * (i + 0.5)) / nCracks;
+      this.cracks.push(this.makeCrack(x));
+    }
 
     // --- Pool amplio de escombros (para las oleadas) ---
-    for (let i = 0; i < 110; i++) {
+    for (let i = 0; i < 170; i++) {
       const { geometry } = makeBrickGeometry(2, 2, 'brick');
       const col = [BrickPalette.SAND, BrickPalette.WARM_SAND, BrickPalette.DARK_SAND, BrickPalette.TAN][i % 4];
       const m = new THREE.Mesh(geometry, this.plastic.get(col));
@@ -149,7 +155,7 @@ export class ShofarInteraction {
     let done = 0;
     for (const r of this.rubble) {
       if (r.active) continue;
-      const x = (Math.random() - 0.5) * 90;
+      const x = (Math.random() - 0.5) * this.halfW * 1.9;
       r.mesh.position.set(x, yLevel + (Math.random() - 0.5) * 2, 1.2 + Math.random());
       r.mesh.visible = true;
       r.active = true; r.settled = false;

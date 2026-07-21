@@ -89,6 +89,7 @@ const initAudio = (): void => {
 };
 addEventListener('keydown', initAudio);
 addEventListener('pointerdown', initAudio);
+(window as any).__audio = audio;
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
 const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos);

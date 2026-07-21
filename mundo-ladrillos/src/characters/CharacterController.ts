@@ -64,8 +64,8 @@ export class CharacterController {
     if (this.pos.y <= 0) { this.pos.y = 0; this.vy = 0; this.grounded = true; }
 
     // zona jugable amplia (movimiento libre)
-    this.pos.x = Math.max(-140, Math.min(140, this.pos.x));
-    this.pos.z = Math.max(3.5, Math.min(120, this.pos.z));
+    this.pos.x = Math.max(-215, Math.min(215, this.pos.x));
+    this.pos.z = Math.max(3.5, Math.min(140, this.pos.z));
 
     this.fig.root.position.copy(this.pos);
     this.fig.root.rotation.y = this.facing;

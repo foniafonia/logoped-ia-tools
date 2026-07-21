@@ -16,8 +16,9 @@ export class AudioManager {
 
   /** Debe llamarse tras un gesto del usuario (tecla/click) para permitir audio. */
   init(): void {
-    if (this.ac) return;
+    if (this.ac) { void this.ac.resume(); return; }
     this.ac = new (window.AudioContext || (window as any).webkitAudioContext)();
+    void this.ac.resume(); // móvil/artifact: arranca suspendido
     for (const [name, url] of Object.entries(CLIPS)) {
       try {
         const a = base64ToArrayBuffer(url);
@@ -28,6 +29,7 @@ export class AudioManager {
 
   play(name: string, volume = 1, stopAfter?: number): boolean {
     if (!this.ac) return false;
+    if (this.ac.state === 'suspended') void this.ac.resume();
     const buf = this.buffers.get(name);
     if (!buf) return false;
     const src = this.ac.createBufferSource();

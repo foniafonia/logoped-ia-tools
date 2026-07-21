@@ -5,6 +5,7 @@ import { makeBrickGeometry, normalizeGeometry } from '../bricks/BrickGeometryFac
 import { STUD_WIDTH, BRICK_HEIGHT, BEVEL_SIZE } from '../bricks/BrickDimensions';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { BrickPalette } from '../materials/BrickPalette';
+import { IS_MOBILE } from '../core/Quality';
 
 /**
  * Acumula geometrías por color y las fusiona en una malla por color
@@ -197,8 +198,10 @@ export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
 
   // (el suelo lo pone EnvironmentManager: un plano texturizado, barato)
 
-  // muro MUY grande por franjas
-  const o: WallOptions = { x0: -110, z: 0, widthStuds: 220, courses: 16, gate: true };
+  // Tamaño según el dispositivo: ENORME en ordenador, manejable en móvil.
+  const width = IS_MOBILE ? 200 : 420;
+  const courses = IS_MOBILE ? 14 : 20;
+  const o: WallOptions = { x0: -width / 2, z: 0, widthStuds: width, courses, gate: true };
   const BAND = 2;
   for (let c0 = 0; c0 < o.courses; c0 += BAND) {
     const acc = new BrickAccumulator();
@@ -210,10 +213,14 @@ export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
   }
   bands.reverse(); // arriba primero
 
-  // torres altas repartidas
-  for (const tx of [-96, -60, -24, 24, 60, 96]) {
+  // torres altas repartidas a lo ancho
+  const nTowers = IS_MOBILE ? 6 : 10;
+  const towerH = IS_MOBILE ? 20 : 26;
+  for (let i = 0; i < nTowers; i++) {
+    const tx = o.x0 + (o.widthStuds * (i + 0.5)) / nTowers;
+    if (Math.abs(tx) < 6) continue; // deja libre la puerta central
     const acc = new BrickAccumulator();
-    addTower(acc, tx, 22);
+    addTower(acc, tx, towerH);
     const g = acc.build(plastic);
     group.add(g);
     towers.push(g);
