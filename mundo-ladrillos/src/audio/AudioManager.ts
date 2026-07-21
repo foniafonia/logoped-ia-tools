@@ -16,10 +16,10 @@ export class AudioManager {
     }
   }
 
-  play(name: string, volume = 1, stopAfter?: number): void {
-    if (!this.ac) return;
+  play(name: string, volume = 1, stopAfter?: number): boolean {
+    if (!this.ac) return false;
     const buf = this.buffers.get(name);
-    if (!buf) return;
+    if (!buf) return false;
     const src = this.ac.createBufferSource();
     src.buffer = buf;
     const g = this.ac.createGain();
@@ -32,5 +32,6 @@ export class AudioManager {
       g.gain.linearRampToValueAtTime(0.001, t + stopAfter);
       try { src.stop(t + stopAfter); } catch { /* noop */ }
     }
+    return true;
   }
 }

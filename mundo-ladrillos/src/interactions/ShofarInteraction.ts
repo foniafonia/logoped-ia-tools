@@ -116,8 +116,11 @@ export class ShofarInteraction {
   private startCollapse(): void {
     this.damaging = true;
     this.shakeT = 1.4;
-    this.audio.play('rumble', 1.0);
-    setTimeout(() => this.audio.play('shout', 0.85), 500);
+    // audio REAL de la película si está disponible; si no, sonidos libres
+    if (!this.audio.play('filmCollapse', 1.0)) {
+      this.audio.play('rumble', 1.0);
+      setTimeout(() => this.audio.play('shout', 0.85), 500);
+    }
     // lanzar escombros desde lo alto del muro
     for (let i = 0; i < this.rubble.length; i++) {
       const r = this.rubble[i];
