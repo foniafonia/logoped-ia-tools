@@ -1,0 +1,11 @@
+[
+  {
+    "id": "nino-enfadado-01",
+    "title": "¿Cómo puedo ayudar?",
+    "description": "Un compañero está enfadado. ¿Qué puedes hacer?",
+    "thumbnail": "images/nino-enfadado/portada.jpg",
+    "level": 1,
+    "tags": ["emociones", "ayuda", "conflicto"],
+    "src": "stories/nino-enfadado.json"
+  }
+]

@@ -1,0 +1,109 @@
+{
+  "id": "nino-enfadado-01",
+  "title": "¿Cómo puedo ayudar?",
+  "description": "Historia social sobre cómo responder cuando otra persona está enfadada.",
+  "thumbnail": "/images/nino-enfadado/portada.jpg",
+  "level": 1,
+  "startNode": "situacion",
+  "settings": {
+    "showText": true,
+    "showImages": true,
+    "showAudioButtons": true,
+    "autoplayAudio": true,
+    "showSubtitles": false,
+    "allowBack": true,
+    "allowReplay": true,
+    "showFeedback": true,
+    "pauseBeforeChoices": 500,
+    "autoplayVideo": true
+  },
+  "nodes": {
+    "situacion": {
+      "type": "video",
+      "video": "/videos/nino-enfadado/situacion.mp4",
+      "poster": "/images/nino-enfadado/situacion.jpg",
+      "subtitles": "/videos/nino-enfadado/situacion.es.vtt",
+      "question": "¿Qué puedes hacer?",
+      "questionAudio": "/audio/nino-enfadado/pregunta.mp3",
+      "choices": [
+        {
+          "id": "ayudar",
+          "label": "Le ofrezco ayuda",
+          "image": "/images/choices/ayudar.png",
+          "imageAlt": "Una mano ofreciendo ayuda",
+          "audio": "/audio/choices/ayudar.mp3",
+          "next": "consecuencia-ayudar",
+          "category": "helpful"
+        },
+        {
+          "id": "platano",
+          "label": "Le tiro el plátano",
+          "image": "/images/choices/platano.png",
+          "imageAlt": "Un plátano lanzado por el aire",
+          "audio": "/audio/choices/platano.mp3",
+          "next": "consecuencia-platano",
+          "category": "unhelpful"
+        }
+      ]
+    },
+    "consecuencia-ayudar": {
+      "type": "video",
+      "video": "/videos/nino-enfadado/ayudar.mp4",
+      "poster": "/images/nino-enfadado/ayudar.jpg",
+      "feedback": {
+        "title": "Has intentado ayudar",
+        "text": "Le has ofrecido ayuda y ahora parece más tranquilo.",
+        "audio": "/audio/nino-enfadado/feedback-ayuda.mp3",
+        "tone": "positive"
+      },
+      "next": "final"
+    },
+    "consecuencia-platano": {
+      "type": "video",
+      "video": "/videos/nino-enfadado/platano.mp4",
+      "poster": "/images/nino-enfadado/platano.jpg",
+      "feedback": {
+        "title": "Observa lo que ha pasado",
+        "text": "El plátano no le ha ayudado. Ahora está más enfadado.",
+        "audio": "/audio/nino-enfadado/feedback-platano.mp3",
+        "tone": "reflective"
+      },
+      "choices": [
+        {
+          "id": "probar-otra",
+          "label": "Probar otra opción",
+          "image": "/images/choices/volver.png",
+          "imageAlt": "Flecha que vuelve atrás",
+          "next": "situacion"
+        },
+        {
+          "id": "reparar",
+          "label": "Pedir perdón y ayudar",
+          "image": "/images/choices/reparar.png",
+          "imageAlt": "Dos personas que hacen las paces",
+          "next": "reparacion"
+        }
+      ]
+    },
+    "reparacion": {
+      "type": "video",
+      "video": "/videos/nino-enfadado/reparacion.mp4",
+      "poster": "/images/nino-enfadado/reparacion.jpg",
+      "feedback": {
+        "title": "Has reparado la situación",
+        "text": "Has devuelto lo que quitaste, has pedido perdón y has ofrecido ayuda.",
+        "tone": "repair"
+      },
+      "next": "final"
+    },
+    "final": {
+      "type": "ending",
+      "video": "/videos/nino-enfadado/final.mp4",
+      "poster": "/images/nino-enfadado/final.jpg",
+      "title": "Historia terminada",
+      "message": "A veces podemos ayudar preguntando, esperando y observando cómo reacciona la otra persona.",
+      "allowReplay": true,
+      "allowChooseAnotherPath": true
+    }
+  }
+}
