@@ -1,9 +1,10 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { buildJericho } from './structures/BrickStructureBuilder';
-import { createMinifigure } from './characters/MinifigureFactory';
+import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
+import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
+import { CharacterController } from './characters/CharacterController';
 
 const app = document.getElementById('app')!;
 
@@ -28,12 +29,9 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 // ---- Cámara ----
-const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 500);
-camera.position.set(5, 4.2, 21);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 2.2, 9);
-controls.enableDamping = true;
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 500);
+camera.position.set(0, 6, 24);
+const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 
 // ---- Iluminación de cine (sol de atardecer bajo y cálido) ----
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -74,10 +72,11 @@ const plastic = new PlasticMaterialFactory();
 const jericho = buildJericho(plastic);
 scene.add(jericho);
 
-// === PERSONAJE: Yoshúa (Fase 3 — presentación) ===
-const yoshua = createMinifigure(plastic);
-yoshua.root.position.set(0, 0, 10);
-scene.add(yoshua.root); // mira hacia +Z (a la cámara)
+// === PERSONAJE JUGABLE: el espía (Fase 3) ===
+const spy = createMinifigure(plastic, SPY_SKIN);
+scene.add(spy.root);
+const controller = new CharacterController(spy);
+(window as any).__spy = spy; // depuración
 
 // ---- Bucle ----
 addEventListener('resize', () => {
@@ -86,13 +85,16 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-function animate(): void {
+let last = 0;
+function animate(now: number): void {
   requestAnimationFrame(animate);
-  yoshua.update(0.016, false);
-  controls.update();
+  const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+  last = now;
+  controller.update(dt, tpcam.yaw);
+  tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }
-animate();
+requestAnimationFrame(animate);
 
 // Señal para las capturas automáticas (headless)
 (window as any).__READY__ = true;

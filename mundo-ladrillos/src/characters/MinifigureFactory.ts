@@ -15,7 +15,8 @@ export interface MinifigureSkin {
   legs: number;      // piernas
   arms: number;      // mangas
   hands: number;     // manos
-  headwear?: number; // turbante (color) — opcional
+  headwear?: number; // color del tocado — opcional
+  headStyle?: 'turban' | 'hood'; // tipo de tocado
   beard?: number;    // barba (color) — opcional
 }
 
@@ -28,7 +29,20 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   arms: 0x7a5230,
   hands: 0xf2c141,
   headwear: 0x2a5fa0,
+  headStyle: 'turban',
   beard: 0xd8d2c6
+};
+
+/** Espía: capucha negra, túnica gris oscura. */
+export const SPY_SKIN: MinifigureSkin = {
+  head: 0xf2c141,
+  torso: 0x3b3d42,
+  belt: 0x26272b,
+  legs: 0x2c2a28,
+  arms: 0x2c2a28,
+  hands: 0xf2c141,
+  headwear: 0x191a1d,
+  headStyle: 'hood'
 };
 
 export class Minifigure {
@@ -116,8 +130,22 @@ export class Minifigure {
       this.root.add(this.box(0.85, 0.4, 0.32, s.beard, 0, 3.78, 0.4)); // mejillas/bigote
     }
 
-    // --- Turbante grande (media esfera + banda + nudo) ---
-    if (s.headwear !== undefined) {
+    // --- Tocado ---
+    if (s.headStyle === 'hood' && s.headwear !== undefined) {
+      // Capucha: casquete que cubre arriba/atrás/lados dejando la cara
+      const shell = new THREE.SphereGeometry(0.62, 28, 20);
+      const shellMesh = new THREE.Mesh(shell, this.plastic.get(s.headwear));
+      shellMesh.position.set(0, 3.95, -0.06); shellMesh.scale.set(1.06, 1.12, 1.1); shellMesh.castShadow = true;
+      this.root.add(shellMesh);
+      // marco de la cara (mejillas + mentón) para recortar el óvalo
+      this.root.add(this.box(0.22, 0.95, 0.2, s.headwear, -0.5, 3.9, 0.44));
+      this.root.add(this.box(0.22, 0.95, 0.2, s.headwear, 0.5, 3.9, 0.44));
+      this.root.add(this.box(0.9, 0.22, 0.22, s.headwear, 0, 3.5, 0.46));  // mentón
+      this.root.add(this.box(0.9, 0.2, 0.24, s.headwear, 0, 4.32, 0.46));  // frente
+      // ojos "enfadados" del espía
+      this.root.add(this.box(0.14, 0.1, 0.05, 0x2a1c12, -0.2, 3.98, 0.56));
+      this.root.add(this.box(0.14, 0.1, 0.05, 0x2a1c12, 0.2, 3.98, 0.56));
+    } else if (s.headStyle === 'turban' && s.headwear !== undefined) {
       const dome = new THREE.SphereGeometry(0.64, 26, 18, 0, Math.PI * 2, 0, Math.PI / 2);
       const domeMesh = new THREE.Mesh(dome, this.plastic.get(s.headwear));
       domeMesh.position.set(0, 4.32, 0); domeMesh.scale.set(1.05, 0.92, 1.05); domeMesh.castShadow = true;
@@ -127,7 +155,7 @@ export class Minifigure {
       const bandMesh = new THREE.Mesh(band, this.plastic.get(s.headwear));
       bandMesh.position.set(0, 4.34, 0); bandMesh.castShadow = true;
       this.root.add(bandMesh);
-      this.root.add(this.cyl(0.13, 0.22, s.headwear, 0.46, 4.44, 0.3)); // nudo
+      this.root.add(this.cyl(0.13, 0.22, s.headwear, 0.46, 4.44, 0.3));
     }
   }
 
