@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
-import { buildJericho } from './structures/BrickStructureBuilder';
+import { buildJericho, buildCourtyard } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
@@ -42,6 +42,7 @@ if (QUALITY.envMap) {
 const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 62 : 52, innerWidth / innerHeight, 0.1, 500);
 camera.position.set(0, 6, 24);
 const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
+(window as any).__tpcam = tpcam;
 
 // ---- Iluminación de cine (sol de atardecer bajo y cálido) ----
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -72,6 +73,9 @@ const plastic = new PlasticMaterialFactory();
 const jericho = buildJericho(plastic);
 scene.add(jericho.group);
 
+// === RECINTO AMURALLADO: cierra la plaza (muros laterales + trasero + torres) ===
+scene.add(buildCourtyard(plastic));
+
 // === PERSONAJE JUGABLE: el espía (Fase 3) ===
 const spy = createMinifigure(plastic, SPY_SKIN);
 scene.add(spy.root);
@@ -83,9 +87,9 @@ if (IS_MOBILE || 'ontouchstart' in window) new TouchControls(controller);
 // === ENTORNO (cielo de atardecer + dunas + suelo) ===
 setupEnvironment(scene);
 
-// === ÉPICO: ejército, palmeras y polvo ===
+// === ÉPICO: ejército, columnas/antorchas y polvo ===
 scene.add(buildCrowd());
-scene.add(buildScenery());
+scene.add(buildScenery(plastic));
 const dust = new Dust(scene);
 
 // === AUDIO (se activa con el primer gesto del usuario) ===

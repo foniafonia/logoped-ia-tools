@@ -1,90 +1,63 @@
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { normalizeGeometry } from '../bricks/BrickGeometryFactory';
+import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
+import { buildBrickColumn } from '../structures/BrickStructureBuilder';
+import { COURT } from '../core/Layout';
 import { IS_MOBILE } from '../core/Quality';
 
-/** Palmeras (instanced) + antorchas junto a la puerta. */
-export function buildScenery(): THREE.Group {
+/**
+ * Decorado de la plaza: columnas de LADRILLO flanqueando la avenida y
+ * antorchas encendidas a lo largo de los muros. Todo con el mismo acabado
+ * de plástico que la muralla y el personaje (nada liso ni "cutre").
+ */
+export function buildScenery(plastic: PlasticMaterialFactory): THREE.Group {
   const group = new THREE.Group();
-  const N = IS_MOBILE ? 26 : 60;
+  const { half, back } = COURT;
 
-  const trunkGeo = normalizeGeometry(new THREE.CylinderGeometry(0.32, 0.5, 8, 6).translate(0, 4, 0));
-  // fronda: varias hojas planas radiales
-  const leaves: THREE.BufferGeometry[] = [];
-  for (let k = 0; k < 6; k++) {
-    const leaf = new THREE.BoxGeometry(0.5, 0.16, 3.2);
-    leaf.translate(0, 0, 1.5);
-    leaf.rotateX(-0.5);
-    leaf.rotateY((k / 6) * Math.PI * 2);
-    leaf.translate(0, 8, 0);
-    leaves.push(normalizeGeometry(leaf));
-  }
-  const frondGeo = mergeGeometries(leaves, false)!;
-
-  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x7a5a34, roughness: 0.85 });
-  const frondMat = new THREE.MeshStandardMaterial({ color: 0x4f7a3a, roughness: 0.8 });
-  const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, N);
-  const fronds = new THREE.InstancedMesh(frondGeo, frondMat, N);
-  trunks.castShadow = true; fronds.castShadow = true;
-
-  const d = new THREE.Object3D();
-  for (let i = 0; i < N; i++) {
-    // repartidas a los lados y detrás, lejos del frente central
-    let x = (Math.random() - 0.5) * 340;
-    if (Math.abs(x) < 40) x += Math.sign(x || 1) * 40;
-    const z = 15 + Math.random() * 130;
-    d.position.set(x, 0, z);
-    d.rotation.set(0, Math.random() * Math.PI, 0);
-    const s = 0.8 + Math.random() * 0.7;
-    d.scale.set(s, s, s);
-    d.updateMatrix();
-    trunks.setMatrixAt(i, d.matrix); fronds.setMatrixAt(i, d.matrix);
-  }
-  trunks.instanceMatrix.needsUpdate = true; fronds.instanceMatrix.needsUpdate = true;
-  group.add(trunks, fronds);
-
-  // Antorchas a los lados de la puerta (poste + llama emisiva, sin luces)
-  const postMat = new THREE.MeshStandardMaterial({ color: 0x4a3420, roughness: 0.9 });
-  const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb347 });
-  for (const tx of [-6, 6]) {
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 5, 6), postMat);
-    post.position.set(tx, 2.5, 4.5); post.castShadow = true;
-    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1.4, 8), flameMat);
-    flame.position.set(tx, 5.4, 4.5);
-    group.add(post, flame);
-  }
-
-  // === Avenida procesional: columnas + farolas flanqueando el pasillo ===
-  const stoneMat = new THREE.MeshStandardMaterial({ color: 0xe3cd9a, roughness: 0.8 });
-  const colBase = normalizeGeometry(new THREE.BoxGeometry(1.7, 0.5, 1.7).translate(0, 0.25, 0));
-  const colShaft = normalizeGeometry(new THREE.CylinderGeometry(0.5, 0.6, 6.2, 14).translate(0, 3.6, 0));
-  const colCap = normalizeGeometry(new THREE.BoxGeometry(1.6, 0.6, 1.6).translate(0, 7.0, 0));
-  const columnGeo = mergeGeometries([colBase, colShaft, colCap], false)!;
-
-  const lampPostMat = new THREE.MeshStandardMaterial({ color: 0x2a241c, roughness: 0.7 });
-  const lampGlow = new THREE.MeshBasicMaterial({ color: 0xffd27a });
-
-  for (const side of [-1, 1]) {
-    for (let z = 16; z <= 50; z += 5.6) {
-      // columna
-      const col = new THREE.Mesh(columnGeo, stoneMat);
-      col.position.set(side * 10, 0, z); col.castShadow = true; col.receiveShadow = true;
+  // === Columnas de ladrillo: dos hileras flanqueando el pasillo central ===
+  const colProto = buildBrickColumn(plastic, IS_MOBILE ? 5 : 6);
+  const colX = 11;                    // separación del eje (pasillo libre en medio)
+  const zStart = 12, zEnd = back - 14, zStep = IS_MOBILE ? 13 : 12;
+  for (let z = zStart; z <= zEnd; z += zStep) {
+    for (const side of [-1, 1]) {
+      const col = colProto.clone();
+      col.position.set(side * colX, 0, z);
       group.add(col);
     }
-    for (let z = 19; z <= 48; z += 5.6) {
-      // farola: poste + brazo + lámpara que brilla
-      const lp = new THREE.Group();
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 6, 6), lampPostMat);
-      post.position.y = 3; post.castShadow = true;
-      const arm = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 1.2), lampPostMat);
-      arm.position.set(side * -0.6, 5.8, 0);
-      const lamp = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.9, 0.7), lampGlow);
-      lamp.position.set(side * -1.1, 5.5, 0);
-      lp.add(post, arm, lamp);
-      lp.position.set(side * 14, 0, z);
-      group.add(lp);
-    }
   }
+
+  // Un par de columnas mayores junto al shofar, como marco
+  for (const side of [-1, 1]) {
+    const col = buildBrickColumn(plastic, IS_MOBILE ? 7 : 8);
+    col.position.set(side * 6.5, 0, 12);
+    group.add(col);
+  }
+
+  // === Antorchas: brasero de ladrillo + llama emisiva + luz cálida ===
+  const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb347 });
+  const emberMat = new THREE.MeshBasicMaterial({ color: 0xff7a2a });
+  const addTorch = (x: number, z: number): void => {
+    const t = new THREE.Group();
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 4.4, 8), plastic.get(0x3a2a18));
+    post.position.y = 2.2; post.castShadow = true;
+    const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.28, 0.5, 10), plastic.get(0x2a2018));
+    bowl.position.y = 4.4;
+    const ember = new THREE.Mesh(new THREE.SphereGeometry(0.36, 8, 6), emberMat);
+    ember.position.y = 4.6;
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.3, 8), flameMat);
+    flame.position.y = 5.3;
+    const light = new THREE.PointLight(0xffa64d, IS_MOBILE ? 6 : 9, 26, 2);
+    light.position.set(0, 5, 0);
+    t.add(post, bowl, ember, flame, light);
+    t.position.set(x, 0, z);
+    group.add(t);
+  };
+
+  // antorchas junto a la puerta de la muralla y repartidas por los muros
+  addTorch(-6, 4.5); addTorch(6, 4.5);
+  const zTorchStep = IS_MOBILE ? 22 : 26;
+  for (let z = 14; z < back - 6; z += zTorchStep) {
+    addTorch(-(half - 3), z); addTorch(half - 3, z);
+  }
+
   return group;
 }
-

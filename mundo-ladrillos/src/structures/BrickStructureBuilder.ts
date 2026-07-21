@@ -6,6 +6,7 @@ import { STUD_WIDTH, BRICK_HEIGHT, BEVEL_SIZE } from '../bricks/BrickDimensions'
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { BrickPalette } from '../materials/BrickPalette';
 import { IS_MOBILE } from '../core/Quality';
+import { COURT } from '../core/Layout';
 
 /**
  * Acumula geometrías por color y las fusiona en una malla por color
@@ -227,4 +228,75 @@ export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
   }
 
   return { group, bands, towers, wallTop: o.courses * BRICK_HEIGHT, wallWidth: o.widthStuds };
+}
+
+/** Muro recto de ladrillo (centrado en x=0, cara frontal hacia +z), coronado
+ * con banda de ménsulas y merlones — el mismo lenguaje que la muralla. */
+function buildStraightWall(plastic: PlasticMaterialFactory, widthStuds: number, courses: number, gate: boolean): THREE.Group {
+  const acc = new BrickAccumulator();
+  const o: WallOptions = { x0: -widthStuds / 2, z: 0, widthStuds, courses, gate };
+  addWallCourses(acc, o, 0, courses);
+  const topY = courses * BRICK_HEIGHT;
+  // banda saliente + ménsulas frontales + merlones
+  acc.addGeometry(blockGeo(widthStuds, 0.5, 2.4), BrickPalette.SAND, 0, topY + 0.28, 0);
+  for (let x = -widthStuds / 2 + 0.5; x < widthStuds / 2; x += 1) {
+    acc.addGeometry(corbelGeo(0.9, 'x'), BrickPalette.WARM_SAND, x, topY - 0.1, 1.1);
+  }
+  addMerlons(acc, -widthStuds / 2, widthStuds / 2, topY + 0.85, 0, 'x');
+  return acc.build(plastic);
+}
+
+/**
+ * Recinto amurallado delante de la muralla: dos muros laterales, un muro
+ * trasero con puerta y cuatro torres en las esquinas. Todo de ladrillo con
+ * el acabado de plástico, para que el espacio esté ACOTADO y "recogido".
+ */
+export function buildCourtyard(plastic: PlasticMaterialFactory): THREE.Group {
+  const g = new THREE.Group();
+  const { half, back, front, courses } = COURT;
+  const sideLen = Math.round(back - front);   // studs de fondo
+  const midZ = (front + back) / 2;
+
+  const left = buildStraightWall(plastic, sideLen, courses, false);
+  left.rotation.y = Math.PI / 2; left.position.set(-half, 0, midZ); g.add(left);
+
+  const right = buildStraightWall(plastic, sideLen, courses, false);
+  right.rotation.y = -Math.PI / 2; right.position.set(half, 0, midZ); g.add(right);
+
+  const backW = buildStraightWall(plastic, Math.round(half * 2), courses, true);
+  backW.rotation.y = Math.PI; backW.position.set(0, 0, back); g.add(backW);
+
+  // torres en las cuatro esquinas (algo más altas que los muros)
+  const tH = courses + 4;
+  for (const cx of [-half, half]) {
+    for (const cz of [front, back]) {
+      const acc = new BrickAccumulator();
+      addTower(acc, 0, tH);
+      const t = acc.build(plastic);
+      t.position.set(cx, 0, cz);
+      g.add(t);
+    }
+  }
+  return g;
+}
+
+/**
+ * Columna procesional de LADRILLO (base y capitel anchos, fuste 2x2 con
+ * tetones). Devuelve un grupo listo para clonar por la avenida.
+ */
+export function buildBrickColumn(plastic: PlasticMaterialFactory, courses: number): THREE.Group {
+  const acc = new BrickAccumulator();
+  // base ancha (dos placas apiladas)
+  acc.addBrick(4, 4, 'plate', BrickPalette.DARK_SAND, 0, 0, 0);
+  acc.addBrick(3, 3, 'plate', BrickPalette.WARM_SAND, 0, 0.4, 0);
+  // fuste 2x2
+  for (let c = 0; c < courses; c++) {
+    const y = 0.8 + c * BRICK_HEIGHT;
+    acc.addBrick(2, 2, 'brick', c % 2 ? BrickPalette.SAND : BrickPalette.WARM_SAND, 0, y, 0);
+  }
+  // capitel ancho
+  const capY = 0.8 + courses * BRICK_HEIGHT;
+  acc.addGeometry(blockGeo(3.4, 0.6, 3.4), BrickPalette.DARK_SAND, 0, capY, 0);
+  acc.addBrick(4, 4, 'plate', BrickPalette.WARM_SAND, 0, capY + 0.6, 0);
+  return acc.build(plastic);
 }

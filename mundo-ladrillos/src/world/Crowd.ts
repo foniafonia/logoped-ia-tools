@@ -3,6 +3,15 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { normalizeGeometry } from '../bricks/BrickGeometryFactory';
 import { IS_MOBILE } from '../core/Quality';
+import { COURT } from '../core/Layout';
+
+/** Material de plástico ABS (clearcoat) como el del espía y la muralla. */
+function plasticStd(color: number, extra: THREE.MeshPhysicalMaterialParameters = {}): THREE.MeshPhysicalMaterial {
+  return new THREE.MeshPhysicalMaterial({
+    color, metalness: 0, roughness: 0.34, clearcoat: 0.4, clearcoatRoughness: 0.2,
+    envMapIntensity: 1.1, ...extra
+  });
+}
 
 const ROBES = [0xb9a36f, 0x8f6a3e, 0x6f7a52, 0x9a9184, 0x7a5230, 0xc9b083, 0x86633a];
 const TURBANS = [0xf1ece0, 0x2f6db0, 0x8a6a3a, 0xb9b2a4, 0xcdb98a, 0xe6ddc9];
@@ -26,7 +35,7 @@ function cyl(rt: number, rb: number, h: number, x: number, y: number, z: number,
  */
 export function buildCrowd(): THREE.Group {
   const group = new THREE.Group();
-  const count = IS_MOBILE ? 190 : 460;
+  const count = IS_MOBILE ? 170 : 340;
 
   // --- Cuerpo (túnica): piernas + cadera + torso trapezoidal + 2 brazos ---
   const body = mergeGeometries([
@@ -68,12 +77,12 @@ export function buildCrowd(): THREE.Group {
   const boss = new THREE.CylinderGeometry(0.16, 0.16, 0.26, 8).rotateX(Math.PI / 2).translate(-1.08, 2.5, 0.68);
   const shield = mergeGeometries([normalizeGeometry(disc), normalizeGeometry(boss)], false)!;
 
-  const stdBody = new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0 });
-  const stdSkin = new THREE.MeshStandardMaterial({ color: 0xf2c141, roughness: 0.45 });
-  const stdTurb = new THREE.MeshStandardMaterial({ roughness: 0.6 });
-  const stdBeard = new THREE.MeshStandardMaterial({ color: 0xcfc8ba, roughness: 0.7 });
-  const stdSword = new THREE.MeshStandardMaterial({ color: 0xc7ccd2, roughness: 0.35, metalness: 0.6 });
-  const stdShield = new THREE.MeshStandardMaterial({ color: 0x8a5a2c, roughness: 0.6 });
+  const stdBody = plasticStd(0xffffff);                 // color por instancia (túnica)
+  const stdSkin = plasticStd(0xf2c141);                 // amarillo minifig
+  const stdTurb = plasticStd(0xffffff);                 // color por instancia (turbante)
+  const stdBeard = plasticStd(0xcfc8ba, { roughness: 0.6 });
+  const stdSword = new THREE.MeshPhysicalMaterial({ color: 0xd2d7dd, roughness: 0.28, metalness: 0.7, clearcoat: 0.3 });
+  const stdShield = plasticStd(0x8a5a2c);
 
   const meshes = {
     body: new THREE.InstancedMesh(body, stdBody, count),
@@ -85,17 +94,22 @@ export function buildCrowd(): THREE.Group {
   };
   meshes.body.castShadow = true; meshes.skin.castShadow = true; meshes.turban.castShadow = true;
 
+  // Formación DENTRO del recinto, flanqueando el pasillo central y de cara
+  // a la muralla. Denso, para que se sienta lleno y no un descampado.
   const dummy = new THREE.Object3D();
-  const rows = IS_MOBILE ? 8 : 13;
+  const rows = IS_MOBILE ? 9 : 13;
   const cols = Math.ceil(count / rows);
+  const spread = (COURT.half - 5) * 2;   // ancho ocupado
+  const laneHalf = 15;                    // pasillo libre (columnas dentro, ejército fuera)
+  const zA = 14, zB = COURT.back - 10;
   let i = 0;
   for (let r = 0; r < rows && i < count; r++) {
     for (let c = 0; c < cols && i < count; c++) {
-      let x = (c - cols / 2) * (320 / cols) + (Math.random() - 0.5) * 3;
-      if (Math.abs(x) < 13) x += (x < 0 ? -1 : 1) * 13;
-      const z = 16 + r * (90 / rows) + (Math.random() - 0.5) * 3;
+      let x = (c / (cols - 1) - 0.5) * spread + (Math.random() - 0.5) * 2.4;
+      if (Math.abs(x) < laneHalf) x += (x < 0 ? -1 : 1) * laneHalf;
+      const z = zA + (r / (rows - 1)) * (zB - zA) + (Math.random() - 0.5) * 2.4;
       dummy.position.set(x, 0, z);
-      dummy.rotation.set(0, Math.PI + (Math.random() - 0.5) * 0.5, 0);
+      dummy.rotation.set(0, Math.PI + (Math.random() - 0.5) * 0.4, 0);
       const s = 0.92 + Math.random() * 0.16;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
