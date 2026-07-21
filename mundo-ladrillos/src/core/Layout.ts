@@ -11,3 +11,15 @@ export const COURT = {
   front: 2,                       // los muros laterales arrancan junto a la muralla
   courses: IS_MOBILE ? 8 : 10     // altura de los muros del recinto (más bajos que la muralla)
 };
+
+/**
+ * El camino de aproximación: fuera de la ciudad, por donde el ejército marcha
+ * hasta la puerta trasera del recinto. Arranca en COURT.back y se aleja +Z.
+ */
+export const ROAD = {
+  len: IS_MOBILE ? 120 : 160,    // largo del camino
+  half: IS_MOBILE ? 22 : 30      // medio ancho del camino (muros a los lados)
+};
+
+/** Zona de choque de la batalla (delante de la muralla). */
+export const CLASH_Z = 12;

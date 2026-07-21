@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
-import { buildJericho, buildCourtyard } from './structures/BrickStructureBuilder';
+import { buildJericho, buildCourtyard, buildApproach } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
@@ -10,7 +10,7 @@ import { AudioManager } from './audio/AudioManager';
 import { ShofarInteraction } from './interactions/ShofarInteraction';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
-import { buildCrowd } from './world/Crowd';
+import { Army } from './world/Army';
 import { buildScenery } from './world/Scenery';
 import { Dust } from './effects/Dust';
 
@@ -75,6 +75,8 @@ scene.add(jericho.group);
 
 // === RECINTO AMURALLADO: cierra la plaza (muros laterales + trasero + torres) ===
 scene.add(buildCourtyard(plastic));
+// === CAMINO de aproximación (por donde marcha el ejército) ===
+scene.add(buildApproach(plastic));
 
 // === PERSONAJE JUGABLE: el espía (Fase 3) ===
 const spy = createMinifigure(plastic, SPY_SKIN);
@@ -87,10 +89,12 @@ if (IS_MOBILE || 'ontouchstart' in window) new TouchControls(controller);
 // === ENTORNO (cielo de atardecer + dunas + suelo) ===
 setupEnvironment(scene);
 
-// === ÉPICO: ejército, columnas/antorchas y polvo ===
-scene.add(buildCrowd());
+// === ÉPICO: ejército que marcha y combate, columnas/antorchas y polvo ===
+const army = new Army();
+scene.add(army.group);
 scene.add(buildScenery(plastic));
 const dust = new Dust(scene);
+(window as any).__army = army;
 
 // === AUDIO (se activa con el primer gesto del usuario) ===
 const audio = new AudioManager();
@@ -101,7 +105,7 @@ const startEl = document.createElement('div');
 startEl.innerHTML =
   '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px">' +
   '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b;letter-spacing:2px">LA CONQUISTA DE ISRAEL</div>' +
-  '<div style="opacity:.8;margin:10px 0 22px">Mundo de ladrillos · demo jugable</div>' +
+  '<div style="opacity:.8;margin:10px 0 22px">Marcha con el ejército hasta Jericó · toca el shofar 🎺 y derriba la muralla</div>' +
   '<button id="startBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)">▶ Tocar para empezar</button>' +
   '<div style="opacity:.7;font-size:13px;margin-top:14px">🔊 Activa el sonido · sube el volumen</div></div>';
 Object.assign(startEl.style, {
@@ -112,6 +116,7 @@ Object.assign(startEl.style, {
 document.body.appendChild(startEl);
 const startGame = (): void => {
   audio.init();                 // desbloquea + decodifica dentro del gesto
+  army.start();                 // el ejército empieza a marchar contigo
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
 };
@@ -120,7 +125,7 @@ startEl.addEventListener('pointerdown', startGame, { once: true });
 addEventListener('keydown', () => audio.init(), { once: true });
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
-const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos, dust);
+const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos, dust, () => army.startBattle());
 void jericho.wallWidth;
 (window as any).__jericho = jericho;
 
@@ -137,6 +142,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
   controller.update(dt, tpcam.yaw);
+  army.update(dt, now / 1000);
   shofarGame.update(dt);
   dust.update(dt);
   tpcam.update(controller.pos);

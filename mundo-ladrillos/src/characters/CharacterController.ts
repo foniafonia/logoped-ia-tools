@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Minifigure } from './MinifigureFactory';
-import { COURT } from '../core/Layout';
+import { COURT, ROAD } from '../core/Layout';
 
 /** Interpolación angular corta (para girar al personaje suavemente). */
 function lerpAngle(a: number, b: number, t: number): number {
@@ -16,7 +16,7 @@ function lerpAngle(a: number, b: number, t: number): number {
  * de andar. La física completa (Rapier) llegará en su fase.
  */
 export class CharacterController {
-  pos = new THREE.Vector3(0, 0, COURT.back - 34);
+  pos = new THREE.Vector3(0, 0, COURT.back + ROAD.len * 0.62);
   touch = { x: 0, z: 0, jump: false }; // entrada táctil (joystick + botón)
   private vy = 0;
   private facing = Math.PI; // mira hacia la cámara al empezar
@@ -64,9 +64,10 @@ export class CharacterController {
     this.pos.y += this.vy * dt;
     if (this.pos.y <= 0) { this.pos.y = 0; this.vy = 0; this.grounded = true; }
 
-    // acotado al recinto amurallado (no salir de la plaza)
-    this.pos.x = Math.max(-(COURT.half - 2.5), Math.min(COURT.half - 2.5, this.pos.x));
-    this.pos.z = Math.max(3.5, Math.min(COURT.back - 3, this.pos.z));
+    // acotado: camino estrecho fuera, plaza ancha dentro (no salir de los muros)
+    this.pos.z = Math.max(3.5, Math.min(COURT.back + ROAD.len - 4, this.pos.z));
+    const halfX = this.pos.z > COURT.back + 1 ? ROAD.half - 2.5 : COURT.half - 2.5;
+    this.pos.x = Math.max(-halfX, Math.min(halfX, this.pos.x));
 
     this.fig.root.position.copy(this.pos);
     this.fig.root.rotation.y = this.facing;

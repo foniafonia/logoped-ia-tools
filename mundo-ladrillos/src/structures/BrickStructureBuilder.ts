@@ -6,7 +6,7 @@ import { STUD_WIDTH, BRICK_HEIGHT, BEVEL_SIZE } from '../bricks/BrickDimensions'
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { BrickPalette } from '../materials/BrickPalette';
 import { IS_MOBILE } from '../core/Quality';
-import { COURT } from '../core/Layout';
+import { COURT, ROAD } from '../core/Layout';
 
 /**
  * Acumula geometrías por color y las fusiona en una malla por color
@@ -276,6 +276,33 @@ export function buildCourtyard(plastic: PlasticMaterialFactory): THREE.Group {
       t.position.set(cx, 0, cz);
       g.add(t);
     }
+  }
+  return g;
+}
+
+/**
+ * El CAMINO de aproximación: dos muros bajos de ladrillo que flanquean la
+ * senda por la que el ejército marcha hasta la puerta trasera del recinto.
+ */
+export function buildApproach(plastic: PlasticMaterialFactory): THREE.Group {
+  const g = new THREE.Group();
+  const courses = COURT.courses - 2;
+  const len = Math.round(ROAD.len);
+  const midZ = COURT.back + ROAD.len / 2;
+  for (const side of [-1, 1]) {
+    const w = buildStraightWall(plastic, len, courses, false);
+    w.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+    w.position.set(side * ROAD.half, 0, midZ);
+    g.add(w);
+  }
+  // torres a la boca del camino (donde arranca la marcha)
+  const zMouth = COURT.back + ROAD.len;
+  for (const cx of [-ROAD.half, ROAD.half]) {
+    const acc = new BrickAccumulator();
+    addTower(acc, 0, courses + 3);
+    const t = acc.build(plastic);
+    t.position.set(cx, 0, zMouth);
+    g.add(t);
   }
   return g;
 }

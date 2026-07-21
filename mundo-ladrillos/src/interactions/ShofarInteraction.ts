@@ -40,7 +40,8 @@ export class ShofarInteraction {
     private audio: AudioManager,
     jericho: JerichoBuild,
     private getSpy: () => THREE.Vector3,
-    private dust?: Dust
+    private dust?: Dust,
+    private onBattle?: () => void
   ) {
     this.jgroup = jericho.group;
     this.bands = jericho.bands;
@@ -161,12 +162,18 @@ export class ShofarInteraction {
       }, 400 + i * step);
     });
     // torres al final: gran estallido
+    const end = 400 + this.bands.length * step;
     setTimeout(() => {
       this.towers.forEach((t) => { t.visible = false; });
       this.spawnWave(30, 8);
       this.shakePulse(0.6);
       for (let k = 0; k < 8; k++) this.dust?.burst((Math.random() - 0.5) * this.halfW * 2, 6, 1.5, 30);
-    }, 400 + this.bands.length * step);
+    }, end);
+    // ...y salen los defensores de Jericó a luchar: ¡a la batalla!
+    setTimeout(() => {
+      this.audio.play('shout', 0.9);
+      this.onBattle?.();
+    }, end + 1400);
   }
 
   private spawnWave(count: number, yLevel: number): void {
