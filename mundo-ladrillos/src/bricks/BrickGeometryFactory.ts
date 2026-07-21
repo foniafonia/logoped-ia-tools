@@ -9,6 +9,9 @@ import {
 export type PieceKind = 'brick' | 'plate' | 'tile';
 
 /** Deja solo position/normal/uv y sin índice, para poder fusionar sin conflictos. */
+export function normalizeGeometry(geo: THREE.BufferGeometry): THREE.BufferGeometry {
+  return normalize(geo);
+}
 function normalize(geo: THREE.BufferGeometry): THREE.BufferGeometry {
   const g = geo.index ? geo.toNonIndexed() : geo;
   const keep = ['position', 'normal', 'uv'];
