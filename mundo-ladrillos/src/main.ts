@@ -45,11 +45,11 @@ key.position.set(-18, 10, 14);
 key.castShadow = true;
 key.shadow.mapSize.set(2048, 2048);
 key.shadow.camera.near = 1;
-key.shadow.camera.far = 90;
-key.shadow.camera.left = -34;
-key.shadow.camera.right = 34;
-key.shadow.camera.top = 30;
-key.shadow.camera.bottom = -30;
+key.shadow.camera.far = 130;
+key.shadow.camera.left = -60;
+key.shadow.camera.right = 60;
+key.shadow.camera.top = 40;
+key.shadow.camera.bottom = -40;
 key.shadow.bias = -0.0002;
 key.shadow.normalBias = 0.02;
 scene.add(key);
@@ -71,9 +71,9 @@ scene.add(ground);
 // ---- Fábrica de materiales de plástico ----
 const plastic = new PlasticMaterialFactory();
 
-// === MURALLA DE JERICÓ (Fase 2) ===
+// === MURALLA DE JERICÓ (grande, por franjas) ===
 const jericho = buildJericho(plastic);
-scene.add(jericho);
+scene.add(jericho.group);
 
 // === PERSONAJE JUGABLE: el espía (Fase 3) ===
 const spy = createMinifigure(plastic, SPY_SKIN);
@@ -97,6 +97,8 @@ addEventListener('pointerdown', initAudio);
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
 const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos);
+void jericho.wallWidth;
+(window as any).__jericho = jericho;
 
 // ---- Bucle ----
 addEventListener('resize', () => {

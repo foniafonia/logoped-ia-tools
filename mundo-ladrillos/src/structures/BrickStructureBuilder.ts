@@ -67,32 +67,28 @@ function blockGeo(w: number, h: number, d: number): THREE.BufferGeometry {
 
 interface WallOptions { x0: number; z: number; widthStuds: number; courses: number; gate?: boolean; }
 
-/** Tramo de muralla de filas alternadas, con ménsulas y almenas arriba. */
-function addWall(acc: BrickAccumulator, o: WallOptions): void {
-  const gateCenter = o.x0 + o.widthStuds / 2;
-  const gateHalf = 3; // hueco de puerta de 6 studs
-  const gateTop = 5;  // cursos de alto del hueco
+const GATE_HALF = 3; // hueco de puerta de 6 studs
+const GATE_TOP = 5;  // cursos de alto del hueco
 
-  for (let c = 0; c < o.courses; c++) {
+/** Añade los cursos [cStart, cEnd) del muro a un acumulador (para franjas). */
+function addWallCourses(acc: BrickAccumulator, o: WallOptions, cStart: number, cEnd: number): void {
+  const gateCenter = o.x0 + o.widthStuds / 2;
+  for (let c = cStart; c < cEnd; c++) {
     const y = c * BRICK_HEIGHT;
     const offset = c % 2 ? -1 : 0;
     for (let sx = 0; sx < o.widthStuds; sx += 2) {
-      const cx = o.x0 + sx + offset + 1; // centro de un ladrillo 2x2
-      if (o.gate && c < gateTop && Math.abs(cx - gateCenter) < gateHalf) continue; // hueco de puerta
+      const cx = o.x0 + sx + offset + 1;
+      if (o.gate && c < GATE_TOP && Math.abs(cx - gateCenter) < GATE_HALF) continue; // hueco de puerta
       acc.addBrick(2, 2, 'brick', sandFor(cx, y), cx, y, o.z);
     }
+    if (o.gate && c === GATE_TOP) {
+      acc.addGeometry(blockGeo(GATE_HALF * 2 + 1, BRICK_HEIGHT * 1.2, 2.2), BrickPalette.DARK_SAND, gateCenter, GATE_TOP * BRICK_HEIGHT, o.z);
+    }
   }
-
-  // Dintel del arco de la puerta
-  if (o.gate) {
-    const topY = gateTop * BRICK_HEIGHT;
-    acc.addGeometry(blockGeo(gateHalf * 2 + 1, BRICK_HEIGHT * 1.2, 2.2), BrickPalette.DARK_SAND, gateCenter, topY, o.z);
-    // Puerta de madera (plástico marrón)
-    acc.addGeometry(blockGeo(gateHalf * 2 - 0.6, gateTop * BRICK_HEIGHT - 0.2, 0.5),
-      BrickPalette.DARK_BROWN, gateCenter, 0, o.z + 0.9);
+  if (cStart === 0 && o.gate) {
+    acc.addGeometry(blockGeo(GATE_HALF * 2 - 0.6, GATE_TOP * BRICK_HEIGHT - 0.2, 0.5),
+      BrickPalette.DARK_BROWN, gateCenter, 0, o.z + 0.9); // puerta
   }
-
-  addCrown(acc, o.x0, o.x0 + o.widthStuds, o.courses * BRICK_HEIGHT, o.z);
 }
 
 /** Corona del muro: fila de ménsulas + almenas cuadradas con huecos. */
@@ -177,20 +173,54 @@ function addTower(acc: BrickAccumulator, cx: number, courses: number): void {
 
 /** Suelo tipo placa base con tetones (sand), amplio para la zona jugable. */
 function addBaseplate(acc: BrickAccumulator): void {
-  for (let x = -44; x < 44; x += 2) {
-    for (let zz = -6; zz < 30; zz += 2) {
+  for (let x = -70; x < 70; x += 2) {
+    for (let zz = -8; zz < 34; zz += 2) {
       const col = ((x + zz) >>> 2) % 9 === 0 ? BrickPalette.WARM_SAND : BrickPalette.SAND;
       acc.addBrick(2, 2, 'plate', col, x + 1, -0.4, zz + 1);
     }
   }
 }
 
-/** Escena completa: muralla + dos torres + puerta + suelo. */
-export function buildJericho(plastic: PlasticMaterialFactory): THREE.Group {
-  const acc = new BrickAccumulator();
-  addBaseplate(acc);
-  addWall(acc, { x0: -20, z: 0, widthStuds: 40, courses: 7, gate: true });
-  addTower(acc, -8, 10);
-  addTower(acc, 8, 10);
-  return acc.build(plastic);
+export interface JerichoBuild {
+  group: THREE.Group;    // todo, para añadir a la escena
+  bands: THREE.Group[];  // franjas del muro, de ARRIBA a abajo (para el derrumbe)
+  towers: THREE.Group[]; // torres, colapsan al final
+  wallTop: number;       // altura de la coronación
+  wallWidth: number;     // ancho total en unidades
+}
+
+/** Muralla de Jericó grande, construida por franjas horizontales. */
+export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
+  const group = new THREE.Group();
+  const bands: THREE.Group[] = [];
+  const towers: THREE.Group[] = [];
+
+  // suelo (estático)
+  const base = new BrickAccumulator();
+  addBaseplate(base);
+  group.add(base.build(plastic));
+
+  // muro grande por franjas
+  const o: WallOptions = { x0: -48, z: 0, widthStuds: 96, courses: 12, gate: true };
+  const BAND = 2;
+  for (let c0 = 0; c0 < o.courses; c0 += BAND) {
+    const acc = new BrickAccumulator();
+    addWallCourses(acc, o, c0, Math.min(o.courses, c0 + BAND));
+    if (c0 + BAND >= o.courses) addCrown(acc, o.x0, o.x0 + o.widthStuds, o.courses * BRICK_HEIGHT, o.z);
+    const g = acc.build(plastic);
+    group.add(g);
+    bands.push(g);
+  }
+  bands.reverse(); // arriba primero
+
+  // torres altas
+  for (const tx of [-34, -12, 12, 34]) {
+    const acc = new BrickAccumulator();
+    addTower(acc, tx, 16);
+    const g = acc.build(plastic);
+    group.add(g);
+    towers.push(g);
+  }
+
+  return { group, bands, towers, wallTop: o.courses * BRICK_HEIGHT, wallWidth: o.widthStuds };
 }
