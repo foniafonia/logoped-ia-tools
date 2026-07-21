@@ -33,6 +33,39 @@ export class AudioManager {
     }
   }
 
+  /**
+   * Sonido en bucle (ambiente): p.ej. el estruendo del ejército durante la
+   * marcha. Espera a que el buffer esté decodificado y devuelve un control
+   * para bajarlo/pararlo con fundido.
+   */
+  loop(name: string, volume = 0.5): { stop: (fade?: number) => void; setVolume: (v: number) => void } {
+    const ctl = { src: null as AudioBufferSourceNode | null, gain: null as GainNode | null, stopped: false };
+    const startWhenReady = (tries = 0): void => {
+      if (ctl.stopped || !this.ac) return;
+      const buf = this.buffers.get(name);
+      if (!buf) { if (tries < 50) setTimeout(() => startWhenReady(tries + 1), 100); return; }
+      const src = this.ac.createBufferSource();
+      src.buffer = buf; src.loop = true;
+      const g = this.ac.createGain(); g.gain.value = volume;
+      src.connect(g); g.connect(this.ac.destination);
+      try { src.start(); } catch { /* noop */ }
+      ctl.src = src; ctl.gain = g;
+    };
+    startWhenReady();
+    return {
+      stop: (fade = 0.8): void => {
+        ctl.stopped = true;
+        if (ctl.src && ctl.gain && this.ac) {
+          const t = this.ac.currentTime;
+          ctl.gain.gain.setValueAtTime(ctl.gain.gain.value, t);
+          ctl.gain.gain.linearRampToValueAtTime(0.0001, t + fade);
+          try { ctl.src.stop(t + fade); } catch { /* noop */ }
+        }
+      },
+      setVolume: (v: number): void => { if (ctl.gain) ctl.gain.gain.value = v; }
+    };
+  }
+
   play(name: string, volume = 1, stopAfter?: number): boolean {
     if (!this.ac) return false;
     if (this.ac.state === 'suspended') void this.ac.resume();

@@ -114,9 +114,11 @@ Object.assign(startEl.style, {
   transition: 'opacity .4s'
 } as CSSStyleDeclaration);
 document.body.appendChild(startEl);
+let din: { stop: (f?: number) => void } | null = null;
 const startGame = (): void => {
   audio.init();                 // desbloquea + decodifica dentro del gesto
   army.start();                 // el ejército empieza a marchar contigo
+  din = audio.loop('din', 0.42); // estruendo de la tropa que te acompaña
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
 };
@@ -125,7 +127,10 @@ startEl.addEventListener('pointerdown', startGame, { once: true });
 addEventListener('keydown', () => audio.init(), { once: true });
 
 // === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
-const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos, dust, () => army.startBattle());
+const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos, dust, () => {
+  army.startBattle();
+  din?.stop(1.2);   // el estruendo de marcha da paso al fragor de la batalla
+});
 void jericho.wallWidth;
 (window as any).__jericho = jericho;
 
