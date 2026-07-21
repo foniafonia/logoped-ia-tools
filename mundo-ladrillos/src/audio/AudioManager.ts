@@ -1,5 +1,14 @@
 import { CLIPS } from './clips';
 
+/** Decodifica un data:...;base64 a ArrayBuffer sin usar fetch (robusto en móvil/artifact). */
+function base64ToArrayBuffer(dataUri: string): ArrayBuffer {
+  const b64 = dataUri.slice(dataUri.indexOf(',') + 1);
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes.buffer;
+}
+
 /** Reproduce los clips de la película con WebAudio (baja latencia). */
 export class AudioManager {
   private ac: AudioContext | null = null;
@@ -10,9 +19,10 @@ export class AudioManager {
     if (this.ac) return;
     this.ac = new (window.AudioContext || (window as any).webkitAudioContext)();
     for (const [name, url] of Object.entries(CLIPS)) {
-      fetch(url).then((r) => r.arrayBuffer()).then((a) => {
-        this.ac!.decodeAudioData(a, (buf) => this.buffers.set(name, buf), () => {});
-      }).catch(() => {});
+      try {
+        const a = base64ToArrayBuffer(url);
+        this.ac.decodeAudioData(a, (buf) => this.buffers.set(name, buf), () => {});
+      } catch { /* noop */ }
     }
   }
 

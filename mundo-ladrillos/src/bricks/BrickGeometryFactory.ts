@@ -5,6 +5,7 @@ import {
   STUD_WIDTH, STUD_DEPTH, BRICK_HEIGHT, PLATE_HEIGHT, TILE_HEIGHT,
   STUD_RADIUS, STUD_HEIGHT, BEVEL_SIZE, PIECE_GAP
 } from './BrickDimensions';
+import { QUALITY } from '../core/Quality';
 
 export type PieceKind = 'brick' | 'plate' | 'tile';
 
@@ -27,9 +28,10 @@ function normalize(geo: THREE.BufferGeometry): THREE.BufferGeometry {
 
 /** Geometría de tetón reutilizable (cilindro con borde superior suavizado). */
 function makeStudGeometry(): THREE.BufferGeometry {
-  const g = new THREE.CylinderGeometry(STUD_RADIUS, STUD_RADIUS * 0.98, STUD_HEIGHT, 24, 1, false);
+  const seg = QUALITY.studSegments;
+  const g = new THREE.CylinderGeometry(STUD_RADIUS, STUD_RADIUS * 0.98, STUD_HEIGHT, seg, 1, false);
   // pequeño chaflán superior para que el tetón no tenga canto vivo
-  const cap = new THREE.CylinderGeometry(STUD_RADIUS * 0.86, STUD_RADIUS, STUD_HEIGHT * 0.28, 24, 1, false);
+  const cap = new THREE.CylinderGeometry(STUD_RADIUS * 0.86, STUD_RADIUS, STUD_HEIGHT * 0.28, seg, 1, false);
   cap.translate(0, STUD_HEIGHT * 0.5, 0);
   return mergeGeometries([normalize(g), normalize(cap)], false)!;
 }
@@ -54,7 +56,7 @@ export function makeBrickGeometry(
   const width = wStuds * STUD_WIDTH - PIECE_GAP;
   const depth = dStuds * STUD_DEPTH - PIECE_GAP;
 
-  const body = new RoundedBoxGeometry(width, height, depth, 4, BEVEL_SIZE);
+  const body = new RoundedBoxGeometry(width, height, depth, QUALITY.brickSegments, BEVEL_SIZE);
   body.translate(0, height / 2, 0);
 
   const geoms: THREE.BufferGeometry[] = [normalize(body)];

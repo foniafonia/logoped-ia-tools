@@ -8,28 +8,32 @@ import { CharacterController } from './characters/CharacterController';
 import { setupEnvironment } from './world/EnvironmentManager';
 import { AudioManager } from './audio/AudioManager';
 import { ShofarInteraction } from './interactions/ShofarInteraction';
+import { QUALITY, IS_MOBILE } from './core/Quality';
+import { TouchControls } from './ui/TouchControls';
 
 const app = document.getElementById('app')!;
 
 // ---- Renderer (gestión de color + tonemapping cinematográfico) ----
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ antialias: !IS_MOBILE, alpha: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(QUALITY.pixelRatio);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.02;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = QUALITY.shadows;
+renderer.shadowMap.type = IS_MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 app.appendChild(renderer.domElement);
 
 // ---- Escena + niebla suave (atardecer dorado, como la peli) ----
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf0d9a8);
-scene.fog = new THREE.Fog(0xf0d9a8, 55, 150);
+scene.fog = new THREE.Fog(0xf0d9a8, 45, QUALITY.fogFar);
 
-// Entorno para reflejos del clearcoat (sin cargar archivos)
-const pmrem = new THREE.PMREMGenerator(renderer);
-scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+// Reflejos del clearcoat (PMREM) solo en equipos capaces (en móvil se omite)
+if (QUALITY.envMap) {
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
 
 // ---- Cámara ----
 const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 500);
@@ -42,14 +46,14 @@ scene.add(hemi);
 
 const key = new THREE.DirectionalLight(0xffd9a0, 3.0);
 key.position.set(-18, 10, 14);
-key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
+key.castShadow = QUALITY.shadows;
+key.shadow.mapSize.set(QUALITY.shadowMap, QUALITY.shadowMap);
 key.shadow.camera.near = 1;
-key.shadow.camera.far = 130;
-key.shadow.camera.left = -60;
-key.shadow.camera.right = 60;
-key.shadow.camera.top = 40;
-key.shadow.camera.bottom = -40;
+key.shadow.camera.far = 150;
+key.shadow.camera.left = -70;
+key.shadow.camera.right = 70;
+key.shadow.camera.top = 45;
+key.shadow.camera.bottom = -45;
 key.shadow.bias = -0.0002;
 key.shadow.normalBias = 0.02;
 scene.add(key);
@@ -57,16 +61,6 @@ scene.add(key);
 const fill = new THREE.DirectionalLight(0xbcd2ff, 0.35);
 fill.position.set(12, 6, -6);
 scene.add(fill);
-
-// ---- Suelo que recibe sombra ----
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(400, 400),
-  new THREE.MeshStandardMaterial({ color: 0xd8c79c, roughness: 0.95, metalness: 0 })
-);
-ground.rotation.x = -Math.PI / 2;
-ground.position.y = -0.42;
-ground.receiveShadow = true;
-scene.add(ground);
 
 // ---- Fábrica de materiales de plástico ----
 const plastic = new PlasticMaterialFactory();
@@ -79,6 +73,7 @@ scene.add(jericho.group);
 const spy = createMinifigure(plastic, SPY_SKIN);
 scene.add(spy.root);
 const controller = new CharacterController(spy);
+if (IS_MOBILE || 'ontouchstart' in window) new TouchControls(controller);
 (window as any).__spy = spy; // depuración
 (window as any).__ctrl = controller;
 

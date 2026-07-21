@@ -127,8 +127,8 @@ export class ShofarInteraction {
       this.audio.play('rumble', 1.0);
       setTimeout(() => this.audio.play('shout', 0.85), 500);
     }
-    // franjas de ARRIBA a abajo, una cada ~1.1s (derrumbe lento)
-    const step = 1100;
+    // franjas de ARRIBA a abajo, una cada ~2.6s (derrumbe muy lento)
+    const step = 2600;
     this.bands.forEach((band, i) => {
       setTimeout(() => {
         band.visible = false;

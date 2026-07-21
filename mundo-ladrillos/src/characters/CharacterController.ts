@@ -15,7 +15,8 @@ function lerpAngle(a: number, b: number, t: number): number {
  * de andar. La física completa (Rapier) llegará en su fase.
  */
 export class CharacterController {
-  pos = new THREE.Vector3(0, 0, 11);
+  pos = new THREE.Vector3(0, 0, 14);
+  touch = { x: 0, z: 0, jump: false }; // entrada táctil (joystick + botón)
   private vy = 0;
   private facing = Math.PI; // mira hacia la cámara al empezar
   private grounded = true;
@@ -37,8 +38,13 @@ export class CharacterController {
     if (this.keys.has('KeyS') || this.keys.has('ArrowDown')) iz += 1;
     if (this.keys.has('KeyA') || this.keys.has('ArrowLeft')) ix -= 1;
     if (this.keys.has('KeyD') || this.keys.has('ArrowRight')) ix += 1;
+    // entrada táctil (joystick): z hacia arriba = adelante
+    if (Math.abs(this.touch.x) > 0.12 || Math.abs(this.touch.z) > 0.12) {
+      ix += this.touch.x; iz += this.touch.z;
+    }
+    if (this.touch.jump) { this.keys.add('Space'); this.touch.jump = false; setTimeout(() => this.keys.delete('Space'), 60); }
     const run = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight');
-    const moving = ix !== 0 || iz !== 0;
+    const moving = Math.abs(ix) > 0.01 || Math.abs(iz) > 0.01;
 
     if (moving) {
       const len = Math.hypot(ix, iz); ix /= len; iz /= len;
@@ -57,9 +63,9 @@ export class CharacterController {
     this.pos.y += this.vy * dt;
     if (this.pos.y <= 0) { this.pos.y = 0; this.vy = 0; this.grounded = true; }
 
-    // límites de la zona jugable (delante de la muralla)
-    this.pos.x = Math.max(-22, Math.min(22, this.pos.x));
-    this.pos.z = Math.max(3.5, Math.min(26, this.pos.z));
+    // zona jugable amplia (movimiento libre)
+    this.pos.x = Math.max(-140, Math.min(140, this.pos.x));
+    this.pos.z = Math.max(3.5, Math.min(120, this.pos.z));
 
     this.fig.root.position.copy(this.pos);
     this.fig.root.rotation.y = this.facing;

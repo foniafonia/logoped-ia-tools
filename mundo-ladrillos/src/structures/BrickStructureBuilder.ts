@@ -195,13 +195,10 @@ export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
   const bands: THREE.Group[] = [];
   const towers: THREE.Group[] = [];
 
-  // suelo (estático)
-  const base = new BrickAccumulator();
-  addBaseplate(base);
-  group.add(base.build(plastic));
+  // (el suelo lo pone EnvironmentManager: un plano texturizado, barato)
 
-  // muro grande por franjas
-  const o: WallOptions = { x0: -48, z: 0, widthStuds: 96, courses: 12, gate: true };
+  // muro MUY grande por franjas
+  const o: WallOptions = { x0: -110, z: 0, widthStuds: 220, courses: 16, gate: true };
   const BAND = 2;
   for (let c0 = 0; c0 < o.courses; c0 += BAND) {
     const acc = new BrickAccumulator();
@@ -213,10 +210,10 @@ export function buildJericho(plastic: PlasticMaterialFactory): JerichoBuild {
   }
   bands.reverse(); // arriba primero
 
-  // torres altas
-  for (const tx of [-34, -12, 12, 34]) {
+  // torres altas repartidas
+  for (const tx of [-96, -60, -24, 24, 60, 96]) {
     const acc = new BrickAccumulator();
-    addTower(acc, tx, 16);
+    addTower(acc, tx, 22);
     const g = acc.build(plastic);
     group.add(g);
     towers.push(g);
