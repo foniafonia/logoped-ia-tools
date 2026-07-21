@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Conquista de Israel — Película Interactiva (dentro del vídeo)</title>
+<style>
+:root{--brand:#e8b04b;--ink:#f4e9d2}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#000;color:var(--ink);font-family:"Trebuchet MS",Verdana,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#frame{position:relative;width:min(100vw,calc(100vh*2.168));aspect-ratio:2556/1179;background:#000;overflow:hidden}
+#film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+
+/* Punto luminoso "pulsa aquí" — aparece SOBRE el vídeo */
+#hot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:5;
+  display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;pointer-events:none;transition:opacity .4s}
+#hot.on{opacity:1;pointer-events:auto}
+.dot{width:46px;height:46px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 50% 40%,#fff,#ffd77a 45%,var(--brand) 70%);
+  box-shadow:0 0 22px 6px rgba(232,176,75,.9),0 0 60px 18px rgba(232,176,75,.45)}
+.dot::before,.dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--brand)}
+.dot::before{animation:ring 1.6s ease-out infinite}
+.dot::after{animation:ring 1.6s ease-out infinite .8s}
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.hand{position:absolute;top:52%;left:54%;font-size:30px;animation:tap 1.1s ease-in-out infinite;filter:drop-shadow(0 2px 3px #000)}
+@keyframes tap{50%{transform:translate(4px,6px)}}
+.lbl{background:rgba(10,7,4,.85);border:1px solid var(--brand);color:#fff;font-weight:700;
+  font-size:clamp(13px,1.9vw,17px);padding:8px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.lbl small{display:block;font-weight:400;font-size:.72em;opacity:.85;letter-spacing:1px}
+
+/* Narración */
+#cap{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:24px 24px 18px;opacity:0;transition:opacity .4s;
+  background:linear-gradient(transparent,rgba(0,0,0,.82) 55%);font-size:clamp(14px,2.3vw,20px);line-height:1.45;text-align:center;text-shadow:0 2px 8px #000}
+#cap.on{opacity:1}
+#hint{position:absolute;top:12px;left:14px;z-index:6;font:600 12px/1 "Courier New",monospace;color:#fff;background:rgba(0,0,0,.5);padding:6px 10px;border-radius:14px;letter-spacing:.5px}
+#mute{position:absolute;top:12px;right:14px;z-index:6;cursor:pointer;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:16px;padding:5px 10px;font-size:14px}
+
+/* Pantallas */
+.screen{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:15px;padding:26px;background:radial-gradient(120% 100% at 50% 0%,#241708,#0a0705 72%);overflow:auto}
+.screen.hidden{display:none}
+.logo{font:800 clamp(20px,4.6vw,40px)/1.05 Georgia,serif;letter-spacing:2px;color:var(--brand);text-shadow:0 3px 0 rgba(0,0,0,.5)}
+.logo span{display:block;font-size:.32em;letter-spacing:5px;color:var(--ink);font-weight:400;margin-top:8px}
+.tag{max-width:520px;color:#e0d3b6;font-size:clamp(13px,2.3vw,16px);line-height:1.5}
+.filebox{display:flex;flex-direction:column;gap:8px;align-items:center;background:rgba(255,255,255,.04);border:1px dashed rgba(232,176,75,.5);border-radius:14px;padding:16px 20px}
+#film-status{font-size:12.5px;color:#bfae8c}
+.btn{font:700 16px/1 inherit;color:#0a0705;background:var(--brand);border:none;border-radius:12px;padding:14px 24px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45);transition:transform .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.pill{font-size:12px;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:4px 12px}
+.win{color:#7ad08a}
+.linkrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.linkrow button{background:none;border:none;color:#cbb;text-decoration:underline;cursor:pointer;font:inherit;font-size:13px}
+
+/* Editor de momentos */
+#ed{position:absolute;inset:0;z-index:20;background:rgba(6,4,2,.97);display:none;flex-direction:column;gap:10px;padding:18px;overflow:auto}
+#ed.on{display:flex}
+#ed h2{color:var(--brand);font-size:18px}
+#ed .sub{font-size:12.5px;color:#bfae8c;line-height:1.5;max-width:720px}
+.stop{display:grid;grid-template-columns:24px 1fr 96px 150px;gap:8px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(232,176,75,.25);border-radius:10px;padding:10px}
+.stop .n{color:var(--brand);font-weight:700;text-align:center}
+.stop input{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.18);color:#f4e9d2;border-radius:7px;padding:8px;font:inherit;font-size:13px;width:100%}
+.stop .mini{display:flex;gap:5px}
+.stop .mini button{flex:1;font-size:11px;padding:8px 4px;background:rgba(232,176,75,.18);color:var(--brand);border:none;border-radius:6px;cursor:pointer}
+.ed-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.ed-actions button{font:700 14px/1 inherit;padding:11px 16px;border-radius:9px;border:none;cursor:pointer}
+.ed-actions .primary{background:var(--brand);color:#0a0705}
+.ed-actions .sec{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="frame">
+  <video id="film" playsinline preload="auto"></video>
+  <div id="hint"></div>
+  <button id="mute" onclick="toggleMute()" style="display:none">🔊</button>
+  <div id="hot"><div class="dot"><span class="hand">👆</span></div><div class="lbl" id="lbl"></div></div>
+  <div id="cap"></div>
+
+  <!-- INTRO -->
+  <section class="screen" id="intro">
+    <div class="logo">LA CONQUISTA DE ISRAEL<span>Película interactiva · dentro del vídeo</span></div>
+    <span class="pill">La peli se reproduce · tú tocas el punto de luz</span>
+    <div class="filebox">
+      <p class="tag" style="margin:0">Carga <b>tu película</b> (se queda en tu ordenador, no se sube):</p>
+      <input type="file" id="filepick" accept="video/*">
+      <div id="film-status">Sin película cargada.</div>
+    </div>
+    <p class="tag">La película va corriendo y, en los momentos de decisión, se para y aparece
+       un <b>punto brillante sobre el vídeo</b>. Tócalo para que la historia continúe.</p>
+    <button class="btn" id="playbtn" onclick="start()" disabled>▶ Empezar</button>
+    <div class="linkrow"><button onclick="openEd()">⚙ Ajustar los momentos</button></div>
+  </section>
+
+  <!-- FIN -->
+  <section class="screen hidden" id="end">
+    <div class="logo" style="font-size:clamp(18px,4vw,32px)"><span class="win" style="letter-spacing:0">▣ ¡Misión cumplida!</span></div>
+    <p class="tag">Los espías volvieron con la información y la promesa a Rahab. El pueblo cruzó el
+       Jordán y, al sonar el shofar, las murallas de Jericó cayeron.</p>
+    <div class="linkrow" style="gap:12px">
+      <button class="btn" onclick="location.reload()">↻ Volver a empezar</button>
+      <button class="btn ghost" onclick="openEd()">⚙ Ajustar los momentos</button>
+    </div>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="ed">
+    <h2>⚙ Ajustar los momentos de decisión</h2>
+    <p class="sub">Cada fila es un botón luminoso. Pon el <b>segundo</b> de la película donde debe
+       aparecer. Con la peli cargada, dale a <b>“⏱ momento actual”</b> mientras la ves para fijarlo
+       en el instante exacto. Se guarda en tu navegador.</p>
+    <div id="stoplist"></div>
+    <div class="ed-actions">
+      <button class="sec" onclick="resetEd()">↺ Valores por defecto</button>
+      <button class="primary" onclick="saveEd()">✓ Guardar y volver</button>
+    </div>
+  </section>
+</div></div>
+
+<script>
+/* ===== Momentos de decisión (dentro de la película) =====
+   t = segundo del vídeo donde se pausa y aparece el botón.
+   x,y = posición del punto luminoso en % del fotograma (ya medidos sobre tus capturas).
+   Los segundos son una PRIMERA ESTIMACIÓN — ajústalos en ⚙ o con “momento actual”. */
+const DEFAULT_STOPS=[
+ {t:340, x:50, y:63, label:'Entrar en la ciudad',        cap:'Es de noche. Eres un espía de Israel. Entra en Jericó sin que te vean.'},
+ {t:425, x:74, y:31, label:'Ir con Rahab',               cap:'Los guardias te buscan. Escóndete en el «Restaurante de Rahab».'},
+ {t:590, x:52, y:22, label:'Escapar por la ventana',     cap:'Rahab te esconde y te enseña la ventana. Prométele el cordón rojo y huye por ahí.'},
+ {t:610, x:30, y:70, label:'Correr por el sendero',      cap:'¡Huye por el sendero, hacia la colina y en silencio! Los guardias fueron al río.'},
+ {t:830, x:39, y:82, label:'Cruzar el Jordán',           cap:'Con tu información, el pueblo cruza el Jordán en seco hacia la Tierra Prometida.'},
+];
+const DEFAULT_START=312, DEFAULT_END=845;
+
+let STOPS=load(), startAt=DEFAULT_START, endAt=DEFAULT_END;
+let hasFilm=false, i=0, raf=null, armed=true;
+
+const $=s=>document.querySelector(s);
+const film=$('#film'), hot=$('#hot'), lbl=$('#lbl'), cap=$('#cap'), hint=$('#hint');
+
+function load(){ try{const j=JSON.parse(localStorage.getItem('cji_stops_v1'));if(Array.isArray(j)&&j.length)return j;}catch(e){} return structuredClone(DEFAULT_STOPS); }
+function save(){ localStorage.setItem('cji_stops_v1', JSON.stringify(STOPS)); }
+
+/* Cargar película */
+$('#filepick').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f)return;
+  film.src=URL.createObjectURL(f); hasFilm=true;
+  $('#film-status').innerHTML='🎬 <b>'+f.name+'</b> cargada.';
+  $('#playbtn').disabled=false;
+});
+
+/* Reproducción con paradas */
+function start(){
+  if(!hasFilm) return;
+  $('#intro').classList.add('hidden');
+  $('#mute').style.display='block'; film.muted=false;
+  i=0; armed=true;
+  film.currentTime=startAt;
+  film.play().catch(()=>{});
+  loop();
+}
+function loop(){
+  raf=requestAnimationFrame(loop);
+  hint.textContent = 'Decisión '+Math.min(i+1,STOPS.length)+' / '+STOPS.length;
+  // fin de la película o llegado a endAt
+  if(film.currentTime>=endAt-0.05 || (film.duration && film.currentTime>=film.duration-0.05)){
+    if(i>=STOPS.length){ finish(); return; }
+  }
+  if(i<STOPS.length && armed && film.currentTime>=STOPS[i].t-0.05){
+    pauseForChoice(STOPS[i]);
+  }
+}
+function pauseForChoice(s){
+  armed=false; film.pause();
+  hot.style.left=s.x+'%'; hot.style.top=s.y+'%';
+  lbl.innerHTML=s.label+'<small>toca aquí 👆</small>';
+  cap.textContent=s.cap;
+  hot.classList.add('on'); cap.classList.add('on');
+}
+hot.onclick=()=>{
+  hot.classList.remove('on'); cap.classList.remove('on');
+  i++; armed=true;
+  if(i>=STOPS.length && (endAt<=STOPS[STOPS.length-1].t)){ finish(); return; }
+  film.play().catch(()=>{});
+};
+function finish(){
+  if(raf)cancelAnimationFrame(raf);
+  try{film.pause();}catch(e){}
+  hot.classList.remove('on'); cap.classList.remove('on');
+  $('#end').classList.remove('hidden');
+}
+function toggleMute(){ film.muted=!film.muted; $('#mute').textContent=film.muted?'🔇':'🔊'; }
+
+/* Editor */
+function openEd(){ $('#intro').classList.add('hidden'); $('#end').classList.add('hidden'); $('#ed').classList.add('on'); renderStops(); }
+function renderStops(){
+  const L=$('#stoplist'); L.innerHTML='';
+  STOPS.forEach((s,n)=>{
+    const row=document.createElement('div'); row.className='stop';
+    row.innerHTML=`<div class="n">${n+1}</div>
+      <input value="${(s.label||'').replace(/"/g,'&quot;')}" onchange="updS(${n},'label',this.value)">
+      <input type="number" step="0.5" value="${s.t}" onchange="updS(${n},'t',this.value)" title="segundo del vídeo">
+      <div class="mini">
+        <button onclick="capNow(${n})" ${hasFilm?'':'disabled'}>⏱ momento actual</button>
+        <button onclick="tryS(${n})" ${hasFilm?'':'disabled'}>▶</button>
+      </div>`;
+    L.appendChild(row);
+  });
+}
+function updS(n,k,v){ STOPS[n][k]=(k==='t')?parseFloat(v)||0:v; save(); }
+function capNow(n){ if(!hasFilm)return; STOPS[n].t=Math.round(film.currentTime*10)/10; save(); renderStops(); }
+function tryS(n){ if(!hasFilm)return; film.currentTime=Math.max(0,STOPS[n].t-3); film.play(); setTimeout(()=>film.pause(),4000); }
+function resetEd(){ STOPS=structuredClone(DEFAULT_STOPS); save(); renderStops(); }
+function saveEd(){ save(); $('#ed').classList.remove('on'); $('#intro').classList.remove('hidden'); }
+</script>
+</body>
+</html>
