@@ -5,6 +5,9 @@ import { buildJericho } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
+import { setupEnvironment } from './world/EnvironmentManager';
+import { AudioManager } from './audio/AudioManager';
+import { ShofarInteraction } from './interactions/ShofarInteraction';
 
 const app = document.getElementById('app')!;
 
@@ -77,6 +80,23 @@ const spy = createMinifigure(plastic, SPY_SKIN);
 scene.add(spy.root);
 const controller = new CharacterController(spy);
 (window as any).__spy = spy; // depuración
+(window as any).__ctrl = controller;
+
+// === ENTORNO (cielo de atardecer + dunas) ===
+setupEnvironment(scene);
+
+// === AUDIO (se activa con el primer gesto del usuario) ===
+const audio = new AudioManager();
+const initAudio = (): void => {
+  audio.init();
+  removeEventListener('keydown', initAudio);
+  removeEventListener('pointerdown', initAudio);
+};
+addEventListener('keydown', initAudio);
+addEventListener('pointerdown', initAudio);
+
+// === INTERACCIÓN: encuentra el shofar y derrumba la muralla ===
+const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => controller.pos);
 
 // ---- Bucle ----
 addEventListener('resize', () => {
@@ -91,6 +111,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
   controller.update(dt, tpcam.yaw);
+  shofarGame.update(dt);
   tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }

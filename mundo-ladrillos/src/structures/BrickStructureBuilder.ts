@@ -175,11 +175,12 @@ function addTower(acc: BrickAccumulator, cx: number, courses: number): void {
   addMerlons(acc, z - half, z + half, my, cx + half, 'z'); // derecha
 }
 
-/** Suelo tipo placa base con tetones (sand). */
+/** Suelo tipo placa base con tetones (sand), amplio para la zona jugable. */
 function addBaseplate(acc: BrickAccumulator): void {
-  for (let x = -30; x < 30; x += 2) {
-    for (let zz = 2; zz < 16; zz += 2) {
-      acc.addBrick(2, 2, 'plate', BrickPalette.SAND, x + 1, -0.4, zz + 1);
+  for (let x = -44; x < 44; x += 2) {
+    for (let zz = -6; zz < 30; zz += 2) {
+      const col = ((x + zz) >>> 2) % 9 === 0 ? BrickPalette.WARM_SAND : BrickPalette.SAND;
+      acc.addBrick(2, 2, 'plate', col, x + 1, -0.4, zz + 1);
     }
   }
 }
