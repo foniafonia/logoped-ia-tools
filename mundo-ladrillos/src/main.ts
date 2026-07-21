@@ -8,6 +8,7 @@ import { CharacterController } from './characters/CharacterController';
 import { setupEnvironment } from './world/EnvironmentManager';
 import { AudioManager } from './audio/AudioManager';
 import { ShofarInteraction } from './interactions/ShofarInteraction';
+import { Combat } from './interactions/Combat';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
 import { Army } from './world/Army';
@@ -131,6 +132,9 @@ const shofarGame = new ShofarInteraction(scene, plastic, audio, jericho, () => c
   army.startBattle();
   din?.stop(1.2);   // el estruendo de marcha da paso al fragor de la batalla
 });
+
+// === COMBATE: el espía lucha (F / botón ⚔️) y derriba enemigos ===
+const combat = new Combat(scene, spy, army, audio, () => controller.pos);
 void jericho.wallWidth;
 (window as any).__jericho = jericho;
 
@@ -148,6 +152,7 @@ function animate(now: number): void {
   last = now;
   controller.update(dt, tpcam.yaw);
   army.update(dt, now / 1000);
+  combat.update(dt);
   shofarGame.update(dt);
   dust.update(dt);
   tpcam.update(controller.pos);

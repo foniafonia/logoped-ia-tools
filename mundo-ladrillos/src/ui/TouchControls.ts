@@ -12,6 +12,9 @@ export class TouchControls {
     this.buildButton('🎺', 'right: 108px; bottom: 40px;', () => {
       dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' }));
     });
+    this.buildButton('⚔️', 'right: 108px; bottom: 124px;', () => {
+      dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyF' }));
+    });
     const hint = document.createElement('div');
     hint.textContent = 'Joystick para andar · arrastra la pantalla para girar la cámara';
     Object.assign(hint.style, {

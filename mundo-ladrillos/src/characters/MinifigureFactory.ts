@@ -52,9 +52,34 @@ export class Minifigure {
   readonly armL = new THREE.Group();
   readonly armR = new THREE.Group();
   private walkPhase = 0;
+  private attackT = 0;
+  private readonly ATTACK_DUR = 0.42;
 
   constructor(private plastic: PlasticMaterialFactory, skin: MinifigureSkin = YOSHUA_SKIN) {
     this.build(skin);
+    this.addSword();
+  }
+
+  /** Lanza un espadazo. Devuelve true si conecta (no en plena animación). */
+  attack(): boolean {
+    if (this.attackT > 0.12) return false;
+    this.attackT = this.ATTACK_DUR;
+    return true;
+  }
+  get attacking(): boolean { return this.attackT > 0; }
+
+  /** Espada del héroe en la mano derecha (hoja metálica + guarda + empuñadura). */
+  private addSword(): void {
+    const steel = new THREE.MeshStandardMaterial({ color: 0xdfe4ea, roughness: 0.28, metalness: 0.8 });
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.09, 2.5), steel);
+    blade.position.set(0, -1.12, 1.45); blade.castShadow = true;
+    const tip = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.35, 4), steel);
+    tip.rotation.x = Math.PI / 2; tip.position.set(0, -1.12, 2.75);
+    const guard = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.14, 0.16), this.plastic.get(0x6e4a2c));
+    guard.position.set(0, -1.12, 0.28);
+    const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.42, 8), this.plastic.get(0x3a2a1a));
+    grip.rotation.x = Math.PI / 2; grip.position.set(0, -1.12, 0.02);
+    this.armR.add(blade, tip, guard, grip);
   }
 
   private box(w: number, h: number, d: number, color: number, x: number, y: number, z: number): THREE.Mesh {
@@ -169,7 +194,14 @@ export class Minifigure {
     this.legL.rotation.x = swing;
     this.legR.rotation.x = -swing;
     this.armL.rotation.x = -swing * 0.8;
-    this.armR.rotation.x = swing * 0.8;
+    // El brazo derecho: espadazo si ataca; si no, balanceo de andar.
+    if (this.attackT > 0) {
+      this.attackT = Math.max(0, this.attackT - dt);
+      const p = 1 - this.attackT / this.ATTACK_DUR;       // 0..1
+      this.armR.rotation.x = -1.4 + Math.sin(p * Math.PI) * 3.2; // levanta y corta
+    } else {
+      this.armR.rotation.x = swing * 0.8;
+    }
   }
 }
 

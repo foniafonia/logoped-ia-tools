@@ -220,6 +220,27 @@ export class Army {
     }
   }
 
+  /**
+   * El héroe golpea: derriba a los enemigos cercanos que tenga DELANTE.
+   * (x,z) posición del espía; (dx,dz) su dirección de mirada. Devuelve
+   * cuántos enemigos ha tumbado.
+   */
+  hitNear(x: number, z: number, dx: number, dz: number, range = 5.5): number {
+    let hits = 0;
+    const r2 = range * range;
+    for (const s of this.soldiers) {
+      if (s.team !== 1 || s.state === 'hidden' || s.state === 'fallen') continue;
+      const ex = s.x - x, ez = s.z - z;
+      const d2 = ex * ex + ez * ez;
+      if (d2 > r2) continue;
+      const d = Math.sqrt(d2) || 1;
+      if ((ex / d) * dx + (ez / d) * dz < 0.15) continue;   // debe estar por delante
+      s.state = 'fallen'; s.fall = 0; this.fallenEne++;
+      hits++;
+    }
+    return hits;
+  }
+
   update(dt: number, t: number): void {
     if (!this.running) return;
     const march = 4.6, charge = 8.0;

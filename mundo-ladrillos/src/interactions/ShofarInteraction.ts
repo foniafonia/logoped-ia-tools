@@ -171,7 +171,7 @@ export class ShofarInteraction {
     }, end);
     // ...y salen los defensores de Jericó a luchar: ¡a la batalla!
     setTimeout(() => {
-      this.audio.play('shout', 0.9);
+      this.audio.play('din', 0.9, 3);   // los defensores gritan al salir
       this.onBattle?.();
     }, end + 1400);
   }
