@@ -1,40 +1,78 @@
 import { Escena } from './StoryEngine';
 
 /**
- * GUION JUGABLE de "La Conquista de Israel".
- * La película, escena a escena, en el orden real. Cada escena tiene su
- * subtítulo (frase de la peli), su objetivo y el enlace a la siguiente.
+ * GUION JUGABLE — ACTO 1: "LA MISIÓN DE RAHAB"
+ * (película real, escenas ~13–28: los espías cruzan el río, se cuelan en
+ * Jericó, la treta del "avión", corren al Restaurante de Rahab, se esconden
+ * de los guardias, atan el cordón rojo y huyen por la muralla).
  *
- * Empezamos por el principio (el espía llega a Jericó de noche). Las voces
- * reales se irán cortando del audio y enganchando en el campo "voz".
- * Las escenas de shofar/batalla ya existen como sistemas y se integrarán
- * como escenas finales de este mismo guión.
+ * Protagonista de este acto: el ESPÍA (multi-protagonista por relevo: en otros
+ * actos el motor pasará el control a Yehoshúa, los niños, el sacerdote…).
+ *
+ * Cada escena: subtítulo (frase de la peli), voz real (clip a cortar del audio),
+ * objetivo (mecánica) y fondo real (fotograma). Los `target`/tiempos se afinan
+ * al construir cada escenario 3D. Marcado TODO para no dar nada por sentado.
  */
 export const GUION: Escena[] = [
   {
-    id: 'intro',
-    subtitulo: 'Eres un espía de Israel. Yoshúa te ha enviado a Jericó para explorar la ciudad… sin que te descubran.',
+    id: 'a1_intro',
+    subtitulo: 'Dos espías de Israel, enviados por Yoshúa, se acercan de noche a la fortaleza de Jericó.',
     objetivo: { tipo: 'cinematica', texto: '', dur: 6 },
-    exito: 'La misión comienza'
+    exito: 'Comienza la misión'
   },
   {
-    id: 'entrar_ciudad',
-    subtitulo: 'Es de noche. La puerta de Jericó está delante. Entra en la ciudad.',
-    objetivo: { tipo: 'ir_a', texto: 'Entra por la puerta de la ciudad', target: { x: 0, z: 6 }, radio: 5 },
-    exito: '¡Estás dentro de Jericó!'
+    id: 'a1_cruzar_rio',
+    subtitulo: 'Cruza el río a oscuras colgado de la cuerda, sin caer al agua.',
+    objetivo: { tipo: 'cruzar', texto: 'Cruza el río por la cuerda', target: { x: 0, z: 40 }, radio: 4 },
+    exito: '¡Al otro lado!'
   },
   {
-    id: 'esconderse_rahab',
-    subtitulo: '¡Los guardias del rey te buscan! Corre a esconderte en la casa de Rahab.',
-    objetivo: { tipo: 'esconderse', texto: 'Escóndete en la casa de Rahab', target: { x: -18, z: 20 }, radio: 4 },
-    exito: 'Rahab te oculta en su tejado'
+    id: 'a1_avion',
+    subtitulo: 'Los guardias vigilan la puerta. Distráelos con la vieja treta: «¡Mirad, un avión!».',
+    objetivo: { tipo: 'ir_a', texto: 'Distrae a los guardias', target: { x: 12, z: 26 }, radio: 4 },
+    exito: 'Los guardias miran al cielo, confundidos'
   },
   {
-    id: 'rahab_pacto',
-    subtitulo: 'Rahab te protege. A cambio, le prometes salvarla a ella y su familia con un cordón rojo en la ventana.',
+    id: 'a1_colarse',
+    subtitulo: 'Aprovecha el despiste: cuela a los espías por la puerta sin que te vean.',
+    objetivo: { tipo: 'esconderse', texto: 'Pasa la puerta sin ser visto', target: { x: 0, z: 8 }, radio: 4 },
+    exito: '¡Dentro de Jericó!'
+  },
+  {
+    id: 'a1_correr_rahab',
+    subtitulo: 'Los guardias encuentran vuestras huellas. ¡Corre al Restaurante de Rahab!',
+    objetivo: { tipo: 'huir', texto: 'Corre hasta el Restaurante de Rahab', target: { x: -18, z: 20 }, radio: 4 },
+    exito: 'Entráis en el restaurante'
+  },
+  {
+    id: 'a1_pacto_rahab',
+    subtitulo: 'Le contáis a Rahab que sois de Israel y le juráis salvarla. Ella acepta ayudaros.',
     objetivo: { tipo: 'cinematica', texto: '', dur: 7 },
-    exito: 'Trato hecho con Rahab'
+    exito: 'Rahab os ayudará'
+  },
+  {
+    id: 'a1_esconderse',
+    subtitulo: '¡Los guardias entran! Rápido: elige un escondite (tras el tapiz o en la maceta).',
+    objetivo: { tipo: 'esconderse', texto: 'Escóndete antes de que te vean', target: { x: -22, z: 22 }, radio: 3 },
+    exito: 'Bien escondido…'
+  },
+  {
+    id: 'a1_rahab_engana',
+    subtitulo: 'Rahab miente a los guardias: «Se fueron hacia el río». Y salen corriendo.',
+    objetivo: { tipo: 'cinematica', texto: '', dur: 6 },
+    exito: 'Los guardias se marchan'
+  },
+  {
+    id: 'a1_cordon_rojo',
+    subtitulo: 'Le das a Rahab un cordón rojo: átalo en la ventana y su familia se salvará.',
+    objetivo: { tipo: 'ir_a', texto: 'Ata el cordón rojo en la ventana', target: { x: -16, z: 24 }, radio: 3 },
+    exito: '¡Cordón rojo colocado!'
+  },
+  {
+    id: 'a1_huir',
+    subtitulo: 'Baja por la cuerda del balcón y escapa en la noche de vuelta al campamento.',
+    objetivo: { tipo: 'huir', texto: 'Baja por la cuerda y huye', target: { x: 0, z: 46 }, radio: 4 },
+    exito: '¡Misión cumplida! Fin del Acto 1'
   }
-  // … (continúa la peli: colgar el cordón, huir por la ventana, el sendero,
-  //     cruzar el Jordán, la marcha, el shofar, la muralla y la batalla)
+  // → Acto 2: el cruce del Jordán, el asedio, el shofar y la caída de la muralla.
 ];
