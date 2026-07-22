@@ -48,6 +48,7 @@ function buildSheep(plastic: PlasticMaterialFactory): THREE.Group {
 
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
+interface Bicho { g: THREE.Group; vy: number; hopCd: number; }
 
 /**
  * VIDA del campamento: aldeanos que deambulan (con animación de andar),
@@ -59,6 +60,7 @@ export class CampLife {
   private wanderers: Wander[] = [];
   private bedouin: Minifigure;
   private loads: Load[] = [];
+  private sheep: Bicho[] = [];      // ovejas que saltan y balan si te acercas
   private gagT = 0;
   private gagState: 'cargado' | 'derrumbe' | 'suelo' = 'cargado';
 
@@ -79,9 +81,10 @@ export class CampLife {
       const camel = buildCamel(plastic); camel.position.set(cx, 0, cz); camel.rotation.y = Math.random() * Math.PI; this.group.add(camel);
     }
     for (let i = 0; i < (IS_MOBILE ? 7 : 12); i++) {
-      const sheep = buildSheep(plastic);
-      sheep.position.set(-30 + Math.random() * 12, 0, 60 + Math.random() * 14);
-      sheep.rotation.y = Math.random() * Math.PI; this.group.add(sheep);
+      const s = buildSheep(plastic);
+      s.position.set(-30 + Math.random() * 12, 0, 60 + Math.random() * 14);
+      s.rotation.y = Math.random() * Math.PI; this.group.add(s);
+      this.sheep.push({ g: s, vy: 0, hopCd: 0 });
     }
 
     // --- Gag del beduino: figura + camello + torre de carga ---
@@ -101,7 +104,27 @@ export class CampLife {
     scene.add(this.group);
   }
 
-  update(dt: number, t: number): void {
+  update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void): void {
+    // ovejas: saltan y balan cuando el jugador se acerca (mundo que reacciona)
+    for (const s of this.sheep) {
+      s.hopCd -= dt;
+      if (playerPos && s.hopCd <= 0 && s.g.position.y < 0.05) {
+        const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
+        if (dx * dx + dz * dz < 12) {   // ~3.5 de radio
+          s.vy = 5.5; s.hopCd = 1.4;
+          s.g.rotation.y = Math.atan2(-dx, -dz);   // huye del jugador
+          onBaa?.();
+        }
+      }
+      if (s.g.position.y > 0 || s.vy > 0) {
+        s.vy -= 24 * dt;
+        s.g.position.y += s.vy * dt;
+        s.g.position.x += Math.sin(s.g.rotation.y) * 1.6 * dt;
+        s.g.position.z += Math.cos(s.g.rotation.y) * 1.6 * dt;
+        if (s.g.position.y < 0) { s.g.position.y = 0; s.vy = 0; }
+      }
+    }
+
     // aldeanos deambulando
     for (const w of this.wanderers) {
       const p = w.fig.root.position;

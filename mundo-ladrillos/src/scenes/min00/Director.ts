@@ -28,6 +28,8 @@ export class Director {
   private sub: HTMLDivElement;
   private objEl: HTMLDivElement;
   private flashEl: HTMLDivElement;
+  private starEl: HTMLDivElement;
+  private stars = 0;
   private flashUntil = 0;
 
   constructor(private beats: Beat[], private spine: Spine | null, private onFinish?: () => void) {
@@ -46,7 +48,24 @@ export class Director {
       color: '#bfffce', font: '800 26px/1.2 system-ui, sans-serif', textShadow: '0 2px 12px rgba(0,0,0,.7)',
       textAlign: 'center'
     });
+    // contador de estrellas (esquina) — el gancho coleccionable para los peques
+    this.starEl = this.mk({
+      left: '14px', top: '14px', color: '#ffe08a', font: '800 22px system-ui, sans-serif',
+      textShadow: '0 2px 6px rgba(0,0,0,.6)', transition: 'transform .18s, opacity .4s'
+    });
+    this.starEl.textContent = '⭐ 0';
+    this.starEl.style.opacity = '1';
   }
+
+  /** Suma una estrella (premio) con un "pop" — el refuerzo positivo principal. */
+  star(): number {
+    this.stars++;
+    this.starEl.textContent = '⭐ ' + this.stars;
+    this.starEl.style.transform = 'scale(1.6)';
+    setTimeout(() => { this.starEl.style.transform = 'scale(1)'; }, 30);
+    return this.stars;
+  }
+  get starCount(): number { return this.stars; }
 
   private mk(style: Partial<CSSStyleDeclaration>): HTMLDivElement {
     const d = document.createElement('div');

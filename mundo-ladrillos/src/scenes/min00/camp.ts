@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { normalizeGeometry } from '../../bricks/BrickGeometryFactory';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
-import { MinifigureSkin, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
+import { MinifigureSkin, Minifigure, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -14,6 +14,7 @@ export const VILLAGER_SKIN: MinifigureSkin = {
 export interface CampBuild {
   group: THREE.Group;
   ropes: THREE.Mesh[];      // cuerdas a recoger (objetivo)
+  yehoshua: Minifigure;     // el líder sobre la tarima (saluda al acercarte)
 }
 
 /**
@@ -125,5 +126,5 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   });
 
   scene.add(group);
-  return { group, ropes };
+  return { group, ropes, yehoshua: yoshua };
 }

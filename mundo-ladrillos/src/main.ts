@@ -123,7 +123,7 @@ const beats: Beat[] = [
   {
     t: 189, sub: '¡Ahí está el río Jordán! Y al otro lado se alza Jericó, la ciudad amurallada.',
     obj: 'Llega a la orilla del río Jordán',
-    onEnter: () => { journey.revelarRio(); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 }); }
+    onEnter: () => { journey.revelarRio(); audio.sfxSparkle(); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 }); }
   },
   {
     t: 235, sub: 'Yehoshúa reúne a los jefes: enviará dos espías a explorar Jericó en secreto.',
@@ -137,19 +137,25 @@ const beats: Beat[] = [
 const director = new Director(beats, null, () => { /* fin del tramo → enganchará con el min 5–10 */ });
 (window as any).__director = director;
 
-// hitos por jugador (una sola vez)
+// jugosidad: sonidos, estelas y reacciones
+let trailCd = 0;                 // temporizador de la estela de polvo
+let waveT = 0;                   // Yehoshúa saludando
+let baaCd = 0;                   // anti-spam del "bee" de oveja
+const baa = (): void => { if (baaCd <= 0) { audio.sfxAnimal(); baaCd = 0.5; } };
+
+// hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
 const done = new Set<number>();
 function checkTargets(): void {
   const p = controller.pos;
   const i = director.beatIndex;
   if (i === 1 && target && !done.has(1) && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
-    done.add(1); director.logro('Yehoshúa te saluda'); setTarget(null);
+    done.add(1); waveT = 2.2; audio.sfxSparkle(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
   }
   if (i === 3 && target && !done.has(3) && p.z < Journey.MARCHA_Z + 3) {
-    done.add(3); director.logro('Sigues a la caravana'); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 });
+    done.add(3); audio.sfxSparkle(); director.star(); director.logro('¡Sigues a la caravana!'); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 });
   }
   if (i >= 4 && target && !done.has(5) && p.z < Journey.ORILLA_Z + 7) {
-    done.add(5); director.logro('¡Has llegado al río Jordán!'); setTarget(null);
+    done.add(5); audio.sfxSuccess(); director.star(); director.logro('¡Has llegado al río Jordán!'); setTarget(null);
   }
 }
 
@@ -186,15 +192,24 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
 
-  controller.update(dt, tpcam.yaw);
-  life.update(dt, now / 1000);
+  const moving = controller.update(dt, tpcam.yaw);
+  life.update(dt, now / 1000, controller.pos, baa);
   journey.update(dt, now / 1000);
   dust.update(dt);
   director.update();
   checkTargets();
 
+  // estela de polvo al andar/correr (sensación de velocidad)
+  trailCd -= dt;
+  if (moving && trailCd <= 0) { dust.burst(controller.pos.x, 0.2, controller.pos.z, 3); trailCd = 0.14; }
+
+  // Yehoshúa saluda con la mano un ratito tras acercarte
+  if (waveT > 0) { waveT -= dt; camp.yehoshua.armR.rotation.x = -2.2 + Math.sin(now * 0.02) * 0.5; }
+
   // baliza
   if (beacon.visible) { ring.rotation.z += dt * 1.5; arrow.position.y = 4 + Math.sin(now * 0.004) * 0.4; }
+
+  baaCd -= dt;
 
   // recoger cuerdas (durante su beat; el contador solo manda mientras es el objetivo activo)
   if (ropesActivas && !done.has(2)) {
@@ -203,11 +218,16 @@ function animate(now: number): void {
       if (!rope.visible) continue;
       left++;
       rope.rotation.z += dt * 1.5;
-      if (controller.pos.distanceTo(rope.position) < 2.6) { rope.visible = false; left--; }
+      rope.position.y = 0.35 + Math.sin(now * 0.004 + rope.position.x) * 0.15;   // flota (invita a cogerla)
+      if (controller.pos.distanceTo(rope.position) < 2.6) {
+        rope.visible = false; left--;
+        audio.sfxPickup();                                             // ¡pling!
+        dust.burst(rope.position.x, 0.6, rope.position.z, 10);         // chispa
+      }
     }
     const got = camp.ropes.length - left;
     if (director.beatIndex === 2) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
-    if (got >= camp.ropes.length) { done.add(2); director.logro('¡Campamento recogido!'); }
+    if (got >= camp.ropes.length) { done.add(2); audio.sfxSuccess(); director.star(); director.logro('¡Campamento recogido!'); }
   }
 
   // caída de la noche (rampa suave)
