@@ -48,6 +48,12 @@ export interface MinifigureSkin {
 
   shield?: number;            // escudo redondo con león (color del borde)
   accessory?: 'sword' | 'staff' | 'spear' | 'shofar' | 'none'; // objeto en la mano
+
+  // Rasgos femeninos (Rahab): cejas finas, pestañas, mejillas y labios;
+  // falda/vestido acampanado sobre las piernas (que siguen animando debajo).
+  feminine?: boolean;
+  lips?: number;              // color de los labios (boca femenina)
+  skirt?: number;             // color de la falda acampanada
 }
 
 /** Yehoshúa: turbante cobalto con franjas blancas, barba blanca larga,
@@ -99,17 +105,21 @@ export const SPY2_SKIN: MinifigureSkin = {
   accessory: 'sword'
 };
 
-/** Rahab: melena plateada larga, vestido gris claro humilde, cara amable. */
+/** Rahab: mujer de rasgos suaves; melena plateada larga, vestido humilde con
+ *  falda acampanada, cara amable. */
 export const RAHAB_SKIN: MinifigureSkin = {
   head: 0xf4c98f,
-  torso: 0xcdcdd2,       // vestido gris claro
-  belt: 0xb0aeb0,
-  legs: 0xc2c2c8,
-  arms: 0xcdcdd2,
+  torso: 0xc9c1cf,       // corpiño del vestido (lila grisáceo humilde)
+  belt: 0xb0a6b6,
+  legs: 0xd8d2df,
+  arms: 0xc9c1cf,
   hands: 0xf4c98f,
-  headwear: 0xd6d8db,    // pelo plateado
+  headwear: 0xdfe3ea,    // pelo plateado (distinto del vestido)
   headStyle: 'longHair',
   emotion: 'happy',
+  feminine: true,
+  lips: 0xc26a63,
+  skirt: 0xbcb2c6,       // falda acampanada
   accessory: 'none'
 };
 
@@ -269,12 +279,27 @@ export class Minifigure {
     }
   }
 
-  /** Cejas cuya inclinación transmite la emoción. */
-  private addBrows(y: number, z: number, emotion: Emotion, color = 0x3a2a1a, spread = 0.2): void {
+  /** Cejas cuya inclinación transmite la emoción. `slim` las hace finas (fem). */
+  private addBrows(y: number, z: number, emotion: Emotion, color = 0x3a2a1a, spread = 0.2, slim = false): void {
     // t>0 baja el extremo interior (enfado); t<0 lo sube (preocupación/amable)
     const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13 }[emotion];
-    const bL = this.box(0.22, 0.06, 0.05, color, -spread, y, z); bL.rotation.z = -t; this.root.add(bL);
-    const bR = this.box(0.22, 0.06, 0.05, color, spread, y, z); bR.rotation.z = t; this.root.add(bR);
+    const h = slim ? 0.035 : 0.06;
+    const w = slim ? 0.2 : 0.22;
+    const bL = this.box(w, h, 0.05, color, -spread, y, z); bL.rotation.z = -t; this.root.add(bL);
+    const bR = this.box(w, h, 0.05, color, spread, y, z); bR.rotation.z = t; this.root.add(bR);
+  }
+
+  /** Pestañas: pequeños trazos en el ángulo externo de cada ojo (rasgo fem). */
+  private addLashes(y: number, z: number, spread = 0.19, color = 0x2a1c12): void {
+    for (const sgn of [-1, 1]) {
+      const l = this.box(0.13, 0.04, 0.05, color, sgn * (spread + 0.08), y + 0.05, z);
+      l.rotation.z = -sgn * 0.5; this.root.add(l);
+    }
+  }
+
+  /** Mejillas sonrosadas (rasgo fem/simpático). */
+  private addBlush(y: number, z: number, spread = 0.33, color = 0xe89a8a): void {
+    for (const ex of [-spread, spread]) this.root.add(this.box(0.13, 0.08, 0.03, color, ex, y, z));
   }
 
   /** Sonrisa amable de tres piezas (curva hacia arriba). */
@@ -282,6 +307,13 @@ export class Minifigure {
     this.root.add(this.box(0.28, 0.06, 0.05, color, 0, y, z));
     this.root.add(this.box(0.09, 0.1, 0.05, color, -0.17, y + 0.05, z));
     this.root.add(this.box(0.09, 0.1, 0.05, color, 0.17, y + 0.05, z));
+  }
+
+  /** Boca de labios (rasgo fem): labio inferior + arco superior en dos piezas. */
+  private addLips(y: number, z: number, color: number): void {
+    this.root.add(this.box(0.24, 0.08, 0.05, color, 0, y, z));          // labio inferior
+    this.root.add(this.box(0.1, 0.06, 0.05, color, -0.06, y + 0.07, z)); // arco superior izq
+    this.root.add(this.box(0.1, 0.06, 0.05, color, 0.06, y + 0.07, z));  // arco superior der
   }
 
   /** Gafas cuadradas negras (montura de cuatro barras por cristal + puente). */
@@ -317,6 +349,15 @@ export class Minifigure {
     this.root.add(this.box(1.5, 0.7, 0.86, s.torso, 0, 3.0, 0)); // hombros anchos
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
     this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
+
+    // Falda / vestido acampanado (rasgo fem): tronco de cono sobre la cadera.
+    // Las piernas asoman y siguen balanceándose por debajo del bajo.
+    if (s.skirt !== undefined) {
+      const skirt = new THREE.CylinderGeometry(0.72, 1.16, 1.05, 22);
+      const m = this.mesh(skirt, s.skirt, 0, 1.12, 0);
+      m.receiveShadow = true;
+      this.root.add(m);
+    }
 
     // Rayas verticales de la túnica (guardias)
     if (s.tunicStripe !== undefined) {
@@ -382,10 +423,12 @@ export class Minifigure {
     } else {
       this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30));           // cabeza de piel
       this.addEyes(3.98, 0.54, 0.19);
-      this.addBrows(4.13, 0.54, emotion);
+      this.addBrows(4.15, 0.54, emotion, 0x3a2a1a, 0.2, s.feminine);
+      if (s.feminine) { this.addLashes(3.98, 0.55); this.addBlush(3.74, 0.53); }
       if (s.glasses !== undefined) this.addGlasses(3.98, 0.56, s.glasses);
-      // Boca: sonrisa si no hay barba tapándola
-      if (!s.beard || s.beardStyle === 'short') this.addSmile(3.62, 0.55);
+      // Boca: labios (fem), o sonrisa si no hay barba tapándola
+      if (s.lips !== undefined) this.addLips(3.64, 0.55, s.lips);
+      else if (!s.beard || s.beardStyle === 'short') this.addSmile(3.62, 0.55);
     }
 
     // --- Barba ---
