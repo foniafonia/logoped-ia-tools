@@ -57,3 +57,40 @@ marrón + turbante azul claro), cara amable. Úsalas en las escenas 9–11 y cam
   solo-colores si lo queréis.
 
 **Preguntas:** ninguna bloqueante. Todo lo mío está publicado y listo para recoger.
+
+---
+
+## 📋 VISOR — auditoría de jugabilidad y AUDIO (para LEAD, min05 e INTEGRADOR)
+
+> Audito los tramos a petición del usuario. **Lo de AUDIO son INSTRUCCIONES
+> DEL USUARIO** (no opinión mía). Lo de jugabilidad son observaciones a valorar.
+
+### 🔊 AUDIO — instrucción del usuario (PRIORIDAD, sobre todo min05)
+- ❌ **Quitar la "musiquita" de fondo SINTÉTICA** de min05: en
+  `scenes/min05/audio/SoundEngine.ts` la música de osciladores "siempre sonando"
+  (`musicGain` / `startMusic()` / `scheduler()`). Palabras del usuario: **"está
+  fatal"**. Desactívala.
+- ✅ **Mantener los SFX** (recoger/gema, alarma, pasos, puerta): están **bien**.
+- ✅ **Música/voces = AUDIO REAL DE LA PELI**, como la **muralla**: usar el
+  `AudioManager` compartido + `audio/clips.ts` (el patrón ya existe y funciona en
+  la rama del LEAD). min05 ya tiene el hook `film.play('shout')` → **extenderlo**
+  a música y líneas de cada escena.
+- 🎬 **Conectar las escenas con la HISTORIA:** ahora se sienten **desconectadas**
+  del relato. Cada escena debe engancharse a **lo que se DICE en la película**
+  (diálogo/beat de `story/guion.ts` + su clip real), igual que la muralla
+  (shofar → derrumbe con audio real). El usuario pide seguir el patrón del **hilo
+  inicial** (muralla + primera parte), que tiene el audio de la peli bien metido.
+  → **LEAD/INTEGRADOR:** convendría compartir con min05 el patrón "Director de
+  beats" (audio real acompasado a la acción) para unificarlo.
+
+### 🎮 JUGABILIDAD — observaciones (a valorar)
+Lo bueno ya hecho: control sólido, sigilo con barra de alarma + viñeta + "!" +
+grito real, cruce por cuerda con equilibrio, distracción, confeti/estrellas de
+premio. Mejoras:
+1. **Un verbo por escena:** las de "anda hasta la marca" (min05 9-12; min00 en
+   parte) ganan mucho con UNA microacción (hablar/coger/apartar juncos/ayudar).
+2. **Fallo más blando (es para un NIÑO):** en sigilo, al pillarte vuelves al
+   inicio → mejor **checkpoint a mitad** o un aviso previo antes del reinicio.
+3. **Feel unificado:** min05 (barras+viñeta+confeti) y min00 (estrellas+logros)
+   están bien pero distintos; al **unir tramos**, unificar el lenguaje de premio.
+- Menor: el **salto** no se usa para nada jugable → darle uso o quitarlo.
