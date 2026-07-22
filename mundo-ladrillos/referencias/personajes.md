@@ -57,3 +57,15 @@ minifigura `#F2C141`/`#F4D03F`.
 - Traje de sastre **azul marino** `#2C3E50`, camisa blanca, corbata azul.
 - **Gafas negras cuadradas** impresas en la cara. Cabello y **barba corta gris** `#7F8C8D`.
 - **Kipá negra**.
+
+---
+
+## Fotogramas disponibles (en esta carpeta)
+- `espia-01` (dos espías), `espia-02` (espía negro primer plano), `espia2-01` (espía gris).
+- `yehoshua-01` (primer plano, barba blanca + azul). `rabino-01` (estudio).
+- `guardia-01` (guardias en la taberna). `jefe-guardia-01` (casco de plumas + capa).
+- `rahab-01` ⚠️ Rahab aparece en el balcón junto al espía, NO es primer plano —
+  usa los hex/forma de arriba; si el usuario te pega un frame mejor, cámbialo.
+- `beduino-01` ⚠️ contexto (camello cargado), no primer plano de cara.
+- `sacerdote-01` ⚠️ sacerdotes de blanco en la marcha, no primer plano.
+- `escenas/jordan-partido` (aguas partidas), `escenas/jerico-noche`, `escenas/contactos-0-10min`.
