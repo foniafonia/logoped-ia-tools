@@ -22,7 +22,15 @@ const LABELS: Record<string, string> = {
 
 const params = new URLSearchParams(location.search);
 const fig = params.get('fig') ?? 'espia';
-const skin = CHARACTER_SKINS[fig] ?? CHARACTER_SKINS.espia;
+const base = CHARACTER_SKINS[fig] ?? CHARACTER_SKINS.espia;
+
+// Overrides por URL para renderizar OFERTAS/variantes sin tocar las skins
+// del juego. Ej: ?fig=rahab&headwear=0xdfe3e8&torso=0xcdb79a
+const skin: Record<string, unknown> = { ...base };
+for (const k of ['head', 'torso', 'belt', 'legs', 'arms', 'hands', 'headwear', 'beard']) {
+  const v = params.get(k);
+  if (v) skin[k] = Number(v); // acepta 0xRRGGBB o decimal
+}
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1);
