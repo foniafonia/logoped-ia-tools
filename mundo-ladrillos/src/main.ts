@@ -19,7 +19,7 @@ renderer.setPixelRatio(QUALITY.pixelRatio);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMappingExposure = 1.15;
 renderer.shadowMap.enabled = QUALITY.shadows;
 renderer.shadowMap.type = IS_MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 app.appendChild(renderer.domElement);
@@ -35,7 +35,7 @@ const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 (window as any).__tpcam = tpcam;
 
 // Luz de luna fría + relleno tenue
-const moon = new THREE.DirectionalLight(0xbcd0ff, 1.5);
+const moon = new THREE.DirectionalLight(0xcfe0ff, 2.6);
 moon.position.set(-16, 22, 10);
 moon.castShadow = QUALITY.shadows;
 moon.shadow.mapSize.set(QUALITY.shadowMap, QUALITY.shadowMap);
@@ -44,7 +44,7 @@ moon.shadow.camera.left = -70; moon.shadow.camera.right = 70;
 moon.shadow.camera.top = 60; moon.shadow.camera.bottom = -40;
 moon.shadow.bias = -0.0003;
 scene.add(moon);
-scene.add(new THREE.HemisphereLight(0x2a3c5a, 0x0a0c12, 0.5));
+scene.add(new THREE.HemisphereLight(0x4a5c7a, 0x14161c, 0.9));
 
 // ---- Materiales de ladrillo ----
 const plastic = new PlasticMaterialFactory();

@@ -15,9 +15,10 @@ export interface MinifigureSkin {
   legs: number;      // piernas
   arms: number;      // mangas
   hands: number;     // manos
-  headwear?: number; // color del tocado — opcional
-  headStyle?: 'turban' | 'hood'; // tipo de tocado
+  headwear?: number; // color del tocado / máscara — opcional
+  headStyle?: 'turban' | 'hood' | 'ninja'; // tipo de tocado
   beard?: number;    // barba (color) — opcional
+  straps?: number;   // correas tácticas del chaleco (para el espía ninja)
 }
 
 /** Yoshúa: turbante azul, barba gris, túnica azul con cinturón marrón. */
@@ -33,16 +34,30 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   beard: 0xd8d2c6
 };
 
-/** Espía: capucha negra, túnica gris oscura. */
+/** Espía 1 (traje negro): ninja de sigilo, máscara negra con franja de ojos. */
 export const SPY_SKIN: MinifigureSkin = {
   head: 0xf2c141,
-  torso: 0x3b3d42,
-  belt: 0x26272b,
-  legs: 0x2c2a28,
-  arms: 0x2c2a28,
+  torso: 0x17181b,
+  belt: 0x0d0e10,
+  legs: 0x17181b,
+  arms: 0x17181b,
   hands: 0xf2c141,
-  headwear: 0x191a1d,
-  headStyle: 'hood'
+  headwear: 0x141517,   // máscara
+  headStyle: 'ninja',
+  straps: 0x2b2d31
+};
+
+/** Espía 2 (traje gris asfalto): compañero ninja. */
+export const SPY2_SKIN: MinifigureSkin = {
+  head: 0xf2c141,
+  torso: 0x566573,
+  belt: 0x39434c,
+  legs: 0x4a5560,
+  arms: 0x566573,
+  hands: 0xf2c141,
+  headwear: 0x3d454d,   // máscara gris
+  headStyle: 'ninja',
+  straps: 0x2e363d
 };
 
 export class Minifigure {
@@ -134,18 +149,37 @@ export class Minifigure {
     this.armL.add(handL); this.armR.add(handL.clone());
     this.root.add(this.armL, this.armR);
 
-    // --- Cuello corto + cabeza GRANDE ---
+    // --- Cuello corto ---
     this.root.add(this.cyl(0.26, 0.16, s.head, 0, 3.35, 0));
-    this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30)); // cabeza
 
-    // ojos + cejas (encima de la barba)
-    this.root.add(this.box(0.11, 0.13, 0.05, 0x2a1c12, -0.19, 3.98, 0.54));
-    this.root.add(this.box(0.11, 0.13, 0.05, 0x2a1c12, 0.19, 3.98, 0.54));
-    this.root.add(this.box(0.18, 0.05, 0.05, 0x3a2a1a, -0.19, 4.13, 0.54));
-    this.root.add(this.box(0.18, 0.05, 0.05, 0x3a2a1a, 0.19, 4.13, 0.54));
+    if (s.headStyle === 'ninja') {
+      // Cabeza ENMASCARADA: máscara oscura con una franja amarilla de ojos.
+      const mask = s.headwear ?? 0x141517;
+      this.root.add(this.cyl(0.56, 0.94, mask, 0, 3.9, 0, 30));            // cabeza-máscara
+      this.root.add(this.box(0.98, 0.34, 0.12, s.head, 0, 4.0, 0.5));      // franja de ojos (amarilla)
+      // ojos
+      this.root.add(this.box(0.15, 0.16, 0.05, 0x201810, -0.2, 4.0, 0.6));
+      this.root.add(this.box(0.15, 0.16, 0.05, 0x201810, 0.2, 4.0, 0.6));
+      // cejas decididas (inclinadas hacia el centro)
+      const bL = this.box(0.24, 0.07, 0.05, 0x201810, -0.2, 4.16, 0.6); bL.rotation.z = -0.4; this.root.add(bL);
+      const bR = this.box(0.24, 0.07, 0.05, 0x201810, 0.2, 4.16, 0.6); bR.rotation.z = 0.4; this.root.add(bR);
+      // correas tácticas del chaleco
+      if (s.straps !== undefined) {
+        this.root.add(this.box(1.24, 0.14, 0.86, s.straps, 0, 2.75, 0.01)); // banda horizontal
+        this.root.add(this.box(0.18, 1.35, 0.86, s.straps, 0.32, 2.5, 0.02)); // correa diagonal (aprox.)
+        this.root.add(this.box(0.5, 0.34, 0.2, s.belt, 0, 2.4, 0.44));        // hebilla/placa
+      }
+    } else {
+      // --- Cabeza normal (piel) + ojos + cejas ---
+      this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30));
+      this.root.add(this.box(0.11, 0.13, 0.05, 0x2a1c12, -0.19, 3.98, 0.54));
+      this.root.add(this.box(0.11, 0.13, 0.05, 0x2a1c12, 0.19, 3.98, 0.54));
+      this.root.add(this.box(0.18, 0.05, 0.05, 0x3a2a1a, -0.19, 4.13, 0.54));
+      this.root.add(this.box(0.18, 0.05, 0.05, 0x3a2a1a, 0.19, 4.13, 0.54));
+    }
 
     // --- Barba gris prominente (cono invertido) ---
-    if (s.beard) {
+    if (s.beard && s.headStyle !== 'ninja') {
       const bg = new THREE.ConeGeometry(0.6, 1.35, 22, 1, true);
       bg.rotateX(Math.PI);
       bg.scale(1, 1, 0.72);
