@@ -17,6 +17,9 @@ correcciones del proyecto. Aquí van solo las reglas duras que no se saltan nunc
    entregas.
 
 ## Coordinación (producción por minutos, en paralelo)
+- **Los hilos NO comparten chat; solo el repo.** Comunícate por el **tablón**:
+  `coordinacion/` (lee `coordinacion/README.md`). Escribe tu estado/dudas/peticiones
+  en `coordinacion/<tu-nombre>.md` y lee a los demás con `git fetch --all`.
 - Trabaja en **tu rama** y en **tu carpeta** `src/scenes/minXX/`. **No** edites archivos
   compartidos (los integra el LEAD).
 - Reutiliza las piezas compartidas: `structures/BrickStructureBuilder`,
