@@ -53,7 +53,8 @@ export interface MinifigureSkin {
   // falda/vestido acampanado sobre las piernas (que siguen animando debajo).
   feminine?: boolean;
   lips?: number;              // color de los labios (boca femenina)
-  skirt?: number;             // color de la falda acampanada
+  skirt?: number;             // color de la falda / vestido acampanado
+  skirtLong?: boolean;        // túnica larga hasta los tobillos (más humilde/época)
 }
 
 /** Yehoshúa: turbante cobalto con franjas blancas, barba blanca larga,
@@ -109,17 +110,18 @@ export const SPY2_SKIN: MinifigureSkin = {
  *  falda acampanada, cara amable. */
 export const RAHAB_SKIN: MinifigureSkin = {
   head: 0xf4c98f,
-  torso: 0xc9c1cf,       // corpiño del vestido (lila grisáceo humilde)
-  belt: 0xb0a6b6,
-  legs: 0xd8d2df,
-  arms: 0xc9c1cf,
+  torso: 0xd0d0d6,       // vestido gris claro humilde (fiel al brief)
+  belt: 0xbdbdc4,
+  legs: 0xcac9d0,
+  arms: 0xd0d0d6,
   hands: 0xf4c98f,
-  headwear: 0xdfe3ea,    // pelo plateado (distinto del vestido)
+  headwear: 0xe2e5ec,    // pelo plateado (distinto del vestido)
   headStyle: 'longHair',
   emotion: 'happy',
   feminine: true,
   lips: 0xc26a63,
-  skirt: 0xbcb2c6,       // falda acampanada
+  skirt: 0xd0d0d6,       // túnica larga hasta los tobillos
+  skirtLong: true,
   accessory: 'none'
 };
 
@@ -353,8 +355,11 @@ export class Minifigure {
     // Falda / vestido acampanado (rasgo fem): tronco de cono sobre la cadera.
     // Las piernas asoman y siguen balanceándose por debajo del bajo.
     if (s.skirt !== undefined) {
-      const skirt = new THREE.CylinderGeometry(0.72, 1.16, 1.05, 22);
-      const m = this.mesh(skirt, s.skirt, 0, 1.12, 0);
+      const h = s.skirtLong ? 1.78 : 1.05;   // larga (tobillos) o corta (acampanada)
+      const rB = s.skirtLong ? 0.98 : 1.16;
+      const cy = s.skirtLong ? 1.06 : 1.12;
+      const skirt = new THREE.CylinderGeometry(0.72, rB, h, 24);
+      const m = this.mesh(skirt, s.skirt, 0, cy, 0);
       m.receiveShadow = true;
       this.root.add(m);
     }
