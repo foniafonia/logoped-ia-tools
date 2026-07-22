@@ -363,13 +363,13 @@ export class Minifigure {
       this.root.add(this.box(0.14, 0.62, 0.06, s.tie, 0, 2.82, 0.49));  // corbata
     }
 
-    // Cordón/faja en banda diagonal (cordón rojo carmesí de Rahab)
+    // Cordón rojo carmesí de Rahab: fino, cruzado del hombro a la cadera.
     if (s.cord !== undefined) {
-      const band = this.box(0.15, 1.9, 0.2, s.cord, 0.06, 2.5, 0.42);
-      band.rotation.z = 0.35;
+      const band = this.box(0.09, 1.95, 0.12, s.cord, 0.05, 2.48, 0.45);
+      band.rotation.z = 0.32;
       this.root.add(band);
-      const loop = new THREE.TorusGeometry(0.15, 0.05, 8, 16);
-      this.root.add(this.mesh(loop, s.cord, 0.44, 1.72, 0.42)); // rollo colgando en la cadera
+      const loop = new THREE.TorusGeometry(0.12, 0.04, 8, 16);
+      this.root.add(this.mesh(loop, s.cord, 0.42, 1.66, 0.45)); // pequeño rollo en la cadera
     }
 
     // Falda / vestido acampanado (rasgo fem): tronco de cono sobre la cadera.
