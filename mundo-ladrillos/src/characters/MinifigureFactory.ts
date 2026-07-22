@@ -34,30 +34,30 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   beard: 0xd8d2c6
 };
 
-/** Espía 1 (traje negro): ninja de sigilo, máscara negra con franja de ojos. */
+/** Espía 1 (ninja simpático): traje azul pizarra, máscara azulada, cara amable. */
 export const SPY_SKIN: MinifigureSkin = {
   head: 0xf2c141,
-  torso: 0x17181b,
-  belt: 0x0d0e10,
-  legs: 0x17181b,
-  arms: 0x17181b,
+  torso: 0x2c3550,
+  belt: 0x3a4a6b,
+  legs: 0x2c3550,
+  arms: 0x2c3550,
   hands: 0xf2c141,
-  headwear: 0x141517,   // máscara
+  headwear: 0x3a4362,   // máscara azul oscuro (no negro)
   headStyle: 'ninja',
-  straps: 0x2b2d31
+  straps: 0x5b7bb0      // correas azul claro (detalle alegre)
 };
 
-/** Espía 2 (traje gris asfalto): compañero ninja. */
+/** Espía 2 (ninja gris azulado): compañero. */
 export const SPY2_SKIN: MinifigureSkin = {
   head: 0xf2c141,
-  torso: 0x566573,
-  belt: 0x39434c,
-  legs: 0x4a5560,
-  arms: 0x566573,
+  torso: 0x6b7684,
+  belt: 0x4a525e,
+  legs: 0x5a6472,
+  arms: 0x6b7684,
   hands: 0xf2c141,
-  headwear: 0x3d454d,   // máscara gris
+  headwear: 0x545e6c,   // máscara gris azulada
   headStyle: 'ninja',
-  straps: 0x2e363d
+  straps: 0x9aa7b5
 };
 
 export class Minifigure {
@@ -156,13 +156,15 @@ export class Minifigure {
       // Cabeza ENMASCARADA: máscara oscura con una franja amarilla de ojos.
       const mask = s.headwear ?? 0x141517;
       this.root.add(this.cyl(0.56, 0.94, mask, 0, 3.9, 0, 30));            // cabeza-máscara
-      this.root.add(this.box(0.98, 0.34, 0.12, s.head, 0, 4.0, 0.5));      // franja de ojos (amarilla)
-      // ojos
-      this.root.add(this.box(0.15, 0.16, 0.05, 0x201810, -0.2, 4.0, 0.6));
-      this.root.add(this.box(0.15, 0.16, 0.05, 0x201810, 0.2, 4.0, 0.6));
-      // cejas decididas (inclinadas hacia el centro)
-      const bL = this.box(0.24, 0.07, 0.05, 0x201810, -0.2, 4.16, 0.6); bL.rotation.z = -0.4; this.root.add(bL);
-      const bR = this.box(0.24, 0.07, 0.05, 0x201810, 0.2, 4.16, 0.6); bR.rotation.z = 0.4; this.root.add(bR);
+      this.root.add(this.box(1.02, 0.42, 0.12, s.head, 0, 4.0, 0.5));      // franja de ojos amable (ancha)
+      // ojos redondeados con brillo (simpáticos)
+      for (const ex of [-0.23, 0.23]) {
+        this.root.add(this.box(0.18, 0.2, 0.06, 0x2a2016, ex, 4.0, 0.59));
+        this.root.add(this.box(0.07, 0.08, 0.04, 0xffffff, ex - 0.05, 4.06, 0.63)); // brillo
+      }
+      // cejas suaves (casi rectas, nada agresivas)
+      const bL = this.box(0.22, 0.06, 0.05, 0x2a2016, -0.23, 4.19, 0.6); bL.rotation.z = 0.08; this.root.add(bL);
+      const bR = this.box(0.22, 0.06, 0.05, 0x2a2016, 0.23, 4.19, 0.6); bR.rotation.z = -0.08; this.root.add(bR);
       // correas tácticas del chaleco
       if (s.straps !== undefined) {
         this.root.add(this.box(1.24, 0.14, 0.86, s.straps, 0, 2.75, 0.01)); // banda horizontal

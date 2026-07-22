@@ -26,8 +26,8 @@ app.appendChild(renderer.domElement);
 
 // ---- Escena de NOCHE (la peli empieza de noche) ----
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0d1524);
-scene.fog = new THREE.Fog(0x0d1524, 40, QUALITY.fogFar);
+scene.background = new THREE.Color(0x1a2338);
+scene.fog = new THREE.Fog(0x1a2338, 45, QUALITY.fogFar);
 
 const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 62 : 52, innerWidth / innerHeight, 0.1, 500);
 camera.position.set(0, 6, 24);
@@ -44,7 +44,11 @@ moon.shadow.camera.left = -70; moon.shadow.camera.right = 70;
 moon.shadow.camera.top = 60; moon.shadow.camera.bottom = -40;
 moon.shadow.bias = -0.0003;
 scene.add(moon);
-scene.add(new THREE.HemisphereLight(0x4a5c7a, 0x14161c, 0.9));
+scene.add(new THREE.HemisphereLight(0x5a6a86, 0x1a1c22, 1.05));
+// Relleno cálido (antorchas): quita el tono tétrico y da calidez de juguete
+const warmFill = new THREE.DirectionalLight(0xffcf9a, 1.0);
+warmFill.position.set(14, 8, 12);
+scene.add(warmFill);
 
 // ---- Materiales de ladrillo ----
 const plastic = new PlasticMaterialFactory();
