@@ -48,7 +48,7 @@ function buildSheep(plastic: PlasticMaterialFactory): THREE.Group {
 
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
-interface Bicho { g: THREE.Group; vy: number; hopCd: number; }
+interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; }
 
 /**
  * VIDA del campamento: aldeanos que deambulan (con animación de andar),
@@ -61,6 +61,8 @@ export class CampLife {
   private bedouin: Minifigure;
   private loads: Load[] = [];
   private sheep: Bicho[] = [];      // ovejas que saltan y balan si te acercas
+  private pen = { x: -30, z: 44, r: 5.4 };   // redil (arrear ovejas)
+  private penActive = false;        // el mini-juego de arrear está activo
   private gagT = 0;
   private gagState: 'cargado' | 'derrumbe' | 'suelo' = 'cargado';
 
@@ -87,6 +89,15 @@ export class CampLife {
       this.sheep.push({ g: s, vy: 0, hopCd: 0 });
     }
 
+    // --- Redil (corral de vallas) + 3 ovejas OBJETIVO para arrear ---
+    this.buildPen();
+    for (const [sx, sz] of [[-19, 44], [-22, 49], [-17, 40]] as Array<[number, number]>) {
+      const s = buildSheep(plastic);
+      s.position.set(sx, 0, sz); s.rotation.y = Math.random() * Math.PI;
+      this.group.add(s);
+      this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true });
+    }
+
     // --- Gag del beduino: figura + camello + torre de carga ---
     this.bedouin = createMinifigure(plastic, BEDOUIN_SKIN);
     this.bedouin.root.position.set(24, 0, 30);
@@ -104,14 +115,56 @@ export class CampLife {
     scene.add(this.group);
   }
 
-  update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void): void {
-    // ovejas: saltan y balan cuando el jugador se acerca (mundo que reacciona)
+  /** Corral de vallas de ladrillo con una abertura al este (por donde se arrea). */
+  private buildPen(): void {
+    const { x: cx, z: cz } = this.pen;
+    const half = 6, postH = 1.8;
+    const railMat = 0x8a5a2c;
+    const addPost = (x: number, z: number): void => {
+      const p = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.18, postH, 6), this.plastic.get(0x6f4622));
+      p.position.set(x, postH / 2, z); p.castShadow = true; this.group.add(p);
+    };
+    // cuatro lados; el lado +x (este) queda abierto en el centro (entrada)
+    for (let d = -half; d <= half; d += 1.5) {
+      addPost(cx + d, cz - half);           // sur
+      addPost(cx + d, cz + half);           // norte
+      addPost(cx - half, cz + d);           // oeste
+      if (Math.abs(d) > 2.2) addPost(cx + half, cz + d); // este (con hueco)
+    }
+    // travesaños (cajas finas) por los tres lados cerrados
+    const rail = (x: number, z: number, w: number, dep: number): void => {
+      this.group.add(rbox(w, 0.22, dep, railMat, this.plastic, x, 1.2, z));
+      this.group.add(rbox(w, 0.22, dep, railMat, this.plastic, x, 0.6, z));
+    };
+    rail(cx, cz - half, half * 2, 0.18);    // sur
+    rail(cx, cz + half, half * 2, 0.18);    // norte
+    rail(cx - half, cz, 0.18, half * 2);    // oeste
+    // cartel/paja en el suelo del redil
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(half - 0.6, 16), this.plastic.get(0xcdae6a));
+    floor.rotation.x = -Math.PI / 2; floor.position.set(cx, 0.02, cz); floor.receiveShadow = true;
+    this.group.add(floor);
+  }
+
+  /** Arranca el mini-juego de arrear ovejas al redil. */
+  activarOvejas(): void { this.penActive = true; }
+  get ovejasObjetivo(): number { return this.sheep.filter((s) => s.target).length; }
+  get ovejasEnRedil(): number { return this.sheep.filter((s) => s.target && s.penned).length; }
+  get redil(): { x: number; z: number } { return { x: this.pen.x, z: this.pen.z }; }
+  /** (debug) posiciones de las ovejas objetivo, para pruebas de arreo. */
+  get _targets(): Array<{ x: number; z: number; penned: boolean }> {
+    return this.sheep.filter((s) => s.target).map((s) => ({ x: s.g.position.x, z: s.g.position.z, penned: !!s.penned }));
+  }
+
+  update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void, onPenned?: () => void): void {
+    // ovejas: saltan y balan cuando el jugador se acerca (mundo que reacciona).
+    // Las OBJETIVO, además, se arrean: si el jugador las empuja al redil, se quedan.
     for (const s of this.sheep) {
+      if (s.penned) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.15; continue; }
       s.hopCd -= dt;
       if (playerPos && s.hopCd <= 0 && s.g.position.y < 0.05) {
         const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
-        if (dx * dx + dz * dz < 12) {   // ~3.5 de radio
-          s.vy = 5.5; s.hopCd = 1.4;
+        if (dx * dx + dz * dz < (s.target ? 20 : 12)) {   // objetivo: radio mayor, más fácil de arrear
+          s.vy = 6.2; s.hopCd = 1.0;
           s.g.rotation.y = Math.atan2(-dx, -dz);   // huye del jugador
           onBaa?.();
         }
@@ -119,9 +172,21 @@ export class CampLife {
       if (s.g.position.y > 0 || s.vy > 0) {
         s.vy -= 24 * dt;
         s.g.position.y += s.vy * dt;
-        s.g.position.x += Math.sin(s.g.rotation.y) * 1.6 * dt;
-        s.g.position.z += Math.cos(s.g.rotation.y) * 1.6 * dt;
+        const flee = s.target ? 4.2 : 1.9;           // las de arrear avanzan más por salto
+        s.g.position.x += Math.sin(s.g.rotation.y) * flee * dt;
+        s.g.position.z += Math.cos(s.g.rotation.y) * flee * dt;
         if (s.g.position.y < 0) { s.g.position.y = 0; s.vy = 0; }
+      }
+      // arrear: cuando ya está cerca del redil, deriva sola hacia dentro (menos frustración)
+      if (s.target && this.penActive) {
+        const px = this.pen.x - s.g.position.x, pz = this.pen.z - s.g.position.z;
+        const d2 = px * px + pz * pz;
+        if (s.g.position.y < 0.05 && d2 < 81) {   // a menos de ~9: imán suave al corral
+          const d = Math.sqrt(d2) || 1;
+          s.g.position.x += (px / d) * 0.8 * dt;
+          s.g.position.z += (pz / d) * 0.8 * dt;
+        }
+        if (d2 < this.pen.r * this.pen.r) { s.penned = true; s.vy = 0; onPenned?.(); }
       }
     }
 

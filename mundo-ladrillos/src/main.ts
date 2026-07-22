@@ -64,6 +64,7 @@ const camp = buildCamp(scene, plastic);
 const dust = new Dust(scene);
 const life = new CampLife(scene, plastic, dust);           // aldeanos, animales, gag del beduino
 const journey = new Journey(scene, plastic);               // río Jordán + Jericó + caravana (ocultos)
+(window as any).__life = life; (window as any).__journey = journey;
 
 // === JUGADOR: un joven levita del campamento ===
 const villager = createMinifigure(plastic, VILLAGER_SKIN);
@@ -141,7 +142,9 @@ const director = new Director(beats, null, () => { /* fin del tramo → engancha
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let baaCd = 0;                   // anti-spam del "bee" de oveja
+let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
 const baa = (): void => { if (baaCd <= 0) { audio.sfxAnimal(); baaCd = 0.5; } };
+const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling al meter una oveja
 
 // hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
 const done = new Set<number>();
@@ -193,7 +196,7 @@ function animate(now: number): void {
   last = now;
 
   const moving = controller.update(dt, tpcam.yaw);
-  life.update(dt, now / 1000, controller.pos, baa);
+  life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil);
   journey.update(dt, now / 1000);
   dust.update(dt);
   director.update();
@@ -211,14 +214,14 @@ function animate(now: number): void {
 
   baaCd -= dt;
 
-  // recoger cuerdas (durante su beat; el contador solo manda mientras es el objetivo activo)
-  if (ropesActivas && !done.has(2)) {
+  // FASE A — recoger cuerdas (flotan e invitan a cogerlas)
+  if (ropesActivas && !ropesHechas) {
     let left = 0;
     for (const rope of camp.ropes) {
       if (!rope.visible) continue;
       left++;
       rope.rotation.z += dt * 1.5;
-      rope.position.y = 0.35 + Math.sin(now * 0.004 + rope.position.x) * 0.15;   // flota (invita a cogerla)
+      rope.position.y = 0.35 + Math.sin(now * 0.004 + rope.position.x) * 0.15;
       if (controller.pos.distanceTo(rope.position) < 2.6) {
         rope.visible = false; left--;
         audio.sfxPickup();                                             // ¡pling!
@@ -227,7 +230,20 @@ function animate(now: number): void {
     }
     const got = camp.ropes.length - left;
     if (director.beatIndex === 2) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
-    if (got >= camp.ropes.length) { done.add(2); audio.sfxSuccess(); director.star(); director.logro('¡Campamento recogido!'); }
+    if (got >= camp.ropes.length) {
+      ropesHechas = true; audio.sfxSuccess(); director.star();
+      director.logro('¡Cuerdas recogidas! Ahora arrea las ovejas 🐑');
+      life.activarOvejas(); setTarget(camp.ropes.length ? life.redil : null);
+    }
+  }
+  // FASE B — arrear las ovejas al redil (empújalas acercándote)
+  if (ropesHechas && !done.has(2)) {
+    const enRedil = life.ovejasEnRedil;
+    if (director.beatIndex === 2) director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo})`);
+    if (enRedil >= life.ovejasObjetivo) {
+      done.add(2); audio.sfxSuccess(); director.star();
+      director.logro('¡Campamento recogido! 🎉'); setTarget(null);
+    }
   }
 
   // caída de la noche (rampa suave)
