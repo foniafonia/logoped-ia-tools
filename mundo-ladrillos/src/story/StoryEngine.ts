@@ -23,6 +23,8 @@ export interface Escena {
   id: string;
   subtitulo: string;             // frase de la peli (abajo)
   voz?: string;                  // nombre del clip de audio (si lo hay)
+  fondo?: string;                // fotograma real de la peli (telón 2.5D)
+  protagonista?: string;         // quién controla el jugador (multi-protagonista)
   objetivo: Objetivo;
   exito: string;                 // mensaje al lograrlo
 }

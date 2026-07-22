@@ -107,13 +107,21 @@ for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, n
   city.add(flame, post, light);
 }
 
-// --- Fondo real de la peli (plano fijo 2.5D): textura de fondo ---
+// --- Fondo real de la peli (plano fijo 2.5D): textura de fondo por escena ---
 const texLoader = new THREE.TextureLoader();
+const nightBg = scene.background;   // color de noche por defecto
+function applyBackdrop(url?: string): void {
+  if (url) {
+    texLoader.load(url, (t) => { t.colorSpace = THREE.SRGBColorSpace; scene.background = t; });
+    city.visible = false;           // escena 2.5D: telón real manda
+  } else {
+    scene.background = nightBg;
+    city.visible = true;            // escena 3D
+  }
+}
 (window as any).__scene = scene;
 (window as any).__city = city;
-(window as any).__setBackdrop = (url: string): void => {
-  texLoader.load(url, (t) => { t.colorSpace = THREE.SRGBColorSpace; scene.background = t; });
-};
+(window as any).__setBackdrop = applyBackdrop;
 
 // ---- Espía jugable ----
 const spy = createMinifigure(plastic, SPY_SKIN);
@@ -128,7 +136,9 @@ const audio = new AudioManager();
 (window as any).__audio = audio;
 
 // ---- Director de la película jugable ----
-const story = new StoryEngine(scene, () => controller.pos, audio, GUION);
+const story = new StoryEngine(scene, () => controller.pos, audio, GUION, {
+  onEnter: (esc) => applyBackdrop(esc.fondo)   // cada escena pone su telón real
+});
 (window as any).__story = story;
 
 // ---- Pantalla de inicio (desbloquea audio + arranca la historia) ----
