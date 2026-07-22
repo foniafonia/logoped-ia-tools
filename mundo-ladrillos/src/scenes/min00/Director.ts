@@ -57,15 +57,40 @@ export class Director {
     this.starEl.style.opacity = '1';
   }
 
-  /** Suma una estrella (premio) con un "pop" — el refuerzo positivo principal. */
+  /** Suma una estrella (premio) con un "pop" + confeti — el refuerzo positivo. */
   star(): number {
     this.stars++;
     this.starEl.textContent = '⭐ ' + this.stars;
     this.starEl.style.transform = 'scale(1.6)';
     setTimeout(() => { this.starEl.style.transform = 'scale(1)'; }, 30);
+    this.confetti();
     return this.stars;
   }
   get starCount(): number { return this.stars; }
+
+  /** Lluvia de confeti (celebración): a los peques les encanta. */
+  confetti(n = 22): void {
+    const cols = ['#ffd34d', '#ff6b6b', '#4dd2ff', '#7bed7b', '#c77dff', '#ffa94d'];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('div');
+      const size = 8 + Math.random() * 8;
+      Object.assign(c.style, {
+        position: 'fixed', zIndex: '30', top: '-20px', left: (10 + Math.random() * 80) + '%',
+        width: size + 'px', height: size * 0.6 + 'px', background: cols[(Math.random() * cols.length) | 0],
+        borderRadius: '2px', pointerEvents: 'none', opacity: '1',
+        transform: 'rotate(' + (Math.random() * 360) + 'deg)',
+        transition: 'top 1.5s cubic-bezier(.3,.6,.5,1), left 1.5s ease-out, opacity 1.5s'
+      } as CSSStyleDeclaration);
+      document.body.appendChild(c);
+      void c.offsetWidth;   // fuerza reflow → la transición dispara seguro
+      requestAnimationFrame(() => {
+        c.style.top = (60 + Math.random() * 35) + '%';
+        c.style.left = (parseFloat(c.style.left) + (Math.random() - 0.5) * 24) + '%';
+        c.style.opacity = '0';
+      });
+      setTimeout(() => c.remove(), 1700);
+    }
+  }
 
   private mk(style: Partial<CSSStyleDeclaration>): HTMLDivElement {
     const d = document.createElement('div');
