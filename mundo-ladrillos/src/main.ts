@@ -107,6 +107,7 @@ Object.assign(startEl.style, {
 document.body.appendChild(startEl);
 startEl.addEventListener('pointerdown', () => {
   audio.init();
+  audio.loop('campAmbiente', 0.5);   // ambiente real de la peli (si está embebido)
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
 }, { once: true });
