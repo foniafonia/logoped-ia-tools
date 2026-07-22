@@ -23,6 +23,7 @@ export const escena13: Min05Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'river',
+  voz: 'm0510_13_cruzar',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: 0, z: -18 },
   objetivo: { tipo: 'cruzar', texto: 'Cruza el puente de cuerda manteniendo el equilibrio', target: { x: 0, z: 20 }, radio: 4 },
   exito: '¡Al otro lado, sanos y secos!',

@@ -104,7 +104,12 @@ export interface Min05Scene {
   exito: string;            // mensaje al lograrlo
   spawn: { x: number; z: number };
   noche?: boolean;          // ambiente nocturno (11–16 son de noche)
-  ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de sonido/luz
+  ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de ambiente (viento/grillos/agua)
+  /** Clip de VOZ de la peli que se reproduce al entrar (diálogo/narración del beat). */
+  voz?: string;
+  /** Clip de la peli en bucle como fondo de la escena (música/ambiente del filme). */
+  fondoClip?: string;
+  fondoVol?: number;
   camara?: CameraHint;
   /** Skin del jugador en esta escena (campamento vs sigilo). */
   jugador?: PlayerSkinId;

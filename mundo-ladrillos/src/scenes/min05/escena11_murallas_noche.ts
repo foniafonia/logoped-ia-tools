@@ -24,6 +24,7 @@ export const escena11: Min05Scene = {
   jugador: 'spy_camp',
   noche: true,
   ambiente: 'night',
+  voz: 'm0510_11_murallas',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: -16, z: -18 },
   objetivo: { tipo: 'ir_a', texto: 'Llega al puesto de observación entre los juncos', target: { x: 10, z: -5 }, radio: 3.5 },
   exito: 'Los espías estudian la muralla desde las sombras',

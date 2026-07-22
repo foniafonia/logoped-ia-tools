@@ -23,6 +23,7 @@ export const escena16: Min05Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
+  voz: 'm0510_16_calles',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: 0, z: -22 },
   objetivo: { tipo: 'sigilo', texto: 'Alcanza el refugio del fondo sin que se llene la alarma', target: { x: 0, z: 30 }, radio: 3.5 },
   exito: '¡A salvo en el refugio! (fin del tramo 5–10)',

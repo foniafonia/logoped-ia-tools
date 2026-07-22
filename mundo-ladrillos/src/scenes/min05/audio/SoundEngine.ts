@@ -46,7 +46,9 @@ export class SoundEngine {
     for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
     // empujón silencioso (desbloqueo iOS)
     try { const b = this.ac.createBuffer(1, 1, 22050); const s = this.ac.createBufferSource(); s.buffer = b; s.connect(this.ac.destination); s.start(); } catch { /* noop */ }
-    this.startMusic();
+    // NOTA: la música de fondo la pone el AUDIO DE LA PELÍCULA (ver preview:
+    // `film`), NO un sintetizador. Aquí solo hay ambiente (viento/grillos/agua)
+    // y efectos. `setMusicMood`/scheduler quedan desactivados a propósito.
   }
 
   // ===================== MÚSICA DE FONDO (siempre sonando) =====================

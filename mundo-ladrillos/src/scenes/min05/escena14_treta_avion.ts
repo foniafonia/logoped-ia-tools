@@ -23,6 +23,7 @@ export const escena14: Min05Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
+  voz: 'm0510_14_avion',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: -10, z: -16 },
   objetivo: { tipo: 'distraer', texto: 'Llega a la marca y pulsa E: «¡un avión!»', target: { x: 0, z: -4 }, radio: 3.2 },
   exito: 'Los guardias miran al cielo; la puerta queda libre',
