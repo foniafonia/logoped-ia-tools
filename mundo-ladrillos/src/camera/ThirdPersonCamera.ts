@@ -3,8 +3,8 @@ import * as THREE from 'three';
 /** Cámara en tercera persona: sigue al objetivo, orbita con arrastre, zoom con rueda. */
 export class ThirdPersonCamera {
   yaw = 0;
-  pitch = 0.24;   // más nivelada: el telón real (2.5D) llena el fondo
-  dist = 21;
+  pitch = 0.5;    // vista de mundo 3D (la buena)
+  dist = 26;
   private dragging = false;
   private lastX = 0;
   private lastY = 0;
