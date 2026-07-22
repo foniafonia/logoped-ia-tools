@@ -155,16 +155,21 @@ export class Minifigure {
     if (s.headStyle === 'ninja') {
       // Cabeza ENMASCARADA: máscara oscura con una franja amarilla de ojos.
       const mask = s.headwear ?? 0x141517;
-      this.root.add(this.cyl(0.56, 0.94, mask, 0, 3.9, 0, 30));            // cabeza-máscara
-      this.root.add(this.box(1.02, 0.42, 0.12, s.head, 0, 4.0, 0.5));      // franja de ojos amable (ancha)
+      this.root.add(this.cyl(0.56, 0.94, mask, 0, 3.9, 0, 30));            // capucha oscura (cabeza)
+      // CARA amarilla amplia (deja ver ojos + boca), enmarcada por la capucha
+      this.root.add(this.box(0.9, 0.82, 0.12, s.head, 0, 3.86, 0.5));
       // ojos redondeados con brillo (simpáticos)
-      for (const ex of [-0.23, 0.23]) {
-        this.root.add(this.box(0.18, 0.2, 0.06, 0x2a2016, ex, 4.0, 0.59));
-        this.root.add(this.box(0.07, 0.08, 0.04, 0xffffff, ex - 0.05, 4.06, 0.63)); // brillo
+      for (const ex of [-0.22, 0.22]) {
+        this.root.add(this.box(0.17, 0.19, 0.06, 0x2a2016, ex, 4.02, 0.57));
+        this.root.add(this.box(0.06, 0.07, 0.04, 0xffffff, ex - 0.05, 4.07, 0.61)); // brillo
       }
       // cejas suaves (casi rectas, nada agresivas)
-      const bL = this.box(0.22, 0.06, 0.05, 0x2a2016, -0.23, 4.19, 0.6); bL.rotation.z = 0.08; this.root.add(bL);
-      const bR = this.box(0.22, 0.06, 0.05, 0x2a2016, 0.23, 4.19, 0.6); bR.rotation.z = -0.08; this.root.add(bR);
+      const bL = this.box(0.22, 0.06, 0.05, 0x2a2016, -0.22, 4.2, 0.58); bL.rotation.z = 0.08; this.root.add(bL);
+      const bR = this.box(0.22, 0.06, 0.05, 0x2a2016, 0.22, 4.2, 0.58); bR.rotation.z = -0.08; this.root.add(bR);
+      // SONRISA amable (curva de tres piezas)
+      this.root.add(this.box(0.28, 0.06, 0.05, 0x6e3f24, 0, 3.62, 0.57));
+      this.root.add(this.box(0.09, 0.1, 0.05, 0x6e3f24, -0.17, 3.67, 0.57));
+      this.root.add(this.box(0.09, 0.1, 0.05, 0x6e3f24, 0.17, 3.67, 0.57));
       // correas tácticas del chaleco
       if (s.straps !== undefined) {
         this.root.add(this.box(1.24, 0.14, 0.86, s.straps, 0, 2.75, 0.01)); // banda horizontal
