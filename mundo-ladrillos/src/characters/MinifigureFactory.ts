@@ -55,24 +55,26 @@ export interface MinifigureSkin {
   lips?: number;              // color de los labios (boca femenina)
   skirt?: number;             // color de la falda / vestido acampanado
   skirtLong?: boolean;        // túnica larga hasta los tobillos (más humilde/época)
+  cord?: number;              // cordón/faja en banda diagonal (rojo carmesí de Rahab)
+  tie?: number;               // corbata sobre camisa blanca (rabino de traje)
+  spearGold?: boolean;        // lanza/alabarda dorada (jefe de guardia)
 }
 
-/** Yehoshúa: turbante cobalto con franjas blancas, barba blanca larga,
- *  túnica marrón claro, capa azul y bastón de madera. */
+/** Yehoshúa (según frame): AZUL dominante — chaleco/pantalón azul, cinturón
+ *  marrón, barba larga blanca-canosa, turbante cobalto y bastón. */
 export const YOSHUA_SKIN: MinifigureSkin = {
-  head: 0xf2c141,
-  torso: 0xbe9c6a,       // túnica marrón claro
-  belt: 0x6e4a2c,
-  legs: 0x8a6a3e,
-  arms: 0xbe9c6a,
-  hands: 0xf2c141,
-  headwear: 0x1c4f9c,    // turbante azul cobalto
+  head: 0xf4d03f,
+  torso: 0x1f618d,       // chaleco/túnica azul
+  belt: 0x6e4a2c,        // cinturón cuero oscuro
+  legs: 0x1f618d,        // pantalón azul
+  arms: 0x2c7bb0,        // mangas azul algo más claro
+  hands: 0xf4d03f,
+  headwear: 0x2980b9,    // turbante azul cobalto
   headStyle: 'turban',
-  turbanStripe: 0xf4efe4,
-  beard: 0xe8e4da,
+  turbanStripe: 0xf4efe4, // franjas blancas
+  beard: 0xbdc3c7,       // barba larga blanca/canosa
   beardStyle: 'long',
-  cape: 0x22467e,        // capa azul
-  emotion: 'happy',
+  emotion: 'neutral',    // líder mayor, solemne
   accessory: 'staff'
 };
 
@@ -91,17 +93,17 @@ export const SPY_SKIN: MinifigureSkin = {
   accessory: 'sword'
 };
 
-/** Espía 2 (ninja gris azulado): compañero. */
+/** Espía 2 (ninja gris asfalto #566573): compañero. */
 export const SPY2_SKIN: MinifigureSkin = {
-  head: 0xf2c141,
-  torso: 0x6b7684,
-  belt: 0x4a525e,
-  legs: 0x5a6472,
-  arms: 0x6b7684,
-  hands: 0xf2c141,
-  headwear: 0x545e6c,   // máscara gris azulada
+  head: 0xf4d03f,
+  torso: 0x566573,
+  belt: 0x424e59,
+  legs: 0x4c5964,
+  arms: 0x566573,
+  hands: 0xf4d03f,
+  headwear: 0x4b5560,   // máscara gris asfalto
   headStyle: 'ninja',
-  straps: 0x9aa7b5,
+  straps: 0x8b98a6,
   emotion: 'happy',
   accessory: 'sword'
 };
@@ -109,34 +111,35 @@ export const SPY2_SKIN: MinifigureSkin = {
 /** Rahab: mujer de rasgos suaves; melena plateada larga, vestido humilde con
  *  falda acampanada, cara amable. */
 export const RAHAB_SKIN: MinifigureSkin = {
-  head: 0xf4c98f,
-  torso: 0xd0d0d6,       // vestido gris claro humilde (fiel al brief)
-  belt: 0xbdbdc4,
-  legs: 0xcac9d0,
-  arms: 0xd0d0d6,
-  hands: 0xf4c98f,
-  headwear: 0xe2e5ec,    // pelo plateado (distinto del vestido)
+  head: 0xf4d03f,
+  torso: 0xd5d8dc,       // vestido gris claro humilde (#D5D8DC)
+  belt: 0xc2c5ca,
+  legs: 0xd5d8dc,
+  arms: 0xd5d8dc,
+  hands: 0xf4d03f,
+  headwear: 0xe5e7e9,    // pelo largo plateado (#E5E7E9)
   headStyle: 'longHair',
   emotion: 'happy',
   feminine: true,
   lips: 0xc26a63,
-  skirt: 0xd0d0d6,       // túnica larga hasta los tobillos
+  skirt: 0xd5d8dc,       // túnica larga
   skirtLong: true,
+  cord: 0xe74c3c,        // cordón rojo carmesí (prop clave)
   accessory: 'none'
 };
 
 /** Guardia de Jericó: casco cónico plateado, túnica de rayas rojas/amarillas,
  *  escudo redondo con león y lanza. */
 export const GUARD_SKIN: MinifigureSkin = {
-  head: 0xe0a878,
-  torso: 0xb62b2b,       // rojo
-  belt: 0x8a6a3a,
-  legs: 0x8a6a3a,
-  arms: 0xb62b2b,
-  hands: 0xe0a878,
-  headwear: 0xbfc2c4,    // casco plateado
+  head: 0xf4d03f,
+  torso: 0xc0392b,       // rojo (#C0392B)
+  belt: 0x7a5433,
+  legs: 0x8a5a2c,        // grebas de cuero marrón
+  arms: 0xc0392b,
+  hands: 0xf4d03f,
+  headwear: 0x95a5a6,    // casco plateado (#95A5A6)
   headStyle: 'coneHelmet',
-  tunicStripe: 0xf0b429, // rayas amarillas
+  tunicStripe: 0xf1c40f, // rayas amarillas (#F1C40F)
   emotion: 'stern',
   shield: 0xcaa14a,
   accessory: 'spear'
@@ -144,68 +147,70 @@ export const GUARD_SKIN: MinifigureSkin = {
 
 /** Jefe de guardia: casco con plumas negras, bigote marrón, rayas rojas/amarillas. */
 export const GUARD_CHIEF_SKIN: MinifigureSkin = {
-  head: 0xd89a68,
-  torso: 0xb62b2b,
-  belt: 0x5a3f22,
-  legs: 0x6b675e,
-  arms: 0xb62b2b,
-  hands: 0xd89a68,
+  head: 0xf4d03f,
+  torso: 0x87663c,       // peto de metal reforzado (bronce)
+  belt: 0x4a3a26,
+  legs: 0x4a4038,
+  arms: 0x87663c,
+  hands: 0xf4d03f,
   headwear: 0xa8adb0,    // casco metálico
   headStyle: 'plumeHelmet',
-  tunicStripe: 0xf0b429,
-  mustache: 0x5a3f22,    // bigote marrón
+  cape: 0x161616,        // capa negra
+  mustache: 0x3a2a1a,    // bigote marrón oscuro
   emotion: 'stern',
+  spearGold: true,       // alabarda dorada
   accessory: 'spear'
 };
 
 /** Sacerdote (Cohen): túnica blanca con pectoral, mitra blanca, barba negra, shofar. */
 export const PRIEST_SKIN: MinifigureSkin = {
-  head: 0xefc08a,
+  head: 0xf4d03f,
   torso: 0xf4efe4,       // túnica blanca
-  belt: 0xcaa14a,
+  belt: 0xe6e0d2,
   legs: 0xece7dc,
   arms: 0xf4efe4,
-  hands: 0xefc08a,
-  headwear: 0xf7f3ea,    // mitra blanca
-  headStyle: 'mitre',
-  beard: 0x2a221c,       // barba negra
+  hands: 0xf4d03f,
+  headwear: 0xf7f3ea,    // turbante sacerdotal blanco
+  headStyle: 'turban',
+  beard: 0x2a221c,       // barba negra poblada
   beardStyle: 'long',
-  pectoral: 0xcaa14a,
+  pectoral: 0xcaa14a,    // pectoral multicolor
   emotion: 'neutral',
-  accessory: 'shofar'
+  accessory: 'shofar'    // shofar dorado
 };
 
 /** Beduino cómico: turbante beige, túnica verde oliva con remiendos, barba negra,
  *  cejas de preocupación. */
 export const BEDOUIN_SKIN: MinifigureSkin = {
-  head: 0xd7a06a,
-  torso: 0x6b7233,       // verde oliva
-  belt: 0x4a4a24,
-  legs: 0x5a5a2c,
-  arms: 0x6b7233,
-  hands: 0xd7a06a,
-  headwear: 0xd9c6a0,    // turbante beige
+  head: 0xf4d03f,
+  torso: 0x7d6608,       // verde oliva descolorido (#7D6608)
+  belt: 0x5a4028,
+  legs: 0x5a4028,        // pantalones marrones
+  arms: 0x7d6608,
+  hands: 0xf4d03f,
+  headwear: 0xf5cba7,    // turbante beige/arena (#F5CBA7)
   headStyle: 'turban',
-  beard: 0x2a221c,       // barba negra
+  beard: 0x2a221c,       // barba negra desaliñada
   beardStyle: 'short',
-  patches: 0x8a7a3a,     // remiendos
-  emotion: 'worried',
+  patches: 0x9a7a3a,     // remiendos
+  emotion: 'worried',    // cejas de preocupación
   accessory: 'none'
 };
 
 /** Rabino director: traje azul marino, gafas negras cuadradas, barba gris corta, kipá. */
 export const RABBI_SKIN: MinifigureSkin = {
-  head: 0xe8b988,
-  torso: 0x1c2a4a,       // azul marino
-  belt: 0x141e33,
-  legs: 0x1c2a4a,
-  arms: 0x1c2a4a,
-  hands: 0xe8b988,
-  headwear: 0x141a2c,    // kipá oscura
+  head: 0xf4d03f,
+  torso: 0x2c3e50,       // traje azul marino (#2C3E50)
+  belt: 0x22303f,
+  legs: 0x2c3e50,
+  arms: 0x2c3e50,
+  hands: 0xf4d03f,
+  headwear: 0x14140f,    // kipá negra
   headStyle: 'kippah',
-  beard: 0x9a958c,       // barba gris corta
+  beard: 0x7f8c8d,       // barba gris corta (#7F8C8D)
   beardStyle: 'short',
-  glasses: 0x14140f,     // gafas negras
+  glasses: 0x14140f,     // gafas negras cuadradas
+  tie: 0x2b4a7a,         // camisa blanca + corbata azul
   emotion: 'happy',
   accessory: 'none'
 };
@@ -351,6 +356,21 @@ export class Minifigure {
     this.root.add(this.box(1.5, 0.7, 0.86, s.torso, 0, 3.0, 0)); // hombros anchos
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
     this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
+
+    // Camisa blanca + corbata (rabino de traje)
+    if (s.tie !== undefined) {
+      this.root.add(this.box(0.5, 0.78, 0.16, 0xf4efe4, 0, 2.86, 0.4)); // camisa
+      this.root.add(this.box(0.14, 0.62, 0.06, s.tie, 0, 2.82, 0.49));  // corbata
+    }
+
+    // Cordón/faja en banda diagonal (cordón rojo carmesí de Rahab)
+    if (s.cord !== undefined) {
+      const band = this.box(0.15, 1.9, 0.2, s.cord, 0.06, 2.5, 0.42);
+      band.rotation.z = 0.35;
+      this.root.add(band);
+      const loop = new THREE.TorusGeometry(0.15, 0.05, 8, 16);
+      this.root.add(this.mesh(loop, s.cord, 0.44, 1.72, 0.42)); // rollo colgando en la cadera
+    }
 
     // Falda / vestido acampanado (rasgo fem): tronco de cono sobre la cadera.
     // Las piernas asoman y siguen balanceándose por debajo del bajo.
@@ -580,7 +600,7 @@ export class Minifigure {
     const acc = s.accessory ?? 'sword';
     if (acc === 'sword') this.addSword();
     else if (acc === 'staff') this.addStaff();
-    else if (acc === 'spear') this.addSpear();
+    else if (acc === 'spear') this.addSpear(s.spearGold === true);
     else if (acc === 'shofar') this.addShofar();
     if (s.shield !== undefined) this.addShield(s.shield);
   }
@@ -608,19 +628,27 @@ export class Minifigure {
     this.armR.add(shaft, knob);
   }
 
-  /** Lanza de la guardia en la mano derecha. */
-  private addSpear(): void {
-    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 4.0, 8), this.plastic.get(0x7a5433));
+  /** Lanza de la guardia (o alabarda DORADA del jefe) en la mano derecha. */
+  private addSpear(gold = false): void {
+    const shaftCol = gold ? 0x8a6a2a : 0x7a5433;
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 4.0, 8), this.plastic.get(shaftCol));
     shaft.position.set(0, -0.4, 0.2); shaft.castShadow = true;
-    const steel = new THREE.MeshStandardMaterial({ color: 0xcfd3d6, roughness: 0.3, metalness: 0.7 });
-    const point = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.6, 10), steel);
+    const metal = gold
+      ? new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.32, metalness: 0.85 })
+      : new THREE.MeshStandardMaterial({ color: 0xcfd3d6, roughness: 0.3, metalness: 0.7 });
+    const point = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.6, 10), metal);
     point.position.set(0, 1.9, 0.2); point.castShadow = true;
     this.armR.add(shaft, point);
+    if (gold) { // cuchilla lateral de alabarda
+      const axe = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 0.08), metal);
+      axe.position.set(0.28, 1.55, 0.2); axe.castShadow = true;
+      this.armR.add(axe);
+    }
   }
 
-  /** Shofar (cuerno curvo) del sacerdote, alzado en la mano derecha. */
+  /** Shofar (cuerno curvo DORADO) del sacerdote, alzado en la mano derecha. */
   private addShofar(): void {
-    const horn = this.plastic.get(0xe8dcc0);
+    const horn = this.plastic.get(0xc9a24a);
     // Caña que sube y campana acampanada al final: silueta de cuerno.
     const body = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.17, 1.15, 12), horn);
     body.rotation.x = -1.2; body.position.set(0.08, -0.85, 0.5); body.castShadow = true;
