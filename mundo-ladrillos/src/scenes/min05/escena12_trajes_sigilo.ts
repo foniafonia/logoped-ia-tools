@@ -4,6 +4,7 @@ import { BrickPalette } from '../../materials/BrickPalette';
 import { buildTent, buildPalm, studdedPlate, brickBox } from './props/BrickProps';
 import { buildLantern } from './props/NightAmbience';
 import { Npc } from './props/Npc';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA2_CAMP, ESPIA2_SIGILO } from './skins';
 
 /**
@@ -59,6 +60,9 @@ export const escena12: Min05Scene = {
 
     let buddy = new Npc(plastic, ESPIA2_CAMP, -1, 5, Math.PI); group.add(buddy.root);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -4, z: -6 }, { x: 4, z: -4 }, { x: -6, z: 2 }, { x: 8, z: 2 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     let equipped = false;
@@ -76,13 +80,13 @@ export const escena12: Min05Scene = {
           suits.forEach((s) => (s.visible = false)); // los trajes ya no cuelgan
           ctx.sound.pickup();
         }
-        buddy.update(dt);
+        buddy.update(dt); gems.update(dt, t, player);
       },
       status() { return equipped ? '🥷 ¡Traje de sigilo puesto!' : null; },
       hud() {
         const p = ctx.getPlayer();
         const near = Math.hypot(p.x - 4, p.z - 6) < 3.5;
-        return { progress: equipped ? 1 : 0, prompt: (near && !equipped) ? 'Pulsa E para ponerte el traje' : undefined };
+        return { progress: equipped ? 1 : 0, prompt: (near && !equipped) ? 'Pulsa E para ponerte el traje' : undefined, gems: { got: gems.got, total: gems.total } };
       },
       isDone() { return equipped; }
     };

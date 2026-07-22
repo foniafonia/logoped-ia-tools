@@ -4,6 +4,7 @@ import { BrickPalette } from '../../materials/BrickPalette';
 import { buildTent, buildPalm, studdedPlate, brickBox } from './props/BrickProps';
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 
 /**
@@ -64,6 +65,9 @@ export const escena10: Min05Scene = {
     const life = new Wanderers(plastic, [ESPIA1_CAMP, ESPIA2_CAMP], 4, { minX: -26, maxX: 26, minZ: -10, maxZ: -2 });
     group.add(life.group);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -6, z: -8 }, { x: 6, z: -6 }, { x: -8, z: 0 }, { x: 8, z: -2 }, { x: 0, z: -4 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     let greetA = false, greetB = false;
@@ -75,13 +79,13 @@ export const escena10: Min05Scene = {
         if (!greetB && Math.hypot(player.x - 4, player.z - 2) < 3.5) { greetB = true; spyB.lookAt(player.x, player.z); ctx.sound.pickup(); }
         if (greetA) spyA.lookAt(player.x, player.z);
         if (greetB) spyB.lookAt(player.x, player.z);
-        spyA.update(dt); spyB.update(dt); life.update(dt);
+        spyA.update(dt); spyB.update(dt); life.update(dt); gems.update(dt, t, player);
       },
       status() {
         const n = (greetA ? 1 : 0) + (greetB ? 1 : 0);
         return n < 2 ? `🗣️ Espías reclutados: ${n}/2` : null;
       },
-      hud() { return { progress: ((greetA ? 1 : 0) + (greetB ? 1 : 0)) / 2 }; },
+      hud() { return { progress: ((greetA ? 1 : 0) + (greetB ? 1 : 0)) / 2, gems: { got: gems.got, total: gems.total } }; },
       isDone() { return greetA && greetB; }
     };
   }

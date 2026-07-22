@@ -8,6 +8,7 @@ import { PreviewController } from './PreviewController';
 import { MIN05_SCENES } from '../registry';
 import { Min05Scene, SceneInstance, SceneContext } from '../types';
 import { SoundEngine } from '../audio/SoundEngine';
+import { AudioManager } from '../../../audio/AudioManager';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -41,6 +42,10 @@ const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 const plastic = new PlasticMaterialFactory();
 const sound = new SoundEngine();
+// Audios REALES de la peli (clips embebidos en el repo para la entrega).
+const film = new AudioManager();
+let filmReady = false;
+let filmBed: { stop: (f?: number) => void } | null = null;
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -115,6 +120,30 @@ function setPlayerSkin(which: string): void {
   controller.teleport(keep.x, keep.z);
 }
 
+// --- Confeti 3D de celebración (premio para el niño al lograr el objetivo) ---
+const confettiGroup = new THREE.Group();
+scene.add(confettiGroup);
+let confetti: Array<{ m: THREE.Mesh; v: THREE.Vector3; life: number }> = [];
+const confettiCols = [0xff5a4d, 0xffd24a, 0x4c9e5e, 0x1f6fb2, 0xe8801e, 0xffffff];
+function spawnConfetti(x: number, z: number): void {
+  for (let i = 0; i < 60; i++) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.35, 0.05), new THREE.MeshBasicMaterial({ color: confettiCols[i % confettiCols.length] }));
+    m.position.set(x + (Math.random() - 0.5) * 3, 7 + Math.random() * 2, z + (Math.random() - 0.5) * 3);
+    confettiGroup.add(m);
+    confetti.push({ m, v: new THREE.Vector3((Math.random() - 0.5) * 7, 4 + Math.random() * 4, (Math.random() - 0.5) * 7), life: 2.4 });
+  }
+}
+function updateConfetti(dt: number): void {
+  for (const c of confetti) {
+    c.life -= dt; c.v.y -= 12 * dt;
+    c.m.position.addScaledVector(c.v, dt);
+    c.m.rotation.x += dt * 6; c.m.rotation.z += dt * 5;
+  }
+  const dead = confetti.filter((c) => c.life <= 0 || c.m.position.y < -1);
+  for (const c of dead) { confettiGroup.remove(c.m); c.m.geometry.dispose(); }
+  confetti = confetti.filter((c) => c.life > 0 && c.m.position.y >= -1);
+}
+
 // --- Interacción (E / botón de acción): flag de un frame ---
 let interactFlag = false;
 addEventListener('keydown', (e) => { if (e.code === 'KeyE') interactFlag = true; });
@@ -168,6 +197,7 @@ Object.assign(muteBtn.style, { position: 'fixed', right: '10px', top: '10px', zI
 muteBtn.onclick = () => { sound.setMuted(!sound.muted); muteBtn.textContent = sound.muted ? '🔈' : '🔊'; };
 document.body.appendChild(muteBtn);
 
+const gemsEl = mkDiv({ right: '10px', top: '52px', color: '#ffe08a', font: '800 18px system-ui', textShadow: '0 2px 6px rgba(0,0,0,.8)' });
 const hint = mkDiv({ right: '10px', bottom: '10px', color: '#cfe', font: '12px system-ui', background: 'rgba(0,0,0,.42)', padding: '5px 9px', borderRadius: '8px' });
 hint.textContent = 'WASD/flechas mover · Shift correr · E acción · arrastra cámara';
 
@@ -220,7 +250,12 @@ function loadScene(i: number): void {
   currentDef = def; done = false; advanceT = 0;
   const amb = def.ambiente ?? (def.noche ? 'night' : 'day');
   applyLighting(!!def.noche, amb === 'street');
-  if (sound.ready) sound.setAmbience(amb);
+  if (sound.ready) { sound.setAmbience(amb); sound.setMusicMood(def.noche ? 'tension' : 'adventure'); }
+  // cama de audio REAL de la peli: bullicio del campamento (din) en las escenas
+  // de campamento; en el resto se corta.
+  if (filmBed) { filmBed.stop(0.6); filmBed = null; }
+  const campScene = def.numero === 9 || def.numero === 10 || def.numero === 12;
+  if (filmReady && campScene) filmBed = film.loop('din', 0.3);
   setPlayerSkin(def.jugador ?? 'spy');
 
   controller.clearObstacles();
@@ -230,6 +265,7 @@ function loadScene(i: number): void {
     setPlayer: (x, z) => controller.teleport(x, z),
     markDone: () => { done = true; },
     sound,
+    film,
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
     setPlayerSkin: (which) => setPlayerSkin(which)
@@ -264,7 +300,13 @@ Object.assign(startEl.style, { position: 'fixed', inset: '0', zIndex: '50', disp
 document.body.appendChild(startEl);
 const startGame = (): void => {
   sound.init();
-  if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
+  film.init(); filmReady = true;
+  if (currentDef) {
+    sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
+    sound.setMusicMood(currentDef.noche ? 'tension' : 'adventure');
+    const campScene = currentDef.numero === 9 || currentDef.numero === 10 || currentDef.numero === 12;
+    if (campScene) { filmBed?.stop(0); filmBed = film.loop('din', 0.3); }
+  }
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
 };
 startEl.addEventListener('pointerdown', startGame, { once: true });
@@ -313,12 +355,15 @@ function animate(now: number): void {
     else progBar.wrap.style.display = 'none';
     promptEl.style.display = h.prompt ? 'block' : 'none';
     if (h.prompt) promptEl.textContent = h.prompt;
+    gemsEl.textContent = h.gems ? `⭐ ${h.gems.got}/${h.gems.total}` : '';
 
     if (!done && current.isDone(controller.pos)) {
       done = true; advanceT = 0;
       flashEl.textContent = '✅ ' + currentDef.exito;
       if (sound.ready) sound.success();
+      spawnConfetti(controller.pos.x, controller.pos.z);
     }
+    updateConfetti(dt);
     if (done) {
       advanceT += dt;
       if (advanceT > 2.6) { const idx = MIN05_SCENES.findIndex((s) => s.id === currentDef!.id); loadScene(idx + 1); }

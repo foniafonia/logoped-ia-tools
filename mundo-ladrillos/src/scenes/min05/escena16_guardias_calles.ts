@@ -6,6 +6,7 @@ import { buildBrazier, buildLantern, buildBanner } from './props/NightAmbience';
 import { StealthSystem } from './mechanics/StealthSystem';
 import { VisionCone, Npc } from './props/Npc';
 import { buildGuard } from './props/Guard';
+import { Collectibles } from './props/Collectibles';
 
 /**
  * ESCENA 16 (545–604s) — LOS GUARDIAS VUELVEN POR LAS CALLES BUSCÁNDOLOS.
@@ -66,7 +67,7 @@ export const escena16: Min05Scene = {
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);
 
     // === SIGILO: tres guardias patrullando ===
-    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena16.spawn, ctx.sound);
+    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena16.spawn, ctx.sound, ctx.film);
     const patrols: Array<Array<{ x: number; z: number }>> = [
       [{ x: -6, z: 6 }, { x: 6, z: 6 }, { x: 6, z: 2 }, { x: -6, z: 2 }],
       [{ x: 6, z: 24 }, { x: -6, z: 24 }, { x: -6, z: 16 }, { x: 6, z: 16 }],
@@ -82,6 +83,9 @@ export const escena16: Min05Scene = {
     for (const b of barrelPos) stealth.addHidingSpot({ x: b.x, z: b.z, radio: 2.2 });
     for (const s of stealth.marksGroup) group.add(s);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -8, z: 3 }, { x: 8, z: 10 }, { x: -8, z: 20 }, { x: 6, z: 26 }, { x: 0, z: 30 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     let doneFlag = false;
@@ -89,14 +93,14 @@ export const escena16: Min05Scene = {
       group,
       update(dt, t, player) {
         braziers.forEach((b) => b.update(t)); lanterns.forEach((l) => l.update(t));
-        stealth.update(dt, t);
+        stealth.update(dt, t); gems.update(dt, t, player);
         doorLight.intensity = 2.2 + Math.sin(t * 6) * 0.3;
         goal.scale.setScalar(1 + Math.sin(t * 3) * 0.08);
         const o = escena16.objetivo.target!;
         if (Math.hypot(player.x - o.x, player.z - o.z) < (escena16.objetivo.radio ?? 3.5)) doneFlag = true;
       },
       status() { return stealth.status(); },
-      hud() { const p = ctx.getPlayer(); const o = escena16.objetivo.target!; return { alarm: stealth.alarmLevel, progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 54, 0, 1) }; },
+      hud() { const p = ctx.getPlayer(); const o = escena16.objetivo.target!; return { alarm: stealth.alarmLevel, progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 54, 0, 1), gems: { got: gems.got, total: gems.total } }; },
       isDone() { return doneFlag; }
     };
   }

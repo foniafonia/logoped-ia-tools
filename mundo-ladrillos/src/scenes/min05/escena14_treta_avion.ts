@@ -6,6 +6,7 @@ import { buildStraightWallLike } from './props/Walls';
 import { buildArchGate, buildBrazier, buildLantern, buildBanner } from './props/NightAmbience';
 import { Distraction } from './mechanics/Distraction';
 import { buildGuard } from './props/Guard';
+import { Collectibles } from './props/Collectibles';
 
 /**
  * ESCENA 14 (512–533s) — GUARDIAS EN LA PUERTA; LA TRETA DEL "¡UN AVIÓN!".
@@ -53,6 +54,9 @@ export const escena14: Min05Scene = {
 
     const distr = new Distraction(plastic, [gA, gB]); group.add(distr.group);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -10, z: -10 }, { x: -4, z: -8 }, { x: 4, z: -8 }, { x: 8, z: -4 }, { x: 0, z: -12 }]);
+    group.add(gems.group);
+
     const spot = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0xffd24a, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
     spot.rotation.x = -Math.PI / 2; spot.position.set(0, 0.2, -4); group.add(spot);
 
@@ -76,12 +80,13 @@ export const escena14: Min05Scene = {
           if (distr.active && !gateSoundDone) { ctx.sound.gate(); gateSoundDone = true; }
           if (!distr.active && planeSfx) { planeSfx.stop(); planeSfx = null; }
         }
+        gems.update(dt, t, player);
       },
       status() { return distr.active ? '✈️ ¡Miran al cielo! La puerta se abre' : (triggered ? null : null); },
       hud() {
         const p = ctx.getPlayer();
         const near = !triggered && Math.hypot(p.x - 0, p.z - (-4)) < (escena14.objetivo.radio ?? 3.2);
-        return { progress: triggered ? 1 : 0, prompt: near ? 'Pulsa E: «¡un avión!»' : undefined };
+        return { progress: triggered ? 1 : 0, prompt: near ? 'Pulsa E: «¡un avión!»' : undefined, gems: { got: gems.got, total: gems.total } };
       },
       isDone() { return triggered && (distr.active || distr.spent); }
     };

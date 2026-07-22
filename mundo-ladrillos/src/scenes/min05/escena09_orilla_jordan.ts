@@ -6,6 +6,7 @@ import {
 } from './props/BrickProps';
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 
 /**
@@ -67,6 +68,10 @@ export const escena09: Min05Scene = {
     group.add(life.group);
     const g1 = new Npc(plastic, ESPIA1_CAMP, -2, -20, -0.2); g1.lookAt(6, 20); group.add(g1.root);
 
+    // gemas por el camino (premio)
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -6, z: -8 }, { x: 2, z: -6 }, { x: -2, z: 0 }, { x: 8, z: -2 }, { x: 0, z: -12 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     const start = new THREE.Vector2(escena09.spawn.x, escena09.spawn.z);
@@ -81,12 +86,12 @@ export const escena09: Min05Scene = {
           f.position.set(f.userData.bx + s * 6, 0.5 + Math.sin(t * 3 + f.userData.ph) * 0.15, f.userData.bz + Math.cos(t * 0.6 + f.userData.ph) * 2);
           f.rotation.y = s > 0 ? 0.4 : -0.4 + Math.PI;
         }
-        life.update(dt); g1.update(dt);
+        life.update(dt); g1.update(dt); gems.update(dt, t, player);
       },
       hud() {
         const p = ctx.getPlayer();
         const d = Math.hypot(p.x - tgt.x, p.z - tgt.y);
-        return { progress: THREE.MathUtils.clamp(1 - d / total, 0, 1) };
+        return { progress: THREE.MathUtils.clamp(1 - d / total, 0, 1), gems: { got: gems.got, total: gems.total } };
       },
       isDone(p) { const o = escena09.objetivo.target!; return Math.hypot(p.x - o.x, p.z - o.z) < (escena09.objetivo.radio ?? 3.5); }
     };

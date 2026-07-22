@@ -58,6 +58,20 @@ Los muros propios (`props/Walls.ts`) replican el estilo del builder compartido
 sin depender de sus funciones internas (que no están exportadas), para no tener
 que tocar archivos compartidos.
 
+## Audio y recompensas (para que sea divertido para un niño 6–8)
+- **Música de fondo continua** (procedural, `audio/SoundEngine.ts`): alegre de
+  día, de intriga en el sigilo. NUNCA hay silencio.
+- **Audio REAL de la peli** (`AudioManager` + `clips.ts`): bullicio del
+  campamento (`din`) y grito de guardia (`shout`) al pillarte.
+- **Efectos**: pasos, salto, recoger, alarma, avión, puerta, chapuzón, éxito.
+- **Gemas coleccionables** (`props/Collectibles.ts`) por el camino, con contador
+  ⭐ y **confeti** al lograr el objetivo. Son premio, no bloquean el avance.
+
+> ⚠️ El HTML de entrega `preview/jugar-min05.html` **embebe el audio de la peli**
+> (privado) → **NO se versiona** (está en `.gitignore`). Se genera para la
+> entrega con `npx vite build --config src/scenes/min05/preview/vite.preview.config.mjs`.
+> En el repo, `clips.ts` debería ir vacío (regla de privacidad del proyecto).
+
 ## Probar el preview
 
 ```bash

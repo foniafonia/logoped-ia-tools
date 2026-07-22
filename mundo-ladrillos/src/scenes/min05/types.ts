@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
 import { SoundEngine } from './audio/SoundEngine';
+import { AudioManager } from '../../audio/AudioManager';
 
 /**
  * TRAMO MINUTO 5–10 · "El Jordán y los dos espías" (CREADOR 5–10).
@@ -23,8 +24,10 @@ export interface SceneContext {
   setPlayer: (x: number, z: number) => void;
   /** Marca el objetivo como cumplido de forma externa (mecánicas propias). */
   markDone: () => void;
-  /** Sonido procedural (ambiente + efectos). */
+  /** Sonido procedural (ambiente + música + efectos). */
   sound: SoundEngine;
+  /** Audios REALES de la peli (clips embebidos). Puede no estar listo aún. */
+  film: AudioManager;
   /** True UNA vez cuando el jugador pulsa la acción (E / botón) este frame. */
   wantsInteract: () => boolean;
   /** Registra un obstáculo sólido (AABB en el plano XZ) para las colisiones. */
@@ -42,6 +45,7 @@ export interface HudState {
   balance?: number;   // -1..1 desvío del equilibrio (cuerda)
   progress?: number;  // 0..1 progreso del objetivo
   prompt?: string;    // aviso de acción ("Pulsa E para…")
+  gems?: { got: number; total: number }; // gemas recogidas (premio)
 }
 
 /**

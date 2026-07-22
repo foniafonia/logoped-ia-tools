@@ -4,3 +4,7 @@ dist-single/
 *.log
 public/fondos/
 dist-min05/
+
+# Entrega single-file: puede embeber audio de la peli (privado) -> no versionar
+mundo-ladrillos/src/scenes/min05/preview/jugar-min05.html
+src/scenes/min05/preview/jugar-min05.html

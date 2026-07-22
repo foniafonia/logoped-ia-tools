@@ -5,6 +5,7 @@ import { buildRiver, buildReeds, buildPalm, studdedPlate, buildDistantJericho } 
 import { buildLantern } from './props/NightAmbience';
 import { RopeCrossing } from './mechanics/RopeCrossing';
 import { Npc } from './props/Npc';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA2_SIGILO } from './skins';
 
 /**
@@ -55,6 +56,10 @@ export const escena13: Min05Scene = {
 
     const buddy = new Npc(plastic, ESPIA2_SIGILO, 0, 22, Math.PI); group.add(buddy.root);
 
+    // gemas en el centro del puente (recompensan mantener el equilibrio)
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: 0, z: -3 }, { x: 0, z: 2 }, { x: 0, z: 7 }, { x: 0, z: 12 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     let doneFlag = false;
@@ -73,9 +78,10 @@ export const escena13: Min05Scene = {
         (guide.material as THREE.MeshBasicMaterial).color.setHex(r.nearMiss ? 0xffcc44 : 0x8fe0ff);
         if (r.fell) { ctx.sound.splash(); ctx.setPlayer(escena13.spawn.x, escena13.spawn.z); }
         if (player.z > 18) doneFlag = true;
+        gems.update(dt, t, player);
       },
       status() { return rope.fellRecently ? '💦 ¡Al agua! Vuelve al inicio del puente' : (onBridge ? '⚖️ Corrige con A/D para no caer' : null); },
-      hud() { return { balance: onBridge ? balance : undefined, progress }; },
+      hud() { return { balance: onBridge ? balance : undefined, progress, gems: { got: gems.got, total: gems.total } }; },
       isDone() { return doneFlag; }
     };
   }

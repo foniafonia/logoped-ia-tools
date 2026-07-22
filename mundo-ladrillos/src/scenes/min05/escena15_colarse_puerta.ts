@@ -8,6 +8,7 @@ import { StealthSystem } from './mechanics/StealthSystem';
 import { VisionCone } from './props/Npc';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA2_SIGILO } from './skins';
 
 /**
@@ -58,7 +59,7 @@ export const escena15: Min05Scene = {
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);
 
     // === SIGILO ===
-    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena15.spawn, ctx.sound);
+    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena15.spawn, ctx.sound, ctx.film);
     const gA = buildGuard(plastic, -6, 11, 0);
     const gB = buildGuard(plastic, 6, 11, 0, true);
     group.add(gA.root, gB.root);
@@ -72,6 +73,9 @@ export const escena15: Min05Scene = {
 
     const buddy = new Npc(plastic, ESPIA2_SIGILO, 3, 32, Math.PI); group.add(buddy.root);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -5, z: 2 }, { x: 6, z: 14 }, { x: -6, z: 20 }, { x: 3, z: 26 }, { x: 0, z: 30 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     let doneFlag = false;
@@ -79,13 +83,13 @@ export const escena15: Min05Scene = {
       group,
       update(dt, t, player) {
         braziers.forEach((b) => b.update(t)); lanterns.forEach((l) => l.update(t));
-        stealth.update(dt, t); buddy.update(dt);
+        stealth.update(dt, t); buddy.update(dt); gems.update(dt, t, player);
         goal.scale.setScalar(1 + Math.sin(t * 3) * 0.08);
         const o = escena15.objetivo.target!;
         if (Math.hypot(player.x - o.x, player.z - o.z) < (escena15.objetivo.radio ?? 3.5)) doneFlag = true;
       },
       status() { return stealth.status(); },
-      hud() { const p = ctx.getPlayer(); const o = escena15.objetivo.target!; return { alarm: stealth.alarmLevel, progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 48, 0, 1) }; },
+      hud() { const p = ctx.getPlayer(); const o = escena15.objetivo.target!; return { alarm: stealth.alarmLevel, progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 48, 0, 1), gems: { got: gems.got, total: gems.total } }; },
       isDone() { return doneFlag; }
     };
   }

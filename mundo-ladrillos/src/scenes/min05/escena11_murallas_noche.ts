@@ -6,6 +6,7 @@ import { buildReeds, buildRock, buildPalm, studdedPlate } from './props/BrickPro
 import { buildBrazier, buildBanner, buildLantern } from './props/NightAmbience';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
+import { Collectibles } from './props/Collectibles';
 import { ESPIA2_CAMP } from './skins';
 
 /**
@@ -69,14 +70,17 @@ export const escena11: Min05Scene = {
     buddy.setPatrol([{ x: -20, z: -20 }, { x: -12, z: -12 }, { x: 4, z: -7 }], 1.8);
     group.add(buddy.root);
 
+    const gems = new Collectibles(plastic, ctx.sound, [{ x: -12, z: -12 }, { x: -4, z: -8 }, { x: 4, z: -10 }, { x: 8, z: -3 }, { x: -18, z: -4 }]);
+    group.add(gems.group);
+
     ctx.scene.add(group);
 
     const tgt = escena11.objetivo.target!;
     const total = Math.hypot(escena11.spawn.x - tgt.x, escena11.spawn.z - tgt.z);
     return {
       group,
-      update(dt, t) { for (const br of braziers) br.update(t); lanterns.forEach((l) => l.update(t)); wg1.update(dt); wg2.update(dt); buddy.update(dt); },
-      hud() { const p = ctx.getPlayer(); return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1) }; },
+      update(dt, t, player) { for (const br of braziers) br.update(t); lanterns.forEach((l) => l.update(t)); wg1.update(dt); wg2.update(dt); buddy.update(dt); gems.update(dt, t, player); },
+      hud() { const p = ctx.getPlayer(); return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1), gems: { got: gems.got, total: gems.total } }; },
       isDone(p) { return Math.hypot(p.x - tgt.x, p.z - tgt.z) < (escena11.objetivo.radio ?? 3.5); }
     };
   }
