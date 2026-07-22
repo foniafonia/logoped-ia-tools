@@ -103,3 +103,16 @@ node src/scenes/min05/preview/capture.mjs
 - **Esta rama incluye un merge del marco** (rama del juego) como base para poder
   compilar y capturar. Todo mi trabajo propio está exclusivamente en
   `src/scenes/min05/`; no he tocado ningún archivo compartido.
+
+### Al integrar los muñecos nuevos (rama `claude/munecos-ifepfa`)
+Comprobado que mis skins son **compatibles** (la nueva `MinifigureFactory`
+mantiene la interfaz `MinifigureSkin`; `headStyle` sigue teniendo `turban`,
+`ninja`, `hood`). Cuando se fusionen los muñecos, se puede SIMPLIFICAR:
+- `skins.ts` → usar los canónicos `YOSHUA_SKIN`, `SPY_SKIN`, `SPY2_SKIN`
+  (los espías de sigilo) directamente del `MinifigureFactory`.
+- `props/Guard.ts` → la nueva factoría trae `GUARD_SKIN`/`GUARD_CHIEF_SKIN` con
+  `headStyle: 'coneHelmet'/'plumeHelmet'`, `tunicStripe` y `cape` NATIVOS, así
+  que el casco/rayas/escudo que yo cuelgo a mano se pueden quitar y dejar solo el
+  skin (más limpio y coherente). Mantengo `Guard.ts` para que funcione HOY (mi
+  rama aún lleva la `MinifigureFactory` vieja del marco).
+- Yehoshúa: `YOSHUA_SKIN` canónico ya trae barba larga blanca + `cape` cobalto.

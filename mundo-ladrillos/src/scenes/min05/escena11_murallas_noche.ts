@@ -3,7 +3,7 @@ import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
 import { buildStraightWallLike } from './props/Walls';
 import { buildReeds, buildRock, buildPalm, studdedPlate } from './props/BrickProps';
-import { buildBrazier, buildBanner } from './props/NightAmbience';
+import { buildBrazier, buildBanner, buildLantern } from './props/NightAmbience';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
 import { ESPIA2_CAMP } from './skins';
@@ -53,6 +53,10 @@ export const escena11: Min05Scene = {
     wg2.setPatrol([{ x: 20, z: 22 }, { x: -2, z: 22 }], 2.4);
     group.add(wg1.root, wg2.root);
 
+    // faroles de mano junto al camino de aproximación (iluminan la zona jugable)
+    const lanterns = [buildLantern(plastic, -14, 5, -4), buildLantern(plastic, 14, 5, -2), buildLantern(plastic, 2, 5, -12)];
+    lanterns.forEach((l) => group.add(l.group));
+
     // cañaveral + rocas (escondrijo = objetivo) con colisión en las rocas
     group.add(buildReeds(plastic, 10, -5, 14));
     group.add(buildReeds(plastic, -20, -8, 10));
@@ -71,7 +75,7 @@ export const escena11: Min05Scene = {
     const total = Math.hypot(escena11.spawn.x - tgt.x, escena11.spawn.z - tgt.z);
     return {
       group,
-      update(dt, t) { for (const br of braziers) br.update(t); wg1.update(dt); wg2.update(dt); buddy.update(dt); },
+      update(dt, t) { for (const br of braziers) br.update(t); lanterns.forEach((l) => l.update(t)); wg1.update(dt); wg2.update(dt); buddy.update(dt); },
       hud() { const p = ctx.getPlayer(); return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1) }; },
       isDone(p) { return Math.hypot(p.x - tgt.x, p.z - tgt.z) < (escena11.objetivo.radio ?? 3.5); }
     };

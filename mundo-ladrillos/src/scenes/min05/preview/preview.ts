@@ -69,13 +69,13 @@ const nightSky = buildNightSky(); nightSky.visible = false; scene.add(nightSky);
 function applyLighting(noche: boolean, street: boolean): void {
   if (noche) {
     scene.environment = null;
-    renderer.toneMappingExposure = 1.12;
-    scene.background = new THREE.Color(0x0e1c30);
-    scene.fog = new THREE.Fog(0x14263f, 55, 230);
-    hemi.color.setHex(0x3a5378); hemi.groundColor.setHex(0x14202f); hemi.intensity = 0.72;
-    key.color.setHex(0xaac4f2); key.intensity = 0.85;           // luna
+    renderer.toneMappingExposure = 1.2;
+    scene.background = new THREE.Color(0x102138);
+    scene.fog = new THREE.Fog(0x162943, 60, 250);
+    hemi.color.setHex(0x466288); hemi.groundColor.setHex(0x172433); hemi.intensity = 0.95;
+    key.color.setHex(0xb2caf5); key.intensity = 1.05;          // luna
     key.position.set(-150, 150, -240);
-    fill.color.setHex(0x35507e); fill.intensity = 0.35;
+    fill.color.setHex(0x3d5c8c); fill.intensity = 0.42;
     nightSky.visible = true;
     if (street) { groundMat.map = cobbleTex; groundMat.color.setHex(0x8a8a92); }
     else { groundMat.map = groundDayTex; groundMat.color.setHex(0x5c6c82); }

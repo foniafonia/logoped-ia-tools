@@ -78,7 +78,7 @@ export class VisionCone {
     const shape = new THREE.CircleGeometry(range, 24, -this.halfAngle + Math.PI / 2, this.halfAngle * 2);
     shape.rotateX(-Math.PI / 2);
     this.mat = new THREE.MeshBasicMaterial({
-      color: 0x9be08a, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false
+      color: 0x9be08a, transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false
     });
     this.mesh = new THREE.Mesh(shape, this.mat);
     this.mesh.position.y = 0.15;
@@ -92,7 +92,7 @@ export class VisionCone {
 
   setAlert(alert: boolean): void {
     this.mat.color.setHex(alert ? 0xff5a4d : 0x9be08a);
-    this.mat.opacity = alert ? 0.34 : 0.22;
+    this.mat.opacity = alert ? 0.5 : 0.32;
   }
 
   /** ¿El punto (px,pz) cae dentro del cono desde (ox,oz) mirando a `yaw`? */

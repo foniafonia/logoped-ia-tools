@@ -42,6 +42,7 @@ export const escena14: Min05Scene = {
     const braziers = [buildBrazier(plastic, -11, 12, 15), buildBrazier(plastic, 11, 12, 15)];
     braziers.forEach((b) => group.add(b.group));
     const lantern = buildLantern(plastic, 0, 9, 13); group.add(lantern.group);
+    const spotLantern = buildLantern(plastic, -6, 5, -2); group.add(spotLantern.group); // ilumina la zona de la marca
     for (const x of [-16, 16]) { const b = buildBanner(plastic, BrickPalette.DARK_RED, 1.4, 4.5); b.position.set(x, 9, 14.6); group.add(b); }
 
     // dos guardias delante de la puerta
@@ -63,7 +64,7 @@ export const escena14: Min05Scene = {
     return {
       group,
       update(dt, t, player) {
-        braziers.forEach((b) => b.update(t)); lantern.update(t);
+        braziers.forEach((b) => b.update(t)); lantern.update(t); spotLantern.update(t);
         distr.update(dt, t);
         if (!triggered) {
           gA.update(dt); gB.update(dt);
