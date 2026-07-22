@@ -66,6 +66,40 @@ export class AudioManager {
     };
   }
 
+  /**
+   * Reproduce la NARRACIÓN como "columna vertebral" (spine) del tramo y
+   * devuelve un reloj sincronizado: `elapsed()` da los segundos transcurridos
+   * del audio real. El juego se acompasa a ese reloj, beat a beat.
+   *
+   * Si el clip no existe (build del repo, sin audio de la peli), `ready()`
+   * nunca se pone a true y el Director usa su reloj de pared como respaldo:
+   * la secuencia se reproduce igual, solo que sin voz.
+   */
+  playSpine(name: string, volume = 1): {
+    ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean; stop: () => void;
+  } {
+    const st = { started: false, startAt: 0, dur: 0, src: null as AudioBufferSourceNode | null, stopped: false };
+    const startWhenReady = (tries = 0): void => {
+      if (st.stopped || !this.ac) return;
+      const buf = this.buffers.get(name);
+      if (!buf) { if (tries < 40) setTimeout(() => startWhenReady(tries + 1), 100); return; }
+      const src = this.ac.createBufferSource();
+      src.buffer = buf;
+      const g = this.ac.createGain(); g.gain.value = volume;
+      src.connect(g); g.connect(this.ac.destination);
+      try { src.start(); } catch { /* noop */ }
+      st.src = src; st.startAt = this.ac.currentTime; st.dur = buf.duration; st.started = true;
+    };
+    startWhenReady();
+    return {
+      ready: () => st.started,
+      elapsed: () => (st.started && this.ac ? this.ac.currentTime - st.startAt : 0),
+      duration: () => st.dur,
+      ended: () => st.started && !!this.ac && this.ac.currentTime - st.startAt >= st.dur,
+      stop: () => { st.stopped = true; try { st.src?.stop(); } catch { /* noop */ } }
+    };
+  }
+
   play(name: string, volume = 1, stopAfter?: number): boolean {
     if (!this.ac) return false;
     if (this.ac.state === 'suspended') void this.ac.resume();
