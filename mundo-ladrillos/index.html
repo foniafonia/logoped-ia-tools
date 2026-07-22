@@ -10,6 +10,8 @@
     canvas { display: block; width: 100%; height: 100%; }
     #tag { position: fixed; left: 12px; bottom: 10px; font: 12px/1.3 system-ui, sans-serif;
       color: #3a2f1c; background: rgba(255,255,255,.55); padding: 6px 10px; border-radius: 8px; }
+    /* En móvil/táctil los controles en pantalla se explican solos: ocultamos la ayuda de teclado */
+    @media (pointer: coarse) { #tag { display: none; } }
   </style>
 </head>
 <body>

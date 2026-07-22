@@ -33,8 +33,10 @@ export class Director {
   private flashUntil = 0;
 
   constructor(private beats: Beat[], private spine: Spine | null, private onFinish?: () => void) {
+    // en móvil (vertical) el subtítulo sube para no chocar con joystick/botones
+    const isTouch = matchMedia('(pointer: coarse)').matches;
     this.sub = this.mk({
-      left: '50%', bottom: '12%', transform: 'translateX(-50%)', maxWidth: '88%',
+      left: '50%', bottom: isTouch ? '25%' : '12%', transform: 'translateX(-50%)', maxWidth: isTouch ? '78%' : '88%',
       background: 'rgba(8,6,4,.74)', color: '#ffeecb', font: '500 17px/1.4 Georgia, serif',
       padding: '10px 18px', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(232,176,75,.4)'
     });

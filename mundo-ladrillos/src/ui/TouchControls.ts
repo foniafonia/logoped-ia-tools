@@ -18,9 +18,9 @@ export class TouchControls {
     const hint = document.createElement('div');
     hint.textContent = 'Joystick para andar · arrastra la pantalla para girar la cámara';
     Object.assign(hint.style, {
-      position: 'fixed', top: '10px', left: '50%', transform: 'translateX(-50%)',
-      font: '600 12px system-ui, sans-serif', color: '#3a2f1c',
-      background: 'rgba(255,255,255,.55)', padding: '6px 10px', borderRadius: '8px', zIndex: '20'
+      position: 'fixed', bottom: '14px', left: '50%', transform: 'translateX(-50%)', maxWidth: '52%',
+      font: '600 12px system-ui, sans-serif', color: '#3a2f1c', textAlign: 'center',
+      background: 'rgba(255,255,255,.6)', padding: '6px 10px', borderRadius: '8px', zIndex: '20', pointerEvents: 'none'
     } as CSSStyleDeclaration);
     document.body.appendChild(hint);
     setTimeout(() => hint.remove(), 6000);
