@@ -10,6 +10,7 @@ import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
 import { StoryEngine } from './story/StoryEngine';
 import { GUION } from './story/guion';
+import { FONDOS } from './story/fondos';
 
 const app = document.getElementById('app')!;
 
@@ -112,7 +113,8 @@ const texLoader = new THREE.TextureLoader();
 const nightBg = scene.background;   // color de noche por defecto
 function applyBackdrop(url?: string): void {
   if (url) {
-    texLoader.load(url, (t) => { t.colorSpace = THREE.SRGBColorSpace; scene.background = t; });
+    const src = FONDOS[url] ?? url;  // embebido (entrega) o ruta local (dev)
+    texLoader.load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; scene.background = t; });
     city.visible = false;           // escena 2.5D: telón real manda
   } else {
     scene.background = nightBg;
