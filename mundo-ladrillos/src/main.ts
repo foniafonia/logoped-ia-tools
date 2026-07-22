@@ -8,7 +8,9 @@ import { setupEnvironment } from './world/EnvironmentManager';
 import { AudioManager } from './audio/AudioManager';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
+import { Dust } from './effects/Dust';
 import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
+import { CampLife } from './scenes/min00/campLife';
 
 const app = document.getElementById('app')!;
 
@@ -56,6 +58,8 @@ setupEnvironment(scene);
 
 // === CAMPAMENTO DE ISRAEL (minuto 0–5) ===
 const camp = buildCamp(scene, plastic);
+const dust = new Dust(scene);
+const life = new CampLife(scene, plastic, dust);   // aldeanos, animales y gag del beduino
 
 // === JUGADOR: un joven levita del campamento ===
 const villager = createMinifigure(plastic, VILLAGER_SKIN);
@@ -119,6 +123,8 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
   controller.update(dt, tpcam.yaw);
+  life.update(dt, now / 1000);
+  dust.update(dt);
   // recoger cuerdas: acercarse a cada una
   for (const rope of camp.ropes) {
     if (!rope.visible) continue;
