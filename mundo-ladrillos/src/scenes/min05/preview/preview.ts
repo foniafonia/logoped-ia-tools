@@ -132,6 +132,8 @@ const statusEl = mkDiv({ left: '50%', top: '84px', transform: 'translateX(-50%)'
 const subEl = mkDiv({ left: '50%', bottom: '64px', transform: 'translateX(-50%)', maxWidth: '86%', background: 'rgba(8,6,4,.75)', color: '#ffeecb', font: '500 16px/1.35 Georgia, serif', padding: '9px 16px', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(232,176,75,.35)' });
 const flashEl = mkDiv({ left: '50%', top: '40%', transform: 'translate(-50%,-50%)', color: '#bfffce', font: '800 30px system-ui', textShadow: '0 2px 14px rgba(0,0,0,.8)', textAlign: 'center' });
 const promptEl = mkDiv({ left: '50%', top: '58%', transform: 'translate(-50%,-50%)', color: '#0a0705', background: '#ffd24a', font: '800 16px system-ui', padding: '8px 16px', borderRadius: '12px', boxShadow: '0 4px 14px rgba(0,0,0,.5)', display: 'none' });
+// viñeta de peligro (bordes rojos que suben con la alarma del sigilo)
+const vignette = mkDiv({ inset: '0', zIndex: '18', boxShadow: 'inset 0 0 120px 40px rgba(255,40,30,0)', transition: 'box-shadow .12s linear' });
 
 // barra genérica (detección / equilibrio / progreso)
 function mkBar(top: string, label: string, color: string): { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivElement } {
@@ -298,6 +300,9 @@ function animate(now: number): void {
     // barras HUD
     const h = current.hud?.() ?? {};
     setBar(alarmBar, h.alarm);
+    // viñeta de peligro proporcional a la alarma
+    const a = h.alarm ?? 0;
+    vignette.style.boxShadow = `inset 0 0 120px 40px rgba(255,40,30,${(a * 0.55).toFixed(3)})`;
     if (h.balance !== undefined) {
       balBar.wrap.style.display = 'block'; balBar.lab.style.display = 'block';
       const off = Math.abs(THREE.MathUtils.clamp(h.balance, -1, 1));
