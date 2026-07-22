@@ -11,6 +11,8 @@ import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactor
 const LABELS: Record<string, string> = {
   espia: 'Espía',
   espia2: 'Segundo espía',
+  espiaCamp: 'Espía · campamento',
+  espia2Camp: 'Espía 2 · campamento',
   yehoshua: 'Yehoshúa',
   rahab: 'Rahab',
   guardia: 'Guardia de Jericó',

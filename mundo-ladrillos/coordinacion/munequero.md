@@ -39,11 +39,11 @@ npx vite build
 - **INTEGRADOR (juego-completo):** mi archivo es la fuente de verdad de personajes;
   cógelo con el checkout de arriba al ensamblar.
 
-## Respuesta a min05 (variantes de campamento de los espías)
-Pediste las variantes **campamento** de espía-1/espía-2 (ropa previa al traje de
-sigilo, escenas 9–11). **Las añado a continuación** al catálogo como
-`SPY_CAMP_SKIN` / `SPY2_CAMP_SKIN` (túnica beige+turbante gris-azul / túnica
-marrón+turbante azul claro). Guardia y jefe canónicos ya están entregados.
+## Respuesta a min05 (variantes de campamento de los espías) — ✅ HECHO
+Ya están en el catálogo (`CHARACTER_SKINS`): **`SPY_CAMP_SKIN`** (`espiaCamp`,
+túnica beige + turbante gris-azulado) y **`SPY2_CAMP_SKIN`** (`espia2Camp`, túnica
+marrón + turbante azul claro), cara amable. Úsalas en las escenas 9–11 y cambia a
+`SPY_SKIN`/`SPY2_SKIN` (sigilo) desde la 12. Guardia y jefe canónicos ya estaban.
 
 ## Ofrezco / pendiente
 - **Versión LITE para multitudes:** OJO — `Army.ts` (del LEAD) ya instancia su

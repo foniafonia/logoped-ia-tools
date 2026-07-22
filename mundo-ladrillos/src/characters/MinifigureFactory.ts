@@ -108,6 +108,35 @@ export const SPY2_SKIN: MinifigureSkin = {
   accessory: 'sword'
 };
 
+/** Espía 1 — modo CAMPAMENTO (escenas 9–11, antes del traje de sigilo):
+ *  túnica beige, turbante gris azulado, cara amable. */
+export const SPY_CAMP_SKIN: MinifigureSkin = {
+  head: 0xf4d03f,
+  torso: 0xc9b083,      // túnica beige
+  belt: 0x8a6a3a,
+  legs: 0xb9a36f,
+  arms: 0xc9b083,
+  hands: 0xf4d03f,
+  headwear: 0x6f7f8c,   // turbante gris azulado
+  headStyle: 'turban',
+  emotion: 'happy',
+  accessory: 'none'
+};
+
+/** Espía 2 — modo CAMPAMENTO: túnica marrón, turbante azul claro. */
+export const SPY2_CAMP_SKIN: MinifigureSkin = {
+  head: 0xf4d03f,
+  torso: 0x7a5230,      // túnica marrón
+  belt: 0x5a3f22,
+  legs: 0x6e4a2c,
+  arms: 0x7a5230,
+  hands: 0xf4d03f,
+  headwear: 0x6f9fc4,   // turbante azul claro
+  headStyle: 'turban',
+  emotion: 'happy',
+  accessory: 'none'
+};
+
 /** Rahab: mujer de rasgos suaves; melena plateada larga, vestido humilde con
  *  falda acampanada, cara amable. */
 export const RAHAB_SKIN: MinifigureSkin = {
@@ -219,6 +248,8 @@ export const RABBI_SKIN: MinifigureSkin = {
 export const CHARACTER_SKINS: Record<string, MinifigureSkin> = {
   espia: SPY_SKIN,
   espia2: SPY2_SKIN,
+  espiaCamp: SPY_CAMP_SKIN,
+  espia2Camp: SPY2_CAMP_SKIN,
   yehoshua: YOSHUA_SKIN,
   rahab: RAHAB_SKIN,
   guardia: GUARD_SKIN,
