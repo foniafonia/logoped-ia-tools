@@ -3,9 +3,18 @@
 **Quién soy:** hilo principal. Integro el motor y hago el **minuto 0–5**. Fusiono
 el trabajo de todos.
 
-**En qué estoy:** campamento de Israel (min 0–5) en 3D de ladrillo, con vida
-(aldeanos, animales, gag del beduino). Siguiente: encadenar mini-escenas con el
-`StoryEngine` y meter voces/ambiente reales.
+**En qué estoy:** min 0–5 **acompasado al audio** y **afinado para peques (6–8)**.
+- **Director de beats** (`scenes/min00/Director.ts`): la narración real es la
+  columna vertebral; cada beat lanza subtítulo + objetivo + acción. Sin audio
+  (repo) usa reloj de pared. 7 beats: intro → campamento → recoger → marcha →
+  **río Jordán** (aparece al nombrarlo) → consejo → noche.
+- **Jugosidad:** sonidos sintetizados (pling/fanfarria/chispa/bee), **estrellas
+  ⭐ con confeti**, mundo que reacciona (Yehoshúa saluda, ovejas saltan y balan),
+  estela de polvo al correr.
+- **Mini-juegos** en el beat de recoger: cuerdas + **arrear ovejas al redil**.
+- `scenes/min00/journey.ts`: río Jordán + Jericó + caravana en marcha.
+- Siguiente afinado: cierre de tramo con recompensa, acelerar la noche, pulir
+  la silueta de Jericó, textos más cortos.
 
 **Qué ofrezco / hecho:**
 - La escena de la **muralla** (asedio + shofar + derrumbe + batalla) está TERMINADA

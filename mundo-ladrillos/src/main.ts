@@ -135,8 +135,29 @@ const beats: Beat[] = [
     obj: '', onEnter: () => { goNight = true; journey.caeLaNoche(); setTarget(null); }
   }
 ];
-const director = new Director(beats, null, () => { /* fin del tramo → enganchará con el min 5–10 */ });
+const director = new Director(beats, null, () => finDelTramo());
 (window as any).__director = director;
+
+// pantalla de recompensa al terminar el tramo (sensación de logro para el peque)
+function finDelTramo(): void {
+  director.confetti(60);
+  audio.sfxSuccess();
+  const fin = document.createElement('div');
+  fin.innerHTML =
+    '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px;max-width:520px">' +
+    '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b">¡Bien hecho!</div>' +
+    '<div style="font:800 40px system-ui;margin:14px 0">⭐ ' + director.starCount + '</div>' +
+    '<div style="opacity:.9;margin:0 0 20px">Has llevado al pueblo de Israel hasta el río Jordán.<br>Muy pronto: cruzar las aguas y entrar en Jericó.</div>' +
+    '<button id="reBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">↻ Volver a jugar</button></div>';
+  Object.assign(fin.style, {
+    position: 'fixed', inset: '0', zIndex: '60', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #23324f, #0a0f18 78%)',
+    opacity: '0', transition: 'opacity .6s'
+  } as CSSStyleDeclaration);
+  document.body.appendChild(fin);
+  requestAnimationFrame(() => { fin.style.opacity = '1'; });
+  fin.querySelector('#reBtn')?.addEventListener('pointerdown', () => location.reload());
+}
 
 // jugosidad: sonidos, estelas y reacciones
 let trailCd = 0;                 // temporizador de la estela de polvo
@@ -247,7 +268,7 @@ function animate(now: number): void {
   }
 
   // caída de la noche (rampa suave)
-  if (goNight && nightF < 1) nightF = Math.min(1, nightF + dt * 0.35);
+  if (goNight && nightF < 1) nightF = Math.min(1, nightF + dt * 0.5);
   if (nightF > 0) {
     (scene.background as THREE.Color).copy(DAY_SKY).lerp(NIGHT_SKY, nightF);
     (scene.fog as THREE.Fog).color.copy(DAY_SKY).lerp(NIGHT_SKY, nightF);
