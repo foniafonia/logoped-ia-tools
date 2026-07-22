@@ -54,8 +54,12 @@ const ground = createStuddedGround(600);
 (ground.material as THREE.MeshStandardMaterial).color = new THREE.Color(0x55504a); // apagado, de noche
 scene.add(ground);
 
+// Grupo "ciudad" 3D: se puede ocultar en escenas de PLANO FIJO (fondo real)
+const city = new THREE.Group();
+scene.add(city);
+
 const jericho = buildJericho(plastic);
-scene.add(jericho.group);
+city.add(jericho.group);
 
 // ---- Casas de la calle (ladrillo) + antorchas cálidas ----
 function buildHouse(color: number, w = 6, h = 5, d = 6): THREE.Group {
@@ -78,7 +82,7 @@ street.forEach(([x, z], i) => {
   const house = buildHouse(HOUSE_COLORS[i % HOUSE_COLORS.length]);
   house.position.set(x, 0, z);
   house.rotation.y = x < 0 ? 0.5 : -0.5;
-  scene.add(house);
+  city.add(house);
 });
 
 // Casa de Rahab: más grande, marcada y con un cordón rojo en la ventana
@@ -87,7 +91,7 @@ rahab.position.set(-18, 20, 0);
 rahab.rotation.y = 0.6;
 const cordon = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.6, 0.3), new THREE.MeshBasicMaterial({ color: 0xd12b2b }));
 cordon.position.set(-15.6, 4.2, 22.4);
-scene.add(rahab, cordon);
+city.add(rahab, cordon);
 
 // Antorchas cálidas dispersas
 for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, number]>) {
@@ -96,8 +100,16 @@ for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, n
   const post = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 4, 6), plastic.get(0x3a2a18));
   post.position.set(tx, 2, tz); post.castShadow = true;
   const light = new THREE.PointLight(0xffa64d, 5, 22, 2); light.position.set(tx, 4.4, tz);
-  scene.add(flame, post, light);
+  city.add(flame, post, light);
 }
+
+// --- Fondo real de la peli (plano fijo 2.5D): textura de fondo ---
+const texLoader = new THREE.TextureLoader();
+(window as any).__scene = scene;
+(window as any).__city = city;
+(window as any).__setBackdrop = (url: string): void => {
+  texLoader.load(url, (t) => { t.colorSpace = THREE.SRGBColorSpace; scene.background = t; });
+};
 
 // ---- Espía jugable ----
 const spy = createMinifigure(plastic, SPY_SKIN);
