@@ -66,6 +66,10 @@ fotogramas se usan **solo como REFERENCIA** para construir los escenarios en 3D.
   **fusiona** el trabajo de todos.
 - **Creador 5–10, 10–15, 15–20, 20–25, 25–29**: cada uno su tramo de 5 min.
 - **MUÑEQUERO**: personajes (`MinifigureFactory.ts`).
+- **INTEGRADOR / UNIFICADOR**: monta el **juego completo** juntando todas las
+  ramas en la suya (`claude/juego-completo`), **sin romper** el trabajo de nadie;
+  encadena los tramos, compila y entrega el jugable para el niño. Comunicación
+  **bidireccional** por el tablón (`coordinacion/integrador.md`). Ver detalle allí.
 - Todos **ven el repo** (ramas) y aprenden del trabajo de los demás.
 
 ---

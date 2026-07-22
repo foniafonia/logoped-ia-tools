@@ -66,6 +66,72 @@ export class AudioManager {
     };
   }
 
+  /**
+   * Reproduce la NARRACIÓN como "columna vertebral" (spine) del tramo y
+   * devuelve un reloj sincronizado: `elapsed()` da los segundos transcurridos
+   * del audio real. El juego se acompasa a ese reloj, beat a beat.
+   *
+   * Si el clip no existe (build del repo, sin audio de la peli), `ready()`
+   * nunca se pone a true y el Director usa su reloj de pared como respaldo:
+   * la secuencia se reproduce igual, solo que sin voz.
+   */
+  playSpine(name: string, volume = 1): {
+    ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean; stop: () => void;
+  } {
+    const st = { started: false, startAt: 0, dur: 0, src: null as AudioBufferSourceNode | null, stopped: false };
+    const startWhenReady = (tries = 0): void => {
+      if (st.stopped || !this.ac) return;
+      const buf = this.buffers.get(name);
+      if (!buf) { if (tries < 40) setTimeout(() => startWhenReady(tries + 1), 100); return; }
+      const src = this.ac.createBufferSource();
+      src.buffer = buf;
+      const g = this.ac.createGain(); g.gain.value = volume;
+      src.connect(g); g.connect(this.ac.destination);
+      try { src.start(); } catch { /* noop */ }
+      st.src = src; st.startAt = this.ac.currentTime; st.dur = buf.duration; st.started = true;
+    };
+    startWhenReady();
+    return {
+      ready: () => st.started,
+      elapsed: () => (st.started && this.ac ? this.ac.currentTime - st.startAt : 0),
+      duration: () => st.dur,
+      ended: () => st.started && !!this.ac && this.ac.currentTime - st.startAt >= st.dur,
+      stop: () => { st.stopped = true; try { st.src?.stop(); } catch { /* noop */ } }
+    };
+  }
+
+  // ----------------------------------------------------------------------
+  // SFX de JUEGO sintetizados (sin archivos): premian cada acción con sonido.
+  // Funcionan siempre (también en el build del repo, sin audio de la peli).
+  // ----------------------------------------------------------------------
+  private tone(freq: number, t0: number, dur: number, type: OscillatorType = 'triangle', vol = 0.2): void {
+    if (!this.ac) return;
+    const o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(this.ac.destination);
+    o.start(t0); o.stop(t0 + dur + 0.03);
+  }
+  /** "pling" al recoger algo. */
+  sfxPickup(): void { if (!this.ac) return; const t = this.ac.currentTime; this.tone(680, t, 0.10, 'square', 0.16); this.tone(1020, t + 0.06, 0.12, 'square', 0.14); }
+  /** fanfarria corta al lograr un objetivo. */
+  sfxSuccess(): void { if (!this.ac) return; const t = this.ac.currentTime; [523, 659, 784, 1047].forEach((f, i) => this.tone(f, t + i * 0.09, 0.2, 'triangle', 0.2)); }
+  /** chispa/brillo (revelaciones, saludo). */
+  sfxSparkle(): void { if (!this.ac) return; const t = this.ac.currentTime; this.tone(1320, t, 0.12, 'sine', 0.12); this.tone(1760, t + 0.05, 0.15, 'sine', 0.1); }
+  /** "bee" de oveja (con vibrato). */
+  sfxAnimal(): void {
+    if (!this.ac) return; const t = this.ac.currentTime;
+    const o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(360, t); o.frequency.linearRampToValueAtTime(250, t + 0.26);
+    const lfo = this.ac.createOscillator(), lg = this.ac.createGain();
+    lfo.frequency.value = 19; lg.gain.value = 20; lfo.connect(lg); lg.connect(o.frequency);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.14, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.27);
+    o.connect(g); g.connect(this.ac.destination);
+    lfo.start(t); lfo.stop(t + 0.3); o.start(t); o.stop(t + 0.3);
+  }
+
   play(name: string, volume = 1, stopAfter?: number): boolean {
     if (!this.ac) return false;
     if (this.ac.state === 'suspended') void this.ac.resume();

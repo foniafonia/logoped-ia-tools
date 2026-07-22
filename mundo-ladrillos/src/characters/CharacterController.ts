@@ -18,6 +18,9 @@ function lerpAngle(a: number, b: number, t: number): number {
 export class CharacterController {
   pos = new THREE.Vector3(0, 0, COURT.back + ROAD.len * 0.62);
   touch = { x: 0, z: 0, jump: false }; // entrada táctil (joystick + botón)
+  /** Límites del terreno. Por defecto: pasillo/plaza de la muralla. Escenas
+   *  abiertas (campamento, viaje al río) fijan una caja libre con setBounds(). */
+  bounds: { minX: number; maxX: number; minZ: number; maxZ: number } | null = null;
   private vy = 0;
   private facing = Math.PI; // mira hacia la cámara al empezar
   private grounded = true;
@@ -64,10 +67,15 @@ export class CharacterController {
     this.pos.y += this.vy * dt;
     if (this.pos.y <= 0) { this.pos.y = 0; this.vy = 0; this.grounded = true; }
 
-    // acotado: camino estrecho fuera, plaza ancha dentro (no salir de los muros)
-    this.pos.z = Math.max(3.5, Math.min(COURT.back + ROAD.len - 4, this.pos.z));
-    const halfX = this.pos.z > COURT.back + 1 ? ROAD.half - 2.5 : COURT.half - 2.5;
-    this.pos.x = Math.max(-halfX, Math.min(halfX, this.pos.x));
+    // acotado: caja libre (escenas abiertas) o pasillo/plaza de la muralla
+    if (this.bounds) {
+      this.pos.x = Math.max(this.bounds.minX, Math.min(this.bounds.maxX, this.pos.x));
+      this.pos.z = Math.max(this.bounds.minZ, Math.min(this.bounds.maxZ, this.pos.z));
+    } else {
+      this.pos.z = Math.max(3.5, Math.min(COURT.back + ROAD.len - 4, this.pos.z));
+      const halfX = this.pos.z > COURT.back + 1 ? ROAD.half - 2.5 : COURT.half - 2.5;
+      this.pos.x = Math.max(-halfX, Math.min(halfX, this.pos.x));
+    }
 
     this.fig.root.position.copy(this.pos);
     this.fig.root.rotation.y = this.facing;

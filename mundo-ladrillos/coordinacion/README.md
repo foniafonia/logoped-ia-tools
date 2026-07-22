@@ -25,6 +25,12 @@ Así que nos comunicamos de forma **asíncrona a través del repo**:
     MUÑEQUERO lo lee y lo entrega.
 - **LEAD** integra las escenas de cada creador (`src/scenes/minXX/`) en el
   `StoryEngine` y fusiona.
+- **INTEGRADOR / UNIFICADOR** (`coordinacion/integrador.md`, rama
+  `claude/juego-completo`): monta el **juego completo** juntando TODAS las ramas
+  en la suya, **sin tocar** las de los demás. Resuelve conflictos en su rama,
+  encadena los tramos, compila y entrega el jugable para el niño. Se comunica en
+  **ambos sentidos**: deja bugs/peticiones en su archivo y lee a todos con
+  `git fetch --all`. **Nunca** hace push a la rama de otro.
 
 ## Regla de oro (recordatorio)
 Todo en **mundo 3D de ladrillo**. 🚫 Nada de fondos-foto planos. Personajes

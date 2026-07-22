@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { normalizeGeometry } from '../../bricks/BrickGeometryFactory';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
-import { MinifigureSkin, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
+import { MinifigureSkin, Minifigure, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -14,6 +14,7 @@ export const VILLAGER_SKIN: MinifigureSkin = {
 export interface CampBuild {
   group: THREE.Group;
   ropes: THREE.Mesh[];      // cuerdas a recoger (objetivo)
+  yehoshua: Minifigure;     // el líder sobre la tarima (saluda al acercarte)
 }
 
 /**
@@ -26,8 +27,9 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
 
   // --- Tienda de campaña (cono de 6 lados + remate), instanciada ---
   const tentGeo = mergeGeometries([
-    normalizeGeometry(new THREE.CylinderGeometry(0.0, 3.2, 4.4, 6).translate(0, 2.2, 0)),   // lona
-    normalizeGeometry(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 5).translate(0, 4.5, 0))  // palo/remate
+    normalizeGeometry(new THREE.CylinderGeometry(3.15, 3.5, 0.9, 6).translate(0, 0.45, 0)),  // falda/base
+    normalizeGeometry(new THREE.CylinderGeometry(0.0, 3.2, 4.2, 6).translate(0, 2.3, 0)),    // lona
+    normalizeGeometry(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 5).translate(0, 4.5, 0))   // palo/remate
   ], false)!;
   const tentMat = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 });
   const cloth = [0x9a9184, 0x8a7a5a, 0xb9a36f, 0x6f6558, 0xa8926a];
@@ -111,6 +113,18 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     ropes.push(rope);
   }
 
+  // --- Estandartes de las tribus (poste + bandera de color) ---
+  const poleMat = plastic.get(0x5a4028);
+  const flagColors = [0x2f6db0, 0xc0392b, 0x2e8b57, 0xe8b04b, 0x8e44ad, 0xd9702a];
+  const bannerSpots: Array<[number, number]> = [[-8, 12], [8, 13], [-16, 24], [18, 26], [0, 40], [-24, 38]];
+  bannerSpots.forEach(([bx, bz], i) => {
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 6, 6), poleMat);
+    pole.position.set(bx, 3, bz); pole.castShadow = true;
+    const flag = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.1, 0.1), plastic.get(flagColors[i % flagColors.length]));
+    flag.position.set(bx + 0.95, 5.2, bz); flag.castShadow = true;
+    group.add(pole, flag);
+  });
+
   scene.add(group);
-  return { group, ropes };
+  return { group, ropes, yehoshua: yoshua };
 }
