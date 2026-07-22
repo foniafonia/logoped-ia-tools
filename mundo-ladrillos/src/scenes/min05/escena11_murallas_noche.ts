@@ -1,26 +1,30 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
-import { SPY_SKIN, SPY2_SKIN } from '../../characters/MinifigureFactory';
 import { BrickPalette } from '../../materials/BrickPalette';
 import { buildStraightWallLike } from './props/Walls';
-import { buildTorch, buildReeds, buildRock, studdedPlate } from './props/BrickProps';
+import { buildReeds, buildRock, buildPalm, studdedPlate } from './props/BrickProps';
+import { buildBrazier, buildBanner } from './props/NightAmbience';
+import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
+import { ESPIA2_CAMP } from './skins';
 
 /**
  * ESCENA 11 (440–449s) — MURALLAS DE JERICÓ DE NOCHE (establecimiento).
- * Plano nocturno de la muralla, con antorchas encendidas y guardias arriba. Los
- * dos espías llegan por el cañaveral. Objetivo suave (jugable): avanza hasta el
+ * Noche azul cálidamente iluminada por braseros (como el plano real): la muralla
+ * enorme, guardias patrullando la coronación con casco cónico y lanza. Los dos
+ * espías (aún de campamento) llegan por el cañaveral. Objetivo: alcanzar el
  * puesto de observación oculto entre los juncos para estudiar la muralla.
  */
 export const escena11: Min05Scene = {
   id: 'm05_11_murallas_noche',
   numero: 11,
   titulo: 'Murallas de noche',
-  subtitulo: 'De noche, la fortaleza de Jericó se alza enorme e iluminada por antorchas.',
-  jugador: 'spy',
+  subtitulo: 'De noche, la fortaleza de Jericó se alza enorme, iluminada por los braseros de la muralla.',
+  jugador: 'spy_camp',
   noche: true,
+  ambiente: 'night',
   spawn: { x: -16, z: -18 },
-  objetivo: { tipo: 'ir_a', texto: 'Llega al puesto de observación entre los juncos', target: { x: 10, z: -6 }, radio: 3.5 },
+  objetivo: { tipo: 'ir_a', texto: 'Llega al puesto de observación entre los juncos', target: { x: 10, z: -5 }, radio: 3.5 },
   exito: 'Los espías estudian la muralla desde las sombras',
   camara: { yaw: Math.PI + 0.12, pitch: 0.3, dist: 36 },
 
@@ -29,54 +33,47 @@ export const escena11: Min05Scene = {
     const group = new THREE.Group();
 
     const ground = studdedPlate(plastic, 90, 60, BrickPalette.DARK_SAND, false);
-    ground.position.set(0, -0.4, -6);
-    group.add(ground);
+    ground.position.set(0, -0.4, -6); group.add(ground);
 
-    // gran muralla al fondo (z ~ 20), con puerta cerrada
+    // muralla al fondo (z ~ 22) con puerta cerrada — sólida (colisión)
     const wall = buildStraightWallLike(plastic, 80, 14, true);
-    wall.position.set(0, 0, 22);
-    group.add(wall);
+    wall.position.set(0, 0, 22); group.add(wall);
+    ctx.addObstacle(0, 23, 40, 2);
 
-    // antorchas a lo largo de la muralla
-    const torches: Array<{ update: (t: number) => void }> = [];
-    for (const x of [-30, -14, 14, 30]) {
-      const tr = buildTorch(plastic, x, 18, 6);
-      group.add(tr.group); torches.push(tr);
-    }
-    // antorchas cercanas al camino de aproximación
-    const tr1 = buildTorch(plastic, -6, 4, 5); group.add(tr1.group); torches.push(tr1);
+    // braseros encendidos a lo largo de la coronación + estandartes
+    const braziers: Array<{ update: (t: number) => void }> = [];
+    for (const x of [-30, -14, 14, 30]) { const br = buildBrazier(plastic, x, 18, 21); group.add(br.group); braziers.push(br); }
+    for (const x of [-22, 0, 22]) { const b = buildBanner(plastic, BrickPalette.DARK_RED, 1.6, 5); b.position.set(x, 9, 20.4); group.add(b); }
 
-    // guardias patrullando la coronación de la muralla
-    const wg1 = new Npc(plastic, { ...SPY2_SKIN, torso: 0x8a3a2a, headwear: 0x6b2a1e, headStyle: 'turban' }, -10, 22, Math.PI);
-    const wg2 = new Npc(plastic, { ...SPY2_SKIN, torso: 0x3a4a6b, headwear: 0x2a3550, headStyle: 'turban' }, 12, 22, Math.PI);
+    // guardias patrullando la coronación (con casco + lanza), fieles a la peli
+    const wg1 = buildGuard(plastic, -10, 22, Math.PI);
+    const wg2 = buildGuard(plastic, 12, 22, Math.PI, true); // el jefe con plumas
     wg1.root.position.y = 14 * 1.2 + 0.6; wg2.root.position.y = 14 * 1.2 + 0.6;
     wg1.setPatrol([{ x: -20, z: 22 }, { x: 4, z: 22 }], 3);
-    wg2.setPatrol([{ x: 20, z: 22 }, { x: -2, z: 22 }], 2.6);
+    wg2.setPatrol([{ x: 20, z: 22 }, { x: -2, z: 22 }], 2.4);
     group.add(wg1.root, wg2.root);
 
-    // cañaveral y rocas donde se esconden los espías (el objetivo)
-    group.add(buildReeds(plastic, 10, -6, 14));
+    // cañaveral + rocas (escondrijo = objetivo) con colisión en las rocas
+    group.add(buildReeds(plastic, 10, -5, 14));
     group.add(buildReeds(plastic, -20, -8, 10));
-    group.add(buildRock(plastic, 1.3));
-    const rock2 = buildRock(plastic, 0.9); rock2.position.set(-24, 0, -10); group.add(rock2);
+    const r1 = buildRock(plastic, 1.3); group.add(r1); ctx.addObstacle(0, 0, 2.5, 2);
+    const r2 = buildRock(plastic, 0.9); r2.position.set(-24, 0, -10); group.add(r2); ctx.addObstacle(-24, -10, 2, 1.5);
+    [[-30, -14], [26, -12]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 8)); ctx.addObstacle(x, z, 1, 1); });
 
     // el compañero espía acompaña al jugador
-    const buddy = new Npc(plastic, SPY2_SKIN, -20, -20, 0.4);
-    buddy.setPatrol([{ x: -20, z: -20 }, { x: -12, z: -12 }, { x: 4, z: -8 }], 1.8);
+    const buddy = new Npc(plastic, ESPIA2_CAMP, -20, -20, 0.4);
+    buddy.setPatrol([{ x: -20, z: -20 }, { x: -12, z: -12 }, { x: 4, z: -7 }], 1.8);
     group.add(buddy.root);
 
     ctx.scene.add(group);
 
+    const tgt = escena11.objetivo.target!;
+    const total = Math.hypot(escena11.spawn.x - tgt.x, escena11.spawn.z - tgt.z);
     return {
       group,
-      update(dt, t) {
-        for (const tr of torches) tr.update(t);
-        wg1.update(dt); wg2.update(dt); buddy.update(dt);
-      },
-      isDone(p) {
-        const o = escena11.objetivo.target!;
-        return Math.hypot(p.x - o.x, p.z - o.z) < (escena11.objetivo.radio ?? 3.5);
-      }
+      update(dt, t) { for (const br of braziers) br.update(t); wg1.update(dt); wg2.update(dt); buddy.update(dt); },
+      hud() { const p = ctx.getPlayer(); return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1) }; },
+      isDone(p) { return Math.hypot(p.x - tgt.x, p.z - tgt.z) < (escena11.objetivo.radio ?? 3.5); }
     };
   }
 };

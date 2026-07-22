@@ -1,20 +1,28 @@
 import * as THREE from 'three';
 import { Minifigure } from '../../../characters/MinifigureFactory';
 
+export interface Obstacle { x: number; z: number; hw: number; hd: number; }
+
 /**
  * Controlador de jugador LIBRE para el preview del tramo (independiente del
- * CharacterController compartido, que acota el movimiento al recinto de la
- * muralla). Movimiento relativo a la cámara, salto con gravedad y límites de
- * escena configurables. El lead puede sustituirlo por el CharacterController
- * compartido al integrar; aquí necesitamos límites por escena.
+ * CharacterController compartido, que acota al recinto de la muralla).
+ * Movimiento relativo a la cámara, salto con gravedad, límites por escena y
+ * COLISIONES contra obstáculos (círculo del jugador vs cajas AABB). Expone
+ * eventos (moviéndose / corriendo / aterrizó) para el sonido.
  */
 export class PreviewController {
   pos = new THREE.Vector3(0, 0, 0);
-  bounds = { minX: -60, maxX: 60, minZ: -60, maxZ: 60 };
+  bounds = { minX: -70, maxX: 70, minZ: -70, maxZ: 70 };
+  obstacles: Obstacle[] = [];
+  moving = false;
+  running = false;
+  justJumped = false;
+  justLanded = false;
   private vy = 0;
   private facing = Math.PI;
   private grounded = true;
   private keys = new Set<string>();
+  private radius = 1.1;
   touch = { x: 0, z: 0, jump: false };
 
   constructor(private fig: Minifigure) {
@@ -26,16 +34,30 @@ export class PreviewController {
   }
 
   teleport(x: number, z: number): void {
-    this.pos.set(x, 0, z);
-    this.vy = 0; this.grounded = true;
+    this.pos.set(x, 0, z); this.vy = 0; this.grounded = true;
     this.fig.root.position.copy(this.pos);
   }
+  setBounds(minX: number, maxX: number, minZ: number, maxZ: number): void { this.bounds = { minX, maxX, minZ, maxZ }; }
+  clearObstacles(): void { this.obstacles = []; }
+  addObstacle(x: number, z: number, hw: number, hd: number): void { this.obstacles.push({ x, z, hw, hd }); }
 
-  setBounds(minX: number, maxX: number, minZ: number, maxZ: number): void {
-    this.bounds = { minX, maxX, minZ, maxZ };
+  /** Empuja al jugador fuera de cada caja con la que solape (resolución simple). */
+  private resolveCollisions(): void {
+    for (const o of this.obstacles) {
+      const dx = this.pos.x - o.x;
+      const dz = this.pos.z - o.z;
+      const px = o.hw + this.radius - Math.abs(dx);
+      const pz = o.hd + this.radius - Math.abs(dz);
+      if (px > 0 && pz > 0) {
+        // expulsa por el eje de menor penetración
+        if (px < pz) this.pos.x = o.x + Math.sign(dx || 1) * (o.hw + this.radius);
+        else this.pos.z = o.z + Math.sign(dz || 1) * (o.hd + this.radius);
+      }
+    }
   }
 
   update(dt: number, camYaw: number): boolean {
+    this.justJumped = false; this.justLanded = false;
     let ix = 0, iz = 0;
     if (this.keys.has('KeyW') || this.keys.has('ArrowUp')) iz -= 1;
     if (this.keys.has('KeyS') || this.keys.has('ArrowDown')) iz += 1;
@@ -51,17 +73,18 @@ export class PreviewController {
       const s = Math.sin(camYaw), c = Math.cos(camYaw);
       const dx = ix * c + iz * s;
       const dz = iz * c - ix * s;
-      const speed = run ? 9 : 5.2;
+      const speed = run ? 8.5 : 5;
       this.pos.x += dx * speed * dt;
       this.pos.z += dz * speed * dt;
       this.facing += (Math.atan2(dx, dz) - this.facing) * 0.25;
     }
 
-    if (this.keys.has('Space') && this.grounded) { this.vy = 9.5; this.grounded = false; }
+    if (this.keys.has('Space') && this.grounded) { this.vy = 9.5; this.grounded = false; this.justJumped = true; }
     this.vy -= 26 * dt;
     this.pos.y += this.vy * dt;
-    if (this.pos.y <= 0) { this.pos.y = 0; this.vy = 0; this.grounded = true; }
+    if (this.pos.y <= 0) { if (!this.grounded) this.justLanded = true; this.pos.y = 0; this.vy = 0; this.grounded = true; }
 
+    this.resolveCollisions();
     const b = this.bounds;
     this.pos.x = Math.max(b.minX, Math.min(b.maxX, this.pos.x));
     this.pos.z = Math.max(b.minZ, Math.min(b.maxZ, this.pos.z));
@@ -69,6 +92,7 @@ export class PreviewController {
     this.fig.root.position.copy(this.pos);
     this.fig.root.rotation.y = this.facing;
     this.fig.update(dt, moving && this.grounded, run ? 1.4 : 1);
+    this.moving = moving && this.grounded; this.running = run;
     return moving;
   }
 }

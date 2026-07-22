@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
+import { SoundEngine } from './audio/SoundEngine';
 
 /**
  * TRAMO MINUTO 5–10 · "El Jordán y los dos espías" (CREADOR 5–10).
@@ -22,6 +23,25 @@ export interface SceneContext {
   setPlayer: (x: number, z: number) => void;
   /** Marca el objetivo como cumplido de forma externa (mecánicas propias). */
   markDone: () => void;
+  /** Sonido procedural (ambiente + efectos). */
+  sound: SoundEngine;
+  /** True UNA vez cuando el jugador pulsa la acción (E / botón) este frame. */
+  wantsInteract: () => boolean;
+  /** Registra un obstáculo sólido (AABB en el plano XZ) para las colisiones. */
+  addObstacle: (x: number, z: number, halfW: number, halfD: number) => void;
+  /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
+  setPlayerSkin: (which: PlayerSkinId) => void;
+}
+
+/** Skins de jugador disponibles (campamento vs sigilo). */
+export type PlayerSkinId = 'yoshua' | 'spy' | 'spy2' | 'spy_camp' | 'spy2_camp';
+
+/** Datos para las barras/indicadores del HUD (detección, equilibrio, progreso). */
+export interface HudState {
+  alarm?: number;     // 0..1 nivel de alarma (sigilo)
+  balance?: number;   // -1..1 desvío del equilibrio (cuerda)
+  progress?: number;  // 0..1 progreso del objetivo
+  prompt?: string;    // aviso de acción ("Pulsa E para…")
 }
 
 /**
@@ -64,6 +84,8 @@ export interface SceneInstance {
   isDone(player: THREE.Vector3): boolean;
   /** Texto de estado opcional para el HUD (p. ej. "¡Te han visto!"). */
   status?(): string | null;
+  /** Barras/indicadores del HUD (detección, equilibrio, progreso, prompt). */
+  hud?(): HudState;
   /** Libera geometrías/materiales propios al salir de la escena. */
   dispose?(): void;
 }
@@ -78,9 +100,10 @@ export interface Min05Scene {
   exito: string;            // mensaje al lograrlo
   spawn: { x: number; z: number };
   noche?: boolean;          // ambiente nocturno (11–16 son de noche)
+  ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de sonido/luz
   camara?: CameraHint;
-  /** Skin del jugador en esta escena ("yoshua" | "spy" | "spy2"). */
-  jugador?: 'yoshua' | 'spy' | 'spy2';
+  /** Skin del jugador en esta escena (campamento vs sigilo). */
+  jugador?: PlayerSkinId;
   /** Construye el escenario 3D + NPCs. Devuelve la instancia viva. */
   build(ctx: SceneContext): SceneInstance;
 }

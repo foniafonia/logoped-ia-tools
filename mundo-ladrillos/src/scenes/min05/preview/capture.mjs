@@ -29,12 +29,12 @@ import { mkdirSync } from 'node:fs';
 mkdirSync(OUT, { recursive: true });
 
 for (const n of NUMS) {
-  const url = `${BASE}${PATH}?scene=${n}`;
+  const url = `${BASE}${PATH}?scene=${n}&shot=1`;
   await page.goto(url, { waitUntil: 'load', timeout: 30000 });
   // esperar a que el motor y la escena estén listos
   await page.waitForFunction(() => window.__READY__ === true && window.__SCENE_READY__ === true, { timeout: 20000 });
-  // dejar correr unos frames (animaciones, antorchas, conos)
-  await page.waitForTimeout(1400);
+  // dejar correr unos frames (animaciones, braseros, conos, cámara)
+  await page.waitForTimeout(1800);
   const file = join(OUT, `escena-${String(n).padStart(2, '0')}.png`);
   await page.screenshot({ path: file });
   console.log('✓', file);
