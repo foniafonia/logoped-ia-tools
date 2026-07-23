@@ -1,0 +1,1676 @@
+{
+  "pelicula": "Construyendo la Conquista de Israel (Estilo Ladrillos LEGO)",
+  "duracion_seg": 1750,
+  "personajes": [
+    {
+      "id": "rabino_director",
+      "nombre": "Rabino / Director",
+      "piel": "#F1C40F",
+      "ropa": "Traje formal de saco y pantalón azul marino con camisa blanca y corbata gris",
+      "colores": [
+        "#1B4F72",
+        "#FFFFFF",
+        "#7F8C8D"
+      ],
+      "tocado": "Kipá negra de ladrillo liso",
+      "barba": "Barba y bigote cortos color gris oscuro, con patillas integradas. Lleva lentes de marco negro rectangulares",
+      "objetos": [
+        "Ninguno"
+      ],
+      "notas": "Presenta y dirige la película en el set de grabación al inicio y final"
+    },
+    {
+      "id": "beduino",
+      "nombre": "Beduino Cómico",
+      "piel": "#F1C40F",
+      "ropa": "Túnica rústica verde oliva cruzada con cinturón de cuerda marrón y pantalones marrón oscuro",
+      "colores": [
+        "#1E8449",
+        "#5D4037",
+        "#2E4053"
+      ],
+      "tocado": "Keffiyeh de ladrillo color arena con banda marrón",
+      "barba": "Barba corta y bigote color marrón oscuro con expresión de enojo/esfuerzo",
+      "objetos": [
+        "Saco de dormir de tela",
+        "Cuerda de amarre",
+        "Carnero / Cabra de LEGO"
+      ],
+      "notes": "Personaje recurrente que sufre accidentes con su camello sobrecargado, lodo y tesoros"
+    },
+    {
+      "id": "yehoshua",
+      "nombre": "Yehoshua (Josué)",
+      "piel": "#F1C40F",
+      "ropa": "Túnica azul real cruzada con mangas cortas, cinturón marrón y pantalones marrón claro",
+      "colores": [
+        "#2980B9",
+        "#8D4F2A",
+        "#D35400"
+      ],
+      "tocado": "Cinta o banda azul tejida con patrones blancos en el cabello",
+      "barba": "Barba muy larga y frondosa color blanco canoso con bigote largo",
+      "objetos": [
+        "Vara de madera larga",
+        "Espada de bronce plana"
+      ],
+      "notes": "Líder del pueblo de Israel"
+    },
+    {
+      "id": "espia_negro",
+      "nombre": "Espía Israelí (Traje Negro)",
+      "piel": "#F1C40F",
+      "ropa": "Ropa de viaje marrón claro con chaleco azul; luego cambia a un traje de sigilo/ninja negro con detalles de armadura impresos",
+      "colores": [
+        "#784212",
+        "#1B2631",
+        "#D5F5E3"
+      ],
+      "tocado": "Turbante gris azulado; luego cambia a pasamontañas de sigilo negro con aberturas para los ojos",
+      "barba": "Barba corta marrón claro con bigote fino",
+      "objetos": [
+        "Cuerda de escape",
+        "Vaso de LEGO con café",
+        "Escudo redondo de bronce"
+      ],
+      "notes": "Uno de los dos espías enviados a Jericó"
+    },
+    {
+      "id": "espia_gris",
+      "nombre": "Espía Israelí (Traje Gris)",
+      "piel": "#F1C40F",
+      "ropa": "Ropa de viaje marrón claro con bufanda azul; luego cambia a traje de sigilo gris oscuro con placas tácticas de ladrillos",
+      "colores": [
+        "#784212",
+        "#566573",
+        "#2E4053"
+      ],
+      "tocado": "Turbante de viaje marrón claro; luego cambia a pasamontañas gris oscuro con visor",
+      "barba": "Afeitado, cara juvenil con expresión de concentración",
+      "objetos": [
+        "Espada corta de LEGO",
+        "Cuerda",
+        "Telescopio de latón"
+      ],
+      "notes": "El segundo espía enviado a Jericó"
+    },
+    {
+      "id": "rahab",
+      "nombre": "Rahab",
+      "piel": "#F1C40F",
+      "ropa": "Vestido rústico de corte largo color arena con un chal gris cruzado sobre los hombros",
+      "colores": [
+        "#E5E7E9",
+        "#BDC3C7",
+        "#909497"
+      ],
+      "tocado": "Cabello largo y canoso color gris claro recogido atrás con una banda gris",
+      "barba": "Ninguna",
+      "objetos": [
+        "Jarra de barro",
+        "Cordón rojo de hilo grueso",
+        "Taza de café"
+      ],
+      "notes": "Propietaria de la posada en las murallas de Jericó que ayuda a los espías"
+    },
+    {
+      "id": "guardia_jerico_jefe",
+      "nombre": "Jefe de Guardia de Jericó",
+      "piel": "#F1C40F",
+      "ropa": "Túnica de franjas rojas y amarillas verticales con chaleco de cuero tachonado",
+      "colores": [
+        "#C0392B",
+        "#F1C40F",
+        "#34495E"
+      ],
+      "tocado": "Casco de metal cónico plateado con protector de nariz y pluma decorativa",
+      "barba": "Barba rubia recortada cuadrada",
+      "objetos": [
+        "Hacha de batalla de doble filo",
+        "Linterna de aceite con ladrillo translúcido amarillo"
+      ],
+      "notes": "Líder de la patrulla nocturna que persigue a los espías"
+    },
+    {
+      "id": "guardia_jerico_comun",
+      "nombre": "Guardia de Jericó",
+      "piel": "#F1C40F",
+      "ropa": "Cota de malla impresa con faldón marrón y cinturón de cuero ancho",
+      "colores": [
+        "#7F8C8D",
+        "#D35400",
+        "#2C3E50"
+      ],
+      "tocado": "Casco de hierro semiesférico liso",
+      "barba": "Bigote negro grueso y patillas anchas",
+      "objetos": [
+        "Lanza larga con punta plateada",
+        "Escudo redondo con grabado de león"
+      ],
+      "notes": "Soldado estándar de la guarnición de Jericó"
+    },
+    {
+      "id": "cohen_gadol",
+      "nombre": "Sacerdote (Cohen)",
+      "piel": "#F1C40F",
+      "ropa": "Túnica ceremonial blanca con mangas largas, decorada con un pectoral (Pectoral del Juicio) multicolor impreso en el pecho",
+      "colores": [
+        "#FFB100",
+        "#E1341E",
+        "#0B2545",
+        "#F4F5F7"
+      ],
+      "tocado": "Turbante sacerdotal blanco tipo mitra alta",
+      "barba": "Barba larga negra y poblada",
+      "objetos": [
+        "Shofar largo de cuerno de carnero (ladrillo curvo color beige)"
+      ],
+      "notes": "Sacerdote que lidera el Arca de la Alianza"
+    }
+  ],
+  "escenarios": [
+    {
+      "id": "set_grabacion",
+      "nombre": "Estudio de Cine de Ladrillos",
+      "descripcion": "Estudio con paredes grises acústicas con rejilla de LEGO. En el centro hay una mesa de control con computadora, micrófonos de jirafa, focos de iluminación profesional de ladrillos amarillos y negros, cámaras de cine sobre rieles y una claqueta en el suelo",
+      "arquitectura": "Estudio moderno cerrado con vigas técnicas aéreas expuestas",
+      "hora_del_dia": "Interior / Noche",
+      "luz": "Focalizada y artificial con focos colgantes directos",
+      "paleta": [
+        "#1C2833",
+        "#7F8C8D",
+        "#F4D03F",
+        "#1A5276"
+      ],
+      "referencia_seg": 15
+    },
+    {
+      "id": "camino_desierto",
+      "nombre": "Cañón y Camino del Desierto",
+      "descripcion": "Camino de tierra rodeado de colinas de arena hechas de placas planas superpuestas (tan/arena). Montañas de bloques apilados simulando roca tallada en la lejanía. Algunos arbustos desérticos pequeños de tres hojas verdes",
+      "arquitectura": "Formaciones rocosas naturales de cañón erosionado",
+      "hora_del_dia": "Día",
+      "luz": "Cálida de sol brillante de fondo",
+      "paleta": [
+        "#F9E79F",
+        "#F5B041",
+        "#196F3D",
+        "#A04000"
+      ],
+      "referencia_seg": 25
+    },
+    {
+      "id": "campamento_israel",
+      "nombre": "Campamento de las Tribus de Israel",
+      "descripcion": "Cientos de tiendas de campaña de tela rústica gris y marrón con soportes de postes de madera. Fogatas encendidas con ladrillos naranjas translúcidos. Corrales con ovejas, asnos y camellos de ladrillos. Una valla perimetral de madera delimita el Tabernáculo al fondo",
+      "arquitectura": "Campamento nómada masivo",
+      "hora_del_dia": "Atardecer / Amanecer",
+      "luz": "Luz dorada de sol poniente con destellos solares en el horizonte",
+      "paleta": [
+        "#EDBB99",
+        "#D35400",
+        "#34495E",
+        "#E5E7E9"
+      ],
+      "referencia_seg": 35
+    },
+    {
+      "id": "orilla_jordan",
+      "nombre": "Riberas del Río Jordán",
+      "descripcion": "El cauce del río de color azul brillante translúcido con olas blancas de ladrillo. Palmeras con hojas verdes flexibles y troncos marrones curvos a los lados. Al fondo se divisa la silueta fortificada de Jericó",
+      "arquitectura": "Ribera natural con cultivos verdes ordenados a las orillas",
+      "hora_del_dia": "Atardecer",
+      "luz": "Luz contra el sol reflejada sobre el agua translúcida",
+      "paleta": [
+        "#5DADE2",
+        "#F4D03F",
+        "#1D8348",
+        "#2C3E50"
+      ],
+      "referencia_seg": 307
+    },
+    {
+      "id": "murallas_jerico",
+      "nombre": "Fortaleza y Puerta de Jericó",
+      "descripcion": "Inmensas murallas de ladrillo color beige con almenas y torres de vigilancia. Portón doble de madera reforzada con bisagras negras. Linternas y antorchas con fuegos de LEGO encendidos a los lados de la entrada",
+      "arquitectura": "Murallas de asedio masivas, torres cuadradas altas con ventanas arqueadas",
+      "hora_del_dia": "Noche",
+      "luz": "Oscuridad con puntos de luz focalizados de antorchas amarillas",
+      "paleta": [
+        "#1A252C",
+        "#D5F5E3",
+        "#935116",
+        "#F1C40F"
+      ],
+      "referencia_seg": 440
+    },
+    {
+      "id": "taberna_rahab",
+      "nombre": "Interior del Restaurante de Rahab",
+      "descripcion": "Establecimiento acogedor con estanterías llenas de vasijas, tarros e ingredientes de LEGO. Mesas circulares con jarras transparentes llenas de café humeante (humo de algodón blanco). Un tapiz rústico colgando en la pared con un patrón geométrico",
+      "arquitectura": "Interior de adobe con vigas de soporte de madera y techos de arco de medio punto",
+      "hora_del_dia": "Noche",
+      "luz": "Luz tenue e íntima proveniente de lámparas de aceite sobre las mesas",
+      "paleta": [
+        "#51361A",
+        "#F39C12",
+        "#979A9A",
+        "#1A252C"
+      ],
+      "referencia_seg": 705
+    },
+    {
+      "id": "balcon_rahab",
+      "nombre": "Balcón en la Muralla de Rahab",
+      "descripcion": "Balcón de madera que sobresale de la muralla exterior de Jericó. Al fondo se ve la silueta nocturna de la ciudad iluminada y la luna llena brillando en un cielo estrellado",
+      "arquitectura": "Balcón voladizo medieval/antiguo integrado en muro de piedra",
+      "hora_del_dia": "Noche",
+      "luz": "Luz plateada de luna llena",
+      "paleta": [
+        "#1B2631",
+        "#909497",
+        "#D5F5E3",
+        "#566573"
+      ],
+      "referencia_seg": 911
+    },
+    {
+      "id": "rio_dividido",
+      "nombre": "El Río Jordán Dividido",
+      "descripcion": "El cauce del río abierto por la mitad con dos paredes masivas verticales de agua azul translúcida donde se ven peces de colores de LEGO nadando atrapados. El fondo del río está seco y arenoso con conchas y coral de ladrillos",
+      "arquitectura": "Cañón sobrenatural de agua sostenida verticalmente",
+      "hora_del_dia": "Día / Mañana",
+      "luz": "Rayos de luz celestiales cayendo verticalmente sobre el cauce seco",
+      "paleta": [
+        "#3498DB",
+        "#F7DC6F",
+        "#27AE60",
+        "#F4F6F7"
+      ],
+      "referencia_seg": 1330
+    },
+    {
+      "id": "campo_batalla_hai",
+      "nombre": "Valle de Emboscada de Hai (Ai)",
+      "descripcion": "Un estrecho cañón rocoso con acantilados de piedra gris oscuro. En el centro hay un puente/camino de madera. Vegetación espinosa seca de ladrillo a los lados y arena fina",
+      "arquitectura": "Accidente geográfico con laderas escarpadas de roca escalonada",
+      "hora_del_dia": "Noche con Luna Llena masiva",
+      "luz": "Luz nocturna de luna de alto contraste con sombras marcadas en los desfiladeros",
+      "paleta": [
+        "#11161B",
+        "#FDFEFE",
+        "#5D6D7E",
+        "#273746"
+      ],
+      "referencia_seg": 2024
+    },
+    {
+      "id": "campos_cultivo",
+      "nombre": "Tierras de Cultivo y Viñedos",
+      "descripcion": "Campos arados con surcos marrón oscuro donde crecen plantas jóvenes. Viñedos repletos de uvas moradas y verdes de LEGO en canastas de mimbre. Al fondo fluye un río serpenteante rodeado de colinas verdes",
+      "arquitectura": "Terrazas agrícolas de ladrillos con casas de campo sencillas",
+      "hora_del_dia": "Amanecer dorado",
+      "luz": "Luz rasante del amanecer que resalta los cultivos",
+      "paleta": [
+        "#27AE60",
+        "#8E44AD",
+        "#F39C12",
+        "#D35400"
+      ],
+      "referencia_seg": 2442
+    }
+  ],
+  "escenas": [
+    {
+      "id": "escena_01",
+      "orden": 1,
+      "inicio_seg": 0,
+      "fin_seg": 14,
+      "escenario": "set_grabacion",
+      "plano": "medio",
+      "personajes_presentes": [],
+      "accion_visual": "Aparece el logo de Tula.tv en un fondo de chispas doradas. Luego corta a un pergamino de la Torá hecho completamente de ladrillos que se despliega revelando letras de colores que deletrean el título y dedicatorias",
+      "props": [
+        "Pergamino de Torá de LEGO",
+        "Platos de comida festiva tradicionales de fondo"
+      ],
+      "texto_en_pantalla": "UNA PRODUCCIÓN DE TuIA.tv - R. AMRAM ANIDJAR / CONSTRUYENDO LA CONQUISTA DE ISRAEL - PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD SHEVET AHIM - PANAMÁ",
+      "paleta": [
+        "#1B2631",
+        "#F1C40F",
+        "#FFFFFF",
+        "#2E86C1"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_02",
+      "orden": 2,
+      "inicio_seg": 15,
+      "fin_seg": 24,
+      "escenario": "set_grabacion",
+      "plano": "medio",
+      "personajes_presentes": [
+        "rabino_director",
+        "beduino"
+      ],
+      "accion_visual": "El Rabino en traje azul se encuentra en el centro de su estudio de cine regañando al Beduino que se queja del trabajo de grabación. El Rabino le advierte que deje de quejarse",
+      "props": [
+        "Cámaras de estudio",
+        "Claqueta de cine",
+        "Lámpara de estudio"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#7F8C8D",
+        "#1A5276",
+        "#F1C40F",
+        "#11161B"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_03",
+      "orden": 3,
+      "inicio_seg": 25,
+      "fin_seg": 44,
+      "escenario": "camino_desierto",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "Cámara aérea en movimiento rápido recorre el camino arenoso del desierto hasta revelar un inmenso campamento militar con tiendas de campaña y fogatas que se extiende hasta perderse de vista",
+      "props": [
+        "Tiendas de campaña de tela",
+        "Fogatas de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#EB984E",
+        "#85929E",
+        "#1F618D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_04",
+      "orden": 4,
+      "inicio_seg": 45,
+      "fin_seg": 54,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Yehoshua, con una imponente barba canosa, parado sobre una tarima de piedra, levanta su mano y arenga al gran gentío que lo rodea en el campamento",
+      "props": [
+        "Tarima de piedra de ladrillo",
+        "Vara de Josué"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#2980B9",
+        "#F1C40F",
+        "#D35400",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_05",
+      "orden": 5,
+      "inicio_seg": 55,
+      "fin_seg": 122,
+      "escenario": "campamento_israel",
+      "plano": "detalle",
+      "personajes_presentes": [
+        "beduino"
+      ],
+      "accion_visual": "Montaje de personas empacando el campamento. El Beduino intenta enrollar sábanas y atarlas al lomo de su camello. Tres figuras de jóvenes israelitas enrollan una larga cuerda de LEGO. Un grupo da de beber a asnos y camellos de un bebedero largo",
+      "props": [
+        "Sábanas de fieltro",
+        "Cuerda de LEGO",
+        "Bebedero largo con agua azul",
+        "Asnos de LEGO",
+        "Camello de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#E5E7E9",
+        "#D35400",
+        "#784212",
+        "#F1C40F"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_06",
+      "orden": 6,
+      "inicio_seg": 123,
+      "fin_seg": 132,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [],
+      "accion_visual": "Cuatro niños israelíes cargan alegres canastas de mimbre repletas de panes redondos y rollos de tela mientras avanzan frente al Tabernáculo",
+      "props": [
+        "Canastas",
+        "Panes de LEGO",
+        "Rollos de tela"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#D35400",
+        "#1F618D",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_07",
+      "orden": 7,
+      "inicio_seg": 133,
+      "fin_seg": 227,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "beduino"
+      ],
+      "accion_visual": "El Beduino sobrecarga la espalda de su camello con vasijas de plata, alfombras y una caja enorme. El camello lo mira disgustado, empieza a temblar y de repente toda la carga colapsa y explota en una nube de polvo gris, dejando al Beduino aplastado y enojado mientras una cabra se burla",
+      "props": [
+        "Vasijas de plata",
+        "Caja de madera de LEGO",
+        "Efecto de humo de explosión",
+        "Cabra de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#7F8C8D",
+        "#F1C40F",
+        "#935116",
+        "#11161B"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_08",
+      "orden": 8,
+      "inicio_seg": 228,
+      "fin_seg": 306,
+      "escenario": "camino_desierto",
+      "plano": "aereo",
+      "personajes_presentes": [],
+      "accion_visual": "Gran caravana de israelíes, camellos y carretas cargadas de equipaje avanza en línea cruzando las dunas del desierto bajo el sol brillante",
+      "props": [
+        "Carretas de madera de LEGO",
+        "Camellos cargados"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#EB984E",
+        "#F4F6F7",
+        "#D35400"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_09",
+      "orden": 9,
+      "inicio_seg": 307,
+      "fin_seg": 340,
+      "escenario": "orilla_jordan",
+      "plano": "general",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Yehoshua parado de espaldas frente a la multitud observa el gran río Jordán que fluye caudaloso. Al otro lado se destaca la inmensa fortaleza amurallada de Jericó rodeada de palmeras",
+      "props": [
+        "Río azul de LEGO",
+        "Palmeras de LEGO",
+        "Silueta de Jericó"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#5499C7",
+        "#1E8449",
+        "#F5B041",
+        "#1B2631"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_10",
+      "orden": 10,
+      "inicio_seg": 341,
+      "fin_seg": 439,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "yehoshua",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Frente a su tienda de campaña, Yehoshua da instrucciones secretas a los dos espías. Los espías asienten con respeto y entusiasmo, manifestando su valentía frente a los peligros de Jericó",
+      "props": [
+        "Tienda de Josué",
+        "Barriles de fondo"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#D35400",
+        "#2980B9",
+        "#784212",
+        "#F4F6F7"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_11",
+      "orden": 11,
+      "inicio_seg": 440,
+      "fin_seg": 449,
+      "escenario": "murallas_jerico",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "Vista nocturna espectacular de las murallas de Jericó con sus torres iluminadas con antorchas encendidas y las ventanas con luz cálida",
+      "props": [
+        "Antorchas de fuego de LEGO",
+        "Muros beige de Jericó"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1B2631",
+        "#2E4053",
+        "#F1C40F",
+        "#A04000"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_12",
+      "orden": 12,
+      "inicio_seg": 450,
+      "fin_seg": 500,
+      "escenario": "campamento_israel",
+      "plano": "interior",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Dentro de una carpa oscura iluminada por un farol de aceite, los espías se miran con complicidad y se cambian rápidamente de ropa, poniéndose trajes tácticos de sigilo negros y grises con capuchas ninja",
+      "props": [
+        "Farol con luz translúcida amarilla",
+        "Cofre de madera",
+        "Tapete de hilos decorado"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#1B2631",
+        "#7F8C8D",
+        "#F39C12"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_13",
+      "orden": 13,
+      "inicio_seg": 501,
+      "fin_seg": 511,
+      "escenario": "rio_jordan",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Bajo la noche estrellada, los espías cruzan sigilosamente el río deslizándose colgados de las manos de una cuerda tensa amarrada de orilla a orilla sobre el agua que corre turbulenta",
+      "props": [
+        "Cuerda de escape larga",
+        "Ladrillos de agua azul oscuro de LEGO",
+        "Rocas grises"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#212F3C",
+        "#7F8C8D",
+        "#566573"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_14",
+      "orden": 14,
+      "inicio_seg": 512,
+      "fin_seg": 533,
+      "escenario": "murallas_jerico",
+      "plano": "primer_plano",
+      "personajes_presentes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "En la entrada de Jericó, dos guardias vigilan con antorchas. Uno menciona bostezando que es una noche tranquila. El espía de traje gris asoma la cabeza por unos arbustos lejanos y grita '¡Un avión!' (broma anacrónica), lo que confunde a los guardias",
+      "props": [
+        "Antorchas",
+        "Lanzas de metal",
+        "Escudo redondo",
+        "Arbustos de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1B2631",
+        "#F1C40F",
+        "#D35400",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_15",
+      "orden": 15,
+      "inicio_seg": 534,
+      "fin_seg": 544,
+      "escenario": "murallas_jerico",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Aprovechando la distracción de los guardias que debaten sobre el supuesto 'avión', los dos espías pasan corriendo sigilosamente por detrás de ellos cruzando el gran portón de madera abierto",
+      "props": [
+        "Portón de madera abierto",
+        "Arbustos tácticos"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1C2833",
+        "#F1C40F",
+        "#5D4037",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_16",
+      "orden": 16,
+      "inicio_seg": 545,
+      "fin_seg": 604,
+      "escenario": "murallas_jerico",
+      "plano": "medio",
+      "personajes_presentes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "Los guardias se dan cuenta de la mentira del 'avión' y caminan de vuelta por las calles internas de Jericó portando un farol, hablando de que los espías de Israel deben de estar cerca",
+      "props": [
+        "Farol de mano metálico de LEGO",
+        "Lanzas de metal"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1A252C",
+        "#F39C12",
+        "#7F8C8D",
+        "#5D4037"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_17",
+      "orden": 17,
+      "inicio_seg": 605,
+      "fin_seg": 654,
+      "escenario": "murallas_jerico",
+      "plano": "detalle",
+      "personajes_presentes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "Primer plano del suelo arenoso de Jericó mostrando marcas de huellas de pies descalzos de LEGO. El jefe de la guardia apunta con su linterna, grita '¡Huellas!' y salen corriendo con pánico y entusiasmo buscando intrusos",
+      "props": [
+        "Placa de arena con marcas de huellas",
+        "Farol de mano de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#D5F5E3",
+        "#11161B",
+        "#F1C40F",
+        "#784212"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_18",
+      "orden": 18,
+      "inicio_seg": 655,
+      "fin_seg": 704,
+      "escenario": "jerico_interior",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Los espías corren de prisa esquivando carros y puestos de mercado nocturno hasta llegar a una puerta con un cartel de piedra tallada que dice 'RESTAURANTE DE RAHAB' en ladrillo de relieve. Entran de prisa",
+      "props": [
+        "Cartel tallado de Jericó",
+        "Carros de madera",
+        "Palmeras"
+      ],
+      "texto_en_pantalla": "RESTAURANTE DE RAHAB",
+      "paleta": [
+        "#1B2631",
+        "#E5E7E9",
+        "#784212",
+        "#D35400"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_19",
+      "orden": 19,
+      "inicio_seg": 705,
+      "fin_seg": 717,
+      "escenario": "taberna_rahab",
+      "plano": "general",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "accion_visual": "Los espías entran en la taberna y se sientan en la barra. Rahab los recibe de manera atenta y amable. Ellos ordenan un café y un expresso doble",
+      "props": [
+        "Estanterías con botellas de LEGO",
+        "Tazas de barro",
+        "Varios clientes cenando al fondo"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#F39C12",
+        "#E5E7E9",
+        "#1B2631"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_20",
+      "orden": 20,
+      "inicio_seg": 718,
+      "fin_seg": 725,
+      "escenario": "jerico_interior",
+      "plano": "medio",
+      "personajes_presentes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "Los dos guardias de Jericó con linternas se detienen justo frente al letrero iluminado del Restaurante de Rahab, decididos a entrar a inspeccionar",
+      "props": [
+        "Cartel de piedra",
+        "Farol",
+        "Lanzas"
+      ],
+      "texto_en_pantalla": "RESTAURANTE DE RAHAB",
+      "paleta": [
+        "#11161B",
+        "#F1C40F",
+        "#A04000",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_21",
+      "orden": 21,
+      "inicio_seg": 726,
+      "fin_seg": 754,
+      "escenario": "taberna_rahab",
+      "plano": "primer_plano",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "accion_visual": "El espía negro le revela susurrando a Rahab que son emisarios de Israel enviados por Josué. Le piden que los esconda y a cambio le juran por Dios salvar su vida y darle una gran recompensa cuando conquisten Jericó",
+      "props": [
+        "Vasos de LEGO humeantes con café"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#1B2631",
+        "#7F8C8D",
+        "#E5E7E9"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_22",
+      "orden": 22,
+      "inicio_seg": 755,
+      "fin_seg": 804,
+      "escenario": "taberna_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun",
+        "rahab"
+      ],
+      "accion_visual": "Rahab acepta de prisa ayudarlos y los manda esconderse. En ese instante, los guardias irrumpen ruidosamente pateando la puerta. El jefe exige saber dónde están los extranjeros",
+      "props": [
+        "Puerta de madera abatible de LEGO",
+        "Lámparas colgantes de aceite"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#F1C40F",
+        "#C0392B",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_23",
+      "orden": 23,
+      "inicio_seg": 805,
+      "fin_seg": 840,
+      "escenario": "taberna_rahab",
+      "plano": "detalle",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris",
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "Montaje de los escondites graciosos. El espía negro se oculta pegado a la pared detrás del tapiz del letrero de Rahab. El espía gris se esconde en una esquina metido dentro de una gran maceta de barro con plantas, usando una maceta pequeña boca abajo en su cabeza como camuflaje. Los guardias los buscan de cerca de manera inútil",
+      "props": [
+        "Tapestry de tela de Rahab",
+        "Maceteros de barro grandes de LEGO",
+        "Plantas artificiales verdes",
+        "Moscas de LEGO volando"
+      ],
+      "texto_en_pantalla": "RESTAURANTE DE RAHAB",
+      "paleta": [
+        "#5D4037",
+        "#1E8449",
+        "#11161B",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_24",
+      "orden": 24,
+      "inicio_seg": 841,
+      "fin_seg": 856,
+      "escenario": "taberna_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "rahab",
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "accion_visual": "Rahab miente sonriente a los guardias con calma, señalando con su dedo hacia afuera de la posada asegurando que los hombres sospechosos huyeron hacia la orilla del río. Los guardias salen corriendo gritando '¡Vamos al río!'",
+      "props": [
+        "Barra de madera",
+        "Vasos vacíos de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#F1C40F",
+        "#C0392B",
+        "#BDC3C7"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_25",
+      "orden": 25,
+      "inicio_seg": 857,
+      "fin_seg": 910,
+      "escenario": "taberna_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "rahab"
+      ],
+      "accion_visual": "El espía negro sale de detrás del tapiz aliviado, mientras que Rahab le dice amigablemente que ya es seguro moverse. El espía gris sigue asomado de la maceta",
+      "props": [
+        "Tapiz",
+        "Maceta"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#51361A",
+        "#1B2631",
+        "#BDC3C7",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_26",
+      "orden": 26,
+      "inicio_seg": 911,
+      "fin_seg": 939,
+      "escenario": "balcon_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "accion_visual": "Reunidos en el balcón que da hacia el exterior de las murallas, Rahab les confiesa que sabe que su Dios es el único Dios verdadero y que les ha otorgado milagros inmensos desde Egipto. Ella pide ser parte del pueblo de Israel",
+      "props": [
+        "Mapa de Jericó de pergamino de LEGO sobre la mesa",
+        "Lámpara de aceite encendida de LEGO",
+        "Balcón de madera"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1B2631",
+        "#AEB6BF",
+        "#F39C12",
+        "#E5E7E9"
+      ],
+      "clip_video_recommended": false
+    },
+    {
+      "id": "escena_27",
+      "orden": 27,
+      "inicio_seg": 940,
+      "fin_seg": 950,
+      "escenario": "balcon_rahab",
+      "plano": "primer_plano",
+      "personajes_presentes": [
+        "espia_negro",
+        "rahab"
+      ],
+      "accion_visual": "El espía negro le entrega a Rahab un cordón rojo brillante de lana y le indica que debe atarlo fuertemente en el marco de la ventana del balcón. Ese cordón será la señal sagrada para que las tropas israelíes perdonen la vida de todos los que estén dentro",
+      "props": [
+        "Cordón de lana roja brillante de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#CB4335",
+        "#1B2631",
+        "#E5E7E9",
+        "#F1C40F"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_28",
+      "orden": 28,
+      "inicio_seg": 951,
+      "fin_seg": 1019,
+      "escenario": "balcon_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "accion_visual": "Rahab les ayuda a descender por fuera de la muralla atando cuerdas de LEGO. Los espías van bajando lentamente en silencio y al tocar tierra firme saludan y escapan corriendo con sigilo por la calle del pueblo de abajo",
+      "props": [
+        "Cuerdas de LEGO de color marrón",
+        "Farol de pared encendido de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#566573",
+        "#7F8C8D",
+        "#AEB6BF"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_29",
+      "orden": 29,
+      "inicio_seg": 1020,
+      "fin_seg": 1036,
+      "escenario": "rio_jordan",
+      "plano": "medio",
+      "personajes_presentes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Los dos espías corren de noche cruzando un bosque espeso de pinos de bloques verdes y luego cruzan de vuelta el río Jordán tomados de la cuerda con gran agilidad salpicando agua",
+      "props": [
+        "Pinos de LEGO verdes y marrones",
+        "Cuerda de río",
+        "Efecto de agua salpicada de ladrillos blancos"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#1B4F72",
+        "#1E8449",
+        "#566573"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_30",
+      "orden": 30,
+      "inicio_seg": 1037,
+      "fin_seg": 1126,
+      "escenario": "campamento_israel",
+      "plano": "interior",
+      "personajes_presentes": [
+        "yehoshua",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "Los espías, de vuelta a salvo en la tienda militar de Josué, rinden su reporte. Con gestos animados le revelan que los habitantes de Jericó están aterrorizados y tiemblan de miedo de Israel. También le hablan del pacto de Rahab y su rica cafetería",
+      "props": [
+        "Tienda de campaña grande",
+        "Alfombra tejida",
+        "Cofres de madera de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#5D4037",
+        "#1B2631",
+        "#2980B9",
+        "#AEB6BF"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_31",
+      "orden": 31,
+      "inicio_seg": 1127,
+      "fin_seg": 1141,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Los dos espías hacen un saludo militar firme. Josué, parado triunfante de espaldas a su tienda iluminada por la luna, declara solemnemente que con ayuda divina heredarán la tierra prometida y manda reunir el gran ejército",
+      "props": [
+        "Linterna de aceite rústica de LEGO",
+        "Postes de madera"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1B2631",
+        "#E5E7E9",
+        "#F1C40F",
+        "#784212"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_32",
+      "orden": 32,
+      "inicio_seg": 1142,
+      "fin_seg": 1213,
+      "escenario": "campamento_israel",
+      "plano": "detalle",
+      "personajes_presentes": [],
+      "accion_visual": "Montaje enérgico de preparación de guerra israelí. Soldados afilando espadas de bronce sobre piedras de amolar que giran, flechas de LEGO siendo ordenadas en carcaj, guerreros marchando en formación con escudos con patrones grabados y templando arcos",
+      "props": [
+        "Espadas de bronce de LEGO",
+        "Piedras de amolar",
+        "Flechas de LEGO",
+        "Arcos de madera",
+        "Escudos grabados redondos de LEGO",
+        "Hogueras"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#E67E22",
+        "#F1C40F",
+        "#1F618D",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_33",
+      "orden": 33,
+      "inicio_seg": 1214,
+      "fin_seg": 1305,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "cohen_gadol"
+      ],
+      "accion_visual": "El Sacerdote (Cohen Gadol) reúne a los levitas en una carpa y ordena preparar los Shofarot de cuerno. Montaje de sacerdotes tallando, puliendo y lijando los cuernos curvos de madera. Escena cómica de un carnero que huye asustado de los sacerdotes que lo persiguen para sacarle el Shofar. Un sacerdote prueba un gran Shofar soplando y emitiendo un sonido grave y vibrante",
+      "props": [
+        "Mesa de taller con cinceles y herramientas de LEGO",
+        "Shofarot terminados y en proceso de madera",
+        "Carnero de LEGO",
+        "Cuerda de captura"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#5D4037",
+        "#F4F6F7",
+        "#F1C40F",
+        "#BDC3C7"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_34",
+      "orden": 34,
+      "inicio_seg": 1306,
+      "fin_seg": 1418,
+      "escenario": "rio_dividido",
+      "plano": "general",
+      "personajes_presentes": [
+        "cohen_gadol",
+        "yehoshua"
+      ],
+      "accion_visual": "¡Gran escena espectacular! Los sacerdotes con túnicas ceremoniales blancas y cargando en hombros el Arca de la Alianza de oro brillante entran en el río Jordán. Al instante, las aguas se dividen verticalmente creando dos gigantescas paredes de agua translúcida a los lados. Se ve a los israelíes, liderados por Josué, cruzando asombrados por el cauce seco viendo peces multicolores de LEGO en el agua",
+      "props": [
+        "Arca de la Alianza de oro brillante de LEGO con barras",
+        "Ladrillos de agua azul translúcidos gigantes",
+        "Peces de colores de LEGO (rojo, verde, amarillo, azul)",
+        "Corales de LEGO y conchas en el cauce seco"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#3498DB",
+        "#FFD700",
+        "#F4F6F7",
+        "#27AE60"
+      ],
+      "clip_video_recomendado": true
+    },
+    {
+      "id": "escena_35",
+      "orden": 35,
+      "inicio_seg": 1419,
+      "fin_seg": 1428,
+      "escenario": "camino_desierto",
+      "plano": "medio",
+      "personajes_presentes": [
+        "beduino"
+      ],
+      "accion_visual": "El Beduino cómico se queda atascado hasta la cintura en un lodazal marrón de bloques LEGO sueltos. Pide ayuda con furia mientras su carnero lo mira fijamente con tranquilidad y luego huye corriendo, dejándolo atrás gritando",
+      "props": [
+        "Placa de lodo marrón con bloques sueltos",
+        "Carnero de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#5D4037",
+        "#F5B041",
+        "#D35400",
+        "#11161B"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_36",
+      "orden": 36,
+      "inicio_seg": 1429,
+      "fin_seg": 1541,
+      "escenario": "murallas_jerico",
+      "plano": "general",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "El ejército de Israel marcha alrededor de Jericó. Josué y el Beduino marchan al frente de la columna militar. Los sacerdotes cargan el Arca de la Alianza y soplan los Shofarot constantemente levantando polvo. Desde la muralla de Jericó, los guardias cananeos los observan asustados e incrédulos",
+      "props": [
+        "Arca de la Alianza",
+        "Shofarot",
+        "Lanzas de los guardias",
+        "Nubes de polvo de ladrillo beige"
+      ],
+      "texto_en_pantalla": "Día 1 / Día 2 / Día 3 / Día 4 / Día 5 / Día 6 / Día 7",
+      "paleta": [
+        "#F5B041",
+        "#D35400",
+        "#FFD700",
+        "#85929E"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_37",
+      "orden": 37,
+      "inicio_seg": 1542,
+      "fin_seg": 1619,
+      "escenario": "murallas_jerico",
+      "plano": "aereo",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "¡Clímax del asedio! En el séptimo día, tras rodear Jericó siete veces, todos los israelíes gritan con fuerza y los Shofares tocan un gran sonido continuo. Las colosales murallas beige de Jericó se agrietan y se derrumban estrepitosamente, rompiéndose y separándose en miles de bloques individuales de LEGO en un estallido de polvo. Los asustados guardias salen huyendo",
+      "props": [
+        "Murallas colapsables de Jericó",
+        "Efecto de desmoronamiento de ladrillos",
+        "Efecto de explosión de polvo de ladrillo beige"
+      ],
+      "texto_en_pantalla": "Día 7",
+      "paleta": [
+        "#E5E7E9",
+        "#D35400",
+        "#F1C40F",
+        "#2C3E50"
+      ],
+      "clip_video_recomendado": true
+    },
+    {
+      "id": "escena_38",
+      "orden": 38,
+      "inicio_seg": 1620,
+      "fin_seg": 1625,
+      "escenario": "ruinas_jerico",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "El gran ejército israelí corre victorioso cargando a través de las ruinas y escombros caídos de las murallas de Jericó para tomar control de la ciudad",
+      "props": [
+        "Espadas de bronce",
+        "Lanzas de metal",
+        "Escombros de LEGO beige"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#D35400",
+        "#7F8C8D",
+        "#1F618D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_39",
+      "orden": 39,
+      "inicio_seg": 1626,
+      "fin_seg": 1701,
+      "escenario": "balcon_rahab",
+      "plano": "medio",
+      "personajes_presentes": [
+        "rahab",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "accion_visual": "En la única sección de muralla que quedó de pie, distinguida por el cordón rojo atado, Rahab y su familia rezan con miedo. Los dos espías entran en la habitación, saludan con alegría a Rahab y la guían de prisa para rescatarlos a todos de la destrucción",
+      "props": [
+        "Cordón rojo",
+        "Balcón de madera",
+        "Efectos de polvo flotante"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1B2631",
+        "#CB4335",
+        "#E5E7E9",
+        "#F1C40F"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_40",
+      "orden": 40,
+      "inicio_seg": 1702,
+      "fin_seg": 1721,
+      "escenario": "ruinas_jerico",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "El resto de las construcciones internas de Jericó colapsan en escombros humeantes, dejando solo cenizas y restos de piedra",
+      "props": [
+        "Postes caídos",
+        "Efectos de fuego con fuegos de LEGO",
+        "Humo negro de algodón"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#A04000",
+        "#5D6D7E",
+        "#273746"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_41",
+      "orden": 41,
+      "inicio_seg": 1722,
+      "fin_seg": 1743,
+      "escenario": "ruinas_jerico",
+      "plano": "medio",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Josué parado sobre un montón de escombros prohíbe terminantemente saquear oro, joyas o riquezas de la ciudad para demostrar al mundo que Israel pelea por orden divina y no por robo. El ejército celebra con sus espadas arriba",
+      "props": [
+        "Estructura de pilares rotos",
+        "Espadas levantadas"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#D35400",
+        "#7F8C8D",
+        "#11161B"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_42",
+      "orden": 42,
+      "inicio_seg": 1744,
+      "fin_seg": 1753,
+      "escenario": "ruinas_jerico",
+      "plano": "medio",
+      "personajes_presentes": [
+        "beduino"
+      ],
+      "accion_visual": "El Beduino cómico encuentra cofres llenos de rubíes y gemas de colores. Al intentar guardarlas en su saco ignorando la orden de Josué, su carnero lo embiste por detrás de un cabezazo, haciéndole soltar las gemas y quedar enterrado en escombros",
+      "props": [
+        "Cofre de tesoro de LEGO",
+        "Rubíes y gemas translúcidas de colores de LEGO",
+        "Carnero de LEGO",
+        "Saco"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#9B59B6",
+        "#E74C3C",
+        "#1ABC9C",
+        "#F1C40F"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_43",
+      "orden": 43,
+      "inicio_seg": 1754,
+      "fin_seg": 1826,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Bajo la gran carpa central, Josué anuncia que la siguiente ciudad cananea a conquistar es Hai (Ai) frente al gran ejército que ruge de alegría",
+      "props": [
+        "Fogata con antorchas",
+        "Estandarte con la estrella de David"
+      ],
+      "texto_en_pantalla": "Día 1 / Hai",
+      "paleta": [
+        "#F5B041",
+        "#1B2631",
+        "#D35400",
+        "#E5E7E9"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_44",
+      "orden": 44,
+      "inicio_seg": 1827,
+      "fin_seg": 1849,
+      "escenario": "campamento_israel",
+      "plano": "interior",
+      "personajes_presentes": [
+        "yehoshua"
+      ],
+      "accion_visual": "Josué junto a sus comandantes planea la estrategia de batalla sobre una mesa de madera con un mapa dibujado. Explica la estrategia de simular una huida desorganizada para sacar a las tropas enemigas de Hai y emboscarlas por detrás",
+      "props": [
+        "Mesa rústica con mapa táctico de LEGO",
+        "Banderas pequeñas de LEGO",
+        "Vela encendida"
+      ],
+      "texto_en_pantalla": "ROAD TO HAI / CITY OF HAI / ISRAELITE CAMP - GILGAL / POTENTIAL AMBUSH POSITIONS",
+      "paleta": [
+        "#5D4037",
+        "#F1C40F",
+        "#2E4053",
+        "#7F8C8D"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_45",
+      "orden": 45,
+      "inicio_seg": 1850,
+      "fin_seg": 1915,
+      "escenario": "campamento_israel",
+      "plano": "detalle",
+      "personajes_presentes": [],
+      "accion_visual": "Un niño israelí espía la reunión militar oculto debajo de la mesa de Josué. Luego sale corriendo gateando de prisa hacia una fogata cercana donde están reunidos otros tres niños para contarles todo el plan estratégico en secreto",
+      "props": [
+        "Mesa de madera de LEGO",
+        "Farol de pie de LEGO",
+        "Fogata pequeña"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#F39C12",
+        "#784212",
+        "#BDC3C7"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_46",
+      "orden": 46,
+      "inicio_seg": 1916,
+      "fin_seg": 2023,
+      "escenario": "campamento_israel",
+      "plano": "medio",
+      "personajes_presentes": [],
+      "accion_visual": "Montaje divertido de los niños preparándose para su propia 'misión secreta'. Uno se ata cuerdas de LEGO alrededor de su cuerpo, otro baña manzanas de LEGO con miel usando pinceles, otro dibuja caras aterradoras de monstruos en máscaras de madera de LEGO usando pinturas de colores. Otro grupo carga cubetas pesadas llenas de agua y lodo",
+      "props": [
+        "Cuerda de LEGO",
+        "Manzanas rojas de LEGO",
+        "Potes de miel",
+        "Máscaras de monstruos de LEGO",
+        "Frascos de pintura de colores con etiquetas ('paint')",
+        "Cubetas de madera de LEGO con agua azul y lodo marrón"
+      ],
+      "texto_en_pantalla": "paint",
+      "paleta": [
+        "#E74C3C",
+        "#3498DB",
+        "#27AE60",
+        "#F1C40F"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_47",
+      "orden": 47,
+      "inicio_seg": 2024,
+      "fin_seg": 2113,
+      "escenario": "campo_batalla_hai",
+      "plano": "general",
+      "personajes_presentes": [
+        "beduino"
+      ],
+      "accion_visual": "Las tropas de Israel con antorchas simulan huir en desbandada por el cañón arenoso. El comandante de Hai, montado en caballo en las murallas de la ciudad, ríe triunfante y ordena abrir las puertas para perseguirlos con todo su ejército",
+      "props": [
+        "Antorchas",
+        "Portón de Hai",
+        "Caballos de LEGO de color negro y marrón"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#11161B",
+        "#7F8C8D",
+        "#F39C12",
+        "#5D6D7E"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_48",
+      "orden": 48,
+      "inicio_seg": 2114,
+      "fin_seg": 2210,
+      "escenario": "campo_batalla_hai",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "En la colina de roca de Hai, los soldados que estaban escondidos de Israel asoman tras la colina bajo una luna llena enorme portando espadas y atacando al confiado ejército de Hai de regreso por el desfiladero",
+      "props": [
+        "Luna llena de fondo de LEGO",
+        "Espadas",
+        "Antorchas de fuego de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1C2833",
+        "#FDFEFE",
+        "#AEB6BF",
+        "#566573"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_49",
+      "orden": 49,
+      "inicio_seg": 2211,
+      "fin_seg": 2322,
+      "escenario": "campo_batalla_hai",
+      "plano": "detalle",
+      "personajes_presentes": [],
+      "accion_visual": "Los niños israelíes intervienen en la batalla de manera graciosa. Lanzan manzanas pegajosas con miel que caen en las caras de los soldados enemigos, derraman cubetas de agua con jabón que hacen resbalar y caer en hilera a los guerreros, y saltan de los lados de las rocas usando las máscaras de monstruos aterradoras para espantar a los caballos enemigos que tiran a sus jinetes",
+      "props": [
+        "Manzanas cubiertas de miel",
+        "Cubetas de agua espumosa",
+        "Máscaras de monstruos de arcilla de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#C0392B",
+        "#F1C40F",
+        "#5D6D7E",
+        "#27AE60"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_50",
+      "orden": 50,
+      "inicio_seg": 2323,
+      "fin_seg": 2351,
+      "escenario": "campo_batalla_hai",
+      "plano": "medio",
+      "personajes_presentes": [],
+      "accion_visual": "Celebración de la victoria sobre Hai alrededor de una inmensa fogata nocturna. Los israelíes bailan alegres cantando 'Am Israel Chai', tocan tambores de ladrillo y brindan chocando sus tazas de LEGO de manera festiva",
+      "props": [
+        "Fogata inmensa de LEGO",
+        "Panderos y tambores de LEGO",
+        "Tazas transparentes de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#E67E22",
+        "#F1C40F",
+        "#1B2631",
+        "#E5E7E9"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_51",
+      "orden": 51,
+      "inicio_seg": 2352,
+      "fin_seg": 2421,
+      "escenario": "campamento_israel",
+      "plano": "interior",
+      "personajes_presentes": [
+        "yehoshua",
+        "beduino"
+      ],
+      "accion_visual": "El Beduino cómico celebra sonriente la victoria en el desierto. Josué, rodeado de los jefes de las doce tribus de Israel alrededor del mapa del territorio, clava banderas de LEGO de distintos colores en las porciones asignadas a cada una",
+      "props": [
+        "Mapa grande de Israel",
+        "Banderas pequeñas de LEGO de colores (azul, verde, rojo, amarillo)"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#5D4037",
+        "#F1C40F",
+        "#2E4053",
+        "#27AE60"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_52",
+      "orden": 52,
+      "inicio_seg": 2422,
+      "fin_seg": 2516,
+      "escenario": "campos_cultivo",
+      "plano": "general",
+      "personajes_presentes": [],
+      "accion_visual": "Montaje pacífico de asentamiento de las tribus. Los israelíes labran las tierras con bueyes que tiran de arados de madera, cavan hoyos con palas de LEGO para sembrar brotes verdes de uva, recolectan racimos morados de uvas en canastas de mimbre y siembran granos de trigo arrojándolos al surco labrado de tierra arenosa",
+      "props": [
+        "Pareja de bueyes de LEGO con yugo",
+        "Arado de madera",
+        "Palas de LEGO",
+        "Racimos de uva de LEGO morados y verdes",
+        "Semillas de LEGO doradas",
+        "Saco de granos"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#1E8449",
+        "#9B59B6",
+        "#D35400",
+        "#F4F6F7"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_53",
+      "orden": 53,
+      "inicio_seg": 2517,
+      "fin_seg": 2539,
+      "escenario": "campos_cultivo",
+      "plano": "medio",
+      "personajes_presentes": [],
+      "accion_visual": "Dos niños se despiden llorando con lágrimas transparentes de LEGO. Para consolarse, uno le regala un 'celulavaso' (teléfono hecho con dos vasos de plástico de LEGO atados con un hilo largo). Los niños se comunican alegres estirando el hilo largo cruzando colinas desérticas con sus tiendas",
+      "props": [
+        "Vasos de plástico de LEGO",
+        "Hilo blanco largo",
+        "Ovejas de LEGO"
+      ],
+      "texto_en_pantalla": null,
+      "paleta": [
+        "#F5B041",
+        "#3498DB",
+        "#D35400",
+        "#1E8449"
+      ],
+      "clip_video_recomendado": false
+    },
+    {
+      "id": "escena_54",
+      "orden": 54,
+      "inicio_seg": 2540,
+      "fin_seg": 2910,
+      "escenario": "camino_desierto",
+      "plano": "medio",
+      "personajes_presentes": [
+        "rabino_director",
+        "beduino"
+      ],
+      "accion_visual": "Un camello de LEGO de pie hace un baile gracioso moviendo el cuello al ritmo de la música tradicional alegre de cierre. Reaparece el Rabino director en su estudio felicitando al Beduino que se muestra cansado pero alegre. Finaliza con los títulos de créditos flotando sobre el campamento de Shiló",
+      "props": [
+        "Camello de LEGO",
+        "Cámaras de estudio"
+      ],
+      "texto_en_pantalla": "PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD - SHEVET AHIM - PANAMÁ / DIRECCIÓN R. AMRAM ANIDJAR / CREACIÓN DE IMAGEN Y EDICIÓN DE VIDEO YAAKOV LEON / SUPERVISIÓN Y CONTENIDO DAVID MIZRAHI - IDAN J. ANIDJAR - ISRAEL CORTES",
+      "paleta": [
+        "#1B2631",
+        "#F1C40F",
+        "#E67E22",
+        "#F4F6F7"
+      ],
+      "clip_video_recomendado": false
+    }
+  ]
+}
