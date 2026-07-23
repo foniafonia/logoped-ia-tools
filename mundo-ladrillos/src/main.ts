@@ -121,33 +121,33 @@ function terminarIntro(): void {
 // Beats con los TIEMPOS OFICIALES del desglose de la peli (escenas 01–08)
 const beats: Beat[] = [
   // — INTRO DE ESTUDIO (esc. 01–02) —
-  { t: 0, sub: 'TuIA.tv presenta: «Construyendo la Conquista de Israel».', obj: '' },
-  { t: 15, sub: '—¡Deja de quejarte y a grabar! El Rabino director pone orden en el plató.', obj: '' },
+  { t: 0, sub: '«Construyendo la Conquista de Israel»', obj: '' },
+  { t: 15, sub: '—¡Deja de quejarte y a grabar! 🎬', obj: '' },
   // — CAMPAMENTO (esc. 03–08) —
   {
-    t: 25, sub: 'El desierto… y el gran campamento de Israel, listo para la Tierra Prometida.',
+    t: 25, sub: 'El gran campamento de Israel.',
     obj: '', onEnter: () => terminarIntro()
   },
   {
-    t: 45, sub: 'Yehoshúa alza la mano y arenga a todo el pueblo.',
-    obj: 'Acércate a Yehoshúa', onEnter: () => { terminarIntro(); setTarget(YEHOSHUA); }
+    t: 45, sub: '¡Yehoshúa arenga al pueblo!',
+    obj: 'Ve con Yehoshúa', onEnter: () => { terminarIntro(); setTarget(YEHOSHUA); }
   },
   {
-    t: 55, sub: '¡A recoger el campamento! Enrolla las cuerdas y arrea las ovejas.',
-    obj: `Recoge las cuerdas del campamento (0/${camp.ropes.length})`,
+    t: 55, sub: '¡A recoger el campamento!',
+    obj: `Recoge las cuerdas (0/${camp.ropes.length})`,
     onEnter: () => { ropesActivas = true; setTarget(null); }
   },
   {
-    t: 123, sub: 'Los niños cargan canastas de pan; todo el campamento se prepara.',
+    t: 123, sub: 'Los niños cargan el pan. 🥖',
     obj: ''
   },
   {
-    t: 133, sub: '¡Cuidado! El beduino sobrecarga su camello… ¡y la carga se derrumba!',
+    t: 133, sub: '¡El camello del beduino se derrumba! 💥',
     obj: ''
   },
   {
-    t: 228, sub: 'La gran caravana se pone en marcha, cruzando las dunas del desierto.',
-    obj: 'Sigue a la caravana hacia el norte',
+    t: 228, sub: '¡La caravana se pone en marcha!',
+    obj: 'Sigue a la caravana',
     onEnter: () => { journey.arrancarCaravana(); setTarget({ x: 0, z: Journey.MARCHA_Z }); }
   }
 ];

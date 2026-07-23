@@ -19,6 +19,8 @@ export interface MinifigureSkin {
   headStyle?: 'turban' | 'hood' | 'ninja'; // tipo de tocado
   beard?: number;    // barba (color) — opcional
   straps?: number;   // correas tácticas del chaleco (para el espía ninja)
+  sword?: boolean;   // lleva espada en la mano derecha (por defecto sí). Los
+                     // no-combatientes (aldeanos, niños, rabino…) ponen false.
 }
 
 /** Yoshúa: turbante azul, barba gris, túnica azul con cinturón marrón. */
@@ -72,7 +74,7 @@ export class Minifigure {
 
   constructor(private plastic: PlasticMaterialFactory, skin: MinifigureSkin = YOSHUA_SKIN) {
     this.build(skin);
-    this.addSword();
+    if (skin.sword !== false) this.addSword();   // no-combatientes: sword:false
   }
 
   /** Lanza un espadazo. Devuelve true si conecta (no en plena animación). */

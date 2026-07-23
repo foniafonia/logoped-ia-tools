@@ -6,12 +6,12 @@ import { createMinifigure, Minifigure, MinifigureSkin } from '../../characters/M
 /** Rabino director: traje azul marino, barba canosa, cara amable. */
 const RABINO_SKIN: MinifigureSkin = {
   head: 0xf2c141, torso: 0x1a3a6b, belt: 0x14203a, legs: 0x1b2740,
-  arms: 0x1a3a6b, hands: 0xf2c141, headwear: 0x141414, headStyle: 'turban', beard: 0xb9b4a6
+  arms: 0x1a3a6b, hands: 0xf2c141, headwear: 0x141414, headStyle: 'turban', beard: 0xb9b4a6, sword: false
 };
 /** Beduino quejica de la peli. */
 const BEDUINO_SKIN: MinifigureSkin = {
   head: 0xf2c141, torso: 0x7d6608, belt: 0x4a3a10, legs: 0x5a4a1a,
-  arms: 0x6a5a18, hands: 0xf2c141, headwear: 0xf5cba7, headStyle: 'turban', beard: 0x2a2018
+  arms: 0x6a5a18, hands: 0xf2c141, headwear: 0xf5cba7, headStyle: 'turban', beard: 0x2a2018, sword: false
 };
 
 /** Lienzo del pergamino con el título de la peli (texto dibujado, no foto). */

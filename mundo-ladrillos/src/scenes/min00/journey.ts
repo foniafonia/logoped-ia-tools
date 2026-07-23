@@ -5,9 +5,9 @@ import { Minifigure, createMinifigure, MinifigureSkin } from '../../characters/M
 import { IS_MOBILE } from '../../core/Quality';
 
 const CARAVAN_SKINS: MinifigureSkin[] = [
-  { head: 0xf2c141, torso: 0x2f6db0, belt: 0x24507e, legs: 0x3a4a6a, arms: 0x2c5f96, hands: 0xf2c141, headwear: 0x9fb8d6, headStyle: 'turban' },
-  { head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a, arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban' },
-  { head: 0xf2c141, torso: 0x9a9184, belt: 0x5a5248, legs: 0x6f6558, arms: 0x8a8278, hands: 0xf2c141, headwear: 0xb9b2a4, headStyle: 'turban' }
+  { head: 0xf2c141, torso: 0x2f6db0, belt: 0x24507e, legs: 0x3a4a6a, arms: 0x2c5f96, hands: 0xf2c141, headwear: 0x9fb8d6, headStyle: 'turban', sword: false },
+  { head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a, arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban', sword: false },
+  { head: 0xf2c141, torso: 0x9a9184, belt: 0x5a5248, legs: 0x6f6558, arms: 0x8a8278, hands: 0xf2c141, headwear: 0xb9b2a4, headStyle: 'turban', sword: false }
 ];
 
 function rbox(w: number, h: number, d: number, color: number, plastic: PlasticMaterialFactory, x: number, y: number, z: number): THREE.Mesh {

@@ -16,9 +16,12 @@ Me centro **solo en lo mío**: el **minuto 0–5** y el **motor**. Los demás tr
   riñe al Beduino. ✅
 - [x] **Beats a tiempos OFICIALES** del desglose (esc. 01–08) + **cierre en la
   caravana** (el río se lo deja al 5–10). ✅
-- [ ] **Tabernáculo + 4 niños con pan** (esc. 06).
-- [ ] Más **reactividad** ambiental (tocar tiendas, dar de beber a animales…).
-- [ ] **Textos más cortos** (los peques leen despacio).
+- [x] **Tabernáculo** (Mishkán: cortinas azul/púrpura/carmesí + capiteles dorados)
+  **+ 4 niños desfilando con canastas de pan** (esc. 06). ✅
+- [x] **Textos más cortos** (subtítulos y objetivos). ✅
+- [x] **Quitar espadas** a los no-combatientes (campo `sword:false`). ✅
+- [x] **Abrevadero** con aldeano dando de beber + oveja bebiendo (esc. 05). ✅
+- [ ] Más reactividad interactiva (camellos/tiendas que reaccionen al jugador).
 - [ ] Silueta de **Jericó** más fina (queda como pieza para el 5–10).
 - [ ] Entregas: single-file jugable + capturas.
 

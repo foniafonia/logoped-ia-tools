@@ -6,14 +6,14 @@ import { Dust } from '../../effects/Dust';
 import { IS_MOBILE } from '../../core/Quality';
 
 const VILLAGER_SKINS: MinifigureSkin[] = [
-  { head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a, arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban' },
-  { head: 0xf2c141, torso: 0x9a9184, belt: 0x5a5248, legs: 0x6f6558, arms: 0x8a8278, hands: 0xf2c141, headwear: 0xb9b2a4, headStyle: 'turban' },
-  { head: 0xf2c141, torso: 0x8f6a3e, belt: 0x5a4028, legs: 0x6f5230, arms: 0x7a5a34, hands: 0xf2c141, headwear: 0xcdb98a, headStyle: 'turban' },
-  { head: 0xf2c141, torso: 0x6f7a52, belt: 0x4a5030, legs: 0x556040, arms: 0x66703f, hands: 0xf2c141, headwear: 0xa9b088, headStyle: 'turban' }
+  { head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a, arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban', sword: false },
+  { head: 0xf2c141, torso: 0x9a9184, belt: 0x5a5248, legs: 0x6f6558, arms: 0x8a8278, hands: 0xf2c141, headwear: 0xb9b2a4, headStyle: 'turban', sword: false },
+  { head: 0xf2c141, torso: 0x8f6a3e, belt: 0x5a4028, legs: 0x6f5230, arms: 0x7a5a34, hands: 0xf2c141, headwear: 0xcdb98a, headStyle: 'turban', sword: false },
+  { head: 0xf2c141, torso: 0x6f7a52, belt: 0x4a5030, legs: 0x556040, arms: 0x66703f, hands: 0xf2c141, headwear: 0xa9b088, headStyle: 'turban', sword: false }
 ];
 const BEDOUIN_SKIN: MinifigureSkin = {
   head: 0xf2c141, torso: 0x7d6608, belt: 0x4a3a10, legs: 0x5a4a1a, arms: 0x6a5a18,
-  hands: 0xf2c141, headwear: 0xf5cba7, headStyle: 'turban', beard: 0x2a2018
+  hands: 0xf2c141, headwear: 0xf5cba7, headStyle: 'turban', beard: 0x2a2018, sword: false
 };
 
 function rbox(w: number, h: number, d: number, color: number, plastic: PlasticMaterialFactory, x: number, y: number, z: number): THREE.Mesh {
@@ -46,6 +46,20 @@ function buildSheep(plastic: PlasticMaterialFactory): THREE.Group {
   return g;
 }
 
+/** Canasta de mimbre con panes redondos (la cargan los niños). */
+function buildBasket(plastic: PlasticMaterialFactory): THREE.Group {
+  const g = new THREE.Group();
+  const basket = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.4, 0.5, 12), plastic.get(0xc9a24a));
+  g.add(basket);
+  for (let k = 0; k < 4; k++) {
+    const bread = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 6), plastic.get(0xd9a75a));
+    bread.position.set((Math.random() - 0.5) * 0.4, 0.32, (Math.random() - 0.5) * 0.4);
+    g.add(bread);
+  }
+  return g;
+}
+
+interface Nino { fig: Minifigure; prog: number; }
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
 interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; }
@@ -61,6 +75,9 @@ export class CampLife {
   private bedouin: Minifigure;
   private loads: Load[] = [];
   private sheep: Bicho[] = [];      // ovejas que saltan y balan si te acercas
+  private ninos: Nino[] = [];       // niños que desfilan con canastas de pan
+  private readonly rutaA = new THREE.Vector3(12, 0, 46);   // ruta de los niños
+  private readonly rutaB = new THREE.Vector3(31, 0, 25);   // (hacia el Tabernáculo)
   private pen = { x: -30, z: 44, r: 5.4 };   // redil (arrear ovejas)
   private penActive = false;        // el mini-juego de arrear está activo
   private gagT = 0;
@@ -97,6 +114,32 @@ export class CampLife {
       this.group.add(s);
       this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true });
     }
+
+    // --- 4 niños con canastas de pan que desfilan hacia el Tabernáculo (esc. 06) ---
+    for (let i = 0; i < 4; i++) {
+      const fig = createMinifigure(plastic, VILLAGER_SKINS[i % VILLAGER_SKINS.length]);
+      fig.root.scale.setScalar(0.62);
+      const basket = buildBasket(plastic);
+      basket.position.set(0, 2.4, 1.2); fig.root.add(basket);   // canasta delante, en las manos
+      this.group.add(fig.root);
+      this.ninos.push({ fig, prog: i * 0.16 });
+    }
+
+    // --- Abrevadero: dan de beber a los animales (esc. 05) ---
+    const trough = new THREE.Group();
+    const stone = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.9, 1.4), plastic.get(0x8a8078));
+    stone.position.y = 0.45; stone.castShadow = true; trough.add(stone);
+    const water = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.16, 1.0),
+      new THREE.MeshStandardMaterial({ color: 0x3a8fbf, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.9 }));
+    water.position.y = 0.86; trough.add(water);
+    trough.position.set(-12, 0, 30); this.group.add(trough);
+    const helper = createMinifigure(plastic, VILLAGER_SKINS[1]);
+    helper.root.position.set(-14.2, 0, 30); helper.root.rotation.y = Math.PI / 2;
+    helper.armR.rotation.x = -0.9; helper.armL.rotation.x = -0.6;   // inclinado, dando de beber
+    this.group.add(helper.root);
+    const drinker = buildSheep(plastic);
+    drinker.position.set(-10.4, 0, 30); drinker.rotation.y = -Math.PI / 2; drinker.rotation.x = 0.22;
+    this.group.add(drinker);
 
     // --- Gag del beduino: figura + camello + torre de carga ---
     this.bedouin = createMinifigure(plastic, BEDOUIN_SKIN);
@@ -188,6 +231,18 @@ export class CampLife {
         }
         if (d2 < this.pen.r * this.pen.r) { s.penned = true; s.vy = 0; onPenned?.(); }
       }
+    }
+
+    // niños desfilando con canastas de pan (en fila hacia el Tabernáculo)
+    const dirY = Math.atan2(this.rutaB.x - this.rutaA.x, this.rutaB.z - this.rutaA.z);
+    for (const n of this.ninos) {
+      n.prog += dt * 0.06;
+      if (n.prog > 1.15) n.prog -= 1.15;   // bucle con pausa al final
+      const p = Math.min(1, n.prog);
+      n.fig.root.position.lerpVectors(this.rutaA, this.rutaB, p);
+      n.fig.root.rotation.y = dirY;
+      n.fig.update(dt, n.prog <= 1, 0.7);
+      n.fig.armR.rotation.x = -1.2; n.fig.armL.rotation.x = -1.2;   // mantienen el pan cargado
     }
 
     // aldeanos deambulando

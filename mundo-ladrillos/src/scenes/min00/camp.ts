@@ -8,7 +8,7 @@ import { IS_MOBILE } from '../../core/Quality';
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
 export const VILLAGER_SKIN: MinifigureSkin = {
   head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a,
-  arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban'
+  arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban', sword: false
 };
 
 export interface CampBuild {
@@ -124,6 +124,44 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     flag.position.set(bx + 0.95, 5.2, bz); flag.castShadow = true;
     group.add(pole, flag);
   });
+
+  // --- TABERNÁCULO (Mishkán): recinto de cortinas de lino + tienda sagrada ---
+  const tab = new THREE.Group();
+  const gold = new THREE.MeshStandardMaterial({ color: 0xd9ad3c, roughness: 0.35, metalness: 0.7 });
+  const linen = plastic.get(0xf0ead6);
+  const W = 13, D = 8, postH = 3.2;
+  const post = (x: number, z: number): void => {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, postH, 6), plastic.get(0xcdb98a));
+    p.position.set(x, postH / 2, z); p.castShadow = true; tab.add(p);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.26, 8, 6), gold);
+    cap.position.set(x, postH, z); tab.add(cap);
+  };
+  const curtain = (x: number, z: number, w: number, horiz: boolean): void => {
+    const geo = horiz ? new THREE.BoxGeometry(w, 2.2, 0.12) : new THREE.BoxGeometry(0.12, 2.2, w);
+    const m = new THREE.Mesh(geo, linen); m.position.set(x, 1.5, z); m.castShadow = true; tab.add(m);
+  };
+  // perímetro: lados y fondo cerrados; frente (+z) con hueco de entrada
+  for (let i = 0; i <= 6; i++) { const x = -W / 2 + (i * W) / 6; post(x, -D / 2); }
+  for (let i = 0; i <= 4; i++) { const z = -D / 2 + (i * D) / 4; post(-W / 2, z); post(W / 2, z); }
+  curtain(0, -D / 2, W, true);                       // fondo
+  curtain(-W / 2, 0, D, false); curtain(W / 2, 0, D, false); // lados
+  curtain(-W / 2 + 2.6, D / 2, 5.2, true); curtain(W / 2 - 2.6, D / 2, 5.2, true); // frente con hueco
+  // cortina de entrada (azul/púrpura/carmesí del Mishkán)
+  const gateColors = [0x2f5fb0, 0x7a3f9a, 0xb03a3a];
+  gateColors.forEach((c, i) => {
+    const s = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.4, 0.1), plastic.get(c));
+    s.position.set(-1.35 + i * 0.9, 1.5, D / 2); tab.add(s);
+  });
+  // tienda sagrada central (paredes a rayas + techo dorado)
+  const stripes = [0x2f5fb0, 0x7a3f9a, 0xb03a3a, 0xf0ead6];
+  for (let i = 0; i < 4; i++) {
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(5.4, 0.9, 3.2), plastic.get(stripes[i]));
+    wall.position.set(0, 0.6 + i * 0.9, -1.5); wall.castShadow = true; tab.add(wall);
+  }
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 3.8), gold);
+  roof.position.set(0, 4.4, -1.5); roof.castShadow = true; tab.add(roof);
+  tab.position.set(26, 0, 22); tab.rotation.y = -0.35;
+  group.add(tab);
 
   scene.add(group);
   return { group, ropes, yehoshua: yoshua };
