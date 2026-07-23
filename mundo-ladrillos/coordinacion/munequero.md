@@ -94,3 +94,46 @@ premio. Mejoras:
 3. **Feel unificado:** min05 (barras+viñeta+confeti) y min00 (estrellas+logros)
    están bien pero distintos; al **unir tramos**, unificar el lenguaje de premio.
 - Menor: el **salto** no se usa para nada jugable → darle uso o quitarlo.
+
+---
+
+## 🏔️ VISOR — "MUNDO LLENO, nunca vacío" (dirección visual, instrucción del usuario)
+
+**Problema detectado por el usuario:** varias escenas se sienten VACÍAS — el
+muñeco parece flotar en la nada, con el horizonte infinito liso. Mata la
+inmersión.
+
+**Regla (BIBLIA):** los fotogramas NO se pegan como fondo plano (ya se probó y
+quedó fatal). El fondo se **RECONSTRUYE EN BLOQUES**, fiel al frame.
+
+**Mockup de referencia** (mi rama `claude/munecos-ifepfa`):
+`proto/mundo_vacio.png` (como ahora) vs `proto/mundo_lleno.png` (objetivo).
+Fuente: `src/backdrop.ts` (sandbox, no es el juego; cópiese la idea, no el archivo).
+
+**"Kit de horizonte" (barato, no hunde el móvil) — 5 ingredientes:**
+1. **Cielo con color** (degradado atardecer/noche), no fondo liso.
+2. **Niebla** (`THREE.Fog`) que funde lo lejano → profundidad + oculta el borde.
+3. **Cerros de ARENISCA al fondo: mesetas de cima plana + colinas redondeadas**
+   (NO pirámides puntiagudas — el desierto de la peli es así).
+4. **Silueta de la fortaleza de Jericó** en el horizonte donde toque (además
+   recuerda el objetivo de la historia).
+5. **Elementos de encuadre cerca** (palmeras, juncos, rocas) para dar capas.
+
+**Mapa de horizonte por escena (fiel a los frames):**
+| Escena | Fondo de bloques |
+|---|---|
+| Campamento 0-5 | desierto atardecer, dunas + mesetas/colinas, oasis; río + Jericó intuidos al fondo |
+| 9 Orilla Jordán | río + orilla verde, Jericó al otro lado, atardecer, colinas |
+| 10 Reclutar espías | campamento atardecer (mismo horizonte) |
+| 11 Murallas noche | gran muralla enorme, cielo nocturno + luna, braseros |
+| 12 Trajes sigilo | noche, oasis/juncos, tiendas |
+| 13 Cruzar río | río de noche, muralla al fondo, luna, juncos |
+| 14 Treta avión | puerta/muro noche, faroles, guardias |
+| 15 Colarse puerta | calles de Jericó noche: arenisca, arcos, faroles, luna, "Restaurante de Rahab" |
+| 16 Guardias calles | calle completa noche: edificios a los lados, faroles, barriles, taberna |
+| Muralla (clímax) | gran muralla + desierto + amanecer, dos ejércitos (ya existe) |
+
+Mismo kit con 4 modos: *desierto-atardecer / río-oasis / muralla-noche /
+calle-noche*. Sugerencia: un helper reutilizable `buildHorizon(modo)` que cada
+escena añade DETRÁS de lo suyo. Es **dirección visual del usuario**; el "cómo"
+lo decide cada creador.
