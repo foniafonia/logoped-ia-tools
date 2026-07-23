@@ -31,6 +31,12 @@ export interface SceneContext {
   addObstacle: (x: number, z: number, halfW: number, halfD: number) => void;
   /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
   setPlayerSkin: (which: PlayerSkinId) => void;
+  /**
+   * Momento CINEMÁTICO: la cámara enfoca automáticamente `target` durante
+   * `seconds` (p. ej. el avión de la treta) y luego DEVUELVE el control manual.
+   * Opcional: si el orquestador no lo implementa, no pasa nada.
+   */
+  cameraFocus?: (target: THREE.Object3D, seconds: number) => void;
 }
 
 /** Skins de jugador disponibles (campamento vs sigilo). */

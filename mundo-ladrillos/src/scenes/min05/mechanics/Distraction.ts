@@ -81,6 +81,8 @@ export class Distraction {
 
   get active(): boolean { return this.timer > 0; }
   get spent(): boolean { return this.used && this.timer <= 0; }
+  /** El avión (para que la cámara lo enfoque en el momento cinemático). */
+  get planeObject(): THREE.Object3D { return this.plane; }
   /** Fracción 0..1 de la ventana de distracción (para el HUD "¡AHORA!"). */
   get window(): number { return Math.max(0, this.timer / this.DUR); }
 

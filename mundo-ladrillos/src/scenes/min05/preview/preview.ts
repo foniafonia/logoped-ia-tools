@@ -238,6 +238,11 @@ let currentDef: Min05Scene | null = null;
 let done = false;
 let advanceT = 0;
 
+// --- cinemática de cámara (mirar el avión y devolver el control) ---
+let cineT = 0;
+let cineTarget: THREE.Object3D | null = null;
+const cineTmp = new THREE.Vector3();
+
 function disposeGroup(g: THREE.Group): void {
   g.traverse((o: THREE.Object3D) => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
 }
@@ -264,7 +269,8 @@ function loadScene(i: number): void {
     sound,
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
-    setPlayerSkin: (which) => setPlayerSkin(which)
+    setPlayerSkin: (which) => setPlayerSkin(which),
+    cameraFocus: (target, seconds) => { cineTarget = target; cineT = seconds; }
   };
   current = def.build(ctx);
 
@@ -323,13 +329,16 @@ function animate(now: number): void {
   requestAnimationFrame(animate);
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
-  controller.update(dt, tpcam.yaw);
 
-  // sonido de locomoción
-  if (sound.ready) {
-    sound.footTick(dt, controller.moving, controller.running);
-    if (controller.justJumped) sound.jump();
-    if (controller.justLanded) sound.land();
+  const cine = cineT > 0 && !!cineTarget;
+  // durante la cinemática el jugador NO se mueve (solo mira); si no, control normal
+  if (!cine) {
+    controller.update(dt, tpcam.yaw);
+    if (sound.ready) {
+      sound.footTick(dt, controller.moving, controller.running);
+      if (controller.justJumped) sound.jump();
+      if (controller.justLanded) sound.land();
+    }
   }
 
   if (current && currentDef) {
@@ -366,7 +375,19 @@ function animate(now: number): void {
       if (advanceT > 2.6) { const idx = MIN05_SCENES.findIndex((s) => s.id === currentDef!.id); loadScene(idx + 1); }
     }
   }
-  tpcam.update(controller.pos);
+
+  // ---- Cámara ----
+  if (cine && cineTarget) {
+    cineT -= dt;
+    // cámara baja y por detrás, mirando ARRIBA al avión (lo sigue al cruzar)
+    const tp = cineTarget.position;
+    cineTmp.set(controller.pos.x * 0.4 + tp.x * 0.12, 3.5, controller.pos.z - 20);
+    camera.position.lerp(cineTmp, 0.09);
+    camera.lookAt(tp.x, tp.y, tp.z);
+    if (cineT <= 0) cineTarget = null; // fin → vuelve el control manual
+  } else {
+    tpcam.update(controller.pos);
+  }
   renderer.render(scene, camera);
 }
 function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivElement }, v?: number): void {
@@ -380,3 +401,4 @@ requestAnimationFrame(animate);
 // hooks de depuración/captura
 (window as any).__setPlayer = (x: number, z: number) => controller.teleport(x, z);
 (window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });
+(window as any).__cine = () => cineT;

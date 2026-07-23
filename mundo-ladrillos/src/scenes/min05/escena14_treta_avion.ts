@@ -84,6 +84,8 @@ export const escena14: Min05Scene = {
             distr.trigger(); triggered = true;
             planeSfx = ctx.sound.plane(); ctx.sound.playClip('m0510_14_avion', 1.6);
             spot.visible = false; goal.visible = true;
+            // la cámara mira arriba al avión ~2,4 s y luego devuelve el control
+            ctx.cameraFocus?.(distr.planeObject, 2.4);
           }
         } else {
           gate.setOpen(1);                       // una vez hecha la treta, la puerta queda abierta
