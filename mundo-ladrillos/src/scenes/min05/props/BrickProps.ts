@@ -352,6 +352,42 @@ export function buildBarrel(plastic: PlasticMaterialFactory, color: number = Bri
   return g;
 }
 
+/**
+ * PUESTO DE MERCADO de ladrillo: cuatro postes, TOLDO a rayas, mostrador y
+ * género (vasijas, fruta, panes). Da vida y atmósfera de zoco a las calles.
+ */
+export function buildMarketStall(
+  plastic: PlasticMaterialFactory, awning: number = BrickPalette.DARK_RED
+): THREE.Group {
+  const g = new THREE.Group();
+  // postes
+  for (const sx of [-2.4, 2.4]) for (const sz of [-1.4, 1.4]) {
+    g.add(brickBox(plastic, 0.35, 4.4, 0.35, BrickPalette.DARK_BROWN, sx, 2.2, sz));
+  }
+  // mostrador
+  g.add(brickBox(plastic, 5.4, 0.4, 3, BrickPalette.BROWN, 0, 2.4, 0));
+  for (const sx of [-2.3, 2.3]) g.add(brickBox(plastic, 0.4, 2.2, 3, BrickPalette.DARK_BROWN, sx, 1.2, 0));
+  // toldo a dos aguas, a rayas (tela clara + color)
+  for (let i = 0; i < 6; i++) {
+    const col = i % 2 ? awning : BrickPalette.WARM_SAND;
+    for (const side of [-1, 1]) {
+      const panel = brickBox(plastic, 1.0, 0.25, 3.4, col, -2.5 + i + 0.5, 4.7, side * 0.9);
+      panel.rotation.x = side * 0.5; g.add(panel);
+    }
+  }
+  g.add(brickBox(plastic, 6, 0.3, 0.3, BrickPalette.DARK_BROWN, 0, 5.2, 0)); // caballete
+  // género sobre el mostrador
+  const goods = [0xdd7a1e, 0xb62b2b, 0x4c9e5e, 0xf0b429, 0x7a5433];
+  for (let i = 0; i < 6; i++) {
+    const gx = -2 + i * 0.8;
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.24, 0.6, 10), plastic.get(goods[i % goods.length]));
+    pot.position.set(gx, 2.9, (i % 2 ? 0.6 : -0.5)); pot.castShadow = true; g.add(pot);
+    const fruit = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 6), plastic.get(goods[(i + 2) % goods.length]));
+    fruit.position.set(gx, 2.85, (i % 2 ? -0.6 : 0.6)); g.add(fruit);
+  }
+  return g;
+}
+
 /** Casa/edificio urbano de ladrillo (para las calles de Jericó). */
 export function buildHouse(
   plastic: PlasticMaterialFactory, w = 8, h = 8, d = 8,

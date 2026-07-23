@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { buildHouse, buildBarrel, studdedPlate, brickBox } from './props/BrickProps';
+import { buildHouse, buildBarrel, buildMarketStall, studdedPlate, brickBox } from './props/BrickProps';
 import { buildBrazier, buildLantern, buildBanner } from './props/NightAmbience';
 import { StealthSystem } from './mechanics/StealthSystem';
 import { VisionCone, Npc } from './props/Npc';
@@ -62,6 +62,9 @@ export const escena16: Min05Scene = {
 
     const barrelPos = [{ x: -8, z: 3 }, { x: 8, z: 3 }, { x: -8, z: 20 }, { x: 8, z: 20 }, { x: -7, z: 33 }];
     for (const b of barrelPos) { const br = buildBarrel(plastic); br.position.set(b.x, 0, b.z); group.add(br); }
+    // puestos de mercado (atmósfera de zoco nocturno + hacen de cobertura)
+    const stallPos: Array<[number, number, number]> = [[-9, 10, BrickPalette.DARK_RED], [9, 25, BrickPalette.DARK_BLUE]];
+    for (const [sx, sz, col] of stallPos) { const st = buildMarketStall(plastic, col); st.position.set(sx, 0, sz); st.rotation.y = sx < 0 ? 0.4 : -0.4; group.add(st); ctx.addObstacle(sx, sz, 2.6, 1.6); }
 
     const goal = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);

@@ -9,6 +9,7 @@ import { MIN05_SCENES, BEAT_LOCAL } from '../registry';
 import { Min05Scene, SceneInstance, SceneContext } from '../types';
 import { SoundEngine } from '../audio/SoundEngine';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
+import { CinematicCamera } from '../props/CinematicCamera';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
 /**
@@ -238,29 +239,16 @@ let currentDef: Min05Scene | null = null;
 let done = false;
 let advanceT = 0;
 
-// --- cinemática de cámara: "a veces el audio manda" (seguir objeto o revelar) ---
-let cineT = 0;
-let cineDur = 0;
-let cineMode: 'follow' | 'reveal' | null = null;
-let cineTarget: THREE.Object3D | null = null;
-const cvFrom = new THREE.Vector3(), cvTo = new THREE.Vector3();
-const clFrom = new THREE.Vector3(), clTo = new THREE.Vector3();
-const cineTmp = new THREE.Vector3(), cineLook = new THREE.Vector3();
+// --- cinemática de cámara: "a veces el audio manda" (helper reutilizable) ---
+const cineCam = new CinematicCamera(camera);
 let started = false;                          // ¿pulsó ya "empezar"?
 let pendingIntro: Min05Scene['intro'] | null = null;
 const shotMode = new URLSearchParams(location.search).get('shot') === '1';
 
-type XYZ = { x: number; y: number; z: number };
-function doReveal(from: XYZ, to: XYZ, lookFrom: XYZ, lookTo: XYZ, seconds: number): void {
-  cineMode = 'reveal'; cineT = seconds; cineDur = seconds;
-  cvFrom.set(from.x, from.y, from.z); cvTo.set(to.x, to.y, to.z);
-  clFrom.set(lookFrom.x, lookFrom.y, lookFrom.z); clTo.set(lookTo.x, lookTo.y, lookTo.z);
-  camera.position.copy(cvFrom);
-}
 function fireIntro(): void {
   if (!pendingIntro) return;
   const i = pendingIntro; pendingIntro = null;
-  doReveal(i.from, i.to, i.lookFrom, i.lookTo, i.seconds);
+  cineCam.reveal(i.from, i.to, i.lookFrom, i.lookTo, i.seconds);
 }
 
 function disposeGroup(g: THREE.Group): void {
@@ -290,8 +278,8 @@ function loadScene(i: number): void {
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
     setPlayerSkin: (which) => setPlayerSkin(which),
-    cameraFocus: (target, seconds) => { cineMode = 'follow'; cineTarget = target; cineT = seconds; cineDur = seconds; },
-    cameraReveal: (from, to, lookFrom, lookTo, seconds) => doReveal(from, to, lookFrom, lookTo, seconds)
+    cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
+    cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds)
   };
   current = def.build(ctx);
 
@@ -357,7 +345,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
 
-  const cine = cineT > 0 && cineMode !== null;
+  const cine = cineCam.active;
   // durante la cinemática el jugador NO se mueve (solo mira); si no, control normal
   if (!cine) {
     controller.update(dt, tpcam.yaw);
@@ -403,26 +391,8 @@ function animate(now: number): void {
     }
   }
 
-  // ---- Cámara ----
-  if (cine) {
-    cineT -= dt;
-    if (cineMode === 'follow' && cineTarget) {
-      // cámara baja y por detrás, mirando ARRIBA al objeto (lo sigue al cruzar)
-      const tp = cineTarget.position;
-      cineTmp.set(controller.pos.x * 0.4 + tp.x * 0.12, 3.5, controller.pos.z - 20);
-      camera.position.lerp(cineTmp, 0.09);
-      camera.lookAt(tp.x, tp.y, tp.z);
-    } else if (cineMode === 'reveal') {
-      const k = THREE.MathUtils.clamp(1 - Math.max(0, cineT) / cineDur, 0, 1);
-      const e = k * k * (3 - 2 * k); // smoothstep
-      camera.position.lerpVectors(cvFrom, cvTo, e);
-      cineLook.lerpVectors(clFrom, clTo, e);
-      camera.lookAt(cineLook);
-    }
-    if (cineT <= 0) { cineMode = null; cineTarget = null; } // fin → control manual
-  } else {
-    tpcam.update(controller.pos);
-  }
+  // ---- Cámara ---- (si hay cinemática la controla el helper; si no, la normal)
+  if (!cineCam.update(dt, controller.pos.x, controller.pos.z)) tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }
 function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivElement }, v?: number): void {
@@ -436,4 +406,4 @@ requestAnimationFrame(animate);
 // hooks de depuración/captura
 (window as any).__setPlayer = (x: number, z: number) => controller.teleport(x, z);
 (window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });
-(window as any).__cine = () => cineT;
+(window as any).__cine = () => (cineCam.active ? 1 : 0);
