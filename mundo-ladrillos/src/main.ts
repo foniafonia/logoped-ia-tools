@@ -12,6 +12,7 @@ import { Dust } from './effects/Dust';
 import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
 import { CampLife } from './scenes/min00/campLife';
 import { Journey } from './scenes/min00/journey';
+import { StudioIntro } from './scenes/min00/studioIntro';
 import { Director, Beat } from './scenes/min00/Director';
 
 const app = document.getElementById('app')!;
@@ -64,6 +65,8 @@ const camp = buildCamp(scene, plastic);
 const dust = new Dust(scene);
 const life = new CampLife(scene, plastic, dust);           // aldeanos, animales, gag del beduino
 const journey = new Journey(scene, plastic);               // río Jordán + Jericó + caravana (ocultos)
+const studio = new StudioIntro(scene, plastic);            // plató de cine (cinemática de apertura)
+let introActiva = false;                                   // true durante la intro del estudio
 (window as any).__life = life; (window as any).__journey = journey;
 
 // === JUGADOR: un joven levita del campamento ===
@@ -73,7 +76,8 @@ const controller = new CharacterController(villager);
 // terreno abierto: del fondo del campamento (+z) hasta la orilla del Jordán (−z)
 controller.bounds = { minX: -88, maxX: 88, minZ: Journey.ORILLA_Z + 2, maxZ: 88 };
 controller.pos.set(0, 0, 64);
-if (IS_MOBILE || 'ontouchstart' in window) new TouchControls(controller);
+const esMovil = IS_MOBILE || 'ontouchstart' in window;
+let touchCreado = false;   // los controles táctiles se crean al terminar la intro
 (window as any).__spy = villager; (window as any).__ctrl = controller;
 
 // === Baliza del objetivo (anillo + flecha que bota) ===
@@ -105,34 +109,46 @@ let ropesActivas = false;
 let nightF = 0;            // 0 = día, 1 = noche (rampa al beat final)
 let goNight = false;
 
+// termina la cinemática de estudio y devuelve el control al jugador en el campamento
+function terminarIntro(): void {
+  if (!introActiva) return;
+  introActiva = false;
+  studio.setActive(false);
+  villager.root.visible = true;
+  if (esMovil && !touchCreado) { new TouchControls(controller); touchCreado = true; }  // controles al empezar a jugar
+}
+
+// Beats con los TIEMPOS OFICIALES del desglose de la peli (escenas 01–08)
 const beats: Beat[] = [
-  { t: 0, sub: 'Comunidad Shevet Ajim presenta: «La conquista de Jericó», la historia de Yehoshúa.', obj: '' },
+  // — INTRO DE ESTUDIO (esc. 01–02) —
+  { t: 0, sub: 'TuIA.tv presenta: «Construyendo la Conquista de Israel».', obj: '' },
+  { t: 15, sub: '—¡Deja de quejarte y a grabar! El Rabino director pone orden en el plató.', obj: '' },
+  // — CAMPAMENTO (esc. 03–08) —
   {
-    t: 21, sub: 'El pueblo de Israel acampa en el desierto, listo para entrar en la Tierra Prometida.',
-    obj: 'Explora el campamento y acércate a Yehoshúa', onEnter: () => setTarget(YEHOSHUA)
+    t: 25, sub: 'El desierto… y el gran campamento de Israel, listo para la Tierra Prometida.',
+    obj: '', onEnter: () => terminarIntro()
   },
   {
-    t: 63, sub: '¡Hay que recoger el campamento! Enrolla las cuerdas y ayuda a cargar los bultos.',
+    t: 45, sub: 'Yehoshúa alza la mano y arenga a todo el pueblo.',
+    obj: 'Acércate a Yehoshúa', onEnter: () => { terminarIntro(); setTarget(YEHOSHUA); }
+  },
+  {
+    t: 55, sub: '¡A recoger el campamento! Enrolla las cuerdas y arrea las ovejas.',
     obj: `Recoge las cuerdas del campamento (0/${camp.ropes.length})`,
     onEnter: () => { ropesActivas = true; setTarget(null); }
   },
   {
-    t: 135, sub: 'La caravana se pone en marcha por el desierto, rumbo al río Jordán.',
+    t: 123, sub: 'Los niños cargan canastas de pan; todo el campamento se prepara.',
+    obj: ''
+  },
+  {
+    t: 133, sub: '¡Cuidado! El beduino sobrecarga su camello… ¡y la carga se derrumba!',
+    obj: ''
+  },
+  {
+    t: 228, sub: 'La gran caravana se pone en marcha, cruzando las dunas del desierto.',
     obj: 'Sigue a la caravana hacia el norte',
     onEnter: () => { journey.arrancarCaravana(); setTarget({ x: 0, z: Journey.MARCHA_Z }); }
-  },
-  {
-    t: 189, sub: '¡Ahí está el río Jordán! Y al otro lado se alza Jericó, la ciudad amurallada.',
-    obj: 'Llega a la orilla del río Jordán',
-    onEnter: () => { journey.revelarRio(); audio.sfxSparkle(); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 }); }
-  },
-  {
-    t: 235, sub: 'Yehoshúa reúne a los jefes: enviará dos espías a explorar Jericó en secreto.',
-    obj: 'Observa el consejo junto al río', onEnter: () => setTarget(null)
-  },
-  {
-    t: 279, sub: 'Cae la noche sobre el desierto. Los dos espías se preparan para entrar en Jericó…',
-    obj: '', onEnter: () => { goNight = true; journey.caeLaNoche(); setTarget(null); }
   }
 ];
 const director = new Director(beats, null, () => finDelTramo());
@@ -147,7 +163,7 @@ function finDelTramo(): void {
     '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px;max-width:520px">' +
     '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b">¡Bien hecho!</div>' +
     '<div style="font:800 40px system-ui;margin:14px 0">⭐ ' + director.starCount + '</div>' +
-    '<div style="opacity:.9;margin:0 0 20px">Has llevado al pueblo de Israel hasta el río Jordán.<br>Muy pronto: cruzar las aguas y entrar en Jericó.</div>' +
+    '<div style="opacity:.9;margin:0 0 20px">Has preparado el campamento y la caravana está en marcha.<br>Muy pronto: el río Jordán y la misión de los espías.</div>' +
     '<button id="reBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">↻ Volver a jugar</button></div>';
   Object.assign(fin.style, {
     position: 'fixed', inset: '0', zIndex: '60', display: 'flex', alignItems: 'center',
@@ -168,18 +184,17 @@ const baa = (): void => { if (baaCd <= 0) { audio.sfxAnimal(); baaCd = 0.5; } };
 const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling al meter una oveja
 
 // hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
-const done = new Set<number>();
+const done = new Set<string>();
 function checkTargets(): void {
   const p = controller.pos;
   const i = director.beatIndex;
-  if (i === 1 && target && !done.has(1) && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
-    done.add(1); waveT = 2.2; audio.sfxSparkle(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
+  // acércate a Yehoshúa (esc. 04, beat 3)
+  if (i === 3 && target && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
+    done.add('yeh'); waveT = 2.2; audio.sfxSparkle(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
   }
-  if (i === 3 && target && !done.has(3) && p.z < Journey.MARCHA_Z + 3) {
-    done.add(3); audio.sfxSparkle(); director.star(); director.logro('¡Sigues a la caravana!'); setTarget({ x: 0, z: Journey.ORILLA_Z + 4 });
-  }
-  if (i >= 4 && target && !done.has(5) && p.z < Journey.ORILLA_Z + 7) {
-    done.add(5); audio.sfxSuccess(); director.star(); director.logro('¡Has llegado al río Jordán!'); setTarget(null);
+  // sigue la caravana al norte (esc. 08, beat 7)
+  if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
+    done.add('carav'); audio.sfxSuccess(); director.star(); director.logro('¡En marcha con la caravana!'); setTarget(null);
   }
 }
 
@@ -199,6 +214,9 @@ startEl.addEventListener('pointerdown', () => {
   audio.init();
   // la NARRACIÓN real de la peli conduce el tramo (si está embebida en la entrega)
   director.setSpine(audio.playSpine('narracion_min0-5', 0.95));   // el reloj del audio real conduce
+  introActiva = true;              // arranca la cinemática de estudio
+  studio.setActive(true);
+  villager.root.visible = false;   // el jugador aparece al terminar la intro
   director.start();
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
@@ -216,11 +234,20 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
 
+  director.update();
+
+  // — CINEMÁTICA DE ESTUDIO: cámara propia, sin gameplay —
+  if (introActiva) {
+    studio.update(dt, now / 1000, director.tiempo);
+    studio.frameCamera(camera, director.tiempo);
+    renderer.render(scene, camera);
+    return;
+  }
+
   const moving = controller.update(dt, tpcam.yaw);
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil);
   journey.update(dt, now / 1000);
   dust.update(dt);
-  director.update();
   checkTargets();
 
   // estela de polvo al andar/correr (sensación de velocidad)
@@ -250,7 +277,7 @@ function animate(now: number): void {
       }
     }
     const got = camp.ropes.length - left;
-    if (director.beatIndex === 2) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
+    if (director.beatIndex === 4) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
       director.logro('¡Cuerdas recogidas! Ahora arrea las ovejas 🐑');
@@ -258,11 +285,11 @@ function animate(now: number): void {
     }
   }
   // FASE B — arrear las ovejas al redil (empújalas acercándote)
-  if (ropesHechas && !done.has(2)) {
+  if (ropesHechas && !done.has('camp')) {
     const enRedil = life.ovejasEnRedil;
-    if (director.beatIndex === 2) director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo})`);
+    if (director.beatIndex === 4) director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo})`);
     if (enRedil >= life.ovejasObjetivo) {
-      done.add(2); audio.sfxSuccess(); director.star();
+      done.add('camp'); audio.sfxSuccess(); director.star();
       director.logro('¡Campamento recogido! 🎉'); setTarget(null);
     }
   }

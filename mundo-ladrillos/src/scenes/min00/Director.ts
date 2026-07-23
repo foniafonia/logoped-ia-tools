@@ -128,6 +128,8 @@ export class Director {
   }
 
   get beatIndex(): number { return this.i; }
+  /** Segundo actual del tramo (reloj del audio, o de pared si no hay audio). */
+  get tiempo(): number { return this.started ? this.clock() : 0; }
 
   update(): void {
     if (!this.started || this.finished) return;
