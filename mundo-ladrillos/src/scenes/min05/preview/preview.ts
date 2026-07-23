@@ -9,6 +9,7 @@ import { MIN05_SCENES, BEAT_LOCAL } from '../registry';
 import { Min05Scene, SceneInstance, SceneContext } from '../types';
 import { SoundEngine } from '../audio/SoundEngine';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
+import { buildHorizon } from '../props/Horizon';
 import { CinematicCamera } from '../props/CinematicCamera';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -70,6 +71,9 @@ scene.add(ground);
 const groundMat = ground.material as THREE.MeshStandardMaterial;
 const cobbleTex = cobbleTexture(); cobbleTex.repeat.set(120, 120);
 const nightSky = buildNightSky(); nightSky.visible = false; scene.add(nightSky);
+// Kit de horizonte: dunas y cerros que rodean SIEMPRE al jugador (nunca un
+// descampado pálido). Se iluminan solos con la luz día/noche de la escena.
+const horizon = buildHorizon(plastic); scene.add(horizon.group);
 
 function applyLighting(noche: boolean, street: boolean): void {
   if (noche) {
@@ -88,8 +92,8 @@ function applyLighting(noche: boolean, street: boolean): void {
   } else {
     scene.environment = envTex;
     renderer.toneMappingExposure = 1.05;
-    scene.background = new THREE.Color(0xf0d9a8);
-    scene.fog = new THREE.Fog(0xf0d9a8, 60, 360);
+    scene.background = horizon.daySky;                       // cielo con color (no liso)
+    scene.fog = new THREE.Fog(horizon.horizonColor, 70, 360); // funde las dunas en el horizonte
     hemi.color.setHex(0xffe9c0); hemi.groundColor.setHex(0xa9895f); hemi.intensity = 0.55;
     key.color.setHex(0xffd9a0); key.intensity = 3.0;
     key.position.set(-18, 28, 14);
