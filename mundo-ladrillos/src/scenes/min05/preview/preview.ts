@@ -238,10 +238,30 @@ let currentDef: Min05Scene | null = null;
 let done = false;
 let advanceT = 0;
 
-// --- cinemática de cámara (mirar el avión y devolver el control) ---
+// --- cinemática de cámara: "a veces el audio manda" (seguir objeto o revelar) ---
 let cineT = 0;
+let cineDur = 0;
+let cineMode: 'follow' | 'reveal' | null = null;
 let cineTarget: THREE.Object3D | null = null;
-const cineTmp = new THREE.Vector3();
+const cvFrom = new THREE.Vector3(), cvTo = new THREE.Vector3();
+const clFrom = new THREE.Vector3(), clTo = new THREE.Vector3();
+const cineTmp = new THREE.Vector3(), cineLook = new THREE.Vector3();
+let started = false;                          // ¿pulsó ya "empezar"?
+let pendingIntro: Min05Scene['intro'] | null = null;
+const shotMode = new URLSearchParams(location.search).get('shot') === '1';
+
+type XYZ = { x: number; y: number; z: number };
+function doReveal(from: XYZ, to: XYZ, lookFrom: XYZ, lookTo: XYZ, seconds: number): void {
+  cineMode = 'reveal'; cineT = seconds; cineDur = seconds;
+  cvFrom.set(from.x, from.y, from.z); cvTo.set(to.x, to.y, to.z);
+  clFrom.set(lookFrom.x, lookFrom.y, lookFrom.z); clTo.set(lookTo.x, lookTo.y, lookTo.z);
+  camera.position.copy(cvFrom);
+}
+function fireIntro(): void {
+  if (!pendingIntro) return;
+  const i = pendingIntro; pendingIntro = null;
+  doReveal(i.from, i.to, i.lookFrom, i.lookTo, i.seconds);
+}
 
 function disposeGroup(g: THREE.Group): void {
   g.traverse((o: THREE.Object3D) => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
@@ -270,7 +290,8 @@ function loadScene(i: number): void {
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
     setPlayerSkin: (which) => setPlayerSkin(which),
-    cameraFocus: (target, seconds) => { cineTarget = target; cineT = seconds; }
+    cameraFocus: (target, seconds) => { cineMode = 'follow'; cineTarget = target; cineT = seconds; cineDur = seconds; },
+    cameraReveal: (from, to, lookFrom, lookTo, seconds) => doReveal(from, to, lookFrom, lookTo, seconds)
   };
   current = def.build(ctx);
 
@@ -284,6 +305,10 @@ function loadScene(i: number): void {
   objEl.style.display = def.objetivo.tipo === 'cinematica' ? 'none' : 'block';
   subEl.textContent = def.subtitulo;
   flashEl.textContent = '';
+  // intro cinemática: se dispara ya si el juego arrancó (o en modo captura);
+  // en la PRIMERA escena espera a "empezar" para no reproducirse tras el overlay.
+  pendingIntro = def.intro ?? null;
+  if (pendingIntro && (started || shotMode)) fireIntro();
   (window as any).__SCENE_READY__ = true;
 }
 
@@ -310,6 +335,8 @@ const startGame = (): void => {
   });
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
   if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
+  started = true;
+  fireIntro();   // intro cinemática de la primera escena, ya con el juego activo
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
 };
 startEl.addEventListener('pointerdown', startGame, { once: true });
@@ -330,7 +357,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
 
-  const cine = cineT > 0 && !!cineTarget;
+  const cine = cineT > 0 && cineMode !== null;
   // durante la cinemática el jugador NO se mueve (solo mira); si no, control normal
   if (!cine) {
     controller.update(dt, tpcam.yaw);
@@ -377,14 +404,22 @@ function animate(now: number): void {
   }
 
   // ---- Cámara ----
-  if (cine && cineTarget) {
+  if (cine) {
     cineT -= dt;
-    // cámara baja y por detrás, mirando ARRIBA al avión (lo sigue al cruzar)
-    const tp = cineTarget.position;
-    cineTmp.set(controller.pos.x * 0.4 + tp.x * 0.12, 3.5, controller.pos.z - 20);
-    camera.position.lerp(cineTmp, 0.09);
-    camera.lookAt(tp.x, tp.y, tp.z);
-    if (cineT <= 0) cineTarget = null; // fin → vuelve el control manual
+    if (cineMode === 'follow' && cineTarget) {
+      // cámara baja y por detrás, mirando ARRIBA al objeto (lo sigue al cruzar)
+      const tp = cineTarget.position;
+      cineTmp.set(controller.pos.x * 0.4 + tp.x * 0.12, 3.5, controller.pos.z - 20);
+      camera.position.lerp(cineTmp, 0.09);
+      camera.lookAt(tp.x, tp.y, tp.z);
+    } else if (cineMode === 'reveal') {
+      const k = THREE.MathUtils.clamp(1 - Math.max(0, cineT) / cineDur, 0, 1);
+      const e = k * k * (3 - 2 * k); // smoothstep
+      camera.position.lerpVectors(cvFrom, cvTo, e);
+      cineLook.lerpVectors(clFrom, clTo, e);
+      camera.lookAt(cineLook);
+    }
+    if (cineT <= 0) { cineMode = null; cineTarget = null; } // fin → control manual
   } else {
     tpcam.update(controller.pos);
   }

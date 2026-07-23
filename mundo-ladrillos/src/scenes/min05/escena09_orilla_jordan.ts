@@ -27,6 +27,11 @@ export const escena09: Min05Scene = {
   objetivo: { tipo: 'ir_a', texto: 'Sube al promontorio y contempla el río', target: { x: 6, z: 5 }, radio: 3.5 },
   exito: 'Yehoshúa observa Jericó al otro lado del río',
   camara: { yaw: Math.PI + 0.2, pitch: 0.34, dist: 32 },
+  // establecimiento: la cámara recorre el río hasta Jericó y baja a Yehoshúa
+  intro: {
+    from: { x: 0, y: 10, z: 22 }, lookFrom: { x: 0, y: 6, z: 50 },
+    to: { x: -8, y: 12, z: -44 }, lookTo: { x: -8, y: 3, z: -14 }, seconds: 4
+  },
 
   build(ctx: SceneContext): SceneInstance {
     const { plastic } = ctx;

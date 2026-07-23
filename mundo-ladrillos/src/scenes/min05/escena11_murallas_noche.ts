@@ -28,6 +28,11 @@ export const escena11: Min05Scene = {
   objetivo: { tipo: 'ir_a', texto: 'Llega al puesto de observación entre los juncos', target: { x: 10, z: -5 }, radio: 3.5 },
   exito: 'Los espías estudian la muralla desde las sombras',
   camara: { yaw: Math.PI + 0.12, pitch: 0.3, dist: 36 },
+  // establecimiento nocturno: la cámara descubre la muralla y baja a los espías
+  intro: {
+    from: { x: 0, y: 4, z: 9 }, lookFrom: { x: 0, y: 16, z: 22 },
+    to: { x: -16, y: 12, z: -46 }, lookTo: { x: -16, y: 3, z: -18 }, seconds: 3.4
+  },
 
   build(ctx: SceneContext): SceneInstance {
     const { plastic } = ctx;

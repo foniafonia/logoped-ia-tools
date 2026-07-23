@@ -32,11 +32,22 @@ export interface SceneContext {
   /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
   setPlayerSkin: (which: PlayerSkinId) => void;
   /**
-   * Momento CINEMÁTICO: la cámara enfoca automáticamente `target` durante
-   * `seconds` (p. ej. el avión de la treta) y luego DEVUELVE el control manual.
-   * Opcional: si el orquestador no lo implementa, no pasa nada.
+   * MOMENTO CINEMÁTICO — "a veces el audio manda sobre el juego": la cámara
+   * toma el control unos segundos (sincronizada con la peli) y luego DEVUELVE
+   * el control manual. Dos variantes; ambas OPCIONALES (si el orquestador no las
+   * implementa, no pasa nada y el juego sigue jugable):
+   *  - `cameraFocus`: sigue a un objeto en movimiento (p. ej. el avión).
+   *  - `cameraReveal`: travelling de revelado de `from`→`to` mirando de
+   *    `lookFrom`→`lookTo` (p. ej. descubrir la muralla o el río al empezar).
    */
   cameraFocus?: (target: THREE.Object3D, seconds: number) => void;
+  cameraReveal?: (
+    from: { x: number; y: number; z: number },
+    to: { x: number; y: number; z: number },
+    lookFrom: { x: number; y: number; z: number },
+    lookTo: { x: number; y: number; z: number },
+    seconds: number
+  ) => void;
 }
 
 /** Skins de jugador disponibles (campamento vs sigilo). */
@@ -109,6 +120,19 @@ export interface Min05Scene {
   noche?: boolean;          // ambiente nocturno (11–16 son de noche)
   ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de ambiente (viento/grillos/agua)
   camara?: CameraHint;
+  /**
+   * INTRO cinemática opcional: al empezar la escena, la cámara hace un travelling
+   * de revelado (from→to mirando lookFrom→lookTo) durante `seconds` y luego
+   * devuelve el control. Para los planos que en la peli son de establecimiento
+   * (la orilla del Jordán, la muralla de noche…). "A veces el audio manda."
+   */
+  intro?: {
+    from: { x: number; y: number; z: number };
+    to: { x: number; y: number; z: number };
+    lookFrom: { x: number; y: number; z: number };
+    lookTo: { x: number; y: number; z: number };
+    seconds: number;
+  };
   // NOTA AUDIO: el audio de la peli NO va por campos de escena. Es el clip
   // `narracion_min5-10` (spine) + los tiempos `BEAT_LOCAL` (registry.ts): al
   // entrar en una escena se salta a su segundo. El clip corto interactivo
