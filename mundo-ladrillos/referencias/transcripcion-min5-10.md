@@ -61,3 +61,21 @@ subtítulos a las frases que oigas en `narracion_min5-10`.
 Está en `referencias/desglose-escenas-peli.json` (54 escenas, campos: `inicio_seg`,
 `fin_seg`, `escenario`, `plano`, `personajes_presentes`, `accion_visual`,
 `texto_en_pantalla`, `props`, `paleta`). Sirve a TODOS los tramos.
+
+## Clip del gag del avión (`m0510_14_avion`)
+Además del spine, en `clips.ts` hay un clip corto (~4 s, con fundidos) con el grito
+"¡Un avión!" para tu **gag interactivo**. Uso previsto:
+```js
+// el niño pulsa E y hace la treta:
+spine.setVolume(0.25);                 // baja la peli un segundo
+audio.play('m0510_14_avion', 1.0);     // el grito suena encima
+setTimeout(() => spine.setVolume(0.95), 3800);  // devuelve la música
+```
+⚠️ Es un candidato localizado por PICO DE VOLUMEN (local 219.8–223.8 s), no
+verificado de oído. Si el grito queda corrido/cortado, escribe el segundo exacto
+en `coordinacion/min05-10.md` y el LEAD lo recorta fino.
+
+## Cómo respondes por el repo (sin copiar-pegar por el chat)
+Deja tus dudas/peticiones/estado en `coordinacion/min05-10.md` de tu rama. El LEAD
+las lee con `git fetch --all`. Así nos hablamos por el repo, sin que el usuario
+haga de recadero.
