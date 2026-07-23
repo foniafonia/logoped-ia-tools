@@ -221,19 +221,28 @@ export class SoundEngine {
   alarm(): void { this.blip(1200, 0.18, 'square', 0.3, 1500); setTimeout(() => this.blip(1500, 0.22, 'square', 0.3, 1200), 150); }
   /** Grito de aviso ("¡Eh!") aproximado con formante. */
   shout(): void { this.blip(300, 0.22, 'sawtooth', 0.32, 180); }
-  /** Motor de avión que cruza (whoosh con doppler). */
+  /** Motor de avión que cruza — FUERTE, con doppler y retumbo grave (crece al
+   *  pasar por encima y se aleja). */
   plane(): { stop: () => void } {
     if (!this.ac || !this.master) return { stop: () => {} };
     const t = this.now();
     const s = this.nz(); const bp = this.ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 450; bp.Q.value = 3;
-    const drone = this.ac.createOscillator(); drone.type = 'sawtooth'; drone.frequency.value = 90;
-    const g = this.ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.28, t + 0.6);
-    const dg = this.ac.createGain(); dg.gain.value = 0.12;
-    s.connect(bp); bp.connect(g); drone.connect(dg); dg.connect(g); g.connect(this.master);
-    // doppler: sube y baja el filtro/frecuencia
-    bp.frequency.setValueAtTime(300, t); bp.frequency.linearRampToValueAtTime(650, t + 3); bp.frequency.linearRampToValueAtTime(300, t + 6);
-    s.start(t); drone.start(t);
-    return { stop: () => { const tt = this.now(); g.gain.setTargetAtTime(0.0001, tt, 0.4); try { s.stop(tt + 1.2); drone.stop(tt + 1.2); } catch { /* noop */ } } };
+    const drone = this.ac.createOscillator(); drone.type = 'sawtooth'; drone.frequency.value = 85;
+    const rumble = this.ac.createOscillator(); rumble.type = 'sine'; rumble.frequency.value = 46; // retumbo grave
+    const g = this.ac.createGain();
+    // envolvente: entra fuerte, PICO al pasar por encima (~2.8 s), luego se aleja
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.5, t + 0.5);
+    g.gain.linearRampToValueAtTime(0.75, t + 2.8);   // pico al sobrevolar
+    g.gain.linearRampToValueAtTime(0.2, t + 6);
+    const dg = this.ac.createGain(); dg.gain.value = 0.28;
+    const rg = this.ac.createGain(); rg.gain.value = 0.35;
+    s.connect(bp); bp.connect(g); drone.connect(dg); dg.connect(g); rumble.connect(rg); rg.connect(g); g.connect(this.master);
+    // doppler: la frecuencia del motor sube al acercarse y baja al alejarse
+    drone.frequency.setValueAtTime(70, t); drone.frequency.linearRampToValueAtTime(120, t + 2.8); drone.frequency.linearRampToValueAtTime(60, t + 6);
+    bp.frequency.setValueAtTime(300, t); bp.frequency.linearRampToValueAtTime(750, t + 2.8); bp.frequency.linearRampToValueAtTime(280, t + 6);
+    s.start(t); drone.start(t); rumble.start(t);
+    return { stop: () => { const tt = this.now(); g.gain.setTargetAtTime(0.0001, tt, 0.4); try { s.stop(tt + 1.2); drone.stop(tt + 1.2); rumble.stop(tt + 1.2); } catch { /* noop */ } } };
   }
   /** Fanfarria breve de éxito (arpegio mayor). */
   success(): void { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => this.blip(f, 0.22, 'triangle', 0.3), i * 90)); }

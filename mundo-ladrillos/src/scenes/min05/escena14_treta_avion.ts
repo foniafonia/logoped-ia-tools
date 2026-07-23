@@ -24,8 +24,8 @@ export const escena14: Min05Scene = {
   noche: true,
   ambiente: 'street',
   spawn: { x: -10, z: -16 },
-  objetivo: { tipo: 'distraer', texto: 'Llega a la marca y pulsa E: «¡un avión!»', target: { x: 0, z: -4 }, radio: 3.2 },
-  exito: 'Los guardias miran al cielo; la puerta queda libre',
+  objetivo: { tipo: 'distraer', texto: 'Ve a la marca, pulsa E («¡un avión!») y cuélate por la puerta', target: { x: 0, z: 22 }, radio: 4 },
+  exito: '¡Colado por la puerta mientras miraban al cielo!',
   camara: { yaw: Math.PI, pitch: 0.32, dist: 30 },
 
   build(ctx: SceneContext): SceneInstance {
@@ -57,12 +57,17 @@ export const escena14: Min05Scene = {
     const gems = new Collectibles(plastic, ctx.sound, [{ x: -10, z: -10 }, { x: -4, z: -8 }, { x: 4, z: -8 }, { x: 8, z: -4 }, { x: 0, z: -12 }]);
     group.add(gems.group);
 
+    // marca del grito (antes) y meta al otro lado de la puerta (después)
     const spot = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0xffd24a, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
     spot.rotation.x = -Math.PI / 2; spot.position.set(0, 0.2, -4); group.add(spot);
+    const goal = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
+    goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 22); goal.visible = false; group.add(goal);
 
     ctx.scene.add(group);
 
+    const GOAL_Z = 20;
     let triggered = false;
+    let doneFlag = false;
     let planeSfx: { stop: () => void } | null = null;
     let gateSoundDone = false;
     return {
@@ -70,25 +75,38 @@ export const escena14: Min05Scene = {
       update(dt, t, player) {
         braziers.forEach((b) => b.update(t)); lantern.update(t); spotLantern.update(t);
         distr.update(dt, t);
+        gems.update(dt, t, player);
         if (!triggered) {
           gA.update(dt); gB.update(dt);
           spot.scale.setScalar(1 + Math.sin(t * 4) * 0.1);
-          const near = Math.hypot(player.x - 0, player.z - (-4)) < (escena14.objetivo.radio ?? 3.2);
-          if (near && ctx.wantsInteract()) { distr.trigger(); triggered = true; planeSfx = ctx.sound.plane(); ctx.sound.playClip('m0510_14_avion'); spot.visible = false; }
+          const near = Math.hypot(player.x - 0, player.z - (-4)) < 3.2;
+          if (near && ctx.wantsInteract()) {
+            distr.trigger(); triggered = true;
+            planeSfx = ctx.sound.plane(); ctx.sound.playClip('m0510_14_avion', 1.6);
+            spot.visible = false; goal.visible = true;
+          }
         } else {
-          gate.setOpen(distr.active ? 1 : 0.2);
-          if (distr.active && !gateSoundDone) { ctx.sound.gate(); gateSoundDone = true; }
+          gate.setOpen(1);                       // una vez hecha la treta, la puerta queda abierta
+          if (!gateSoundDone) { ctx.sound.gate(); gateSoundDone = true; }
           if (!distr.active && planeSfx) { planeSfx.stop(); planeSfx = null; }
+          goal.scale.setScalar(1 + Math.sin(t * 3) * 0.1);
+          if (player.z > GOAL_Z) doneFlag = true; // ¡colado por la puerta!
         }
-        gems.update(dt, t, player);
       },
-      status() { return distr.active ? '✈️ ¡Miran al cielo! La puerta se abre' : (triggered ? null : null); },
+      status() {
+        if (!triggered) return null;
+        return distr.active ? '✈️ ¡Miran al cielo! ¡Corre, cuélate!' : '🚪 ¡La puerta sigue abierta, entra!';
+      },
       hud() {
         const p = ctx.getPlayer();
-        const near = !triggered && Math.hypot(p.x - 0, p.z - (-4)) < (escena14.objetivo.radio ?? 3.2);
-        return { progress: triggered ? 1 : 0, prompt: near ? 'Pulsa E: «¡un avión!»' : undefined, gems: { got: gems.got, total: gems.total } };
+        if (!triggered) {
+          const near = Math.hypot(p.x - 0, p.z - (-4)) < 3.2;
+          return { progress: 0, prompt: near ? 'Pulsa E: «¡un avión!»' : undefined, gems: { got: gems.got, total: gems.total } };
+        }
+        const prog = THREE.MathUtils.clamp((p.z - (-4)) / (GOAL_Z + 4), 0, 1);
+        return { progress: prog, prompt: distr.active ? '🏃 ¡AHORA! ¡Cuélate por la puerta!' : undefined, gems: { got: gems.got, total: gems.total } };
       },
-      isDone() { return triggered && (distr.active || distr.spent); }
+      isDone() { return doneFlag; }
     };
   }
 };

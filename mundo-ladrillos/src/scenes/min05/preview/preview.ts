@@ -377,3 +377,6 @@ requestAnimationFrame(animate);
 
 (window as any).__READY__ = true;
 (window as any).__filmReady = () => filmReady;
+// hooks de depuración/captura
+(window as any).__setPlayer = (x: number, z: number) => controller.teleport(x, z);
+(window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });
