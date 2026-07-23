@@ -21,7 +21,6 @@ export const escena12: Min05Scene = {
   jugador: 'spy_camp',
   noche: true,
   ambiente: 'night',
-  voz: 'm0510_12_trajes',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: 0, z: -12 },
   objetivo: { tipo: 'ir_a', texto: 'Ve al perchero y pulsa E para ponerte el traje', target: { x: 4, z: 6 }, radio: 3 },
   exito: 'Listos y camuflados en la oscuridad',

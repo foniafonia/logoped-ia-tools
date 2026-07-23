@@ -23,7 +23,6 @@ export const escena09: Min05Scene = {
   subtitulo: 'Yehoshúa contempla el Jordán y, al otro lado, la fortaleza de Jericó.',
   jugador: 'yoshua',
   ambiente: 'river',
-  voz: 'm0510_09_jordan',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: -8, z: -14 },
   objetivo: { tipo: 'ir_a', texto: 'Sube al promontorio y contempla el río', target: { x: 6, z: 5 }, radio: 3.5 },
   exito: 'Yehoshúa observa Jericó al otro lado del río',

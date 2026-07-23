@@ -23,7 +23,6 @@ export const escena14: Min05Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
-  voz: 'm0510_14_avion',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: -10, z: -16 },
   objetivo: { tipo: 'distraer', texto: 'Llega a la marca y pulsa E: «¡un avión!»', target: { x: 0, z: -4 }, radio: 3.2 },
   exito: 'Los guardias miran al cielo; la puerta queda libre',
@@ -75,7 +74,7 @@ export const escena14: Min05Scene = {
           gA.update(dt); gB.update(dt);
           spot.scale.setScalar(1 + Math.sin(t * 4) * 0.1);
           const near = Math.hypot(player.x - 0, player.z - (-4)) < (escena14.objetivo.radio ?? 3.2);
-          if (near && ctx.wantsInteract()) { distr.trigger(); triggered = true; planeSfx = ctx.sound.plane(); ctx.sound.shout(); spot.visible = false; }
+          if (near && ctx.wantsInteract()) { distr.trigger(); triggered = true; planeSfx = ctx.sound.plane(); ctx.sound.playClip('m0510_14_avion'); spot.visible = false; }
         } else {
           gate.setOpen(distr.active ? 1 : 0.2);
           if (distr.active && !gateSoundDone) { ctx.sound.gate(); gateSoundDone = true; }

@@ -21,7 +21,6 @@ export const escena10: Min05Scene = {
   subtitulo: '«Id y reconoced la tierra, y Jericó.» Yehoshúa encomienda la misión a dos hombres.',
   jugador: 'yoshua',
   ambiente: 'day',
-  voz: 'm0510_10_reclutar',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: 0, z: -13 },
   objetivo: { tipo: 'ir_a', texto: 'Habla con los dos espías (acércate a cada uno)', target: { x: 0, z: 4 }, radio: 4 },
   exito: 'Los dos espías aceptan la misión',

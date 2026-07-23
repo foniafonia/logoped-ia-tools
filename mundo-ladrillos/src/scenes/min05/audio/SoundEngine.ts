@@ -101,6 +101,41 @@ export class SoundEngine {
     this.filmSrc = null;
   }
 
+  // --- clips CORTOS de la peli para momentos interactivos (p. ej. "¡un avión!") ---
+  private clips = new Map<string, AudioBuffer>();
+  async preloadClip(name: string): Promise<boolean> {
+    if (!this.ac || this.clips.has(name)) return this.clips.has(name);
+    const uri = CLIPS[name];
+    if (!uri) return false;
+    try {
+      const b64 = uri.slice(uri.indexOf(',') + 1);
+      const bin = atob(b64);
+      const by = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) by[i] = bin.charCodeAt(i);
+      this.clips.set(name, await this.ac.decodeAudioData(by.buffer));
+      return true;
+    } catch { return false; }
+  }
+
+  /** Reproduce un clip corto de la peli una vez, BAJANDO el spine mientras suena
+   *  (para que la línea se oiga clara), y lo restaura al terminar. */
+  playClip(name: string, gain = 1): void {
+    if (!this.ac || !this.master) return;
+    const buf = this.clips.get(name);
+    if (!buf) { void this.preloadClip(name).then((ok) => { if (ok) this.playClip(name, gain); }); return; }
+    const t = this.ac.currentTime;
+    if (this.filmGain) {
+      const cur = this.filmGain.gain.value;
+      this.filmGain.gain.cancelScheduledValues(t);
+      this.filmGain.gain.setValueAtTime(cur, t);
+      this.filmGain.gain.linearRampToValueAtTime(0.22, t + 0.12);
+      this.filmGain.gain.linearRampToValueAtTime(0.9, t + buf.duration + 0.35);
+    }
+    const src = this.ac.createBufferSource(); src.buffer = buf;
+    const g = this.ac.createGain(); g.gain.value = gain;
+    src.connect(g); g.connect(this.master); src.start(t);
+  }
+
   get ready(): boolean { return !!this.ac; }
   setMuted(m: boolean): void { this.muted = m; if (this.master && this.ac) this.master.gain.setTargetAtTime(m ? 0 : 0.9, this.ac.currentTime, 0.05); }
 

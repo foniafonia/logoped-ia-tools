@@ -302,6 +302,7 @@ const startGame = (): void => {
     filmReady = ok;
     if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0);
   });
+  void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
   if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
 };

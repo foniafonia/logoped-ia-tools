@@ -102,12 +102,11 @@ export interface Min05Scene {
   spawn: { x: number; z: number };
   noche?: boolean;          // ambiente nocturno (11–16 son de noche)
   ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de ambiente (viento/grillos/agua)
-  /** Clip de VOZ de la peli que se reproduce al entrar (diálogo/narración del beat). */
-  voz?: string;
-  /** Clip de la peli en bucle como fondo de la escena (música/ambiente del filme). */
-  fondoClip?: string;
-  fondoVol?: number;
   camara?: CameraHint;
+  // NOTA AUDIO: el audio de la peli NO va por campos de escena. Es el clip
+  // `narracion_min5-10` (spine) + los tiempos `BEAT_LOCAL` (registry.ts): al
+  // entrar en una escena se salta a su segundo. El clip corto interactivo
+  // `m0510_14_avion` se dispara en el gag (SoundEngine.playClip).
   /** Skin del jugador en esta escena (campamento vs sigilo). */
   jugador?: PlayerSkinId;
   /** Construye el escenario 3D + NPCs. Devuelve la instancia viva. */

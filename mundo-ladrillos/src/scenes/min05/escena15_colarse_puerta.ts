@@ -25,7 +25,6 @@ export const escena15: Min05Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
-  voz: 'm0510_15_colarse',            // TODO: cortar del audio de la peli (min 5-10)
   spawn: { x: 0, z: -18 },
   objetivo: { tipo: 'sigilo', texto: 'Cruza la puerta hasta la calle sin que se llene la alarma', target: { x: 0, z: 30 }, radio: 3.5 },
   exito: '¡Dentro de Jericó, sin ser vistos!',
