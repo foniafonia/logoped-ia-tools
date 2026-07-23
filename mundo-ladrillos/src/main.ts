@@ -178,10 +178,9 @@ function finDelTramo(): void {
 // jugosidad: sonidos, estelas y reacciones
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
-let baaCd = 0;                   // anti-spam del "bee" de oveja
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
-const baa = (): void => { if (baaCd <= 0) { audio.sfxAnimal(); baaCd = 0.5; } };
-const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling al meter una oveja
+const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
+const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling discreto al meter una oveja
 
 // hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
 const done = new Set<string>();
@@ -190,7 +189,7 @@ function checkTargets(): void {
   const i = director.beatIndex;
   // acércate a Yehoshúa (esc. 04, beat 3)
   if (i === 3 && target && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
-    done.add('yeh'); waveT = 2.2; audio.sfxSparkle(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
+    done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
   }
   // sigue la caravana al norte (esc. 08, beat 7)
   if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
@@ -259,8 +258,6 @@ function animate(now: number): void {
 
   // baliza
   if (beacon.visible) { ring.rotation.z += dt * 1.5; arrow.position.y = 4 + Math.sin(now * 0.004) * 0.4; }
-
-  baaCd -= dt;
 
   // FASE A — recoger cuerdas (flotan e invitan a cogerlas)
   if (ropesActivas && !ropesHechas) {

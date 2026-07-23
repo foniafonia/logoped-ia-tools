@@ -114,10 +114,10 @@ export class AudioManager {
     o.connect(g); g.connect(this.ac.destination);
     o.start(t0); o.stop(t0 + dur + 0.03);
   }
-  /** "pling" al recoger algo. */
-  sfxPickup(): void { if (!this.ac) return; const t = this.ac.currentTime; this.tone(680, t, 0.10, 'square', 0.16); this.tone(1020, t + 0.06, 0.12, 'square', 0.14); }
-  /** fanfarria corta al lograr un objetivo. */
-  sfxSuccess(): void { if (!this.ac) return; const t = this.ac.currentTime; [523, 659, 784, 1047].forEach((f, i) => this.tone(f, t + i * 0.09, 0.2, 'triangle', 0.2)); }
+  /** "pling" discreto al recoger algo (bajo, para no tapar la narración real). */
+  sfxPickup(): void { if (!this.ac) return; const t = this.ac.currentTime; this.tone(680, t, 0.09, 'triangle', 0.09); this.tone(1020, t + 0.05, 0.10, 'triangle', 0.08); }
+  /** fanfarria corta y suave al lograr un objetivo/estrella. */
+  sfxSuccess(): void { if (!this.ac) return; const t = this.ac.currentTime; [523, 659, 784, 1047].forEach((f, i) => this.tone(f, t + i * 0.085, 0.16, 'triangle', 0.11)); }
   /** chispa/brillo (revelaciones, saludo). */
   sfxSparkle(): void { if (!this.ac) return; const t = this.ac.currentTime; this.tone(1320, t, 0.12, 'sine', 0.12); this.tone(1760, t + 0.05, 0.15, 'sine', 0.1); }
   /** "bee" de oveja (con vibrato). */
