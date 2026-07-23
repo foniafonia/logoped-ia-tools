@@ -79,15 +79,25 @@ for (const [x, z, r, ci] of dunePos) {
   d.scale.set(1, 0.32, 1); world.add(d);
 }
 
-// Montañas lejanas: conos chunky de baja poli en arco al fondo
-const mtnColors = [0x9c8b6e, 0x8a7c66, 0xab9a7d, 0x7d715c];
-for (let i = 0; i < 11; i++) {
-  const ang = -Math.PI * 0.92 + (i / 10) * Math.PI * 0.84;
-  const rad = 200 + (i % 3) * 26;
-  const h = 46 + (i % 4) * 16;
+// Cerros lejanos: MESETAS de cima plana + colinas redondeadas (arenisca),
+// como el desierto de la peli (NO pirámides egipcias).
+const mtnColors = [0xc9b183, 0xbaa274, 0xd0ba8c, 0xa9906a];
+for (let i = 0; i < 12; i++) {
+  const ang = -Math.PI * 0.94 + (i / 11) * Math.PI * 0.88;
+  const rad = 190 + (i % 3) * 30;
+  const h = 40 + (i % 4) * 18;
   const x = Math.cos(ang) * rad, z = -Math.abs(Math.sin(ang)) * rad - 40;
-  const m = mesh(new THREE.ConeGeometry(h * 0.72, h, 5), mtnColors[i % 4], x, h / 2 - 6, z);
-  m.rotation.y = i * 0.7; world.add(m);
+  const col = mtnColors[i % 4];
+  if (i % 2 === 0) {
+    // meseta (butte): cilindro ancho de cima plana, ligeramente troncocónico
+    const m = mesh(new THREE.CylinderGeometry(h * 0.62, h * 0.9, h, 7), col, x, h / 2 - 6, z);
+    m.rotation.y = i; world.add(m);
+    m.add(mesh(new THREE.CylinderGeometry(h * 0.5, h * 0.62, h * 0.28, 7), col, 0, h * 0.6, 0)); // escalón superior
+  } else {
+    // colina redondeada (media esfera achatada)
+    const m = mesh(new THREE.SphereGeometry(h * 0.85, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), col, x, -4, z);
+    m.scale.set(1, 0.6, 1); world.add(m);
+  }
 }
 
 // ---------- FORTALEZA DE JERICÓ al fondo (silueta de muralla + torres) ----------
