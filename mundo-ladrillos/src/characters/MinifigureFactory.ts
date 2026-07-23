@@ -108,6 +108,35 @@ export const SPY2_SKIN: MinifigureSkin = {
   accessory: 'sword'
 };
 
+/** Espía 1 — modo CAMPAMENTO (escenas 9–11, antes del traje de sigilo):
+ *  túnica beige, turbante gris azulado, cara amable. */
+export const SPY_CAMP_SKIN: MinifigureSkin = {
+  head: 0xf4d03f,
+  torso: 0xc9b083,      // túnica beige
+  belt: 0x8a6a3a,
+  legs: 0xb9a36f,
+  arms: 0xc9b083,
+  hands: 0xf4d03f,
+  headwear: 0x6f7f8c,   // turbante gris azulado
+  headStyle: 'turban',
+  emotion: 'happy',
+  accessory: 'none'
+};
+
+/** Espía 2 — modo CAMPAMENTO: túnica marrón, turbante azul claro. */
+export const SPY2_CAMP_SKIN: MinifigureSkin = {
+  head: 0xf4d03f,
+  torso: 0x7a5230,      // túnica marrón
+  belt: 0x5a3f22,
+  legs: 0x6e4a2c,
+  arms: 0x7a5230,
+  hands: 0xf4d03f,
+  headwear: 0x6f9fc4,   // turbante azul claro
+  headStyle: 'turban',
+  emotion: 'happy',
+  accessory: 'none'
+};
+
 /** Rahab: mujer de rasgos suaves; melena plateada larga, vestido humilde con
  *  falda acampanada, cara amable. */
 export const RAHAB_SKIN: MinifigureSkin = {
@@ -219,6 +248,8 @@ export const RABBI_SKIN: MinifigureSkin = {
 export const CHARACTER_SKINS: Record<string, MinifigureSkin> = {
   espia: SPY_SKIN,
   espia2: SPY2_SKIN,
+  espiaCamp: SPY_CAMP_SKIN,
+  espia2Camp: SPY2_CAMP_SKIN,
   yehoshua: YOSHUA_SKIN,
   rahab: RAHAB_SKIN,
   guardia: GUARD_SKIN,
@@ -363,13 +394,13 @@ export class Minifigure {
       this.root.add(this.box(0.14, 0.62, 0.06, s.tie, 0, 2.82, 0.49));  // corbata
     }
 
-    // Cordón/faja en banda diagonal (cordón rojo carmesí de Rahab)
+    // Cordón rojo carmesí de Rahab: fino, cruzado del hombro a la cadera.
     if (s.cord !== undefined) {
-      const band = this.box(0.15, 1.9, 0.2, s.cord, 0.06, 2.5, 0.42);
-      band.rotation.z = 0.35;
+      const band = this.box(0.09, 1.95, 0.12, s.cord, 0.05, 2.48, 0.45);
+      band.rotation.z = 0.32;
       this.root.add(band);
-      const loop = new THREE.TorusGeometry(0.15, 0.05, 8, 16);
-      this.root.add(this.mesh(loop, s.cord, 0.44, 1.72, 0.42)); // rollo colgando en la cadera
+      const loop = new THREE.TorusGeometry(0.12, 0.04, 8, 16);
+      this.root.add(this.mesh(loop, s.cord, 0.42, 1.66, 0.45)); // pequeño rollo en la cadera
     }
 
     // Falda / vestido acampanado (rasgo fem): tronco de cono sobre la cadera.

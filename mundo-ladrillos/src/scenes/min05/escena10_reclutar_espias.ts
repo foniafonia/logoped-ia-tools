@@ -5,6 +5,7 @@ import { buildTent, buildPalm, studdedPlate, brickBox } from './props/BrickProps
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
 import { Collectibles } from './props/Collectibles';
+import { buildRug, KILIM_PALS } from '../min00/textiles';
 import { ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 
 /**
@@ -36,6 +37,8 @@ export const escena10: Min05Scene = {
     const tent = buildTent(plastic, BrickPalette.DARK_RED, 16, 14, true);
     tent.position.set(0, 0, 12); tent.rotation.y = Math.PI; group.add(tent);
     ctx.addObstacle(0, 14, 8, 5);
+    // alfombra de kilim en el suelo de la tienda (detalle "de verdad", técnica del lead/muñequero)
+    const rug = buildRug(9, 6.5, KILIM_PALS[0]); rug.position.set(0, 0.03, 9); group.add(rug);
 
     // mesa de mapas
     group.add(brickBox(plastic, 5, 0.4, 3, BrickPalette.BROWN, 0, 2.4, 10));

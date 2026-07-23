@@ -5,6 +5,7 @@ import { buildTent, buildPalm, studdedPlate, brickBox } from './props/BrickProps
 import { buildLantern } from './props/NightAmbience';
 import { Npc } from './props/Npc';
 import { Collectibles } from './props/Collectibles';
+import { buildRug, KILIM_PALS } from '../min00/textiles';
 import { ESPIA2_CAMP, ESPIA2_SIGILO } from './skins';
 
 /**
@@ -36,6 +37,8 @@ export const escena12: Min05Scene = {
     const tent = buildTent(plastic, BrickPalette.DARK_BLUE, 18, 16, true);
     tent.position.set(0, 0, 12); tent.rotation.y = Math.PI; group.add(tent);
     ctx.addObstacle(0, 15, 9, 4);
+    // alfombra de kilim (azul/púrpura) en la carpa de los espías
+    const rug = buildRug(10, 7, KILIM_PALS[1]); rug.position.set(0, 0.03, 9); group.add(rug);
 
     // perchero con dos trajes colgados (el objetivo)
     const rack = new THREE.Group();
