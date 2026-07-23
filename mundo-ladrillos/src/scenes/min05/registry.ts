@@ -24,3 +24,13 @@ export function sceneById(id: string): Min05Scene | undefined {
 export function sceneByNumero(n: number): Min05Scene | undefined {
   return MIN05_SCENES.find((s) => s.numero === n);
 }
+
+/**
+ * Segundo LOCAL (dentro del clip `narracion_min5-10`, que empieza en 0) en que
+ * arranca cada escena, según el desglose oficial de la peli (global − 300).
+ * Al entrar en una escena, el audio de la peli salta a este segundo para que la
+ * voz/música case con lo que se ve.
+ */
+export const BEAT_LOCAL: Record<number, number> = {
+  9: 7, 10: 41, 11: 140, 12: 150, 13: 201, 14: 212, 15: 234, 16: 245
+};

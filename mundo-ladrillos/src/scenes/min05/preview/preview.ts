@@ -5,10 +5,9 @@ import { ThirdPersonCamera } from '../../../camera/ThirdPersonCamera';
 import { createMinifigure, MinifigureSkin } from '../../../characters/MinifigureFactory';
 import { createStuddedGround } from '../../../world/EnvironmentManager';
 import { PreviewController } from './PreviewController';
-import { MIN05_SCENES } from '../registry';
+import { MIN05_SCENES, BEAT_LOCAL } from '../registry';
 import { Min05Scene, SceneInstance, SceneContext } from '../types';
 import { SoundEngine } from '../audio/SoundEngine';
-import { AudioManager } from '../../../audio/AudioManager';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -41,13 +40,11 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 const plastic = new PlasticMaterialFactory();
+// El SoundEngine da el AMBIENTE + EFECTOS y también reproduce el AUDIO REAL DE
+// LA PELÍCULA (`narracion_min5-10`) por segmentos, saltando al segundo de cada
+// escena (BEAT_LOCAL). No hay música sintética.
 const sound = new SoundEngine();
-// Audios REALES de la peli (clips embebidos en el repo para la entrega).
-const film = new AudioManager();
 let filmReady = false;
-let filmBed: { stop: (f?: number) => void } | null = null;   // cama por escena (opcional)
-// columna vertebral = narración de la peli (reloj maestro del Director de beats)
-let spine: { ready: () => boolean; elapsed: () => number; ended: () => boolean; stop: () => void } | null = null;
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -252,17 +249,10 @@ function loadScene(i: number): void {
   currentDef = def; done = false; advanceT = 0;
   const amb = def.ambiente ?? (def.noche ? 'night' : 'day');
   applyLighting(!!def.noche, amb === 'street');
-  if (sound.ready) sound.setAmbience(amb); // solo viento/grillos/agua (NO música sintética)
-  // FONDO Y MÚSICA = AUDIO DE LA PELÍCULA (nunca sintetizador):
-  //  - `fondoClip`: música/ambiente del filme en bucle para la escena.
-  //  - `voz`: la frase/narración de la peli de ese beat, al entrar.
-  // Si el clip no existe todavía (falta el audio del tramo), hace no-op y queda
-  // LISTO para cuando el hilo principal aporte el audio + la transcripción.
-  if (filmReady) {
-    if (filmBed) { filmBed.stop(0.6); filmBed = null; }
-    if (def.fondoClip) filmBed = film.loop(def.fondoClip, def.fondoVol ?? 0.5);
-    if (def.voz) film.play(def.voz, 1);
-  }
+  if (sound.ready) sound.setAmbience(amb); // viento/grillos/agua, por debajo de la peli
+  // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
+  // lo que se ve). Si el clip no está (build del repo), no-op.
+  if (filmReady) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0);
   setPlayerSkin(def.jugador ?? 'spy');
 
   controller.clearObstacles();
@@ -272,7 +262,6 @@ function loadScene(i: number): void {
     setPlayer: (x, z) => controller.teleport(x, z),
     markDone: () => { done = true; },
     sound,
-    film,
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
     setPlayerSkin: (which) => setPlayerSkin(which)
@@ -307,21 +296,15 @@ Object.assign(startEl.style, { position: 'fixed', inset: '0', zIndex: '50', disp
 document.body.appendChild(startEl);
 const startGame = (): void => {
   sound.init();
-  film.init(); filmReady = true;
-  // NARRACIÓN de la peli (voces + música) como COLUMNA VERTEBRAL del tramo,
-  // igual que el min 0-5 del lead (`narracion_min0-5`). Es la música/fondo de la
-  // peli y, más adelante, el reloj del Director de beats. No-op hasta que el
-  // hilo principal aporte el clip `narracion_min5-10`.
-  spine = film.playSpine('narracion_min5-10', 0.95);
-  if (currentDef) {
-    sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
-    filmBed?.stop(0);
-    if (currentDef.fondoClip) filmBed = film.loop(currentDef.fondoClip, currentDef.fondoVol ?? 0.5);
-    if (currentDef.voz) film.play(currentDef.voz, 1);
-  }
+  // carga el audio de la peli (voces + música) y arranca en el segundo de la
+  // escena actual. Asíncrono: cuando termine de decodificar, empieza a sonar.
+  void sound.loadFilm('narracion_min5-10').then((ok) => {
+    filmReady = ok;
+    if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0);
+  });
+  if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
 };
-void spine;
 startEl.addEventListener('pointerdown', startGame, { once: true });
 addEventListener('keydown', () => { if (sound.ready) return; startGame(); }, { once: true });
 
@@ -392,3 +375,4 @@ function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivEle
 requestAnimationFrame(animate);
 
 (window as any).__READY__ = true;
+(window as any).__filmReady = () => filmReady;

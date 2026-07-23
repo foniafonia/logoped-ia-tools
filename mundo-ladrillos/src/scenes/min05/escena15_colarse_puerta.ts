@@ -60,7 +60,7 @@ export const escena15: Min05Scene = {
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);
 
     // === SIGILO ===
-    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena15.spawn, ctx.sound, ctx.film);
+    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena15.spawn, ctx.sound);
     const gA = buildGuard(plastic, -6, 11, 0);
     const gB = buildGuard(plastic, 6, 11, 0, true);
     group.add(gA.root, gB.root);

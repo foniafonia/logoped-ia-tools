@@ -4,26 +4,28 @@
  *  - camas de ambiente (noche con grillos, brisa; río) en bucle,
  *  - efectos: pasos, salto, recoger, alarma de guardia, avión, puerta,
  *    chapuzón, éxito y fallo.
- * El LEAD puede cablear las VOCES REALES de la peli aparte (AudioManager).
+ * La MÚSICA y las VOCES son el AUDIO REAL DE LA PELÍCULA: este motor decodifica
+ * el clip del tramo y lo reproduce DESDE EL SEGUNDO de cada escena (offset), para
+ * que la voz/música case con lo que se ve. NO hay música sintética.
  *
  * Debe arrancarse con un gesto del usuario (política de autoplay): `init()`.
  */
+import { CLIPS } from '../../../audio/clips';
+
 export class SoundEngine {
   private ac: AudioContext | null = null;
   private master: GainNode | null = null;
   private ambientGain: GainNode | null = null;
-  private musicGain: GainNode | null = null;
   private noise: AudioBuffer | null = null;
   private ambientNodes: AudioNode[] = [];
   private crickets: OscillatorNode | null = null;
   private stepT = 0;
   muted = false;
 
-  // --- secuenciador de música ---
-  private musicTimer: ReturnType<typeof setInterval> | null = null;
-  private nextNoteTime = 0;
-  private step = 0;
-  private mood: 'adventure' | 'tension' = 'adventure';
+  // --- audio REAL de la peli (voces + música) reproducido por segmentos ---
+  private filmGain: GainNode | null = null;
+  private filmSrc: AudioBufferSourceNode | null = null;
+  private filmBuf: AudioBuffer | null = null;
 
   init(): void {
     if (this.ac) { void this.ac.resume(); return; }
@@ -36,9 +38,9 @@ export class SoundEngine {
     this.ambientGain = this.ac.createGain();
     this.ambientGain.gain.value = 0.0;
     this.ambientGain.connect(this.master);
-    this.musicGain = this.ac.createGain();
-    this.musicGain.gain.value = 0.32;
-    this.musicGain.connect(this.master);
+    this.filmGain = this.ac.createGain();
+    this.filmGain.gain.value = 0.9;
+    this.filmGain.connect(this.master);
     // buffer de ruido blanco reutilizable (2 s)
     const n = this.ac.sampleRate * 2;
     this.noise = this.ac.createBuffer(1, n, this.ac.sampleRate);
@@ -51,66 +53,52 @@ export class SoundEngine {
     // y efectos. `setMusicMood`/scheduler quedan desactivados a propósito.
   }
 
-  // ===================== MÚSICA DE FONDO (siempre sonando) =====================
-  // Progresiones de acordes (semitonos desde la tónica). Alegre = mayor;
-  // sigilo = menor con notas suspensivas. Un arpegio + pad + bajo por compás.
-  private static PROG = {
-    adventure: { root: 261.63, chords: [[0, 4, 7, 12], [7, 11, 14, 19], [9, 12, 16, 21], [5, 9, 12, 17]] }, // C G Am F
-    tension:   { root: 196.00, chords: [[0, 3, 7, 10], [8, 12, 15, 20], [5, 8, 12, 15], [7, 10, 14, 17]] }   // Gm Eb Cm Dm-ish
-  };
-
-  setMusicMood(m: 'adventure' | 'tension'): void {
-    this.mood = m;
-    if (this.musicGain && this.ac) this.musicGain.gain.setTargetAtTime(m === 'tension' ? 0.24 : 0.34, this.ac.currentTime, 0.6);
+  // ============= AUDIO DE LA PELÍCULA (voces + música por segmentos) =============
+  /** Decodifica el clip de la peli (data:...;base64 en CLIPS) una sola vez. */
+  async loadFilm(name: string): Promise<boolean> {
+    if (!this.ac || this.filmBuf) return !!this.filmBuf;
+    const uri = CLIPS[name];
+    if (!uri) return false; // sin audio del tramo (build del repo) → no-op
+    try {
+      const b64 = uri.slice(uri.indexOf(',') + 1);
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      this.filmBuf = await this.ac.decodeAudioData(bytes.buffer);
+      return true;
+    } catch { return false; }
   }
 
-  private startMusic(): void {
-    if (!this.ac || this.musicTimer) return;
-    this.nextNoteTime = this.ac.currentTime + 0.1;
-    this.step = 0;
-    // planificador con lookahead (robusto): programa las notas que caen en los
-    // próximos 120 ms cada 25 ms.
-    this.musicTimer = setInterval(() => this.scheduler(), 25);
-  }
+  get filmReady(): boolean { return !!this.filmBuf; }
+  get filmDuration(): number { return this.filmBuf ? this.filmBuf.duration : 0; }
 
-  private freq(root: number, semi: number): number { return root * Math.pow(2, semi / 12); }
-
-  private note(freq: number, t: number, dur: number, gain: number, type: OscillatorType): void {
-    if (!this.ac || !this.musicGain) return;
-    const o = this.ac.createOscillator(); o.type = type; o.frequency.value = freq;
+  /**
+   * Reproduce el audio de la peli DESDE `offsetSec` (el segundo de la escena),
+   * con fundido de entrada. Si el offset supera la duración, envuelve en bucle
+   * (para que nunca haya silencio). Corta lo anterior con un fundido corto.
+   */
+  playFilmFrom(offsetSec: number, gain = 0.9): void {
+    if (!this.ac || !this.filmBuf || !this.filmGain) return;
+    const t = this.ac.currentTime;
+    // corta el segmento anterior con un fundido rápido
+    if (this.filmSrc) { try { this.filmSrc.stop(t + 0.25); } catch { /* noop */ } this.filmSrc = null; }
+    const src = this.ac.createBufferSource();
+    src.buffer = this.filmBuf;
+    src.loop = true;                     // si llega al final, sigue de fondo
+    const off = Math.max(0, Math.min(offsetSec, this.filmBuf.duration - 0.1));
     const g = this.ac.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(gain, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(this.musicGain); o.start(t); o.stop(t + dur + 0.03);
+    g.gain.exponentialRampToValueAtTime(gain, t + 0.4);
+    src.connect(g); g.connect(this.filmGain);
+    src.start(t, off);
+    this.filmSrc = src;
   }
 
-  private scheduler(): void {
-    if (!this.ac) return;
-    const spb = 0.30; // segundos por paso (~100 BPM en corcheas)
-    while (this.nextNoteTime < this.ac.currentTime + 0.12) {
-      const t = this.nextNoteTime;
-      const prog = SoundEngine.PROG[this.mood];
-      const bar = Math.floor(this.step / 8) % prog.chords.length;
-      const chord = prog.chords[bar];
-      const inBar = this.step % 8;
-      // arpegio (corcheas): recorre las notas del acorde
-      const arpSemi = chord[inBar % chord.length] + (inBar >= 4 ? 12 : 0);
-      this.note(this.freq(prog.root, arpSemi), t, 0.28, 0.16, this.mood === 'tension' ? 'triangle' : 'square');
-      // pad sostenido al empezar el compás (tónica + quinta)
-      if (inBar === 0) {
-        this.note(this.freq(prog.root, chord[0]), t, spb * 8 * 0.98, 0.05, 'sawtooth');
-        this.note(this.freq(prog.root, chord[2]), t, spb * 8 * 0.98, 0.04, 'sawtooth');
-        // bajo
-        this.note(this.freq(prog.root, chord[0] - 12), t, spb * 2, 0.10, 'sine');
-      }
-      // melodía sencilla en los tiempos fuertes (día: saltarina)
-      if (this.mood === 'adventure' && (inBar === 2 || inBar === 6)) {
-        this.note(this.freq(prog.root, chord[(inBar) % chord.length] + 12), t, 0.24, 0.10, 'triangle');
-      }
-      this.step = (this.step + 1) % (8 * prog.chords.length);
-      this.nextNoteTime += spb;
-    }
+  stopFilm(fade = 0.5): void {
+    if (!this.ac || !this.filmSrc) return;
+    const t = this.ac.currentTime;
+    try { this.filmSrc.stop(t + fade); } catch { /* noop */ }
+    this.filmSrc = null;
   }
 
   get ready(): boolean { return !!this.ac; }

@@ -68,7 +68,7 @@ export const escena16: Min05Scene = {
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);
 
     // === SIGILO: tres guardias patrullando ===
-    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena16.spawn, ctx.sound, ctx.film);
+    const stealth = new StealthSystem(ctx.getPlayer, (x, z) => ctx.setPlayer(x, z), escena16.spawn, ctx.sound);
     const patrols: Array<Array<{ x: number; z: number }>> = [
       [{ x: -6, z: 6 }, { x: 6, z: 6 }, { x: 6, z: 2 }, { x: -6, z: 2 }],
       [{ x: 6, z: 24 }, { x: -6, z: 24 }, { x: -6, z: 16 }, { x: 6, z: 16 }],

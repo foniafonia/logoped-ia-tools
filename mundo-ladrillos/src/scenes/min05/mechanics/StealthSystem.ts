@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { Npc, VisionCone } from '../props/Npc';
 import { SoundEngine } from '../audio/SoundEngine';
-import { AudioManager } from '../../../audio/AudioManager';
 
 /** Un guardia = NPC + cono de visión + barrido de la mirada (o patrulla). */
 export interface GuardConfig {
@@ -33,8 +32,7 @@ export class StealthSystem {
     private getPlayer: () => THREE.Vector3,
     private onCaught: (x: number, z: number) => void,
     private spawn: { x: number; z: number },
-    private sound: SoundEngine,
-    private film?: AudioManager
+    private sound: SoundEngine
   ) {}
 
   addGuard(cfg: GuardConfig): this {
@@ -98,7 +96,6 @@ export class StealthSystem {
       this.resetCooldown = 1.6;
       this.alarm = 0;
       this.sound.alarm();
-      this.film?.play('shout', 1);   // grito REAL de la peli al pillarte
       this.onCaught(this.spawn.x, this.spawn.z);
     }
   }
