@@ -36,8 +36,8 @@ const scene = new THREE.Scene();
 scene.background = DAY_SKY.clone();
 // bruma que CIERRA el horizonte (mundo acotado, no infinito): más cerca que el
 // perfil de calidad, pero dejando ver la caravana marchar al norte.
-const FOG_FAR = Math.min(QUALITY.fogFar, 200);
-scene.fog = new THREE.Fog(DAY_SKY.clone(), 60, FOG_FAR);
+const FOG_FAR = Math.min(QUALITY.fogFar, 150);
+scene.fog = new THREE.Fog(DAY_SKY.clone(), 42, FOG_FAR);
 if (QUALITY.envMap) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
