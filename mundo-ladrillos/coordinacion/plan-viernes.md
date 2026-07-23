@@ -21,8 +21,13 @@ Me centro **solo en lo mío**: el **minuto 0–5** y el **motor**. Los demás tr
 - [x] **Textos más cortos** (subtítulos y objetivos). ✅
 - [x] **Quitar espadas** a los no-combatientes (campo `sword:false`). ✅
 - [x] **Abrevadero** con aldeano dando de beber + oveja bebiendo (esc. 05). ✅
+- [x] **Nivel de detalle "del muñequero"**: alfombras de **kilim** con patrón
+  tejido (bordes zigzag, rombos, medallón, flecos) tendidas por el campamento +
+  **tapiz de patrón** en el Tabernáculo. Técnica de `textiles.ts` inspirada en su
+  escondite de la alfombra (`rug-hide.ts`). ✅
 - [ ] Más reactividad interactiva (camellos/tiendas que reaccionen al jugador).
 - [ ] Silueta de **Jericó** más fina (queda como pieza para el 5–10).
+- [ ] Subir ese mimo a más assets (lonas de tienda con textura, etc.).
 - [ ] Entregas: single-file jugable + capturas.
 
 ## Bitácora

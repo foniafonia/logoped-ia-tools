@@ -3,6 +3,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { normalizeGeometry } from '../../bricks/BrickGeometryFactory';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
 import { MinifigureSkin, Minifigure, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
+import { buildRug, kilimTexture, KILIM_PALS } from './textiles';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -125,6 +126,18 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     group.add(pole, flag);
   });
 
+  // --- Alfombras de kilim tendidas (detalle: patrón tejido + esquinas levantadas) ---
+  const rugSpots: Array<[number, number, number, number]> = [ // x, z, giro, paleta
+    [-13, 22, 0.3, 0], [16, 30, -0.5, 1], [-8, 42, 0.8, 2], [12, 52, 0.15, 3],
+    [-20, 52, -0.3, 0], [6, 15, 0.6, 1], [22, 44, -0.2, 2]
+  ];
+  for (const [rx, rz, rot, pi] of rugSpots) {
+    const holder = new THREE.Group();
+    holder.add(buildRug(4.2, 6.0, KILIM_PALS[pi]));
+    holder.position.set(rx, 0, rz); holder.rotation.y = rot;
+    group.add(holder);
+  }
+
   // --- TABERNÁCULO (Mishkán): recinto de cortinas de lino + tienda sagrada ---
   const tab = new THREE.Group();
   const gold = new THREE.MeshStandardMaterial({ color: 0xd9ad3c, roughness: 0.35, metalness: 0.7 });
@@ -152,14 +165,12 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     const s = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.4, 0.1), plastic.get(c));
     s.position.set(-1.35 + i * 0.9, 1.5, D / 2); tab.add(s);
   });
-  // tienda sagrada central (paredes a rayas + techo dorado)
-  const stripes = [0x2f5fb0, 0x7a3f9a, 0xb03a3a, 0xf0ead6];
-  for (let i = 0; i < 4; i++) {
-    const wall = new THREE.Mesh(new THREE.BoxGeometry(5.4, 0.9, 3.2), plastic.get(stripes[i]));
-    wall.position.set(0, 0.6 + i * 0.9, -1.5); wall.castShadow = true; tab.add(wall);
-  }
+  // tienda sagrada central (paredes con TAPIZ de patrón + techo dorado)
+  const shrineMat = new THREE.MeshStandardMaterial({ map: kilimTexture(KILIM_PALS[1]), roughness: 0.9 });
+  const shrine = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.6, 3.4), shrineMat);
+  shrine.position.set(0, 2.1, -1.5); shrine.castShadow = true; shrine.receiveShadow = true; tab.add(shrine);
   const roof = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 3.8), gold);
-  roof.position.set(0, 4.4, -1.5); roof.castShadow = true; tab.add(roof);
+  roof.position.set(0, 4.1, -1.5); roof.castShadow = true; tab.add(roof);
   tab.position.set(26, 0, 22); tab.rotation.y = -0.35;
   group.add(tab);
 

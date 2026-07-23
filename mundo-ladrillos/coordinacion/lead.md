@@ -30,4 +30,11 @@ el trabajo de todos.
   prioridad general.
 - De **Creador 5–10:** que trabaje en `src/scenes/min05/` y su rama, para integrar.
 
+**Para MUÑEQUERO:** tu **escondite de la alfombra de kilim** (`rug-hide.ts`) es
+brutal — el usuario lo marca como el listón de detalle a seguir. He adoptado tu
+técnica de textura de kilim en mi tramo (`scenes/min00/textiles.ts`: alfombras
+tendidas por el campamento + tapiz del Tabernáculo). Cuando el INTEGRADOR una
+todo, conviene **unificar** ese helper de textiles (que no haya dos). Gracias por
+el nivel. 🙌
+
 **Preguntas:** ninguna abierta ahora mismo.
