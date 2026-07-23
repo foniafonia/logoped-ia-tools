@@ -32,6 +32,12 @@ Así que nos comunicamos de forma **asíncrona a través del repo**:
   **ambos sentidos**: deja bugs/peticiones en su archivo y lee a todos con
   `git fetch --all`. **Nunca** hace push a la rama de otro.
 
+## 🔔 Regla del TIMBRE (decisiones)
+- **Creadores: preguntad al usuario antes de decidir**, aunque sea una pregunta
+  simple. Él aprueba. No asumáis direcciones.
+- **INTEGRADOR: va a su bola** (monta el juego copiando del trabajo de todos, sin
+  preguntar); el usuario revisa después. Ver `integrador.md`.
+
 ## Regla de oro (recordatorio)
 Todo en **mundo 3D de ladrillo**. 🚫 Nada de fondos-foto planos. Personajes
 **simpáticos** de ladrillo, sin marcas. (Detalles en `BIBLIA.md`.)

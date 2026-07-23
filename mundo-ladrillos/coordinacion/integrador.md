@@ -5,6 +5,12 @@ todos, en una rama aparte, **sin tocar ni romper** el trabajo individual de
 nadie. Mi objetivo es que el niño tenga **UN solo juego jugable de principio a
 fin** para vivir la peli, iterar y explicarla.
 
+## Cómo trabajo: A MI BOLA (excepción a la regla del timbre)
+A diferencia de los creadores (que **preguntan al usuario antes de decidir**), yo
+**voy autónomo**: monto el juego completo copiando del trabajo de todos, tomo las
+decisiones de ensamblaje que hagan falta y **el usuario revisa después** y decide.
+No paro a preguntar por cada cosa; genero contenido montado y se enseña.
+
 ## Qué hago (y qué NO)
 - ✅ **Junto** las ramas de todos en **mi rama** `claude/juego-completo`.
 - ✅ **Resuelvo los conflictos aquí** (no en las ramas de los creadores).

@@ -33,6 +33,15 @@ correcciones del proyecto. Aquí van solo las reglas duras que no se saltan nunc
   por esqueletos.
 - Las **decisiones de dirección** las marca el usuario; la **ejecución** corre libre.
 
+## 🔔 Regla del TIMBRE (decisiones con el usuario)
+- **Los hilos creadores PREGUNTAN al usuario antes de decidir**, aunque la pregunta
+  parezca de tontos. Mejor una pregunta simple que asumir. El usuario aprueba; él es
+  el timbre. (Los detalles finos de ejecución sí corren libres, pero ante cualquier
+  bifurcación o duda de dirección → **se pregunta**, no se da por hecho.)
+- **EXCEPCIÓN — el INTEGRADOR va a su bola:** monta el juego completo copiando del
+  trabajo de todos los hilos, **sin preguntar**; el usuario **revisa después** y
+  decide. (Detalle en `coordinacion/integrador.md`.)
+
 ## Comprobar que compila
 ```
 cd mundo-ladrillos && npx vite build
