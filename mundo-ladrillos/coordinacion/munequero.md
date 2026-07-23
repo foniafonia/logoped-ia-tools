@@ -180,3 +180,40 @@ siguiente. Principios para TODOS los tramos:
 5. **Nunca vacío** (ver kit de horizonte): el mundo siempre rodea al niño.
 El listón: que cada escena tenga **al menos UN detalle** del que puedas decir
 "guau, mira eso". Con eso el juego pasa de "está bien" a **inolvidable**.
+
+---
+
+## 📋 VISOR — Auditoría VISUAL del juego ensamblado (recomendaciones)
+Revisé las capturas del integrador (`entrega/capturas/`) y del min05. Gran avance:
+verbo por escena (E), balizas/anillos de objetivo, contador de gemas, subtítulos,
+mis muñecos integrados, interiores marcados "sin horizonte", escenas de esconder/
+cordón/aguas/taberna ya existen. Ahora, lo que MÁS lastra el conjunto (por impacto):
+
+1. **MUNDOS VACÍOS / LAVADOS (prioridad #1, es general).** La mayoría de escenas
+   exteriores (`E2-esconder`, `10-resync-jordan`, `D3-cruce-aguas`, `E1-taberna`)
+   se ven como un **descampado pálido**: suelo de un color + fondo claro vacío,
+   sin cielo, sin niebla, sin cerros, sin Jericó al fondo. **El kit de horizonte
+   NO está aplicado.** Aplicarlo (ver `proto/mundo_lleno.png` + `src/backdrop.ts`)
+   es el cambio que más transforma el juego. Cada escena, su modo de horizonte
+   (mapa de arriba). NUNCA un muñeco flotando en el vacío.
+2. **LUZ PLANA (mood).** Escenas que en la peli son atardecer/noche se ven como
+   mediodía plano (Jordán, esconder, taberna). Ya sabéis hacerlo bien (`E3-cordon`
+   noche, muralla atardecer) → aplicad ESA atmósfera a todas: cielo con color,
+   sombras largas, charcos de luz cálida de noche.
+3. **INTERIORES VACÍOS.** "Sin horizonte" es correcto, pero la **taberna**
+   (`E1-taberna`) es una sala vacía. Hay que **vestirla**: paredes, barra con
+   vasijas, estantes, faroles, Rahab detrás, el cartel "Restaurante de Rahab".
+   Interior lleno ≠ horizonte; es dressing de sala.
+4. **MOMENTOS "WOW" SOLO NARRADOS.** `D3-cruce-aguas` dice "muros de agua con
+   peces" pero **no se ven** (agua plana). El río partido merece los **muros de
+   agua + peces + cauce seco** (fiel al frame `escenas/jordan-partido`). Igual el
+   **cordón rojo** (`E3-cordon`): es un momento clave, que se vea atar el cordón y
+   Jericó abajo. Visualizad los golpes, no los contéis.
+5. **CÁMARA/ENCUADRE.** A veces muy alta/lejos o rara (`11-resync-muralla`: cubos
+   enormes sosos, jugador diminuto). Acercar/bajar; que el personaje y la acción
+   manden, con algo de mundo detrás.
+
+**Vara de medir de referencia (mis mockups, mi rama):** `proto/mundo_lleno.png`
+(horizonte), `proto/jerico_noche.png` (calle-noche llena), `proto/rug_in.png`
+(detalle estrella). Objetivo: que CUALQUIER captura se parezca más a esas que a
+un descampado pálido.
