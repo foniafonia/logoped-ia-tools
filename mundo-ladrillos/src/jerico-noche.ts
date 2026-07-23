@@ -14,7 +14,7 @@ renderer.setPixelRatio(1);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.4;
+renderer.toneMappingExposure = 1.75;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
@@ -22,19 +22,19 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const plastic = new PlasticMaterialFactory();
 
-const SAND = 0xcdb082, SAND_D = 0xb2966a, SAND_L = 0xdcc596, STONE = 0x413a34;
+const SAND = 0xdcc596, SAND_D = 0xc4a878, SAND_L = 0xe8d5a8, STONE = 0x6a5f52;
 
 // ---------- CIELO NOCHE + niebla + luna ----------
 function nightSky(): THREE.Texture {
   const c = document.createElement('canvas'); c.width = 16; c.height = 256;
   const ctx = c.getContext('2d')!;
   const g = ctx.createLinearGradient(0, 0, 0, 256);
-  g.addColorStop(0.0, '#070f24'); g.addColorStop(0.5, '#122043'); g.addColorStop(0.82, '#28345a'); g.addColorStop(1.0, '#4a4a5e');
+  g.addColorStop(0.0, '#1c2c5c'); g.addColorStop(0.5, '#31407a'); g.addColorStop(0.82, '#5566a0'); g.addColorStop(1.0, '#9a8fa8');
   ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
 scene.background = nightSky();
-scene.fog = new THREE.Fog(0x1b2748, 45, 180);
+scene.fog = new THREE.Fog(0x40507e, 70, 230);
 
 // luna
 const moon = new THREE.Mesh(new THREE.SphereGeometry(6, 24, 16), new THREE.MeshBasicMaterial({ color: 0xf6f1dc }));
@@ -47,8 +47,9 @@ starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
 scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xdfe6ff, size: 0.7, sizeAttenuation: true })));
 
 // ---------- LUCES (noche fría + faroles cálidos) ----------
-scene.add(new THREE.HemisphereLight(0x5a6c9a, 0x1c1710, 1.05));
-const moonLight = new THREE.DirectionalLight(0xbcccff, 1.15);
+scene.add(new THREE.HemisphereLight(0x9aabd6, 0x4a4030, 2.2));
+scene.add(new THREE.AmbientLight(0x6a6488, 0.7));            // relleno base (que se vea todo)
+const moonLight = new THREE.DirectionalLight(0xd6dcff, 1.9);
 moonLight.position.set(-40, 55, -20); moonLight.castShadow = true;
 moonLight.shadow.mapSize.set(1024, 1024);
 moonLight.shadow.camera.near = 1; moonLight.shadow.camera.far = 160;
