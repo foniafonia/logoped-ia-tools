@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { normalizeGeometry } from '../../bricks/BrickGeometryFactory';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
@@ -15,6 +16,7 @@ export const VILLAGER_SKIN: MinifigureSkin = {
 export interface CampBuild {
   group: THREE.Group;
   ropes: THREE.Mesh[];      // cuerdas a recoger (objetivo)
+  bultos: THREE.Mesh[];     // cargamento para la caravana (mini-juego, ocultos al inicio)
   yehoshua: Minifigure;     // el líder sobre la tarima (saluda al acercarte)
 }
 
@@ -174,6 +176,19 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   tab.position.set(26, 0, 22); tab.rotation.y = -0.35;
   group.add(tab);
 
+  // --- Bultos de carga para la caravana (mini-juego; ocultos hasta su beat) ---
+  const bultos: THREE.Mesh[] = [];
+  const bultoSpots: Array<[number, number]> = [[-6, 26], [15, 24], [-16, 36], [9, 48], [21, 40], [-11, 18]];
+  bultoSpots.forEach(([bx, bz], i) => {
+    const kind = i % 3;
+    let mesh: THREE.Mesh;
+    if (kind === 0) mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.72, 1.3, 10), plastic.get(0xb7b7c0));      // vasija de plata
+    else if (kind === 1) mesh = new THREE.Mesh(new RoundedBoxGeometry(1.2, 1.0, 1.2, 2, 0.06), plastic.get(0x9a6a3a)); // caja de madera
+    else { mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.7, 8), plastic.get(0xc0392b)); mesh.rotation.z = Math.PI / 2; } // alfombra enrollada
+    mesh.position.set(bx, 0.7, bz); mesh.castShadow = true; mesh.visible = false;
+    group.add(mesh); bultos.push(mesh);
+  });
+
   scene.add(group);
-  return { group, ropes, yehoshua: yoshua };
+  return { group, ropes, bultos, yehoshua: yoshua };
 }

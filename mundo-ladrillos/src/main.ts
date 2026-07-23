@@ -12,6 +12,7 @@ import { Dust } from './effects/Dust';
 import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
 import { CampLife } from './scenes/min00/campLife';
 import { Journey } from './scenes/min00/journey';
+import { buildHorizon } from './scenes/min00/horizon';
 import { StudioIntro } from './scenes/min00/studioIntro';
 import { Director, Beat } from './scenes/min00/Director';
 
@@ -33,7 +34,10 @@ const DAY_SKY = new THREE.Color(0xf0d9a8);
 const NIGHT_SKY = new THREE.Color(0x1a2340);
 const scene = new THREE.Scene();
 scene.background = DAY_SKY.clone();
-scene.fog = new THREE.Fog(DAY_SKY.clone(), 55, QUALITY.fogFar);
+// bruma que CIERRA el horizonte (mundo acotado, no infinito): más cerca que el
+// perfil de calidad, pero dejando ver la caravana marchar al norte.
+const FOG_FAR = Math.min(QUALITY.fogFar, 200);
+scene.fog = new THREE.Fog(DAY_SKY.clone(), 60, FOG_FAR);
 if (QUALITY.envMap) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -61,6 +65,7 @@ const plastic = new PlasticMaterialFactory();
 
 // === ENTORNO + CAMPAMENTO + VIDA + VIAJE ===
 setupEnvironment(scene);
+buildHorizon(scene);                                        // cerros de arenisca que acotan el valle
 const camp = buildCamp(scene, plastic);
 const dust = new Dust(scene);
 const life = new CampLife(scene, plastic, dust);           // aldeanos, animales, gag del beduino
@@ -148,7 +153,7 @@ const beats: Beat[] = [
   {
     t: 228, sub: '¡La caravana se pone en marcha!',
     obj: 'Sigue a la caravana',
-    onEnter: () => { journey.arrancarCaravana(); setTarget({ x: 0, z: Journey.MARCHA_Z }); }
+    onEnter: () => { journey.arrancarCaravana(); camp.bultos.forEach((b) => { b.visible = false; }); setTarget({ x: 0, z: Journey.MARCHA_Z }); }
   }
 ];
 const director = new Director(beats, null, () => finDelTramo());
@@ -179,7 +184,29 @@ function finDelTramo(): void {
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
+let bultosActivos = false;       // mini-juego de cargar la caravana
 const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
+
+// mini-juego "carga la caravana": recoge los bultos repartidos (fácil e intuitivo)
+function actualizarObjBultos(): void {
+  if (director.beatIndex !== 6) return;
+  const got = camp.bultos.filter((b) => !b.visible).length;
+  director.setObjetivo(`📦 Carga la caravana: recoge los bultos (${got}/${camp.bultos.length})`);
+}
+function balizaBulto(): void {
+  let best: THREE.Mesh | null = null, bd = 1e9;
+  for (const b of camp.bultos) {
+    if (!b.visible) continue;
+    const d = controller.pos.distanceTo(b.position);
+    if (d < bd) { bd = d; best = b; }
+  }
+  setTarget(best ? { x: best.position.x, z: best.position.z } : null);
+}
+function activarBultos(): void {
+  bultosActivos = true;
+  for (const b of camp.bultos) b.visible = true;
+  actualizarObjBultos(); balizaBulto();
+}
 const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling discreto al meter una oveja
 
 // hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
@@ -198,7 +225,7 @@ function checkTargets(): void {
   // ayuda al beduino → el camello se derrumba (esc. 07, beat 6)
   if (i === 6 && target && !done.has('bed') && Math.hypot(p.x - life.beduinoPos.x, p.z - life.beduinoPos.z) < 6) {
     done.add('bed'); life.derrumbar(); audio.sfxSuccess(); director.star(); director.logro('¡Uy! ¡Al camello se le cae la carga! 💥');
-    setTarget(null); director.setObjetivo('⏳ Explora el campamento: la caravana va a salir');
+    activarBultos();   // arranca el mini-juego de cargar la caravana
   }
   // sigue la caravana al norte (esc. 08, beat 7)
   if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
@@ -297,6 +324,23 @@ function animate(now: number): void {
     if (enRedil >= life.ovejasObjetivo) {
       done.add('camp'); audio.sfxSuccess(); director.star();
       director.logro('¡Campamento recogido! 🎉'); setTarget(null);
+    }
+  }
+
+  // mini-juego: cargar la caravana (recoge los bultos) — solo en el beat del beduino
+  if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {
+    let cambio = false;
+    for (const b of camp.bultos) {
+      if (!b.visible) continue;
+      b.rotation.y += dt * 1.2;
+      b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
+      if (controller.pos.distanceTo(b.position) < 2.6) {
+        b.visible = false; audio.sfxPickup(); dust.burst(b.position.x, 0.7, b.position.z, 8); cambio = true;
+      }
+    }
+    if (cambio) { actualizarObjBultos(); balizaBulto(); }
+    if (camp.bultos.every((b) => !b.visible)) {
+      done.add('bultos'); audio.sfxSuccess(); director.star(); director.logro('¡Caravana cargada! 🐫'); setTarget(null);
     }
   }
 
