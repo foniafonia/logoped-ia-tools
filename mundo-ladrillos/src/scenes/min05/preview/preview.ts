@@ -45,8 +45,9 @@ const sound = new SoundEngine();
 // Audios REALES de la peli (clips embebidos en el repo para la entrega).
 const film = new AudioManager();
 let filmReady = false;
-let filmBed: { stop: (f?: number) => void } | null = null;   // cama por escena (din, etc.)
-let filmMusic: { stop: (f?: number) => void } | null = null; // BSO de la peli (continua)
+let filmBed: { stop: (f?: number) => void } | null = null;   // cama por escena (opcional)
+// columna vertebral = narración de la peli (reloj maestro del Director de beats)
+let spine: { ready: () => boolean; elapsed: () => number; ended: () => boolean; stop: () => void } | null = null;
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -307,9 +308,11 @@ document.body.appendChild(startEl);
 const startGame = (): void => {
   sound.init();
   film.init(); filmReady = true;
-  // BSO de la peli como música de fondo CONTINUA para TODO el tramo (si existe
-  // el clip `bso_min5-10`). Mientras no esté, no suena (no-op).
-  filmMusic = film.loop('bso_min5-10', 0.5);
+  // NARRACIÓN de la peli (voces + música) como COLUMNA VERTEBRAL del tramo,
+  // igual que el min 0-5 del lead (`narracion_min0-5`). Es la música/fondo de la
+  // peli y, más adelante, el reloj del Director de beats. No-op hasta que el
+  // hilo principal aporte el clip `narracion_min5-10`.
+  spine = film.playSpine('narracion_min5-10', 0.95);
   if (currentDef) {
     sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
     filmBed?.stop(0);
@@ -318,7 +321,7 @@ const startGame = (): void => {
   }
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
 };
-void filmMusic;
+void spine;
 startEl.addEventListener('pointerdown', startGame, { once: true });
 addEventListener('keydown', () => { if (sound.ready) return; startGame(); }, { once: true });
 
