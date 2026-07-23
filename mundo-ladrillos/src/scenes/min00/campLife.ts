@@ -190,6 +190,10 @@ export class CampLife {
 
   /** Arranca el mini-juego de arrear ovejas al redil. */
   activarOvejas(): void { this.penActive = true; }
+  /** Dónde está el beduino con su camello (para guiar al jugador). */
+  get beduinoPos(): { x: number; z: number } { return { x: 25, z: 31 }; }
+  /** Fuerza el derrumbe de la carga del camello (gag garantizado al llegar). */
+  derrumbar(): void { if (this.gagState === 'cargado') this.gagT = 99; }
   get ovejasObjetivo(): number { return this.sheep.filter((s) => s.target).length; }
   get ovejasEnRedil(): number { return this.sheep.filter((s) => s.target && s.penned).length; }
   get redil(): { x: number; z: number } { return { x: this.pen.x, z: this.pen.z }; }

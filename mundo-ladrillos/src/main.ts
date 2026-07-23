@@ -138,12 +138,12 @@ const beats: Beat[] = [
     onEnter: () => { ropesActivas = true; setTarget(null); }
   },
   {
-    t: 123, sub: 'Los niños cargan el pan. 🥖',
-    obj: ''
+    t: 123, sub: 'Los niños llevan el pan al Tabernáculo. 🥖',
+    obj: 'Visita el Tabernáculo', onEnter: () => setTarget({ x: 26, z: 22 })
   },
   {
-    t: 133, sub: '¡El camello del beduino se derrumba! 💥',
-    obj: ''
+    t: 133, sub: '¡El camello del beduino va cargadísimo! Ve a ayudarle.',
+    obj: 'Ve con el beduino y su camello', onEnter: () => setTarget(life.beduinoPos)
   },
   {
     t: 228, sub: '¡La caravana se pone en marcha!',
@@ -190,6 +190,15 @@ function checkTargets(): void {
   // acércate a Yehoshúa (esc. 04, beat 3)
   if (i === 3 && target && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
     done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
+  }
+  // visita el Tabernáculo (esc. 06, beat 5)
+  if (i === 5 && target && !done.has('tab') && Math.hypot(p.x - 26, p.z - 22) < 6.5) {
+    done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Qué bonito el Tabernáculo!'); setTarget(null);
+  }
+  // ayuda al beduino → el camello se derrumba (esc. 07, beat 6)
+  if (i === 6 && target && !done.has('bed') && Math.hypot(p.x - life.beduinoPos.x, p.z - life.beduinoPos.z) < 6) {
+    done.add('bed'); life.derrumbar(); audio.sfxSuccess(); director.star(); director.logro('¡Uy! ¡Al camello se le cae la carga! 💥');
+    setTarget(null); director.setObjetivo('⏳ Explora el campamento: la caravana va a salir');
   }
   // sigue la caravana al norte (esc. 08, beat 7)
   if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
