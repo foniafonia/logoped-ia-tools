@@ -137,3 +137,46 @@ Mismo kit con 4 modos: *desierto-atardecer / río-oasis / muralla-noche /
 calle-noche*. Sugerencia: un helper reutilizable `buildHorizon(modo)` que cada
 escena añade DETRÁS de lo suyo. Es **dirección visual del usuario**; el "cómo"
 lo decide cada creador.
+
+**Ejemplo concreto del modo "calle-noche"** (mockup, mi rama): `proto/jerico_noche.png`
++ fuente `src/jerico-noche.ts`. Fiel al frame: arenisca, arcos (medio cilindro),
+faroles cálidos (point lights) contra noche fría, luna, "Restaurante de Rahab",
+cobblestones. NOTA de brillo: **noche ILUMINADA** (que un niño vea todo), no
+cueva — exposición ~1.75, hemisférica alta + ambient de relleno.
+
+---
+
+## 🎭 VISOR — ESCONDITE ESTRELLA "la alfombra" + qué hace MEMORABLE un juego
+
+Petición del usuario: el momento de la peli en que un ninja **se esconde tras una
+alfombra colgada de la pared** debe ser **espectacular**. Mockup de referencia
+(mi rama): `proto/rug_out.png` (acercándose) + `proto/rug_in.png` (escondido),
+fuente `src/rug-hide.ts`.
+
+**Spec de la mecánica (escondite especial, se apoya en el `StealthSystem`):**
+- Alfombra de **kilim** (textura tejida) colgada de una barra, junto a un farol.
+- Cerca → prompt "pulsa para esconderte". Al meterse: el ninja se desliza detrás;
+  la tela se levanta y cae dejando un **BULTO** (cuerpo + cabeza) que **respira**
+  (gaussiana animada en los vértices del plano), **piernas asomando** por debajo
+  y una **manita** agarrando el borde.
+- Escondido = un `HidingSpot` más: los conos pasan por encima y NO te ven. Si un
+  guardia se acerca mucho, el bulto se queda quieto y sube un **latido**.
+- Salir → sales de golpe apartando la tela (ágil, cómico).
+- **Jugo:** "swish" al entrar/salir, motas de polvo, tela ondeando (vértices),
+  farol cálido encima. La tela: `PlaneGeometry` con segmentos + desplazamiento de
+  vértices (ondeo tapered desde la barra; bulto = suma de gaussianas). Barato.
+
+### 🌟 El principio: qué hace que un niño NO OLVIDE el juego
+No son las mecánicas genéricas; son los **momentos con alma y tacto**. La alfombra
+no es "un escondite": es una tela con dibujo que **se mueve**, un bulto que
+**respira**, unas **piernas que asoman**. Eso es lo que el niño imita al día
+siguiente. Principios para TODOS los tramos:
+1. **Un "toque estrella" por escena.** Algo hecho con mimo que se recuerde (la
+   alfombra, la treta del avión, la muralla cayendo, el río partido con peces).
+2. **Reacción tangible.** Todo responde: la tela se deforma, el guardia mira, el
+   objetivo brilla. Nada estático.
+3. **Carisma sobre realismo.** Caras amables, gestos cómicos, piezas de juguete.
+4. **Se siente, no se lee.** Icono + sonido + movimiento cuentan la acción.
+5. **Nunca vacío** (ver kit de horizonte): el mundo siempre rodea al niño.
+El listón: que cada escena tenga **al menos UN detalle** del que puedas decir
+"guau, mira eso". Con eso el juego pasa de "está bien" a **inolvidable**.
