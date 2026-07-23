@@ -21,6 +21,8 @@ export class CharacterController {
   /** Límites del terreno. Por defecto: pasillo/plaza de la muralla. Escenas
    *  abiertas (campamento, viaje al río) fijan una caja libre con setBounds(). */
   bounds: { minX: number; maxX: number; minZ: number; maxZ: number } | null = null;
+  walkSpeed = 8.5;   // más ágil (antes 5.5) — se sentía lento para peques
+  runSpeed = 15;     // corriendo con Shift (antes 9.5)
   private vy = 0;
   private facing = Math.PI; // mira hacia la cámara al empezar
   private grounded = true;
@@ -55,7 +57,7 @@ export class CharacterController {
       const s = Math.sin(camYaw), c = Math.cos(camYaw);
       const dx = ix * c + iz * s;     // dirección relativa a la cámara
       const dz = iz * c - ix * s;
-      const speed = run ? 9.5 : 5.5;
+      const speed = run ? this.runSpeed : this.walkSpeed;
       this.pos.x += dx * speed * dt;
       this.pos.z += dz * speed * dt;
       this.facing = lerpAngle(this.facing, Math.atan2(dx, dz), 0.25);
