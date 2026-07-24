@@ -26,6 +26,13 @@ export class SoundEngine {
   private filmGain: GainNode | null = null;
   private filmSrc: AudioBufferSourceNode | null = null;
   private filmBuf: AudioBuffer | null = null;
+  // seguimiento del segmento en curso (para no bleed entre escenas + pegatina)
+  private filmStartAt = 0;
+  private filmOff = 0;
+  private filmSegLen = 0;
+  private filmLabel = '';
+  private clipUntil = 0;
+  private clipName = '';
 
   init(): void {
     if (this.ac) { void this.ac.resume(); return; }
@@ -73,25 +80,45 @@ export class SoundEngine {
   get filmDuration(): number { return this.filmBuf ? this.filmBuf.duration : 0; }
 
   /**
-   * Reproduce el audio de la peli DESDE `offsetSec` (el segundo de la escena),
-   * con fundido de entrada. Si el offset supera la duración, envuelve en bucle
-   * (para que nunca haya silencio). Corta lo anterior con un fundido corto.
+   * Reproduce SOLO el SEGMENTO de la peli de esta escena: `[offsetSec, endSec)`.
+   * Al terminar el segmento se funde a silencio y NO continúa (así una escena
+   * nunca "se adelanta" y suelta el audio de otra —p. ej. el del avión). Si el
+   * jugador se demora, queda el ambiente (viento/grillos/agua) por debajo.
    */
-  playFilmFrom(offsetSec: number, gain = 0.9): void {
+  playFilmFrom(offsetSec: number, endSec?: number, gain = 0.9, label = ''): void {
     if (!this.ac || !this.filmBuf || !this.filmGain) return;
     const t = this.ac.currentTime;
     // corta el segmento anterior con un fundido rápido
-    if (this.filmSrc) { try { this.filmSrc.stop(t + 0.25); } catch { /* noop */ } this.filmSrc = null; }
+    if (this.filmSrc) { try { this.filmSrc.stop(t + 0.2); } catch { /* noop */ } this.filmSrc = null; }
+    const dur = this.filmBuf.duration;
+    const off = Math.max(0, Math.min(offsetSec, dur - 0.1));
+    const end = Math.max(off + 0.5, Math.min(endSec ?? dur, dur));
+    const segLen = end - off;
     const src = this.ac.createBufferSource();
     src.buffer = this.filmBuf;
-    src.loop = true;                     // si llega al final, sigue de fondo
-    const off = Math.max(0, Math.min(offsetSec, this.filmBuf.duration - 0.1));
+    src.loop = false;                    // NO se cuela en el audio de la escena siguiente
     const g = this.ac.createGain();
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(gain, t + 0.4);
+    g.gain.setValueAtTime(gain, t + Math.max(0.4, segLen - 0.6));
+    g.gain.linearRampToValueAtTime(0.0001, t + segLen);  // fundido al final del segmento
     src.connect(g); g.connect(this.filmGain);
     src.start(t, off);
+    try { src.stop(t + segLen + 0.05); } catch { /* noop */ }
     this.filmSrc = src;
+    this.filmStartAt = t; this.filmOff = off; this.filmSegLen = segLen; this.filmLabel = label;
+  }
+
+  /** Descripción legible de lo que SUENA ahora (para la chapita de parte). */
+  nowPlaying(): string {
+    if (!this.ac) return '—';
+    const t = this.ac.currentTime;
+    if (t < this.clipUntil) return `clip ${this.clipName}`;
+    if (this.filmSrc && t < this.filmStartAt + this.filmSegLen) {
+      const head = this.filmOff + (t - this.filmStartAt);
+      return `${this.filmLabel || 'narración'} @ ${head.toFixed(0)}s`;
+    }
+    return '🔇 solo ambiente';
   }
 
   stopFilm(fade = 0.5): void {
@@ -124,6 +151,7 @@ export class SoundEngine {
     const buf = this.clips.get(name);
     if (!buf) { void this.preloadClip(name).then((ok) => { if (ok) this.playClip(name, gain); }); return; }
     const t = this.ac.currentTime;
+    this.clipUntil = t + buf.duration; this.clipName = name;
     if (this.filmGain) {
       const cur = this.filmGain.gain.value;
       this.filmGain.gain.cancelScheduledValues(t);

@@ -11,6 +11,7 @@ import { SoundEngine } from '../audio/SoundEngine';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
 import { buildHorizon } from '../props/Horizon';
 import { CinematicCamera } from '../props/CinematicCamera';
+import { mountSceneTag, SceneTagHandle } from '../../../ui/SceneTag';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
 /**
@@ -240,6 +241,7 @@ if (isTouch()) {
 // ================= Escena activa + secuencia =================
 let current: SceneInstance | null = null;
 let currentDef: Min05Scene | null = null;
+let sceneTag: SceneTagHandle | null = null;
 let done = false;
 let advanceT = 0;
 
@@ -269,7 +271,8 @@ function loadScene(i: number): void {
   if (sound.ready) sound.setAmbience(amb); // viento/grillos/agua, por debajo de la peli
   // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
   // lo que se ve). Si el clip no está (build del repo), no-op.
-  if (filmReady) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0);
+  // solo el segmento de ESTA escena: [beat, beat de la siguiente) → sin bleed.
+  if (filmReady) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0, BEAT_LOCAL[def.numero + 1], 0.9, `esc${def.numero}`);
   setPlayerSkin(def.jugador ?? 'spy');
   player.root.visible = true; // por si la escena anterior escondió al jugador
 
@@ -288,6 +291,17 @@ function loadScene(i: number): void {
     cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds)
   };
   current = def.build(ctx);
+
+  // CHAPITA DE PARTE: código de escena + audio en vivo + botón "📋 Copiar" para
+  // pegarme el momento exacto (escena, audio, posición) y así iterar en el sitio.
+  sceneTag?.dispose();
+  sceneTag = mountSceneTag({
+    id: `E${def.numero}`, nombre: def.titulo, tramo: 'T5–10', modo: amb, hilo: 'min05',
+    archivo: `escena${def.id.replace(/^m05_/, '')}.ts`,
+    getAudio: () => sound.nowPlaying(),
+    getPos: () => ({ x: controller.pos.x, z: controller.pos.z }),
+    getExtra: () => `objetivo: ${def.objetivo.texto}`
+  });
 
   controller.setBounds(-72, 72, def.spawn.z - 8, (def.objetivo.target?.z ?? def.spawn.z) + 26);
   controller.teleport(def.spawn.x, def.spawn.z);
