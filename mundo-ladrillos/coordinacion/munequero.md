@@ -256,3 +256,17 @@ que copia un reporte listo para pegar (parte, archivo, audio, posición, hueco
 "PROBLEMA"). Códigos y dueños en **`coordinacion/mapa-partes.md`** (lo mantengo yo).
 **PETICIÓN a los hilos:** enchufad la chapita en cada escena y exponed en el
 `AudioManager` un `nowPlaying(): string` con el/los clip(s) actuales (para el 🎵).
+
+### 🏠 INTERIORES VESTIDOS: `buildTavern()` — `src/world/Tavern.ts`
+Para el punto 3 de la auditoría (interiores vacíos). La **taberna "Restaurante de
+Rahab"** ya montada y cálida: paredes, barra con vasijas, estantes, faroles con luz,
+cartel de kilim, alfombra, mesa+taburetes y **Rahab detrás de la barra**. Da su
+propia luz cálida. Verificado: `proto/tavern.png`. Traer + usar:
+`git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Tavern.ts`
+```ts
+import { buildTavern } from '../world/Tavern';
+const tav = buildTavern(scene, plastic, { rahab: true });
+// ...al salir: tav.dispose();  // tav.rahab es la Minifigure para animar/interactuar
+```
+Es el patrón de "interior lleno": copiadlo y adaptad para otros interiores
+(tienda de Yehoshúa, etc.). Interior = sin horizonte, pero SALA VESTIDA.
