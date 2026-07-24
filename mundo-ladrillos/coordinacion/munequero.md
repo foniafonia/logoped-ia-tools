@@ -68,6 +68,21 @@ lógica del juego ni las escenas de nadie.
 > con peces, el pueblo cruzando con asombro y Jericó al fondo. Copiad ese patrón
 > en la escena real del cruce (hoy el milagro se narra pero se ve poco).
 
+> 🗳️ **DECISIONES DEL USUARIO (relé para INTEGRADOR/LEAD, 24-jul):**
+> Respuestas a las dos preguntas abiertas del integrador:
+> 1. **Orden de la muralla:** va **según el desglose oficial** de la peli
+>    (`referencias/desglose-escenas-peli.json`). Es el clímax → cae al final donde
+>    la transcripción la sitúa. No la fuerces a "tramo 3" a mano: ordénalo por el
+>    desglose y quedará al final sola.
+> 2. **Jugador del Jordán (esc. 9–11):** **los DOS espías** (no Yehoshúa); cada
+>    uno cuando la escena lo pida. Mantén las variantes de campamento en 9–11.
+>
+> Y sobre **evitar duplicar**: sé que ya poblaste escenas por tu cuenta (horizonte,
+> mercado, río con peces). Mis helpers `Crowd/Market/StreetProps` son **opcionales**
+> —si los tuyos ya cubren, quédate con ellos; solo ofrezco unificar si te sirve—.
+> Lo que **sí** conviene re-tirar es `MinifigureFactory.ts` (trae caras expresivas,
+> `villagerSkin`/aldeanos y el arreglo de Yehoshúa que aún no tienes).
+
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
 `MinifigureFactory.ts` es **autónomo** (solo depende de THREE + PlasticMaterialFactory,
