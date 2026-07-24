@@ -1,20 +1,13 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
-import { Minifigure, createMinifigure, MinifigureSkin } from '../../characters/MinifigureFactory';
+import { Minifigure, createMinifigure, villagerSkin, BEDOUIN_SKIN } from '../../characters/MinifigureFactory';
 import { Dust } from '../../effects/Dust';
 import { IS_MOBILE } from '../../core/Quality';
 
-const VILLAGER_SKINS: MinifigureSkin[] = [
-  { head: 0xf2c141, torso: 0xb9a36f, belt: 0x7a5230, legs: 0x8a6a3a, arms: 0xa8895f, hands: 0xf2c141, headwear: 0xc9b083, headStyle: 'turban', sword: false },
-  { head: 0xf2c141, torso: 0x9a9184, belt: 0x5a5248, legs: 0x6f6558, arms: 0x8a8278, hands: 0xf2c141, headwear: 0xb9b2a4, headStyle: 'turban', sword: false },
-  { head: 0xf2c141, torso: 0x8f6a3e, belt: 0x5a4028, legs: 0x6f5230, arms: 0x7a5a34, hands: 0xf2c141, headwear: 0xcdb98a, headStyle: 'turban', sword: false },
-  { head: 0xf2c141, torso: 0x6f7a52, belt: 0x4a5030, legs: 0x556040, arms: 0x66703f, hands: 0xf2c141, headwear: 0xa9b088, headStyle: 'turban', sword: false }
-];
-const BEDOUIN_SKIN: MinifigureSkin = {
-  head: 0xf2c141, torso: 0x7d6608, belt: 0x4a3a10, legs: 0x5a4a1a, arms: 0x6a5a18,
-  hands: 0xf2c141, headwear: 0xf5cba7, headStyle: 'turban', beard: 0x2a2018, sword: false
-};
+// La multitud usa los PRESETS del muñequero (villagerSkin): comunidad variada
+// —hombres, mujeres con vestido y melena, ancianos— con caras expresivas y sin
+// arma. El beduino usa el skin del muñequero directamente.
 
 function rbox(w: number, h: number, d: number, color: number, plastic: PlasticMaterialFactory, x: number, y: number, z: number): THREE.Mesh {
   const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, 0.06), plastic.get(color));
@@ -87,7 +80,7 @@ export class CampLife {
     // --- Aldeanos deambulando ---
     const n = IS_MOBILE ? 8 : 14;
     for (let i = 0; i < n; i++) {
-      const fig = createMinifigure(plastic, VILLAGER_SKINS[i % VILLAGER_SKINS.length]);
+      const fig = createMinifigure(plastic, villagerSkin(i));
       const x = (Math.random() - 0.5) * 60, z = 16 + Math.random() * 66;
       fig.root.position.set(x, 0, z);
       const s = 0.85 + Math.random() * 0.25; fig.root.scale.setScalar(s);
@@ -117,7 +110,7 @@ export class CampLife {
 
     // --- 4 niños con canastas de pan que desfilan hacia el Tabernáculo (esc. 06) ---
     for (let i = 0; i < 4; i++) {
-      const fig = createMinifigure(plastic, VILLAGER_SKINS[i % VILLAGER_SKINS.length]);
+      const fig = createMinifigure(plastic, villagerSkin(i));
       fig.root.scale.setScalar(0.62);
       const basket = buildBasket(plastic);
       basket.position.set(0, 2.4, 1.2); fig.root.add(basket);   // canasta delante, en las manos
@@ -133,7 +126,7 @@ export class CampLife {
       new THREE.MeshStandardMaterial({ color: 0x3a8fbf, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.9 }));
     water.position.y = 0.86; trough.add(water);
     trough.position.set(-12, 0, 30); this.group.add(trough);
-    const helper = createMinifigure(plastic, VILLAGER_SKINS[1]);
+    const helper = createMinifigure(plastic, villagerSkin(1));
     helper.root.position.set(-14.2, 0, 30); helper.root.rotation.y = Math.PI / 2;
     helper.armR.rotation.x = -0.9; helper.armL.rotation.x = -0.6;   // inclinado, dando de beber
     this.group.add(helper.root);
