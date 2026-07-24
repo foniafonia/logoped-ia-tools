@@ -236,3 +236,23 @@ Pone cielo con color + niebla + cerros de arenisca + Jericó al fondo + luna/est
 INTERIORES no lo usan (se visten con paredes/props). Mapear cada escena a su modo
 según la tabla de arriba. Traerlo con:
 `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Horizon.ts`
+
+### 🏷️ CHAPITA DE PARTE (para iterar) — `src/ui/SceneTag.ts` — ENCHUFAR EN CADA ESCENA
+Para que el usuario dé feedback preciso ("en E15 falla X"), **cada escena debe
+montar su chapita**. Autocontenida (solo DOM). Traer:
+`git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/ui/SceneTag.ts`
+```ts
+import { mountSceneTag } from '../ui/SceneTag';
+const tag = mountSceneTag({
+  id: 'E15', tramo: 'T2', nombre: 'Colarse por la puerta', modo: 'calle-noche',
+  hilo: 'min05', archivo: 'escena15_colarse_puerta.ts',
+  getAudio: () => audio.nowPlaying(),                 // ← el/los clip(s) sonando AHORA
+  getPos:   () => ({ x: controller.pos.x, z: controller.pos.z }),
+});
+// al cambiar de escena: tag.dispose();
+```
+Pinta una etiqueta (arriba-izq) `▸ E15 · calle-noche · 🎵 <audio>` + botón **📋 Copiar**
+que copia un reporte listo para pegar (parte, archivo, audio, posición, hueco
+"PROBLEMA"). Códigos y dueños en **`coordinacion/mapa-partes.md`** (lo mantengo yo).
+**PETICIÓN a los hilos:** enchufad la chapita en cada escena y exponed en el
+`AudioManager` un `nowPlaying(): string` con el/los clip(s) actuales (para el 🎵).

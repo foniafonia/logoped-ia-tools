@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { buildHorizon, HorizonMode } from './world/Horizon';
+import { mountSceneTag } from './ui/SceneTag';
 
 /** Demo del helper buildHorizon: horizon-demo.html?m=desierto-atardecer */
 const mode = (new URLSearchParams(location.search).get('m') ?? 'desierto-atardecer') as HorizonMode;
@@ -38,6 +39,14 @@ const spy = createMinifigure(plastic, SPY_SKIN); spy.root.position.set(-2, 0, 4)
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 600);
 camera.position.set(6, 6.5, 24); camera.lookAt(0, 5, -60);
 (document.getElementById('tag')!).textContent = 'buildHorizon("' + mode + '")';
+
+// ★ chapita de parte (demo)
+mountSceneTag({
+  id: 'E15', tramo: 'T2', nombre: 'Colarse por la puerta', modo: mode,
+  hilo: 'min05', archivo: 'escena15_colarse_puerta.ts',
+  getAudio: () => 'bso_jerico + voz_15',
+  getPos: () => ({ x: spy.root.position.x, z: spy.root.position.z })
+});
 
 let t = 0;
 function loop(): void { requestAnimationFrame(loop); t += 0.016; spy.update(0.016, false); renderer.render(scene, camera); (window as any).__ready = true; }
