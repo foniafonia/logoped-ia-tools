@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
-import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactory';
+import { createMinifigure, CHARACTER_SKINS, villagerSkin } from './characters/MinifigureFactory';
 
 /**
  * Harness de PREVIEW (no forma parte del juego): renderiza un único muñeco
@@ -24,7 +24,11 @@ const LABELS: Record<string, string> = {
 
 const params = new URLSearchParams(location.search);
 const fig = params.get('fig') ?? 'espia';
-const base = CHARACTER_SKINS[fig] ?? CHARACTER_SKINS.espia;
+// ?villager=i renderiza un aldeano del set de multitud (para ofertas de variedad)
+const villagerParam = params.get('villager');
+const base = villagerParam !== null
+  ? villagerSkin(Number(villagerParam))
+  : (CHARACTER_SKINS[fig] ?? CHARACTER_SKINS.espia);
 
 // Overrides por URL para renderizar OFERTAS/variantes sin tocar las skins
 // del juego. Ej: ?fig=rahab&headwear=0xdfe3e8&torso=0xcdb79a
@@ -84,7 +88,7 @@ const fighter = createMinifigure(plastic, skin);
 scene.add(fighter.root);
 
 const labelEl = document.getElementById('label')!;
-labelEl.textContent = LABELS[fig] ?? fig;
+labelEl.textContent = villagerParam !== null ? `Aldeano ${villagerParam}` : (LABELS[fig] ?? fig);
 
 // Giro lento opcional con ?spin=1; por defecto, quieto de frente.
 const spin = params.get('spin') === '1';

@@ -268,6 +268,52 @@ export const CHARACTER_SKINS: Record<string, MinifigureSkin> = {
   rabino: RABBI_SKIN
 };
 
+/**
+ * ALDEANOS para multitudes: 8 presets distintos (hombres y mujeres, ropas,
+ * tocados, barbas y caras variadas) para que la gente NO se clone. Pensado para
+ * "mundo lleno" y comunidad de todas las edades. Colores terrosos de época.
+ */
+export const VILLAGER_PRESETS: MinifigureSkin[] = [
+  // 0 · hombre, túnica arena, turbante marrón, barba gris, sereno
+  { head: 0xf4d03f, torso: 0xc9b083, belt: 0x8a6a3a, legs: 0xb9a36f, arms: 0xc9b083,
+    hands: 0xf4d03f, headwear: 0x8a6a3a, headStyle: 'turban', beard: 0x9aa0a3,
+    beardStyle: 'short', emotion: 'neutral' },
+  // 1 · mujer, vestido teja, melena castaña, amable
+  { head: 0xf4d03f, torso: 0xb5654a, belt: 0x8f4c37, legs: 0xb5654a, arms: 0xb5654a,
+    hands: 0xf4d03f, headwear: 0x6b4a2f, headStyle: 'longHair', feminine: true,
+    lips: 0xc26a63, skirt: 0xb5654a, skirtLong: true, emotion: 'happy' },
+  // 2 · hombre joven, túnica oliva, pañuelo claro (cogulla), sin barba, alerta
+  { head: 0xf4d03f, torso: 0x7d8b4f, belt: 0x5a5a30, legs: 0x6f7a45, arms: 0x7d8b4f,
+    hands: 0xf4d03f, headwear: 0xd9c9a8, headStyle: 'hood', emotion: 'alert' },
+  // 3 · anciano, túnica gris-azul, turbante claro, barba larga blanca, preocupado
+  { head: 0xf4d03f, torso: 0x6f7f8c, belt: 0x4f5a63, legs: 0x62707b, arms: 0x6f7f8c,
+    hands: 0xf4d03f, headwear: 0xd7dbde, headStyle: 'turban', beard: 0xcfd4d7,
+    beardStyle: 'long', emotion: 'worried' },
+  // 4 · mujer joven, vestido azul polvo, melena negra, sorprendida
+  { head: 0xf4d03f, torso: 0x5b7b8a, belt: 0x435c66, legs: 0x5b7b8a, arms: 0x5b7b8a,
+    hands: 0xf4d03f, headwear: 0x2a2620, headStyle: 'longHair', feminine: true,
+    lips: 0xbf6a6a, skirt: 0x5b7b8a, skirtLong: true, emotion: 'surprised' },
+  // 5 · hombre, túnica marrón rojiza, pañuelo tostado, barba negra corta, serio
+  { head: 0xf4d03f, torso: 0x8a4b3a, belt: 0x5e3527, legs: 0x6e3c2e, arms: 0x8a4b3a,
+    hands: 0xf4d03f, headwear: 0xcdb79a, headStyle: 'hood', beard: 0x2a221c,
+    beardStyle: 'short', emotion: 'stern' },
+  // 6 · hombre, túnica trigo, turbante verdoso, barba castaña, amable
+  { head: 0xf4d03f, torso: 0xd9c27e, belt: 0x9a7b3a, legs: 0xc8b06a, arms: 0xd9c27e,
+    hands: 0xf4d03f, headwear: 0x6f7f5a, headStyle: 'turban', beard: 0x6b4a2f,
+    beardStyle: 'short', emotion: 'happy' },
+  // 7 · mujer mayor, vestido gris, melena plateada, neutral
+  { head: 0xf4d03f, torso: 0x9a9690, belt: 0x7c7872, legs: 0x928e88, arms: 0x9a9690,
+    hands: 0xf4d03f, headwear: 0xdadde0, headStyle: 'longHair', feminine: true,
+    lips: 0xb98a80, skirt: 0x9a9690, skirtLong: true, emotion: 'neutral' }
+];
+
+/** Aldeano determinista por índice (sin Math.random → estable en resume).
+ *  Sin arma por defecto (los aldeanos no van armados). */
+export function villagerSkin(i: number): MinifigureSkin {
+  const n = VILLAGER_PRESETS.length;
+  return { accessory: 'none', ...VILLAGER_PRESETS[((i % n) + n) % n] };
+}
+
 export class Minifigure {
   readonly root = new THREE.Group();
   readonly legL = new THREE.Group();
