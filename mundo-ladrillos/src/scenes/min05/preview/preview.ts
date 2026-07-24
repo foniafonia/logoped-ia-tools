@@ -48,12 +48,13 @@ const plastic = new PlasticMaterialFactory();
 // escena (BEAT_LOCAL). No hay música sintética.
 const sound = new SoundEngine();
 let filmReady = false;
-// ⚠ La NARRACIÓN de la peli (`narracion_min5-10`) está DESALINEADA con el desglose
-// oficial: verificado por el usuario, el gag del avión suena en ~seg 21 del clip,
-// no en el 212 que dice la ficha. Hasta que el LEAD entregue un clip que case (o
-// los offsets reales), apagamos el spine para no soltar audio que no toca. Se
-// mantienen ambiente + efectos + gemas + el gag interactivo del avión (esc14).
-const USE_FILM_SPINE = false;
+// AUDIO de la peli. El clip `narracion_min5-10` está DESALINEADO con el desglose
+// (el gag del avión suena en ~seg 21, no en 212), así que NO salto a un segundo
+// por escena (esos tiempos no son fiables). En su lugar reproduzco la peli DE
+// FONDO DESDE EL PRINCIPIO, en orden (así hay audio de la peli, no silencio). Para
+// afinar: el usuario copia la chapita en el momento que casa y ajusto los offsets.
+const USE_FILM_SPINE = true;
+const PER_SCENE_JUMP = false;   // saltos por escena OFF hasta tener offsets reales
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -277,8 +278,8 @@ function loadScene(i: number): void {
   if (sound.ready) sound.setAmbience(amb); // viento/grillos/agua, por debajo de la peli
   // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
   // lo que se ve). Si el clip no está (build del repo), no-op.
-  // solo el segmento de ESTA escena: [beat, beat de la siguiente) → sin bleed.
-  if (filmReady) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0, BEAT_LOCAL[def.numero + 1], 0.9, `esc${def.numero}`);
+  // (saltos por escena OFF: la peli suena de fondo continua desde startGame)
+  if (filmReady && PER_SCENE_JUMP) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0, BEAT_LOCAL[def.numero + 1], 0.9, `esc${def.numero}`);
   setPlayerSkin(def.jugador ?? 'spy');
   player.root.visible = true; // por si la escena anterior escondió al jugador
 
@@ -346,9 +347,9 @@ const startGame = (): void => {
   if (USE_FILM_SPINE) {
     void sound.loadFilm('narracion_min5-10').then((ok) => {
       filmReady = ok;
-      // arranca SOLO el segmento de la escena actual (mismo criterio acotado que
-      // al cambiar de escena): [beat, beat siguiente) + etiqueta. Sin bleed.
-      if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0, BEAT_LOCAL[currentDef.numero + 1], 0.9, `esc${currentDef.numero}`);
+      // la peli suena de fondo DESDE EL PRINCIPIO, en orden (no silencio). El clip
+      // completo como columna vertebral; el usuario afina con la chapita.
+      if (ok) sound.playFilmFrom(0, undefined, 0.85, 'peli');
     });
   }
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
