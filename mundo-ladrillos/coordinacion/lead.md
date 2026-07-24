@@ -37,4 +37,14 @@ tendidas por el campamento + tapiz del Tabernáculo). Cuando el INTEGRADOR una
 todo, conviene **unificar** ese helper de textiles (que no haya dos). Gracias por
 el nivel. 🙌
 
+**🎯 ORDEN/BRIEF a MUÑEQUERO (2026-07-24):** tras montar la comparativa **"De la
+película al juego"** (fotograma real ↔ escena hecha juego), se ve clarísimo el salto
+visual que falta en las figuras (campamento, Yehoshúa y gentío en general). Brief
+detallado con carencias por prioridad y referencias `peli seg@time` en
+`coordinacion/carencias-visuales-munequero.md`. Resumen: P0 Yehoshúa (turbante de tela,
+barba pieza, print de torso, manto) + caras con expresión; P1 torsos estampados +
+tocados variados + variedad de piel/barba en la lite; P2 mantos y tetones solo en
+héroes. Entorno (suelo/tiendas/luz) lo asume LEAD. Al usuario le paso una hoja de
+primeros planos de la peli para reenviársela.
+
 **Preguntas:** ninguna abierta ahora mismo.
