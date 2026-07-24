@@ -25,6 +25,50 @@ export interface CampBuild {
  * tiendas de campaña, fogatas, Yehoshúa sobre una tarima arengando, y cuerdas
  * enrolladas repartidas para el objetivo "recoge las cuerdas".
  */
+/** Textura de LONA de tienda: casi blanca (para teñir por-instancia) con costuras
+ *  verticales (paneles) y trama sutil → deja de parecer un cono liso. */
+function tentClothTexture(): THREE.CanvasTexture {
+  const S = 128;
+  const c = document.createElement('canvas'); c.width = c.height = S;
+  const x = c.getContext('2d')!;
+  x.fillStyle = '#efeae0'; x.fillRect(0, 0, S, S);
+  // costuras verticales (paneles de lona)
+  for (let i = 0; i <= 8; i++) {
+    x.strokeStyle = 'rgba(120,104,78,.28)'; x.lineWidth = i % 2 ? 1 : 2;
+    const px = (i / 8) * S;
+    x.beginPath(); x.moveTo(px, 0); x.lineTo(px, S); x.stroke();
+  }
+  // trama horizontal muy tenue
+  x.strokeStyle = 'rgba(120,104,78,.08)'; x.lineWidth = 1;
+  for (let y = 4; y < S; y += 6) { x.beginPath(); x.moveTo(0, y); x.lineTo(S, y); x.stroke(); }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/** 4 vientos (cuerdas tensoras) que van de cerca de la cima a estacas en el suelo. */
+function tentGuyRopesGeometry(): THREE.BufferGeometry {
+  const parts: THREE.BufferGeometry[] = [];
+  const up = new THREE.Vector3(0, 1, 0), q = new THREE.Quaternion(), mid = new THREE.Vector3();
+  for (let k = 0; k < 4; k++) {
+    const a = Math.PI / 4 + (k / 4) * Math.PI * 2;
+    const top = new THREE.Vector3(Math.cos(a) * 0.6, 3.6, Math.sin(a) * 0.6);
+    const peg = new THREE.Vector3(Math.cos(a) * 4.2, 0.05, Math.sin(a) * 4.2);
+    const dir = peg.clone().sub(top); const len = dir.length();
+    q.setFromUnitVectors(up, dir.clone().normalize());
+    mid.copy(top).add(peg).multiplyScalar(0.5);
+    const g = new THREE.BoxGeometry(0.07, len, 0.07);
+    g.applyMatrix4(new THREE.Matrix4().compose(mid, q, new THREE.Vector3(1, 1, 1)));
+    parts.push(g);
+    // estaca (pequeño taco en el suelo)
+    const pegG = new THREE.BoxGeometry(0.16, 0.4, 0.16);
+    pegG.translate(peg.x, 0.2, peg.z);
+    parts.push(pegG);
+  }
+  return mergeGeometries(parts, false)!;
+}
+
 export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): CampBuild {
   const group = new THREE.Group();
 
@@ -34,11 +78,22 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     normalizeGeometry(new THREE.CylinderGeometry(0.0, 3.2, 4.2, 6).translate(0, 2.3, 0)),    // lona
     normalizeGeometry(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 5).translate(0, 4.5, 0))   // palo/remate
   ], false)!;
-  const tentMat = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 });
+  // textura de LONA: paneles verticales (costuras) + trama sutil; casi blanca para
+  // que el color por-instancia la tiña (cada tienda su tono).
+  const clothTex = tentClothTexture();
+  const tentMat = new THREE.MeshStandardMaterial({ map: clothTex, roughness: 0.95, metalness: 0 });
   const cloth = [0x9a9184, 0x8a7a5a, 0xb9a36f, 0x6f6558, 0xa8926a];
   const N = IS_MOBILE ? 34 : 70;
   const tents = new THREE.InstancedMesh(tentGeo, tentMat, N);
   tents.castShadow = true; tents.receiveShadow = true;
+
+  // --- VIENTOS (cuerdas tensoras): 4 por tienda, misma transformación que la
+  //     tienda (malla instanciada aparte, color cuerda) → toda tienda los lleva. ---
+  const guyGeo = tentGuyRopesGeometry();
+  const guyMat = new THREE.MeshStandardMaterial({ color: 0x6f5230, roughness: 1, metalness: 0 });
+  const guyRopes = new THREE.InstancedMesh(guyGeo, guyMat, N);
+  guyRopes.castShadow = true;
+
   const d = new THREE.Object3D();
   const col = new THREE.Color();
   let placed = 0;
@@ -51,11 +106,13 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);
     d.updateMatrix();
     tents.setMatrixAt(placed, d.matrix);
+    guyRopes.setMatrixAt(placed, d.matrix);
     tents.setColorAt(placed, col.set(cloth[(Math.random() * cloth.length) | 0]));
     placed++;
   }
   tents.instanceMatrix.needsUpdate = true;
-  group.add(tents);
+  guyRopes.instanceMatrix.needsUpdate = true;
+  group.add(tents); group.add(guyRopes);
 
   // --- MAR DE TIENDAS lejano: un campo denso hacia los cerros (a los lados y al
   //     sur), más pequeño y desaturado → el campamento se extiende hasta el

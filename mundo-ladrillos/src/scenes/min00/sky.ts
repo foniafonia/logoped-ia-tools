@@ -38,31 +38,44 @@ function backdropTexture(): THREE.CanvasTexture {
   }
   ctx.globalAlpha = 1;
 
-  // --- mesetas de cima plana, silueta BAJA en el horizonte (capas con perspectiva
-  //     aérea: lejana clara → cercana oscura). Bordes nítidos, no torres. ---
-  const mesaBand = (baseY: number, tones: string[], minH: number, maxH: number, step: number): void => {
-    let x = -60;
-    while (x < W + 60) {
-      const w = 80 + Math.random() * 150;
+  // --- mesetas de cima plana en el horizonte (capas con perspectiva aérea:
+  //     lejana clara → cercana oscura). Siluetas MARCADAS: cima plana nítida,
+  //     estrato horizontal y sombra lateral para que lean como mesetas. ---
+  const mesaBand = (baseY: number, tones: string[], minH: number, maxH: number, step: number, strata: boolean): void => {
+    let x = -70;
+    while (x < W + 70) {
+      const w = 90 + Math.random() * 170;
       const h = minH + Math.random() * (maxH - minH);
       const top = baseY - h;
-      const shoulder = 6 + Math.random() * 10;   // hombro de la meseta (cima plana)
-      ctx.fillStyle = tones[(Math.random() * tones.length) | 0];
+      const shoulder = 4 + Math.random() * 7;    // hombro corto → cima bien plana
+      const tone = tones[(Math.random() * tones.length) | 0];
+      ctx.fillStyle = tone;
       ctx.beginPath();
       ctx.moveTo(x, baseY);
-      ctx.lineTo(x + shoulder, top + Math.random() * 5);
-      ctx.lineTo(x + w - shoulder, top + Math.random() * 5);
+      ctx.lineTo(x + shoulder, top + 2);
+      ctx.lineTo(x + w - shoulder, top + 2);   // cima plana (misma altura)
       ctx.lineTo(x + w, baseY);
       ctx.closePath(); ctx.fill();
-      x += w * step - Math.random() * 20;
+      // cara sombreada (ladera derecha) → volumen
+      ctx.fillStyle = 'rgba(60,44,20,.16)';
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.6, top + 3); ctx.lineTo(x + w - shoulder, top + 2);
+      ctx.lineTo(x + w, baseY); ctx.lineTo(x + w * 0.72, baseY); ctx.closePath(); ctx.fill();
+      // estrato horizontal (línea de roca)
+      if (strata) {
+        ctx.strokeStyle = 'rgba(70,50,24,.18)'; ctx.lineWidth = 2;
+        const sy = top + h * (0.4 + Math.random() * 0.25);
+        ctx.beginPath(); ctx.moveTo(x + shoulder, sy); ctx.lineTo(x + w - shoulder, sy); ctx.stroke();
+      }
+      x += w * step - Math.random() * 22;
     }
   };
-  // capa lejana (perspectiva aérea: desaturada) — la más alta pero suave
-  mesaBand(HORIZ - 2, ['#dcc99e', '#d6c294', '#e0cfa4'], 48, 104, 0.56);
-  // capa media
-  mesaBand(HORIZ + 8, ['#c6ac77', '#bb9f6a', '#c9b17c'], 60, 128, 0.62);
-  // capa cercana (silueta más definida) — se funde con los cerros 3D vía bruma
-  mesaBand(HORIZ + 20, ['#ab8e5a', '#9f8652', '#b29965'], 52, 98, 0.66);
+  // capa lejana (perspectiva aérea: desaturada, sin estrato)
+  mesaBand(HORIZ - 2, ['#d8c592', '#d2bd88', '#dccb9a'], 60, 120, 0.54, false);
+  // capa media (estrato visible)
+  mesaBand(HORIZ + 8, ['#bda169', '#b0955f', '#c3a970'], 90, 175, 0.60, true);
+  // capa cercana (silueta oscura y marcada) — se funde con los cerros 3D
+  mesaBand(HORIZ + 22, ['#9c8050', '#8f7647', '#a68b58'], 78, 150, 0.64, true);
 
   const tex = new THREE.CanvasTexture(c);
   tex.wrapS = THREE.RepeatWrapping;
