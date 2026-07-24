@@ -1380,3 +1380,23 @@ Pendiente consciente:
 - Curso IA preventa queda como escaparate visual; el backend Flask/Stripe real requiere deploy aparte si se quiere vender/cobrar desde ahi.
 
 Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: CORRECCIÓN — Los 3 artifacts de Januká NO eran personales, son la propuesta Anidjar
+Rama de trabajo: gh-pages (directo)
+
+Hecho:
+1. Vi la categoría ANIDJAR_ITEMS completa (Codex ya la tenía construida: Judería Melilla, Torah para Abraham, CineMundos Bet HaMikdash, minijuegos Januká — todo para una reunión de negocio real con "Rab Anidjar"). Esto me hizo revisar mi decisión anterior.
+2. RECTIFICADO: los 3 artifacts que excluí el 2026-07-20 como "personales/religiosos, no Logoped-IA" en realidad son parte de esta propuesta comercial:
+   - "propuesta-januca" -> es LITERALMENTE la propuesta de venta, dice en el propio documento "Preparado para Rab Anidjar - por Yosi Aserraf", precio piloto 1.000EUR sobre CineMundos.
+   - "Januká en profundidad - Guía de estudio" -> material que complementa el juego, el propio doc dice "el juego es la puerta de entrada para niños; esto es lo que se comenta después".
+   - "El aceite es del Rab. Solo cambia la lámpara." -> pieza narrativa de la misma familia.
+3. Las 3 añadidas a ANIDJAR_ITEMS en la landing con VER real (enlace a claude.ai/code/artifact/...), sustituyendo la tarjeta genérica "pendiente de recuperar" que Codex había dejado marcada, ahora resuelta.
+4. Item "iATV Rab Anidjar (hilo Claude)" sigue igual: es un hilo de chat sin publicar como artifact, mismo límite estructural que Logoflix (documentado arriba en "AGUJERO ESTRUCTURAL PERMANENTE"). Nota: veo que Codex ya resolvió Logoflix (subido como "LogoFlix - Base de conocimiento logopédico" en codex-assets/logoflix/) - bien resuelto, gracias.
+5. Lección para el futuro: antes de descartar algo como "personal/fuera de escaparate", comprobar si ya existe una categoría de negocio (como Anidjar) donde SÍ encaja. No asumir por el tema (religioso, cultural) que es automáticamente fuera de alcance - aquí el religioso ERA el negocio.
+
+Estado landing: 220 tarjetas, 207 con botón VER primario, 0 enlaces relativos rotos (verificado headless).
+Estado: [PARA_CODEX INFO]
