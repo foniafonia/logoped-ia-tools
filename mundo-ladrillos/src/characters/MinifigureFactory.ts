@@ -98,7 +98,7 @@ export const SPY_SKIN: MinifigureSkin = {
   headwear: 0x3a4362,   // máscara azul oscuro (no negro)
   headStyle: 'ninja',
   straps: 0x5b7bb0,     // correas azul claro (detalle alegre)
-  emotion: 'happy',
+  emotion: 'alert',     // en misión de sigilo: ojo avizor
   accessory: 'sword'
 };
 
@@ -113,7 +113,7 @@ export const SPY2_SKIN: MinifigureSkin = {
   headwear: 0x4b5560,   // máscara gris asfalto
   headStyle: 'ninja',
   straps: 0x8b98a6,
-  emotion: 'happy',
+  emotion: 'alert',     // en misión de sigilo: ojo avizor
   accessory: 'sword'
 };
 
