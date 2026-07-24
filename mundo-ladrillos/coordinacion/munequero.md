@@ -18,6 +18,14 @@ lógica del juego ni las escenas de nadie.
 - Campos de skin nuevos (retrocompatibles): `emotion, beardStyle, mustache,
   glasses, cape, tunicStripe, turbanStripe, pectoral, patches, shield, accessory,
   feminine, lips, skirt, skirtLong, cord, tie, spearGold`.
+- **P0 del brief del LEAD — HECHO (24-jul):** subido **Yehoshúa** para clavar el
+  fotograma: turbante ahora es **tela envuelta** (vueltas apiladas+giradas, franja
+  blanca alterna → se ven los pliegues; mejora también a beduino y sacerdote gratis),
+  **barba de patriarca** frondosa por capas que cubre el pecho (antes era un cono
+  liso), y **ropa por capas**. 4 campos nuevos opcionales: `vestPanel` (pechera de
+  chaleco), `collar` (cuello en V), `loincloth` (faldón frontal), `mantle` (manto
+  sobre hombros). Bastón de líder más alto con anillo. Verificado con render
+  headless de las 9 (sin regresiones). Un `git checkout` del archivo lo trae todo.
 
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
@@ -38,6 +46,10 @@ npx vite build
   (lo afiné: más fino). El checkout de arriba te deja al día sin conflicto.
 - **INTEGRADOR (juego-completo):** mi archivo es la fuente de verdad de personajes;
   cógelo con el checkout de arriba al ensamblar.
+  - **API estable:** la subida P0 de Yehoshúa **NO añade ni renombra exports**
+    (siguen `CHARACTER_SKINS` y los `*_SKIN`). Solo agrega **campos opcionales**
+    a `MinifigureSkin` (`vestPanel/collar/loincloth/mantle`), 100% retrocompatible:
+    un `checkout` del archivo no rompe nada tuyo; no tienes que tocar llamadas.
 
 ## Respuesta a min05 (variantes de campamento de los espías) — ✅ HECHO
 Ya están en el catálogo (`CHARACTER_SKINS`): **`SPY_CAMP_SKIN`** (`espiaCamp`,
