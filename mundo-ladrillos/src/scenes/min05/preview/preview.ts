@@ -48,6 +48,12 @@ const plastic = new PlasticMaterialFactory();
 // escena (BEAT_LOCAL). No hay música sintética.
 const sound = new SoundEngine();
 let filmReady = false;
+// ⚠ La NARRACIÓN de la peli (`narracion_min5-10`) está DESALINEADA con el desglose
+// oficial: verificado por el usuario, el gag del avión suena en ~seg 21 del clip,
+// no en el 212 que dice la ficha. Hasta que el LEAD entregue un clip que case (o
+// los offsets reales), apagamos el spine para no soltar audio que no toca. Se
+// mantienen ambiente + efectos + gemas + el gag interactivo del avión (esc14).
+const USE_FILM_SPINE = false;
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -337,12 +343,14 @@ const startGame = (): void => {
   sound.init();
   // carga el audio de la peli (voces + música) y arranca en el segundo de la
   // escena actual. Asíncrono: cuando termine de decodificar, empieza a sonar.
-  void sound.loadFilm('narracion_min5-10').then((ok) => {
-    filmReady = ok;
-    // arranca SOLO el segmento de la escena actual (mismo criterio acotado que
-    // al cambiar de escena): [beat, beat siguiente) + etiqueta. Sin bleed.
-    if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0, BEAT_LOCAL[currentDef.numero + 1], 0.9, `esc${currentDef.numero}`);
-  });
+  if (USE_FILM_SPINE) {
+    void sound.loadFilm('narracion_min5-10').then((ok) => {
+      filmReady = ok;
+      // arranca SOLO el segmento de la escena actual (mismo criterio acotado que
+      // al cambiar de escena): [beat, beat siguiente) + etiqueta. Sin bleed.
+      if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0, BEAT_LOCAL[currentDef.numero + 1], 0.9, `esc${currentDef.numero}`);
+    });
+  }
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
   if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
   started = true;
