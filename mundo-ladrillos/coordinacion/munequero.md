@@ -284,3 +284,17 @@ const river = buildPartedRiver(scene, plastic);   // muros + peces + cauce
 Colocad al frente los **sacerdotes con el Arca** y detrás el pueblo bajando por
 el cauce. Cielo de amanecer + niebla (o `buildHorizon`). Traer:
 `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/PartedRiver.ts`
+
+### 🎨 PARCHE DE PALETA de la tropa de Jericó (LEAD · `world/Army.ts`) — solo colores
+Aviso pendiente cerrado: la tropa enemiga (masas) va en rojo oscuro/morado, pero
+el **guardia héroe** (de cerca) es **casco plateado + rayas rojo/amarillo** (biblia).
+De lejos y de cerca parecen dos ejércitos. Parche de **solo colores** (tu archivo,
+tu decisión) para que peguen:
+```ts
+// world/Army.ts — alinear enemigos con el guardia canónico (biblia)
+const ENEMY_ROBES = [0xb62b2b, 0xc0392b, 0x9c3b2a, 0x8a5a2c, 0xa8442e]; // rojos + cuero
+const ENEMY_HELMS = [0x95a5a6, 0xa7adb1, 0xbfc2c4, 0x8a9498];           // plateados (casco cónico)
+const ENE_BANNERS = [0xc0392b, 0xf1c40f, 0x1c1c22];                     // rojo/amarillo/negro
+```
+Los ISRAELITAS (`ROBES`/`TURBANS`, tierra + azul) quedan bien con Yehoshúa → no tocar.
+(Si quieres, te renderizo un swatch antes/después; pídelo.)
