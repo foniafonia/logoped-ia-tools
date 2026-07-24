@@ -11,7 +11,7 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
  */
 
 /** Expresión de las cejas para dar carácter (amable, serio, preocupado…). */
-export type Emotion = 'happy' | 'neutral' | 'worried' | 'stern';
+export type Emotion = 'happy' | 'neutral' | 'worried' | 'stern' | 'surprised' | 'alert';
 
 export interface MinifigureSkin {
   head: number;      // color piel/cabeza
@@ -329,11 +329,43 @@ export class Minifigure {
   /** Cejas cuya inclinación transmite la emoción. `slim` las hace finas (fem). */
   private addBrows(y: number, z: number, emotion: Emotion, color = 0x3a2a1a, spread = 0.2, slim = false): void {
     // t>0 baja el extremo interior (enfado); t<0 lo sube (preocupación/amable)
-    const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13 }[emotion];
+    const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13, surprised: -0.1, alert: 0.24 }[emotion];
+    // Elevación de la ceja: sorprendido/alerta las suben (ojos muy abiertos)
+    const lift = { neutral: 0, stern: 0, worried: 0.02, happy: 0, surprised: 0.11, alert: 0.06 }[emotion];
     const h = slim ? 0.035 : 0.06;
     const w = slim ? 0.2 : 0.22;
-    const bL = this.box(w, h, 0.05, color, -spread, y, z); bL.rotation.z = -t; this.root.add(bL);
-    const bR = this.box(w, h, 0.05, color, spread, y, z); bR.rotation.z = t; this.root.add(bR);
+    const bL = this.box(w, h, 0.05, color, -spread, y + lift, z); bL.rotation.z = -t; this.root.add(bL);
+    const bR = this.box(w, h, 0.05, color, spread, y + lift, z); bR.rotation.z = t; this.root.add(bR);
+  }
+
+  /** Boca según emoción: sonrisa, línea seria, mueca preocupada u «O» de sorpresa. */
+  private addMouth(y: number, z: number, emotion: Emotion, color = 0x6e3f24): void {
+    switch (emotion) {
+      case 'happy': // sonrisa curva hacia arriba
+        this.root.add(this.box(0.28, 0.06, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, -0.17, y + 0.05, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, 0.17, y + 0.05, z));
+        break;
+      case 'worried': // comisuras hacia abajo
+        this.root.add(this.box(0.28, 0.06, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, -0.17, y - 0.05, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, 0.17, y - 0.05, z));
+        break;
+      case 'surprised': { // boca abierta en «O»
+        const o = new THREE.CylinderGeometry(0.1, 0.1, 0.05, 16);
+        o.rotateX(Math.PI / 2);
+        this.root.add(this.mesh(o, color, 0, y, z));
+        break;
+      }
+      case 'stern': // línea recta ancha y firme
+        this.root.add(this.box(0.34, 0.06, 0.05, color, 0, y, z));
+        break;
+      case 'alert': // boca pequeña y tensa
+        this.root.add(this.box(0.18, 0.08, 0.05, color, 0, y, z));
+        break;
+      default: // neutral: línea corta
+        this.root.add(this.box(0.24, 0.06, 0.05, color, 0, y, z));
+    }
   }
 
   /** Pestañas: pequeños trazos en el ángulo externo de cada ojo (rasgo fem). */
@@ -507,17 +539,17 @@ export class Minifigure {
       this.root.add(this.box(0.9, 0.82, 0.12, s.head, 0, 3.86, 0.5));       // cara amarilla enmarcada
       this.addEyes(4.02, 0.57, 0.22, 0x2a2016);
       this.addBrows(4.2, 0.58, emotion, 0x2a2016, 0.22);
-      this.addSmile(3.62, 0.57);
+      this.addMouth(3.62, 0.57, emotion);
     } else {
       this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30));           // cabeza de piel
       this.addEyes(3.98, 0.54, 0.19);
       this.addBrows(4.15, 0.54, emotion, 0x3a2a1a, 0.2, s.feminine);
       if (s.feminine) { this.addLashes(3.98, 0.55); this.addBlush(3.74, 0.53); }
       if (s.glasses !== undefined) this.addGlasses(3.98, 0.56, s.glasses);
-      // Boca: labios (fem) o sonrisa. Siempre visible: en barbudos la barba
-      // arranca en la barbilla y el bigote va por encima → boca libre.
+      // Boca según emoción (labios si es fem). Siempre visible: en barbudos la
+      // barba arranca en la barbilla y el bigote va por encima → boca libre.
       if (s.lips !== undefined) this.addLips(3.64, 0.55, s.lips);
-      else this.addSmile(3.62, 0.55);
+      else this.addMouth(3.62, 0.55, emotion);
     }
 
     // --- Barba ---

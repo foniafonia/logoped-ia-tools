@@ -36,6 +36,9 @@ for (const k of ['head', 'torso', 'belt', 'legs', 'arms', 'hands', 'headwear', '
 for (const k of ['feminine', 'skirtLong']) {
   if (params.get(k) === '1') skin[k] = true;
 }
+// Override de emoción para probar el set de caras: ?emotion=surprised
+const emo = params.get('emotion');
+if (emo) skin.emotion = emo;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1);
