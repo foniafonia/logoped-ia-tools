@@ -19,13 +19,23 @@ lógica del juego ni las escenas de nadie.
   glasses, cape, tunicStripe, turbanStripe, pectoral, patches, shield, accessory,
   feminine, lips, skirt, skirtLong, cord, tie, spearGold`.
 - **P0 del brief del LEAD — HECHO (24-jul):** subido **Yehoshúa** para clavar el
-  fotograma: turbante ahora es **tela envuelta** (vueltas apiladas+giradas, franja
-  blanca alterna → se ven los pliegues; mejora también a beduino y sacerdote gratis),
-  **barba de patriarca** frondosa por capas que cubre el pecho (antes era un cono
-  liso), y **ropa por capas**. 4 campos nuevos opcionales: `vestPanel` (pechera de
-  chaleco), `collar` (cuello en V), `loincloth` (faldón frontal), `mantle` (manto
-  sobre hombros). Bastón de líder más alto con anillo. Verificado con render
-  headless de las 9 (sin regresiones). Un `git checkout` del archivo lo trae todo.
+  fotograma: turbante de **tela envuelta** (vueltas apiladas+giradas, franja blanca
+  alterna → se ven los pliegues; mejora también a beduino y sacerdote gratis),
+  **barba de patriarca con la BOCA LIBRE** (bigote encima del labio, barba desde la
+  barbilla en punta al pecho — ya NO tapa la boca ni la túnica), y **ropa por capas**.
+  4 campos nuevos opcionales: `vestPanel` (pechera), `collar` (cuello en V),
+  `loincloth` (faldón frontal), `mantle` (manto). Bastón de líder más alto.
+- **Set de CARAS EXPRESIVAS — HECHO (24-jul):** `Emotion` ahora tiene 6 valores:
+  `happy | neutral | worried | stern | surprised | alert`. Nueva `addMouth` cambia
+  la boca por emoción (sonrisa / línea / mueca / seria / «O» de sorpresa / tensa) y
+  las cejas suben en sorprendido/alerta. Sirve para **romper la clonación de la
+  multitud** (aldeanos preocupados, guardias serios, espías en alerta). Los espías
+  (ninja) también emocionan. **Retrocompatible**: si no pones `emotion`, queda neutral.
+
+> 🔔 **AVISO INTEGRADOR / LEAD / min05:** hay **versión nueva** de personajes
+> (Yehoshúa con boca libre + set de caras). El juego montado aún tiene la vieja.
+> Para actualizar, **volved a hacer el `git checkout` del archivo** (comando abajo).
+> Sigue sin añadir/renombrar exports: solo campos opcionales → no rompe nada.
 
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
