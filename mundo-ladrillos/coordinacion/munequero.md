@@ -109,6 +109,27 @@ clímax épico. Recomendaciones concretas (de más a menos impacto):
    de atardecer + menos exposición lo dramatizaría.
 6. **[PERF] Muralla ~22 s síncronos** (ya sabido, tarea LEAD): trocear el build.
 
+## 🔍 AUDITORÍA de 0–5 (LEAD) y 5–10 (min05) — 24-jul (foco pedido por el usuario)
+Auditados en SUS ramas (no el ensamblado). Ambos arrancan con **0 errores**.
+
+**0–5 · Campamento (LEAD):** lleno y vivo (tiendas, ovejas, hoguera, kilim,
+banderas, shofar). Muy bien. **Recomendación:** la multitud usa **un solo
+`VILLAGER_SKIN`** (aldeanos clonados). Cambiar a **`villagerSkin(i)`** (8 aldeanos
+distintos + las 6 caras) rompe la clonación en una línea. Tú (LEAD) me pediste
+justo "aldeanos/niños + versión lite"; `villagerSkin` es esa pieza (re-tira
+`MinifigureFactory.ts`). Puedo pasar mockup del campamento con variedad si quieres.
+
+**5–10 · Jordán/espías (min05):** sólido. La **alfombra colgada (esc.16)** es un
+momentazo (kilim detallado + piececitos asomando 👌). Bien: muralla noche,
+gemas, palmeras, tus juncos propios. **A mejorar:**
+- **esc.14 "treta del avión": muy oscura y vacía**; el "avión" se lee como una
+  mancha. Subir luz de luna/braseros, hacer el avión legible (silueta clara) y
+  meter a los guardias mirando al cielo en primer plano.
+- Varios **primeros planos nocturnos pelados** (mucho suelo vacío): un poco de
+  attrezzo bajo (cajas/juncos/roca) cierra el encuadre.
+- Personajes: tu `MinifigureFactory` es una copia **anterior** a mis caras/
+  aldeanos → re-tirar el archivo te da caras expresivas (espías en alerta) gratis.
+
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
 `MinifigureFactory.ts` es **autónomo** (solo depende de THREE + PlasticMaterialFactory,
