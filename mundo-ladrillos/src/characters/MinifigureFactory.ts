@@ -58,6 +58,12 @@ export interface MinifigureSkin {
   cord?: number;              // cordón/faja en banda diagonal (rojo carmesí de Rahab)
   tie?: number;               // corbata sobre camisa blanca (rabino de traje)
   spearGold?: boolean;        // lanza/alabarda dorada (jefe de guardia)
+
+  // Ropa de héroe (P0 del brief del LEAD): capas de tela para clavar la peli.
+  vestPanel?: number;         // panel de chaleco (frente del torso, sobre la "camisa")
+  collar?: number;            // cuello en V marcado
+  loincloth?: number;         // faldón/tira frontal que cuelga del cinturón (Yehoshúa)
+  mantle?: number;            // manto/chal sobre los hombros (ancianos/sacerdote)
 }
 
 /** Yehoshúa (según frame): AZUL dominante — chaleco/pantalón azul, cinturón
@@ -74,6 +80,9 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   turbanStripe: 0xf4efe4, // franjas blancas
   beard: 0xbdc3c7,       // barba larga blanca/canosa
   beardStyle: 'long',
+  vestPanel: 0x184e78,   // chaleco azul más oscuro (pechera)
+  collar: 0x3a7fb5,      // cuello en V azul claro
+  loincloth: 0x6e4a2c,   // faldón de cuero al frente
   emotion: 'neutral',    // líder mayor, solemne
   accessory: 'staff'
 };
@@ -388,6 +397,32 @@ export class Minifigure {
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
     this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
 
+    // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
+    if (s.vestPanel !== undefined) {
+      this.root.add(this.box(0.92, 1.5, 0.12, s.vestPanel, 0, 2.5, 0.4));   // pechera
+      // Ribetes laterales del chaleco (dos tiras verticales)
+      this.root.add(this.box(0.14, 1.5, 0.14, s.belt, -0.5, 2.5, 0.4));
+      this.root.add(this.box(0.14, 1.5, 0.14, s.belt, 0.5, 2.5, 0.4));
+    }
+    // Cuello en V marcado (dos tiras cruzadas del color del collar)
+    if (s.collar !== undefined) {
+      const cl = this.box(0.16, 0.7, 0.1, s.collar, -0.18, 2.98, 0.47); cl.rotation.z = 0.5;
+      const cr = this.box(0.16, 0.7, 0.1, s.collar, 0.18, 2.98, 0.47); cr.rotation.z = -0.5;
+      this.root.add(cl, cr);
+    }
+    // Faldón / tira frontal que cuelga del cinturón (Yehoshúa).
+    if (s.loincloth !== undefined) {
+      this.root.add(this.box(0.5, 1.0, 0.14, s.loincloth, 0, 1.35, 0.42));
+      this.root.add(this.box(0.5, 0.18, 0.16, s.belt, 0, 1.86, 0.44)); // remache al cinturón
+    }
+    // Manto/chal sobre los hombros (ancianos, sacerdote): cae por la espalda.
+    if (s.mantle !== undefined) {
+      const drape = this.box(1.6, 2.3, 0.16, s.mantle, 0, 2.3, -0.5);
+      drape.rotation.x = -0.05;
+      this.root.add(drape);
+      this.root.add(this.box(1.5, 0.36, 0.6, s.mantle, 0, 3.16, -0.12)); // cuello del manto
+    }
+
     // Camisa blanca + corbata (rabino de traje)
     if (s.tie !== undefined) {
       this.root.add(this.box(0.5, 0.78, 0.16, 0xf4efe4, 0, 2.86, 0.4)); // camisa
@@ -510,15 +545,28 @@ export class Minifigure {
       this.root.add(this.box(0.2, 0.6, 0.16, col, -0.5, 3.78, 0.28)); // patilla
       this.root.add(this.box(0.2, 0.6, 0.16, col, 0.5, 3.78, 0.28));
     } else {
-      // Barba larga: cono SÓLIDO invertido, colocado bajo la cara para que
-      // los ojos sigan a la vista (base ~3.7, punta ~2.4).
-      const bg = new THREE.ConeGeometry(0.56, 1.35, 22);
-      bg.rotateX(Math.PI); // punta hacia abajo, base ancha arriba
-      bg.scale(1, 1, 0.7);
-      const beard = this.mesh(bg, col, 0, 3.05, 0.3);
-      this.root.add(beard);
-      // bigote / mejillas que enlazan con la cara
-      this.root.add(this.box(0.82, 0.32, 0.34, col, 0, 3.64, 0.42));
+      // Barba larga y FRONDOSA (pieza de patriarca, cubre el pecho): capas de
+      // bloques que se ensanchan bajo las mejillas y se afilan en punta, para
+      // que se lea como mechones y no como un cono liso. Ojos a la vista (~3.98).
+      // Marco lateral (patillas anchas que arrancan de las orejas)
+      this.root.add(this.box(0.24, 0.9, 0.34, col, -0.52, 3.66, 0.3));
+      this.root.add(this.box(0.24, 0.9, 0.34, col, 0.52, 3.66, 0.3));
+      // Cuerpo de la barba: capas anchas que caen y se estrechan
+      const layers: Array<[number, number, number, number]> = [
+        // [ancho, alto, y, z]
+        [0.98, 0.5, 3.58, 0.34],
+        [1.06, 0.5, 3.24, 0.32],
+        [0.92, 0.5, 2.9, 0.3],
+        [0.7, 0.46, 2.58, 0.28],
+        [0.44, 0.42, 2.3, 0.26],
+      ];
+      layers.forEach(([w, h, y, z]) => this.root.add(this.box(w, h, 0.4, col, 0, y, z)));
+      // Punta final
+      const tip = new THREE.ConeGeometry(0.22, 0.4, 14);
+      tip.rotateX(Math.PI);
+      this.root.add(this.mesh(tip, col, 0, 2.06, 0.24));
+      // Bigote grueso que enlaza con la cara
+      this.root.add(this.box(0.9, 0.34, 0.36, col, 0, 3.66, 0.44));
     }
   }
 
@@ -540,22 +588,36 @@ export class Minifigure {
       }
       case 'turban': {
         if (hw === undefined) break;
-        const dome = new THREE.SphereGeometry(0.64, 26, 18, 0, Math.PI * 2, 0, Math.PI / 2);
-        const domeMesh = this.mesh(dome, hw, 0, 4.32, 0);
-        domeMesh.scale.set(1.06, 0.95, 1.06);
+        // Turbante de TELA ENVUELTA (como en la peli): cúpula pequeña + varias
+        // vueltas (toros) apiladas y giradas para que se lean los pliegues.
+        const dome = new THREE.SphereGeometry(0.5, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+        const domeMesh = this.mesh(dome, hw, 0, 4.5, 0);
+        domeMesh.scale.set(1.02, 0.9, 1.02);
         this.root.add(domeMesh);
-        // Banda frontal (blanca si el turbante lleva franjas)
-        const band = new THREE.TorusGeometry(0.6, 0.17, 12, 30);
-        band.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(band, s.turbanStripe ?? hw, 0, 4.3, 0));
-        // Cola del turbante colgando al lado
-        this.root.add(this.cyl(0.13, 0.34, hw, 0.5, 4.34, 0.24));
-        // Franja blanca superior envolviendo la cúpula
-        if (s.turbanStripe !== undefined) {
-          const st = new THREE.TorusGeometry(0.6, 0.06, 12, 30);
-          st.rotateX(Math.PI / 2);
-          this.root.add(this.mesh(st, s.turbanStripe, 0, 4.56, 0));
-        }
+        // Vueltas de tela: radios y alturas decrecientes hacia arriba, cada una
+        // ligeramente girada para simular el envoltorio en espiral.
+        const wraps: Array<[number, number, number, number]> = [
+          // [radio, tubo, y, giro.z]
+          [0.62, 0.19, 4.14, 0.10],
+          [0.60, 0.18, 4.30, -0.08],
+          [0.54, 0.17, 4.45, 0.12],
+          [0.44, 0.15, 4.58, -0.05],
+        ];
+        wraps.forEach(([r, t, y, rz], i) => {
+          const g = new THREE.TorusGeometry(r, t, 12, 30);
+          g.rotateX(Math.PI / 2);
+          // franja blanca alternando con el color del turbante
+          const col = (s.turbanStripe !== undefined && i % 2 === 1) ? s.turbanStripe : hw;
+          const m = this.mesh(g, col, 0, y, 0);
+          m.rotation.y = rz;
+          this.root.add(m);
+        });
+        // Nudo/pliegue lateral donde se remete la tela
+        this.root.add(this.box(0.3, 0.26, 0.24, hw, 0.5, 4.24, 0.16));
+        // Cola de la tela cayendo por detrás del hombro
+        const tail = this.box(0.26, 0.7, 0.16, s.turbanStripe ?? hw, 0.46, 3.7, -0.34);
+        tail.rotation.z = 0.22;
+        this.root.add(tail);
         break;
       }
       case 'coneHelmet': {
@@ -652,11 +714,16 @@ export class Minifigure {
 
   /** Bastón de madera vertical con nudo superior (Yehoshúa). */
   private addStaff(): void {
-    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 3.4, 10), this.plastic.get(0x6e4a2c));
-    shaft.position.set(0, -0.55, 0.2); shaft.castShadow = true;
-    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.19, 14, 12), this.plastic.get(0x8a6a3a));
-    knob.position.set(0, 1.2, 0.2); knob.castShadow = true;
-    this.armR.add(shaft, knob);
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 4.0, 10), this.plastic.get(0x6e4a2c));
+    shaft.position.set(0, -0.4, 0.2); shaft.castShadow = true;
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 12), this.plastic.get(0x8a6a3a));
+    knob.position.set(0, 1.75, 0.2); knob.castShadow = true;
+    // anillo bajo el pomo (bastón de líder)
+    const ring = new THREE.TorusGeometry(0.14, 0.05, 8, 16);
+    ring.rotateX(Math.PI / 2);
+    const ringM = new THREE.Mesh(ring, this.plastic.get(0x8a6a3a));
+    ringM.position.set(0, 1.5, 0.2);
+    this.armR.add(shaft, knob, ringM);
   }
 
   /** Lanza de la guardia (o alabarda DORADA del jefe) en la mano derecha. */
