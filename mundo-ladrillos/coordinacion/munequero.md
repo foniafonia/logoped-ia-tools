@@ -88,6 +88,17 @@ skin.emotion = CARAS[i % CARAS.length];
 Cambiando el array por contexto se consigue variedad sin clonar caras. Los
 espías (ninja) ya emocionan solos: `alert` en sigilo, `happy` en campamento.
 
+**Aún mejor — ALDEANOS listos (nuevo):** exporto `villagerSkin(i)` y
+`VILLAGER_PRESETS` (8 aldeanos distintos: hombres/mujeres, ropas terrosas,
+turbante/pañuelo/melena, barbas, las 6 caras; sin arma). Para llenar una escena
+sin clonar, en el spawner:
+```
+import { createMinifigure, villagerSkin } from '../characters/MinifigureFactory';
+const fig = createMinifigure(plastic, villagerSkin(i)); // i = índice de la instancia
+```
+Determinista (estable en resume). Se pueden sobreescribir campos sueltos
+(`{ ...villagerSkin(i), emotion:'surprised' }`) para ajustar el mood por escena.
+
 ## Ofrezco / pendiente
 - **Versión LITE para multitudes:** OJO — `Army.ts` (del LEAD) ya instancia su
   propia tropa con geometría fusionada; un "lite" como minifig **puede ser
