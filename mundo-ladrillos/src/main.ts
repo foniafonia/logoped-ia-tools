@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { buildJericho } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
+import { buildCrowd } from './world/Crowd';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
 import { createStuddedGround } from './world/EnvironmentManager';
@@ -107,6 +108,24 @@ for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, n
   city.add(flame, post, light);
 }
 
+// ---- Vecinos de Jericó (mundo lleno): aldeanos por la calle, de noche ----
+// Junto a las casas y antorchas, mirando a la calle; algunos inquietos por la
+// noche. Variedad garantizada por villagerSkin(i) (no se clonan).
+const crowd = buildCrowd(scene, plastic, [
+  { x: -6, z: 8, yaw: 1.3, emotion: 'worried' },   // junto a la antorcha izq.
+  { x: -8, z: 16, yaw: 1.5 },
+  { x: -7, z: 25, yaw: 1.4, emotion: 'surprised' },
+  { x: -9, z: 33, yaw: 1.5 },
+  { x: -3, z: 12, yaw: 0.5, emotion: 'happy' },     // un chico mirando la calle
+  { x: 6, z: 8, yaw: -1.3 },                          // junto a la antorcha der.
+  { x: 8, z: 18, yaw: -1.5, emotion: 'worried' },
+  { x: 7, z: 27, yaw: -1.4 },
+  { x: 7, z: 29, yaw: -1.2, emotion: 'surprised' },  // junto a la antorcha (8,28)
+  { x: 3, z: 20, yaw: -0.5 },
+  { x: -14, z: 26, yaw: 1.2, emotion: 'neutral' }    // cerca de casa de Rahab
+]);
+(window as any).__crowd = crowd;
+
 // --- Fondo real de la peli (plano fijo 2.5D): textura de fondo ---
 const texLoader = new THREE.TextureLoader();
 (window as any).__scene = scene;
@@ -164,6 +183,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
   controller.update(dt, tpcam.yaw);
+  crowd.update(dt);
   story.update(dt);
   tpcam.update(controller.pos);
   renderer.render(scene, camera);
