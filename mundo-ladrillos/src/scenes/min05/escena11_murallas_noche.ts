@@ -25,7 +25,7 @@ export const escena11: Min05Scene = {
   noche: true,
   ambiente: 'night',
   spawn: { x: -16, z: -18 },
-  objetivo: { tipo: 'ir_a', texto: 'Llega al puesto de observación entre los juncos', target: { x: 10, z: -5 }, radio: 3.5 },
+  objetivo: { tipo: 'ir_a', texto: 'Llega al puesto entre los juncos y estudia la muralla (E)', target: { x: 10, z: -5 }, radio: 3.5 },
   exito: 'Los espías estudian la muralla desde las sombras',
   camara: { yaw: Math.PI + 0.12, pitch: 0.3, dist: 36 },
   // establecimiento nocturno: la cámara descubre la muralla y baja a los espías
@@ -82,11 +82,28 @@ export const escena11: Min05Scene = {
 
     const tgt = escena11.objetivo.target!;
     const total = Math.hypot(escena11.spawn.x - tgt.x, escena11.spawn.z - tgt.z);
+    const radio = escena11.objetivo.radio ?? 3.5;
+    let studied = false; // los espías ya han estudiado la muralla (verbo: E)
     return {
       group,
-      update(dt, t, player) { for (const br of braziers) br.update(t); lanterns.forEach((l) => l.update(t)); wg1.update(dt); wg2.update(dt); buddy.update(dt); gems.update(dt, t, player); },
-      hud() { const p = ctx.getPlayer(); return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1), gems: { got: gems.got, total: gems.total } }; },
-      isDone(p) { return Math.hypot(p.x - tgt.x, p.z - tgt.z) < (escena11.objetivo.radio ?? 3.5); }
+      update(dt, t, player) {
+        for (const br of braziers) br.update(t); lanterns.forEach((l) => l.update(t));
+        wg1.update(dt); wg2.update(dt); buddy.update(dt); gems.update(dt, t, player);
+        // VERBO: desde el escondite, pulsa E para ESTUDIAR la muralla (la cámara
+        // recorre la coronación y las patrullas, y vuelve al control manual).
+        const near = Math.hypot(player.x - tgt.x, player.z - tgt.z) < radio;
+        if (near && !studied && ctx.wantsInteract()) {
+          studied = true;
+          ctx.sound.success();
+          ctx.cameraReveal?.(
+            { x: 8, y: 5.5, z: -4 }, { x: 2, y: 8, z: 2 },
+            { x: -6, y: 12, z: 22 }, { x: 12, y: 12, z: 22 }, 3
+          );
+        }
+      },
+      status() { return studied ? '🧭 Muralla estudiada: 2 guardias y la puerta cerrada' : null; },
+      hud() { const p = ctx.getPlayer(); const near = Math.hypot(p.x - tgt.x, p.z - tgt.z) < radio; return { progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - tgt.x, p.z - tgt.z) / total, 0, 1), gems: { got: gems.got, total: gems.total }, prompt: (near && !studied) ? '🧭 Pulsa E para estudiar la muralla' : undefined }; },
+      isDone() { return studied; }
     };
   }
 };

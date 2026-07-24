@@ -24,7 +24,7 @@ export const escena09: Min05Scene = {
   jugador: 'yoshua',
   ambiente: 'river',
   spawn: { x: -8, z: -14 },
-  objetivo: { tipo: 'ir_a', texto: 'Sube al promontorio y contempla el río', target: { x: 6, z: 5 }, radio: 3.5 },
+  objetivo: { tipo: 'ir_a', texto: 'Sube al promontorio y otea Jericó al otro lado (E)', target: { x: 6, z: 5 }, radio: 3.5 },
   exito: 'Yehoshúa observa Jericó al otro lado del río',
   camara: { yaw: Math.PI + 0.2, pitch: 0.34, dist: 32 },
   // establecimiento: la cámara recorre el río hasta Jericó y baja a Yehoshúa
@@ -82,6 +82,8 @@ export const escena09: Min05Scene = {
     const start = new THREE.Vector2(escena09.spawn.x, escena09.spawn.z);
     const tgt = new THREE.Vector2(escena09.objetivo.target!.x, escena09.objetivo.target!.z);
     const total = start.distanceTo(tgt);
+    const radio = escena09.objetivo.radio ?? 3.5;
+    let observed = false; // Yehoshúa ya ha oteado Jericó (verbo: pulsar E arriba)
     return {
       group,
       update(dt, t, player) {
@@ -92,13 +94,26 @@ export const escena09: Min05Scene = {
           f.rotation.y = s > 0 ? 0.4 : -0.4 + Math.PI;
         }
         life.update(dt); g1.update(dt); gems.update(dt, t, player);
+        // VERBO: en el promontorio, pulsa E para otear Jericó (la cámara cruza el
+        // río hasta la fortaleza y vuelve). Refuerza "Yehoshúa contempla Jericó".
+        const near = Math.hypot(player.x - tgt.x, player.z - tgt.y) < radio;
+        if (near && !observed && ctx.wantsInteract()) {
+          observed = true;
+          ctx.sound.success();
+          ctx.cameraReveal?.(
+            { x: 4, y: 7.5, z: 2 }, { x: 0, y: 9, z: 9 },
+            { x: 0, y: 5, z: 26 }, { x: 0, y: 9, z: 50 }, 2.8
+          );
+        }
       },
+      status() { return observed ? '🔭 Yehoshúa contempla Jericó al otro lado' : null; },
       hud() {
         const p = ctx.getPlayer();
+        const near = Math.hypot(p.x - tgt.x, p.z - tgt.y) < radio;
         const d = Math.hypot(p.x - tgt.x, p.z - tgt.y);
-        return { progress: THREE.MathUtils.clamp(1 - d / total, 0, 1), gems: { got: gems.got, total: gems.total } };
+        return { progress: THREE.MathUtils.clamp(1 - d / total, 0, 1), gems: { got: gems.got, total: gems.total }, prompt: (near && !observed) ? '🔭 Pulsa E para otear Jericó al otro lado' : undefined };
       },
-      isDone(p) { const o = escena09.objetivo.target!; return Math.hypot(p.x - o.x, p.z - o.z) < (escena09.objetivo.radio ?? 3.5); }
+      isDone() { return observed; }
     };
   }
 };
