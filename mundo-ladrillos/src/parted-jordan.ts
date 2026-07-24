@@ -4,6 +4,7 @@ import { createMinifigure, YOSHUA_SKIN, PRIEST_SKIN } from './characters/Minifig
 import { buildPartedRiver } from './world/PartedRiver';
 import { buildHorizon } from './world/Horizon';
 import { buildCrowd } from './world/Crowd';
+import { buildRiverbank } from './world/Riverbank';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1); renderer.setSize(innerWidth, innerHeight);
@@ -29,6 +30,11 @@ sand.rotation.x = -Math.PI / 2; sand.position.y = -0.02; sand.receiveShadow = tr
 
 // ★ el río partido
 const river = buildPartedRiver(scene, plastic);
+
+// Ribera vestida (juncos, espadañas, rocas) para que la orilla no esté vacía.
+scene.add(buildRiverbank(plastic, { ax: -6, az: 12, bx: -6, bz: -6, clumps: 6, seed: 1 }));
+scene.add(buildRiverbank(plastic, { ax: 6, az: 12, bx: 6, bz: -6, clumps: 6, seed: 4 }));
+scene.add(buildRiverbank(plastic, { ax: -8, az: 16, bx: 8, bz: 16, clumps: 5, jitter: 0.8, seed: 7 }));
 
 // figuras en el cauce: sacerdotes al frente (llevan el Arca) + Yehoshúa
 const priestA = createMinifigure(plastic, PRIEST_SKIN); priestA.root.position.set(-1.6, 0, -2); priestA.root.rotation.y = Math.PI; scene.add(priestA.root);
