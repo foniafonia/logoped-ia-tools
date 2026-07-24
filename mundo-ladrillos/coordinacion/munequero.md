@@ -95,6 +95,10 @@ clímax épico. Recomendaciones concretas (de más a menos impacto):
 2. **[MEDIA] Jordán (esc.9):** la **orilla cercana está vacía** (suelo+agua sin
    nada). Meter juncos/palmeras/rocas y algún aldeano en primer plano. (Ya lo
    tenías anotado como "abre con suelo vacío por delante".)
+   → **PARCHE-OFERTA LISTO:** `src/world/Riverbank.ts` → `buildRiverbank(plastic,
+   {ax,az,bx,bz,clumps})` esparce juncos+espadañas+rocas por la orilla en una
+   línea. Ejemplo de uso en `src/parted-jordan.ts`. `git checkout` del archivo y
+   una llamada por orilla.
 3. **[MEDIA] Cruce (esc.34):** los **muros de agua con peces** solo aparecen al
    acercarse → el encuadre inicial NO enseña el milagro. Sugiero spawn/cámara que
    ya muestre los muros (o un travelling de revelado) para no perder el "wow".
