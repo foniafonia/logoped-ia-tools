@@ -126,7 +126,17 @@ const CROWD_SPOTS = [
   { x: 3, z: 20, yaw: -0.5 },
   { x: -14, z: 26, yaw: 1.2, emotion: 'neutral' as const }             // casa de Rahab
 ];
-const crowd = buildCrowd(scene, plastic, IS_MOBILE ? CROWD_SPOTS.slice(0, 6) : CROWD_SPOTS);
+// Paseantes: dan vida a la calle andando despacio (en móvil, ninguno).
+const WALKERS = [
+  { ax: -5, az: 14, bx: -5, bz: 30, speed: 1.4 },            // sube por la izquierda
+  { ax: 5, az: 32, bx: 5, bz: 12, speed: 1.6, emotion: 'neutral' as const }, // baja por la derecha
+  { ax: -2, az: 38, bx: 2, bz: 40, speed: 1.1, scale: 0.66, emotion: 'happy' as const } // niño correteando
+];
+const crowd = buildCrowd(
+  scene, plastic,
+  IS_MOBILE ? CROWD_SPOTS.slice(0, 6) : CROWD_SPOTS,
+  { walkers: IS_MOBILE ? [] : WALKERS }
+);
 (window as any).__crowd = crowd;
 
 // --- Fondo real de la peli (plano fijo 2.5D): textura de fondo ---
