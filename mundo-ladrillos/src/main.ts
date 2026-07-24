@@ -3,6 +3,7 @@ import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { buildJericho } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { buildCrowd } from './world/Crowd';
+import { buildStall } from './world/Market';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
 import { createStuddedGround } from './world/EnvironmentManager';
@@ -107,6 +108,17 @@ for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, n
   const light = new THREE.PointLight(0xffa64d, 5, 22, 2); light.position.set(tx, 4.4, tz);
   city.add(flame, post, light);
 }
+
+// ---- Puestos de mercado (dressing de la calle): dan textura y punto de reunión ----
+const STALLS: Array<[number, number, number, number]> = [
+  // [x, z, yaw, variante]
+  [-8.5, 20, Math.PI / 2, 0],   // izquierda, mira a la calle
+  [8.5, 24, -Math.PI / 2, 1],   // derecha
+  [-9, 32, Math.PI / 2, 2]      // izquierda (solo escritorio)
+];
+(IS_MOBILE ? STALLS.slice(0, 2) : STALLS).forEach(([sx, sz, syaw, sv]) => {
+  city.add(buildStall(plastic, { x: sx, z: sz, yaw: syaw, variant: sv }));
+});
 
 // ---- Vecinos de Jericó (mundo lleno): aldeanos por la calle, de noche ----
 // Comunidad de todas las edades (hay niños a menor escala), junto a casas y
