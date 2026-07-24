@@ -1034,3 +1034,369 @@ Tarea: Codex Desktop — subir Logoflix al repo.
 Estado: [PARA_CODEX PENDIENTE]
 
 Estado landing tras esta pasada: 178 tarjetas, 160 con botón VER primario, 0 enlaces relativos rotos (verificado headless).
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Reparacion Suite clinica medible — juegos cargan dentro del medidor
+
+Contexto:
+- Jose detecta en captura que `resource-player.html?activity=poe-erre-que-erre-erre-directa` mide, pero el iframe del juego carga un 404 de GitHub Pages.
+
+Causa:
+- La suite publicada tenia el medidor y el catalogo, pero no todas las carpetas de actividades del catalogo.
+- `resource-player.html` usaba `activity.web_path` en web publica, generando URLs absolutas tipo `/POE/...`, que en GitHub Pages apuntan fuera de `logoped-ia-tools` y devuelven 404.
+
+Hecho:
+- Corregido `resource-player.html`: ahora siempre abre `./${rel_path}` dentro del paquete de la suite.
+- Copiadas las carpetas reales de actividades desde:
+  `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS DESDE CENTRO/`
+  hacia `codex-assets/academia-suite-medible/`, preservando la estructura del catalogo.
+- Resultado: 56 actividades del catalogo, 56 rutas `rel_path` existentes en el paquete publicado.
+- Limpieza antes de commit: fuera `.git` anidados, `.env*` y `.DS_Store`; busqueda de claves reales sin hallazgos.
+
+Verificacion local headless:
+- `poe-erre-que-erre-erre-directa` carga dentro del iframe con titulo "Erre que Erre - Libro Interactivo"; ya no muestra 404.
+- `poe-194rrr`, `poe-midiendo-con-la-s-y-la-z-definitivo`, `poe-karaoke-tartamudez` y `ponencia-murcia-05-proyecto-evaluacion-logopedica` cargan dentro del medidor sin 404.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Alias recuperado — Juego del Lince
+
+Contexto:
+- Jose avisa que falta "el juego del Lince", pieza que no aparecia por nombre en la landing.
+
+Hallazgo:
+- No existe archivo/repo con nombre literal `lince` en los barridos de local, GitHub y conversaciones parseadas como texto.
+- El candidato funcional coincide con `Detective de Palabras` / `Lupas y Linternas`:
+  - Objetivo: encontrar objeto/palabra escondida.
+  - Herramientas: linterna y lupa.
+  - Ruta directa: `codex-assets/academia-suite-medible/POE/lupas y linternas/index.html`
+  - Ruta medible: `codex-assets/academia-suite-medible/resource-player.html?activity=poe-lupas-y-linternas`
+  - Medicion interna: `detective_palabras_metrics_v1`
+  - postMessage a suite: `poe-lupas-y-linternas`
+
+Hecho:
+- Añadida tarjeta explicita en `LANDING_TODO_LOGOPED_IA.html`:
+  `El Lince — Detective de Palabras / Lupas y Linternas`
+- Añadidos botones:
+  - VER juego directo
+  - VER medible
+  - Copia Suite POE
+- Generada captura:
+  `codex-assets/screenshots/el-lince-detective-de-palabras-lupas-y-linternas.jpg`
+
+Pendiente consciente:
+- Si Jose recuerda otro "Lince" distinto, pedir pista visual/ruta/hilo y mantener este como alias, no como sustituto.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Suite clinica medible — comprobacion de juegos que no cargaban
+
+Contexto:
+- Jose detecta en captura que `resource-player.html?activity=poe-erre-que-erre-erre-directa` mide, pero el juego aparecia como 404 dentro del iframe.
+
+Hecho:
+- Verificado en publico que el iframe de `resource-player` para `poe-erre-que-erre-erre-directa` resuelve a:
+  `./POE/erre%20que%20erre%20erre%20directa/index.html`
+- Verificado que la ruta directa en GitHub Pages devuelve 200:
+  `codex-assets/academia-suite-medible/POE/erre%20que%20erre%20erre%20directa/index.html`
+- Actualizada la tarjeta `Suite clinica medible — pacientes, resultados y juegos` para incluir accesos directos medibles:
+  - Erre que Erre medible
+  - Letra Crush medible
+  - S/Z medible
+  - Anamnesis medible
+- Generada/actualizada captura reconocible de la Suite:
+  `codex-assets/screenshots/suite-clinica-medible-pacientes-resultados-y-juegos.jpg`
+
+Nota:
+- La suite medible tiene catalogadas unas 40 actividades en `content/activity-catalog.generated.json`; las primeras de prioridad alta incluyen Letra Crush, Erre que Erre, evaluacion/anamnesis, chatbot familias, 194RRR, Kaboom, S/Z y Karaoke Tartamudez.
+- Si vuelve a verse 404 en navegador, puede ser cache vieja de Pages o una copia distinta de `resource-player`; la version publicada actualmente apunta relativo, no a `/POE/...`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Auditoria GitHub repos sin Pages — VocalClinic, curso online y privados localizados
+
+Contexto:
+- Jose pide seguir buscando porque siguen faltando prototipos antiguos y recientes.
+- Prioridad: cada cosa enseñable debe tener boton VER y captura; lo que sea repo privado/deploy pendiente debe estar identificado sin esconderlo.
+
+Hecho:
+- Rescatado y publicado `foniafonia/vocalclinic-demo` completo dentro de:
+  `codex-assets/vocalclinic-demo/`
+- Añadidas tarjetas con captura y boton VER:
+  - VocalClinic Demo — entrenamiento vocal inteligente (`codex-assets/vocalclinic-demo/index.html`)
+  - QR Sonoro — misiones de lenguaje (`codex-assets/vocalclinic-demo/qr-sonoro/index.html` + `mision.html`)
+  - EthosFlow / FoniaWatch — apoyo a la fluidez (`codex-assets/vocalclinic-demo/FoniaWatchRehab/web-demo/index.html`)
+- Generadas capturas:
+  - `codex-assets/screenshots/vocalclinic-demo-entrenamiento-vocal-inteligente.jpg`
+  - `codex-assets/screenshots/qr-sonoro-misiones-de-lenguaje.jpg`
+  - `codex-assets/screenshots/ethosflow-foniawatch-apoyo-a-la-fluidez.jpg`
+- Localizados y dados de alta como pendientes/repos, con fechas de GitHub:
+  - `logoped-ia` / `CURSO-ONLINE-REPLIT` / `curso-logoped-ia`: curso online/preventa con landing, rutas `/gracias` y `/admin`, textos Stripe y docs de deploy.
+  - `vocaltrack`: analisis acustico vocal en tiempo real con pitch.
+  - `chatbot_familias_logopedia`: chatbot de familias con calendario social/publicacion programada.
+  - `logoped-ia-inventario-workia`: repo privado de continuidad/inventario.
+  - `valencia-nadina-ia-logopedia-codex`: repo privado territorial/formativo.
+
+Verificacion:
+- VocalClinic, QR Sonoro y FoniaWatch se copiaron como estaticos y tienen capturas generadas con Chrome headless.
+- Se intento compilar `artifacts/logoped-ia` con `pnpm`; el repo esta preparado para workspace/Replit/Linux y excluye binarios nativos Darwin en `pnpm-workspace.yaml`, por lo que en este Mac falla por bindings nativos (`rollup`, `esbuild`, `lightningcss`, `tailwindcss oxide`). No se marca como VER hasta desplegar/compilar en entorno adecuado.
+
+Pendiente consciente:
+- Curso online Logoped-IA necesita deploy real o build en Linux/Vercel.
+- VocalTrack y Chatbot familias son privados: no hay demo publica; si se quieren enseñar, crear demo limpia sin datos sensibles.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Auditoria GitHub Pages foniafonia — tanda de URLs vivas faltantes
+
+Contexto:
+- Jose pide continuar buscando con metodo amplio, no solo por lo que ya esta en la landing.
+- Se cruza listado de repos `foniafonia` con URLs `https://foniafonia.github.io/<repo>/` y se compara contra `LANDING_TODO_LOGOPED_IA.html`.
+
+Hecho:
+- Listados 35 repos de `foniafonia` via GitHub CLI.
+- Probadas URLs GitHub Pages publicas. Pages vivos detectados, entre otros:
+  - `elevenlabs-pitch`
+  - `laboratorio-logoped-ia-landing`
+  - `zonacentro-ia-familia`
+  - `extremadura-landing`
+  - `lleno-vacio-teacch`
+  - `portfolio`
+  - `logopedia-generador`
+  - `adapro-personal`
+  - `adapro-plus`
+  - `imaginejuego`
+  - `araia`
+- Añadidas tarjetas propias a `LANDING_TODO_LOGOPED_IA.html` para esos Pages vivos.
+- Generadas capturas:
+  - `codex-assets/screenshots/elevenlabs-pitch-voz-clinica.jpg`
+  - `codex-assets/screenshots/laboratorio-logoped-ia-landing-ia-util-educacion.jpg`
+  - `codex-assets/screenshots/zona-centro-ia-familia-melilla.jpg`
+  - `codex-assets/screenshots/colegio-logopedas-extremadura-propuesta-formativa.jpg`
+  - `codex-assets/screenshots/lleno-vacio-teacch.jpg`
+  - `codex-assets/screenshots/portfolio-jose-aserraf-logopeda-ia-builder.jpg`
+  - `codex-assets/screenshots/logoped-ia-generador-de-contenido.jpg`
+  - `codex-assets/screenshots/adapro-personal-editor-dislexia.jpg`
+  - `codex-assets/screenshots/adapro-plus-procesador-adaptado.jpg`
+  - `codex-assets/screenshots/imagine-comunicacion-visual.jpg`
+  - `codex-assets/screenshots/araia-visualizador-web-publico.jpg`
+
+No añadido aun:
+- `joseaserraf.github.io`: responde 200, pero se deja fuera por ahora por posible duplicado/personal frente a `portfolio`.
+- Repos con Pages 404 quedan para siguiente capa: revisar si tienen Vercel/Netlify o si solo deben figurar como repo/deploy pendiente.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Añadido Torah para Abraham — fallo detectado por Jose
+
+Contexto:
+- Jose señala que faltaba `https://foniafonia.github.io/torah-para-abraham/`.
+- Es una pieza claramente relevante para Anidjar/judaísmo y no había sido detectada por la auditoría anterior.
+
+Hecho:
+- Verificada URL pública: `https://foniafonia.github.io/torah-para-abraham/` devuelve 200.
+- Verificado repo: `foniafonia/torah-para-abraham`, rama `main`.
+- Detectado contenido: `Perashá Interactiva | Yitró`, acceso alumno, ruta de estudio, hebreo/español, exámenes tipo test, progresión y memoria de clase de Abraham.
+- Añadidas dos fichas a `LANDING_TODO_LOGOPED_IA.html`:
+  - `Torah para Abraham — Perashá interactiva` en Curso.
+  - `Para reunión con Anidjar — Torah para Abraham` en Anidjar.
+- Generadas capturas:
+  - `codex-assets/screenshots/torah-para-abraham-perasha-interactiva.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-torah-para-abraham.jpg`
+
+Lección de auditoría:
+- Hay que auditar también repos publicados como `https://foniafonia.github.io/<repo>/`, no solo `logoped-ia-tools`, `cinemundos`, Vercel y archivos locales. Esta omisión explica que Torah para Abraham no saliera antes.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: CineMundos/Januka/Anidjar + traspaso visual a FonoMundos
+
+Contexto:
+- Jose avisa de que faltaban CineMundos, la pelicula tipo Duolingo de Januka y el trabajo versionado desde FonoMundos con avatares/atracciones.
+- Tambien cita un hilo/proyecto en Claude llamado `iatv rab andijar` con varias opciones para Anidjar.
+
+Hecho:
+- Copiado el inventario tecnico de Claude desde `/Users/joseaserraf/Downloads/INVENTARIO_PARA_FONOMUNDOS.md` a:
+  `codex-assets/docs/INVENTARIO_PARA_FONOMUNDOS.md`.
+- Añadidas a `LANDING_TODO_LOGOPED_IA.html` tarjetas nuevas de FonoMundos/CineMundos:
+  - FonoMundos — traspaso visual desde CineMundos/Januka.
+  - CriatuMundos — mundo 3D reutilizable para FonoMundos.
+  - GeltMundos — armario y avatar personalizable.
+  - Pelicula jugable — motor tipo Duolingo para FonoMundos.
+  - CineMundos/Januka — minijuegos embebibles para suite.
+- Convertidas CriatuMundos y GeltMundos a `live` porque existen demos publicas en:
+  - `https://foniafonia.github.io/pelicula-januka/criatumundos/`
+  - `https://foniafonia.github.io/pelicula-januka/geltmundos/`
+- Añadidas tarjetas nuevas en seccion `Anidjar`:
+  - Para reunion con Anidjar — Pelicula jugable Januka.
+  - Para reunion con Anidjar — Presentacion CineMundos Januka.
+  - Para reunion con Anidjar — Mundos 3D CineMundos.
+  - Para reunion con Anidjar — Minijuegos Januka.
+  - Para reunion con Anidjar — iATV Rab Anidjar (hilo Claude), marcado local/pendiente de exportar.
+- Actualizada la tarjeta generica Januka/Tora para indicar que pelicula + presentacion ya estan enlazadas y que solo faltan variantes restantes del hilo.
+- Generadas capturas nuevas:
+  - `codex-assets/screenshots/pelicula-jugable-motor-tipo-duolingo-para-fonomundos.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-pelicula-jugable-januka.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-presentacion-cinemundos-januka.jpg`
+  - `codex-assets/screenshots/fonomundos-traspaso-visual-desde-cinemundos-januka.jpg`
+  - `codex-assets/screenshots/criatumundos-mundo-3d-reutilizable-para-fonomundos.jpg`
+  - `codex-assets/screenshots/geltmundos-armario-y-avatar-personalizable.jpg`
+  - `codex-assets/screenshots/cinemundos-januka-minijuegos-embebibles-para-suite.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-mundos-3d-cinemundos.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-minijuegos-januka.jpg`
+
+Pendiente para Claude:
+- Exportar o pasar enlaces del proyecto/hilo `iatv rab andijar`.
+- Si hay mas artefactos Januka/Tora no incluidos en `pelicula-januka`, pasar URLs exactas o HTML limpio para `codex-assets/anidjar/`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE PENDIENTE]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Correccion CineMundos Anidjar — Bet HaMikdash real
+
+Contexto:
+- Jose corrige que Codex habia puesto CriatuMundos en Anidjar, pero la pieza que queria enseñar era otro juego muy similar, con Bet HaMikdash y tematica judia.
+- Jose aporta URLs correctas:
+  - `https://cinemundos.vercel.app`
+  - `https://cinemundos.vercel.app/informe-avance.html`
+
+Hecho:
+- Verificado que ambas URLs devuelven 200.
+- Cambiada la ficha de Anidjar:
+  - antes: `Para reunion con Anidjar — Mundos 3D CineMundos` apuntando a CriatuMundos/GeltMundos.
+  - ahora: `Para reunion con Anidjar — CineMundos Bet HaMikdash` apuntando a `https://cinemundos.vercel.app`.
+- Añadida ficha principal en Juegos:
+  - `CineMundos — mundo judio Bet HaMikdash`.
+- Actualizada ficha `CineMundos — Informe de avance` para usar la URL publica de Vercel como enlace principal.
+- Generadas capturas reales:
+  - `codex-assets/screenshots/cinemundos-mundo-judio-bet-hamikdash.jpg`
+  - `codex-assets/screenshots/para-reunion-con-anidjar-cinemundos-bet-hamikdash.jpg`
+  - `codex-assets/screenshots/cinemundos-informe-de-avance.jpg`
+
+Nota:
+- CriatuMundos y GeltMundos quedan como piezas tecnicas/reutilizables para FonoMundos, pero no deben confundirse con la demo judia principal para Anidjar.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Sección curada "Para reunión con Anidjar"
+
+Contexto:
+- Jose pide que, aunque haya duplicados, exista una sección específica con cosas relacionadas con judaísmo/identidad judía/Melilla para una reunión con Anidjar.
+
+Hecho:
+- Añadido filtro/categoría `Anidjar` en `LANDING_TODO_LOGOPED_IA.html`.
+- Añadidas tarjetas duplicadas y curadas:
+  - Para reunión con Anidjar — Judería Melilla Game.
+  - Para reunión con Anidjar — Judería Melilla Gamificada.
+  - Para reunión con Anidjar — App Equito Israel.
+  - Para reunión con Anidjar — Barrio Melilla Juego.
+  - Para reunión con Anidjar — Colmena Melilla UPE.
+  - Para reunión con Anidjar — Januká / Torá / artefactos religiosos (pendiente de recuperar enlaces/exportar HTML).
+- Reutilizadas capturas existentes con nombres propios de la sección Anidjar para que se vea visualmente en la landing.
+
+Nota:
+- La sección Anidjar duplica piezas existentes por intención curatorial; no sustituye la clasificación principal.
+- Claude había detectado 5 artefactos Januká/religiosos y los dejó fuera del escaparate principal por prudencia. Si Jose quiere enseñarlos a Anidjar, siguiente paso: pedir a Claude los enlaces exactos o exportarlos como HTML limpio a `codex-assets/anidjar/`.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Codex Desktop
+Proyecto: Afinado de inventario — convertir locales/pending en demos visibles
+
+Contexto:
+- Jose pide seguir afinando porque faltan muchas cosas de Codex/GPT/Claude y necesita que todo lo enseñable se abra desde la landing, no solo que aparezca como repo o ruta local.
+- Prioridad actual: bajar amarillos/rosas y añadir capturas reconocibles.
+
+Hecho:
+- Rescatado Logoflix desde:
+  `/Users/joseaserraf/Desktop/TODO PROYECTO LOGOPED IA VICTOR Y DEMAS/logoflix.html`
+  hacia `codex-assets/logoflix/index.html`.
+- Publicados como demos estaticas:
+  - `codex-assets/juegos-aire/` (hub + Abecedario Magico, Escritura Aire, Pintura Aire, Constructor de Silabas, Puzzle Agarre, Lengua Runner/Gestos).
+  - `codex-assets/mirrorfono/` (build `dist` de MirrorFono; rutas Vite corregidas a relativas).
+  - `codex-assets/preta/` (frontend PRET-A Fluidez MVP v2 Telegram + anamnesis PRET-A).
+  - `codex-assets/curso-gpt-logopedia/` (MVP curso GPT/logopedia + `content/` real de modulos, quizzes, retos y recursos).
+  - `codex-assets/curso-ia-preventa/` (landing de preventa en modo demo estatica; sin backend, sin SQLite, sin `.env`, sin Stripe real).
+  - `codex-assets/valencia/` (3 HTML de ponencia/deck + `valencia-assets/` visual: 48 imagenes/posters/GIFs y 3 MP4 ligeros; se excluyen videos gigantes >100 MB).
+- Actualizadas las tarjetas correspondientes en `LANDING_TODO_LOGOPED_IA.html` de `pending/upload` a `repo` cuando ya tienen boton VER real.
+- Generadas capturas:
+  - `codex-assets/screenshots/logoflix.jpg`
+  - `codex-assets/screenshots/juegos-de-aire-hub-pendientes.jpg`
+  - `codex-assets/screenshots/mirrorfono-motor-espejo.jpg`
+  - `codex-assets/screenshots/preta-fluidez-clinica.jpg`
+  - `codex-assets/screenshots/curso-gpt-logopedia-para-membresia.jpg`
+  - `codex-assets/screenshots/curso-ia-landing-de-preventa.jpg`
+  - `codex-assets/screenshots/valencia-aelfa-ponencias.jpg`
+
+Verificacion local headless:
+- Logoflix carga con titulo `LogoFlix — Base de conocimiento logopedico`.
+- Juegos de aire hub y 6 subdemos cargan sin 404 locales.
+- MirrorFono carga interfaz y modo demo automatico sin camara.
+- PRET-A carga interfaz clinica/anamnesis sin 404.
+- Curso GPT carga con contenido real desde `./content`.
+- Curso IA preventa carga sin 404 y sin llamadas reales a API/pagos.
+- Valencia deck 46 slides carga con 0 errores locales tras copiar assets visuales y 3 videos ligeros.
+
+Pendiente consciente:
+- No se han subido videos grandes de Valencia/Melilla (hay archivos de 166 MB y 274 MB que no conviene meter en GitHub Pages).
+- JELOU, base de conocimiento chatbot y Anamnesis IA siguen sensibles: no subir sin demo limpia.
+- Curso IA preventa queda como escaparate visual; el backend Flask/Stripe real requiere deploy aparte si se quiere vender/cobrar desde ahi.
+
+Estado: [PARA_CODEX HECHO] [PARA_CLAUDE INFO]
+
+---
+
+Fecha: 2026-07-20
+Agente: Claude Code (Opus)
+Proyecto: CORRECCIÓN — Los 3 artifacts de Januká NO eran personales, son la propuesta Anidjar
+Rama de trabajo: gh-pages (directo)
+
+Hecho:
+1. Vi la categoría ANIDJAR_ITEMS completa (Codex ya la tenía construida: Judería Melilla, Torah para Abraham, CineMundos Bet HaMikdash, minijuegos Januká — todo para una reunión de negocio real con "Rab Anidjar"). Esto me hizo revisar mi decisión anterior.
+2. RECTIFICADO: los 3 artifacts que excluí el 2026-07-20 como "personales/religiosos, no Logoped-IA" en realidad son parte de esta propuesta comercial:
+   - "propuesta-januca" -> es LITERALMENTE la propuesta de venta, dice en el propio documento "Preparado para Rab Anidjar - por Yosi Aserraf", precio piloto 1.000EUR sobre CineMundos.
+   - "Januká en profundidad - Guía de estudio" -> material que complementa el juego, el propio doc dice "el juego es la puerta de entrada para niños; esto es lo que se comenta después".
+   - "El aceite es del Rab. Solo cambia la lámpara." -> pieza narrativa de la misma familia.
+3. Las 3 añadidas a ANIDJAR_ITEMS en la landing con VER real (enlace a claude.ai/code/artifact/...), sustituyendo la tarjeta genérica "pendiente de recuperar" que Codex había dejado marcada, ahora resuelta.
+4. Item "iATV Rab Anidjar (hilo Claude)" sigue igual: es un hilo de chat sin publicar como artifact, mismo límite estructural que Logoflix (documentado arriba en "AGUJERO ESTRUCTURAL PERMANENTE"). Nota: veo que Codex ya resolvió Logoflix (subido como "LogoFlix - Base de conocimiento logopédico" en codex-assets/logoflix/) - bien resuelto, gracias.
+5. Lección para el futuro: antes de descartar algo como "personal/fuera de escaparate", comprobar si ya existe una categoría de negocio (como Anidjar) donde SÍ encaja. No asumir por el tema (religioso, cultural) que es automáticamente fuera de alcance - aquí el religioso ERA el negocio.
+
+Estado landing: 220 tarjetas, 207 con botón VER primario, 0 enlaces relativos rotos (verificado headless).
+Estado: [PARA_CODEX INFO]

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Abecedario Magico</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero" id="homeScreen" aria-labelledby="appTitle">
+      <div class="hero-copy">
+        <span class="eyebrow">Coordinacion, ritmo y lectura</span>
+        <h1 id="appTitle">Abecedario Magico</h1>
+        <p>Actividad guiada para leer letras y responder con movimiento. Puede usarse con terapeuta, camara o ambas cosas.</p>
+      </div>
+
+      <form class="setup-panel" id="setupForm">
+        <label>
+          <span>Modo</span>
+          <select id="modeSelect">
+            <option value="hands">Dedo izquierda/derecha</option>
+          </select>
+        </label>
+        <label>
+          <span>Fase</span>
+          <select id="phaseSelect">
+            <option value="1">Fase 1: A a Z</option>
+            <option value="2">Fase 2: Z a A</option>
+            <option value="3">Fase 3: brazos y piernas</option>
+          </select>
+        </label>
+        <label>
+          <span>Dificultad</span>
+          <select id="difficultySelect">
+            <option value="easy">Facil</option>
+            <option value="medium" selected>Media</option>
+            <option value="hard">Dificil</option>
+          </select>
+        </label>
+        <label>
+          <span>Velocidad</span>
+          <select id="speedSelect">
+            <option value="slow">Lento: 3.2 s</option>
+            <option value="medium" selected>Medio: 2.4 s</option>
+            <option value="fast">Rapido: 1.6 s</option>
+          </select>
+        </label>
+        <div class="toggle-row">
+          <label class="check"><input id="soundToggle" type="checkbox" checked /> sonido</label>
+          <label class="check"><input id="accessibleJumpToggle" type="checkbox" checked /> sin salto</label>
+          <label class="check"><input id="debugToggle" type="checkbox" /> debug</label>
+        </div>
+        <button class="primary" type="submit">Empezar</button>
+      </form>
+    </section>
+
+    <section class="play-screen" id="playScreen" hidden>
+      <header class="topbar">
+        <div>
+          <span class="eyebrow" id="phaseLabel">Fase 1</span>
+          <h2>Abecedario Magico</h2>
+        </div>
+        <div class="stats" aria-label="Marcador">
+          <div><strong id="hitsStat">0</strong><span>aciertos</span></div>
+          <div><strong id="errorsStat">0</strong><span>errores</span></div>
+          <div><strong id="progressStat">0/27</strong><span>progreso</span></div>
+        </div>
+      </header>
+
+      <section class="content-grid">
+        <aside class="alphabet-card" aria-label="Tabla del abecedario">
+          <div class="section-title">
+            <h3>Tabla</h3>
+            <button id="regenerateButton" type="button">Regenerar</button>
+          </div>
+          <div class="alphabet-grid" id="alphabetGrid"></div>
+        </aside>
+
+        <section class="game-card" aria-live="polite">
+          <details class="benefits">
+            <summary>Beneficios</summary>
+            <p>Logopedia: lectura en voz alta, ritmo, lateralidad y atencion auditivo-visual. Pedagogia: secuenciacion, memoria de trabajo y automatizacion. Psicologia: control inhibitorio, tolerancia al error y activacion regulada.</p>
+          </details>
+          <div class="meter" aria-hidden="true"><span id="meterBar"></span></div>
+          <div class="recording-card" aria-label="Letra e instruccion actual">
+            <div class="letter" id="currentLetter">A</div>
+            <div class="fraction-line" aria-hidden="true"></div>
+            <div class="movement-code" id="currentCode">I</div>
+          </div>
+          <div class="movement" id="currentMovement">I: izquierda</div>
+          <div class="direction-cues" aria-hidden="true">
+            <span id="cueLeft">I</span>
+            <span id="cueUp">A</span>
+            <span id="cueRight">D</span>
+          </div>
+          <p class="feedback" id="feedback">Preparado.</p>
+          <div class="control-row">
+            <button id="repeatButton" type="button">Repetir letra</button>
+            <button id="pauseButton" type="button">Pausa</button>
+            <button id="restartButton" type="button">Reiniciar fase</button>
+          </div>
+          <div class="control-row secondary">
+            <button id="cameraButton" type="button">Reactivar camara</button>
+          </div>
+        </section>
+
+        <aside class="debug-card" id="debugPanel">
+          <div class="section-title">
+            <h3>Tu mano</h3>
+            <span id="cameraStatus">Camara apagada</span>
+          </div>
+          <div class="camera-box">
+            <video id="camera" playsinline muted></video>
+            <canvas id="overlay" aria-hidden="true"></canvas>
+          </div>
+          <dl class="debug-list">
+            <div><dt>Modo</dt><dd id="debugMode">hands</dd></div>
+            <div><dt>Gesto</dt><dd id="debugGesture">ninguno</dd></div>
+            <div><dt>Confianza</dt><dd id="debugConfidence">0</dd></div>
+            <div><dt>FPS</dt><dd id="debugFps">0</dd></div>
+          </dl>
+        </aside>
+      </section>
+    </section>
+
+    <section class="summary" id="summaryScreen" hidden>
+      <span class="eyebrow" id="summaryPhase">Fase completada</span>
+      <h2>Buen trabajo</h2>
+      <div class="summary-grid">
+        <div><strong id="summaryHits">0</strong><span>aciertos</span></div>
+        <div><strong id="summaryErrors">0</strong><span>errores</span></div>
+        <div><strong id="summaryTime">0:00</strong><span>tiempo</span></div>
+      </div>
+      <fieldset class="feelings">
+        <legend>Como se siente ahora?</legend>
+        <label><input type="radio" name="feeling" value="tranquilo" /> tranquilo</label>
+        <label><input type="radio" name="feeling" value="activado" /> activado</label>
+        <label><input type="radio" name="feeling" value="concentrado" /> concentrado</label>
+        <label><input type="radio" name="feeling" value="cansado" /> cansado</label>
+        <label><input type="radio" name="feeling" value="frustrado" /> frustrado</label>
+      </fieldset>
+      <div class="control-row">
+        <button id="nextPhaseButton" class="primary" type="button">Siguiente fase</button>
+        <button id="backHomeButton" type="button">Inicio</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

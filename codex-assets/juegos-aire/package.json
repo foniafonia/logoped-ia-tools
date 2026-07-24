@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy:prod": "vercel deploy --prod --force --yes --archive=tgz",
+    "inspect:prod": "vercel inspect juegos-aire-logoped-ia.vercel.app"
+  },
+  "dependencies": {
+    "@vercel/blob": "^1.1.1"
+  }
+}

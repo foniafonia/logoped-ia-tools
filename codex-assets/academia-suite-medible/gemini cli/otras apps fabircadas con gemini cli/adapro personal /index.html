@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto para Dislexia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editor de Texto Amigable para la Dislexia</h1>
+        <div class="controls">
+            <label for="font-select">Fuente:</label>
+            <select id="font-select">
+                <option value="OpenDyslexic">OpenDyslexic</option>
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Comic Sans MS">Comic Sans</option>
+            </select>
+
+            <label for="font-size">Tamaño:</label>
+            <input type="number" id="font-size" value="20" min="10" max="100">
+
+            <label for="highlight-color">Color de Resaltado:</label>
+            <input type="color" id="highlight-color" value="#D0021B">
+
+            <label for="highlight-toggle">Resaltar (b, d, p, q):</label>
+            <input type="checkbox" id="highlight-toggle" checked>
+            
+            <button id="print-button">Imprimir</button>
+        </div>
+        <div class="editor-container">
+            <textarea id="text-input" placeholder="Pega tu texto aquí..."></textarea>
+            <div id="text-output" class="output-area"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

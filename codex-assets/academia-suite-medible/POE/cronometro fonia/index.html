@@ -1,0 +1,801 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fönia - Gabinete de Logopedia en Melilla | José Aserraf</title>
+    <meta name="description" content="Gabinete de Logopedia Fönia en Melilla. José Aserraf, más de 17 años transformando vidas a través de la comunicación. Logopedia, Pedagogía y Psicología especializada.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.logopediafonia.com">
+    <meta property="og:title" content="Fönia - Gabinete de Logopedia en Melilla | José Aserraf">
+    <meta property="og:description" content="Más de 17 años transformando vidas a través de la comunicación. Gabinete especializado en Logopedia, Pedagogía y Psicología en Melilla.">
+    <meta property="og:image" content="https://pfst.cf2.poecdn.net/base/image/590940611987cecd743b92b34975647aacb413e5a779ae9f3c74adf7277db7b2?w=960&amp;h=640">
+    <meta property="og:image:width" content="960">
+    <meta property="og:image:height" content="640">
+    <meta property="og:image:alt" content="Equipo profesional del Gabinete Fönia en Melilla">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.logopediafonia.com">
+    <meta property="twitter:title" content="Fönia - Gabinete de Logopedia en Melilla | José Aserraf">
+    <meta property="twitter:description" content="Más de 17 años transformando vidas a través de la comunicación. Gabinete especializado en Logopedia, Pedagogía y Psicología en Melilla.">
+    <meta property="twitter:image" content="https://pfst.cf2.poecdn.net/base/image/590940611987cecd743b92b34975647aacb413e5a779ae9f3c74adf7277db7b2?w=960&amp;h=640">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#22C55E',
+                        'primary-hover': '#16A34A',
+                        'primary-light': '#86EFAC',
+                        'light-bg': '#FFFFFF',
+                        'dark-bg': '#181818'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite alternate',
+                        'float': 'float 3s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-30px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(30px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 5px rgba(34, 197, 94, 0.5)' },
+                            '100%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.8), 0 0 30px rgba(34, 197, 94, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .shimmer-bg {
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
+            background-size: 200% 100%;
+        }
+        
+        .counter-glow {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .counter-glow:hover {
+            box-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+            transform: scale(1.02);
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typewriter 3s steps(30, end) 1s both;
+        }
+        
+        .parallax {
+            transform: translateZ(0);
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.bd4eeeb8e8e02052ee92.js"></script></head>
+<body class="bg-light-bg dark:bg-dark-bg text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <a href="https://www.logopediafonia.com" target="_blank" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/368bdb64baf69084f595ec2fd1bcd460bb4f92c54888c0fe9120023f5ac538b1?w=3334&amp;h=3344" alt="Gabinete Fönia Logo" class="w-16 h-16 object-contain">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Gabinete Fönia</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Logopedia • Pedagogía • Psicología</p>
+                    </div>
+                </a>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#servicios" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Servicios</a>
+                    <a href="#equipo" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Equipo</a>
+                    <a href="#contacto" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Contacto</a>
+                    <a href="https://www.logopediafonia.com" target="_blank" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition-colors">Sitio Web</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Counter -->
+    <section class="py-20 bg-gradient-to-br from-primary/10 to-green-100 dark:from-primary/20 dark:to-green-900/20 relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 opacity-5 dark:opacity-10">
+            <img src="https://pfst.cf2.poecdn.net/base/image/121e508535eebed1c667a4300414cd58f0ba6a37313bc368804b765a4d424443?w=960&amp;h=640" alt="Gabinete Fönia" class="w-full h-full object-cover">
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6 text-gray-800 dark:text-gray-100 animate-fade-in-up">
+                Transformando vidas a través de la
+                <span class="gradient-text animate-shimmer shimmer-bg">comunicación</span>
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.2s;">
+                Desde noviembre de 2007, dedicados a mejorar la calidad de vida de nuestros pacientes
+            </p>
+            
+            <!-- Time Counter -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-12 max-w-4xl mx-auto counter-glow animate-fade-in-up" style="animation-delay: 0.4s;">
+                <h3 class="text-2xl md:text-3xl font-semibold mb-8 text-gray-800 dark:text-gray-100">
+                    <i class="fas fa-clock text-primary mr-3 animate-bounce-slow"></i>
+                    Tiempo trabajando para nuestros pacientes
+                </h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-6">
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow">
+                        <div id="years" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Años</div>
+                    </div>
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow" style="animation-delay: 0.1s;">
+                        <div id="months" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Meses</div>
+                    </div>
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow" style="animation-delay: 0.2s;">
+                        <div id="days" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Días</div>
+                    </div>
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow" style="animation-delay: 0.3s;">
+                        <div id="hours" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Horas</div>
+                    </div>
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow" style="animation-delay: 0.4s;">
+                        <div id="minutes" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Minutos</div>
+                    </div>
+                    <div class="bg-primary/10 dark:bg-primary/20 rounded-lg p-4 hover-lift animate-pulse-glow" style="animation-delay: 0.5s;">
+                        <div id="seconds" class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">Segundos</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://wa.me/34651509640?text=Hola,%20me%20gustar%C3%ADa%20reservar%20una%20cita%20para%20mi%20hijo/a/familiar%20en%20el%20Gabinete%20F%C3%B6nia.%20%C2%BFPodr%C3%ADan%20indicarme%20disponibilidad?%20Gracias." target="_blank" class="inline-block bg-primary hover:bg-primary-hover text-white font-semibold py-4 px-8 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 animate-float animate-fade-in-up" style="animation-delay: 0.6s;">
+                <i class="fab fa-whatsapp mr-2"></i>
+                Reservar Cita
+            </a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicios" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-gray-100">
+                Nuestros Servicios
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-comments text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">Logopedia</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Tratamos disfunciones que se presentan en los campos de la comunicación, el habla y la voz.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-graduation-cap text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">Pedagogía</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Orientamos las acciones educativas en base a prácticas y técnicas especializadas.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">Psicología</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Analizamos los procesos mentales de las personas para mejorar su bienestar.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-child text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-100">Atención Temprana</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Estimulación temprana dirigida a niños de 0 a 6 años para su desarrollo óptimo.</p>
+                </div>
+            </div>
+            
+            <!-- Additional Services -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">Especialidades</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Evaluación y Diagnóstico</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Cada situación es única, con sus particularidades y objetivos específicos.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Tratamientos de Voz</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Rehabilitación vocal para restablecer la función correcta de la voz.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Tratamiento del Habla</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Rehabilitación tras lesiones o accidentes cerebrovasculares.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Lectoescritura</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Desarrollo de habilidades de lectura e interpretación de textos.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Disfagia</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Tratamiento de dificultades en el proceso de deglución.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Asesoramiento Pedagógico</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">Proyectos de innovación pedagógica y recursos de aprendizaje.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100">
+                Nuestra Filosofía
+            </h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-8">
+                    <blockquote class="text-xl md:text-2xl italic text-center text-gray-700 dark:text-gray-300 mb-6">
+                        "La logopedia es oír una lágrima, articular una emoción, vocalizar un deseo, leer el alma y escribir una sonrisa."
+                    </blockquote>
+                    <p class="text-center text-gray-600 dark:text-gray-400 font-semibold">- MARA BELHAU</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-users text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Equipo Multidisciplinar</h3>
+                                <p class="text-gray-600 dark:text-gray-300">Trabajamos como un equipo especializado e integrado.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-microchip text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Tecnología Avanzada</h3>
+                                <p class="text-gray-600 dark:text-gray-300">Utilizamos tecnología de vanguardia en nuestros tratamientos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-heart text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Terapia Humana</h3>
+                                <p class="text-gray-600 dark:text-gray-300">Basada en la confianza y el contacto cercano con el paciente.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-home text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Vínculo Familiar</h3>
+                                <p class="text-gray-600 dark:text-gray-300">Promovemos la conexión entre institución y familia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="equipo" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-gray-100">
+                Nuestro Equipo
+            </h2>
+            
+            <!-- Director -->
+            <div class="max-w-2xl mx-auto mb-16">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+                    <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-lg">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/121e508535eebed1c667a4300414cd58f0ba6a37313bc368804b765a4d424443?w=960&amp;h=640" alt="José Aserraf" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">José Aserraf</h3>
+                    <p class="text-green-600 font-semibold mb-4">Director y Fundador</p>
+                    <div class="flex justify-center items-center mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/784a404933f91c7004792127e7e7e5ce40aa977fd96aece42a34fff27227a61b?w=225&amp;h=225" alt="100% Orgulloso de ser Logopeda" class="w-16 h-16">
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Con más de 17 años de experiencia, José lidera nuestro equipo con pasión y dedicación,
+                        transformando vidas a través de la logopedia.
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="https://www.facebook.com/Gabinetedelogopediafoniamelilla/" target="_blank" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/gabinete_fonia" target="_blank" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-white hover:bg-pink-700 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo Carousel -->
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">Nuestro Gabinete</h3>
+                <div class="relative">
+                    <!-- Carousel Container -->
+                    <div class="overflow-hidden rounded-2xl shadow-xl">
+                        <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+                            <!-- Slide 1 -->
+                            <div class="w-full flex-shrink-0">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/590940611987cecd743b92b34975647aacb413e5a779ae9f3c74adf7277db7b2?w=960&amp;h=640" alt="Equipo profesional" class="w-full h-80 object-cover">
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="w-full flex-shrink-0">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/1b9a204b04cc24c2c1a6198218a70a5aae6ca0952b03efc8f675c5176f7508da?w=275&amp;h=183" alt="Profesional especializada" class="w-full h-80 object-cover">
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="w-full flex-shrink-0">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/3b71515c5c7ac46b38ec2e5fb12ff8caa3363b2636b1428122634f2f2b9302e2?w=960&amp;h=640" alt="Tecnología interactiva" class="w-full h-80 object-cover">
+                            </div>
+                            <!-- Slide 4 -->
+                            <div class="w-full flex-shrink-0">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/c8d007575f08ff499e65965bd4054993c7fb24ff4dce1705fad198c838a2c294?w=960&amp;h=640" alt="Materiales terapéuticos" class="w-full h-80 object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Arrows -->
+                    <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200">
+                        <i class="fas fa-chevron-left text-gray-600 dark:text-gray-300"></i>
+                    </button>
+                    <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200">
+                        <i class="fas fa-chevron-right text-gray-600 dark:text-gray-300"></i>
+                    </button>
+                    
+                    <!-- Dots Indicator -->
+                    <div class="flex justify-center mt-6 space-x-2">
+                        <button class="carousel-dot w-3 h-3 rounded-full bg-primary transition-all duration-200" data-slide="0"></button>
+                        <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-200" data-slide="1"></button>
+                        <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-200" data-slide="2"></button>
+                        <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-200" data-slide="3"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100">
+                Lo que dicen nuestros pacientes
+            </h2>
+            <div class="text-center mb-12">
+                <div class="flex items-center justify-center space-x-2 mb-2">
+                    <div class="flex text-yellow-400 text-xl">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="text-gray-600 dark:text-gray-300 font-semibold">5.0</span>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">Basado en 29 reseñas de Google</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Reseña 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Servicio y atención excelente. José es un gran profesional, atento y paciente. Totalmente recomendable."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">Nora Irene</p>
+                        <p class="text-gray-600 dark:text-gray-400">Hace 27 semanas</p>
+                    </div>
+                </div>
+
+                <!-- Reseña 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Un gran profesional, que se preocupa del paciente y trabaja con empeño para tratar de conseguir una comunicación lo más eficaz posible."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">María del Mar Delgado</p>
+                        <p class="text-gray-600 dark:text-gray-400">Hace 42 semanas</p>
+                    </div>
+                </div>
+
+                <!-- Reseña 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Llevo casi 4 meses acudiendo a terapia y no puedo estar más contenta, tanto con el trato, como la profesionalidad."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">Farah</p>
+                        <p class="text-gray-600 dark:text-gray-400">Abril 2024</p>
+                    </div>
+                </div>
+
+                <!-- Reseña 4 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Me fue recomendado por un buen amigo y gran logopeda y acertó totalmente. Un grupo muy profesional."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">José Manuel Calzado</p>
+                        <p class="text-gray-600 dark:text-gray-400">Marzo 2021</p>
+                    </div>
+                </div>
+
+                <!-- Reseña 5 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Por mi trabajo debí recurrir al gabinete y fue así que José Aserraf me devolvió mi voz. Experiencia increíble, profesionalidad y entrega."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">Óscar Giménez Barrios</p>
+                        <p class="text-gray-600 dark:text-gray-400">Septiembre 2020</p>
+                    </div>
+                </div>
+
+                <!-- Reseña 6 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <div class="flex text-yellow-400 mb-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 italic">
+                        "Sois muy buenos logopedas, mi Javi hace muchos años que va con vosotros y le habéis enseñado un montón."
+                    </p>
+                    <div class="text-sm">
+                        <p class="font-semibold text-gray-800 dark:text-gray-100">Alberto Mazuela</p>
+                        <p class="text-gray-600 dark:text-gray-400">Septiembre 2020</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://maps.app.goo.gl/2QomuE5eBNc47ci18" target="_blank" class="inline-flex items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fab fa-google text-red-500 mr-2"></i>
+                    Ver todas las reseñas en Google
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-gray-100">
+                Información de Contacto
+            </h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-phone text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">Teléfonos</h3>
+                                    <a href="tel:+34651509640" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors block">+34 651 509 640</a>
+                                    <a href="tel:+34667712699" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors block">+34 667 71 26 99</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">Email</h3>
+                                    <a href="mailto:gestionafonia@gmail.com" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">gestionafonia@gmail.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-globe text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">Sitio Web</h3>
+                                    <a href="https://www.logopediafonia.com" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">www.logopediafonia.com</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1">
+                                    <i class="fas fa-clock text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Horarios</h3>
+                                    <div class="space-y-1 text-gray-600 dark:text-gray-300">
+                                        <p>Lunes - Jueves: 9:00 - 21:00</p>
+                                        <p>Viernes: 9:00 - 19:00</p>
+                                        <p>Fines de semana: Cerrado</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">Dirección</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">Av. Juan Carlos I, Rey, nº 11, 3ª a</p>
+                                    <p class="text-gray-600 dark:text-gray-300">52001 Melilla</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media -->
+                    <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-4">Síguenos en redes sociales</h3>
+                        <div class="flex justify-center space-x-4">
+                            <a href="https://www.facebook.com/Gabinetedelogopediafoniamelilla/" target="_blank" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/gabinete_fonia" target="_blank" class="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center text-white hover:bg-pink-700 transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center space-x-3 mb-4">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <i class="fas fa-comments text-white"></i>
+                </div>
+                <span class="text-xl font-bold">Fönia</span>
+            </div>
+            <p class="text-gray-400">© 2024 Fönia - Gabinete de Logopedia. Transformando vidas desde 2007.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Counter functionality
+        function updateCounter() {
+            const startDate = new Date('2007-11-01T00:00:00'); // 1 de noviembre de 2007
+            const now = new Date();
+            
+            const totalMilliseconds = now - startDate;
+            
+            // Cálculo más preciso de años y meses
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            // Para el cálculo de días, usamos la diferencia desde el último aniversario mensual
+            const lastMonthAnniversary = new Date(now.getFullYear(), now.getMonth(), startDate.getDate());
+            if (lastMonthAnniversary > now) {
+                lastMonthAnniversary.setMonth(lastMonthAnniversary.getMonth() - 1);
+                months--;
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+            }
+            
+            const daysDiff = Math.floor((now - lastMonthAnniversary) / (1000 * 60 * 60 * 24));
+            const hours = now.getHours() - lastMonthAnniversary.getHours();
+            const minutes = now.getMinutes() - lastMonthAnniversary.getMinutes();
+            const seconds = now.getSeconds() - lastMonthAnniversary.getSeconds();
+            
+            // Ajustar valores negativos
+            let finalHours = hours;
+            let finalMinutes = minutes;
+            let finalSeconds = seconds;
+            
+            if (finalSeconds < 0) {
+                finalSeconds += 60;
+                finalMinutes--;
+            }
+            if (finalMinutes < 0) {
+                finalMinutes += 60;
+                finalHours--;
+            }
+            if (finalHours < 0) {
+                finalHours += 24;
+            }
+            
+            // Actualizar el DOM
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = months;
+            document.getElementById('days').textContent = daysDiff;
+            document.getElementById('hours').textContent = String(finalHours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(finalMinutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(finalSeconds).padStart(2, '0');
+        }
+
+        // Actualizar contador cada segundo
+        updateCounter();
+        setInterval(updateCounter, 1000);
+
+        // Smooth scrolling para navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const totalSlides = 4;
+        const carousel = document.getElementById('carousel');
+        const dots = document.querySelectorAll('.carousel-dot');
+
+        function updateCarousel() {
+            const translateX = -currentSlide * 100;
+            carousel.style.transform = `translateX(${translateX}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                    dot.classList.add('bg-primary');
+                } else {
+                    dot.classList.remove('bg-primary');
+                    dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+
+        // Auto-play carousel
+        setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    </script>
+
+
+</body></html>

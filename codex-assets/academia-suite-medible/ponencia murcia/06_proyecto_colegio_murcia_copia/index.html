@@ -1,0 +1,1049 @@
+<!DOCTYPE html><html lang="es"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelando el futuro de la logopedia con IA | Colegio de Logopedas de Murcia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ivory: #FDFBF7;
+            --ivory-dark: #F5F2EB;
+            --warm-gray: #8B8680;
+            --warm-gray-light: #C4C0B8;
+            --warm-gray-dark: #5A5650;
+            --murcia-magenta: #A41E5C;
+            --murcia-magenta-light: #C4306F;
+            --murcia-teal: #008B8B;
+            --murcia-teal-light: #20A5A5;
+            --sage-green: #7A8B7A;
+            --steel-blue: #6B7F8C;
+            --text-primary: #2D2A26;
+            --text-secondary: #5A5650;
+            --accent-line: #D4CFC5;
+        }
+
+        .dark {
+            --ivory: #1A1918;
+            --ivory-dark: #232220;
+            --warm-gray: #9B9690;
+            --warm-gray-light: #6A6660;
+            --warm-gray-dark: #C4C0B8;
+            --murcia-magenta: #D45A8C;
+            --murcia-magenta-light: #E87AA5;
+            --murcia-teal: #40C5C5;
+            --murcia-teal-light: #60D8D8;
+            --sage-green: #8FA88F;
+            --steel-blue: #8BA0AD;
+            --text-primary: #F0EDE8;
+            --text-secondary: #B8B4AC;
+            --accent-line: #3A3835;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--ivory);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            line-height: 1.15;
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            line-height: 1.25;
+            color: var(--murcia-magenta);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            line-height: 1.35;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--accent-line);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-container img {
+            height: 56px;
+            width: auto;
+        }
+
+        .institution-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            .institution-name {
+                display: block;
+            }
+        }
+
+        .header-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--warm-gray);
+            font-weight: 500;
+        }
+
+        /* Event Badge */
+        .event-badge {
+            background: linear-gradient(135deg, var(--murcia-magenta) 0%, var(--murcia-teal) 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+        }
+
+        .event-badge-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .event-badge-icon {
+            font-size: 1.2rem;
+        }
+
+        .event-badge-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .event-badge-date {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 80px;
+            position: relative;
+            background: linear-gradient(180deg, var(--ivory) 0%, var(--ivory-dark) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A41E5C' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--murcia-magenta);
+            font-weight: 500;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--murcia-magenta);
+        }
+
+        .hero h1 {
+            margin-bottom: 32px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--murcia-magenta);
+        }
+
+        .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            line-height: 1.5;
+        }
+
+        .hero-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 32px;
+            padding-top: 40px;
+            border-top: 1px solid var(--accent-line);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .meta-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--warm-gray);
+            font-weight: 500;
+        }
+
+        .meta-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .meta-highlight {
+            color: var(--murcia-magenta);
+        }
+
+        /* Section styling */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: var(--accent-line);
+            margin: 0;
+        }
+
+        /* Description Section */
+        .description {
+            background: var(--ivory);
+        }
+
+        .description-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+        }
+
+        @media (min-width: 768px) {
+            .description-grid {
+                grid-template-columns: 1fr 1.5fr;
+                gap: 80px;
+            }
+        }
+
+        .description-intro {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .description-body p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .description-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Cases Section */
+        .cases {
+            background: var(--ivory-dark);
+        }
+
+        .cases-header {
+            margin-bottom: 64px;
+            max-width: 600px;
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .case-item {
+            padding: 32px 0;
+            border-top: 1px solid var(--accent-line);
+        }
+
+        .case-number {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--warm-gray);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .case-item h3 {
+            margin-bottom: 12px;
+        }
+
+        .case-item p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .case-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--murcia-magenta);
+            background: transparent;
+            border: 1px solid var(--murcia-magenta);
+            padding: 4px 10px;
+            opacity: 0.7;
+        }
+
+        .case-tag-teal {
+            color: var(--murcia-teal);
+            border-color: var(--murcia-teal);
+        }
+
+        /* Program Section */
+        .program {
+            background: var(--ivory);
+        }
+
+        .program-header {
+            margin-bottom: 64px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .program-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+            }
+        }
+
+        .program-duration {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            font-weight: 400;
+        }
+
+        .program-duration span {
+            color: var(--murcia-magenta);
+            font-weight: 500;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--accent-line);
+        }
+
+        @media (min-width: 768px) {
+            .timeline::before {
+                left: 80px;
+            }
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 32px 0 32px 32px;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-item {
+                grid-template-columns: 80px 1fr;
+                padding-left: 0;
+            }
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 40px;
+            width: 9px;
+            height: 9px;
+            background: var(--ivory);
+            border: 2px solid var(--murcia-magenta);
+            border-radius: 50%;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-item::before {
+                left: 76px;
+            }
+        }
+
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--warm-gray);
+            font-weight: 500;
+            padding-top: 4px;
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .timeline-content p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .timeline-details {
+            margin-top: 12px;
+            padding-left: 16px;
+            border-left: 2px solid var(--accent-line);
+        }
+
+        .timeline-details li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            list-style: none;
+            font-weight: 300;
+        }
+
+        /* Ethics Section */
+        .ethics {
+            background: linear-gradient(135deg, var(--murcia-magenta) 0%, #6A2848 100%);
+            color: var(--ivory);
+            padding: 100px 0;
+        }
+
+        .ethics h2 {
+            color: var(--ivory);
+            margin-bottom: 48px;
+        }
+
+        .ethics-content {
+            max-width: 700px;
+        }
+
+        .ethics-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+            font-style: italic;
+            line-height: 1.6;
+            color: rgba(253, 251, 247, 0.9);
+            margin-bottom: 32px;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .ethics-quote::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--murcia-teal-light);
+        }
+
+        .ethics p {
+            color: rgba(253, 251, 247, 0.7);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .ethics-principles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(253, 251, 247, 0.15);
+        }
+
+        .principle {
+            padding: 24px 0;
+        }
+
+        .principle h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--ivory);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .principle p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Closing Section */
+        .closing {
+            background: var(--ivory-dark);
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .closing-content {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .closing h2 {
+            margin-bottom: 32px;
+        }
+
+        .closing-statement {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .closing-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding-top: 32px;
+            border-top: 1px solid var(--accent-line);
+        }
+
+        .closing-ponente {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .closing-role {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--ivory);
+            padding: 40px 0;
+            border-top: 1px solid var(--accent-line);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
+
+        .footer-logo img {
+            height: 48px;
+            width: auto;
+        }
+
+        .footer-info {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+        }
+
+        .footer-info a {
+            color: var(--murcia-magenta);
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Key message highlight */
+        .key-message {
+            background: linear-gradient(135deg, var(--ivory-dark) 0%, var(--ivory) 100%);
+            border-left: 3px solid var(--murcia-magenta);
+            padding: 24px 32px;
+            margin: 32px 0;
+        }
+
+        .key-message p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            section {
+                padding: 60px 0;
+            }
+
+            .hero {
+                padding: 60px 0 50px;
+            }
+
+            .hero-meta {
+                gap: 24px;
+            }
+
+            .timeline-item {
+                padding: 24px 0 24px 24px;
+            }
+
+            .ethics {
+                padding: 60px 0;
+            }
+
+            .closing {
+                padding: 60px 0;
+            }
+
+            .event-badge-content {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Focus states for accessibility */
+        a:focus-visible {
+            outline: 2px solid var(--murcia-magenta);
+            outline-offset: 2px;
+        }
+
+        /* Print styles */
+        @media print {
+            .hero::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="event-badge">
+        <div class="container">
+            <div class="event-badge-content">
+                <span class="event-badge-icon">🗣️</span>
+                <span class="event-badge-text">Día Europeo de la Logopedia</span>
+                <span class="event-badge-date">6 de marzo de 2025</span>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/9d59e7c3f1ca238fbfce542b42bb4b7533d9f0bd66207073c8b3d9164fd814d9?w=225&amp;h=225" alt="Colegio de Logopedas de Murcia">
+                    <span class="institution-name">Colegio de Logopedas de Murcia</span>
+                </div>
+                <span class="header-tag">Formación Profesional</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="hero-eyebrow animate-in">Ponencia</span>
+                    <h1 class="animate-in delay-1">Modelando el futuro de la logopedia con <em>Inteligencia Artificial</em></h1>
+                    <p class="hero-subtitle animate-in delay-2">Casos reales desde la práctica clínica</p>
+                    <div class="hero-meta animate-in delay-3">
+                        <div class="meta-item">
+                            <span class="meta-label">Ponente</span>
+                            <span class="meta-value">José Aserraf Cohén</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Profesión</span>
+                            <span class="meta-value">Logopeda</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Fecha</span>
+                            <span class="meta-value meta-highlight">6 de marzo de 2025</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Duración</span>
+                            <span class="meta-value">2 horas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="description">
+            <div class="container">
+                <div class="description-grid">
+                    <div class="description-intro">
+                        La inteligencia artificial ya está presente en la logopedia, muchas veces sin que seamos plenamente conscientes de ello.
+                    </div>
+                    <div class="description-body">
+                        <p>Esta ponencia aborda la IA desde la práctica clínica real, no desde la teoría ni la programación, mostrando usos concretos ya aplicados en evaluación, intervención, comunicación y divulgación profesional.</p>
+                        <p>A lo largo de la sesión se presentarán casos reales desarrollados por el propio ponente, analizando qué aporta la IA al trabajo del logopeda, dónde están sus límites y qué criterios éticos deben guiar su uso.</p>
+                        <div class="key-message">
+                            <p>Tecnología silenciosa al servicio del criterio clínico. La IA no es protagonista; el profesional y su pensamiento, sí.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="cases">
+            <div class="container">
+                <div class="cases-header">
+                    <h2>Tipologías de uso</h2>
+                    <p>Aplicaciones concretas de la inteligencia artificial en el ejercicio profesional de la logopedia, documentadas desde la experiencia clínica directa.</p>
+                </div>
+                <div class="cases-grid">
+                    <article class="case-item">
+                        <span class="case-number">Evaluación</span>
+                        <h3>Apoyo en evaluación logopédica</h3>
+                        <p>Automatización de procesos evaluativos, organización de datos clínicos, apoyo en la interpretación y generación de informes base comprensibles para familias.</p>
+                        <div class="case-tags">
+                            <span class="case-tag">Anamnesis automatizada</span>
+                            <span class="case-tag">Seguimiento de objetivos</span>
+                            <span class="case-tag case-teal">Corrección de test</span>
+                        </div>
+                    </article>
+                    <article class="case-item">
+                        <span class="case-number">Intervención</span>
+                        <h3>Materiales terapéuticos personalizados</h3>
+                        <p>Creación de videojuegos educativos y materiales adaptados a fonemas, edades y perfiles concretos. Aceleración de la creación sin perder calidad terapéutica.</p>
+                        <div class="case-tags">
+                            <span class="case-tag">Videojuegos</span>
+                            <span class="case-tag">Personalización</span>
+                        </div>
+                    </article>
+                    <article class="case-item">
+                        <span class="case-number">Comunicación</span>
+                        <h3>Informes que se entienden</h3>
+                        <p>Transformación de informes técnicos en documentos claros, visuales y comprensibles para familias, manteniendo el rigor profesional.</p>
+                        <div class="case-tags">
+                            <span class="case-tag">Claridad</span>
+                            <span class="case-tag">Visualización</span>
+                        </div>
+                    </article>
+                    <article class="case-item">
+                        <span class="case-number">Divulgación</span>
+                        <h3>Comunicación profesional</h3>
+                        <p>Apoyo para creación de páginas web explicativas, vídeos divulgativos y contenidos en redes sociales. Divulgar sin banalizar.</p>
+                        <div class="case-tags">
+                            <span class="case-tag">Web</span>
+                            <span class="case-tag">Vídeo</span>
+                            <span class="case-tag">Redes</span>
+                        </div>
+                    </article>
+                    <article class="case-item">
+                        <span class="case-number">Asistencia</span>
+                        <h3>Chatbots y asistentes informativos</h3>
+                        <p>Asistentes que informan, orientan y derivan correctamente. Con límites claros respecto al diagnóstico e intervención.</p>
+                        <div class="case-tags">
+                            <span class="case-tag">Orientación</span>
+                            <span class="case-tag">Derivación</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section class="program">
+            <div class="container">
+                <div class="program-header">
+                    <h2>Programa</h2>
+                    <p class="program-duration">Duración total: <span>120 minutos</span></p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-time">10 min</span>
+                        <div class="timeline-content">
+                            <h3>Introducción: poner orden en el ruido</h3>
+                            <p>Qué es y qué no es la inteligencia artificial en logopedia. Diferenciar herramienta de sustitución del criterio clínico. Contexto actual y necesidad de posicionamiento profesional.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">25 min</span>
+                        <div class="timeline-content">
+                            <h3>Uso de la IA en evaluación logopédica</h3>
+                            <p>Ejemplos reales de aplicación en la práctica evaluativa.</p>
+                            <ul class="timeline-details">
+                                <li>Anamnesis automatizada</li>
+                                <li>Seguimiento de objetivos a corto plazo</li>
+                                <li>Correcciones automáticas de test</li>
+                                <li>Generación de informes base para familias</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">20 min</span>
+                        <div class="timeline-content">
+                            <h3>Videojuegos y materiales terapéuticos</h3>
+                            <p>Creación de videojuegos educativos y materiales adaptados. Uso de la IA para acelerar la creación y facilitar la personalización sin perder calidad terapéutica.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">15 min</span>
+                        <div class="timeline-content">
+                            <h3>Informes clínicos que se entienden</h3>
+                            <p>Transformación de informes técnicos en documentos claros, visuales y comprensibles para familias, manteniendo el rigor profesional y mejorando la comunicación clínica.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">20 min</span>
+                        <div class="timeline-content">
+                            <h3>Comunicación profesional</h3>
+                            <p>Uso de la IA como apoyo para webs, vídeos y redes sociales. Cómo divulgar logopedia sin banalizar ni prometer resultados irreales.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">15 min</span>
+                        <div class="timeline-content">
+                            <h3>Chatbots y asistentes informativos</h3>
+                            <p>Ejemplos reales de asistentes que informan, orientan y derivan correctamente. Análisis de límites claros: diagnóstico, intervención y sustitución del profesional.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">15 min</span>
+                        <div class="timeline-content">
+                            <h3>Ética aplicada al uso real de la IA</h3>
+                            <p>Ética práctica integrada en los ejemplos: decisiones tomadas, límites establecidos, errores frecuentes y criterios profesionales para un uso responsable.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">10 min</span>
+                        <div class="timeline-content">
+                            <h3>Cierre y reflexión final</h3>
+                            <p>El futuro inmediato de la logopedia visto desde la consulta. Qué necesita aprender un logopeda hoy y qué no. Papel del criterio profesional frente al avance tecnológico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ethics">
+            <div class="container">
+                <div class="ethics-content">
+                    <h2>Sobre la ética en el uso de la IA</h2>
+                    <blockquote class="ethics-quote">
+                        La inteligencia artificial no evalúa al paciente. Apoya al profesional. Esta distinción no es semántica: es el fundamento ético de su uso en logopedia.
+                    </blockquote>
+                    <p>La ética no se trata como un bloque teórico aislado, sino como una dimensión transversal que atraviesa cada ejemplo, cada decisión y cada límite establecido a lo largo de la ponencia.</p>
+                    <p>Se analizan errores frecuentes, criterios profesionales para un uso responsable y las fronteras que nunca deben cruzarse.</p>
+                    <div class="ethics-principles">
+                        <div class="principle">
+                            <h4>Criterio clínico</h4>
+                            <p>La tecnología asiste; el profesional decide.</p>
+                        </div>
+                        <div class="principle">
+                            <h4>Transparencia</h4>
+                            <p>El paciente tiene derecho a saber qué herramientas se utilizan.</p>
+                        </div>
+                        <div class="principle">
+                            <h4>Límites claros</h4>
+                            <p>La IA no diagnostica, no interviene, no sustituye.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="container">
+                <div class="closing-content">
+                    <h2>Reflexión final</h2>
+                    <p class="closing-statement">El futuro de la logopedia no se define por la tecnología que adoptemos, sino por el criterio con el que decidamos utilizarla.</p>
+                    <div class="closing-meta">
+                        <span class="closing-ponente">José Aserraf Cohén</span>
+                        <span class="closing-role">Logopeda</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/9d59e7c3f1ca238fbfce542b42bb4b7533d9f0bd66207073c8b3d9164fd814d9?w=225&amp;h=225" alt="Colegio de Logopedas de Murcia">
+                </div>
+                <div class="footer-info">
+                    <p>Colegio de Logopedas de Murcia</p>
+                    <p>Día Europeo de la Logopedia · 6 de marzo de 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Subtle scroll animations using Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe timeline items for subtle animation
+        document.querySelectorAll('.timeline-item, .case-item').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(el);
+        });
+    </script>
+
+
+</body></html>

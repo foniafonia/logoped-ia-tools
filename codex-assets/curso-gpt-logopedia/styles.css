@@ -1,0 +1,271 @@
+:root {
+  --bg: #f3f5ff;
+  --card: #ffffff;
+  --text: #1c2431;
+  --muted: #5c667a;
+  --primary: #1665d8;
+  --secondary: #e9eefc;
+  --border: #dce3f0;
+  --accent: #0ea5e9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(circle at 5% 0%, #dbeafe 0%, rgba(219, 234, 254, 0) 35%),
+    radial-gradient(circle at 95% 0%, #e0f2fe 0%, rgba(224, 242, 254, 0) 35%),
+    linear-gradient(180deg, #f3f5ff 0%, #f8f9fe 100%);
+  color: var(--text);
+}
+
+.hero {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 2fr 1fr;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}
+
+.auth-box,
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(21, 40, 80, 0.08);
+}
+
+.grid {
+  padding: 0 24px 24px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+}
+
+.roadmap {
+  margin: 0 24px 16px;
+}
+
+.roadmap-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+}
+
+.roadmap-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #f8fbff;
+}
+
+.roadmap-item.active {
+  border-color: #60a5fa;
+  background: #eff6ff;
+}
+
+.roadmap-item.completed {
+  border-color: #34d399;
+  background: #ecfdf5;
+}
+
+.roadmap-item.locked {
+  opacity: 0.72;
+}
+
+.roadmap-item .code {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.roadmap-item .title {
+  margin-top: 4px;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.roadmap-item .status {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.card {
+  min-height: 200px;
+}
+
+label {
+  display: block;
+  margin: 10px 0 6px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+input,
+select,
+textarea,
+button {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  font: inherit;
+}
+
+button {
+  margin-top: 10px;
+  border: 0;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(22, 101, 216, 0.25);
+}
+
+button.secondary {
+  background: var(--secondary);
+  color: var(--text);
+}
+
+.small {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.instruction {
+  background: #f3f7ff;
+  border-left: 4px solid var(--primary);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.tab-btn {
+  width: auto;
+  background: #eef3ff;
+  color: #103064;
+  padding: 8px 12px;
+}
+
+.tab-btn.active {
+  background: #d7e5ff;
+}
+
+.hidden {
+  display: none;
+}
+
+.attempt-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #fbfcff;
+}
+
+.semaphore {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.sem-green {
+  background: #ecfdf3;
+  color: #166534;
+  border-color: #86efac;
+}
+
+.sem-yellow {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.sem-red {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+.grade-box {
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: #eef3ff;
+  font-weight: 700;
+}
+
+.bars {
+  margin-bottom: 10px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 34px 1fr 42px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.bar-label,
+.bar-value {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.bar-track {
+  width: 100%;
+  height: 10px;
+  background: #ebeff8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: #f8faff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  font-family: inherit;
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .roadmap-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}

@@ -1,0 +1,2050 @@
+<!DOCTYPE html><html lang="es"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donkey Kong Fonemas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Fondo animado profesional */
+        .intro-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460, #e94560);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            z-index: -2;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Partículas flotantes */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Efectos de entrada para elementos */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .fade-in-delay-1 { animation-delay: 0.2s; }
+        .fade-in-delay-2 { animation-delay: 0.4s; }
+        .fade-in-delay-3 { animation-delay: 0.6s; }
+        .fade-in-delay-4 { animation-delay: 0.8s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Efectos para imagen principal */
+        .hero-image {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+        
+        .hero-image:hover {
+            transform: scale(1.05) rotate(2deg);
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.4));
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3)) brightness(1); }
+            50% { filter: drop-shadow(0 25px 50px rgba(233, 69, 96, 0.4)) brightness(1.1); }
+        }
+        
+        /* Botones con efectos avanzados */
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover:before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(86, 171, 47, 0.6);
+        }
+        
+        .btn-back {
+            background: linear-gradient(45deg, #757575 0%, #9e9e9e 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(117, 117, 117, 0.4);
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(117, 117, 117, 0.6);
+        }
+        
+        /* Containers con efectos de cristal */
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Títulos con efectos de texto */
+        .title-glow {
+            background: linear-gradient(45deg, #fff, #f8f9fa, #fff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes textShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .subtitle-glow {
+            color: #fff;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+        }
+        
+        /* Transiciones entre pantallas */
+        .screen-transition {
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .screen-exit {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+        
+        .screen-enter {
+            opacity: 0;
+            transform: translateX(100px);
+            animation: slideInRight 0.5s ease forwards;
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Elementos del juego */
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #5D5CDE;
+            display: block;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .letter-button {
+            transition: all 0.2s;
+        }
+        
+        .letter-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .letter-button.active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+        
+        .mobile-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .control-btn {
+            padding: 15px;
+            background: #5D5CDE;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        
+        .control-btn:active {
+            background: #4A4BC7;
+            transform: scale(0.95);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .controls {
+                background: rgba(24, 24, 24, 0.9);
+                color: white;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glass-container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .hero-image {
+                width: 250px !important;
+            }
+            
+            .title-glow {
+                font-size: 2.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+    <div class="min-h-screen py-4">
+        <!-- Fondo animado y partículas -->
+        <div class="intro-background"></div>
+        <div class="particles" id="particles"></div>
+
+        <!-- Pantalla 1: Imagen Intro -->
+        <div id="introStep1" class="game-container screen-transition">
+            <div class="glass-container text-center min-h-[600px] flex flex-col justify-center">
+                <h1 class="text-6xl font-bold mb-8 title-glow fade-in">
+                    🎮 DONKEY KONG FONEMAS
+                </h1>
+                
+                <!-- Imagen de Donkey Kong -->
+                <div class="mb-8 fade-in fade-in-delay-1">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/054093d840f4447e80d9c1b83d2d8f195aa56726495d9fdebf7952994ee1c1d0?w=1024&amp;h=1536" alt="Donkey Kong" class="w-80 h-auto mx-auto rounded-xl hero-image">
+                </div>
+
+                <!-- Botón Continuar -->
+                <button id="nextStep1Btn" class="btn-primary text-xl fade-in fade-in-delay-2">
+                    CONTINUAR →
+                </button>
+                
+                <p class="text-sm text-white/80 mt-6 fade-in fade-in-delay-3">
+                    Basado en el Donkey Kong original de Nintendo (1981)
+                </p>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Explicación -->
+        <div id="introStep2" class="game-container screen-transition" style="display: none;">
+            <div class="glass-container min-h-[600px]">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-4xl font-bold mb-6 text-center subtitle-glow fade-in">
+                        🎯 ¿PARA QUÉ SIRVE ESTE JUEGO?
+                    </h2>
+                    
+                    <div class="info-card mb-6 fade-in fade-in-delay-1">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-300">
+                            📚 Objetivo Educativo
+                        </h3>
+                        <p class="text-white/90 mb-4">
+                            <strong>Donkey Kong Fonemas</strong> es una herramienta terapéutica diseñada para mejorar la 
+                            <span class="font-semibold text-blue-400">discriminación visual de letras similares</span> 
+                            en niños y adultos con dificultades de lectura.
+                        </p>
+                        <p class="text-white/80">
+                            Combina la diversión del clásico videojuego con ejercicios específicos para distinguir 
+                            letras que suelen confundirse: <strong>P-B-D-Q</strong>, <strong>M-N-W</strong>, 
+                            <strong>b-d</strong>, etc.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                        <div class="info-card fade-in fade-in-delay-2">
+                            <h4 class="font-semibold text-green-400 mb-2">
+                                ✅ Beneficios
+                            </h4>
+                            <ul class="text-sm text-white/80 space-y-1">
+                                <li>• Mejora discriminación visual</li>
+                                <li>• Reduce inversiones de letras</li>
+                                <li>• Aumenta velocidad lectora</li>
+                                <li>• Refuerza memoria visual</li>
+                                <li>• Motivación a través del juego</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-card fade-in fade-in-delay-3">
+                            <h4 class="font-semibold text-purple-400 mb-2">
+                                🎯 Indicado para
+                            </h4>
+                            <ul class="text-sm text-white/80 space-y-1">
+                                <li>• Dislexia</li>
+                                <li>• Dificultades lectoras</li>
+                                <li>• Terapia visual</li>
+                                <li>• Aprendizaje de lectura</li>
+                                <li>• Refuerzo escolar</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-card mb-8 fade-in fade-in-delay-4">
+                        <h4 class="font-semibold text-yellow-400 mb-2">
+                            🎮 Cómo Funciona
+                        </h4>
+                        <p class="text-sm text-white/80">
+                            Selecciona una <strong>letra objetivo</strong> (ej: P). Mario debe esquivar barriles 
+                            con <strong>letras intrusas</strong> (B, D, Q) y recoger ítems con la letra correcta. 
+                            El cerebro aprende a distinguir automáticamente las diferencias sutiles.
+                        </p>
+                    </div>
+
+                    <!-- Navegación -->
+                    <div class="flex justify-between fade-in fade-in-delay-4">
+                        <button id="backStep2Btn" class="btn-back">
+                            ← ATRÁS
+                        </button>
+                        <button id="nextStep2Btn" class="btn-success">
+                            EMPEZAR JUEGO →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Juego Principal (inicialmente oculto) -->
+        <div id="gameScreen" class="game-container" style="display: none;">
+            <!-- Panel de Control -->
+            <div class="controls">
+                <h1 class="text-2xl font-bold text-center mb-4 text-gray-800 dark:text-white">
+                    🐵 Donkey Kong Fonemas
+                </h1>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Selecciona la letra objetivo:</label>
+                    <div class="grid grid-cols-6 gap-2" id="letterButtons">
+                        <!-- Los botones se generarán dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center text-sm">
+                    <div>
+                        <span class="font-medium">Letra objetivo: </span>
+                        <span id="targetLetter" class="text-xl font-bold text-blue-600">P</span>
+                    </div>
+                    <div>
+                        <span class="font-medium">Puntuación: </span>
+                        <span id="score" class="text-xl font-bold text-green-600">0</span>
+                    </div>
+                    <div>
+                        <span class="font-medium">Vidas: </span>
+                        <span id="lives" class="text-xl font-bold text-red-600">3</span>
+                    </div>
+                    <div>
+                        <span class="font-medium">Nivel: </span>
+                        <span id="level" class="text-xl font-bold text-purple-600">1</span>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-xs text-gray-600 dark:text-gray-400">
+                    <strong>Instrucciones:</strong> ←→ moverte, ↑↓ escaleras, ESPACIO saltar para esquivar barriles. 
+                    <strong>MARTILLO:</strong> Destruye barriles pero no puedes usar escaleras.
+                    <br><strong>PUNTOS:</strong> +100 saltar/destruir barriles, +200-500 power-ups. 
+                    <br><strong>AUTÉNTICO:</strong> Como el Donkey Kong original de 1981.
+                </div>
+            </div>
+            
+            <!-- Canvas del Juego -->
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            
+            <!-- Controles táctiles para móvil -->
+            <div class="mobile-controls">
+                <button class="control-btn" id="leftBtn">←</button>
+                <button class="control-btn" id="jumpBtn">SALTAR</button>
+                <button class="control-btn" id="rightBtn">→</button>
+            </div>
+            <div class="mobile-controls">
+                <button class="control-btn" id="upBtn">↑ SUBIR</button>
+                <button class="control-btn" id="downBtn">↓ BAJAR</button>
+                <button class="control-btn" id="debugBtn">DEBUG</button>
+            </div>
+            
+            <!-- Información de letras intrusas y dificultad -->
+            <div class="controls mt-4">
+                <div class="text-center">
+                    <span class="font-medium">Letras intrusas actuales: </span>
+                    <span id="intruderLetters" class="text-lg font-bold text-red-500"></span>
+                </div>
+                <div class="text-center mt-2" id="difficultyInfo">
+                    <span class="text-sm text-gray-500">Cargando dificultad...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración del juego
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Grupos de letras intrusas
+        const letterGroups = {
+            'P': ['B', 'D', 'Q'],
+            'B': ['P', 'D', 'Q'],
+            'D': ['P', 'B', 'Q'],
+            'Q': ['P', 'B', 'D'],
+            'M': ['N', 'W'],
+            'N': ['M', 'U', 'H'],
+            'U': ['N', 'V'],
+            'V': ['U', 'Y'],
+            'F': ['E', 'T'],
+            'E': ['F', 'B'],
+            'A': ['O', 'Q'],
+            'O': ['A', 'C'],
+            'C': ['O', 'G'],
+            'G': ['C', 'Q'],
+            'S': ['5', 'Z'],
+            'Z': ['S', '2'],
+            'I': ['L', '1'],
+            'L': ['I', 'T'],
+            'T': ['L', 'F'],
+            'R': ['P', 'B'],
+            'H': ['N', 'M'],
+            'J': ['I', 'L'],
+            'K': ['R', 'P'],
+            'W': ['M', 'V'],
+            'X': ['Y', 'K'],
+            'Y': ['X', 'V']
+        };
+        
+        // Estado del juego
+        let gameState = {
+            player: {
+                x: 100,
+                y: 540,
+                width: 25,
+                height: 35,
+                velocityY: 0,
+                onGround: false,
+                onLadder: false,
+                speed: 1.8,
+                climbSpeed: 1.2,
+                facing: 1,
+                animFrame: 0,
+                hasHammer: false,
+                hammerTimer: 0
+            },
+            platforms: [
+                {x: 0, y: 580, width: 800, height: 20, color: '#FF69B4'},
+                {x: 50, y: 480, width: 700, height: 12, color: '#FF69B4', slope: -0.05},
+                {x: 20, y: 400, width: 720, height: 12, color: '#FF69B4', slope: 0.04},
+                {x: 60, y: 320, width: 680, height: 12, color: '#FF69B4', slope: -0.06},
+                {x: 40, y: 240, width: 720, height: 12, color: '#FF69B4', slope: 0.05},
+                {x: 80, y: 160, width: 640, height: 12, color: '#FF69B4', slope: -0.04},
+                {x: 200, y: 80, width: 400, height: 12, color: '#FF69B4'},
+                // Escaleras conectando rampas correctamente
+                {x: 100, y: 468, width: 12, height: 112, color: '#00BFFF', type: 'ladder'},
+                {x: 680, y: 388, width: 12, height: 92, color: '#00BFFF', type: 'ladder'},
+                {x: 120, y: 308, width: 12, height: 92, color: '#00BFFF', type: 'ladder'},
+                {x: 700, y: 228, width: 12, height: 92, color: '#00BFFF', type: 'ladder'},
+                {x: 160, y: 148, width: 12, height: 92, color: '#00BFFF', type: 'ladder'},
+                {x: 560, y: 148, width: 12, height: 92, color: '#00BFFF', type: 'ladder'},
+                {x: -10, y: 0, width: 10, height: 600, color: '#FF69B4', type: 'wall'},
+                {x: 800, y: 0, width: 10, height: 600, color: '#FF69B4', type: 'wall'}
+            ],
+            donkeyKong: {
+                x: 250,
+                y: 45,
+                width: 60,
+                height: 50,
+                animFrame: 0
+            },
+            princess: {
+                x: 350,
+                y: 50,
+                width: 25,
+                height: 40
+            },
+            intruders: [],
+            targetItems: [],
+            powerUps: [],
+            targetLetter: 'P',
+            score: 0,
+            lives: 3,
+            level: 1,
+            levelCompleting: false,
+            keys: {},
+            lastIntruderSpawn: 0,
+            gravity: 0.8,
+            jumpPower: -15
+        };
+        
+        // Inicializar botones de letras
+        function initializeLetterButtons() {
+            const buttonContainer = document.getElementById('letterButtons');
+            const letters = Object.keys(letterGroups);
+            
+            letters.forEach(letter => {
+                const button = document.createElement('button');
+                button.textContent = letter;
+                button.className = 'letter-button px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-base font-bold';
+                button.onclick = () => setTargetLetter(letter);
+                
+                if (letter === gameState.targetLetter) {
+                    button.classList.add('active');
+                }
+                
+                buttonContainer.appendChild(button);
+            });
+        }
+        
+        // Establecer letra objetivo
+        function setTargetLetter(letter) {
+            gameState.targetLetter = letter;
+            document.getElementById('targetLetter').textContent = letter;
+            document.getElementById('intruderLetters').textContent = letterGroups[letter].join(', ');
+            
+            document.querySelectorAll('.letter-button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === letter) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            gameState.intruders = [];
+            gameState.targetItems = [];
+        }
+        
+        // Crear barril básico
+        function createIntruder() {
+            const intruderLetters = letterGroups[gameState.targetLetter];
+            const randomLetter = intruderLetters[Math.floor(Math.random() * intruderLetters.length)];
+            
+            const baseSpeed = 0.8 + (gameState.level - 1) * 0.05;
+            const randomSpeed = Math.random() * 0.2;
+            
+            return {
+                x: 320,
+                y: 70,
+                width: 35,
+                height: 35,
+                letter: randomLetter,
+                speedX: baseSpeed + randomSpeed,
+                speedY: 0,
+                rotation: 0,
+                onPlatform: false,
+                currentPlatform: null,
+                color: '#FF6600'
+            };
+        }
+        
+        // Crear barril estratégico
+        function createStrategicBarrel() {
+            const player = gameState.player;
+            
+            let targetX = player.x;
+            let targetDirection = 1;
+            
+            if (gameState.keys['ArrowLeft'] || gameState.keys['a']) {
+                targetDirection = -1;
+                targetX = player.x - 100;
+            } else if (gameState.keys['ArrowRight'] || gameState.keys['d']) {
+                targetDirection = 1;
+                targetX = player.x + 100;
+            } else if (player.onLadder) {
+                targetX = player.x + (Math.random() - 0.5) * 60;
+                targetDirection = player.x > 400 ? -1 : 1;
+            } else {
+                targetX = player.x + (Math.random() - 0.5) * 150;
+                targetDirection = Math.random() > 0.5 ? 1 : -1;
+            }
+            
+            targetX = Math.max(280, Math.min(380, targetX));
+            
+            const barrel = createIntruder();
+            barrel.x = 300 + (Math.random() - 0.5) * 30;
+            barrel.y = 60;
+            barrel.speedX = targetDirection * (0.8 + Math.random() * 0.5);
+            
+            return barrel;
+        }
+        
+        // Crear ítem objetivo
+        function createTargetItem() {
+            const platforms = gameState.platforms.filter(p => p.y < 550 && !p.type);
+            if (platforms.length === 0) return null;
+            
+            const platform = platforms[Math.floor(Math.random() * platforms.length)];
+            
+            return {
+                x: platform.x + 50 + Math.random() * (platform.width - 100),
+                y: platform.y - 30,
+                width: 30,
+                height: 30,
+                letter: gameState.targetLetter,
+                type: Math.random() < 0.4 ? 'life' : 'points',
+                collected: false,
+                animFrame: 0
+            };
+        }
+        
+        // Crear power-ups
+        function createPowerUp() {
+            const platforms = gameState.platforms.filter(p => p.y < 550 && !p.type && p.y > 100);
+            if (platforms.length === 0) return null;
+            
+            const platform = platforms[Math.floor(Math.random() * platforms.length)];
+            const powerUpTypes = [
+                { type: 'hammer', points: 0, duration: 300 },
+                { type: 'purse', points: 300, duration: 0 },
+                { type: 'hat', points: 500, duration: 0 },
+                { type: 'umbrella', points: 200, duration: 0 }
+            ];
+            
+            const randomPowerUp = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+            
+            return {
+                x: platform.x + 30 + Math.random() * (platform.width - 60),
+                y: platform.y - 25,
+                width: 25,
+                height: 25,
+                type: randomPowerUp.type,
+                points: randomPowerUp.points,
+                duration: randomPowerUp.duration,
+                collected: false,
+                animFrame: 0
+            };
+        }
+        
+        // Detectar colisiones
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+        
+        // Calcular Y de plataforma inclinada
+        function getPlatformY(platform, x) {
+            if (platform.slope) {
+                return platform.y + (x - platform.x) * platform.slope;
+            }
+            return platform.y;
+        }
+        
+        // Verificar movimiento en rampas
+        function checkSlopeMovement(player, deltaX) {
+            let currentPlatform = null;
+            gameState.platforms.forEach(platform => {
+                if (platform.type === 'ladder' || platform.type === 'wall') return;
+                
+                if (player.x + player.width > platform.x && 
+                    player.x < platform.x + platform.width &&
+                    player.y + player.height >= platform.y - 5 &&
+                    player.y + player.height <= platform.y + platform.height + 15) {
+                    currentPlatform = platform;
+                }
+            });
+            
+            if (!currentPlatform || !currentPlatform.slope) {
+                return true;
+            }
+            
+            const slopeAngle = Math.abs(currentPlatform.slope);
+            
+            if (slopeAngle > 0.06) {
+                if (currentPlatform.slope > 0 && deltaX < 0) {
+                    return false;
+                }
+                if (currentPlatform.slope < 0 && deltaX > 0) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Obtener escalera actual
+        function getCurrentLadder(player) {
+            for (let platform of gameState.platforms) {
+                if (platform.type === 'ladder') {
+                    if (player.x + player.width >= platform.x - 5 && 
+                        player.x <= platform.x + platform.width + 5 &&
+                        player.y + player.height >= platform.y - 10 &&
+                        player.y <= platform.y + platform.height + 10) {
+                        return platform;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        // Actualizar física del jugador
+        function updatePlayer() {
+            const player = gameState.player;
+            
+            player.onLadder = false;
+            gameState.platforms.forEach(platform => {
+                if (platform.type === 'ladder') {
+                    if (player.x + player.width >= platform.x - 5 && 
+                        player.x <= platform.x + platform.width + 5 &&
+                        player.y + player.height >= platform.y - 10 &&
+                        player.y <= platform.y + platform.height + 10) {
+                        player.onLadder = true;
+                    }
+                }
+            });
+            
+            if (player.onLadder) {
+                let canClimb = true;
+                
+                gameState.intruders.forEach(intruder => {
+                    const distance = Math.sqrt(
+                        Math.pow(player.x + player.width/2 - intruder.x - intruder.width/2, 2) + 
+                        Math.pow(player.y + player.height/2 - intruder.y - intruder.height/2, 2)
+                    );
+                    if (distance < 90) {
+                        canClimb = false;
+                    }
+                });
+                
+                if (canClimb) {
+                    if (gameState.keys['ArrowUp']) {
+                        player.y -= player.climbSpeed;
+                        player.velocityY = 0;
+                        player.onGround = false;
+                    }
+                    if (gameState.keys['ArrowDown']) {
+                        player.y += player.climbSpeed;
+                        player.velocityY = 0;
+                    }
+                } else {
+                    if (gameState.keys['ArrowUp'] || gameState.keys['ArrowDown']) {
+                        player.x += (Math.random() - 0.5) * 1;
+                        if (Math.random() < 0.02) {
+                            showMessage("¡BARRIL CERCA!");
+                        }
+                    }
+                }
+                
+                if (gameState.keys['ArrowLeft'] || gameState.keys['a']) {
+                    player.facing = -1;
+                    player.x -= player.speed * 0.8;
+                }
+                if (gameState.keys['ArrowRight'] || gameState.keys['d']) {
+                    player.facing = 1;
+                    player.x += player.speed * 0.8;
+                }
+                
+                if (gameState.keys[' '] && !player.hasHammer) {
+                    player.velocityY = gameState.jumpPower * 0.6;
+                    player.onLadder = false;
+                    player.onGround = false;
+                }
+                
+                if (!gameState.keys['ArrowUp'] && !gameState.keys['ArrowDown']) {
+                    player.velocityY += gameState.gravity * 0.05;
+                    player.y += player.velocityY;
+                }
+                
+                const currentLadder = getCurrentLadder(player);
+                if (currentLadder) {
+                    const ladderCenter = currentLadder.x + currentLadder.width / 2;
+                    const playerCenter = player.x + player.width / 2;
+                    const offset = ladderCenter - playerCenter;
+                    
+                    if (Math.abs(offset) > 1) {
+                        player.x += Math.sign(offset) * 0.8;
+                    }
+                }
+            } else {
+                if (gameState.keys['ArrowLeft'] || gameState.keys['a']) {
+                    const canMoveOnSlope = checkSlopeMovement(player, -player.speed);
+                    if (canMoveOnSlope) {
+                        player.x -= player.speed;
+                        player.facing = -1;
+                    }
+                }
+                if (gameState.keys['ArrowRight'] || gameState.keys['d']) {
+                    const canMoveOnSlope = checkSlopeMovement(player, player.speed);
+                    if (canMoveOnSlope) {
+                        player.x += player.speed;
+                        player.facing = 1;
+                    }
+                }
+                
+                if (gameState.keys[' '] && player.onGround) {
+                    player.velocityY = gameState.jumpPower * 0.5;
+                    player.onGround = false;
+                }
+                
+                player.velocityY += gameState.gravity;
+                player.y += player.velocityY;
+            }
+            
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            
+            if (!player.onLadder) {
+                player.onGround = false;
+                gameState.platforms.forEach(platform => {
+                    if (platform.type === 'ladder' || platform.type === 'wall') return;
+                    
+                    if (player.x + player.width > platform.x && 
+                        player.x < platform.x + platform.width &&
+                        player.y + player.height > platform.y &&
+                        player.y + player.height < platform.y + platform.height + 15 &&
+                        player.velocityY > 0) {
+                        
+                        const platformY = getPlatformY(platform, player.x + player.width/2);
+                        player.y = platformY - player.height;
+                        player.velocityY = 0;
+                        player.onGround = true;
+                    }
+                });
+            }
+            
+            if (player.y > canvas.height) {
+                player.x = 100;
+                player.y = 540;
+                player.velocityY = 0;
+                gameState.lives--;
+                updateUI();
+            }
+            
+            if (player.x > 200 && player.y < 120 && player.x < 400 && !gameState.levelCompleting) {
+                gameState.levelCompleting = true;
+                completeLevel();
+            }
+        }
+        
+        // Configuración de dificultad
+        function getDifficultySettings() {
+            const level = gameState.level;
+            
+            if (level <= 2) {
+                return {
+                    spawnRate: 3000 - (level - 1) * 500,
+                    maxBarrels: 3 + level,
+                    description: "PRINCIPIANTE"
+                };
+            }
+            else if (level <= 4) {
+                return {
+                    spawnRate: 2000 - (level - 3) * 300,
+                    maxBarrels: 5 + level,
+                    description: "INTERMEDIO"
+                };
+            }
+            else if (level <= 6) {
+                return {
+                    spawnRate: 1400 - (level - 5) * 200,
+                    maxBarrels: 8 + level,
+                    description: "AVANZADO"
+                };
+            }
+            else {
+                return {
+                    spawnRate: Math.max(800, 1200 - (level - 7) * 100),
+                    maxBarrels: Math.min(12 + level * 2, 20),
+                    description: "EXTREMO"
+                };
+            }
+        }
+        
+        // Actualizar intrusos
+        function updateIntruders() {
+            const now = Date.now();
+            const difficultySettings = getDifficultySettings();
+            
+            if (now - gameState.lastIntruderSpawn > difficultySettings.spawnRate) {
+                if (gameState.intruders.length < difficultySettings.maxBarrels) {
+                    const newIntruder = createStrategicBarrel();
+                    if (newIntruder) {
+                        gameState.intruders.push(newIntruder);
+                        gameState.lastIntruderSpawn = now;
+                    }
+                }
+            }
+            
+            // Spawn secundario muy controlado - solo si hay pocos barriles
+            if (Math.random() < 0.001 && gameState.intruders.length < Math.min(difficultySettings.maxBarrels * 0.3, 4)) {
+                const extraBarrel = createIntruder();
+                extraBarrel.x = 280 + Math.random() * 80;
+                extraBarrel.y = 50;
+                extraBarrel.speedX = (Math.random() > 0.5 ? 1 : -1) * (0.4 + Math.random() * 0.3);
+                gameState.intruders.push(extraBarrel);
+            }
+            
+            const itemSpawnRate = Math.max(0.005, 0.015 - gameState.level * 0.001);
+            if (Math.random() < itemSpawnRate && gameState.targetItems.length < 3) {
+                const newItem = createTargetItem();
+                if (newItem) {
+                    gameState.targetItems.push(newItem);
+                }
+            }
+            
+            const powerUpSpawnRate = 0.002;
+            if (Math.random() < powerUpSpawnRate && gameState.powerUps.length < 2) {
+                const newPowerUp = createPowerUp();
+                if (newPowerUp) {
+                    gameState.powerUps.push(newPowerUp);
+                }
+            }
+            
+            if (gameState.player.hasHammer) {
+                gameState.player.hammerTimer--;
+                if (gameState.player.hammerTimer <= 0) {
+                    gameState.player.hasHammer = false;
+                    showMessage("¡Martillo perdido!");
+                }
+            }
+            
+            gameState.intruders.forEach((intruder, index) => {
+                let wasOnPlatform = intruder.onPlatform;
+                intruder.onPlatform = false;
+                intruder.currentPlatform = null;
+                
+                if (!wasOnPlatform) {
+                    intruder.speedY += 0.4;
+                }
+                
+                intruder.x += intruder.speedX;
+                intruder.y += intruder.speedY;
+                
+                intruder.rotation += intruder.speedX * 0.3;
+                
+                gameState.platforms.forEach(platform => {
+                    if (platform.type === 'wall') {
+                        if (intruder.x < platform.x + platform.width && 
+                            intruder.x + intruder.width > platform.x &&
+                            intruder.y < platform.y + platform.height &&
+                            intruder.y + intruder.height > platform.y) {
+                            intruder.speedX = -intruder.speedX * 0.8;
+                            if (intruder.x < platform.x) {
+                                intruder.x = platform.x - intruder.width;
+                            } else {
+                                intruder.x = platform.x + platform.width;
+                            }
+                        }
+                    }
+                });
+                
+                gameState.platforms.forEach((platform, pIndex) => {
+                    if (platform.type === 'ladder' || platform.type === 'wall') return;
+                    
+                    if (intruder.x + intruder.width > platform.x && 
+                        intruder.x < platform.x + platform.width &&
+                        intruder.y + intruder.height >= platform.y &&
+                        intruder.y + intruder.height <= platform.y + platform.height + 5) {
+                        
+                        const platformY = getPlatformY(platform, intruder.x + intruder.width/2);
+                        intruder.y = platformY - intruder.height;
+                        intruder.speedY = 0;
+                        intruder.onPlatform = true;
+                        intruder.currentPlatform = pIndex;
+                        
+                        if (platform.slope) {
+                            intruder.speedX += platform.slope * 2.5;
+                            const maxSpeed = 1.8 + gameState.level * 0.12;
+                            intruder.speedX = Math.max(0.5, Math.min(maxSpeed, Math.abs(intruder.speedX))) * Math.sign(intruder.speedX);
+                        }
+                        
+                        if (intruder.x <= platform.x - 10 || intruder.x + intruder.width >= platform.x + platform.width + 10) {
+                            intruder.onPlatform = false;
+                            intruder.speedY = 0.5;
+                        }
+                    }
+                });
+                
+                const playerCenterX = gameState.player.x + gameState.player.width/2;
+                const playerCenterY = gameState.player.y + gameState.player.height/2;
+                const barrelCenterX = intruder.x + intruder.width/2;
+                const barrelCenterY = intruder.y + intruder.height/2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(playerCenterX - barrelCenterX, 2) + 
+                    Math.pow(playerCenterY - barrelCenterY, 2)
+                );
+                
+                if (distance < 25 || checkCollision(gameState.player, intruder)) {
+                    if (gameState.player.hasHammer) {
+                        gameState.score += 100;
+                        gameState.intruders.splice(index, 1);
+                        showMessage("¡MARTILLO! +100");
+                        return;
+                    } else if (gameState.player.velocityY > 2 && 
+                               gameState.player.y + gameState.player.height < intruder.y + intruder.height/3) {
+                        gameState.score += 100;
+                        gameState.intruders.splice(index, 1);
+                        gameState.player.velocityY = gameState.jumpPower * 0.2;
+                        showMessage("¡SALTASTE! +100");
+                        return;
+                    } else {
+                        gameState.lives--;
+                        gameState.player.x = 100;
+                        gameState.player.y = 540;
+                        gameState.player.velocityY = 0;
+                        gameState.player.onLadder = false;
+                        gameState.player.hasHammer = false;
+                        gameState.player.hammerTimer = 0;
+                        if (gameState.intruders.length > 3) {
+                            gameState.intruders.splice(0, 2);
+                        }
+                        showMessage("¡MUERTE! ☠️");
+                    }
+                    updateUI();
+                }
+                
+                // Los barriles solo se eliminan si caen muy lejos o salen por los extremos tras rodar
+                if (intruder.y > canvas.height + 100) {
+                    gameState.intruders.splice(index, 1);
+                } else if (intruder.y > 580 && (intruder.x < -100 || intruder.x > canvas.width + 100)) {
+                    // Solo eliminar si están en el suelo y muy lejos lateralmente
+                    gameState.intruders.splice(index, 1);
+                }
+            });
+            
+            gameState.targetItems.forEach((item, index) => {
+                if (item.collected) return;
+                
+                item.animFrame += 0.1;
+                
+                const playerCenterX = gameState.player.x + gameState.player.width/2;
+                const playerCenterY = gameState.player.y + gameState.player.height/2;
+                const itemCenterX = item.x + item.width/2;
+                const itemCenterY = item.y + item.height/2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(playerCenterX - itemCenterX, 2) + 
+                    Math.pow(playerCenterY - itemCenterY, 2)
+                );
+                
+                if (distance < 25) {
+                    item.collected = true;
+                    
+                    if (item.type === 'life') {
+                        gameState.lives++;
+                        gameState.score += 50;
+                        showMessage("¡VIDA EXTRA! +50");
+                    } else {
+                        gameState.score += 25;
+                        showMessage("¡+25 PUNTOS!");
+                    }
+                    
+                    gameState.targetItems.splice(index, 1);
+                    updateUI();
+                }
+            });
+            
+            gameState.powerUps.forEach((powerUp, index) => {
+                if (powerUp.collected) return;
+                
+                powerUp.animFrame += 0.1;
+                
+                const playerCenterX = gameState.player.x + gameState.player.width/2;
+                const playerCenterY = gameState.player.y + gameState.player.height/2;
+                const powerUpCenterX = powerUp.x + powerUp.width/2;
+                const powerUpCenterY = powerUp.y + powerUp.height/2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(playerCenterX - powerUpCenterX, 2) + 
+                    Math.pow(playerCenterY - powerUpCenterY, 2)
+                );
+                
+                if (distance < 20) {
+                    powerUp.collected = true;
+                    
+                    if (powerUp.type === 'hammer') {
+                        gameState.player.hasHammer = true;
+                        gameState.player.hammerTimer = powerUp.duration;
+                        showMessage("¡MARTILLO! Destruye barriles");
+                    } else {
+                        gameState.score += powerUp.points;
+                        showMessage(`¡${powerUp.type.toUpperCase()}! +${powerUp.points}`);
+                    }
+                    
+                    gameState.powerUps.splice(index, 1);
+                    updateUI();
+                }
+            });
+        }
+        
+        // Dibujar jugador
+        function drawPlayer() {
+            const player = gameState.player;
+            const centerX = player.x + player.width / 2;
+            
+            const isMoving = gameState.keys['ArrowLeft'] || gameState.keys['ArrowRight'] || gameState.keys['a'] || gameState.keys['d'] || gameState.keys['ArrowUp'] || gameState.keys['ArrowDown'];
+            let bobOffset = 0;
+            if (isMoving) {
+                player.animFrame += 0.1;
+                // Eliminamos el bobbing molesto - Mario se mantiene estable
+            }
+            
+            if (player.onLadder) {
+                let canClimb = true;
+                gameState.intruders.forEach(intruder => {
+                    const distance = Math.sqrt(
+                        Math.pow(player.x + player.width/2 - intruder.x - intruder.width/2, 2) + 
+                        Math.pow(player.y + player.height/2 - intruder.y - intruder.height/2, 2)
+                    );
+                    if (distance < 60) {
+                        canClimb = false;
+                    }
+                });
+                
+                ctx.fillStyle = canClimb ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)';
+                ctx.fillRect(player.x - 3, player.y - 3, player.width + 6, player.height + 6);
+                
+                ctx.fillStyle = canClimb ? '#00FF00' : '#FF0000';
+                ctx.font = 'bold 10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(canClimb ? 'SUBIR' : 'PELIGRO', player.x + player.width/2, player.y - 8);
+            }
+            
+            ctx.save();
+            if (player.facing === -1) {
+                ctx.scale(-1, 1);
+                ctx.translate(-centerX * 2, 0);
+            }
+            
+            // Botas marrones
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(player.x + 2, player.y + 30, 10, 5);
+            ctx.fillRect(player.x + 13, player.y + 30, 10, 5);
+            
+            // Piernas/pantalones azul oscuro
+            ctx.fillStyle = '#0033AA';
+            ctx.fillRect(player.x + 4, player.y + 20, 7, 10);
+            ctx.fillRect(player.x + 14, player.y + 20, 7, 10);
+            
+            // Cuerpo (overol azul)
+            ctx.fillStyle = '#0066FF';
+            ctx.fillRect(player.x + 3, player.y + 15, player.width - 6, 12);
+            
+            // Tirantes dorados
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(player.x + 7, player.y + 15, 2, 10);
+            ctx.fillRect(player.x + 16, player.y + 15, 2, 10);
+            
+            // Botones dorados del overol
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(player.x + 8, player.y + 18, 2, 2);
+            ctx.fillRect(player.x + 15, player.y + 18, 2, 2);
+            
+            // Camisa roja debajo
+            ctx.fillStyle = '#CC0000';
+            ctx.fillRect(player.x + 5, player.y + 12, player.width - 10, 8);
+            
+            // Cabeza (piel melocotón)
+            ctx.fillStyle = '#FFCC99';
+            ctx.fillRect(player.x + 5, player.y + 3, player.width - 10, 15);
+            
+            // Gorra roja mejorada
+            ctx.fillStyle = '#DD0000';
+            ctx.fillRect(player.x + 3, player.y, player.width - 6, 9);
+            ctx.fillRect(player.x + 7, player.y - 1, player.width - 14, 3);
+            
+            // Logo "M"
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            ctx.strokeText('M', centerX, player.y + 7);
+            ctx.fillText('M', centerX, player.y + 7);
+            
+            // Ojos
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(player.x + 7, player.y + 8, 4, 3);
+            ctx.fillRect(player.x + 14, player.y + 8, 4, 3);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(player.x + 8, player.y + 9, 2, 2);
+            ctx.fillRect(player.x + 15, player.y + 9, 2, 2);
+            
+            // Pupilas brillantes
+            ctx.fillStyle = '#FFF';
+            ctx.fillRect(player.x + 8, player.y + 9, 1, 1);
+            ctx.fillRect(player.x + 15, player.y + 9, 1, 1);
+            
+            // Nariz
+            ctx.fillStyle = '#FF9999';
+            ctx.fillRect(player.x + 11, player.y + 11, 3, 4);
+            
+            // Bigote
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(player.x + 8, player.y + 13, 9, 2);
+            ctx.fillRect(player.x + 9, player.y + 14, 7, 1);
+            
+            // Brazos
+            ctx.fillStyle = '#FFCC99';
+            ctx.fillRect(player.x - 2, player.y + 16 + bobOffset, 5, 8);
+            ctx.fillRect(player.x + player.width - 3, player.y + 16 + bobOffset, 5, 8);
+            
+            // Guantes o martillo
+            if (player.hasHammer) {
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(player.x - 1, player.y + 18 + bobOffset, 3, 12);
+                ctx.fillStyle = '#666666';
+                ctx.fillRect(player.x - 4, player.y + 16 + bobOffset, 9, 6);
+                ctx.fillStyle = '#888888';
+                ctx.fillRect(player.x - 4, player.y + 16 + bobOffset, 9, 2);
+                
+                const timerPercent = player.hammerTimer / 300;
+                ctx.fillStyle = timerPercent > 0.3 ? '#00FF00' : '#FF0000';
+                ctx.fillRect(player.x - 5, player.y - 5, Math.max(1, 15 * timerPercent), 2);
+            } else {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(player.x - 3, player.y + 22 + bobOffset, 7, 5);
+                ctx.fillRect(player.x + player.width - 4, player.y + 22 + bobOffset, 7, 5);
+                
+                ctx.fillStyle = '#DDD';
+                ctx.fillRect(player.x - 2, player.y + 24 + bobOffset, 5, 1);
+                ctx.fillRect(player.x + player.width - 3, player.y + 24 + bobOffset, 5, 1);
+            }
+            
+            ctx.restore();
+        }
+        
+        // Dibujar plataformas
+        function drawPlatforms() {
+            gameState.platforms.forEach(platform => {
+                if (platform.type === 'wall') {
+                    return;
+                }
+                
+                if (platform.type === 'ladder') {
+                    ctx.fillStyle = '#00FFFF';
+                    
+                    ctx.fillRect(platform.x, platform.y, 3, platform.height);
+                    ctx.fillRect(platform.x + platform.width - 3, platform.y, 3, platform.height);
+                    
+                    ctx.fillStyle = '#00CCCC';
+                    for (let i = 0; i < platform.height; i += 8) {
+                        ctx.fillRect(platform.x, platform.y + i, platform.width, 2);
+                    }
+                    
+                    ctx.fillStyle = '#008888';
+                    ctx.fillRect(platform.x + 1, platform.y, 1, platform.height);
+                    ctx.fillRect(platform.x + platform.width - 2, platform.y, 1, platform.height);
+                    
+                } else {
+                    const baseColor = '#FF0033';
+                    const darkColor = '#CC0022';
+                    const lightColor = '#FF3366';
+                    
+                    if (platform.slope) {
+                        ctx.fillStyle = baseColor;
+                        ctx.beginPath();
+                        ctx.moveTo(platform.x, platform.y);
+                        ctx.lineTo(platform.x + platform.width, platform.y + platform.width * platform.slope);
+                        ctx.lineTo(platform.x + platform.width, platform.y + platform.width * platform.slope + platform.height);
+                        ctx.lineTo(platform.x, platform.y + platform.height);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.fillStyle = darkColor;
+                        for (let i = 0; i < platform.width; i += 12) {
+                            const yPos = platform.y + i * platform.slope;
+                            ctx.beginPath();
+                            ctx.moveTo(platform.x + i, yPos + 2);
+                            ctx.lineTo(platform.x + i + 6, yPos + 8);
+                            ctx.lineTo(platform.x + i + 12, yPos + 2);
+                            ctx.lineTo(platform.x + i, yPos + 2);
+                            ctx.fill();
+                        }
+                        
+                        ctx.fillStyle = lightColor;
+                        for (let i = 0; i < platform.width; i += 12) {
+                            const yPos = platform.y + i * platform.slope;
+                            ctx.fillRect(platform.x + i + 2, yPos, 8, 1);
+                        }
+                        
+                    } else {
+                        ctx.fillStyle = baseColor;
+                        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                        
+                        ctx.fillStyle = darkColor;
+                        for (let i = 0; i < platform.width; i += 12) {
+                            ctx.beginPath();
+                            ctx.moveTo(platform.x + i, platform.y + 2);
+                            ctx.lineTo(platform.x + i + 6, platform.y + 8);
+                            ctx.lineTo(platform.x + i + 12, platform.y + 2);
+                            ctx.lineTo(platform.x + i, platform.y + 2);
+                            ctx.fill();
+                        }
+                        
+                        ctx.fillStyle = lightColor;
+                        ctx.fillRect(platform.x, platform.y, platform.width, 1);
+                        
+                        ctx.fillStyle = '#FFDD00';
+                        for (let i = 20; i < platform.width; i += 40) {
+                            ctx.beginPath();
+                            ctx.arc(platform.x + i, platform.y + 6, 2, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.fillStyle = '#FFFF88';
+                            ctx.beginPath();
+                            ctx.arc(platform.x + i - 1, platform.y + 5, 1, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.fillStyle = '#FFDD00';
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Dibujar Donkey Kong
+        function drawDonkeyKong() {
+            const kong = gameState.donkeyKong;
+            kong.animFrame += 0.08 + (gameState.level - 1) * 0.02;
+            
+            const levelColor = gameState.level > 8 ? '#FF0000' : 
+                              gameState.level > 4 ? '#FF4500' : '#8B4513';
+            
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(kong.x + 10, kong.y + 40, 12, 15);
+            ctx.fillRect(kong.x + 38, kong.y + 40, 12, 15);
+            
+            ctx.fillStyle = levelColor;
+            ctx.fillRect(kong.x + 5, kong.y + 20, kong.width - 10, kong.height - 20);
+            
+            ctx.fillStyle = '#DAA520';
+            ctx.fillRect(kong.x + 18, kong.y + 25, kong.width - 36, 25);
+            
+            ctx.fillStyle = '#A0522D';
+            ctx.fillRect(kong.x + 8, kong.y - 5, kong.width - 16, 30);
+            
+            ctx.fillStyle = '#CD853F';
+            ctx.fillRect(kong.x + 12, kong.y + 2, kong.width - 24, 20);
+            
+            ctx.fillStyle = levelColor;
+            const armOffset1 = Math.sin(kong.animFrame) * 4;
+            const armOffset2 = Math.sin(kong.animFrame + Math.PI) * 4;
+            
+            ctx.fillRect(kong.x - 12, kong.y + 18 + armOffset1, 18, 15);
+            ctx.fillRect(kong.x - 8, kong.y + 28 + armOffset1, 12, 12);
+            
+            ctx.fillRect(kong.x + kong.width - 6, kong.y + 18 + armOffset2, 18, 15);
+            ctx.fillRect(kong.x + kong.width - 4, kong.y + 28 + armOffset2, 12, 12);
+            
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(kong.x - 15, kong.y + 38 + armOffset1, 12, 10);
+            ctx.fillRect(kong.x + kong.width + 3, kong.y + 38 + armOffset2, 12, 10);
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(kong.x + 16, kong.y + 8, 6, 4);
+            ctx.fillRect(kong.x + 28, kong.y + 8, 6, 4);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(kong.x + 18, kong.y + 9, 3, 3);
+            ctx.fillRect(kong.x + 30, kong.y + 9, 3, 3);
+            
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(kong.x + 15, kong.y + 6, 8, 2);
+            ctx.fillRect(kong.x + 27, kong.y + 6, 8, 2);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(kong.x + 23, kong.y + 13, 6, 3);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(kong.x + 20, kong.y + 18, 12, 4);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(kong.x + 21, kong.y + 18, 2, 2);
+            ctx.fillRect(kong.x + 24, kong.y + 18, 2, 2);
+            ctx.fillRect(kong.x + 27, kong.y + 18, 2, 2);
+            ctx.fillRect(kong.x + 30, kong.y + 18, 2, 2);
+            
+            ctx.fillStyle = '#CC0000';
+            ctx.fillRect(kong.x + 25, kong.y + 25, 10, 20);
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 8px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('DK', kong.x + 30, kong.y + 37);
+            
+            ctx.fillStyle = '#FFFF00';
+            ctx.font = 'bold 10px Arial';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeText('DONKEY KONG', kong.x + kong.width/2, kong.y - 8);
+            ctx.fillText('DONKEY KONG', kong.x + kong.width/2, kong.y - 8);
+            
+            const difficulty = getDifficultySettings();
+            ctx.fillStyle = '#FF0000';
+            ctx.font = 'bold 8px Arial';
+            ctx.fillText(`NIVEL ${gameState.level} - ${difficulty.description}`, kong.x + kong.width/2, kong.y + kong.height + 8);
+        }
+        
+        // Dibujar Princesa
+        function drawPrincess() {
+            const princess = gameState.princess;
+            
+            ctx.fillStyle = '#FFB6C1';
+            ctx.fillRect(princess.x - 2, princess.y + 20, princess.width + 4, princess.height - 20);
+            
+            ctx.fillStyle = '#FF69B4';
+            ctx.fillRect(princess.x + 3, princess.y + 15, princess.width - 6, 10);
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(princess.x + 2, princess.y + 18, princess.width - 4, 2);
+            ctx.fillRect(princess.x + 4, princess.y + 22, princess.width - 8, 1);
+            
+            ctx.fillStyle = '#FFDBAC';
+            ctx.fillRect(princess.x + 4, princess.y + 2, princess.width - 8, 16);
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(princess.x + 2, princess.y, princess.width - 4, 10);
+            ctx.fillRect(princess.x, princess.y + 8, 6, 18);
+            ctx.fillRect(princess.x + princess.width - 6, princess.y + 8, 6, 18);
+            ctx.fillRect(princess.x + 5, princess.y - 1, princess.width - 10, 4);
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(princess.x + 5, princess.y - 4, princess.width - 10, 3);
+            ctx.fillRect(princess.x + 6, princess.y - 7, 2, 3);
+            ctx.fillRect(princess.x + 10, princess.y - 8, 2, 4);
+            ctx.fillRect(princess.x + 14, princess.y - 7, 2, 3);
+            
+            ctx.fillStyle = '#FF1493';
+            ctx.fillRect(princess.x + 11, princess.y - 7, 2, 2);
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(princess.x + 7, princess.y + 7, 3, 3);
+            ctx.fillRect(princess.x + 15, princess.y + 7, 3, 3);
+            
+            ctx.fillStyle = '#0066FF';
+            ctx.fillRect(princess.x + 8, princess.y + 8, 2, 2);
+            ctx.fillRect(princess.x + 16, princess.y + 8, 2, 2);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(princess.x + 7, princess.y + 7, 3, 1);
+            ctx.fillRect(princess.x + 15, princess.y + 7, 3, 1);
+            
+            ctx.fillStyle = '#FFAAAA';
+            ctx.fillRect(princess.x + 12, princess.y + 10, 1, 2);
+            
+            ctx.fillStyle = '#FF1493';
+            ctx.fillRect(princess.x + 10, princess.y + 13, 5, 2);
+            
+            ctx.fillStyle = '#FFDBAC';
+            ctx.fillRect(princess.x - 4, princess.y + 15, 6, 10);
+            ctx.fillRect(princess.x + princess.width - 2, princess.y + 15, 6, 10);
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(princess.x - 4, princess.y + 22, 6, 6);
+            ctx.fillRect(princess.x + princess.width - 2, princess.y + 22, 6, 6);
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(princess.x + 3, princess.y + 9, 2, 2);
+            ctx.fillRect(princess.x + princess.width - 5, princess.y + 9, 2, 2);
+            
+            ctx.fillStyle = '#FF0000';
+            ctx.font = 'bold 8px Arial';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 2;
+            ctx.strokeText('HELP ME!', princess.x + princess.width/2, princess.y - 12);
+            ctx.fillText('HELP ME!', princess.x + princess.width/2, princess.y - 12);
+        }
+        
+        // Dibujar barriles
+        function drawIntruders() {
+            gameState.intruders.forEach(intruder => {
+                ctx.save();
+                ctx.translate(intruder.x + intruder.width/2, intruder.y + intruder.height/2);
+                ctx.rotate(intruder.rotation);
+                
+                const barrelColor = '#FF6600';
+                const darkBarrel = '#CC3300';
+                const lightBarrel = '#FFB366';
+                const rimColor = '#444444';
+                
+                const w = intruder.width;
+                const h = intruder.height;
+                
+                ctx.fillStyle = barrelColor;
+                ctx.fillRect(-w/2, -h/2, w, h);
+                
+                ctx.fillStyle = lightBarrel;
+                ctx.fillRect(-w/2, -h/2 + h*0.2, w, h*0.6);
+                
+                ctx.fillStyle = rimColor;
+                ctx.fillRect(-w/2, -h/2 + 3, w, 4);
+                ctx.fillRect(-w/2, -h/2 + h - 7, w, 4);
+                ctx.fillRect(-w/2, -h/2 + h/2 - 2, w, 4);
+                
+                ctx.fillStyle = '#888888';
+                ctx.fillRect(-w/2, -h/2 + 3, w, 1);
+                ctx.fillRect(-w/2, -h/2 + h - 7, w, 1);
+                ctx.fillRect(-w/2, -h/2 + h/2 - 2, w, 1);
+                
+                ctx.fillStyle = darkBarrel;
+                ctx.fillRect(-w/2 + w - 6, -h/2, 6, h);
+                ctx.fillRect(-w/2, -h/2 + h - 6, w, 6);
+                
+                ctx.fillStyle = '#FFDD88';
+                ctx.fillRect(-w/2, -h/2, 4, h);
+                ctx.fillRect(-w/2, -h/2, w, 4);
+                
+                ctx.fillStyle = '#DD5500';
+                for (let i = -w/2 + 6; i < w/2 - 6; i += 6) {
+                    ctx.fillRect(i, -h/2 + 8, 2, h - 16);
+                }
+                
+                ctx.fillStyle = '#AA2200';
+                ctx.fillRect(-w/2 + w*0.25, -h/2 + 6, 2, h - 12);
+                ctx.fillRect(-w/2 + w*0.75, -h/2 + 6, 2, h - 12);
+                
+                ctx.restore();
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 5;
+                ctx.strokeText(
+                    intruder.letter, 
+                    intruder.x + intruder.width/2, 
+                    intruder.y + intruder.height/2 + 6
+                );
+                ctx.fillText(
+                    intruder.letter, 
+                    intruder.x + intruder.width/2, 
+                    intruder.y + intruder.height/2 + 6
+                );
+            });
+        }
+        
+        // Mostrar mensaje temporal
+        let messageText = '';
+        let messageTimer = 0;
+        function showMessage(text) {
+            messageText = text;
+            messageTimer = 120;
+        }
+        
+        // Dibujar mensaje temporal
+        function drawMessage() {
+            if (messageTimer > 0) {
+                messageTimer--;
+                ctx.fillStyle = `rgba(255, 255, 0, ${messageTimer / 120})`;
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.strokeText(messageText, canvas.width/2, 100);
+                ctx.fillText(messageText, canvas.width/2, 100);
+            }
+        }
+        
+        // Dibujar ítems objetivo
+        function drawTargetItems() {
+            gameState.targetItems.forEach(item => {
+                if (item.collected) return;
+                
+                const glowIntensity = Math.sin(item.animFrame * 3) * 0.3 + 0.7;
+                
+                ctx.fillStyle = item.type === 'life' ? `rgba(0, 255, 0, ${glowIntensity * 0.5})` : `rgba(255, 215, 0, ${glowIntensity * 0.5})`;
+                ctx.fillRect(item.x - 3, item.y - 3, item.width + 6, item.height + 6);
+                
+                ctx.fillStyle = item.type === 'life' ? '#00FF00' : '#FFD700';
+                ctx.fillRect(item.x, item.y, item.width, item.height);
+                
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(item.x, item.y, item.width, item.height);
+                
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 18px Arial';
+                ctx.textAlign = 'center';
+                
+                ctx.fillText(
+                    item.letter, 
+                    item.x + item.width/2 + 1, 
+                    item.y + item.height/2 + 6 + 1
+                );
+                
+                ctx.fillStyle = item.type === 'life' ? '#FFFFFF' : '#000';
+                ctx.fillText(
+                    item.letter, 
+                    item.x + item.width/2, 
+                    item.y + item.height/2 + 6
+                );
+                
+                ctx.font = 'bold 10px Arial';
+                if (item.type === 'life') {
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillText('♥', item.x + item.width - 5, item.y + 8);
+                } else {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.fillText('★', item.x + item.width - 5, item.y + 8);
+                }
+            });
+        }
+        
+        // Dibujar power-ups
+        function drawPowerUps() {
+            gameState.powerUps.forEach(powerUp => {
+                if (powerUp.collected) return;
+                
+                const glowIntensity = Math.sin(powerUp.animFrame * 4) * 0.4 + 0.6;
+                const x = powerUp.x;
+                const y = powerUp.y;
+                
+                switch(powerUp.type) {
+                    case 'hammer':
+                        ctx.fillStyle = `rgba(139, 69, 19, ${glowIntensity})`;
+                        ctx.fillRect(x - 2, y - 2, powerUp.width + 4, powerUp.height + 4);
+                        
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(x + 8, y + 5, 4, 15);
+                        
+                        ctx.fillStyle = '#666666';
+                        ctx.fillRect(x + 2, y + 2, 16, 8);
+                        
+                        ctx.fillStyle = '#999999';
+                        ctx.fillRect(x + 2, y + 2, 16, 3);
+                        break;
+                        
+                    case 'purse':
+                        ctx.fillStyle = `rgba(255, 20, 147, ${glowIntensity})`;
+                        ctx.fillRect(x - 2, y - 2, powerUp.width + 4, powerUp.height + 4);
+                        
+                        ctx.fillStyle = '#FF1493';
+                        ctx.fillRect(x + 2, y + 8, 20, 12);
+                        ctx.fillRect(x + 8, y + 5, 8, 8);
+                        
+                        ctx.fillStyle = '#FFD700';
+                        ctx.fillRect(x + 10, y + 7, 4, 3);
+                        break;
+                        
+                    case 'hat':
+                        ctx.fillStyle = `rgba(255, 20, 147, ${glowIntensity})`;
+                        ctx.fillRect(x - 2, y - 2, powerUp.width + 4, powerUp.height + 4);
+                        
+                        ctx.fillStyle = '#FF1493';
+                        ctx.fillRect(x + 3, y + 5, 18, 8);
+                        ctx.fillRect(x + 7, y + 2, 10, 8);
+                        
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(x + 16, y, 3, 10);
+                        break;
+                        
+                    case 'umbrella':
+                        ctx.fillStyle = `rgba(0, 100, 255, ${glowIntensity})`;
+                        ctx.fillRect(x - 2, y - 2, powerUp.width + 4, powerUp.height + 4);
+                        
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(x + 11, y + 8, 2, 12);
+                        
+                        ctx.fillStyle = '#0066FF';
+                        ctx.fillRect(x + 2, y + 5, 20, 8);
+                        
+                        ctx.fillStyle = '#333333';
+                        for (let i = 0; i < 4; i++) {
+                            ctx.fillRect(x + 4 + i * 4, y + 3, 1, 6);
+                        }
+                        break;
+                }
+                
+                if (powerUp.points > 0) {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = 'bold 8px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`+${powerUp.points}`, x + powerUp.width/2, y - 5);
+                }
+            });
+        }
+        
+        // Completar nivel
+        function completeLevel() {
+            const levelBonus = gameState.level * 200;
+            gameState.score += levelBonus;
+            gameState.level++;
+            
+            showMessage(`¡NIVEL ${gameState.level - 1} COMPLETADO!`);
+            
+            setTimeout(() => {
+                showMessage(`¡NIVEL ${gameState.level}! +${levelBonus} puntos`);
+                
+                gameState.player.x = 100;
+                gameState.player.y = 540;
+                gameState.player.velocityY = 0;
+                gameState.player.onLadder = false;
+                gameState.player.onGround = false;
+                
+                gameState.intruders = [];
+                gameState.targetItems = [];
+                gameState.levelCompleting = false;
+                
+                updateUI();
+            }, 2000);
+        }
+        
+        // Actualizar UI
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('lives').textContent = gameState.lives;
+            document.getElementById('level').textContent = gameState.level;
+            
+            const difficulty = getDifficultySettings();
+            const difficultyInfo = document.getElementById('difficultyInfo');
+            if (difficultyInfo) {
+                difficultyInfo.innerHTML = `
+                    <strong>Dificultad:</strong> ${difficulty.description} | 
+                    <strong>Barriles máx:</strong> ${difficulty.maxBarrels} | 
+                    <strong>Frecuencia:</strong> ${(difficulty.spawnRate/1000).toFixed(1)}s
+                `;
+            }
+            
+            if (gameState.lives <= 0) {
+                showMessage(`¡JUEGO TERMINADO! Puntuación: ${gameState.score}`);
+                setTimeout(() => {
+                    if (confirm(`¡Juego terminado! Puntuación final: ${gameState.score}\n¿Quieres jugar de nuevo?`)) {
+                        gameState.lives = 3;
+                        gameState.score = 0;
+                        gameState.level = 1;
+                        gameState.intruders = [];
+                        gameState.targetItems = [];
+                        gameState.levelCompleting = false;
+                        gameState.player.x = 100;
+                        gameState.player.y = 540;
+                        updateUI();
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Loop principal del juego
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            updatePlayer();
+            updateIntruders();
+            
+            drawPlatforms();
+            drawDonkeyKong();
+            drawPrincess();
+            drawTargetItems();
+            drawPowerUps();
+            drawPlayer();
+            drawIntruders();
+            drawMessage();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            gameState.keys[e.key] = true;
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            gameState.keys[e.key] = false;
+        });
+        
+        // Controles táctiles
+        document.getElementById('leftBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowLeft'] = true;
+        });
+        document.getElementById('leftBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowLeft'] = false;
+        });
+        
+        document.getElementById('rightBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowRight'] = true;
+        });
+        document.getElementById('rightBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowRight'] = false;
+        });
+        
+        document.getElementById('jumpBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.keys[' '] = true;
+        });
+        document.getElementById('jumpBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            gameState.keys[' '] = false;
+        });
+        
+        document.getElementById('leftBtn').addEventListener('mousedown', () => gameState.keys['ArrowLeft'] = true);
+        document.getElementById('leftBtn').addEventListener('mouseup', () => gameState.keys['ArrowLeft'] = false);
+        document.getElementById('rightBtn').addEventListener('mousedown', () => gameState.keys['ArrowRight'] = true);
+        document.getElementById('rightBtn').addEventListener('mouseup', () => gameState.keys['ArrowRight'] = false);
+        document.getElementById('jumpBtn').addEventListener('mousedown', () => gameState.keys[' '] = true);
+        document.getElementById('jumpBtn').addEventListener('mouseup', () => gameState.keys[' '] = false);
+        
+        document.getElementById('upBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowUp'] = true;
+        });
+        document.getElementById('upBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowUp'] = false;
+        });
+        
+        document.getElementById('downBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowDown'] = true;
+        });
+        document.getElementById('downBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            gameState.keys['ArrowDown'] = false;
+        });
+        
+        document.getElementById('upBtn').addEventListener('mousedown', () => gameState.keys['ArrowUp'] = true);
+        document.getElementById('upBtn').addEventListener('mouseup', () => gameState.keys['ArrowUp'] = false);
+        document.getElementById('downBtn').addEventListener('mousedown', () => gameState.keys['ArrowDown'] = true);
+        document.getElementById('downBtn').addEventListener('mouseup', () => gameState.keys['ArrowDown'] = false);
+        
+        document.getElementById('debugBtn').addEventListener('click', () => {
+            alert(`Posición: X=${Math.round(gameState.player.x)}, Y=${Math.round(gameState.player.y)}, EnEscalera=${gameState.player.onLadder}, Items=${gameState.targetItems.length}, Barriles=${gameState.intruders.length}, Nivel=${gameState.level}`);
+        });
+        
+        // Soporte para modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Sistema de partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Posición aleatoria
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100vh';
+                
+                // Duración aleatoria
+                const duration = Math.random() * 3 + 4;
+                particle.style.animationDuration = duration + 's';
+                
+                // Delay aleatorio
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                // Remover partícula después de la animación
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, (duration + 2) * 1000);
+            }
+            
+            // Crear partículas periódicamente
+            setInterval(createParticle, 300);
+            
+            // Crear algunas partículas iniciales
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createParticle, i * 200);
+            }
+        }
+        
+        // Efectos de transición entre pantallas
+        function addScreenTransition(exitScreen, enterScreen) {
+            exitScreen.classList.add('screen-exit');
+            
+            setTimeout(() => {
+                exitScreen.style.display = 'none';
+                exitScreen.classList.remove('screen-exit');
+                
+                enterScreen.style.display = 'block';
+                enterScreen.classList.add('screen-enter');
+                
+                setTimeout(() => {
+                    enterScreen.classList.remove('screen-enter');
+                }, 500);
+            }, 250);
+        }
+        
+        // Control de navegación entre pantallas mejorado
+        function showStep1() {
+            const step2 = document.getElementById('introStep2');
+            const step1 = document.getElementById('introStep1');
+            const gameScreen = document.getElementById('gameScreen');
+            
+            if (step2.style.display !== 'none') {
+                addScreenTransition(step2, step1);
+            } else if (gameScreen.style.display !== 'none') {
+                addScreenTransition(gameScreen, step1);
+            } else {
+                step1.style.display = 'block';
+                step2.style.display = 'none';
+                gameScreen.style.display = 'none';
+            }
+        }
+        
+        function showStep2() {
+            const step1 = document.getElementById('introStep1');
+            const step2 = document.getElementById('introStep2');
+            
+            addScreenTransition(step1, step2);
+        }
+        
+        function showGameScreen() {
+            const step2 = document.getElementById('introStep2');
+            const gameScreen = document.getElementById('gameScreen');
+            
+            // Transición especial al juego
+            step2.classList.add('screen-exit');
+            
+            setTimeout(() => {
+                step2.style.display = 'none';
+                step2.classList.remove('screen-exit');
+                
+                gameScreen.style.display = 'block';
+                gameScreen.classList.add('screen-enter');
+                
+                setTimeout(() => {
+                    gameScreen.classList.remove('screen-enter');
+                }, 500);
+                
+                // Inicializar juego
+                initializeLetterButtons();
+                setTargetLetter('P');
+                updateUI();
+                gameLoop();
+            }, 250);
+        }
+        
+        // Event listeners para navegación
+        document.getElementById('nextStep1Btn').addEventListener('click', showStep2);
+        document.getElementById('backStep2Btn').addEventListener('click', showStep1);
+        document.getElementById('nextStep2Btn').addEventListener('click', showGameScreen);
+        
+        // Inicializar efectos automáticamente al cargar
+        createParticles();
+    </script>
+
+
+</body></html>

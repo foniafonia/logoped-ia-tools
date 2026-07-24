@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keys for Speed</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="icon" href="img/icono.webp" type="image/x-icon">
+</head>
+<body>
+    <h1>KEYS FOR SPEED</h1>
+    <h2 id="letra"></h2>
+    <h3 id="mensaje"></h3>
+    <h3 id="puntaje"></h3>
+    <h3 id="temporizador"></h3>
+    <button id="reiniciar" style="display: none;">Reiniciar</button>
+
+    <script>
+        /**
+         * @name: Diego André Corneejo Giraldo
+         * @description: Juego de velocidad de escritura en el que el jugador debe presionar la tecla correspondiente a la letra mostrada en pantalla.
+         * @date 18-10-2024
+        */ 
+        // Definimos un array con todas las letras del abecedario español, incluyendo la 'ñ'.
+        let abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        
+        // Definimos un array con las vocales.
+        let vocales = ['a', 'e', 'i', 'o', 'u'];
+        
+        // Seleccionamos una letra aleatoria del abecedario.
+        let letraRandom = abecedario[Math.floor(Math.random() * abecedario.length)];
+        
+        // Inicializamos el puntaje en 0.
+        let puntaje = 0;
+        
+        // Inicializamos el tiempo restante en 5 segundos.
+        let tiempoRestante = 5;
+        
+        // Definimos el decremento de tiempo por cada letra acertada.
+        let decrementoTiempo = 0.1;
+    
+        // Mostramos la letra aleatoria en el elemento con id 'letra'.
+        document.getElementById('letra').textContent = letraRandom;
+        
+        // Mostramos el puntaje inicial en el elemento con id 'puntaje'.
+        document.getElementById('puntaje').textContent = 'Puntaje: ' + puntaje;
+        
+        // Mostramos el tiempo restante inicial en el elemento con id 'temporizador'.
+        document.getElementById('temporizador').textContent = 'Tiempo restante: ' + tiempoRestante + 's';
+    
+        // Creamos un intervalo que se ejecuta cada 100 milisegundos para decrementar el tiempo restante.
+        let temporizadorInterval = setInterval(function() {
+            tiempoRestante -= decrementoTiempo;
+            document.getElementById('temporizador').textContent = 'Tiempo restante: ' + tiempoRestante.toFixed(1) + 's';
+            
+            // Si el tiempo restante llega a 0, terminamos el juego.
+            if (tiempoRestante <= 0) {
+                clearInterval(temporizadorInterval);
+                document.getElementById('mensaje').textContent = 'Juego terminado';
+                document.getElementById('puntaje').textContent = 'Puntaje final: ' + puntaje;
+                document.removeEventListener('keydown', keydownHandler);
+                document.getElementById('reiniciar').style.display = 'block';
+            }
+        }, 100);
+    
+        // Función que maneja el evento de presionar una tecla.
+        function keydownHandler(event) {
+            // Verificamos si la tecla presionada está en el abecedario.
+            if (abecedario.includes(event.key.toLowerCase())) {
+                // Si la tecla presionada es la letra aleatoria, incrementamos el puntaje.
+                if (event.key.toLowerCase() === letraRandom) {
+                    puntaje++;
+                    letraRandom = abecedario[Math.floor(Math.random() * abecedario.length)];
+                    document.getElementById('letra').textContent = letraRandom;
+                    document.getElementById('puntaje').textContent = 'Puntaje: ' + puntaje;
+    
+                    // Si la letra es una vocal, añadimos un segundo al tiempo restante.
+                    if (vocales.includes(event.key.toLowerCase())) {
+                        tiempoRestante += 1;
+                    }
+                } else {
+                    // Si la letra presionada no es la correcta, terminamos el juego.
+                    document.getElementById('mensaje').textContent = 'Juego terminado';
+                    document.getElementById('puntaje').textContent = 'Puntaje final: ' + puntaje;
+                    clearInterval(temporizadorInterval);
+                    document.removeEventListener('keydown', keydownHandler);
+                    document.getElementById('reiniciar').style.display = 'block';
+                }
+            }
+        }
+    
+        // Añadimos un event listener para detectar cuando se presiona una tecla.
+        document.addEventListener('keydown', keydownHandler);
+    
+        // Añadimos un event listener al botón de reiniciar para recargar la página.
+        document.getElementById('reiniciar').addEventListener('click', function() {
+            location.reload();
+        });
+    </script>
+</body>
+</html>

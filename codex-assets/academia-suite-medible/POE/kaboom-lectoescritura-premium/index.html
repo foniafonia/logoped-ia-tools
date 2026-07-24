@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KABOOM Lectoescritura Premium</title>
+  <meta name="description" content="Juego profesional de lectoescritura por equipos con niveles Inicial y Avanzado.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-2: #e8eef7;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #13233c;
+      --muted: #4d6487;
+      --line: #dbe4f0;
+      --brand: #0d5ea8;
+      --brand-2: #1c86c8;
+      --accent: #ff8a00;
+      --danger: #d72638;
+      --success: #178f56;
+      --shadow: 0 10px 30px rgba(10, 36, 74, 0.12);
+      --radius-s: 12px;
+      --radius-m: 18px;
+      --radius-l: 24px;
+      --team-1: #e63946;
+      --team-2: #2a9d8f;
+      --team-3: #f77f00;
+      --team-4: #7b2d8e;
+      --team-5: #264653;
+      --team-6: #e056a0;
+    }
+
+    .dark {
+      --bg: #0e1726;
+      --bg-2: #15253d;
+      --surface: #1a2c47;
+      --surface-2: #203655;
+      --text: #ecf3ff;
+      --muted: #a2b9dc;
+      --line: #304f76;
+      --shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Outfit, system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 500px at 0% -10%, rgba(28, 134, 200, 0.15), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(255, 138, 0, 0.12), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 20px 14px 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .hero {
+      background: linear-gradient(135deg, #0d5ea8, #1c86c8 60%, #67b8e8);
+      color: #fff;
+      border-radius: var(--radius-l);
+      padding: 28px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      right: -80px;
+      top: -90px;
+    }
+    .hero h1 {
+      font-family: Sora, Outfit, sans-serif;
+      margin: 0;
+      font-size: clamp(1.9rem, 6.2vw, 3rem);
+      letter-spacing: 0.02em;
+      position: relative;
+      z-index: 1;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      opacity: 0.96;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-m);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .panel h2, .panel h3 {
+      margin-top: 0;
+      font-family: Sora, Outfit, sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    input, select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 11px 12px;
+      font-family: Outfit, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    input:focus, select:focus, button:focus-visible {
+      outline: 3px solid rgba(28, 134, 200, 0.25);
+      outline-offset: 1px;
+    }
+
+    .team-names {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .team-item {
+      background: var(--surface-2);
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .team-dot { width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto; }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 10px 16px;
+      font-family: Outfit, sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn:active { transform: translateY(1px) scale(0.99); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(13, 94, 168, 0.33);
+    }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-muted { background: #cbd5e1; color: #1e293b; }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      background: rgba(28, 134, 200, 0.14);
+      border: 1px solid rgba(28, 134, 200, 0.25);
+      color: var(--brand);
+      font-weight: 800;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .status-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-2);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .status-card b {
+      display: block;
+      font-family: Sora, Outfit, sans-serif;
+      font-size: 1.18rem;
+      margin-top: 3px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+    }
+
+    .challenge-box {
+      border: 2px dashed var(--line);
+      border-radius: 14px;
+      background: var(--surface-2);
+      padding: 14px;
+      min-height: 148px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .challenge-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: Sora, Outfit, sans-serif;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .team-score {
+      border-radius: 12px;
+      color: #fff;
+      padding: 10px;
+      transition: transform .2s ease;
+    }
+    .team-score.active {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.4);
+    }
+
+    .team-score .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .team-score small { opacity: .92; }
+
+    .rules {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .feedback {
+      min-height: 24px;
+      margin: 10px 0 2px;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .feedback.success { color: var(--success); }
+    .feedback.fail { color: var(--danger); }
+    .feedback.kaboom { color: #a40f1f; font-size: 1.1rem; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 14px;
+      background: rgba(4, 16, 34, 0.55);
+      z-index: 30;
+    }
+    .overlay.active { display: grid; }
+
+    .modal {
+      width: min(560px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .modal h3 { margin: 0 0 8px; }
+    .modal p { margin: 0 0 10px; color: var(--muted); font-weight: 600; }
+
+    .win-text {
+      font-family: Sora, Outfit, sans-serif;
+      font-size: clamp(1.15rem, 2.7vw, 1.6rem);
+      margin: 8px 0 0;
+    }
+
+    .kbd {
+      border: 1px solid var(--line);
+      border-bottom-width: 3px;
+      border-radius: 8px;
+      padding: 1px 6px;
+      background: var(--surface-2);
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    @media (max-width: 860px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="setupScreen" class="screen active" aria-label="Configuración inicial">
+      <div class="hero">
+        <h1>🧨 KABOOM Lectoescritura Premium</h1>
+        <p>Versión profesional para intervención educativa, aula y terapia de lenguaje.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Configuración de la partida</h2>
+        <div class="setup-grid">
+          <label>
+            Nivel
+            <select id="levelSelect">
+              <option value="inicial">Inicial</option>
+              <option value="avanzado">Avanzado</option>
+            </select>
+          </label>
+
+          <label>
+            Número de equipos (2-6)
+            <input id="teamCount" type="number" min="2" max="6" value="2">
+          </label>
+
+          <label>
+            Modo pedagógico
+            <select id="pedagogicMode">
+              <option value="general">General</option>
+              <option value="fluidez">Fluidez lectora</option>
+              <option value="morfosintaxis">Morfosintaxis</option>
+              <option value="expresion">Expresión oral</option>
+            </select>
+          </label>
+
+          <label>
+            Temporizador por reto (segundos)
+            <input id="timerPerTurn" type="number" min="20" max="180" value="60">
+          </label>
+        </div>
+
+        <div id="teamNames" class="team-names" aria-label="Nombres de equipos"></div>
+
+        <div class="actions">
+          <button id="startGameBtn" class="btn btn-primary">Comenzar partida</button>
+          <button id="toggleThemeBtn" class="btn btn-muted" type="button">Tema oscuro</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen" aria-label="Pantalla de juego">
+      <div class="panel">
+        <div class="toolbar">
+          <div class="actions">
+            <span id="levelBadge" class="badge">Nivel Inicial</span>
+            <span id="modeBadge" class="badge">Modo General</span>
+          </div>
+          <div class="actions">
+            <button id="rulesBtn" class="btn btn-muted" type="button">Reglas</button>
+            <button id="restartBtn" class="btn btn-muted" type="button">Reiniciar</button>
+          </div>
+        </div>
+
+        <div class="status">
+          <div class="status-card">Turno<b id="turnTeam">Equipo 1</b></div>
+          <div class="status-card">Palitos restantes<b id="sticksLeft">26</b></div>
+          <div class="status-card">Reto #<b id="drawCount">0</b></div>
+          <div class="status-card">Tiempo<b id="timerLabel">--</b></div>
+        </div>
+
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="main-grid">
+        <div class="panel">
+          <h3>Reto actual</h3>
+          <div id="challengeBox" class="challenge-box">Pulsa <strong>Sacar palito</strong> para empezar.</div>
+          <div class="actions" style="margin-top:10px;">
+            <button id="drawBtn" class="btn btn-primary">Sacar palito</button>
+            <button id="successBtn" class="btn btn-success" disabled>Logrado</button>
+            <button id="failBtn" class="btn btn-danger" disabled>No logrado</button>
+          </div>
+          <div class="rules">
+            Atajos: <span class="kbd">D</span> sacar palito · <span class="kbd">1</span> logrado · <span class="kbd">2</span> no logrado
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Marcador</h3>
+          <div id="scoreGrid" class="score-grid"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="modalOverlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <h3 id="modalTitle">Reglas</h3>
+      <p id="modalText">Texto</p>
+      <div class="actions">
+        <button id="modalCloseBtn" class="btn btn-primary" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const TEAM_COLORS = ['var(--team-1)','var(--team-2)','var(--team-3)','var(--team-4)','var(--team-5)','var(--team-6)'];
+
+      const BOARD_INICIAL = [
+        'dibuja_frase','lee_como_si','escribe_palabra','imita_gestos',
+        'di_palabra','lee_como_si','escribe_palabra','lee_como_si',
+        'imita_gestos','lee_como_si','escribe_palabra','di_palabra',
+        'imita_gestos','lee_como_si','dibuja_frase','lee_como_si',
+        'di_palabra','escribe_palabra','imita_gestos','di_palabra',
+        'escribe_palabra','di_palabra'
+      ];
+
+      const BOARD_AVANZADO = [
+        'corrige_oracion','lee_como_si','escribe_oracion','representa_gestos',
+        'explica_sin','lee_como_si','escribe_oracion','corrige_oracion',
+        'representa_gestos','lee_como_si','escribe_oracion','explica_sin',
+        'representa_gestos','lee_como_si','corrige_oracion','lee_como_si',
+        'explica_sin','escribe_oracion','representa_gestos','explica_sin',
+        'escribe_oracion','corrige_oracion'
+      ];
+
+      const DATA = {
+        escribe_palabra: ['Piña','Manzana','Plátano','Uvas','Maleta','Flor','Ola','Bañador','Tijeras','Corona','Zapatillas','Oso','Cactus','Sol','Sopa','Seta','Paloma','Gato','Hueso','Regalo','Llave','Tambor','Silla','Serpiente'],
+        imita_gestos: ['Gato','Serpiente','Conejo','León','Perro','Pájaro','Ola','Oso','Avión','Coche','Moto','Ambulancia','Ratón','Gusano','Mariposa','Elefante'],
+        dibuja_frase: ['La nube está detrás del sol','El gato es marrón','El bebé coge el biberón','Tengo tres lápices de colores','Dos perros jugando','La niña está leyendo un libro','El ratón come queso','Un cuadrado de color verde','El sol está sonriendo','La luna está triste','La flor es azul','Tengo una moneda de 2€','El delfín azul','Un payaso de pelo rojo','Un ratón sonriendo','Unas cerezas rojas'],
+        lee_como_si: ['fueras un ROBOT','tuvieras mucho FRÍO','estuvieras ENFADADO/A','estuvieras TRISTE','estuvieras CANTANDO','tuvieras MIEDO','estuvieras en CÁMARA LENTA','fueras un MAGO','estuvieras contando un SECRETO','fueras un MONSTRUO','estuvieras nervioso/a','tuvieras mucha PRISA','fueras un BEBÉ','fueras presentador/a de TV','acabaras de ganar un PREMIO'],
+        lee_frases: ['El sol brilla sobre las montañas cada mañana.','Mi abuela cocina la mejor sopa del mundo.','Los pájaros cantan mientras vuelan por el cielo.','El perro corre rápido por el jardín verde.','Las estrellas iluminan la noche oscura.','Mi mejor amigo siempre me hace reír.','La profesora explicó la lección con mucha paciencia.','Comimos una tarta de chocolate deliciosa.','La lluvia mojó las calles de la ciudad.','Preparamos una fiesta sorpresa para mamá.'],
+        letra_sets: [['A','B','C','D','E','F','G','H'],['I','J','K','L','LL','M','N','Ñ'],['O','P','Q','R','S','T','U','V'],['W','X','Y','Z']],
+        corrige_oracion: ['Mis amigos estaba cansado despues del partido.','Yo hize los deberes antes de cenar.','Mi perro y mi gato es muy travieso.','El arbol del patio es muy grande.','No se porque no vinistes ayer.','Ayer los niño jugaba en el patio del colegio.','Los alumnos fue al museo con su profesora.','Mi mama preparo una tarta para mi cumpleaños.'],
+        escribe_oracion: [['amigo','colegio','recreo','familia'],['leer','escribir'],['compartir','flor','sol'],['desayuno','merienda','excursión'],['gato','ventana'],['noche','ruido']],
+        representa_gestos: ['Pingüino','Astronauta','Mago/a','Robot','Chef','Payaso/a','Murciélago','Vampiro','Médico','Profesor/a','Futbolista','Cantante','Delfín','Rana','Ninja'],
+        explica_sin: [{word:'Planeta', forbidden:'Tierra'},{word:'Volcán', forbidden:'Lava'},{word:'Democracia', forbidden:'Votar'},{word:'Sustantivo', forbidden:'Nombre'},{word:'Energía', forbidden:'Electricidad'},{word:'Reloj', forbidden:'Hora'},{word:'Empatía', forbidden:'Sentir'}],
+      };
+
+      const ACTIVITY_META = {
+        dibuja_frase: { icon: '🎨', name: 'Dibuja la frase' },
+        lee_como_si: { icon: '🎭', name: 'Lee como si...' },
+        escribe_palabra: { icon: '✏️', name: 'Escribe la palabra' },
+        imita_gestos: { icon: '🤹', name: 'Imita con gestos' },
+        di_palabra: { icon: '🔠', name: 'Di palabra por letra' },
+        corrige_oracion: { icon: '🔎', name: 'Corrige la oración' },
+        escribe_oracion: { icon: '📝', name: 'Escribe oración' },
+        representa_gestos: { icon: '🎬', name: 'Representa con gestos' },
+        explica_sin: { icon: '🚫', name: 'Explica sin palabra prohibida' },
+      };
+
+      const UI = {
+        setupScreen: document.getElementById('setupScreen'),
+        gameScreen: document.getElementById('gameScreen'),
+        levelSelect: document.getElementById('levelSelect'),
+        pedagogicMode: document.getElementById('pedagogicMode'),
+        timerPerTurn: document.getElementById('timerPerTurn'),
+        teamCount: document.getElementById('teamCount'),
+        teamNames: document.getElementById('teamNames'),
+        startGameBtn: document.getElementById('startGameBtn'),
+        toggleThemeBtn: document.getElementById('toggleThemeBtn'),
+        levelBadge: document.getElementById('levelBadge'),
+        modeBadge: document.getElementById('modeBadge'),
+        rulesBtn: document.getElementById('rulesBtn'),
+        restartBtn: document.getElementById('restartBtn'),
+        turnTeam: document.getElementById('turnTeam'),
+        sticksLeft: document.getElementById('sticksLeft'),
+        drawCount: document.getElementById('drawCount'),
+        timerLabel: document.getElementById('timerLabel'),
+        challengeBox: document.getElementById('challengeBox'),
+        scoreGrid: document.getElementById('scoreGrid'),
+        drawBtn: document.getElementById('drawBtn'),
+        successBtn: document.getElementById('successBtn'),
+        failBtn: document.getElementById('failBtn'),
+        feedback: document.getElementById('feedback'),
+        modalOverlay: document.getElementById('modalOverlay'),
+        modalTitle: document.getElementById('modalTitle'),
+        modalText: document.getElementById('modalText'),
+        modalCloseBtn: document.getElementById('modalCloseBtn'),
+      };
+
+      const state = {
+        level: 'inicial',
+        mode: 'general',
+        timerPerTurn: 60,
+        teamCount: 2,
+        teamNames: [],
+        teamScores: [],
+        activeTeam: 0,
+        stickPool: [],
+        drawnCount: 0,
+        gameRunning: false,
+        challengeOpen: false,
+        used: {},
+        timerRef: null,
+        timerSeconds: null,
+      };
+
+      const lastConfig = loadConfig();
+      if (lastConfig) {
+        UI.levelSelect.value = lastConfig.level;
+        UI.pedagogicMode.value = lastConfig.mode;
+        UI.timerPerTurn.value = String(lastConfig.timerPerTurn);
+        UI.teamCount.value = String(lastConfig.teamCount);
+      }
+
+      function loadConfig() {
+        try {
+          const raw = localStorage.getItem('kaboom-premium-config');
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function saveConfig() {
+        const config = {
+          level: state.level,
+          mode: state.mode,
+          timerPerTurn: state.timerPerTurn,
+          teamCount: state.teamCount,
+        };
+        localStorage.setItem('kaboom-premium-config', JSON.stringify(config));
+      }
+
+      function setDarkBySystem() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        }
+      }
+
+      function makeTeamInputs() {
+        const count = clamp(Number(UI.teamCount.value) || 2, 2, 6);
+        state.teamCount = count;
+        UI.teamCount.value = String(count);
+        UI.teamNames.innerHTML = '';
+
+        for (let i = 0; i < count; i += 1) {
+          const wrap = document.createElement('label');
+          wrap.className = 'team-item';
+
+          const dot = document.createElement('span');
+          dot.className = 'team-dot';
+          dot.style.background = TEAM_COLORS[i];
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 22;
+          input.placeholder = 'Equipo ' + (i + 1);
+          input.value = (state.teamNames[i] || '').trim();
+          input.setAttribute('aria-label', 'Nombre del equipo ' + (i + 1));
+
+          wrap.appendChild(dot);
+          wrap.appendChild(input);
+          UI.teamNames.appendChild(wrap);
+        }
+      }
+
+      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+      function shuffle(arr) {
+        const copy = arr.slice();
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const t = copy[i]; copy[i] = copy[j]; copy[j] = t;
+        }
+        return copy;
+      }
+
+      function getUnused(category, pool) {
+        if (!state.used[category]) state.used[category] = new Set();
+
+        let available = pool.filter((item) => {
+          const key = typeof item === 'string' ? item : JSON.stringify(item);
+          return !state.used[category].has(key);
+        });
+
+        if (!available.length) {
+          state.used[category].clear();
+          available = pool.slice();
+        }
+
+        const pick = available[Math.floor(Math.random() * available.length)];
+        const key = typeof pick === 'string' ? pick : JSON.stringify(pick);
+        state.used[category].add(key);
+        return pick;
+      }
+
+      function buildStickPool(level) {
+        const activities = (level === 'inicial' ? BOARD_INICIAL : BOARD_AVANZADO).slice();
+        const pool = [];
+        for (let i = 0; i < activities.length; i += 1) {
+          pool.push({ type: 'activity', activityType: activities[i] });
+        }
+        for (let i = 0; i < 4; i += 1) pool.push({ type: 'kaboom' });
+        return shuffle(pool);
+      }
+
+      function currentTeamName() {
+        return state.teamNames[state.activeTeam] || ('Equipo ' + (state.activeTeam + 1));
+      }
+
+      function renderState() {
+        UI.levelBadge.textContent = 'Nivel ' + (state.level === 'inicial' ? 'Inicial' : 'Avanzado');
+        UI.modeBadge.textContent = 'Modo ' + modeLabel(state.mode);
+        UI.turnTeam.textContent = currentTeamName();
+        UI.sticksLeft.textContent = String(state.stickPool.length);
+        UI.drawCount.textContent = String(state.drawnCount);
+        UI.timerLabel.textContent = state.timerSeconds == null ? '--' : state.timerSeconds + 's';
+
+        UI.scoreGrid.innerHTML = '';
+        for (let i = 0; i < state.teamCount; i += 1) {
+          const item = document.createElement('div');
+          item.className = 'team-score' + (i === state.activeTeam ? ' active' : '');
+          item.style.background = `linear-gradient(135deg, ${cssVar(TEAM_COLORS[i])}, rgba(255,255,255,0.15))`;
+          item.innerHTML = `
+            <div class="row"><strong>${escapeHtml(state.teamNames[i])}</strong><small>${i === state.activeTeam ? 'Turno actual' : 'En espera'}</small></div>
+            <div class="row"><span>Palitos</span><strong style="font-size:1.35rem;">${state.teamScores[i]}</strong></div>
+          `;
+          UI.scoreGrid.appendChild(item);
+        }
+
+        UI.drawBtn.disabled = !state.gameRunning || state.challengeOpen;
+        UI.successBtn.disabled = !state.challengeOpen;
+        UI.failBtn.disabled = !state.challengeOpen;
+      }
+
+      function cssVar(varName) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || '#1c86c8';
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showFeedback(text, kind) {
+        UI.feedback.className = 'feedback' + (kind ? ' ' + kind : '');
+        UI.feedback.textContent = text;
+      }
+
+      function modeLabel(mode) {
+        if (mode === 'fluidez') return 'Fluidez Lectora';
+        if (mode === 'morfosintaxis') return 'Morfosintaxis';
+        if (mode === 'expresion') return 'Expresión Oral';
+        return 'General';
+      }
+
+      function showScreen(id) {
+        UI.setupScreen.classList.remove('active');
+        UI.gameScreen.classList.remove('active');
+        id.classList.add('active');
+      }
+
+      function initGame() {
+        state.level = UI.levelSelect.value;
+        state.mode = UI.pedagogicMode.value;
+        state.timerPerTurn = clamp(Number(UI.timerPerTurn.value) || 60, 20, 180);
+        state.teamCount = clamp(Number(UI.teamCount.value) || 2, 2, 6);
+        state.teamNames = [];
+
+        const inputs = UI.teamNames.querySelectorAll('input');
+        for (let i = 0; i < inputs.length; i += 1) {
+          const val = (inputs[i].value || '').trim();
+          state.teamNames.push(val || ('Equipo ' + (i + 1)));
+        }
+
+        state.teamScores = Array.from({ length: state.teamCount }, () => 0);
+        state.activeTeam = 0;
+        state.stickPool = buildStickPool(state.level);
+        state.drawnCount = 0;
+        state.gameRunning = true;
+        state.challengeOpen = false;
+        state.used = {};
+        state.timerSeconds = null;
+        stopTimer();
+
+        UI.challengeBox.innerHTML = 'Pulsa <strong>Sacar palito</strong> para empezar.';
+        showFeedback('Partida iniciada. Preparados para intervenir.', 'success');
+        saveConfig();
+        renderState();
+        showScreen(UI.gameScreen);
+      }
+
+      function startTimer() {
+        stopTimer();
+        state.timerSeconds = state.timerPerTurn;
+        UI.timerLabel.textContent = state.timerSeconds + 's';
+
+        state.timerRef = setInterval(() => {
+          state.timerSeconds -= 1;
+          UI.timerLabel.textContent = state.timerSeconds + 's';
+          if (state.timerSeconds <= 0) {
+            stopTimer();
+            if (state.challengeOpen) {
+              resolveChallenge(false, true);
+            }
+          }
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (state.timerRef) {
+          clearInterval(state.timerRef);
+          state.timerRef = null;
+        }
+      }
+
+      function drawStick() {
+        if (!state.gameRunning || state.challengeOpen || !state.stickPool.length) return;
+
+        const drawn = state.stickPool.pop();
+        state.drawnCount += 1;
+
+        if (drawn.type === 'kaboom') {
+          state.teamScores[state.activeTeam] = 0;
+          showFeedback('KABOOM 💥 ' + currentTeamName() + ' pierde todos sus palitos.', 'kaboom');
+          UI.challengeBox.innerHTML = '<span class="challenge-title">💥 KABOOM</span><br>Este equipo vuelve a 0. Pasa turno.';
+          nextTurn();
+          if (!state.stickPool.length) finishGame();
+          renderState();
+          return;
+        }
+
+        const challenge = buildChallenge(drawn.activityType);
+        UI.challengeBox.innerHTML = challenge;
+        state.challengeOpen = true;
+        showFeedback('Reto activo. Evalúa desempeño y marca resultado.', '');
+        startTimer();
+        renderState();
+      }
+
+      function buildChallenge(type) {
+        const meta = ACTIVITY_META[type] || { icon: '📘', name: 'Actividad' };
+        let body = '';
+
+        if (type === 'dibuja_frase') {
+          const t = getUnused('dibuja_frase', DATA.dibuja_frase);
+          body = `<strong>${escapeHtml(t)}</strong><br><small>Dibuja sin hablar para que tu equipo adivine.</small>`;
+        } else if (type === 'lee_como_si') {
+          const frase = getUnused('lee_frases', DATA.lee_frases);
+          const estilo = getUnused('lee_como_si', DATA.lee_como_si);
+          body = `"${escapeHtml(frase)}"<br><small>Léelo como si ${escapeHtml(estilo)}.</small>`;
+        } else if (type === 'escribe_palabra') {
+          const palabra = getUnused('escribe_palabra', DATA.escribe_palabra);
+          body = `Escribe correctamente: <strong>${escapeHtml(palabra)}</strong><br><small>Se valora ortografía y legibilidad.</small>`;
+        } else if (type === 'imita_gestos' || type === 'representa_gestos') {
+          const pool = type === 'imita_gestos' ? DATA.imita_gestos : DATA.representa_gestos;
+          const g = getUnused(type, pool);
+          body = `Representa con gestos: <strong>${escapeHtml(g)}</strong><br><small>Sin voz ni sonidos.</small>`;
+        } else if (type === 'di_palabra') {
+          const letras = getUnused('letra_sets', DATA.letra_sets);
+          body = `Di una palabra válida por cada letra:<br><strong>${letras.join(' · ')}</strong>`;
+        } else if (type === 'corrige_oracion') {
+          const o = getUnused('corrige_oracion', DATA.corrige_oracion);
+          body = `Corrige esta oración:<br><strong>${escapeHtml(o)}</strong>`;
+        } else if (type === 'escribe_oracion') {
+          const words = getUnused('escribe_oracion', DATA.escribe_oracion);
+          body = `Escribe una oración usando todas:<br><strong>${escapeHtml(words.join(', '))}</strong>`;
+        } else if (type === 'explica_sin') {
+          const obj = getUnused('explica_sin', DATA.explica_sin);
+          body = `Explica: <strong>${escapeHtml(obj.word)}</strong><br>No puedes decir: <strong>${escapeHtml(obj.forbidden)}</strong>`;
+        } else {
+          body = 'Actividad libre guiada por docente.';
+        }
+
+        return `<span class="challenge-title">${meta.icon} ${escapeHtml(meta.name)}</span><br>${body}`;
+      }
+
+      function resolveChallenge(success, timedOut) {
+        if (!state.challengeOpen) return;
+
+        stopTimer();
+        state.timerSeconds = null;
+
+        if (success) {
+          state.teamScores[state.activeTeam] += 1;
+          showFeedback('Objetivo logrado. +1 palito para ' + currentTeamName() + '.', 'success');
+        } else {
+          showFeedback(timedOut ? 'Tiempo agotado. Se considera no logrado.' : 'No logrado. Pasa turno.', 'fail');
+        }
+
+        state.challengeOpen = false;
+        nextTurn();
+
+        if (!state.stickPool.length) {
+          finishGame();
+        }
+
+        renderState();
+      }
+
+      function nextTurn() {
+        state.activeTeam = (state.activeTeam + 1) % state.teamCount;
+      }
+
+      function finishGame() {
+        state.gameRunning = false;
+        stopTimer();
+        state.timerSeconds = null;
+
+        const max = Math.max.apply(null, state.teamScores);
+        const winners = [];
+        for (let i = 0; i < state.teamScores.length; i += 1) {
+          if (state.teamScores[i] === max) winners.push(i);
+        }
+
+        if (winners.length === 1) {
+          openModal('Partida finalizada', '🏆 Gana ' + state.teamNames[winners[0]] + ' con ' + max + ' palitos.');
+          showFeedback('Partida completada. Ganador: ' + state.teamNames[winners[0]] + '.', 'success');
+        } else {
+          const names = winners.map((i) => state.teamNames[i]).join(', ');
+          openModal('Partida finalizada', '🤝 Empate técnico entre: ' + names + '. Puedes desempatar con ronda oral extra.');
+          showFeedback('Partida completada con empate.', '');
+        }
+      }
+
+      function openModal(title, text) {
+        UI.modalTitle.textContent = title;
+        UI.modalText.textContent = text;
+        UI.modalOverlay.classList.add('active');
+        UI.modalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        UI.modalOverlay.classList.remove('active');
+        UI.modalOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      function showRules() {
+        openModal('Reglas profesionales',
+          '1) Cada equipo saca un palito. 2) Si sale actividad, debe completarla para ganar 1 palito. ' +
+          '3) Si sale KABOOM, ese equipo pierde todos sus palitos. 4) Gana quien tenga más palitos al final. ' +
+          '5) Usa el modo pedagógico para ajustar el foco terapéutico de la sesión.');
+      }
+
+      function restartMatch() {
+        if (confirm('¿Reiniciar la partida actual?')) {
+          initGame();
+        }
+      }
+
+      function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+        UI.toggleThemeBtn.textContent = document.documentElement.classList.contains('dark') ? 'Tema claro' : 'Tema oscuro';
+      }
+
+      function bindEvents() {
+        UI.teamCount.addEventListener('change', makeTeamInputs);
+        UI.teamCount.addEventListener('input', makeTeamInputs);
+
+        UI.startGameBtn.addEventListener('click', initGame);
+        UI.drawBtn.addEventListener('click', drawStick);
+        UI.successBtn.addEventListener('click', () => resolveChallenge(true, false));
+        UI.failBtn.addEventListener('click', () => resolveChallenge(false, false));
+        UI.rulesBtn.addEventListener('click', showRules);
+        UI.restartBtn.addEventListener('click', restartMatch);
+        UI.toggleThemeBtn.addEventListener('click', toggleTheme);
+
+        UI.modalCloseBtn.addEventListener('click', closeModal);
+        UI.modalOverlay.addEventListener('click', (e) => {
+          if (e.target === UI.modalOverlay) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && UI.modalOverlay.classList.contains('active')) closeModal();
+          if (!state.gameRunning) return;
+          if (e.key.toLowerCase() === 'd') drawStick();
+          if (e.key === '1') resolveChallenge(true, false);
+          if (e.key === '2') resolveChallenge(false, false);
+        });
+      }
+
+      function boot() {
+        setDarkBySystem();
+        makeTeamInputs();
+        bindEvents();
+
+        if (lastConfig) {
+          state.level = lastConfig.level || 'inicial';
+          state.mode = lastConfig.mode || 'general';
+          state.timerPerTurn = clamp(Number(lastConfig.timerPerTurn) || 60, 20, 180);
+          state.teamCount = clamp(Number(lastConfig.teamCount) || 2, 2, 6);
+          makeTeamInputs();
+        }
+      }
+
+      boot();
+    })();
+  </script>
+</body>
+</html>

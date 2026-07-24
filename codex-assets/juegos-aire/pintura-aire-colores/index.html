@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pintura en el aire: colores</title>
+  <link rel="stylesheet" href="./styles.css?v=paint-throw-v2" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <span class="version">paint-throw-v2</span>
+        <h1>Pintura en el aire</h1>
+      </div>
+      <div class="actions">
+        <button id="cameraButton" type="button">Activar camara</button>
+        <button id="resetButton" type="button">Reiniciar</button>
+      </div>
+    </header>
+
+    <section id="stage" class="stage" aria-label="Juego de lanzar pintura con la mano">
+      <div class="prompt">
+        <span id="roundBadge">Color 1 de 6</span>
+        <strong id="targetPrompt">Pinta algo ROJO</strong>
+      </div>
+
+      <div id="objectsLayer" class="objects-layer"></div>
+      <div id="splatsLayer" class="splats-layer"></div>
+      <div id="paintBall" class="paint-ball" role="button" aria-label="Bola de pintura" tabindex="0">
+        <span></span>
+      </div>
+      <div id="trailLayer" class="trail-layer"></div>
+      <canvas id="handsLayer" class="hands-layer"></canvas>
+
+      <div class="camera-card" id="cameraCard">
+        <video id="camera" playsinline muted></video>
+        <div>
+          <strong id="gestureLabel">Sin camara</strong>
+          <span id="cameraStatus">Pulsa activar camara. Tambien puedes arrastrar la pintura.</span>
+          <small id="debugLine">estado idle</small>
+        </div>
+      </div>
+
+      <div class="feedback" id="feedback">Agarra la pintura</div>
+    </section>
+  </main>
+
+  <script src="./app.js?v=paint-throw-v2"></script>
+</body>
+</html>

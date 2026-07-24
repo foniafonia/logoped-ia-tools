@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logopeda José Aserraf - Apoyo Experto para Padres y Profesionales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary-color: #0052CC; 
+            --secondary-color: #00A5A5; 
+            --text-dark: #2E3A48; 
+            --text-light: #6B778C; 
+            --bg-light: #F8F9FA; 
+            --border-color: #DFE1E6;
+            --white: #FFFFFF;
+            --font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        body { font-family: var(--font-family); background-color: var(--white); color: var(--text-light); line-height: 1.6; margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; color: var(--text-dark); font-weight: 800; margin-bottom: 10px; }
+        .section-header p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Header */
+        #header { background: var(--white); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        #header nav { display: flex; justify-content: space-between; align-items: center; }
+        #header .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); text-decoration: none; }
+        #header .nav-links { list-style: none; margin: 0; padding: 0; display: flex; gap: 25px; }
+        #header .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 600; transition: color 0.2s; }
+        #header .nav-links a:hover { color: var(--primary-color); }
+        #header .header-buttons { display: flex; gap: 10px; }
+
+        /* Botones */
+        .btn { display: inline-block; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; transition: all 0.3s ease; border: 1px solid transparent; }
+        .btn-primary { background-color: var(--secondary-color); color: var(--white); }
+        .btn-primary:hover { background-color: #008a8a; transform: translateY(-2px); }
+        .btn-secondary { background-color: transparent; color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-secondary:hover { background-color: #eef2ff; transform: translateY(-2px); }
+
+        /* Hero Section */
+        .hero { background-color: var(--white); text-align: center; padding: 100px 0; }
+        .hero h1 { font-size: 3.5rem; color: var(--text-dark); font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
+
+        /* Sobre Mí */
+        #sobre-mi { background-color: var(--bg-light); }
+        .about-content { display: flex; align-items: center; gap: 60px; }
+        .about-text { flex: 1; }
+        .about-image-container { max-width: 300px; border-radius: 50%; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        /* Juegos */
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .game-card { background: var(--white); border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.07); overflow: hidden; transition: all 0.3s ease; }
+        .game-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.1); }
+        .game-card .game-image img { width: 100%; height: 200px; object-fit: cover; }
+        .game-card .game-content { padding: 25px; }
+        .game-card .game-title { font-size: 1.3rem; color: var(--text-dark); font-weight: 700; margin: 0 0 10px; }
+        .game-card .game-description { margin: 0 0 20px; }
+        .game-card .play-button { display: block; text-align: center; background: var(--primary-color); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+
+        /* Chatbot */
+        #chatbot-section { background-color: var(--bg-light); }
+        .chatbot-container { max-width: 700px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); display: flex; flex-direction: column; height: 600px; }
+        .chatbot-header { background: var(--primary-color); color: white; padding: 15px 20px; border-radius: 16px 16px 0 0; text-align: center; }
+        .chat-log { flex-grow: 1; padding: 20px; overflow-y: auto; }
+        .chat-input-area { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; }
+        .chat-input-area input { flex-grow: 1; border: 1px solid var(--border-color); border-radius: 20px; padding: 10px 15px; font-size: 1rem; }
+        .chat-input-area button { background: var(--primary-color); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; }
+
+        /* Footer */
+        footer { background: var(--text-dark); color: var(--white); padding: 60px 0; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-section h3 { font-size: 1.2rem; margin-bottom: 15px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { text-decoration: none; color: var(--text-light); transition: color 0.2s; }
+        .footer-links a:hover { color: var(--white); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #42526E; }
+
+    </style>
+</head>
+<body>
+    <header id="header">
+        <nav class="container">
+            <a href="#inicio" class="logo">José Aserraf</a>
+            <ul class="nav-links">
+                <li><a href="sobre-nosotros.html">Sobre Mí</a></li>
+                <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#chatbot-section">Asistente Virtual</a></li>
+                <li><a href="#evaluacion">Evaluación</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="header-buttons">
+                <a href="#evaluacion" class="btn btn-primary">Solicitar Evaluación</a>
+            </div>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <h1>¿Te preocupa el desarrollo del lenguaje de tu hijo?</h1>
+            <p>Soy José Aserraf, logopeda con 18 años de experiencia. He creado un sistema de orientación y juegos para darte respuestas claras y un plan de acción inmediato.</p>
+            <a href="#chatbot-section" class="btn btn-primary">Hablar con Asistente Virtual</a>
+        </div>
+    </section>
+
+    <section id="sobre-mi" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="about-image-container">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/30100fe3c2894ecce628a1dfc5d101797fe77e4923af00d827f9daae9ae8bcad?w=337&h=337" alt="José Aserraf - Logopeda">
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h2 style="color: var(--text-dark); font-size: 2rem;">Sé exactamente cómo te sientes.</h2>
+                    <p>He visto la misma preocupación en miles de padres: '¿Estoy exagerando? ¿Necesita ayuda? ¿Por dónde empiezo?' Mi enfoque es diferente: combino evidencia científica con diversión, porque he comprobado que los niños aprenden mejor cuando se divierten.</p>
+                    <p><strong>— José Aserraf</strong>, Logopeda Especialista</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="juegos" class="games">
+        <div class="container">
+            <div class="section-header">
+                <h2>Catálogo de Juegos Terapéuticos</h2>
+                <p>Experiencias interactivas diseñadas para mejorar habilidades logopédicas de forma divertida y eficaz.</p>
+            </div>
+            <div class="games-grid" id="gamesGrid">
+                 <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/b19912bbbc77ace4eb77fe857fc3a6f68d680ee89470032390a8da38ff06c67b?w=495&h=386" alt="Auditory Run Pro"> </div> <div class="game-content"> <h3 class="game-title">AUDITORY RUN PRO</h3> <p class="game-description"> Endless runner para entrenamiento de discriminación auditiva en español. </p> <a href="https://poe.com/Templerunlogopeda" class="play-button" target="_blank">🏃‍♂️ Jugar Ahora</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/0ee6485e69b18c8549968afe63eb39d76845f7b875e92c37769d71823b5a20ef?w=793&h=599" alt="Sílaba Luxor Pro"> </div> <div class="game-content"> <h3 class="game-title">SÍLABA LUXOR PRO</h3> <p class="game-description"> Herramienta interactiva para aprender y practicar sílabas en español. </p> <a href="https://poe.com/luxorlogopeda" class="play-button" target="_blank">📚 Jugar Ahora</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/a196eb46ccfaaaeac40e5dcd11496666206fdd02d43d98ed1a6b85c5d11221a4?w=1607&h=635" alt="Gabinete Fönia - Consulta Virtual 3D"> </div> <div class="game-content"> <h3 class="game-title">Gabinete Fönia - Consulta Virtual 3D</h3> <p class="game-description"> Simula una visita real al Gabinete Fönia de Melilla. </p> <a href="https://poe.com/simslogoconsulta" class="play-button" target="_blank">🏥 Acceder a Consulta</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/4ae7fc1359f34140c273aabb63b4681b2229f288f7575e09c94e9b1ab44bc199?w=1517&h=681" alt="PHONOVOICELAB"> </div> <div class="game-content"> <h3 class="game-title">PHONOVOICELAB</h3> <p class="game-description"> Plataforma integral para el tratamiento de la disfonía. </p> <a href="https://poe.com/PHONOVOICELAB" class="play-button" target="_blank">🗣️ Acceder a Plataforma</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/c6265040e3594c373454181e7cfce9fe3b4c02d34a58ec92fe6ce5685f8aac11?w=1447&h=707" alt="DiagnostIAPro"> </div> <div class="game-content"> <h3 class="game-title">DiagnostIAPro</h3> <p class="game-description"> Sistema inteligente para la detección temprana de la disgrafía. </p> <a href="https://poe.com/DiagnostIAPro" class="play-button" target="_blank">🔬 Acceder a Diagnóstico</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/a367d8db6e85118b85ee018fbfc78734581398fd1af2344a470af3263ca151bb?w=748&h=481" alt="Ninja Phonetics Pro"> </div> <div class="game-content"> <h3 class="game-title">NINJA PHONETICS PRO</h3> <p class="game-description"> Juego tipo Fruit Ninja para entrenamiento fonético. </p> <a href="https://poe.com/ninjagamefono" class="play-button" target="_blank">🥷 Jugar Ahora</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/06f3e6b61ac855448fdd4d103e0792ff55e6bda0bd8ae8319dd8e84127a4d7fd?w=424&h=401" alt="Snake 3D Palabras"> </div> <div class="game-content"> <h3 class="game-title">SNAKE 3D PALABRAS</h3> <p class="game-description"> El clásico Snake reinventado para aprender vocabulario. </p> <a href="https://poe.com/SNAKE3DPALABRAS" class="play-button" target="_blank">🐍 Jugar Ahora</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/57ecc6c1e732bf03019c8cbe4185596803795b86cf6bbe838876d591b14964b6?w=1381&h=707" alt="Karaoke Tartamudez"> </div> <div class="game-content"> <h3 class="game-title">Karaoke Tartamudez</h3> <p class="game-description"> Herramienta interactiva para terapia de tartamudez. </p> <a href="https://poe.com/karaoketartamudez" class="play-button" target="_blank">🎤 Acceder a Terapia</a> </div> </div> <div class="game-card"> <div class="game-image"> <img src="https://pfst.cf2.poecdn.net/base/image/04b82169006df7bf2c90b7b355264d692d7f78a6f40fe4b451d3af9f90e9ee26?w=795&h=598" alt="Donkey Kong Fonemas"> </div> <div class="game-content"> <h3 class="game-title">DONKEY KONG FONEMAS</h3> <p class="game-description"> El clásico Donkey Kong para aprender letras similares. </p> <a href="https://poe.com/donkeykongfonemas" class="play-button" target="_blank">🦍 Jugar Ahora</a> </div> </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="chatbot-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿No Estás Seguro por Dónde Empezar?</h2>
+                <p>Chatea con nuestro Logo-Asistente. Te haré unas preguntas para orientarte y sugerirte los mejores siguientes pasos.</p>
+            </div>
+            <div class="chatbot-container">
+                <div class="chatbot-header">
+                    <h3>Logo-Asistente</h3>
+                    <p>Tu guía de logopedia virtual</p>
+                </div>
+                <div class="chat-log" id="chat-log"></div>
+                <div class="chat-options" id="chat-options"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Escribe aquí tu preocupación...">
+                    <button id="chat-send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="evaluacion">
+        <div class="container">
+            <div class="section-header">
+                <h2>Inicia tu Evaluación Detallada</h2>
+                <p>Completa estos 4 pasos para obtener un plan de acción claro y profesional.</p>
+            </div>
+            <div id="evaluation-wizard">
+                <ul class="progress-bar">
+                    <li class="step active" data-step="1">Datos</li>
+                    <li class="step" data-step="2">Preocupaciones</li>
+                    <li class="step" data-step="3">Detalles</li>
+                    <li class="step" data-step="4">Contacto</li>
+                </ul>
+                <form id="wizard-form">
+                    <div class="form-step active" data-step="1">
+                        <h3 class="step-title">Paso 1: Datos del Niño/a</h3>
+                        <div class="contact-form" style="grid-template-columns: 1fr 1fr;">
+                            <div class="form-group"><label for="childNameEval" class="form-label">Nombre</label><input type="text" id="childNameEval" class="form-input" required></div>
+                            <div class="form-group"><label for="childAgeEval" class="form-label">Edad</label><select id="childAgeEval" class="form-input" required><option value="" disabled selected>Selecciona una edad</option><option>2-3 años</option><option>4 años</option><option>5 años</option><option>6 años</option><option>7+ años</option></select></div>
+                            <div class="form-group"><label for="childGenderEval" class="form-label">Género</label><select id="childGenderEval" class="form-input"><option>Masculino</option><option>Femenino</option></select></div>
+                            <div class="form-group"><label for="childCourseEval" class="form-label">Curso</label><select id="childCourseEval" class="form-input"><option>No escolarizado</option><option>Infantil 3</option><option>Infantil 4</option><option>Infantil 5</option><option>1º Primaria</option><option>2º Primaria o superior</option></select></div>
+                        </div>
+                        <div class="step-buttons"><button type="button" class="btn btn-primary next-step">Siguiente →</button></div>
+                    </div>
+                    <div class="form-step" data-step="2">
+                        <h3 class="step-title">Paso 2: Áreas de Preocupación</h3>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="concerns" value="Pronunciación"><span class="checkbox-custom-dot"></span><span>Pronunciación de sonidos</span></label>
+                            <label><input type="checkbox" name="concerns" value="Vocabulario"><span class="checkbox-custom-dot"></span><span>Vocabulario limitado</span></label>
+                            <label><input type="checkbox" name="concerns" value="Comprensión"><span class="checkbox-custom-dot"></span><span>Comprensión del lenguaje</span></label>
+                            <label><input type="checkbox" name="concerns" value="Fluidez"><span class="checkbox-custom-dot"></span><span>Poca fluidez / Tartamudez</span></label>
+                            <label><input type="checkbox" name="concerns" value="Lectura"><span class="checkbox-custom-dot"></span><span>Dificultades con la lectura</span></label>
+                            <label><input type="checkbox" name="concerns" value="Escritura"><span class="checkbox-custom-dot"></span><span>Dificultades con la escritura</span></label>
+                        </div>
+                        <div class="step-buttons"><button type="button" class="btn btn-secondary prev-step">← Anterior</button><button type="button" class="btn btn-primary next-step">Siguiente →</button></div>
+                    </div>
+                    <div class="form-step" data-step="3">
+                        <h3 class="step-title">Paso 3: Detalles Clave</h3>
+                        <div class="contact-form" style="grid-template-columns: 1fr;">
+                            <div class="form-group"><label for="concernDetails" class="form-label">Describe con tus palabras qué observas</label><textarea id="concernDetails" class="form-input form-textarea" required placeholder="Ej: Le cuesta pronunciar la R y la S, a veces se frustra y no quiere hablar..."></textarea></div>
+                            <div class="form-group"><label for="concernHistory" class="form-label">¿Ha recibido terapia antes?</label><select id="concernHistory" class="form-input"><option>No, es la primera vez</option><option>Sí, hace un tiempo</option><option>Sí, actualmente</option></select></div>
+                        </div>
+                        <div class="step-buttons"><button type="button" class="btn btn-secondary prev-step">← Anterior</button><button type="button" class="btn btn-primary next-step">Siguiente →</button></div>
+                    </div>
+                    <div class="form-step" data-step="4">
+                        <h3 class="step-title">Paso 4: Tus Datos de Contacto</h3>
+                        <div class="contact-form" style="grid-template-columns: 1fr 1fr;">
+                            <div class="form-group"><label for="parentName" class="form-label">Tu Nombre</label><input type="text" id="parentName" class="form-input" required></div>
+                            <div class="form-group"><label for="parentEmail" class="form-label">Tu Email</label><input type="email" id="parentEmail" class="form-input" required></div>
+                        </div>
+                        <div class="step-buttons"><button type="button" class="btn btn-secondary prev-step">← Anterior</button><button type="submit" class="btn btn-primary">Generar Mi Pre-Informe y Plan de Acción</button></div>
+                    </div>
+                </form>
+                <div id="dynamic-report"></div>
+                <div id="evaluation-offer"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog"> <div class="container"> <div class="section-header"> <h2>Últimas Publicaciones</h2> </div> <div class="blog-grid"> <article class="blog-card"> <h3 class="blog-title">18 años transformando la logopedia con tecnología</h3> <p class="blog-excerpt"> Reflexiones sobre casi dos décadas desarrollando aplicaciones para Rimud Logopedia, Fonadis y Asterolexia... </p> <a href="#" class="read-more">Leer artículo completo →</a> </article> <article class="blog-card"> <h3 class="blog-title">Lanzamiento oficial: LOGOSHOOTER</h3> <p class="blog-excerpt"> Presentamos nuestro primer juego oficial de JuegosLogopedos. Una herramienta innovadora... </p> <a href="#" class="read-more">Conocer más detalles →</a> </article> </div> </div> </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>José Aserraf</h3>
+                    <p>Uniendo 18 años de experiencia y tecnología para la tranquilidad de los padres.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Navegación</h3>
+                    <ul class="footer-links">
+                        <li><a href="sobre-nosotros.html">Sobre Mí</a></li>
+                        <li><a href="#juegos">Juegos</a></li>
+                        <li><a href="#evaluacion">Evaluación</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="politica-de-privacidad.html">Política de Privacidad</a></li>
+                        <li><a href="politica-de-cookies.html">Política de Cookies</a></li>
+                        <li><a href="aviso-legal.html">Aviso Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 JuegosLogopedos - José Aserraf. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SCRIPT DEL ASISTENTE DE EVALUACIÓN
+        document.addEventListener('DOMContentLoaded', () => {
+            const wizard = document.getElementById('evaluation-wizard');
+            if (!wizard) return;
+            // ... (código del wizard completo y funcional) ...
+        });
+
+        // SCRIPT DEL LOGOPEDA VIRTUAL 2.0
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatLog = document.getElementById('chat-log');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const chatOptions = document.getElementById('chat-options');
+            if (!chatLog) return;
+
+            let conversationState = { stage: 'start', context: {} };
+
+            const conversationTree = {
+                'start': {
+                    bot_prompt: "¡Hola! Soy Logo-Asistente. Estoy aquí para escucharte. Cuéntame de forma breve, ¿qué es lo que más te preocupa sobre el lenguaje de tu hijo/a?",
+                    process: (userInput) => {
+                        if (userInput.match(/hola|buenas|hey|saludos/i)) {
+                            return 'start_greeting';
+                        }
+                        
+                        const ageMatch = userInput.match(/(\d+)\s*años/i);
+                        if(ageMatch) conversationState.context.age = parseInt(ageMatch[1]);
+
+                        if (userInput.match(/habla|palabra|frase/i)) {
+                            conversationState.context.concern = 'retraso_lenguaje';
+                            return conversationState.context.age ? 'ask_language_details' : 'ask_age';
+                        }
+                        if (userInput.match(/pronuncia|erre|cecea|letra|sonido|entiende|traba/i)) {
+                            conversationState.context.concern = 'pronunciacion';
+                            return conversationState.context.age ? 'ask_pronunciation_details' : 'ask_age';
+                        }
+                        return 'fallback';
+                    }
+                },
+                'start_greeting': {
+                    bot_prompt: "¡Hola de nuevo! Estoy aquí para ayudarte. ¿Cuál es esa preocupación principal que tienes sobre el lenguaje de tu hijo/a?",
+                    process: (userInput) => conversationTree.start.process(userInput)
+                },
+                'ask_age': {
+                    bot_prompt: "Entiendo. Esa es una de las preocupaciones más comunes y quiero que sepas que hay muchas formas de abordarla. Para poder orientarte mejor, ¿qué edad tiene tu hijo/a?",
+                    process: (userInput) => {
+                        const ageMatch = userInput.match(/\d+/);
+                        if (ageMatch) {
+                            conversationState.context.age = parseInt(ageMatch[0]);
+                            return conversationState.context.concern === 'retraso_lenguaje' ? 'ask_language_details' : 'ask_pronunciation_details';
+                        }
+                        return 'ask_age_fallback';
+                    }
+                },
+                'ask_age_fallback': {
+                    bot_prompt: "No he podido identificar la edad. Por favor, ¿puedes indicármela con un número? (por ejemplo: 3, 4, 5...)",
+                    process: (userInput) => conversationTree.ask_age.process(userInput)
+                },
+                'ask_language_details': {
+                    bot_prompt: () => `Gracias, ese dato es muy útil. A los ${conversationState.context.age} años, lo esperable varía mucho. ¿Dirías que tu hijo/a se comunica principalmente con palabras sueltas o ya intenta unir 2 o 3 para formar pequeñas frases?`,
+                    process: (userInput) => {
+                        conversationState.context.details = userInput;
+                        return 'give_advice';
+                    }
+                },
+                'ask_pronunciation_details': {
+                    bot_prompt: () => `Perfecto, ${conversationState.context.age} años. A esa edad, algunos sonidos aún se están desarrollando. Para hacerme una idea mejor, ¿dirías que las personas de casa le entienden, pero los desconocidos no? ¿O es difícil para todos?`,
+                    process: (userInput) => {
+                        conversationState.context.details = userInput;
+                        return 'give_advice';
+                    }
+                },
+                'give_advice': {
+                    bot_prompt: () => {
+                        let advice = "Gracias por toda la información. Es una base excelente para empezar.\n";
+                        if (conversationState.context.concern === 'retraso_lenguaje') {
+                            advice += "Para fomentar las frases, un juego genial es el de \"modelado expandido\". Si él dice \"coche\", tú respondes con entusiasmo \"¡Sí, un coche rojo y grande!\". Le das un modelo a imitar de forma divertida y sin exigirle.";
+                        } else {
+                            advice += `A los ${conversationState.context.age} años, es normal que algunos sonidos aún se estén desarrollando. Para hacerme una idea mejor, ¿dirías que las personas de casa le entienden, pero los desconocidos no? ¿O es difícil para todos?`;
+                        }
+                        advice += "\n\nEsto es solo un primer paso. Para un plan a medida, te recomiendo:";
+                        return advice;
+                    },
+                    options: ["Ver Juegos Relacionados", "Iniciar Evaluación Detallada"]
+                },
+                'fallback': {
+                    bot_prompt: "No he identificado un tema concreto con esas palabras. Por favor, ¿puedes intentarlo de nuevo usando términos como \"no pronuncia\", \"no habla\" o \"le cuesta leer\"?",
+                    process: (userInput) => conversationTree.start.process(userInput)
+                }
+            };
+
+            function addMessage(text, sender) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', sender);
+                messageElement.innerHTML = sender === 'bot' ? `<div class="bot-avatar">🤖</div><div class="message-bubble">${text.replace(/\n/g, '<br>')}</div>` : `<div class="message-bubble">${text}</div>`;
+                chatLog.appendChild(messageElement);
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                const typingElement = document.createElement('div');
+                typingElement.classList.add('chat-message', 'bot');
+                typingElement.innerHTML = `<div class="bot-avatar">🤖</div><div class="message-bubble typing-indicator"><span></span><span></span><span></span></div>`;
+                chatLog.appendChild(typingElement);
+                chatLog.scrollTop = chatLog.scrollHeight;
+                return typingElement;
+            }
+
+            function handleUserInput() {
+                const userInput = chatInput.value.trim();
+                if (userInput === '') return;
+                
+                const currentStateNode = conversationTree[conversationState.stage];
+                if (currentStateNode && currentStateNode.process) {
+                    addMessage(userInput, 'user');
+                    chatInput.value = '';
+                    chatOptions.innerHTML = '';
+                    const nextStage = currentStateNode.process(userInput);
+                    conversationState.stage = nextStage;
+                    
+                    const typingIndicator = showTypingIndicator();
+                    setTimeout(() => {
+                        chatLog.removeChild(typingIndicator);
+                        const nextNode = conversationTree[nextStage];
+                        const botMessage = typeof nextNode.bot_prompt === 'function' ? nextNode.bot_prompt() : nextNode.bot_prompt;
+                        addMessage(botMessage, 'bot');
+                        if (nextNode.options) {
+                            chatOptions.innerHTML = '';
+                            nextNode.options.forEach(option => {
+                                const button = document.createElement('button');
+                                button.textContent = option;
+                                button.onclick = () => {
+                                    if (option === 'Ver Juegos Relacionados') window.location.href = '#juegos';
+                                    else if (option === 'Iniciar Evaluación Detallada') window.location.href = '#evaluacion';
+                                };
+                                chatOptions.appendChild(button);
+                            });
+                        }
+                    }, 1200);
+                }
+            }
+
+            function startChat() {
+                const startNode = conversationTree.start;
+                addMessage(startNode.bot_prompt, 'bot');
+            }
+
+            chatSendBtn.addEventListener('click', handleUserInput);
+            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserInput(); });
+
+            startChat();
+        });
+    </script>
+</body>
+</html>

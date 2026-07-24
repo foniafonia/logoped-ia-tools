@@ -1,0 +1,713 @@
+<!DOCTYPE html><html lang="es" class="scroll-smooth"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logoped-IA: La IA al servicio de la logopedia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#818CF8',
+                        accent: '#F472B6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+        
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold gradient-text">Logoped-IA</h1>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#hero" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Inicio</a>
+                    <a href="#evolution" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Evolución</a>
+                    <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Funciones</a>
+                    <a href="#games" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Juegos</a>
+                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Sobre mí</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-20 pb-16 gradient-bg min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in-up">
+                <!-- Photo and logos -->
+                <div class="mb-8 flex flex-col md:flex-row items-center justify-center gap-8">
+                    <div class="flex items-center gap-6">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/f9881f9b4aaa38853cf0b2c4a4bdca82fba9c8ec7d02db34bd6fd16d3f895f70?w=1024&amp;h=1024" alt="JuegosLogopedios" class="h-12 w-auto">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/4b75219a7eb5a3995eb88fabe522e0f39ce17614c76be9e5783dc999d15d5cda?w=1024&amp;h=1024" alt="Logoped-IA" class="h-12 w-auto">
+                    </div>
+                    <div class="w-16 h-16 rounded-full border-4 border-white overflow-hidden">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&amp;h=225" alt="José Aserraf" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    Logoped-IA
+                    <span class="block text-2xl md:text-4xl font-normal mt-2">
+                        La IA al servicio de la logopedia
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto">
+                    Evaluación automatizada, pseudo-diagnóstico y terapia gamificada sin código.<br>
+                    <span class="font-semibold">Desde Melilla, para todo el mundo.</span>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToSection('demo')" class="bg-white text-primary font-semibold px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-play mr-2"></i>Ver la demo
+                    </button>
+                    <button onclick="scrollToSection('evolution')" class="border-2 border-white text-white font-semibold px-8 py-4 rounded-lg hover:bg-white hover:text-primary transition-all duration-300">
+                        Conocer más
+                    </button>
+                </div>
+            </div>
+            <div class="mt-16 text-center">
+                <div class="floating-animation inline-block">
+                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-4xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evolution Section -->
+    <section id="evolution" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <i class="fas fa-rocket text-primary mr-3"></i>
+                    De JuegosLogopedios a Logoped-IA
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <blockquote class="text-lg leading-relaxed italic border-l-4 border-primary pl-6">
+                        "Hace solo dos meses comenzamos con JuegosLogopedios, una muestra del poder de la IA sin código aplicada a la logopedia."
+                    </blockquote>
+                    
+                    <p class="text-lg leading-relaxed">
+                        Hoy, <strong>Logoped-IA</strong> es una plataforma capaz de evaluar, derivar y ofrecer terapia interactiva en tiempo real.
+                    </p>
+                    
+                    <p class="text-lg leading-relaxed">
+                        Gracias al apoyo del <strong>CARE</strong>, <strong>Digital Brain Academy</strong> y mi mentor <strong>Miguel García Capilla</strong>, pasamos de idea a producto funcional con herramientas <strong>NO CODE</strong>.
+                    </p>
+                    
+                    <p class="text-lg leading-relaxed">
+                        Un viaje que demuestra cómo el <strong>no-code</strong> nos ayuda a hacer realidad con palabras lo que la mente piensa, a diferencia de tiempos pasados. Los agentes, <strong>n8n</strong> y <strong>MCP</strong> van a lograr que lo que hay en mi cabeza sea en los próximos dos meses un <strong>MVP</strong> con capacidad de producir dinero y empleo para melillenses.
+                    </p>
+                    
+                    <div class="bg-primary/10 dark:bg-primary/20 p-6 rounded-lg">
+                        <p class="text-lg font-medium text-primary dark:text-secondary">
+                            Un viaje que demuestra que la tecnología puede humanizar la salud.
+                        </p>
+                    </div>
+                    
+                    <button onclick="window.open('https://poe.com/juegoslogopedios', '_blank')" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        Explorar JuegosLogopedios
+                    </button>
+                </div>
+                
+                <div class="relative">
+                    <div class="bg-white dark:bg-gray-700 p-8 rounded-xl shadow-lg">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/f9881f9b4aaa38853cf0b2c4a4bdca82fba9c8ec7d02db34bd6fd16d3f895f70?w=1024&amp;h=1024" alt="JuegosLogopedios" class="w-full h-full object-contain">
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">JuegosLogopedios</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Fase inicial - Prueba de concepto</p>
+                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-4">
+                                <div class="bg-primary h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-white dark:bg-gray-700 p-8 rounded-xl shadow-lg border-2 border-primary">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4">
+                                <img src="https://pfst.cf2.poecdn.net/base/image/4b75219a7eb5a3995eb88fabe522e0f39ce17614c76be9e5783dc999d15d5cda?w=1024&amp;h=1024" alt="Logoped-IA" class="w-full h-full object-contain">
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Logoped-IA</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Plataforma completa de IA</p>
+                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-4">
+                                <div class="bg-gradient-to-r from-primary to-secondary h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <i class="fas fa-cogs text-primary mr-3"></i>
+                    Qué hace Logoped-IA
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Evalúa con IA en 15 minutos</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Evaluación rápida y precisa usando inteligencia artificial avanzada.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-bar text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Genera informes personalizados</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Informes detallados adaptados a cada paciente y situación específica.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-gamepad text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lanza terapia inmediata con videojuegos</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Terapia gamificada que hace el aprendizaje divertido y efectivo.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-sync-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Automatiza seguimiento</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Agentes no-code (n8n, MCP) para seguimiento automatizado del progreso.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Funciona en cualquier dispositivo</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Sin instalar nada. Acceso inmediato desde cualquier navegador.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-code text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Desarrollado sin código</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Tecnología no-code que permite rápida iteración y mejoras continuas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <i class="fas fa-puzzle-piece text-primary mr-3"></i>
+                    Los 9 juegos que lo hicieron posible
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Logoped-IA nace de estos videojuegos terapéuticos desarrollados sin una sola línea de código tradicional:
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/b19912bbbc77ace4eb77fe857fc3a6f68d680ee89470032390a8da38ff06c67b?w=495&amp;h=386" alt="Auditory Run Pro" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-headphones text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Auditory Run Pro</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Discriminación auditiva con niveles personalizados</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/0ee6485e69b18c8549968afe63eb39d76845f7b875e92c37769d71823b5a20ef?w=793&amp;h=599" alt="Sílaba Luxor Pro" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-gem text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Sílaba Luxor Pro</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Conciencia fonológica con mecánicas adictivas</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/a196eb46ccfaaaeac40e5dcd11496666206fdd02d43d98ed1a6b85c5d11221a4?w=1607&amp;h=635" alt="Consulta Virtual 3D" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-user-md text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Consulta Virtual 3D</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">IA médica simulada con especialista virtual</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/fed24b42607e0bddc78892ad26f8930ec55a6cf1aa3a2a8334ffc8426c1952c5?w=1233&amp;h=691" alt="PhonoVoiceLab TVSO" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-microphone text-white"></i>
+                            </div>
+                            <h3 class="font-bold">PhonoVoiceLab</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Tratamiento de disfonía con TVSO científico</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/c6265040e3594c373454181e7cfce9fe3b4c02d34a58ec92fe6ce5685f8aac11?w=1447&amp;h=707" alt="DiagnostIA Pro" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-brain text-white"></i>
+                            </div>
+                            <h3 class="font-bold">DiagnostIA Pro</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Evaluación disgrafía con IA - 98.7% precisión</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/a367d8db6e85118b85ee018fbfc78734581398fd1af2344a470af3263ca151bb?w=748&amp;h=481" alt="Ninja Phonetics Pro" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-mask text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Ninja Phonetics Pro</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Juego fonológico estilo arcade retro</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/06f3e6b61ac855448fdd4d103e0792ff55e6bda0bd8ae8319dd8e84127a4d7fd?w=424&amp;h=401" alt="Snake 3D Palabras" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-book text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Snake 3D Palabras</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Lectura y vocabulario en 3D</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/57ecc6c1e732bf03019c8cbe4185596803795b86cf6bbe838876d591b14964b6?w=1381&amp;h=707" alt="Karaoke Tartamudez" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-music text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Karaoke Tartamudez</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Terapia fluidez verbal con karaoke terapéutico</p>
+                </div>
+                
+                <div class="game-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="mb-4">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/04b82169006df7bf2c90b7b355264d692d7f78a6f40fe4b451d3af9f90e9ee26?w=795&amp;h=598" alt="Donkey Kong Fonemas" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-eye text-white"></i>
+                            </div>
+                            <h3 class="font-bold">Donkey Kong Fonemas</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">Discriminación visual estilo arcade clásico</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase 2 Section -->
+    <section id="phase2" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <i class="fas fa-calendar-alt text-primary mr-3"></i>
+                    Fase 2 y lo que viene
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tools text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">MVP funcional en 60 días</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Producto mínimo viable completamente operativo</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-flask text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Validación completa</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Con clínicas, colegios y familias reales</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-box text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Próxima Fase</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Dispositivo físico + API completa</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-briefcase text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Empleo tecnológico local</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Desde Melilla para el mundo</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Modelo escalable</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Rentable y sostenible a largo plazo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        <i class="fas fa-user-md text-primary mr-3"></i>
+                        Sobre mí - José Aserraf
+                    </h2>
+                    
+                    <div class="space-y-6 text-lg leading-relaxed">
+                        <p>
+                            Soy <strong>José Aserraf</strong>, logopeda con <strong>18 años de experiencia</strong>, director del <strong>Gabinete Fönia</strong> y apasionado de la tecnología como herramienta de cambio.
+                        </p>
+                        
+                        <p>
+                            Llevo años desarrollando soluciones educativas como <strong>Rimud</strong>, <strong>Fonadis</strong> y <strong>Asterolexia</strong>, pero hoy doy el paso definitivo con <strong>Logoped-IA</strong>:
+                        </p>
+                        
+                        <p>
+                            Un viaje de descubrimiento y aprendizaje que nos ha puesto en primera línea en solo dos meses. Conectando <strong>APIs increíbles</strong>, integrando <strong>audio, video, presión, temperatura, memoria, contexto, rapidez</strong> con <strong>supervisión y evidencia científica</strong>.
+                        </p>
+                        
+                        <div class="bg-primary/10 dark:bg-primary/20 p-6 rounded-lg">
+                            <p class="text-primary dark:text-secondary font-medium">
+                                Una plataforma que une ciencia, IA y corazón para transformar vidas desde Melilla, dando mejor calidad de vida y esperanza a las familias que tanto lo necesitan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="inline-block bg-white dark:bg-gray-700 p-8 rounded-xl shadow-lg">
+                        <div class="w-32 h-32 mx-auto mb-6">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/62a3b3f7b9ef3efb4d54606ac387ca7029fdff07193d11e18bd533336d349e5f?w=225&amp;h=225" alt="José Aserraf" class="w-full h-full rounded-full object-cover border-4 border-primary">
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">José Aserraf</h3>
+                        <p class="text-primary font-medium mb-4">Logopeda &amp; Innovador Tecnológico</p>
+                        
+                        <div class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-graduation-cap mr-2"></i>
+                                <span>18 años de experiencia</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-building mr-2"></i>
+                                <span>Director Gabinete Fönia</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>Melilla, España</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Melilla Call Section -->
+    <section id="melilla" class="py-20 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-8">
+                <i class="fas fa-bullhorn mr-3"></i>
+                Un llamamiento a Melilla
+            </h2>
+            
+            <div class="space-y-6 text-lg text-white/90 leading-relaxed">
+                <p class="text-xl">
+                    <strong>Melilla, esta es nuestra oportunidad.</strong>
+                </p>
+                
+                <p>
+                    Apostemos por el talento local, por la salud digital y por soluciones que nacen aquí para el mundo.
+                </p>
+                
+                <p>
+                    Con <strong>Logoped-IA</strong>, podemos ser referente en tecnología terapéutica, crear empleo, ayudar a miles de familias…
+                </p>
+                
+                <p class="text-xl font-semibold">
+                    Pero necesitamos tu impulso.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">
+                <i class="fas fa-lightbulb text-primary mr-3"></i>
+                ¿Te unes al cambio?
+            </h2>
+            
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-12">
+                Forma parte de la revolución de la logopedia digital desde Melilla
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <button onclick="contactDemo()" class="bg-primary text-white font-semibold px-8 py-4 rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Solicitar demo
+                </button>
+                
+                <button onclick="window.open('https://juegoslogopedos.netlify.app', '_blank')" class="border-2 border-primary text-primary font-semibold px-8 py-4 rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+                    <i class="fas fa-gamepad mr-2"></i>
+                    Probar JuegosLogopedios
+                </button>
+                
+                <button onclick="contactInfo()" class="bg-gray-600 text-white font-semibold px-8 py-4 rounded-lg hover:bg-gray-700 transition-all duration-300">
+                    <i class="fas fa-envelope mr-2"></i>
+                    Contactar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section id="sponsors" class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6">
+                    Nuestros aliados y colaboradores
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Gracias al apoyo institucional y empresarial que hace posible este proyecto
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center justify-items-center">
+                <!-- JuegosLogopedios Logo -->
+                <div class="flex justify-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/f9881f9b4aaa38853cf0b2c4a4bdca82fba9c8ec7d02db34bd6fd16d3f895f70?w=1024&amp;h=1024" alt="JuegosLogopedios" class="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                </div>
+                
+                <!-- Logoped-IA Logo -->
+                <div class="flex justify-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/4b75219a7eb5a3995eb88fabe522e0f39ce17614c76be9e5783dc999d15d5cda?w=1024&amp;h=1024" alt="Logoped-IA" class="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                </div>
+                
+                <!-- Ciudad Autónoma de Melilla -->
+                <div class="flex justify-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/f44a0886d7048e09b9723dd6f5aa2326829c2f6aecebeb0068779c773479cd16?w=402&amp;h=125" alt="Ciudad Autónoma de Melilla" class="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                </div>
+                
+                <!-- EOI Logo -->
+                <div class="flex justify-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/328b210606805905f0bef45a3531f4953043046115f7c39776aec83e5f82e786?w=170&amp;h=43" alt="EOI" class="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                </div>
+                
+                <!-- Cluster de emprendimiento Melilla -->
+                <div class="flex justify-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/ab6f9bb438cc524438a7a085f4c47022b45daad67c917cb29893045f1ac0f27f?w=300&amp;h=168" alt="Cluster de emprendimiento Melilla" class="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                </div>
+                
+                <!-- CARE Melilla -->
+                <div class="flex justify-center items-center col-span-2 md:col-span-5">
+                    <div class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold text-center">
+                        <i class="fas fa-building mr-2"></i>CARE Melilla<br>
+                        <span class="text-sm font-normal">Centro de Alto Rendimiento Empresarial</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold mb-4 gradient-text">Logoped-IA</h3>
+                <p class="text-gray-300 mb-6">Transformando la logopedia con IA desde Melilla</p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="https://poe.com/juegoslogopedios" class="text-gray-300 hover:text-white transition-colors" target="_blank">
+                        <i class="fas fa-gamepad text-2xl"></i>
+                    </a>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-8">
+                    <p class="text-gray-400">
+                        © 2024 Logoped-IA - José Aserraf - Gabinete Fönia. Desarrollado con ❤️ en Melilla.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function contactDemo() {
+            alert('¡Gracias por tu interés! En la versión completa esto abriría un formulario de contacto para solicitar una demo de Logoped-IA.');
+        }
+
+        function contactInfo() {
+            alert('Contacto:\nJosé Aserraf\nGabinete Fönia\nMelilla, España\n\nEn la versión completa esto mostraría información de contacto real.');
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for animations
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+
+</body></html>

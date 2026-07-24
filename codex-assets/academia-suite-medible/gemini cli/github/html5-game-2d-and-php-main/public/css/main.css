@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600&display=swap');
+*{
+	margin:0;
+	padding:0;
+	list-style:none;
+	text-decoration:none;
+}
+
+body{
+	position:relative;
+	background-color: #172025;	
+/*	background-image:url(../img/back.svg);*/
+	background-repeat: repeat-x;
+	background-position: top;
+	overflow-y:hidden;
+	overflow-x: hidden;
+	font-family: 'Roboto Mono', monospace;
+}
+
+/*=============================================
+MARCO
+=============================================*/
+#frame{
+	position:absolute;
+	width:1060px;
+	height:560px;
+	border-radius:10px 10px 0 0;
+	box-shadow:0px 5px 10px black;
+	background:#172025;
+	top:-30px;
+	left:50%;
+	margin-left:-530px;
+}
+
+/*=============================================
+CONTAINER
+=============================================*/
+
+#container{
+	position:relative;
+	margin:5vh auto;
+	width:1000px;
+	height:500px;
+	background:white;
+}
+
+
+/*=============================================
+INGRESO
+=============================================*/
+
+#container #login{
+	position:absolute;
+	width:1000px;
+	height:500px;
+	top:0;
+	left:0px;
+/*	background:url(../img/scenes/level-01/intro.png);*/
+	background: #5D6D7E;
+}
+
+.content-login{
+	width:1000px;
+	height:500px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.content-login form{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.content-login form input{
+	width: 300px;
+	padding: 10px;
+	border-radius: 0;
+	border:1px solid #f2f2f2;
+	margin: 5px 0;
+}
+
+.content-login form button{
+	padding: 10px 20px;
+	font-size: 20px;
+	border-radius: 0;
+	border:0;
+	background: #2E86C1;
+	color: white;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	cursor: pointer;
+}
+.content-login form button:hover{
+	transition: all .3s ease;
+	background: #2471A3;
+	color: #F4F6F7;
+}
+
+/*=============================================
+INICIO
+=============================================*/
+
+#container .home{
+	position:absolute;
+	width:1000px;
+	height:500px;
+	top:0px;
+	left:0px;
+	background: #2471A3;
+/*	background:url(../img/intro/inicio.svg);*/
+	font-family: 'Patrick Hand', cursive;
+}
+
+#container .home #cerrarSesion a{
+	position:absolute;
+	right:0%;
+	text-align:center;
+	color:white;
+	top:-25px;
+}
+
+#container .home #saludo{
+	position:absolute;
+/*	left:50%;*/
+	width:1000px;
+	text-align:center;
+/*	margin-left:-500px;*/
+	color:white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/*=============================================
+CREDITOS
+=============================================*/
+
+footer{
+	position:relative;
+	padding:8px;
+	color:rgba(255,255,255,.5);
+	font-size:12px;
+}
+
+footer a{
+	color:white;
+}
+
+/*=============================================
+PANTALLA VERTICAL
+=============================================*/
+
+#vertical{
+	display:none;
+}
+
+@media all and (orientation: portrait){
+	
+	#container{
+		display:none;
+	}
+
+	#vertical{
+		display:block;
+		position:fixed;
+		width:100%;
+		height:100vh;
+		z-index:1;
+		background:url(../img/vertical.jpg);
+		background-size:cover;
+		background-position:center;
+	}
+
+}

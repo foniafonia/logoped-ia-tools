@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shooter Avance</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            background-color: #333;
+            border: 2px solid #444;
+        }
+        #gameContainer {
+            position: relative;
+        }
+        #stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        #challenge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            background-color: rgba(255, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+        #reward {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            background-color: rgba(0, 255, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="600" height="800"></canvas>
+        <div id="stats">
+            Poder: 1 | Cadencia: 1 | Alcance: 1 | Personajes: 1
+        </div>
+        <div id="challenge">¡Desafío! Haz 500 puntos de daño</div>
+        <div id="reward">¡Recompensa! +2 Poder de tiro</div>
+    </div>
+
+    <script>
+        // Configuración del juego
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const statsElement = document.getElementById('stats');
+        const challengeElement = document.getElementById('challenge');
+        const rewardElement = document.getElementById('reward');
+        
+        // Propiedades del juego
+        const gameState = {
+            roadSpeed: 3,
+            score: 0,
+            isRunning: true,
+            mouseX: canvas.width / 2,
+            lastShootTime: 0,
+            damageDealt: 0,
+            challengeActive: false,
+            challengeGoal: 0,
+            challengeProgress: 0
+        };
+        
+        // Estadísticas del jugador
+        const playerStats = {
+            power: 1,
+            fireRate: 1,
+            range: 1,
+            characters: 1,
+            getFireRateInMs: function() {
+                return 500 / this.fireRate; // 500ms base, reducido por fireRate
+            }
+        };
+        
+        // Colores de las mejoras
+        const upgradeColors = {
+            character: '#4080FF',
+            power: '#FF4040',
+            fireRate: '#40FF40',
+            range: '#FFFF40'
+        };
+        
+        // Classes
+        class Player {
+            constructor() {
+                this.width = 60; // Más ancho para parecerse a un tanque
+                this.height = 40; // Más bajo y robusto
+                this.baseY = canvas.height - 100; // Posición base ajustada
+                this.characters = [];
+                this.updateCharacters();
+            }
+
+            updateCharacters() {
+                this.characters = [];
+                const spread = Math.min(playerStats.characters * 30, 120);
+                for (let i = 0; i < playerStats.characters; i++) {
+                    let xOffset;
+                    if (playerStats.characters === 1) {
+                        xOffset = 0;
+                    } else {
+                        xOffset = spread * (i / (playerStats.characters - 1) - 0.5);
+                    }
+                    this.characters.push({
+                        x: gameState.mouseX + xOffset,
+                        y: this.baseY
+                    });
+                }
+            }
+
+            draw() {
+                this.characters.forEach(char => {
+                    // Cuerpo del tanque
+                    ctx.fillStyle = '#8B4513'; // Color marrón para el cuerpo
+                    ctx.fillRect(char.x - this.width / 2, char.y - this.height / 2, this.width, this.height);
+
+                    // Torreta del tanque
+                    ctx.fillStyle = '#404040'; // Color gris oscuro para la torreta
+                    ctx.fillRect(char.x - 10, char.y - this.height / 2 - 20, 20, 30);
+
+                    // Cañón del tanque
+                    ctx.fillStyle = '#000000'; // Color negro para el cañón
+                    ctx.beginPath();
+                    ctx.moveTo(char.x, char.y - this.height / 2 - 20);
+                    ctx.lineTo(char.x, char.y - this.height / 2 - 50); // Longitud del cañón
+                    ctx.lineWidth = 6;
+                    ctx.stroke();
+                });
+            }
+
+    shoot() {
+        const now = Date.now();
+        const cooldown = playerStats.getFireRateInMs();
+        if (now - gameState.lastShootTime > cooldown) {
+            gameState.lastShootTime = now;
+            this.characters.forEach(char => {
+                bullets.push(new Bullet(char.x, char.y - 20, playerStats.power, playerStats.range));
+            });
+            return true;
+        }
+        return false;
+    }
+
+    update() {
+        this.updateCharacters();
+    }
+}   
+        class Bullet {
+            constructor(x, y, power, range) {
+                this.x = x;
+                this.y = y;
+                this.width = 6;
+                this.height = 15;
+                this.speed = 10;
+                this.power = power;
+                this.range = range;
+                this.distance = 0;
+                this.maxDistance = range * 150; // 150px base multiplied by range stat
+            }
+            
+            draw() {
+                ctx.fillStyle = 'rgba(100, 180, 255, 0.8)';
+                ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+                
+                // Efecto de estela
+                ctx.fillStyle = 'rgba(100, 180, 255, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+                ctx.lineTo(this.x + this.width/2, this.y + this.height/2);
+                ctx.lineTo(this.x, this.y + this.height/2 + 15);
+                ctx.fill();
+            }
+            
+            update() {
+                this.y -= this.speed;
+                this.distance += this.speed;
+                return this.y < -this.height || this.distance > this.maxDistance;
+            }
+            
+            checkCollision(enemy) {
+                return (
+                    this.x < enemy.x + enemy.width/2 &&
+                    this.x > enemy.x - enemy.width/2 &&
+                    this.y < enemy.y + enemy.height/2 &&
+                    this.y > enemy.y - enemy.height/2
+                );
+            }
+        }
+        
+        class Enemy {
+            constructor(lane) {
+                this.lane = lane;
+                this.width = 50;
+                this.height = 50;
+                this.x = 100 + lane * 200;
+                this.y = -50;
+                this.health = 20 + Math.floor(Math.random() * 80);
+                this.maxHealth = this.health;
+                this.speed = 2;
+                this.color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
+            }
+            
+            draw() {
+                // Cuerpo del enemigo
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+                
+                // Barra de salud
+                const healthBarWidth = this.width;
+                const healthBarHeight = 5;
+                const healthPercentage = this.health / this.maxHealth;
+                
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x - healthBarWidth/2, this.y - this.height/2 - 10, healthBarWidth, healthBarHeight);
+                
+                ctx.fillStyle = '#F00';
+                ctx.fillRect(
+                    this.x - healthBarWidth/2, 
+                    this.y - this.height/2 - 10, 
+                    healthBarWidth * healthPercentage, 
+                    healthBarHeight
+                );
+                
+                // Valor de salud
+                ctx.fillStyle = '#FFF';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(Math.floor(this.health), this.x, this.y);
+            }
+            
+            update() {
+                this.y += this.speed;
+                return this.y > canvas.height + this.height/2;
+            }
+            
+            takeDamage(damage) {
+                const actualDamage = Math.min(this.health, damage);
+                this.health -= actualDamage;
+                gameState.damageDealt += actualDamage;
+                
+                if (gameState.challengeActive) {
+                    gameState.challengeProgress += actualDamage;
+                }
+                
+                // Mostrar el daño
+                damages.push(new DamageIndicator(this.x, this.y, actualDamage));
+                
+                return this.health <= 0;
+            }
+        }
+        
+        class Upgrade {
+            constructor(lane) {
+                this.lane = lane;
+                this.width = 40;
+                this.height = 40;
+                this.x = 100 + lane * 200;
+                this.y = -50;
+                this.speed = 2;
+                
+                // Elegir tipo de mejora de forma aleatoria
+                const types = ['character', 'power', 'fireRate', 'range'];
+                this.type = types[Math.floor(Math.random() * types.length)];
+                this.color = upgradeColors[this.type];
+            }
+            
+            draw() {
+                // Círculo de mejora
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.width/2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Borde del círculo
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.width/2, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Símbolo de la mejora
+                ctx.fillStyle = '#FFF';
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                let symbol;
+                switch(this.type) {
+                    case 'character': symbol = '+P'; break;
+                    case 'power': symbol = '+D'; break;
+                    case 'fireRate': symbol = '+V'; break;
+                    case 'range': symbol = '+A'; break;
+                }
+                
+                ctx.fillText(symbol, this.x, this.y);
+            }
+            
+            update() {
+                this.y += this.speed;
+                return this.y > canvas.height + this.height/2;
+            }
+            
+            checkCollision(player) {
+                let collided = false;
+                
+                player.characters.forEach(char => {
+                    if (
+                        Math.abs(char.x - this.x) < (this.width/2 + player.width/2) &&
+                        Math.abs(char.y - this.y) < (this.height/2 + player.height/2)
+                    ) {
+                        collided = true;
+                    }
+                });
+                
+                return collided;
+            }
+            
+            apply() {
+                Upgrade.prototype.apply = function() {
+                    // No aplicar mejoras directamente
+                    console.log(`Mejora recolectada: ${this.type}, pero esperando desafío.`);
+                };
+            }
+        }
+        
+        class DamageIndicator {
+            constructor(x, y, damage) {
+                this.x = x;
+                this.y = y;
+                this.damage = Math.floor(damage);
+                this.lifespan = 30; // frames
+                this.offsetX = (Math.random() - 0.5) * 20;
+                this.offsetY = -Math.random() * 10;
+            }
+            
+            draw() {
+                const alpha = this.lifespan / 30;
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.damage, this.x + this.offsetX, this.y + this.offsetY);
+            }
+            
+            update() {
+                this.lifespan--;
+                this.y -= 1;
+                return this.lifespan <= 0;
+            }
+        }
+        
+        class Road {
+            constructor() {
+                this.lanes = 3;
+                this.laneWidth = canvas.width / this.lanes;
+                this.markings = [];
+                
+                // Inicializar marcas de carretera
+                for (let i = 0; i < 10; i++) {
+                    this.markings.push({
+                        y: i * 100,
+                        speed: gameState.roadSpeed
+                    });
+                }
+            }
+            
+            draw() {
+                // Fondo de la carretera
+                ctx.fillStyle = '#555';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Líneas de carril
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 3;
+                
+                for (let i = 1; i < this.lanes; i++) {
+                    ctx.beginPath();
+                    ctx.setLineDash([20, 20]);
+                    ctx.moveTo(i * this.laneWidth, 0);
+                    ctx.lineTo(i * this.laneWidth, canvas.height);
+                    ctx.stroke();
+                }
+                
+                // Marcas del camino
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 5;
+                ctx.setLineDash([]);
+                
+                this.markings.forEach(mark => {
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.width/2 - 30, mark.y);
+                    ctx.lineTo(canvas.width/2 + 30, mark.y);
+                    ctx.stroke();
+                });
+            }
+            
+            update() {
+                // Mover las marcas de la carretera
+                this.markings.forEach(mark => {
+                    mark.y += mark.speed;
+                    
+                    if (mark.y > canvas.height) {
+                        mark.y = -100;
+                    }
+                });
+            }
+        }
+
+        // Clase Challenge
+        class Challenge {
+            constructor(goal, rewardType, rewardAmount, description) {
+                this.goal = goal; // Meta para completar el desafío (e.g., daño acumulado)
+                this.rewardType = rewardType; // Tipo de mejora ('power', 'fireRate', etc.)
+                this.rewardAmount = rewardAmount; // Cantidad de mejora
+                this.description = description; // Descripción del desafío
+                this.progress = 0; // Progreso actual
+                this.completed = false; // Si el desafío ha sido completado
+            }
+
+            updateProgress(amount) {
+                if (!this.completed) {
+                    this.progress += amount;
+                    if (this.progress >= this.goal) {
+                        this.completed = true;
+                        return true; // Desafío completado
+                    }
+                }
+                return false;
+            }
+
+            applyReward() {
+                switch(this.rewardType) {
+                    case 'power':
+                        playerStats.power += this.rewardAmount;
+                        break;
+                    case 'fireRate':
+                        playerStats.fireRate += this.rewardAmount;
+                        break;
+                    case 'range':
+                        playerStats.range += this.rewardAmount;
+                        break;
+                    case 'character':
+                        playerStats.characters = Math.min(playerStats.characters + this.rewardAmount, 5);
+                        break;
+                }
+                updateStatsDisplay();
+                showReward(`¡Desafío completado! Recompensa: +${this.rewardAmount} ${this.rewardType}`);
+            }
+        }
+
+        // Variables globales para manejar desafíos
+        let currentChallenge = null;
+
+        // Función para iniciar un nuevo desafío
+        function startNewChallenge() {
+            const challenges = [
+                new Challenge(500, 'power', 2, '¡Desafío! Haz 500 puntos de daño'),
+                new Challenge(1000, 'fireRate', 0.5, '¡Desafío! Haz 1000 puntos de daño'),
+                new Challenge(2000, 'range', 1, '¡Desafío! Haz 2000 puntos de daño')
+            ];
+            currentChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            challengeElement.textContent = currentChallenge.description;
+            rewardElement.textContent = '';
+            challengeElement.style.display = 'block';
+        }
+
+        // Modificar la función takeDamage en la clase Enemy
+        Enemy.prototype.takeDamage = function(damage) {
+            const actualDamage = Math.min(this.health, damage);
+            this.health -= actualDamage;
+            gameState.damageDealt += actualDamage;
+
+            if (currentChallenge && !currentChallenge.completed) {
+                if (currentChallenge.updateProgress(actualDamage)) {
+                    currentChallenge.applyReward();
+                    startNewChallenge(); // Iniciar un nuevo desafío
+                }
+            }
+
+            damages.push(new DamageIndicator(this.x, this.y, actualDamage));
+            return this.health <= 0;
+        };
+        
+        // Inicializar objetos del juego
+        const player = new Player();
+        const road = new Road();
+        let bullets = [];
+        let enemies = [];
+        let upgrades = [];
+        let damages = [];
+        
+        // Funciones del juego
+        function updateStatsDisplay() {
+            statsElement.textContent = `Poder: ${playerStats.power.toFixed(1)} | Cadencia: ${playerStats.fireRate.toFixed(1)} | Alcance: ${playerStats.range.toFixed(1)} | Personajes: ${playerStats.characters}`;
+        }
+        
+        function showChallenge(goal) {
+            gameState.challengeActive = true;
+            gameState.challengeGoal = goal;
+            gameState.challengeProgress = 0;
+            challengeElement.textContent = `¡Desafío! Haz ${goal} puntos de daño`;
+            challengeElement.style.display = 'block';
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                challengeElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        function showReward(text) {
+            rewardElement.textContent = `¡Recompensa! ${text}`;
+            rewardElement.style.display = 'block';
+            
+            // Ocultar después de 2 segundos
+            setTimeout(() => {
+                rewardElement.style.display = 'none';
+            }, 2000);
+        }
+        
+        function completeChallenge() {
+            gameState.challengeActive = false;
+            
+            // Elegir recompensa aleatoria
+            const rewards = [
+                { name: '+2 Poder y +1 Cadencia', power: 2, fireRate: 1 },
+                { name: '+1 Alcance y +1.5 Cadencia', range: 1, fireRate: 1.5 },
+                { name: '+2 Poder y +1 Alcance', power: 2, range: 1 },
+                { name: '+1 Personaje', characters: 1 }
+            ];
+            
+            const reward = rewards[Math.floor(Math.random() * rewards.length)];
+            
+            // Aplicar recompensa
+            if (reward.power) playerStats.power += reward.power;
+            if (reward.fireRate) playerStats.fireRate += reward.fireRate;
+            if (reward.range) playerStats.range += reward.range;
+            if (reward.characters) playerStats.characters = Math.min(playerStats.characters + reward.characters, 5);
+            
+            showReward(reward.name);
+            updateStatsDisplay();
+        }
+        
+        function spawnEnemy() {
+            const lane = Math.floor(Math.random() * 3);
+            enemies.push(new Enemy(lane));
+        }
+        
+        function spawnUpgrade() {
+            const lane = Math.floor(Math.random() * 3);
+            upgrades.push(new Upgrade(lane));
+        }
+        
+        function startChallenge() {
+            const goal = 200 + Math.floor(Math.random() * 500);
+            showChallenge(goal);
+        }
+        
+        // Control del ratón
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            gameState.mouseX = e.clientX - rect.left;
+        });
+        
+        // Bucle principal del juego
+        function gameLoop() {
+            if (!gameState.isRunning) return;
+            
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Actualizar y dibujar la carretera
+            road.update();
+            road.draw();
+            
+            // Generar enemigos y mejoras aleatoriamente
+            if (Math.random() < 0.01) {
+                spawnEnemy();
+            }
+            
+            if (Math.random() < 0.005) {
+                spawnUpgrade();
+            }
+            
+            // Generar desafíos periódicamente
+            if (!gameState.challengeActive && Math.random() < 0.002) {
+                startChallenge();
+            }
+            
+            // Disparar automáticamente
+            player.shoot();
+            
+            // Actualizar y dibujar balas
+            bullets = bullets.filter(bullet => {
+                bullet.draw();
+                return !bullet.update();
+            });
+            
+            // Actualizar y dibujar enemigos
+            enemies = enemies.filter(enemy => {
+                enemy.draw();
+                
+                // Comprobar colisiones con balas
+                bullets = bullets.filter(bullet => {
+                    if (bullet.checkCollision(enemy)) {
+                        const killed = enemy.takeDamage(bullet.power * 10);
+                        return false; // Eliminar la bala
+                    }
+                    return true; // Mantener la bala
+                });
+                
+                return !enemy.update() && enemy.health > 0;
+            });
+            
+            // Actualizar y dibujar mejoras
+            upgrades = upgrades.filter(upgrade => {
+                upgrade.draw();
+                
+                // Comprobar colisiones con el jugador
+                if (upgrade.checkCollision(player)) {
+                    upgrade.apply();
+                    return false; // Eliminar la mejora
+                }
+                
+                return !upgrade.update();
+            });
+            
+            // Actualizar y dibujar indicadores de daño
+            damages = damages.filter(damage => {
+                damage.draw();
+                return !damage.update();
+            });
+            
+            // Actualizar y dibujar al jugador
+            player.update();
+            player.draw();
+            
+            // Comprobar si se ha completado el desafío
+            if (gameState.challengeActive && gameState.challengeProgress >= gameState.challengeGoal) {
+                completeChallenge();
+            }
+            
+            // Solicitar el siguiente frame
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Iniciar el juego
+        startNewChallenge();
+        updateStatsDisplay();
+        gameLoop();
+    </script>
+</body>
+</html>

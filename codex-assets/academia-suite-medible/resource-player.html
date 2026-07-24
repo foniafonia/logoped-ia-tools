@@ -337,10 +337,7 @@
 
       function getActivityUrl(activity) {
         if (!activity?.rel_path) return "#";
-        if (window.location.protocol === "file:") {
-          return `./${encodePathSegments(activity.rel_path)}`;
-        }
-        return activity.web_path;
+        return `./${encodePathSegments(activity.rel_path)}`;
       }
 
       function formatTimer(ms) {

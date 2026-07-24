@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anamnesis PRET-A rellenable</title>
+  <style>
+    :root {
+      --bg: #f6f7f3;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #dfe4ea;
+      --accent: #176b66;
+      --soft: #eef7f5;
+      --warn: #fff5df;
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 24px;
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 1.45rem; margin-bottom: 4px; }
+    h2 { font-size: 1.05rem; margin-bottom: 10px; }
+    h3 { font-size: 0.92rem; margin-bottom: 8px; }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(320px, 0.9fr);
+      gap: 16px;
+      padding: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.06);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .section {
+      display: grid;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section:last-child {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.86rem;
+      font-weight: 780;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfd;
+      color: var(--ink);
+      padding: 10px 11px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .required {
+      color: #b42318;
+      font-weight: 900;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: 1fr 90px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .scale output {
+      display: grid;
+      place-items: center;
+      min-height: 38px;
+      border-radius: var(--radius);
+      background: var(--soft);
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .preview {
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-size: 0.92rem;
+      color: #263244;
+    }
+
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .warning {
+      background: var(--warn);
+      border: 1px solid #f2d59b;
+      border-radius: var(--radius);
+      padding: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      header, main { padding: 14px; }
+      header { align-items: flex-start; flex-direction: column; }
+      main, .grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      header, .actions, .no-print { display: none !important; }
+      body { background: #fff; }
+      main { display: block; padding: 0; }
+      .panel { box-shadow: none; border: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">PRET-A · Anamnesis clínica</p>
+      <h1>Anamnesis rellenable para informe de fluidez</h1>
+      <p class="hint">Formulario independiente. No modifica la app de evaluación abierta en la otra pestaña.</p>
+    </div>
+    <div class="actions">
+      <button id="save">Guardar local</button>
+      <button id="copy">Copiar informe</button>
+      <button id="download">Descargar JSON</button>
+      <button class="primary" id="print">Imprimir / PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <form id="form" class="panel">
+      <section class="section">
+        <h2>1. Identificación</h2>
+        <div class="grid">
+          <label>Nombre / código del paciente <span class="required">*</span>
+            <input name="paciente" required placeholder="PRETA-001" />
+          </label>
+          <label>Fecha de evaluación
+            <input name="fecha" type="date" />
+          </label>
+          <label>Edad
+            <input name="edad" placeholder="Ej. 8 años 4 meses" />
+          </label>
+          <label>Informante
+            <input name="informante" placeholder="Madre, padre, paciente, tutor..." />
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>2. Motivo de consulta e historia del problema</h2>
+        <label>Motivo de consulta <span class="required">*</span>
+          <textarea name="motivo" required placeholder="Qué preocupa, quién consulta, desde cuándo y en qué contextos aparece."></textarea>
+        </label>
+        <div class="grid">
+          <label>Inicio de la tartamudez / disfluencia
+            <textarea name="inicio" placeholder="Edad aproximada, forma de inicio, gradual o repentina."></textarea>
+          </label>
+          <label>Evolución
+            <textarea name="evolucion" placeholder="Estable, fluctuante, empeora con presión, mejorías, recaídas."></textarea>
+          </label>
+        </div>
+        <label>Situaciones en las que aumenta o disminuye
+          <textarea name="situaciones" placeholder="Teléfono, clase, familia, desconocidos, lectura, juego, cansancio, emoción..."></textarea>
+        </label>
+      </section>
+
+      <section class="section">
+        <h2>3. Antecedentes familiares y personales</h2>
+        <div class="grid">
+          <label>Historia familiar <span class="required">*</span>
+            <textarea name="historia_familiar" required placeholder="Antecedentes de tartamudez, lenguaje, aprendizaje, ansiedad u otros datos familiares relevantes."></textarea>
+          </label>
+          <label>Historia médica / auditiva / neurológica
+            <textarea name="historia_medica" placeholder="Otitis, audición, medicación, neurología, sueño, salud general."></textarea>
+          </label>
+          <label>Desarrollo psicomotor <span class="required">*</span>
+            <textarea name="desarrollo_psicomotor" required placeholder="Hitos motores, autonomía, coordinación, alimentación, sueño."></textarea>
+          </label>
+          <label>Desarrollo del lenguaje
+            <textarea name="desarrollo_lenguaje" placeholder="Primeras palabras, frases, comprensión, pronunciación, vocabulario."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4. Impacto funcional y emocional</h2>
+        <div class="grid">
+          <label>Conciencia del problema
+            <select name="conciencia">
+              <option value="">Seleccionar</option>
+              <option>No parece consciente</option>
+              <option>Conciencia leve</option>
+              <option>Conciencia clara</option>
+              <option>Alta preocupación / anticipación</option>
+            </select>
+          </label>
+          <label>Conductas de evitación
+            <select name="evitacion">
+              <option value="">Seleccionar</option>
+              <option>No observadas</option>
+              <option>Leves / ocasionales</option>
+              <option>Frecuentes</option>
+              <option>Muy marcadas</option>
+            </select>
+          </label>
+        </div>
+        <label>Impacto en casa, colegio/trabajo y relaciones
+          <textarea name="impacto" placeholder="Participación, llamadas, exposiciones, bromas, frustración, aislamiento, rendimiento."></textarea>
+        </label>
+        <div class="grid">
+          <label class="scale">Presión comunicativa percibida
+            <input name="presion" type="range" min="0" max="10" value="5" />
+            <output>5/10</output>
+          </label>
+          <label class="scale">Malestar emocional asociado
+            <input name="malestar" type="range" min="0" max="10" value="5" />
+            <output>5/10</output>
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>5. Comportamientos secundarios observados</h2>
+        <div class="grid">
+          <label>Fisiológicos
+            <textarea name="sec_fisiologicos" placeholder="Tensión mandibular/labial, parpadeo, movimientos de cabeza, respiración, manos..."></textarea>
+          </label>
+          <label>Verbales
+            <textarea name="sec_verbales" placeholder="Muletillas, circunloquios, sustituciones, reinicios, evitación de palabras."></textarea>
+          </label>
+          <label>Emocionales
+            <textarea name="sec_emocionales" placeholder="Frustración, enfado, tristeza, vergüenza, abandono del habla."></textarea>
+          </label>
+          <label>Observaciones del informante
+            <textarea name="observaciones_informante" placeholder="Comentarios literales o ejemplos relevantes."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>6. Muestras de habla y contexto de grabación</h2>
+        <div class="grid">
+          <label>Tipo de muestra
+            <select name="tipo_muestra">
+              <option>Habla espontánea</option>
+              <option>Narración</option>
+              <option>Lectura</option>
+              <option>Conversación guiada</option>
+              <option>Mixta</option>
+            </select>
+          </label>
+          <label>Duración aproximada
+            <input name="duracion" placeholder="Ej. 3 min 20 s" />
+          </label>
+        </div>
+        <label>Condiciones de grabación
+          <textarea name="condiciones" placeholder="Ruido, distancia al micrófono, presencia de familiares, situación emocional, fatiga."></textarea>
+        </label>
+        <label>Notas para el informe
+          <textarea name="notas_informe" placeholder="Síntesis clínica inicial, hipótesis, datos pendientes, recomendaciones de evaluación complementaria."></textarea>
+        </label>
+      </section>
+    </form>
+
+    <aside class="panel">
+      <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+        <h2>Resumen para informe</h2>
+        <span class="status" id="status">Sin guardar</span>
+      </div>
+      <div class="warning no-print">
+        Esta anamnesis no diagnostica por sí sola. Úsala como contexto para interpretar la muestra de habla, el %SS, la tipología de disfluencias y los comportamientos secundarios.
+      </div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:14px 0;" />
+      <div id="preview" class="preview"></div>
+    </aside>
+  </main>
+
+  <script>
+    const form = document.querySelector("#form");
+    const preview = document.querySelector("#preview");
+    const statusEl = document.querySelector("#status");
+    const storageKey = "preta-anamnesis-v1";
+
+    const labels = {
+      paciente: "Paciente/código",
+      fecha: "Fecha",
+      edad: "Edad",
+      informante: "Informante",
+      motivo: "Motivo de consulta",
+      inicio: "Inicio",
+      evolucion: "Evolución",
+      situaciones: "Situaciones moduladoras",
+      historia_familiar: "Historia familiar",
+      historia_medica: "Historia médica/auditiva/neurológica",
+      desarrollo_psicomotor: "Desarrollo psicomotor",
+      desarrollo_lenguaje: "Desarrollo del lenguaje",
+      conciencia: "Conciencia del problema",
+      evitacion: "Conductas de evitación",
+      impacto: "Impacto funcional",
+      presion: "Presión comunicativa",
+      malestar: "Malestar emocional",
+      sec_fisiologicos: "Comportamientos fisiológicos",
+      sec_verbales: "Comportamientos verbales",
+      sec_emocionales: "Comportamientos emocionales",
+      observaciones_informante: "Observaciones del informante",
+      tipo_muestra: "Tipo de muestra",
+      duracion: "Duración aproximada",
+      condiciones: "Condiciones de grabación",
+      notas_informe: "Notas para informe"
+    };
+
+    function getData() {
+      return Object.fromEntries(new FormData(form).entries());
+    }
+
+    function renderPreview() {
+      const data = getData();
+      const lines = ["ANAMNESIS PRET-A / FLUIDEZ", ""];
+      Object.entries(labels).forEach(([key, label]) => {
+        const value = (data[key] || "").trim();
+        if (value) lines.push(`${label}: ${value}`);
+      });
+      preview.textContent = lines.join("\n\n");
+      document.querySelectorAll("input[type='range']").forEach((range) => {
+        const output = range.parentElement.querySelector("output");
+        if (output) output.textContent = `${range.value}/10`;
+      });
+    }
+
+    function saveLocal() {
+      localStorage.setItem(storageKey, JSON.stringify(getData()));
+      statusEl.textContent = "Guardado local";
+    }
+
+    function restoreLocal() {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([key, value]) => {
+        const field = form.elements[key];
+        if (field) field.value = value;
+      });
+      statusEl.textContent = "Recuperado";
+    }
+
+    async function copyReport() {
+      await navigator.clipboard.writeText(preview.textContent);
+      statusEl.textContent = "Copiado";
+    }
+
+    function downloadJson() {
+      const blob = new Blob([JSON.stringify(getData(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `anamnesis-preta-${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      statusEl.textContent = "JSON descargado";
+    }
+
+    form.addEventListener("input", () => {
+      renderPreview();
+      statusEl.textContent = "Cambios sin guardar";
+    });
+    document.querySelector("#save").addEventListener("click", saveLocal);
+    document.querySelector("#copy").addEventListener("click", copyReport);
+    document.querySelector("#download").addEventListener("click", downloadJson);
+    document.querySelector("#print").addEventListener("click", () => window.print());
+
+    document.querySelector("input[name='fecha']").valueAsDate = new Date();
+    restoreLocal();
+    renderPreview();
+  </script>
+</body>
+</html>

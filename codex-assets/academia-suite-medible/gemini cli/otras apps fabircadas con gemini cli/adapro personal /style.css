@@ -1,0 +1,326 @@
+/* General Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3, h4 {
+    color: #005a9c;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.8em;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 2.2em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #005a9c;
+}
+
+h3 {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #005a9c;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+.highlight {
+    color: #e53935; /* A vibrant accent color */
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #005a9c;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #004a8c;
+}
+
+/* Header */
+.main-header {
+    background-color: #fff;
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.main-header h1 {
+    margin: 0;
+}
+
+.main-header p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(to right, #e0f7fa, #bbdefb);
+    padding: 80px 0;
+    text-align: center;
+    color: #005a9c;
+}
+
+.hero-section h2 {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.hero-section p {
+    font-size: 1.3em;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+}
+
+/* Benefits Section */
+.benefits-section {
+    padding: 60px 0;
+    background-color: #fff;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.benefit-item {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.benefit-item h4 {
+    font-size: 1.4em;
+    margin-top: 0;
+    color: #e53935;
+}
+
+/* Features Section */
+.features-section {
+    padding: 60px 0;
+    background-color: #e0f7fa;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-item {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.feature-item h4 {
+    font-size: 1.5em;
+    margin-top: 0;
+    color: #005a9c;
+}
+
+/* Editor Section */
+.editor-section {
+    padding: 60px 0;
+    background-color: #fff;
+}
+
+.editor-section h2 {
+    margin-bottom: 30px;
+}
+
+.editor-placeholder {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Existing Editor Styles (adapted) */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('opendyslexic-0.91.12/compiled/OpenDyslexic-Regular.woff2') format('woff2'),
+         url('opendyslexic-0.91.12/compiled/OpenDyslexic-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.controls {
+    margin-bottom: 1rem;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px 0;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.controls label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+#font-select, #font-size, #highlight-color, #print-button {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+#print-button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#print-button:hover {
+    background-color: #45a049;
+}
+
+.editor-container {
+    display: flex;
+    gap: 1rem;
+    height: 400px; /* Adjusted height for better fit in landing page */
+    margin-top: 20px;
+}
+
+#text-input, #text-output {
+    width: 50%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 20px; /* Default font size */
+    line-height: 1.8; /* Consistent line height */
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#text-input {
+    resize: none;
+}
+
+/* Styles for the enhancements */
+.output-line {
+    padding: 2px 0;
+    transition: background-color 0.3s;
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+    padding-bottom: 8px; /* Space for the line */
+    margin-bottom: 8px; /* Space between lines */
+}
+
+.output-line:hover {
+    background-color: rgba(224, 247, 250, 0.5); /* Lighter hover effect */
+}
+
+.highlight-grapheme {
+    font-weight: bold;
+}
+
+.highlight-punctuation {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-right: 0.5em; /* Espacio extra para el ritmo */
+}
+
+.highlight-intonation {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #007bff; /* Un color distinto para la entonación */
+}
+
+.highlight-sentence-start {
+    font-weight: bold;
+    color: #28a745; /* Un color distinto para el inicio de frase */
+}
+
+.musicality-mark {
+    color: #fd7e14; /* Color naranja para la nota */
+    font-size: 0.8em;
+    vertical-align: super;
+    margin-left: 0.1em;
+}
+
+/* Footer */
+.main-footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.9em;
+}
+
+.main-footer p {
+    margin: 5px 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section h2 {
+        font-size: 2.5em;
+    }
+
+    .hero-section p {
+        font-size: 1.1em;
+    }
+
+    .benefits-grid, .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #text-input, #text-output {
+        width: 100%;
+        height: 250px;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .controls label, .controls input, .controls select, .controls button {
+        width: 90%;
+        margin: 0.2rem 0;
+    }
+}

@@ -1,0 +1,1052 @@
+<!DOCTYPE html><html lang="es" class="h-full"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TELNA-2024 - Test Especializado de Lenguaje y Neuroaprendizaje</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme:{ extend:{ colors:{ primary:'#5D5CDE', secondary:'#8B5CF6', accent:'#06B6D4' } } }
+    }
+  </script>
+</head>
+<body class="h-full bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+<div id="app" class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-primary to-secondary text-white shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <button onclick="goToHome()" id="home-btn" class="hidden bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg mr-4 transition-colors duration-200 flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-3a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+            </svg>
+            Inicio
+          </button>
+          <div class="flex items-center">
+            <!-- Logo profesional -->
+            <img src="https://pfst.cf2.poecdn.net/base/image/9a5ebda5c3f00a8e7335dc0b08cff33b34f25431f2a752eddefc3b15fdd4866f?w=1536&amp;h=1024" alt="TELNA-2024 Logo" class="w-12 h-12 rounded-lg mr-4 shadow-lg object-cover">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold">TELNA-2024</h1>
+              <p class="text-purple-100 mt-1">Test Especializado de Lenguaje y Neuroaprendizaje v2.0</p>
+            </div>
+          </div>
+        </div>
+        <div class="text-right text-sm text-purple-100">
+          <p>Versión Mejorada</p>
+          <p>Evaluación por Áreas</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress -->
+  <div id="progress-section" class="bg-white dark:bg-gray-800 shadow-sm hidden">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200" id="current-area-name">Área de Evaluación</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400" id="area-description">Descripción del área</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-600 dark:text-gray-400">Progreso Total</p>
+          <p class="font-semibold text-gray-800 dark:text-gray-200" id="overall-progress">0/8 Áreas</p>
+        </div>
+      </div>
+      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+        <div id="progress-bar" class="bg-gradient-to-r from-primary to-accent h-3 rounded-full transition-all duration-500" style="width:0%"></div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+        <span id="area-progress">Ítem 0 de 0</span>
+        <span id="total-score-display">Puntuación: 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
+
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="text-center max-w-6xl mx-auto">
+      <!-- Hero Section with Image -->
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-8 mb-8 overflow-hidden relative">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div class="text-left">
+            <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4">TELNA-2024</h1>
+            <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6">Software de Evaluación de la Afasia</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Herramienta profesional para la evaluación neuropsicológica integral del lenguaje y las funciones cognitivas relacionadas.</p>
+            <div class="space-y-3 mb-8">
+              <div class="flex items-center text-gray-600 dark:text-gray-400">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillrule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path>
+                </svg>
+                Evaluación basada en evidencia científica
+              </div>
+              <div class="flex items-center text-gray-600 dark:text-gray-400">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillrule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path>
+                </svg>
+                72 ítems organizados en 8 áreas especializadas
+              </div>
+              <div class="flex items-center text-gray-600 dark:text-gray-400">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillrule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path>
+                </svg>
+                Reportes automáticos con interpretación clínica
+              </div>
+            </div>
+            <button onclick="showMainScreen()" class="bg-gradient-to-r from-primary to-secondary hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-4 px-8 rounded-xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+              Comenzar Evaluación
+            </button>
+          </div>
+          <div class="relative">
+            <img src="https://pfst.cf2.poecdn.net/base/image/6d45605e497066bca2336967ac7405e462a1d09f1c4296411e592571c087b829?w=1536&amp;h=1024" alt="TELNA-2024 - Software de Evaluación de la Afasia" class="w-full h-auto rounded-2xl shadow-2xl">
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Preview -->
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokelinecap="round" strokelinejoin="round" strokewidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Evaluación Integral</h3>
+          <p class="text-gray-600 dark:text-gray-400">Evaluación completa de las funciones del lenguaje con protocolos estandarizados.</p>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokelinecap="round" strokelinejoin="round" strokewidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Análisis Automático</h3>
+          <p class="text-gray-600 dark:text-gray-400">Interpretación automática de resultados con recomendaciones terapéuticas.</p>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+          <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokelinecap="round" strokelinejoin="round" strokewidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Reportes PDF</h3>
+          <p class="text-gray-600 dark:text-gray-400">Generación automática de reportes profesionales en formato PDF.</p>
+        </div>
+      </div>
+
+      <!-- Quick Info -->
+      <div class="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">¿Qué es TELNA-2024?</h3>
+        <p class="text-gray-700 dark:text-gray-300 text-center max-w-4xl mx-auto">
+          El Test Especializado de Lenguaje y Neuroaprendizaje (TELNA-2024) es una herramienta de evaluación neuropsicológica 
+          diseñada para profesionales de la salud. Permite evaluar de manera integral las funciones del lenguaje, 
+          proporcionando datos objetivos para el diagnóstico y planificación terapéutica en pacientes con afasia y otros trastornos del lenguaje.
+        </p>
+      </div>
+    </div>
+
+    <!-- Welcome -->
+    <div id="welcome-screen" class="text-center max-w-4xl mx-auto hidden">
+
+      <div class="grid lg:grid-cols-3 gap-6 mb-8">
+        <!-- Patient Info -->
+        <div class="lg:col-span-1">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 h-full">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center">
+              <svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+              Información del Paciente
+            </h3>
+            <div class="space-y-4">
+              <input id="patient-name" type="text" placeholder="Nombre completo" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent">
+              <input id="patient-age" type="number" placeholder="Edad" min="1" max="120" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent">
+              <input id="evaluation-date" type="date" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent">
+              <select id="education-level" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Nivel educativo</option>
+                <option value="primaria">Primaria</option>
+                <option value="secundaria">Secundaria</option>
+                <option value="universitario">Universitario</option>
+                <option value="posgrado">Posgrado</option>
+              </select>
+              <input id="examiner-name" type="text" placeholder="Nombre del evaluador" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="lg:col-span-2">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 h-full">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center">
+              <svg class="w-5 h-5 mr-2 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Características de TELNA-2024
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="space-y-3">
+                <div class="flex items-center"><span class="w-3 h-3 bg-primary rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">8 áreas especializadas de evaluación</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-secondary rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">72 ítems de evaluación integral</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-accent rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Análisis cuantitativo y cualitativo</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Reporte PDF detallado</span></div>
+              </div>
+              <div class="space-y-3">
+                <div class="flex items-center"><span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Puntuación automática por área</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-pink-500 rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Interpretación neuropsicológica</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-indigo-500 rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Perfil de fortalezas y debilidades</span></div>
+                <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-3"></span><span class="text-gray-600 dark:text-gray-400">Recomendaciones terapéuticas</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Areas -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200 text-center">Áreas de Evaluación</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-4 rounded-lg border border-blue-200 dark:border-blue-700"><div class="text-2xl mb-2">🗣️</div><h4 class="font-semibold text-blue-800 dark:text-blue-300">Comunicación Básica</h4><p class="text-xs text-blue-600 dark:text-blue-400">9 ítems</p></div>
+          <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-4 rounded-lg border border-green-200 dark:border-green-700"><div class="text-2xl mb-2">👂</div><h4 class="font-semibold text-green-800 dark:text-green-300">Comprensión Auditiva</h4><p class="text-xs text-green-600 dark:text-green-400">15 ítems</p></div>
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-4 rounded-lg border border-purple-200 dark:border-purple-700"><div class="text-2xl mb-2">🤲</div><h4 class="font-semibold text-purple-800 dark:text-purple-300">Praxias Motoras</h4><p class="text-xs text-purple-600 dark:text-purple-400">6 ítems</p></div>
+          <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 p-4 rounded-lg border border-orange-200 dark:border-orange-700"><div class="text-2xl mb-2">💭</div><h4 class="font-semibold text-orange-800 dark:text-orange-300">Acceso Léxico</h4><p class="text-xs text-orange-600 dark:text-orange-400">7 ítems</p></div>
+          <div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30 p-4 rounded-lg border border-teal-200 dark:border-teal-700"><div class="text-2xl mb-2">🔄</div><h4 class="font-semibold text-teal-800 dark:text-teal-300">Repetición y Memoria</h4><p class="text-xs text-teal-600 dark:text-teal-400">4 ítems</p></div>
+          <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-800/30 p-4 rounded-lg border border-indigo-200 dark:border-indigo-700"><div class="text-2xl mb-2">📖</div><h4 class="font-semibold text-indigo-800 dark:text-indigo-300">Comprensión Lectora</h4><p class="text-xs text-indigo-600 dark:text-indigo-400">10 ítems</p></div>
+          <div class="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-800/30 p-4 rounded-lg border border-pink-200 dark:border-pink-700"><div class="text-2xl mb-2">📚</div><h4 class="font-semibold text-pink-800 dark:text-pink-300">Lectura en Voz Alta</h4><p class="text-xs text-pink-600 dark:text-pink-400">8 ítems</p></div>
+          <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/30 p-4 rounded-lg border border-red-200 dark:border-red-700"><div class="text-2xl mb-2">✍️</div><h4 class="font-semibold text-red-800 dark:text-red-300">Expresión Escrita</h4><p class="text-xs text-red-600 dark:text-red-400">13 ítems</p></div>
+        </div>
+      </div>
+
+      <button onclick="startTest()" class="bg-gradient-to-r from-primary to-secondary hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-4 px-12 rounded-xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+        Iniciar Evaluación TELNA-2024
+      </button>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="test-screen" class="hidden">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200" id="item-title">Ítem 1</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400" id="item-type">Tipo de evaluación</p>
+          </div>
+          <div class="text-right">
+            <div class="text-lg font-semibold text-primary" id="area-score-display">0/0</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">Puntos del área</div>
+          </div>
+        </div>
+        <div id="item-content" class="mb-8"></div>
+        <div class="flex justify-between">
+          <div class="flex space-x-3">
+            <button onclick="previousItem()" id="prev-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled="">← Anterior</button>
+          </div>
+          <div class="flex space-x-3">
+            <button onclick="nextItem()" id="next-btn" class="bg-primary hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="hidden">
+      <div class="max-w-6xl mx-auto">
+        <div id="printable-report">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6">
+            <div class="text-center mb-8">
+              <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">TELNA-2024</h2>
+              <h3 class="text-xl text-gray-600 dark:text-gray-400 mb-1">Test Especializado de Lenguaje y Neuroaprendizaje</h3>
+              <p class="text-sm text-gray-500">Reporte de Evaluación Neuropsicológica</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-4">Información del Paciente</h4>
+                <div id="patient-info-results" class="space-y-2 text-gray-700 dark:text-gray-300"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-4">Resumen de Resultados</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" id="total-score">0</div>
+                    <div class="text-sm opacity-90">Puntuación Total</div>
+                  </div>
+                  <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold" id="total-percentage">0%</div>
+                    <div class="text-sm opacity-90">Porcentaje Global</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Análisis Detallado por Áreas</h3>
+            <div id="areas-results" class="space-y-6"></div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Interpretación Neuropsicológica</h3>
+            <div id="clinical-interpretation"></div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-6">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Recomendaciones Terapéuticas</h3>
+            <div id="recommendations"></div>
+          </div>
+        </div>
+        <div class="flex justify-center space-x-4">
+          <button onclick="generatePDF()" class="bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">Generar PDF</button>
+          <button onclick="restartTest()" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">Nueva Evaluación</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// Dark mode
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+}
+
+// Complete test areas with all 72 items
+const testAreas = [
+  {
+    id: 1,
+    name: "Comunicación Básica y Orientación", 
+    description: "Evaluación de habilidades comunicativas elementales y orientación",
+    icon: "🗣️",
+    items: [
+      { id: 1, text: "Saludo espontáneo", instruction: "Observe comunicación oral y gestual del saludo inicial", maxScore: 3 },
+      { id: 2, text: "Narrativa espontánea", instruction: "Evalúe calidad y cantidad de expresión en lenguaje espontáneo", maxScore: 3 },
+      { id: 3, text: "Comando simple gestual", instruction: "'Deme la mano' - sin gesto. Máximo 2 intentos", maxScore: 3 },
+      { id: 4, text: "Reconocimiento personal", instruction: "'¿Nos conocemos?' - Respuesta Si/No", maxScore: 3 },
+      { id: 5, text: "Estado actual correcto", instruction: "'¿Ud. está...?' - Opción correcta", maxScore: 3 },
+      { id: 6, text: "Estado actual incorrecto", instruction: "'¿Ud. está...?' - Opción incorrecta", maxScore: 3 },
+      { id: 7, text: "Identificación nombre incorrecto", instruction: "'¿Ud. se llama...?' - Nombre erróneo", maxScore: 3 },
+      { id: 8, text: "Identificación nombre correcto", instruction: "'¿Ud. se llama...?' - Nombre correcto", maxScore: 3 },
+      { id: 9, text: "Respuesta 'No sé'", instruction: "Pregunta que requiere respuesta 'No sé'", maxScore: 3 }
+    ]
+  },
+  {
+    id: 2,
+    name: "Comprensión Auditiva y Denominación",
+    description: "Evaluación de comprensión auditiva y capacidad de denominación", 
+    icon: "👂",
+    items: [
+      { id: 10, text: "Denominación objeto simple", instruction: "Muestre objeto de uso común", maxScore: 3 },
+      { id: 11, text: "Denominación objeto menos frecuente", instruction: "Objeto de uso menos frecuente", maxScore: 3 },
+      { id: 12, text: "Denominación objeto poco frecuente", instruction: "Objeto de uso poco frecuente", maxScore: 3 },
+      { id: 13, text: "Señalamiento mesa", instruction: "Señale/toque la mesa", maxScore: 3 },
+      { id: 14, text: "Señalamiento ventana", instruction: "Señale la ventana", maxScore: 3 },
+      { id: 15, text: "Esquema corporal - nariz", instruction: "Señale su nariz", maxScore: 3 },
+      { id: 16, text: "Lateralidad", instruction: "Señale mi brazo derecho", maxScore: 3 },
+      { id: 17, text: "Reconocimiento numérico '7'", instruction: "Señale el '7' (Tarjeta)", maxScore: 3 },
+      { id: 18, text: "Reconocimiento numérico '3'", instruction: "Señale el '3' (Tarjeta)", maxScore: 3 },
+      { id: 19, text: "Reconocimiento letra 'I'", instruction: "Señale la 'I' (Tarjeta)", maxScore: 3 },
+      { id: 20, text: "Reconocimiento letra 'B'", instruction: "Señale la 'B' (Tarjeta)", maxScore: 3 },
+      { id: 21, text: "Reconocimiento palabra 'vino'", instruction: "Señale 'vino' (Tarjeta)", maxScore: 3 },
+      { id: 22, text: "Reconocimiento palabra 'pino'", instruction: "Señale 'pino' (Tarjeta)", maxScore: 3 },
+      { id: 23, text: "Reconocimiento palabra 'más'", instruction: "Señale 'más' (Tarjeta)", maxScore: 3 },
+      { id: 24, text: "Reconocimiento palabra 'pato'", instruction: "Señale 'pato' (Tarjeta)", maxScore: 3 }
+    ]
+  },
+  {
+    id: 3,
+    name: "Praxias y Coordinación Motora",
+    description: "Evaluación de praxias bucofaciales y coordinación motora",
+    icon: "🤲",
+    items: [
+      { id: 25, text: "Praxia bucofacial sin modelo", instruction: "Abra y cierre la boca muchas veces - sin gesto", maxScore: 6 },
+      { id: 26, text: "Praxia bucofacial por partes", instruction: "Si falló anterior: abrir/cerrar/muchas veces", maxScore: 3 },
+      { id: 27, text: "Praxia bucofacial con modelo", instruction: "Abra y cierre la boca - con gesto", maxScore: 3 },
+      { id: 28, text: "Comprensión frase 1", instruction: "Señale 'El niño estudia'", maxScore: 3 },
+      { id: 29, text: "Comprensión frase 2", instruction: "Señale 'El hombre juega'", maxScore: 3 },
+      { id: 30, text: "Discriminación auditiva", instruction: "Golpee cuando diga 'A': T-E-A-M-K-L-A-A-J", maxScore: 3 }
+    ]
+  },
+  {
+    id: 4,
+    name: "Denominación y Acceso Léxico",
+    description: "Evaluación del acceso al léxico y fluencia de denominación",
+    icon: "💭",
+    items: [
+      { id: 31, text: "Denominación por función - tijera", instruction: "'¿Con qué se corta papel?' - Con/sin ayuda", maxScore: 3 },
+      { id: 32, text: "Denominación por función - lápiz", instruction: "'¿Para qué se usa lápiz?' - Con/sin ayuda", maxScore: 3 },
+      { id: 33, text: "Deletreo nombre propio", instruction: "Deletree su nombre (el más simple)", maxScore: 3 },
+      { id: 34, text: "Repetición tres palabras", instruction: "Repita: pelota, bandera, árbol", maxScore: 6 },
+      { id: 35, text: "Repetición palabras individuales", instruction: "Si falló: pelota/bandera/árbol por separado", maxScore: 3 },
+      { id: 36, text: "Deletreo directo e inverso", instruction: "Deletree 'mundo' y luego al revés", maxScore: 3 },
+      { id: 37, text: "Memoria de palabras", instruction: "Recuerde las tres palabras anteriores", maxScore: 3 }
+    ]
+  },
+  {
+    id: 5,
+    name: "Repetición y Memoria Verbal",
+    description: "Evaluación de capacidades de repetición y memoria auditiva",
+    icon: "🔄",
+    items: [
+      { id: 38, text: "Repetición frase compleja", instruction: "Repita: 'el flan tiene frutillas y frambuesas'", maxScore: 3 },
+      { id: 39, text: "Repetición serie silábica", instruction: "Repita: bar-mar-par", maxScore: 3 },
+      { id: 40, text: "Repetición serie numérica", instruction: "Repita: 5-8-4-3", maxScore: 3 },
+      { id: 41, text: "Comando complejo secuencial", instruction: "Tome papel mano izquierda, doble, ponga en piso", maxScore: 3 }
+    ]
+  },
+  {
+    id: 6,
+    name: "Comprensión Lectora",
+    description: "Evaluación de la comprensión de material escrito",
+    icon: "📖",
+    items: [
+      { id: 42, text: "Discriminación visual letras", instruction: "¿Cuál letra es igual a esta? (Tarjeta)", maxScore: 3 },
+      { id: 43, text: "Discriminación visual palabra 1", instruction: "'goma' - ¿Cuál palabra es igual?", maxScore: 3 },
+      { id: 44, text: "Discriminación visual palabra 2", instruction: "'peca' - ¿Cuál palabra es igual?", maxScore: 3 },
+      { id: 45, text: "Comprensión lectora 'casa'", instruction: "Señale 'casa' en la tarjeta", maxScore: 3 },
+      { id: 46, text: "Comprensión lectora 'gato'", instruction: "Señale 'gato' en la tarjeta", maxScore: 3 },
+      { id: 47, text: "Comprensión lectora 'planta'", instruction: "Señale 'planta' en la tarjeta", maxScore: 3 },
+      { id: 48, text: "Lectura números", instruction: "Lea: 8, 4, 9", maxScore: 3 },
+      { id: 49, text: "Lectura letras", instruction: "Lea: E, D, A", maxScore: 3 },
+      { id: 50, text: "Comprensión orden escrita 1", instruction: "Haga lo que dice (Tarjeta)", maxScore: 3 },
+      { id: 51, text: "Comprensión orden escrita 2", instruction: "Haga lo que dice (Tarjeta)", maxScore: 3 }
+    ]
+  },
+  {
+    id: 7,
+    name: "Lectura en Voz Alta",
+    description: "Evaluación de habilidades de lectura oral y comprensión",
+    icon: "📚",
+    items: [
+      { id: 52, text: "Asociación palabra-imagen 'pie'", instruction: "Lea 'pie', señale dibujo", maxScore: 1 },
+      { id: 53, text: "Asociación palabra-imagen 'mano'", instruction: "Lea 'mano', señale dibujo", maxScore: 1 },
+      { id: 54, text: "Asociación palabra-imagen 'estudiante'", instruction: "Lea 'estudiante', señale dibujo", maxScore: 1 },
+      { id: 55, text: "Asociación frase-imagen 1", instruction: "Lea 'el perro come', señale dibujo", maxScore: 1 },
+      { id: 56, text: "Asociación frase-imagen 2", instruction: "Lea 'el insecto se apoya', señale dibujo", maxScore: 1 },
+      { id: 57, text: "Síntesis auditiva 1", instruction: "m-a-m-á ¿Qué palabra es?", maxScore: 1 },
+      { id: 58, text: "Síntesis auditiva 2", instruction: "p-e-n-a ¿Qué palabra es?", maxScore: 1 },
+      { id: 59, text: "Síntesis auditiva 3", instruction: "v-i-v-e ¿Qué palabra es?", maxScore: 1 }
+    ]
+  },
+  {
+    id: 8,
+    name: "Expresión Escrita",
+    description: "Evaluación de habilidades de escritura y expresión gráfica",
+    icon: "✍️",
+    items: [
+      { id: 60, text: "Escritura nombre propio", instruction: "Escriba su nombre", maxScore: 3 },
+      { id: 61, text: "Secuencia numérica oral", instruction: "Diga números del 1 al 10", maxScore: 3 },
+      { id: 62, text: "Escritura secuencia numérica", instruction: "Escriba números del 1 al 10", maxScore: 3 },
+      { id: 63, text: "Secuencia alfabética oral", instruction: "Diga letras a-b-c hasta J", maxScore: 3 },
+      { id: 64, text: "Escritura secuencia alfabética", instruction: "Escriba letras del abecedario", maxScore: 3 },
+      { id: 65, text: "Dictado letra 'a'", instruction: "Escriba: a", maxScore: 1 },
+      { id: 66, text: "Dictado letra 'f'", instruction: "Escriba: f", maxScore: 1 },
+      { id: 67, text: "Dictado número '8'", instruction: "Escriba: 8", maxScore: 1 },
+      { id: 68, text: "Dictado número '4'", instruction: "Escriba: 4", maxScore: 1 },
+      { id: 69, text: "Dictado frase", instruction: "Escriba: 'el pan está muy rico'", maxScore: 3 },
+      { id: 70, text: "Escritura espontánea", instruction: "Escriba una oración", maxScore: 3 },
+      { id: 71, text: "Evaluación comprensión global", instruction: "Evaluación general comprensión", maxScore: 3 },
+      { id: 72, text: "Evaluación expresión global", instruction: "Evaluación general expresión", maxScore: 3 }
+    ]
+  }
+];
+
+let currentAreaIndex = 0;
+let currentItemIndex = 0;
+let testData = {};
+let areaScores = [];
+
+function startTest() {
+    const name = document.getElementById('patient-name').value;
+    const age = document.getElementById('patient-age').value;
+    const date = document.getElementById('evaluation-date').value;
+    const education = document.getElementById('education-level').value;
+    const examiner = document.getElementById('examiner-name').value;
+    
+    if (!name.trim()) {
+        alert('Por favor ingrese el nombre del paciente');
+        return;
+    }
+
+    testData = {
+        patientName: name,
+        patientAge: age,
+        evaluationDate: date || new Date().toISOString().split('T')[0],
+        educationLevel: education,
+        examinerName: examiner,
+        startTime: new Date().toISOString(),
+        version: "TELNA-2024 v2.0"
+    };
+
+    areaScores = testAreas.map(area => ({
+        areaId: area.id,
+        areaName: area.name,
+        scores: new Array(area.items.length).fill(0),
+        observations: new Array(area.items.length).fill('')
+    }));
+
+    currentAreaIndex = 0;
+    currentItemIndex = 0;
+
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('progress-section').classList.remove('hidden');
+    document.getElementById('test-screen').classList.remove('hidden');
+    document.getElementById('home-btn').classList.remove('hidden');
+    
+    showCurrentItem();
+    updateProgress();
+}
+
+function showCurrentItem() {
+    const area = testAreas[currentAreaIndex];
+    const item = area.items[currentItemIndex];
+    
+    document.getElementById('current-area-name').textContent = area.name;
+    document.getElementById('area-description').textContent = area.description;
+    document.getElementById('item-title').textContent = 'Área ' + (currentAreaIndex + 1) + ' - Ítem ' + (currentItemIndex + 1);
+    document.getElementById('item-type').textContent = area.name + ' | ' + item.text;
+    
+    let content = '<div class="mb-6">';
+    content += '<div class="flex items-center mb-4">';
+    content += '<span class="text-3xl mr-3">' + area.icon + '</span>';
+    content += '<h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200">' + item.text + '</h4>';
+    content += '</div>';
+    content += '<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">';
+    content += '<p class="text-blue-700 dark:text-blue-300">';
+    content += '<strong>Instrucción:</strong> ' + item.instruction;
+    content += '</p>';
+    content += '<p class="text-sm text-blue-600 dark:text-blue-400 mt-2">';
+    content += '<strong>Puntuación máxima:</strong> ' + item.maxScore + ' puntos';
+    content += '</p>';
+    content += '</div>';
+    content += '</div>';
+    
+    content += '<div class="mb-6">';
+    content += '<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Puntuación obtenida:</label>';
+    content += '<div class="flex flex-wrap gap-2">';
+    
+    for (let i = 0; i <= item.maxScore; i++) {
+        const isSelected = areaScores[currentAreaIndex].scores[currentItemIndex] === i;
+        const btnClass = isSelected ? 
+            'score-btn px-4 py-2 border rounded-lg bg-primary text-white border-primary' :
+            'score-btn px-4 py-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700';
+        
+        content += '<button onclick="setScore(' + i + ')" class="' + btnClass + '">' + i + '</button>';
+    }
+    
+    content += '</div>';
+    content += '</div>';
+    
+    content += '<div class="mb-4">';
+    content += '<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Observaciones (opcional):</label>';
+    content += '<textarea id="observations" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent" rows="3" placeholder="Anote observaciones sobre la respuesta del paciente...">';
+    content += areaScores[currentAreaIndex].observations[currentItemIndex];
+    content += '</textarea>';
+    content += '</div>';
+    
+    document.getElementById('item-content').innerHTML = content;
+    updateAreaScore();
+    updateNavigationButtons();
+}
+
+function setScore(score) {
+    areaScores[currentAreaIndex].scores[currentItemIndex] = score;
+    
+    const observationsEl = document.getElementById('observations');
+    if (observationsEl) {
+        areaScores[currentAreaIndex].observations[currentItemIndex] = observationsEl.value;
+    }
+    
+    showCurrentItem();
+    updateProgress();
+}
+
+function updateAreaScore() {
+    const areaScore = areaScores[currentAreaIndex];
+    const currentScore = areaScore.scores.reduce((sum, score) => sum + score, 0);
+    const maxScore = testAreas[currentAreaIndex].items.reduce((sum, item) => sum + item.maxScore, 0);
+    
+    document.getElementById('area-score-display').textContent = currentScore + '/' + maxScore;
+    
+    const totalScore = areaScores.reduce((total, area) => 
+        total + area.scores.reduce((sum, score) => sum + score, 0), 0
+    );
+    document.getElementById('total-score-display').textContent = 'Puntuación: ' + totalScore;
+}
+
+function updateProgress() {
+    const totalItems = testAreas.reduce((sum, area) => sum + area.items.length, 0);
+    const completedItems = areaScores.reduce((total, area, areaIdx) => {
+        if (areaIdx < currentAreaIndex) return total + area.scores.length;
+        if (areaIdx === currentAreaIndex) return total + currentItemIndex;
+        return total;
+    }, 0);
+    
+    const progressPercentage = (completedItems / totalItems) * 100;
+    document.getElementById('progress-bar').style.width = progressPercentage + '%';
+    
+    document.getElementById('overall-progress').textContent = (currentAreaIndex + 1) + '/8 Áreas';
+    document.getElementById('area-progress').textContent = 'Ítem ' + (currentItemIndex + 1) + ' de ' + testAreas[currentAreaIndex].items.length;
+}
+
+function updateNavigationButtons() {
+    const area = testAreas[currentAreaIndex];
+    const isFirstItem = currentItemIndex === 0;
+    const isLastItem = currentItemIndex === area.items.length - 1;
+    const isFirstArea = currentAreaIndex === 0;
+    const isLastArea = currentAreaIndex === testAreas.length - 1;
+
+    document.getElementById('prev-btn').disabled = isFirstItem && isFirstArea;
+    document.getElementById('next-btn').textContent = isLastItem ? 
+        (isLastArea ? 'Finalizar Test' : 'Siguiente Área →') : 'Siguiente →';
+}
+
+function nextItem() {
+    const observationsElement = document.getElementById('observations');
+    if (observationsElement) {
+        areaScores[currentAreaIndex].observations[currentItemIndex] = observationsElement.value;
+    }
+
+    const area = testAreas[currentAreaIndex];
+    
+    if (currentItemIndex < area.items.length - 1) {
+        currentItemIndex++;
+        showCurrentItem();
+        updateProgress();
+    } else {
+        if (currentAreaIndex < testAreas.length - 1) {
+            currentAreaIndex++;
+            currentItemIndex = 0;
+            showCurrentItem();
+            updateProgress();
+        } else {
+            finishTest();
+        }
+    }
+}
+
+function previousItem() {
+    if (currentItemIndex > 0) {
+        currentItemIndex--;
+        showCurrentItem();
+        updateProgress();
+    } else if (currentAreaIndex > 0) {
+        currentAreaIndex--;
+        currentItemIndex = testAreas[currentAreaIndex].items.length - 1;
+        showCurrentItem();
+        updateProgress();
+    }
+}
+
+function finishTest() {
+    testData.endTime = new Date().toISOString();
+    testData.areaScores = areaScores;
+    
+    document.getElementById('test-screen').classList.add('hidden');
+    document.getElementById('progress-section').classList.add('hidden');
+    document.getElementById('results-screen').classList.remove('hidden');
+    
+    showResults();
+}
+
+function showResults() {
+    const totalScore = areaScores.reduce((total, area) => 
+        total + area.scores.reduce((sum, score) => sum + score, 0), 0
+    );
+    const maxPossibleScore = testAreas.reduce((sum, area) => 
+        sum + area.items.reduce((itemSum, item) => itemSum + item.maxScore, 0), 0
+    );
+    const percentage = Math.round((totalScore / maxPossibleScore) * 100);
+    
+    document.getElementById('total-score').textContent = totalScore + '/' + maxPossibleScore;
+    document.getElementById('total-percentage').textContent = percentage + '%';
+
+    // Patient info
+    let patientInfoHtml = '';
+    patientInfoHtml += '<p><strong>Paciente:</strong> ' + testData.patientName + '</p>';
+    patientInfoHtml += '<p><strong>Edad:</strong> ' + (testData.patientAge || 'No especificada') + ' años</p>';
+    patientInfoHtml += '<p><strong>Nivel educativo:</strong> ' + (testData.educationLevel || 'No especificado') + '</p>';
+    patientInfoHtml += '<p><strong>Evaluador:</strong> ' + (testData.examinerName || 'No especificado') + '</p>';
+    patientInfoHtml += '<p><strong>Fecha:</strong> ' + testData.evaluationDate + '</p>';
+    patientInfoHtml += '<p><strong>Versión:</strong> ' + testData.version + '</p>';
+    document.getElementById('patient-info-results').innerHTML = patientInfoHtml;
+
+    // Areas results
+    let areasResultsHtml = '';
+    testAreas.forEach((area, areaIdx) => {
+        const areaScore = areaScores[areaIdx];
+        const areaTotal = areaScore.scores.reduce((sum, score) => sum + score, 0);
+        const areaMax = area.items.reduce((sum, item) => sum + item.maxScore, 0);
+        const areaPercentage = Math.round((areaTotal / areaMax) * 100);
+        
+        let interpretation = '';
+        if (areaPercentage >= 85) interpretation = 'Excelente';
+        else if (areaPercentage >= 70) interpretation = 'Bueno';
+        else if (areaPercentage >= 55) interpretation = 'Moderado';
+        else if (areaPercentage >= 40) interpretation = 'Bajo';
+        else interpretation = 'Muy bajo';
+
+        areasResultsHtml += '<div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">';
+        areasResultsHtml += '<div class="flex items-center justify-between mb-3">';
+        areasResultsHtml += '<h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">';
+        areasResultsHtml += '<span class="text-2xl mr-3">' + area.icon + '</span>' + area.name + '</h4>';
+        areasResultsHtml += '<div class="text-right">';
+        areasResultsHtml += '<div class="text-lg font-bold text-blue-600">' + areaTotal + '/' + areaMax + '</div>';
+        areasResultsHtml += '<div class="text-sm text-gray-500">' + areaPercentage + '%</div>';
+        areasResultsHtml += '</div></div>';
+        areasResultsHtml += '<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-3">';
+        areasResultsHtml += '<div class="bg-blue-500 h-2 rounded-full" style="width: ' + areaPercentage + '%"></div>';
+        areasResultsHtml += '</div>';
+        areasResultsHtml += '<p class="text-sm text-gray-600 dark:text-gray-400 mb-2">' + area.description + '</p>';
+        areasResultsHtml += '<p class="text-sm"><strong>Interpretación:</strong> <span class="text-blue-600">' + interpretation + '</span></p>';
+        areasResultsHtml += '</div>';
+    });
+
+    document.getElementById('areas-results').innerHTML = areasResultsHtml;
+
+    // Clinical interpretation
+    generateClinicalInterpretation(percentage);
+    
+    // Recommendations
+    generateRecommendations();
+}
+
+function generateClinicalInterpretation(percentage) {
+    let interpretation = '<div class="space-y-4">';
+    interpretation += '<h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Análisis General</h4>';
+
+    if (percentage >= 85) {
+        interpretation += '<p class="text-gray-700 dark:text-gray-300">El paciente presenta un <strong>rendimiento excelente</strong> en la evaluación TELNA-2024, con una puntuación global del ' + percentage + '%. Las habilidades lingüísticas evaluadas se encuentran dentro de parámetros normales esperados para su grupo etario.</p>';
+    } else if (percentage >= 70) {
+        interpretation += '<p class="text-gray-700 dark:text-gray-300">El paciente muestra un <strong>rendimiento bueno</strong> con ' + percentage + '% de la puntuación total. Se observan habilidades lingüísticas preservadas en la mayoría de las áreas evaluadas, con algunas dificultades leves que pueden beneficiarse de estimulación específica.</p>';
+    } else if (percentage >= 55) {
+        interpretation += '<p class="text-gray-700 dark:text-gray-300">Se evidencia un <strong>rendimiento moderado</strong> (' + percentage + '%), sugiriendo dificultades significativas en algunas áreas del lenguaje que requieren intervención terapéutica especializada y seguimiento continuo.</p>';
+    } else {
+        interpretation += '<p class="text-gray-700 dark:text-gray-300">El rendimiento obtenido (' + percentage + '%) indica <strong>alteraciones importantes</strong> en las funciones lingüísticas evaluadas, requiriendo evaluación neurológica complementaria e intervención terapéutica intensiva.</p>';
+    }
+
+    interpretation += '</div>';
+    document.getElementById('clinical-interpretation').innerHTML = interpretation;
+}
+
+function generateRecommendations() {
+    let recommendations = '';
+    let hasLowScores = false;
+    
+    areaScores.forEach((areaScore, index) => {
+        const area = testAreas[index];
+        const areaTotal = areaScore.scores.reduce((sum, score) => sum + score, 0);
+        const areaMax = area.items.reduce((sum, item) => sum + item.maxScore, 0);
+        const areaPercentage = Math.round((areaTotal / areaMax) * 100);
+
+        if (areaPercentage < 70) {
+            hasLowScores = true;
+            recommendations += '<div class="border border-blue-200 dark:border-blue-700 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20">';
+            recommendations += '<h5 class="font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center">';
+            recommendations += '<span class="mr-2">' + area.icon + '</span>' + area.name + '</h5>';
+            recommendations += '<p class="text-blue-700 dark:text-blue-300 text-sm">';
+            recommendations += 'Se recomienda estimulación específica en esta área con ejercicios dirigidos y seguimiento terapéutico.';
+            recommendations += '</p></div>';
+        }
+    });
+
+    if (!hasLowScores) {
+        recommendations = '<div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4"><p class="text-green-700 dark:text-green-300">✅ El paciente presenta un rendimiento satisfactorio en todas las áreas evaluadas. Se recomienda mantener estimulación cognitiva regular y reevaluación anual.</p></div>';
+    } else {
+        recommendations = '<div class="space-y-4"><div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4"><h5 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">Recomendaciones Generales</h5><ul class="text-blue-700 dark:text-blue-300 text-sm space-y-1"><li>• Interconsulta con especialista en neuropsicología</li><li>• Evaluación médica neurológica complementaria</li><li>• Seguimiento terapéutico especializado</li><li>• Reevaluación en 6 meses</li></ul></div>' + recommendations + '</div>';
+    }
+
+    document.getElementById('recommendations').innerHTML = recommendations;
+}
+
+function generatePDF() {
+    if (!window.jspdf) {
+        alert('Error: Biblioteca PDF no disponible');
+        return;
+    }
+    
+    try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        
+        let yPos = 20;
+
+        // Header profesional
+        pdf.setFillColor(93, 92, 222);
+        pdf.rect(0, 0, 210, 30, 'F');
+        
+        // Logo circular simple
+        pdf.setFillColor(255, 255, 255);
+        pdf.circle(25, 15, 8, 'F');
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFontSize(8);
+        pdf.text('🧠', 22, 18);
+        
+        pdf.setFontSize(24);
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('TELNA-2024', 45, 18);
+        
+        pdf.setFontSize(12);
+        pdf.text('Test Especializado de Lenguaje y Neuroaprendizaje', 45, 25);
+
+        yPos = 45;
+
+        // Información del paciente
+        pdf.setFontSize(16);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('INFORMACIÓN DEL PACIENTE', 15, yPos);
+
+        yPos += 15;
+        pdf.setFontSize(11);
+        pdf.setTextColor(55, 65, 81);
+        pdf.setFont('helvetica', 'normal');
+        
+        const patientInfo = [
+            'Paciente: ' + testData.patientName,
+            'Edad: ' + (testData.patientAge || 'No especificada') + ' años',
+            'Nivel Educativo: ' + (testData.educationLevel || 'No especificado'),
+            'Evaluador: ' + (testData.examinerName || 'No especificado'),
+            'Fecha de Evaluación: ' + testData.evaluationDate,
+            'Hora de Inicio: ' + new Date(testData.startTime).toLocaleTimeString(),
+            'Duración: ' + (testData.endTime ? 
+                Math.round((new Date(testData.endTime) - new Date(testData.startTime)) / 60000) + ' minutos' : 'N/A')
+        ];
+
+        patientInfo.forEach(info => {
+            pdf.text(info, 20, yPos);
+            yPos += 7;
+        });
+
+        // Resumen de resultados
+        yPos += 15;
+        pdf.setFontSize(16);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('RESUMEN DE RESULTADOS', 15, yPos);
+
+        const totalScore = areaScores.reduce((total, area) => 
+            total + area.scores.reduce((sum, score) => sum + score, 0), 0
+        );
+        const maxPossibleScore = testAreas.reduce((sum, area) => 
+            sum + area.items.reduce((itemSum, item) => itemSum + item.maxScore, 0), 0
+        );
+        const percentage = Math.round((totalScore / maxPossibleScore) * 100);
+
+        yPos += 15;
+        
+        // Caja de resumen
+        pdf.setFillColor(243, 244, 246);
+        pdf.rect(15, yPos - 5, 165, 25, 'F');
+        pdf.setDrawColor(93, 92, 222);
+        pdf.setLineWidth(1);
+        pdf.rect(15, yPos - 5, 165, 25, 'S');
+
+        pdf.setFontSize(14);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Puntuación Total: ' + totalScore + ' / ' + maxPossibleScore, 20, yPos + 5);
+        pdf.text('Porcentaje Global: ' + percentage + '%', 20, yPos + 15);
+
+        // Interpretación general
+        let interpretation = '';
+        if (percentage >= 85) interpretation = 'EXCELENTE - Rendimiento dentro de parámetros normales';
+        else if (percentage >= 70) interpretation = 'BUENO - Rendimiento satisfactorio con dificultades leves';
+        else if (percentage >= 55) interpretation = 'MODERADO - Requiere intervención terapéutica';
+        else interpretation = 'BAJO - Requiere evaluación neurológica e intervención intensiva';
+
+        pdf.setFontSize(10);
+        pdf.setTextColor(55, 65, 81);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Interpretación: ' + interpretation, 20, yPos + 30);
+
+        // Nueva página para resultados detallados
+        pdf.addPage();
+        yPos = 20;
+
+        pdf.setFontSize(16);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('RESULTADOS DETALLADOS POR ÁREAS', 15, yPos);
+
+        yPos += 20;
+
+        // Resultados por área
+        testAreas.forEach((area, index) => {
+            if (yPos > 250) {
+                pdf.addPage();
+                yPos = 20;
+            }
+
+            const areaScore = areaScores[index];
+            const areaTotal = areaScore.scores.reduce((sum, score) => sum + score, 0);
+            const areaMax = area.items.reduce((sum, item) => sum + item.maxScore, 0);
+            const areaPercentage = Math.round((areaTotal / areaMax) * 100);
+
+            // Header del área
+            pdf.setFillColor(93, 92, 222);
+            pdf.rect(15, yPos, 165, 12, 'F');
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(area.name, 20, yPos + 8);
+            pdf.text(areaTotal + '/' + areaMax + ' (' + areaPercentage + '%)', 150, yPos + 8);
+
+            yPos += 15;
+
+            // Descripción del área
+            pdf.setTextColor(55, 65, 81);
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'italic');
+            pdf.text(area.description, 20, yPos);
+            yPos += 8;
+
+            // Interpretación del área
+            let areaInterpretation = '';
+            if (areaPercentage >= 85) areaInterpretation = 'Excelente';
+            else if (areaPercentage >= 70) areaInterpretation = 'Bueno';
+            else if (areaPercentage >= 55) areaInterpretation = 'Moderado';
+            else if (areaPercentage >= 40) areaInterpretation = 'Bajo';
+            else areaInterpretation = 'Muy bajo';
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.text('Interpretación: ' + areaInterpretation, 20, yPos);
+            yPos += 15;
+        });
+
+        // Página de interpretación clínica
+        pdf.addPage();
+        yPos = 20;
+
+        pdf.setFontSize(16);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('INTERPRETACIÓN NEUROPSICOLÓGICA', 15, yPos);
+
+        yPos += 20;
+        pdf.setFontSize(11);
+        pdf.setTextColor(55, 65, 81);
+        pdf.setFont('helvetica', 'normal');
+
+        let clinicalText = '';
+        if (percentage >= 85) {
+            clinicalText = 'El paciente presenta un rendimiento EXCELENTE en la evaluación TELNA-2024, con una puntuación global del ' + percentage + '%. Las habilidades lingüísticas evaluadas se encuentran dentro de parámetros normales esperados para su grupo etario.';
+        } else if (percentage >= 70) {
+            clinicalText = 'El paciente muestra un rendimiento BUENO con ' + percentage + '% de la puntuación total. Se observan habilidades lingüísticas preservadas en la mayoría de las áreas evaluadas.';
+        } else if (percentage >= 55) {
+            clinicalText = 'Se evidencia un rendimiento MODERADO (' + percentage + '%), sugiriendo dificultades significativas en algunas áreas del lenguaje que requieren intervención terapéutica especializada.';
+        } else {
+            clinicalText = 'El rendimiento obtenido (' + percentage + '%) indica alteraciones IMPORTANTES en las funciones lingüísticas evaluadas, requiriendo evaluación neurológica complementaria.';
+        }
+
+        // Dividir texto en líneas
+        const lines = pdf.splitTextToSize(clinicalText, 165);
+        lines.forEach(line => {
+            pdf.text(line, 15, yPos);
+            yPos += 6;
+        });
+
+        yPos += 10;
+
+        // Recomendaciones específicas
+        pdf.setFontSize(14);
+        pdf.setTextColor(93, 92, 222);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('RECOMENDACIONES TERAPÉUTICAS', 15, yPos);
+
+        yPos += 15;
+        pdf.setFontSize(11);
+        pdf.setTextColor(55, 65, 81);
+        pdf.setFont('helvetica', 'normal');
+
+        const recommendations = [
+            '• Mantener seguimiento interdisciplinario con equipo de neuropsicología',
+            '• Implementar programa de estimulación cognitiva específica',
+            '• Realizar interconsulta con neurología para evaluación complementaria',
+            '• Establecer plan de rehabilitación del lenguaje personalizado',
+            '• Programar reevaluación según cronograma establecido'
+        ];
+
+        recommendations.forEach(rec => {
+            pdf.text(rec, 20, yPos);
+            yPos += 8;
+        });
+
+        // Footer en todas las páginas
+        const pageCount = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(8);
+            pdf.setTextColor(100, 100, 100);
+            pdf.text('TELNA-2024 - Página ' + i + ' de ' + pageCount, 15, 285);
+            pdf.text('Generado: ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(), 140, 285);
+        }
+
+        const fileName = 'TELNA-2024_Reporte_' + testData.patientName.replace(/\s+/g, '_') + '_' + testData.evaluationDate + '.pdf';
+        pdf.save(fileName);
+        
+    } catch (error) {
+        console.error('Error generando PDF:', error);
+        alert('Error al generar el PDF. Por favor, intente nuevamente.');
+    }
+}
+
+function showConfirmDialog(message, onConfirm) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+            <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+            <div class="flex justify-end space-x-3">
+                <button class="cancel-btn px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Cancelar</button>
+                <button class="confirm-btn px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded">Confirmar</button>
+            </div>
+        </div>
+    `;
+    
+    const cancelBtn = modal.querySelector('.cancel-btn');
+    const confirmBtn = modal.querySelector('.confirm-btn');
+    
+    cancelBtn.onclick = () => {
+        document.body.removeChild(modal);
+    };
+    
+    confirmBtn.onclick = () => {
+        document.body.removeChild(modal);
+        onConfirm();
+    };
+    
+    document.body.appendChild(modal);
+}
+
+function restartTest() {
+    showConfirmDialog('¿Está seguro que desea iniciar una nueva evaluación? Se perderán los datos actuales.', () => {
+        location.reload();
+    });
+}
+
+function goToHome() {
+    // Check if there's a test in progress
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const testScreen = document.getElementById('test-screen');
+    const resultsScreen = document.getElementById('results-screen');
+    
+    const isTestInProgress = !testScreen.classList.contains('hidden') || !resultsScreen.classList.contains('hidden');
+    
+    if (isTestInProgress) {
+        showConfirmDialog('¿Está seguro que desea volver al inicio? Se perderá el progreso actual del test.', () => {
+            location.reload();
+        });
+    } else {
+        location.reload();
+    }
+}
+
+function showMainScreen() {
+    document.getElementById('intro-screen').classList.add('hidden');
+    document.getElementById('welcome-screen').classList.remove('hidden');
+}
+
+// Initialize date
+document.getElementById('evaluation-date').value = new Date().toISOString().split('T')[0];
+</script>
+
+
+</body></html>

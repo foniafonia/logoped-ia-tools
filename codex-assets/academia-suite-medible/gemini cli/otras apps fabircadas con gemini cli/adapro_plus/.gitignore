@@ -1,0 +1,9 @@
+release-builds
+.DS_Store
+sources/.DS_Store
+sources/opendyslexic-r/.DS_Store
+*.zip
+*.sh
+actions/build-regular.scpt
+build-release.ps1
+compiled/fonttest.html

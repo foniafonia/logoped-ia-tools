@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'KarmaFuture';
+    src: url('fonts/KarmaFuture.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Arcade';
+    src: url('fonts/Arcade.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Warpen';
+    src: url('fonts/Warpen.ttf') format('truetype');
+}
+
+h1 {
+    font-family: 'KarmaFuture', sans-serif;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+    position: absolute;
+    left: 32%;
+    bottom: 80%;
+    font-size: 80px;
+}
+#letra {
+    font-family: 'Arcade', sans-serif;
+    color: yellow;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+    position: absolute;
+    left: 45%;
+    bottom: 32%;
+    font-size: 350px;
+    text-transform: uppercase;
+}
+
+#mensaje {
+    font-family: 'Warpen', sans-serif;
+    color: rgb(197, 0, 0);
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+    position: absolute;
+    left: 37%;
+    bottom: 27%;
+    font-size: 36px;
+    text-transform: uppercase;
+}
+
+#puntaje {
+    font-family: 'Warpen', sans-serif;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+    position: absolute;
+    left: 38%;
+    bottom: 20%;
+    font-size: 36px;
+    text-transform: uppercase;
+}
+#temporizador {
+    color:white;
+    font-family: 'Warpen', sans-serif;
+    display: inline-block;
+    position: absolute;
+    margin: 0 auto;
+    left: 33%;
+    text-align: center;
+    bottom: 12%;
+    font-size: 36px;
+
+}
+#reiniciar {
+    font-family: 'Warpen', sans-serif;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+    position: absolute;
+    left: 43%;
+    bottom: 3%;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+body {
+    background-image: url('img/espacio.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

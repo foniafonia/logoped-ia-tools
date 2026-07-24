@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fonia Familia - Chatbot de Orientacion</title>
+  <style>
+    :root {
+      --bg: #f4f2ea;
+      --paper: #fffdf7;
+      --ink: #1d2a24;
+      --muted: #5e6c64;
+      --line: #d6d2c4;
+      --accent: #0f766e;
+      --accent-2: #c05621;
+      --ok: #2f855a;
+      --danger: #c53030;
+      --shadow: 0 20px 50px rgba(35, 41, 37, 0.11);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Avenir Next", "SF Pro Text", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(15, 118, 110, 0.15), transparent 38%),
+        radial-gradient(circle at 85% 4%, rgba(192, 86, 33, 0.16), transparent 30%),
+        linear-gradient(155deg, #ece8dd 0%, #f7f3ea 55%, #f4f2ea 100%);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .app {
+      width: min(1160px, 100%);
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 12px 24px rgba(35, 41, 37, 0.09);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, #f5f2e8, #fefcf7);
+      border-right: 1px solid var(--line);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: 1.82rem;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      border: 1px solid #c4ddda;
+      color: #0d5d57;
+      background: #e7f6f4;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.89rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #40504a;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    input, select, textarea, button {
+      font: inherit;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid #c7c2b4;
+      border-radius: 12px;
+      padding: 11px 12px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      border: 1px solid #c7c2b4;
+      border-radius: 12px;
+      padding: 6px;
+      background: #fff;
+    }
+
+    .switch button {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #4a5a54;
+      transition: background .16s ease, color .16s ease;
+    }
+
+    .switch button.active {
+      background: linear-gradient(145deg, #0f766e, #0f8b81);
+      color: #f5fffd;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #f5fffd;
+      background: linear-gradient(140deg, #0f766e, #0a8b80);
+      box-shadow: 0 6px 12px rgba(15, 118, 110, 0.2);
+      transition: transform .14s ease, opacity .14s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: .58; cursor: not-allowed; transform: none; }
+
+    .ghost {
+      width: 100%;
+      border: 1px solid #c7c2b4;
+      background: #fff;
+      color: #42514b;
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background:
+        linear-gradient(130deg, rgba(255,255,255,0.86), rgba(255,255,255,0.96)),
+        repeating-linear-gradient(-32deg, rgba(15, 118, 110, 0.035) 0, rgba(15, 118, 110, 0.035) 13px, transparent 13px, transparent 26px);
+      min-height: 680px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding: 18px 20px;
+      gap: 10px;
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .status {
+      font-size: 0.8rem;
+      border: 1px solid #c7c2b4;
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: #45544d;
+      white-space: nowrap;
+    }
+
+    .chat {
+      padding: 22px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bubble {
+      max-width: min(85%, 760px);
+      padding: 14px 15px;
+      border-radius: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.95rem;
+      animation: reveal .2s ease;
+    }
+
+    .assistant {
+      align-self: flex-start;
+      background: #fff;
+      border: 1px solid #d9d5c8;
+      color: #203029;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: linear-gradient(155deg, #0f766e, #0f8b81);
+      color: #f5fffd;
+      box-shadow: 0 10px 18px rgba(15, 118, 110, 0.22);
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: #6e7b74;
+    }
+
+    .composer {
+      border-top: 1px solid var(--line);
+      background: #fdfbf5;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 54px;
+      max-height: 140px;
+      resize: vertical;
+      border: 1px solid #c7c2b4;
+      border-radius: 12px;
+      padding: 12px;
+      line-height: 1.45;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .send {
+      border: none;
+      border-radius: 12px;
+      width: 52px;
+      background: linear-gradient(155deg, #c05621, #d97706);
+      color: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(192, 86, 33, 0.28);
+    }
+
+    .send:disabled { opacity: .55; cursor: not-allowed; }
+
+    .tip {
+      font-size: .77rem;
+      color: #5e6c64;
+      border: 1px dashed #c7c2b4;
+      background: #fff;
+      border-radius: 10px;
+      padding: 9px;
+      line-height: 1.4;
+    }
+
+    .error { color: var(--danger); }
+
+    @keyframes reveal {
+      from { opacity: .25; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 980px) {
+      body { padding: 14px; }
+      .app { grid-template-columns: 1fr; }
+      .panel { border-right: 0; border-bottom: 1px solid var(--line); }
+      .main { min-height: 68vh; }
+      .bubble { max-width: 93%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <span class="badge">Demo Clinica</span>
+      <h1>Landing Chatbot<br>para Familias</h1>
+      <p class="muted">Simulador para primera consulta orientativa en logopedia. No sustituye evaluacion presencial.</p>
+
+      <div class="field">
+        <label>Conexion</label>
+      </div>
+
+      <div id="backendFields">
+        <div class="field">
+          <label for="backendUrl">URL backend</label>
+          <input id="backendUrl" type="text" value="http://127.0.0.1:8099/chat" placeholder="http://127.0.0.1:8099/chat">
+        </div>
+      </div>
+
+      <button id="saveBtn" class="btn" type="button">Guardar configuracion</button>
+      <button id="clearBtn" class="ghost" type="button">Nueva conversacion</button>
+
+      <div class="tip">Esta landing usa solo el backend local con tu base de conocimiento clínica.</div>
+      <p id="panelMsg" class="muted"></p>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2>Asistente de Orientacion Logopedica Familiar</h2>
+        <span id="status" class="status">Sin conectar</span>
+      </header>
+
+      <section id="chat" class="chat"></section>
+
+      <footer class="composer">
+        <textarea id="prompt" placeholder="Ejemplo: Mi hija de 5 anos omite /r/ y se bloquea al contar lo que hizo en el cole. ¿Que puedo observar esta semana?"></textarea>
+        <button id="send" class="send" type="button" aria-label="Enviar">➤</button>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "fonia-chatbot-landing-v1";
+    const chatEl = document.getElementById("chat");
+    const promptEl = document.getElementById("prompt");
+    const sendBtn = document.getElementById("send");
+    const saveBtn = document.getElementById("saveBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const panelMsg = document.getElementById("panelMsg");
+    const statusEl = document.getElementById("status");
+    const backendUrlEl = document.getElementById("backendUrl");
+    let history = [];
+
+    function setStatus(text, kind = "neutral") {
+      statusEl.textContent = text;
+      if (kind === "ok") statusEl.style.color = "#22543d";
+      else if (kind === "error") statusEl.style.color = "#9b2c2c";
+      else statusEl.style.color = "#45544d";
+    }
+
+    function addBubble(role, content, meta = "") {
+      const bubble = document.createElement("article");
+      bubble.className = `bubble ${role}`;
+      bubble.textContent = content;
+
+      if (meta) {
+        const small = document.createElement("div");
+        small.className = "meta";
+        small.textContent = meta;
+        bubble.appendChild(small);
+      }
+
+      chatEl.appendChild(bubble);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function saveSettings() {
+      const payload = {
+        backendUrl: backendUrlEl.value.trim()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      panelMsg.textContent = "Configuracion guardada.";
+      setTimeout(() => panelMsg.textContent = "", 1800);
+    }
+
+    function loadSettings() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const saved = JSON.parse(raw);
+        if (saved.backendUrl) backendUrlEl.value = saved.backendUrl;
+      } catch (_) {}
+    }
+
+    function mapToBackendHistory() {
+      return history.map(item => ({ role: item.role, content: item.content }));
+    }
+
+    async function checkBackendHealth() {
+      const base = backendUrlEl.value.trim().replace(/\/chat$/, "");
+      if (!base) {
+        setStatus("Configura la URL del backend", "error");
+        return false;
+      }
+      try {
+        const res = await fetch(`${base}/health`, { method: "GET" });
+        if (!res.ok) throw new Error("health no disponible");
+        const data = await res.json();
+        const v = data.behavior_version ? ` (${data.behavior_version})` : "";
+        setStatus(`Backend conectado${v}`, "ok");
+        return true;
+      } catch (_) {
+        setStatus("Backend no conectado", "error");
+        return false;
+      }
+    }
+
+    async function askBackend(userMessage) {
+      const url = backendUrlEl.value.trim();
+      if (!url) throw new Error("Define la URL del backend local.");
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userMessage,
+          history: mapToBackendHistory(),
+          top_k: 3
+        })
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Error backend (${res.status}): ${text.slice(0, 260)}`);
+      }
+
+      const data = await res.json();
+      let meta = "";
+      if (Array.isArray(data.citations) && data.citations.length) {
+        const names = data.citations.slice(0, 3).map(c => c.source).join(" | ");
+        meta = `Fuentes: ${names}`;
+      }
+      return {
+        answer: data.answer || "Sin respuesta del backend.",
+        meta
+      };
+    }
+
+    async function handleSend() {
+      const userMessage = promptEl.value.trim();
+      if (!userMessage) return;
+
+      promptEl.value = "";
+      addBubble("user", userMessage);
+      history.push({ role: "user", content: userMessage });
+
+      sendBtn.disabled = true;
+      setStatus("Generando respuesta...", "neutral");
+
+      try {
+        let assistantText = "";
+        let meta = "";
+        const out = await askBackend(userMessage);
+        assistantText = out.answer;
+        meta = out.meta;
+
+        addBubble("assistant", assistantText, meta);
+        history.push({ role: "assistant", content: assistantText });
+        setStatus("Respuesta lista", "ok");
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Error de conexión";
+        addBubble("assistant", `No he podido responder porque el backend no está disponible.\n\n${msg}`);
+        setStatus("Error de conexión con backend", "error");
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    saveBtn.addEventListener("click", saveSettings);
+    saveBtn.addEventListener("click", checkBackendHealth);
+    clearBtn.addEventListener("click", () => {
+      history = [];
+      chatEl.innerHTML = "";
+      addBubble("assistant", "Hola. Soy tu asistente de orientacion logopedica para familias.\n\nCuéntame edad del nino/a, que te preocupa y ejemplos reales de habla o comprension.");
+      setStatus("Conversacion reiniciada", "ok");
+    });
+
+    sendBtn.addEventListener("click", handleSend);
+    promptEl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        handleSend();
+      }
+    });
+
+    loadSettings();
+    addBubble("assistant", "Hola. Soy tu asistente de orientacion logopedica para familias.\n\nCuéntame edad del nino/a, que te preocupa y ejemplos reales de habla o comprension.");
+    checkBackendHealth();
+  </script>
+</body>
+</html>

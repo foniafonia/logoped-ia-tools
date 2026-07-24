@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midiendo con la S y la Z - Evaluación de Disfonía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .timer-display {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .result-animation {
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/aa0ea12422bc9b4e65dc98a578b7d9483637c21361b50f0e5f3a4457a534393d?w=1024&h=1024" alt="Juegos Logopedos" class="w-16 h-16 mr-4 rounded-lg shadow-lg">
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-bold">
+                            Midiendo con la S y la Z
+                        </h1>
+                        <p class="text-sm opacity-75 mt-1">juegoslogopedos.com</p>
+                    </div>
+                </div>
+                <p class="text-xl opacity-90">Evaluación rápida y precisa de la función vocal</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-center space-x-8 py-4">
+                <a href="#medicion" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200">
+                    <i class="fas fa-stopwatch mr-2"></i>Medición S/Z
+                </a>
+                <a href="#grbas" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200">
+                    <i class="fas fa-clipboard-check mr-2"></i>Escala GRBAS
+                </a>
+                <a href="#teoria" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200">
+                    <i class="fas fa-book mr-2"></i>Teoría
+                </a>
+                <a href="#resultados" class="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200">
+                    <i class="fas fa-chart-line mr-2"></i>Resultados
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- Sección de Medición S/Z -->
+        <section id="medicion" class="mb-16">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl card-shadow p-8">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-stopwatch text-primary mr-3"></i>
+                    Medición del Ratio S/Z
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Cronómetro /s/ -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 p-6 rounded-xl">
+                        <h3 class="text-2xl font-bold text-blue-800 dark:text-blue-200 mb-4 flex items-center">
+                            <i class="fas fa-wind mr-2"></i>
+                            Sonido /s/
+                        </h3>
+                        <p class="text-blue-700 dark:text-blue-300 mb-4">Sin vibración de cuerdas vocales</p>
+                        
+                        <div class="text-center mb-6">
+                            <div id="s-timer-display" class="timer-display text-6xl font-bold text-blue-800 dark:text-blue-200 mb-4">
+                                0.00s
+                            </div>
+                            <div class="space-x-4">
+                                <button id="start-s" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+                                    <i class="fas fa-play mr-2"></i>Iniciar
+                                </button>
+                                <button id="stop-s" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200" disabled>
+                                    <i class="fas fa-stop mr-2"></i>Detener
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Tiempo registrado:</h4>
+                            <p id="s-time" class="text-2xl font-bold text-blue-800 dark:text-blue-200">-- segundos</p>
+                        </div>
+                    </div>
+
+                    <!-- Cronómetro /z/ -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 p-6 rounded-xl">
+                        <h3 class="text-2xl font-bold text-purple-800 dark:text-purple-200 mb-4 flex items-center">
+                            <i class="fas fa-volume-up mr-2"></i>
+                            Sonido /z/
+                        </h3>
+                        <p class="text-purple-700 dark:text-purple-300 mb-4">Con vibración de cuerdas vocales</p>
+                        
+                        <div class="text-center mb-6">
+                            <div id="z-timer-display" class="timer-display text-6xl font-bold text-purple-800 dark:text-purple-200 mb-4">
+                                0.00s
+                            </div>
+                            <div class="space-x-4">
+                                <button id="start-z" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+                                    <i class="fas fa-play mr-2"></i>Iniciar
+                                </button>
+                                <button id="stop-z" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200" disabled>
+                                    <i class="fas fa-stop mr-2"></i>Detener
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Tiempo registrado:</h4>
+                            <p id="z-time" class="text-2xl font-bold text-purple-800 dark:text-purple-200">-- segundos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button id="calculate" class="bg-primary hover:bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200" disabled>
+                        <i class="fas fa-calculator mr-2"></i>Calcular Ratio S/Z
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Escala GRBAS -->
+        <section id="grbas" class="mb-16">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl card-shadow p-8">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-clipboard-check text-primary mr-3"></i>
+                    Escala GRBAS
+                </h2>
+                
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    La escala GRBAS es un sistema de evaluación perceptual de la voz que evalúa 5 parámetros principales. 
+                    Cada parámetro se puntúa de 0 (normal) a 3 (severo).
+                </p>
+
+                <div class="grid gap-6">
+                    <!-- Grado -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                            <span class="bg-primary text-white px-3 py-1 rounded-full mr-3">G</span>
+                            Grado General de Disfonía
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Impresión general del grado de alteración vocal</p>
+                        <p class="text-sm text-blue-600 dark:text-blue-400 mb-4 italic">
+                            💡 En palabras simples: ¿Qué tan diferente suena la voz comparada con una voz normal?
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-g" value="0" class="text-primary mb-2">
+                                <span class="text-sm font-medium">0 - Normal</span>
+                                <span class="text-xs text-gray-500 text-center">Voz que suena completamente normal</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-g" value="1" class="text-primary mb-2">
+                                <span class="text-sm font-medium">1 - Leve</span>
+                                <span class="text-xs text-gray-500 text-center">Se nota algo diferente pero no mucho</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-g" value="2" class="text-primary mb-2">
+                                <span class="text-sm font-medium">2 - Moderado</span>
+                                <span class="text-xs text-gray-500 text-center">Se nota bastante que la voz no es normal</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-g" value="3" class="text-primary mb-2">
+                                <span class="text-sm font-medium">3 - Severo</span>
+                                <span class="text-xs text-gray-500 text-center">La voz suena muy alterada</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rugosidad -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                            <span class="bg-orange-500 text-white px-3 py-1 rounded-full mr-3">R</span>
+                            Rugosidad (Roughness)
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Impresión psicoacústica de irregularidad en la vibración de los pliegues vocales</p>
+                        <p class="text-sm text-orange-600 dark:text-orange-400 mb-4 italic">
+                            💡 En palabras simples: ¿La voz suena áspera, ronca o como si tuviera "granitos"?
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-r" value="0" class="text-primary mb-2">
+                                <span class="text-sm font-medium">0 - Normal</span>
+                                <span class="text-xs text-gray-500 text-center">Voz suave y clara</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-r" value="1" class="text-primary mb-2">
+                                <span class="text-sm font-medium">1 - Leve</span>
+                                <span class="text-xs text-gray-500 text-center">Un poquito áspera</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-r" value="2" class="text-primary mb-2">
+                                <span class="text-sm font-medium">2 - Moderado</span>
+                                <span class="text-xs text-gray-500 text-center">Bastante ronca</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-r" value="3" class="text-primary mb-2">
+                                <span class="text-sm font-medium">3 - Severo</span>
+                                <span class="text-xs text-gray-500 text-center">Muy áspera y ronca</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soplosidad -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full mr-3">B</span>
+                            Soplosidad (Breathiness)
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Impresión psicoacústica de escape de aire en la voz</p>
+                        <p class="text-sm text-blue-600 dark:text-blue-400 mb-4 italic">
+                            💡 En palabras simples: ¿Se escucha aire escapando cuando habla, como si susurrara?
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-b" value="0" class="text-primary mb-2">
+                                <span class="text-sm font-medium">0 - Normal</span>
+                                <span class="text-xs text-gray-500 text-center">No se escucha aire</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-b" value="1" class="text-primary mb-2">
+                                <span class="text-sm font-medium">1 - Leve</span>
+                                <span class="text-xs text-gray-500 text-center">Un poco de aire</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-b" value="2" class="text-primary mb-2">
+                                <span class="text-sm font-medium">2 - Moderado</span>
+                                <span class="text-xs text-gray-500 text-center">Bastante aire escapando</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-b" value="3" class="text-primary mb-2">
+                                <span class="text-sm font-medium">3 - Severo</span>
+                                <span class="text-xs text-gray-500 text-center">Mucho aire, muy soplada</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Astenia -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full mr-3">A</span>
+                            Astenia (Asthenia)
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Impresión psicoacústica de debilidad vocal</p>
+                        <p class="text-sm text-green-600 dark:text-green-400 mb-4 italic">
+                            💡 En palabras simples: ¿La voz suena débil, sin fuerza o como si la persona estuviera muy cansada?
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-a" value="0" class="text-primary mb-2">
+                                <span class="text-sm font-medium">0 - Normal</span>
+                                <span class="text-xs text-gray-500 text-center">Voz fuerte y clara</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-a" value="1" class="text-primary mb-2">
+                                <span class="text-sm font-medium">1 - Leve</span>
+                                <span class="text-xs text-gray-500 text-center">Un poco débil</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-a" value="2" class="text-primary mb-2">
+                                <span class="text-sm font-medium">2 - Moderado</span>
+                                <span class="text-xs text-gray-500 text-center">Bastante débil</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-a" value="3" class="text-primary mb-2">
+                                <span class="text-sm font-medium">3 - Severo</span>
+                                <span class="text-xs text-gray-500 text-center">Muy débil, casi sin fuerza</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Tensión -->
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                            <span class="bg-red-500 text-white px-3 py-1 rounded-full mr-3">S</span>
+                            Tensión (Strain)
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Impresión psicoacústica de hiperfunción vocal</p>
+                        <p class="text-sm text-red-600 dark:text-red-400 mb-4 italic">
+                            💡 En palabras simples: ¿La voz suena forzada, apretada o como si hiciera mucho esfuerzo para hablar?
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-s" value="0" class="text-primary mb-2">
+                                <span class="text-sm font-medium">0 - Normal</span>
+                                <span class="text-xs text-gray-500 text-center">Voz relajada y natural</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-s" value="1" class="text-primary mb-2">
+                                <span class="text-sm font-medium">1 - Leve</span>
+                                <span class="text-xs text-gray-500 text-center">Un poco forzada</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-s" value="2" class="text-primary mb-2">
+                                <span class="text-sm font-medium">2 - Moderado</span>
+                                <span class="text-xs text-gray-500 text-center">Bastante tensa</span>
+                            </label>
+                            <label class="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                <input type="radio" name="grbas-s" value="3" class="text-primary mb-2">
+                                <span class="text-sm font-medium">3 - Severo</span>
+                                <span class="text-xs text-gray-500 text-center">Muy forzada y tensa</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <div id="grbas-score" class="bg-primary text-white px-6 py-4 rounded-lg inline-block mb-4">
+                        <h4 class="font-semibold text-lg mb-2">Puntuación GRBAS</h4>
+                        <div class="flex items-center justify-center space-x-4 text-2xl font-bold">
+                            <div class="flex items-center space-x-1">
+                                <span class="text-sm opacity-75">G:</span>
+                                <span id="g-score">0</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <span class="text-sm opacity-75">R:</span>
+                                <span id="r-score">0</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <span class="text-sm opacity-75">B:</span>
+                                <span id="b-score">0</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <span class="text-sm opacity-75">A:</span>
+                                <span id="a-score">0</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <span class="text-sm opacity-75">S:</span>
+                                <span id="s-score">0</span>
+                            </div>
+                        </div>
+                        <div class="text-sm opacity-75 mt-2">
+                            Total: <span id="grbas-total">0.0.0.0.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Teoría -->
+        <section id="teoria" class="mb-16">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl card-shadow p-8">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-graduation-cap text-primary mr-3"></i>
+                    Fundamentos del Ratio S/Z
+                </h2>
+                
+                <div class="space-y-8">
+                    <!-- Explicación básica -->
+                    <div class="bg-blue-50 dark:bg-blue-900 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-4">🔍 ¿Qué es el Ratio S/Z?</h3>
+                        <p class="text-blue-700 dark:text-blue-300 mb-4">
+                            El ratio S/Z es una prueba muy sencilla que nos ayuda a detectar problemas en la voz. Consiste en comparar cuánto tiempo puede una persona hacer el sonido "ssss" (como una serpiente) versus el sonido "zzzz" (como una abeja).
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Sonido /s/ "ssss"</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Sin vibración de cuerdas vocales. Es como el ruido del aire escapando.
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                <h4 class="font-semibold text-purple-800 dark:text-purple-200 mb-2">Sonido /z/ "zzzz"</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Con vibración de cuerdas vocales. Puedes sentir la vibración en la garganta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interpretación detallada -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-6">📊 ¿Qué significan los diferentes resultados?</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Resultado Normal -->
+                            <div class="bg-green-50 dark:bg-green-900 p-6 rounded-lg border-l-4 border-green-500">
+                                <h4 class="font-bold text-green-800 dark:text-green-200 text-lg mb-3">
+                                    ✅ Ratio 0.8 - 1.4 (NORMAL)
+                                </h4>
+                                <p class="text-green-700 dark:text-green-300 mb-3">
+                                    <strong>¿Qué significa?</strong> Las cuerdas vocales se están cerrando correctamente y no hay problema significativo con la voz.
+                                </p>
+                                <div class="bg-green-100 dark:bg-green-800 p-3 rounded">
+                                    <p class="text-sm text-green-800 dark:text-green-200">
+                                        <strong>En palabras simples:</strong> La persona puede hacer ambos sonidos durante un tiempo similar, lo que indica que sus cuerdas vocales funcionan bien.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Resultado Patológico -->
+                            <div class="bg-red-50 dark:bg-red-900 p-6 rounded-lg border-l-4 border-red-500">
+                                <h4 class="font-bold text-red-800 dark:text-red-200 text-lg mb-3">
+                                    ⚠️ Ratio > 1.4 (POSIBLE PROBLEMA)
+                                </h4>
+                                <p class="text-red-700 dark:text-red-300 mb-3">
+                                    <strong>¿Qué significa?</strong> Las cuerdas vocales no se están cerrando completamente, lo que hace que se escape más aire cuando se intenta hacer el sonido /z/.
+                                </p>
+                                
+                                <div class="space-y-3">
+                                    <div class="bg-red-100 dark:bg-red-800 p-3 rounded">
+                                        <p class="text-sm text-red-800 dark:text-red-200">
+                                            <strong>En palabras simples:</strong> La persona puede hacer "ssss" durante mucho tiempo, pero "zzzz" se le acaba rápido porque las cuerdas vocales no se juntan bien.
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="bg-orange-100 dark:bg-orange-800 p-3 rounded">
+                                        <h5 class="font-semibold text-orange-800 dark:text-orange-200 mb-2">Posibles tipos de disfonía asociados:</h5>
+                                        <ul class="text-sm text-orange-700 dark:text-orange-300 space-y-1">
+                                            <li>• <strong>Nódulos vocales:</strong> "Callos" en las cuerdas vocales por uso excesivo</li>
+                                            <li>• <strong>Pólipos vocales:</strong> Crecimientos benignos en las cuerdas</li>
+                                            <li>• <strong>Parálisis de cuerdas vocales:</strong> Una cuerda no se mueve correctamente</li>
+                                            <li>• <strong>Edema de Reinke:</strong> Hinchazón de las cuerdas por tabaco</li>
+                                            <li>• <strong>Lesiones traumáticas:</strong> Daño por gritos o intubación</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Resultado Atípico -->
+                            <div class="bg-yellow-50 dark:bg-yellow-900 p-6 rounded-lg border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-yellow-800 dark:text-yellow-200 text-lg mb-3">
+                                    🤔 Ratio < 0.8 (RESULTADO ATÍPICO)
+                                </h4>
+                                <p class="text-yellow-700 dark:text-yellow-300 mb-3">
+                                    <strong>¿Qué significa?</strong> Es un resultado poco común que puede indicar que la persona hace mejor el sonido /z/ que el /s/, lo cual requiere más investigación.
+                                </p>
+                                
+                                <div class="space-y-3">
+                                    <div class="bg-yellow-100 dark:bg-yellow-800 p-3 rounded">
+                                        <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                            <strong>En palabras simples:</strong> La persona puede hacer "zzzz" durante más tiempo que "ssss", lo cual es inusual y necesita ser evaluado por un especialista.
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="bg-purple-100 dark:bg-purple-800 p-3 rounded">
+                                        <h5 class="font-semibold text-purple-800 dark:text-purple-200 mb-2">Posibles causas:</h5>
+                                        <ul class="text-sm text-purple-700 dark:text-purple-300 space-y-1">
+                                            <li>• <strong>Problemas respiratorios:</strong> Dificultad para controlar el aire</li>
+                                            <li>• <strong>Hipertonía vocal:</strong> Cuerdas demasiado tensas</li>
+                                            <li>• <strong>Error en la técnica:</strong> No realizó correctamente la prueba</li>
+                                            <li>• <strong>Condiciones neurológicas:</strong> Afectación del control motor</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información adicional sobre GRBAS -->
+                    <div class="bg-purple-50 dark:bg-purple-900 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-purple-800 dark:text-purple-200 mb-4">📋 ¿Qué es la Escala GRBAS?</h3>
+                        <p class="text-purple-700 dark:text-purple-300 mb-4">
+                            GRBAS es una forma de describir cómo suena una voz alterada. Es como dar una puntuación a diferentes aspectos de la voz para entender mejor qué tipo de problema puede tener.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-5 gap-3">
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">G</div>
+                                <p class="text-xs font-medium">Grado General</p>
+                                <p class="text-xs text-gray-500">¿Qué tan alterada?</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                <div class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">R</div>
+                                <p class="text-xs font-medium">Rugosidad</p>
+                                <p class="text-xs text-gray-500">¿Suena áspera?</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">B</div>
+                                <p class="text-xs font-medium">Soplosidad</p>
+                                <p class="text-xs text-gray-500">¿Se escapa aire?</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                <div class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">A</div>
+                                <p class="text-xs font-medium">Astenia</p>
+                                <p class="text-xs text-gray-500">¿Suena débil?</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">S</div>
+                                <p class="text-xs font-medium">Tensión</p>
+                                <p class="text-xs text-gray-500">¿Suena forzada?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Sección de Resultados -->
+        <section id="resultados">
+            <div id="result-section" class="bg-white dark:bg-gray-800 rounded-2xl card-shadow p-8 hidden result-animation">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-primary mr-3"></i>
+                    Resultados de la Evaluación
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Ratio S/Z</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center">
+                            <div id="ratio-value" class="text-3xl font-bold text-primary mb-2">--</div>
+                            <div id="ratio-interpretation" class="text-lg font-medium">Realiza la medición</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Evaluación GRBAS</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl text-center">
+                            <div id="grbas-result" class="text-2xl font-bold text-primary mb-2">0.0.0.0.0</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">G.R.B.A.S</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button id="export-pdf" class="bg-success hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200" disabled>
+                        <i class="fas fa-download mr-2"></i>Exportar Informe PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400">
+                <i class="fas fa-stethoscope mr-2"></i>
+                Herramienta de evaluación vocal para profesionales de la salud
+            </p>
+            <p class="text-sm text-gray-500 mt-2">
+                Desarrollado para la evaluación clínica de la función vocal
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Detectar modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Importar jsPDF
+            const { jsPDF } = window.jspdf;
+
+            // Elementos del DOM
+            const sTimerDisplay = document.getElementById('s-timer-display');
+            const zTimerDisplay = document.getElementById('z-timer-display');
+            const startSBtn = document.getElementById('start-s');
+            const stopSBtn = document.getElementById('stop-s');
+            const startZBtn = document.getElementById('start-z');
+            const stopZBtn = document.getElementById('stop-z');
+            const sTimeEl = document.getElementById('s-time');
+            const zTimeEl = document.getElementById('z-time');
+            const calculateBtn = document.getElementById('calculate');
+            const exportPdfBtn = document.getElementById('export-pdf');
+            const resultSection = document.getElementById('result-section');
+            const ratioValueEl = document.getElementById('ratio-value');
+            const ratioInterpretationEl = document.getElementById('ratio-interpretation');
+            const grbasScoreEl = document.getElementById('grbas-score');
+            const grbasTotalEl = document.getElementById('grbas-total');
+            const grbasResultEl = document.getElementById('grbas-result');
+
+            let sTimer, zTimer;
+            let sStartTime, zStartTime;
+            let sMaxTime = 0, zMaxTime = 0;
+
+            // --- Lógica de los cronómetros ---
+            const startTimer = (timerType) => {
+                if (timerType === 's') {
+                    sStartTime = Date.now();
+                    sTimer = setInterval(() => updateTimerDisplay(sTimerDisplay, sStartTime), 10);
+                    startSBtn.disabled = true;
+                    stopSBtn.disabled = false;
+                } else {
+                    zStartTime = Date.now();
+                    zTimer = setInterval(() => updateTimerDisplay(zTimerDisplay, zStartTime), 10);
+                    startZBtn.disabled = true;
+                    stopZBtn.disabled = false;
+                }
+            };
+
+            const stopTimer = (timerType) => {
+                if (timerType === 's') {
+                    clearInterval(sTimer);
+                    const elapsedTime = (Date.now() - sStartTime) / 1000;
+                    sMaxTime = elapsedTime;
+                    sTimeEl.textContent = sMaxTime.toFixed(2) + ' segundos';
+                    startSBtn.disabled = false;
+                    stopSBtn.disabled = true;
+                } else {
+                    clearInterval(zTimer);
+                    const elapsedTime = (Date.now() - zStartTime) / 1000;
+                    zMaxTime = elapsedTime;
+                    zTimeEl.textContent = zMaxTime.toFixed(2) + ' segundos';
+                    startZBtn.disabled = false;
+                    stopZBtn.disabled = true;
+                }
+                checkCalculationReady();
+            };
+
+            const updateTimerDisplay = (displayElement, startTime) => {
+                const elapsedTime = (Date.now() - startTime) / 1000;
+                displayElement.textContent = `${elapsedTime.toFixed(2)}s`;
+            };
+
+            const checkCalculationReady = () => {
+                if (sMaxTime > 0 && zMaxTime > 0) {
+                    calculateBtn.disabled = false;
+                } else {
+                    calculateBtn.disabled = true;
+                }
+            };
+
+            const calculateRatio = () => {
+                if (zMaxTime === 0) {
+                    ratioValueEl.textContent = 'Error';
+                    ratioInterpretationEl.textContent = 'El tiempo de /z/ no puede ser cero';
+                    ratioInterpretationEl.className = 'text-red-600 dark:text-red-400';
+                    resultSection.classList.remove('hidden');
+                    exportPdfBtn.disabled = true;
+                    return;
+                }
+
+                const ratio = sMaxTime / zMaxTime;
+                ratioValueEl.textContent = ratio.toFixed(2);
+
+                let interpretation = '';
+                let interpretationClass = '';
+
+                if (ratio > 1.4) {
+                    interpretation = 'Resultado Patológico: Sugiere un cierre laríngeo defectuoso';
+                    interpretationClass = 'text-red-600 dark:text-red-400';
+                } else if (ratio >= 0.8) {
+                    interpretation = 'Resultado Normal: No se observan indicios de patología';
+                    interpretationClass = 'text-green-600 dark:text-green-400';
+                } else {
+                    interpretation = 'Resultado Inválido/Atípico: Requiere análisis clínico adicional';
+                    interpretationClass = 'text-yellow-600 dark:text-yellow-400';
+                }
+
+                ratioInterpretationEl.textContent = interpretation;
+                ratioInterpretationEl.className = interpretationClass;
+                resultSection.classList.remove('hidden');
+                exportPdfBtn.disabled = false;
+            };
+
+            // --- Lógica GRBAS ---
+            const updateGRBAS = () => {
+                const g = document.querySelector('input[name="grbas-g"]:checked')?.value || '0';
+                const r = document.querySelector('input[name="grbas-r"]:checked')?.value || '0';
+                const b = document.querySelector('input[name="grbas-b"]:checked')?.value || '0';
+                const a = document.querySelector('input[name="grbas-a"]:checked')?.value || '0';
+                const s = document.querySelector('input[name="grbas-s"]:checked')?.value || '0';
+                
+                // Actualizar puntuaciones individuales
+                document.getElementById('g-score').textContent = g;
+                document.getElementById('r-score').textContent = r;
+                document.getElementById('b-score').textContent = b;
+                document.getElementById('a-score').textContent = a;
+                document.getElementById('s-score').textContent = s;
+                
+                const score = `${g}.${r}.${b}.${a}.${s}`;
+                grbasTotalEl.textContent = score;
+                grbasResultEl.textContent = score;
+            };
+
+            // Event listeners para GRBAS
+            document.querySelectorAll('input[name^="grbas-"]').forEach(input => {
+                input.addEventListener('change', updateGRBAS);
+            });
+
+            // --- Exportación a PDF ---
+            const exportToPDF = () => {
+                const doc = new jsPDF();
+                const ratio = (sMaxTime / zMaxTime).toFixed(2);
+                const grbasScore = grbasTotalEl.textContent;
+                
+                // Obtener valores individuales de GRBAS para la interpretación
+                const g = document.querySelector('input[name="grbas-g"]:checked')?.value || '0';
+                const r = document.querySelector('input[name="grbas-r"]:checked')?.value || '0';
+                const b = document.querySelector('input[name="grbas-b"]:checked')?.value || '0';
+                const a = document.querySelector('input[name="grbas-a"]:checked')?.value || '0';
+                const s = document.querySelector('input[name="grbas-s"]:checked')?.value || '0';
+
+                // **PÁGINA 1: RESULTADOS Y EXPLICACIÓN SIMPLE**
+                // Encabezado amigable
+                doc.setFillColor(93, 92, 222);
+                doc.rect(0, 0, 210, 45, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(22);
+                doc.text("MI EVALUACIÓN DE VOZ", 105, 20, { align: 'center' });
+                doc.setFontSize(14);
+                doc.text("Resultados y explicación sencilla", 105, 30, { align: 'center' });
+                doc.setFontSize(12);
+                doc.text("juegoslogopedos.com", 105, 38, { align: 'center' });
+
+                // Información personal
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(11);
+                doc.text(`Fecha: ${new Date().toLocaleDateString('es-ES')}`, 20, 60);
+                doc.text(`Hora: ${new Date().toLocaleTimeString('es-ES')}`, 120, 60);
+
+                // **MIS RESULTADOS**
+                doc.setFontSize(18);
+                doc.setTextColor(93, 92, 222);
+                doc.text("🎯 MIS RESULTADOS", 20, 80);
+
+                doc.autoTable({
+                    startY: 90,
+                    head: [['Medición', 'Tiempo']],
+                    body: [
+                        ['Tiempo haciendo "ssss"', `${sMaxTime.toFixed(2)} segundos`],
+                        ['Tiempo haciendo "zzzz"', `${zMaxTime.toFixed(2)} segundos`],
+                    ],
+                    theme: 'grid',
+                    headStyles: { fillColor: [93, 92, 222] },
+                });
+
+                let finalY = doc.lastAutoTable.finalY;
+
+                doc.setFontSize(16);
+                doc.setTextColor(0, 0, 0);
+                doc.text("Mi resultado S/Z:", 20, finalY + 15);
+                
+                // Color según resultado - centrado y más grande
+                doc.setFontSize(24);
+                if (ratio > 1.4) {
+                    doc.setTextColor(220, 38, 38);
+                } else if (ratio >= 0.8) {
+                    doc.setTextColor(5, 150, 105);
+                } else {
+                    doc.setTextColor(245, 158, 11);
+                }
+                doc.text(`${ratio}`, 105, finalY + 15, { align: 'center' });
+
+                // **¿QUÉ SIGNIFICA MI RESULTADO?**
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(16);
+                doc.text("🤔 ¿QUÉ SIGNIFICA MI RESULTADO?", 20, finalY + 30);
+
+                let yPos = finalY + 40;
+                
+                if (ratio >= 0.8 && ratio <= 1.4) {
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    const normalText = [
+                        "Esto significa que tus cuerdas vocales se están cerrando bien.",
+                        "Puedes hacer ambos sonidos durante un tiempo parecido.",
+                        "No hay signos de problemas importantes en tu voz.",
+                        "",
+                        "💡 Consejo: Mantén buenos hábitos vocales bebiendo agua y",
+                        "evitando gritar o forzar la voz."
+                    ];
+                    doc.text(normalText, 20, yPos);
+                    
+                } else if (ratio > 1.4) {
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    const problemText = [
+                        "¿Qué está pasando? Tus cuerdas vocales no se cierran completamente.",
+                        "Por eso puedes hacer 'ssss' mucho tiempo, pero 'zzzz' se acaba rápido.",
+                        "",
+                        "Posibles causas (que puede explicarte un médico):",
+                        "• Nódulos vocales: como 'callos' en las cuerdas por usar mucho la voz",
+                        "• Pólipos: pequeños crecimientos que se pueden quitar",
+                        "• Inflamación por gritar, fumar o reflujo",
+                        "",
+                        "🏥 Recomendación: Consulta con un otorrinolaringólogo o foniatra."
+                    ];
+                    doc.text(problemText, 20, yPos);
+                    
+                } else {
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    const atypicalText = [
+                        "Puedes hacer 'zzzz' más tiempo que 'ssss', lo cual es inusual.",
+                        "Puede ser por problemas respiratorios, tensión excesiva,",
+                        "o que no hiciste bien la prueba.",
+                        "",
+                        "🏥 Recomendación: Repite la prueba y consulta con un especialista."
+                    ];
+                    doc.text(atypicalText, 20, yPos);
+                }
+
+                // **NUEVA PÁGINA: GRBAS Y RECOMENDACIONES**
+                doc.addPage();
+                
+                // Header página 2
+                doc.setFillColor(93, 92, 222);
+                doc.rect(0, 0, 210, 35, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(18);
+                doc.text("📋 EVALUACIÓN DE CÓMO SUENA MI VOZ", 105, 22, { align: 'center' });
+
+                doc.setTextColor(0, 0, 0);
+                yPos = 50;
+
+                // **GRBAS SIMPLIFICADO**
+                doc.setFontSize(16);
+                doc.setTextColor(156, 39, 176);
+                doc.text("¿Cómo calificamos tu voz? (Escala GRBAS)", 20, yPos);
+                yPos += 15;
+
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Parámetro', 'Puntuación', 'Descripción']],
+                    body: [
+                        ['G (Grado general)', g, '¿Qué tan diferente suena tu voz?'],
+                        ['R (Rugosidad)', r, '¿Suena áspera o ronca?'],
+                        ['B (Soplosidad)', b, '¿Se escapa aire cuando hablas?'],
+                        ['A (Astenia)', a, '¿Suena débil o sin fuerza?'],
+                        ['S (Tensión)', s, '¿Suena forzada o apretada?'],
+                    ],
+                    theme: 'grid',
+                    headStyles: { fillColor: [156, 39, 176] },
+                });
+                yPos = doc.lastAutoTable.finalY + 15;
+
+
+                // **CONSEJOS PARA CUIDAR LA VOZ**
+                doc.setFontSize(16);
+                doc.setTextColor(59, 130, 246);
+                doc.text("💡 CONSEJOS PARA CUIDAR TU VOZ", 20, yPos);
+                yPos += 10;
+
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                const consejos = [
+                    "✓ Bebe mucha agua durante el día (8 vasos mínimo)",
+                    "✓ Evita gritar o hablar muy fuerte",
+                    "✓ No fumar ni estar en ambientes con humo",
+                    "✓ Duerme bien (7-8 horas) para descansar la voz",
+                    "✓ Evita aclararte la garganta constantemente",
+                    "✓ Si tienes reflujo, trátalo (puede dañar las cuerdas vocales)",
+                    "✓ En ambientes secos, usa humidificador",
+                    "✓ Si usas mucho la voz (maestros, cantantes), aprende técnicas",
+                    "",
+                    "🚨 Consulta un médico si:",
+                    "• Tu voz está ronca por más de 2 semanas",
+                    "• Te duele al hablar o tragar",
+                    "• Sientes algo 'atorado' en la garganta"
+                ];
+
+                doc.text(consejos, 20, yPos);
+
+                // **PIE DE PÁGINA AMIGABLE**
+                doc.setFillColor(55, 65, 81);
+                doc.rect(0, 270, 210, 27, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.text("🎮 juegoslogopedos.com", 105, 282, { align: 'center' });
+                doc.setFontSize(10);
+                doc.text("Herramienta educativa para el cuidado de la voz | No reemplaza consulta médica", 105, 290, { align: 'center' });
+
+                doc.save(`Mi_Evaluacion_Vocal_${new Date().toISOString().slice(0, 10)}.pdf`);
+            };
+
+            // --- Asignación de eventos ---
+            startSBtn.addEventListener('click', () => startTimer('s'));
+            stopSBtn.addEventListener('click', () => stopTimer('s'));
+            startZBtn.addEventListener('click', () => startTimer('z'));
+            stopZBtn.addEventListener('click', () => stopTimer('z'));
+            calculateBtn.addEventListener('click', calculateRatio);
+            exportPdfBtn.addEventListener('click', exportToPDF);
+
+            // Navegación suave
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Estado inicial
+            calculateBtn.disabled = true;
+            updateGRBAS();
+        });
+    </script>
+
+
+</body>
+</html>

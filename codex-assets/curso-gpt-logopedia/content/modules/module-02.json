@@ -1,0 +1,12 @@
+{
+  "id": "module-02",
+  "title": "Aplicaciones logopedicas reales",
+  "description": "Usar IA para sesiones, familia y material educativo.",
+  "goal": "Diseñar prompts utiles para escenarios clinicos no diagnosticos.",
+  "lessons": [
+    {"id":"lesson-02-01","title":"Objetivos terapeuticos medibles","duration_minutes":18,"theory":["Define objetivos observables (ej. produce /r/ en silaba inicial 8/10).","Evita objetivos ambiguos.","Relaciona cada actividad con criterio de exito."],"example":"Crea actividad para lograr 8 de 10 aciertos de /s/ intervocalica.","checklist":["Objetivo cuantificable","Criterio de exito","Tiempo","Registro"]},
+    {"id":"lesson-02-02","title":"Material para sesion","duration_minutes":20,"theory":["Pide material por niveles.","Incluye variantes por fatiga/atencion.","Añade reforzadores positivos."],"example":"Genera 3 actividades de 5 minutos para vocabulario semantico.","checklist":["Nivel 1-2-3","Adaptaciones","Refuerzo","Cierre"]},
+    {"id":"lesson-02-03","title":"Comunicacion con familias","duration_minutes":15,"theory":["Lenguaje claro y sin tecnicismos.","Explica objetivo y rutina breve.","Incluye señales de alerta para consultar profesional."],"example":"Redacta mensaje semanal para familia con 2 ejercicios diarios de 10 minutos.","checklist":["Claro","Breve","Practicable","Seguro"]},
+    {"id":"lesson-02-04","title":"Adaptaciones por edad","duration_minutes":17,"theory":["No es igual 4 que 10 anos.","Ajusta complejidad linguistica y carga cognitiva.","Incluye juego y motivacion por etapa."],"example":"Misma actividad de conciencia fonologica para 5, 7 y 9 anos.","checklist":["Edad","Dificultad","Duracion","Enganche"]}
+  ]
+}

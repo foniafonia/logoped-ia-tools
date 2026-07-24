@@ -1,0 +1,2444 @@
+<!DOCTYPE html><html lang="es"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerapiaFlu - Herramienta Completa de Terapia de Tartamudez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        therapy: '#10b981',
+                        breath: '#06b6d4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .word-highlight {
+            background: linear-gradient(120deg, #5D5CDE 0%, #7B7AE8 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(93, 92, 222, 0.3);
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+        
+        .word {
+            display: inline-block;
+            margin: 8px 4px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .word:hover {
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .playing-indicator {
+            animation: pulse 1s infinite;
+        }
+        
+        .dark .word:hover {
+            background-color: rgba(93, 92, 222, 0.2);
+        }
+
+        /* Animation styles for different visual modes */
+        .word-appear {
+            opacity: 0;
+            transform: scale(0.5);
+            animation: appearWord 0.5s ease-out forwards;
+        }
+
+        @keyframes appearWord {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .word-fade {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-fade::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%);
+            animation: fadeWord 1s ease-in-out forwards;
+        }
+
+        .dark .word-fade::after {
+            background: linear-gradient(90deg, transparent 0%, rgba(24,24,24,0.8) 50%, rgba(24,24,24,1) 100%);
+        }
+
+        @keyframes fadeWord {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0%); }
+        }
+
+        /* Syllable separation styles */
+        .syllable {
+            display: inline-block;
+            margin: 0 1px;
+            padding: 2px 1px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .syllable-separator {
+            color: #9ca3af;
+            font-weight: 300;
+            margin: 0 2px;
+        }
+
+        /* Bouncing ball animations with prosodic heights and connecting lines */
+        .word-bounce {
+            position: relative;
+        }
+
+        .word-bounce::before {
+            content: '🏀';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounceOnWord 0.6s ease-in-out;
+            font-size: 20px;
+            z-index: 10;
+        }
+
+        .word-bounce-syllable {
+            position: relative;
+        }
+
+        .word-bounce-syllable::before {
+            content: '🎾';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounceOnSyllable 0.4s ease-in-out;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        /* Dynamic prosodic animations - different heights based on intonation */
+        .prosodic-low::before {
+            animation: bounceProsodicLow 0.6s ease-in-out;
+        }
+
+        .prosodic-medium::before {
+            animation: bounceProsodicMedium 0.6s ease-in-out;
+        }
+
+        .prosodic-high::before {
+            animation: bounceProsodicHigh 0.6s ease-in-out;
+        }
+
+        .prosodic-very-high::before {
+            animation: bounceProsodicVeryHigh 0.6s ease-in-out;
+        }
+
+        @keyframes bounceOnWord {
+            0% {
+                top: -60px;
+                opacity: 0;
+            }
+            50% {
+                top: -20px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+            100% {
+                top: -40px;
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes bounceOnSyllable {
+            0% {
+                top: -50px;
+                opacity: 0;
+            }
+            50% {
+                top: -15px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.3);
+            }
+            100% {
+                top: -35px;
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        /* Prosodic bounce animations with different heights */
+        @keyframes bounceProsodicLow {
+            0% {
+                top: -30px;
+                opacity: 0;
+            }
+            50% {
+                top: -10px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.1);
+            }
+            100% {
+                top: -20px;
+                opacity: 0.7;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes bounceProsodicMedium {
+            0% {
+                top: -50px;
+                opacity: 0;
+            }
+            50% {
+                top: -25px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.2);
+            }
+            100% {
+                top: -35px;
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes bounceProsodicHigh {
+            0% {
+                top: -70px;
+                opacity: 0;
+            }
+            50% {
+                top: -40px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.3);
+            }
+            100% {
+                top: -55px;
+                opacity: 0.9;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes bounceProsodicVeryHigh {
+            0% {
+                top: -90px;
+                opacity: 0;
+            }
+            50% {
+                top: -60px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.4);
+            }
+            100% {
+                top: -75px;
+                opacity: 1;
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+
+        /* Prosodic curve drawing animation */
+        @keyframes drawCurve {
+            0% {
+                stroke-dashoffset: 100;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+
+        /* Stressed syllable highlighting */
+        .stressed-syllable {
+            position: relative;
+            background: linear-gradient(180deg, transparent 60%, rgba(251, 191, 36, 0.3) 60%);
+            border-radius: 4px;
+            padding: 2px 4px;
+            margin: 0 1px;
+        }
+
+        /* Line container styling */
+        .line-container {
+            margin-bottom: 16px;
+            padding: 8px;
+            border-radius: 12px;
+            background: rgba(249, 250, 251, 0.5);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        .dark .line-container {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.8);
+        }
+
+        /* Prosodic line graph styling */
+        .prosodic-line-container {
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .prosodic-line-container:hover {
+            opacity: 1;
+        }
+
+        /* Mobile landscape optimizations */
+        @media (max-height: 600px) and (orientation: landscape) {
+            /* Reduce header size on mobile landscape */
+            .header-mobile-landscape h1 {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .header-mobile-landscape p {
+                font-size: 0.875rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            /* Compact controls for mobile landscape */
+            .controls-mobile-landscape {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .controls-mobile-landscape .grid {
+                gap: 0.75rem !important;
+            }
+            
+            .controls-mobile-landscape select,
+            .controls-mobile-landscape input {
+                padding: 0.5rem !important;
+                font-size: 0.875rem !important;
+            }
+            
+            /* Optimize text display for mobile landscape */
+            .text-display-mobile-landscape {
+                font-size: 1.25rem !important;
+                line-height: 1.4 !important;
+                min-height: 200px !important;
+                padding: 1rem !important;
+            }
+            
+            /* Compact side panels for mobile landscape */
+            .therapist-panel-mobile-landscape {
+                padding: 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .therapist-panel-mobile-landscape button {
+                padding: 0.5rem !important;
+                font-size: 0.675rem !important;
+            }
+            
+            /* Reduce breathing guide size */
+            .breathing-mobile-landscape {
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .breathing-circle-mobile {
+                width: 4rem !important;
+                height: 4rem !important;
+            }
+            
+            /* Compact prosodic graphs */
+            .prosodic-mobile-landscape {
+                height: 24px !important;
+            }
+            
+            /* Stack layout differently on mobile landscape */
+            .main-grid-mobile-landscape {
+                grid-template-columns: 1fr 3fr 1fr !important;
+                gap: 0.5rem !important;
+            }
+            
+            /* Reduce margins and padding globally */
+            .mobile-landscape-compact * {
+                margin-top: 0.25rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+            
+            /* Progress bar compact */
+            .progress-mobile-landscape {
+                margin-bottom: 0.5rem !important;
+            }
+            
+            /* Status compact */
+            .status-mobile-landscape {
+                margin-top: 0.5rem !important;
+            }
+            
+            .status-mobile-landscape .inline-flex {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+
+        /* Tablet landscape optimizations */
+        @media (min-width: 768px) and (max-height: 600px) and (orientation: landscape) {
+            .text-display-mobile-landscape {
+                font-size: 1.5rem !important;
+                min-height: 250px !important;
+            }
+            
+            .controls-mobile-landscape {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors duration-300">
+    <!-- Intro Page -->
+    <div id="introPage" class="fixed inset-0 bg-white flex items-center justify-center z-50" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #f1f5f9 50%, #e8f4f8 75%, #f0f9ff 100%)">
+        <div class="max-w-4xl mx-auto px-6 py-8 text-center">
+            <!-- Main Image -->
+            <div class="mb-8">
+                <img src="https://pfst.cf2.poecdn.net/base/image/1d4d1564ff9657a8d1bcf67e71de8f0a040d1dc311f3ccc9f74871b4d478673e?w=1024&amp;h=1024" alt="TerapiaFlu Karaoke de Lectura" class="w-80 h-80 mx-auto rounded-3xl shadow-2xl border-4 border-white/20">
+            </div>
+            
+            <!-- Title and Description -->
+            <div class="text-gray-800 mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 text-primary">
+                    <i class="fas fa-microphone-alt mr-3"></i>
+                    TerapiaFlu
+                </h1>
+                <h2 class="text-2xl md:text-3xl font-light mb-6 text-gray-600">
+                    Karaoke de Lectura Terapéutico
+                </h2>
+                
+                <div class="max-w-2xl mx-auto text-lg md:text-xl leading-relaxed space-y-4 text-gray-700">
+                    <p class="font-medium">
+                        🎯 <strong>Herramienta web interactiva para terapia de tartamudez</strong> que combina tecnología avanzada con evidencia científica.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-base">
+                        <div class="bg-white/60 rounded-xl p-4 shadow-lg border border-gray-200 backdrop-blur-sm">
+                            <h3 class="font-semibold mb-2 text-blue-700">🎵 Funcionalidades:</h3>
+                            <ul class="text-sm space-y-1 text-left text-gray-600">
+                                <li>• Lectura palabra por palabra</li>
+                                <li>• 5 modos visuales interactivos</li>
+                                <li>• Gráficas prosódicas en tiempo real</li>
+                                <li>• Guía de respiración animada</li>
+                                <li>• Panel de terapeuta profesional</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 shadow-lg border border-gray-200 backdrop-blur-sm">
+                            <h3 class="font-semibold mb-2 text-green-700">🔬 Base Científica:</h3>
+                            <ul class="text-sm space-y-1 text-left text-gray-600">
+                                <li>• Estudios de prosodia y ritmo</li>
+                                <li>• Control respiratorio terapéutico</li>
+                                <li>• Plasticidad neuronal</li>
+                                <li>• Feedback visual personalizado</li>
+                                <li>• 24 trabalenguas especializados</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <button id="startAppBtn" class="inline-flex items-center px-8 py-4 bg-primary text-white font-bold text-xl rounded-2xl hover:bg-primary/90 transition-all transform hover:scale-105 shadow-xl border-2 border-primary/20">
+                    <i class="fas fa-play mr-3"></i>
+                    Comenzar Terapia
+                </button>
+                
+                <div class="text-gray-600 text-sm">
+                    <p>
+                        <i class="fas fa-mobile-alt mr-2 text-blue-600"></i>
+                        Optimizado para móvil en orientación horizontal
+                    </p>
+                    <p class="mt-1">
+                        <i class="fas fa-globe mr-2 text-blue-600"></i>
+                        Funciona en cualquier navegador moderno
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Version Info -->
+            <div class="absolute bottom-4 right-4 text-gray-500 text-sm">
+                <p>TerapiaFlu v1.0 - Basado en evidencia científica</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual de Uso Modal -->
+    <div id="manualModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-primary mb-2">
+                    <i class="fas fa-book-open mr-2"></i>
+                    Manual de Uso - TerapiaFlu
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300">Guía completa con evidencia científica</p>
+            </div>
+            
+            <div id="manualContent" class="space-y-6 text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+                        <h3 class="font-bold text-blue-700 dark:text-blue-300 mb-3">
+                            <i class="fas fa-eye mr-2"></i>Modos de Visualización
+                        </h3>
+                        <ul class="space-y-2 text-xs">
+                            <li><strong>🟣 Resaltado Morado:</strong> Destaca la palabra actual con color para mejorar el seguimiento visual y reducir la ansiedad de lectura (Rayner et al., 2012)</li>
+                            <li><strong>✨ Aparecer:</strong> Las palabras aparecen gradualmente, controlando la velocidad de procesamiento visual (Kuperman &amp; Van Dyke, 2011)</li>
+                            <li><strong>🌊 Desvanecer:</strong> Efecto de cortina que ayuda a mantener el foco atencional en la palabra actual</li>
+                            <li><strong>🏀 Bolita Palabra:</strong> Indicador prosódico que rebota según la entonación, ayudando a visualizar el ritmo del habla (Patel, 2008)</li>
+                            <li><strong>🎾 Bolita Sílaba:</strong> Guía silábica para mejorar la segmentación fonológica (Goswami &amp; Bryant, 1990)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl">
+                        <h3 class="font-bold text-green-700 dark:text-green-300 mb-3">
+                            <i class="fas fa-chart-line mr-2"></i>Gráficas Prosódicas
+                        </h3>
+                        <ul class="space-y-2 text-xs">
+                            <li><strong>📊 Tono (Azul):</strong> Representa la entonación natural del habla. Basado en estudios de prosodia en tartamudez (Kefalianos et al., 2012)</li>
+                            <li><strong>📍 Pausas (Rojo):</strong> Marca puntos de respiración natural, esencial para el control respiratorio (Andrews et al., 1983)</li>
+                            <li><strong>🔆 Énfasis (Verde):</strong> Palabras de contenido que requieren mayor énfasis prosódico</li>
+                            <li><strong>📍 Posición:</strong> Indicador de progreso en tiempo real que ayuda con la anticipación</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl">
+                    <h3 class="font-bold text-purple-700 dark:text-purple-300 mb-3">
+                        <i class="fas fa-brain mr-2"></i>Evidencia Científica
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <h4 class="font-semibold mb-2">Beneficios Terapéuticos:</h4>
+                            <ul class="space-y-1">
+                                <li>• <strong>Ritmo Controlado:</strong> Mejora la fluidez reduciendo la velocidad de habla (Ingham et al., 2009)</li>
+                                <li>• <strong>Feedback Visual:</strong> Facilita el automonitoreo del habla (Foundas et al., 2004)</li>
+                                <li>• <strong>Sincronización:</strong> Entrena la coordinación motora del habla (Alm, 2004)</li>
+                                <li>• <strong>Prosodia:</strong> Mejora la entonación natural (Lickley et al., 2005)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Mecanismos Neurológicos:</h4>
+                            <ul class="space-y-1">
+                                <li>• <strong>Plasticidad:</strong> Fortalece conexiones neurales del habla (Chang et al., 2008)</li>
+                                <li>• <strong>Automatización:</strong> Reduce la carga cognitiva (Smith &amp; Kelly, 1997)</li>
+                                <li>• <strong>Integración Sensorial:</strong> Combina input visual y auditivo (Foundas et al., 2004)</li>
+                                <li>• <strong>Control Motor:</strong> Mejora la precisión articulatoria (Max et al., 2004)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-xl">
+                        <h3 class="font-bold text-yellow-700 dark:text-yellow-300 mb-3">
+                            <i class="fas fa-lungs mr-2"></i>Guía de Respiración
+                        </h3>
+                        <ul class="space-y-2 text-xs">
+                            <li><strong>Patrones configurables:</strong> Cada 4-8 palabras o en puntuación</li>
+                            <li><strong>Beneficios:</strong> Mejora el control respiratorio, esencial para la fluidez (Andrews et al., 1983)</li>
+                            <li><strong>Técnica:</strong> Respiración diafragmática coordinada con el habla</li>
+                            <li><strong>Evidencia:</strong> Reduce la tensión muscular y mejora la coordinación fono-respiratoria</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl">
+                        <h3 class="font-bold text-red-700 dark:text-red-300 mb-3">
+                            <i class="fas fa-user-md mr-2"></i>Panel Terapeuta
+                        </h3>
+                        <ul class="space-y-2 text-xs">
+                            <li><strong>🛑 Bloqueos:</strong> Interrupciones involuntarias del flujo del habla</li>
+                            <li><strong>🔄 Repeticiones:</strong> Repetición de sonidos, sílabas o palabras</li>
+                            <li><strong>⏳ Prolongaciones:</strong> Extensión anormal de sonidos</li>
+                            <li><strong>⏸️ Vacilaciones:</strong> Pausas anormales o dudas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center mt-8">
+                <button id="closeManual" class="px-8 py-3 bg-primary text-white rounded-xl hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Cerrar Manual
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initial Assessment Modal -->
+    <div id="assessmentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-primary mb-2">
+                    <i class="fas fa-clipboard-check mr-2"></i>
+                    Evaluación Inicial de Disfemia
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300">Este test nos ayudará a personalizar tu terapia (Opcional)</p>
+            </div>
+            
+            <div id="assessmentContent" class="space-y-6">
+                <!-- Questions will be loaded here -->
+            </div>
+            
+            <div class="flex gap-4 mt-8">
+                <button id="skipAssessment" class="flex-1 px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-skip mr-2"></i>Omitir Test
+                </button>
+                <button id="nextQuestion" class="flex-1 px-6 py-3 bg-primary text-white rounded-xl hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-arrow-right mr-2"></i>Siguiente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-2 py-4 max-w-7xl mobile-landscape-compact">
+        <!-- Header -->
+        <div class="text-center mb-8 header-mobile-landscape">
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mb-2">
+                <i class="fas fa-microphone-alt mr-3"></i>
+                TerapiaFlu - Karaoke de Lectura
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 text-lg">
+                Entrena tu ritmo de lectura palabra por palabra con evidencia científica
+            </p>
+            <div class="mt-4">
+                <button id="showManual" class="px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors shadow-lg">
+                    <i class="fas fa-book-open mr-2"></i>Manual de Uso
+                </button>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-lg controls-mobile-landscape">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Speed Control -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Velocidad de Lectura
+                    </label>
+                    <select id="speedSelect" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="2000">🐌 Ultra Lento (30 PPM)</option>
+                        <option value="1500">🐢 Muy Lento (40 PPM)</option>
+                        <option value="1200">🚶‍♂️ Lento (50 PPM)</option>
+                        <option value="1000">📚 Lento Medio (60 PPM)</option>
+                        <option value="800">📖 Normal Lento (75 PPM)</option>
+                        <option value="600" selected="">📘 Normal (100 PPM)</option>
+                        <option value="480">📙 Normal Rápido (125 PPM)</option>
+                        <option value="400">🏃 Rápido (150 PPM)</option>
+                        <option value="300">🏃‍♂️ Muy Rápido (200 PPM)</option>
+                        <option value="240">⚡ Ultra Rápido (250 PPM)</option>
+                        <option value="200">🚀 Súper Rápido (300 PPM)</option>
+                    </select>
+                </div>
+
+                <!-- Text Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                        <i class="fas fa-book mr-2"></i>Texto de Práctica
+                    </label>
+                    <select id="textSelect" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="0">Ejercicio Básico</option>
+                        <option value="1">Trabalenguas Aleatorio</option>
+                        <option value="2">Poema Corto</option>
+                        <option value="3">Texto Personalizado</option>
+                        <option value="4">Trabalenguas Específico</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tongue Twister Selection -->
+            <div id="tongueTwisterArea" class="mt-4 hidden">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                    <i class="fas fa-magic mr-2"></i>Selecciona un Trabalenguas Específico:
+                </label>
+                <select id="tongueTwisterSelect" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Word Display Mode -->
+            <div class="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800">
+                <label class="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-3">
+                    <i class="fas fa-eye mr-2"></i>Modos de Visualización de Palabras
+                </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors">
+                        <input type="checkbox" name="visualMode" value="highlight" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm">🟣 Resaltado Morado</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors">
+                        <input type="checkbox" name="visualMode" value="appear" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm">✨ Aparecer</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors">
+                        <input type="checkbox" name="visualMode" value="fade" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm">🌊 Desvanecer</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors">
+                        <input type="checkbox" name="visualMode" value="bounce-word" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm">🏀 Bolita Palabra</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800/30 transition-colors">
+                        <input type="checkbox" name="visualMode" value="bounce-syllable" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm">🎾 Bolita Sílaba</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Syllable Extension Control -->
+            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                <label class="block text-sm font-semibold text-blue-700 dark:text-blue-300 mb-3">
+                    <i class="fas fa-volume-up mr-2"></i>Alargamiento de Primera Sílaba
+                </label>
+                <select id="syllableMode" class="w-full px-4 py-3 text-base border border-blue-300 dark:border-blue-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="none">🚫 Sin Alargamiento</option>
+                    <option value="sentence">📝 Primera Sílaba de Cada Frase</option>
+                    <option value="word">🔤 Primera Sílaba de Cada Palabra</option>
+                </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 text-xs">
+                    <div class="text-blue-600 dark:text-blue-400">
+                        <strong>Por Frase:</strong> "EEEEn el parque había niños. Meeeee encantó verlos jugar."
+                    </div>
+                    <div class="text-blue-600 dark:text-blue-400">
+                        <strong>Por Palabra:</strong> "EEEEn eeeeel paaaaarque haaaabía niiiiños."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reading Timer -->
+            <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-semibold text-green-700 dark:text-green-300">
+                        <i class="fas fa-stopwatch mr-2"></i>Cronómetro de Lectura
+                    </label>
+                    <div class="text-right">
+                        <div id="currentTime" class="text-2xl font-bold text-green-600 dark:text-green-400">00:00</div>
+                        <div id="wordsPerMinute" class="text-sm text-green-500 dark:text-green-400">0 PPM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metronome Control -->
+            <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="block text-sm font-semibold text-yellow-700 dark:text-yellow-300">
+                        <i class="fas fa-music mr-2"></i>Metrónomo de Ritmo
+                    </label>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="metronomeToggle" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs text-yellow-600 dark:text-yellow-400">Volumen:</span>
+                    <input type="range" id="metronomeVolume" min="0" max="100" value="50" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                    <span id="metronomeVolumeText" class="text-xs text-yellow-600 dark:text-yellow-400 min-w-[30px]">50%</span>
+                </div>
+            </div>
+
+            <!-- Custom Text Area -->
+            <div id="customTextArea" class="mt-4 hidden">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <i class="fas fa-clipboard mr-2"></i>Escribe o pega tu propio texto:
+                </label>
+                <textarea id="customText" rows="4" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y" placeholder="Escribe aquí el texto que quieres practicar o usa Ctrl+V para pegar..."></textarea>
+                <div class="flex gap-2 mt-2">
+                    <button id="loadCustomText" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-upload mr-2"></i>Cargar Texto
+                    </button>
+                    <button id="pasteText" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-paste mr-2"></i>Pegar del Portapapeles
+                    </button>
+                    <button id="clearText" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Playback Controls -->
+            <div class="flex flex-wrap justify-center gap-4 mt-6">
+                <button id="playBtn" class="flex items-center px-6 py-3 bg-primary text-white rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-play mr-2"></i>Reproducir
+                </button>
+                <button id="pauseBtn" class="flex items-center px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg" disabled="">
+                    <i class="fas fa-pause mr-2"></i>Pausar
+                </button>
+                <button id="resetBtn" class="flex items-center px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-redo mr-2"></i>Reiniciar
+                </button>
+                <button id="finishBtn" class="flex items-center px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-flag-checkered mr-2"></i>Finalizar Lectura
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-6 progress-mobile-landscape">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Progreso</span>
+                <span id="progressText" class="text-sm font-medium text-primary">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                <div id="progressBar" class="progress-bar bg-gradient-to-r from-primary to-purple-500 h-3 rounded-full" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Reading Breathing Guide Panel -->
+        <div class="bg-breath/10 dark:bg-breath/20 rounded-2xl p-6 mb-6 shadow-lg border border-breath/30 breathing-mobile-landscape">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-breath">
+                    <i class="fas fa-lungs mr-2"></i>Guía de Respiración durante Lectura
+                </h3>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="breathingGuideToggle" class="sr-only peer">
+                    <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breath/30 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-breath"></div>
+                </label>
+            </div>
+            
+            <!-- Breathing Indicator -->
+            <div class="flex items-center justify-center mb-4">
+                <div class="relative">
+                    <!-- Breathing Circle Pulse -->
+                    <div id="breathingCircle" class="w-32 h-32 rounded-full bg-gradient-to-br from-breath to-cyan-500 flex items-center justify-center mb-4 transition-all duration-2000 breathing-circle-mobile">
+                        <span class="text-white text-xl font-bold">🫁</span>
+                    </div>
+                    
+                    <!-- Breathing Text Indicator -->
+                    <div id="breathingText" class="text-center mt-2 text-sm font-medium text-breath">
+                        Respiración desactivada
+                    </div>
+                    
+                    <!-- Breathing Rate Indicator -->
+                    <div class="text-center mt-1">
+                        <div id="breathingRate" class="text-xs text-gray-500 dark:text-gray-400">
+                            0 resp/min
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Breathing Pattern Settings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Patrón de Respiración
+                    </label>
+                    <select id="breathingPattern" class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="words-4">Cada 4 palabras</option>
+                        <option value="words-6" selected="">Cada 6 palabras</option>
+                        <option value="words-8">Cada 8 palabras</option>
+                        <option value="punctuation">En puntuación</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Duración Respiración
+                    </label>
+                    <select id="breathingDuration" class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="1000">1 segundo</option>
+                        <option value="2000" selected="">2 segundos</option>
+                        <option value="3000">3 segundos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reading Area with Side Panels -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+            <!-- Left Therapist Panel -->
+            <div class="lg:col-span-2">
+                <div class="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 shadow-lg border border-red-200 dark:border-red-800 h-fit sticky top-4 therapist-panel-mobile-landscape">
+                    <h4 class="text-sm font-semibold text-red-700 dark:text-red-300 mb-3 text-center">
+                        <i class="fas fa-user-md mr-1"></i>Panel Terapeuta
+                    </h4>
+                    
+                    <div class="space-y-2">
+                        <button id="blockBtn" class="w-full bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition-colors text-xs">
+                            <i class="fas fa-stop mr-1"></i>Bloqueo
+                            <div class="text-lg font-bold">(<span id="blockCount">0</span>)</div>
+                        </button>
+                        <button id="repetitionBtn" class="w-full bg-orange-500 text-white px-3 py-2 rounded-lg hover:bg-orange-600 transition-colors text-xs">
+                            <i class="fas fa-redo mr-1"></i>Repetición
+                            <div class="text-lg font-bold">(<span id="repetitionCount">0</span>)</div>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-red-200 dark:border-red-700 text-center">
+                        <div class="text-red-600 dark:text-red-400 text-xs">
+                            <strong>Total: <span id="totalDisfluencies">0</span></strong>
+                        </div>
+                        <button id="clearDisfluencies" class="w-full mt-2 bg-gray-500 text-white px-2 py-1 rounded text-xs hover:bg-gray-600 transition-colors">
+                            <i class="fas fa-eraser mr-1"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Text Display -->
+            <div class="lg:col-span-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-gray-700">
+                    <div id="textDisplay" class="text-2xl md:text-3xl leading-loose text-center font-medium text-gray-800 dark:text-gray-200 min-h-[300px] flex items-center justify-center text-display-mobile-landscape">
+                        <!-- Text will be loaded here -->
+                    </div>
+                    
+                    <!-- Prosodic Guide Integrated Below Text -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                        <div id="prosodicGraph" class="relative h-12 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg border border-indigo-200 dark:border-indigo-700 overflow-hidden">
+                            <canvas id="prosodicCanvas" class="w-full h-full"></canvas>
+                            <div id="prosodicIndicator" class="absolute top-0 w-0.5 h-full bg-indigo-600 shadow-lg transition-all duration-300" style="left: 0;">
+                                <div class="absolute -top-1 -left-1 w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1 mt-1 text-xs">
+                            <div class="text-indigo-600 dark:text-indigo-400 text-center">
+                                <span class="inline-block w-2 h-1 bg-blue-500 mr-1"></span>Tono
+                            </div>
+                            <div class="text-red-600 dark:text-red-400 text-center">
+                                <span class="inline-block w-1 h-2 bg-red-500 mr-1"></span>Pausas
+                            </div>
+                            <div class="text-green-600 dark:text-green-400 text-center">
+                                <span class="inline-block w-2 h-1 bg-green-500 opacity-50 mr-1"></span>Énfasis
+                            </div>
+                            <div class="text-indigo-700 dark:text-indigo-300 text-center font-semibold">
+                                <span class="inline-block w-0.5 h-2 bg-indigo-600 mr-1"></span>Posición
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Therapist Panel -->
+            <div class="lg:col-span-2">
+                <div class="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 shadow-lg border border-red-200 dark:border-red-800 h-fit sticky top-4 therapist-panel-mobile-landscape">
+                    <h4 class="text-sm font-semibold text-red-700 dark:text-red-300 mb-3 text-center">
+                        <i class="fas fa-clipboard-list mr-1"></i>Más Errores
+                    </h4>
+                    
+                    <div class="space-y-2">
+                        <button id="prolongationBtn" class="w-full bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition-colors text-xs">
+                            <i class="fas fa-expand-arrows-alt mr-1"></i>Prolongación
+                            <div class="text-lg font-bold">(<span id="prolongationCount">0</span>)</div>
+                        </button>
+                        <button id="hesitationBtn" class="w-full bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors text-xs">
+                            <i class="fas fa-pause-circle mr-1"></i>Vacilación
+                            <div class="text-lg font-bold">(<span id="hesitationCount">0</span>)</div>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-red-200 dark:border-red-700">
+                        <div class="text-red-600 dark:text-red-400 text-xs text-center mb-2">
+                            <i class="fas fa-chart-line mr-1"></i>Análisis rápido
+                        </div>
+                        <div class="text-center text-xs text-gray-600 dark:text-gray-400">
+                            Presiona los botones durante la lectura para registrar errores
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div id="statusDisplay" class="mt-6 text-center">
+            <div class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-full">
+                <i class="fas fa-info-circle mr-2 text-primary"></i>
+                <span class="text-sm font-medium">Selecciona un texto y presiona reproducir para comenzar</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Sample texts and tongue twisters for stuttering therapy
+        const sampleTexts = [
+            "El sol brilla en el cielo azul. Los pájaros cantan melodías dulces. Las flores desprenden aromas frescos. La brisa suave acaricia mi rostro. Es un día perfecto para sonreír.",
+            "", // Trabalenguas will be loaded dynamically
+            "En el silencio de la noche estrellada, susurran secretos las hojas del jardín. La luna plateada ilumina senderos misteriosos mientras el viento toca su canción eterna.",
+            ""
+        ];
+
+        // Tongue twisters specifically designed for stuttering therapy
+        const tongueTwisters = [
+            "Pablito clavó un clavito en la calva de un calvito. En la calva de un calvito, un clavito clavó Pablito.",
+            "Tres tristes tigres tragaban trigo en un trigal. En tres tristes trastos tragaban trigo tres tristes tigres.",
+            "El perro de San Roque no tiene rabo porque Ramón Ramírez se lo ha cortado.",
+            "Parra tenía una perra. Guerra tenía una parra. La perra de Parra subió a la parra de Guerra. Guerra pegó con la porra a la perra de Parra.",
+            "Cuando cuentes cuentos, cuenta cuántos cuentos cuentas, porque cuando cuentas cuentos nunca sabes cuántos cuentos cuentas.",
+            "Si Sansón no sazona su salsa con sal, le sale sosa. Le sale sosa su salsa a Sansón si la sazona sin sal.",
+            "Lado, ledo, lido, lodo, ludo, decirlo al revés lo dudo. Ludo, lodo, lido, ledo, lado, ¿qué trabajo me ha costado?",
+            "Me han dicho que has dicho un dicho que han dicho que he dicho yo. El que lo ha dicho mintió, y en caso de que hubiese dicho ese dicho que tú has dicho que he dicho, dicho y redicho quedó.",
+            "Buscaba el bosque Francisco, un vasco bizco muy brusco, y al verlo le dijo un chusco: ¿Busca el bosque, vasco bizco?",
+            "Como poco coco como, poco coco compro.",
+            "Había una caracola en la cola de la caracola. La caracola tenía una cola en la caracola de la cola.",
+            "Para desenredar el enredo que ayer enredé, hoy desenredaré el enredo que desenredar quiero.",
+            "Guerra tenía una parra y Parra tenía una perra. La perra de Parra mordió la parra de Guerra. Guerra le pegó a la perra de Parra con la porra.",
+            "El cielo está enladrillado, ¿quién lo desenladrillará? El desenladrillador que lo desenladrille, buen desenladrillador será.",
+            "Pepe Pecas pica papas con un pico. Con un pico pica papas Pepe Pecas. Si Pepe Pecas pica papas con un pico, ¿dónde está el pico con que Pepe Pecas pica papas?",
+            "Pancha plancha con cuatro planchas. ¿Con cuántas planchas plancha Pancha?",
+            "En un plato de trigo comían tres tristes tigres. Un tigre, dos tigres, tres tigres comían trigo en un plato.",
+            "Compadre, cómpreme un coco. Compadre, no compro coco porque el que poco coco come, poco coco compra.",
+            "¿Cómo quieres que te quiera si el que quiero que me quiera no me quiere como quiero que me quiera?",
+            "Erre con erre cigarro, erre con erre barril. Rápido ruedan los carros cargados de azúcar del ferrocarril.",
+            "Tengo una gallina pinta, pipiripinta, gorda, pipirigorda, pipiripinta. Si la gallina no fuera pinta, pipiripinta, gorda, pipirigorda, pipiripinta, no tendría los pollitos pintos, pipiripintos, gordos, pipirigordos, pipiripintos.",
+            "El rey de Constantinopla está constantinoplizado. Consta que Constanza, no lo pudo desconstantinoplizar. El desconstantinoplizador que desconstantinoplizare al rey de Constantinopla, buen desconstantinoplizador será.",
+            "Cuando yo digo Diego, digo digo, y cuando digo digo, digo Diego.",
+            "Tres brujas miran tres relojes Swatch. ¿Qué bruja mira qué reloj Swatch?"
+        ];
+
+        let currentTextIndex = 0;
+        let words = [];
+        let currentWordIndex = 0;
+        let isPlaying = false;
+        let intervalId = null;
+        let timerInterval = null;
+        let speed = 600; // milliseconds between words
+        let startTime = null;
+        let elapsedTime = 0;
+        let totalReadingTime = 0;
+
+        // Disfluency counters
+        let disfluencies = {
+            blocks: 0,
+            repetitions: 0,
+            prolongations: 0,
+            hesitations: 0
+        };
+
+        // Metronome and prosodic variables
+        let audioContext = null;
+        let metronomeOscillator = null;
+        let isMetronomeActive = false;
+        let currentSyllableIndex = 0;
+        let syllables = [];
+        let prosodicData = [];
+
+        // Assessment variables
+        const assessmentQuestions = [
+            {
+                question: "¿Con qué frecuencia experimentas dificultades al hablar?",
+                options: [
+                    { text: "Nunca o muy rara vez", value: 1 },
+                    { text: "Ocasionalmente (1-2 veces por semana)", value: 2 },
+                    { text: "Frecuentemente (varias veces por semana)", value: 3 },
+                    { text: "Diariamente", value: 4 },
+                    { text: "En cada conversación", value: 5 }
+                ]
+            },
+            {
+                question: "¿Cuál es el tipo de disfluencia más común que experimentas?",
+                options: [
+                    { text: "Repeticiones de sonidos (p-p-palabra)", value: "repetition" },
+                    { text: "Prolongaciones de sonidos (ssssol)", value: "prolongation" },
+                    { text: "Bloqueos (pausas involuntarias)", value: "block" },
+                    { text: "Combinación de varios tipos", value: "mixed" },
+                    { text: "No estoy seguro", value: "unsure" }
+                ]
+            },
+            {
+                question: "¿En qué situaciones tienes más dificultades para hablar?",
+                options: [
+                    { text: "Hablar por teléfono", value: "phone" },
+                    { text: "Presentaciones públicas", value: "public" },
+                    { text: "Conversaciones casuales", value: "casual" },
+                    { text: "Cuando estoy nervioso/a", value: "nervous" },
+                    { text: "En todas las situaciones por igual", value: "all" }
+                ]
+            },
+            {
+                question: "¿Cómo afecta la tartamudez a tu vida diaria?",
+                options: [
+                    { text: "No afecta significativamente", value: 1 },
+                    { text: "Afecta ligeramente", value: 2 },
+                    { text: "Afecta moderadamente", value: 3 },
+                    { text: "Afecta considerablemente", value: 4 },
+                    { text: "Afecta severamente", value: 5 }
+                ]
+            },
+            {
+                question: "¿Has recibido terapia de habla anteriormente?",
+                options: [
+                    { text: "Nunca", value: "never" },
+                    { text: "En la infancia solamente", value: "childhood" },
+                    { text: "En la adolescencia", value: "teen" },
+                    { text: "Como adulto", value: "adult" },
+                    { text: "Actualmente estoy en terapia", value: "current" }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let assessmentAnswers = {};
+        let assessmentProfile = null;
+
+        // Breathing guide variables
+        let breathingGuideEnabled = false;
+        let breathingPattern = 'words-6';
+        let breathingDuration = 2000;
+
+        // DOM elements
+        const speedSelect = document.getElementById('speedSelect');
+        const textSelect = document.getElementById('textSelect');
+        const tongueTwisterArea = document.getElementById('tongueTwisterArea');
+        const tongueTwisterSelect = document.getElementById('tongueTwisterSelect');
+        const visualModeCheckboxes = document.querySelectorAll('input[name="visualMode"]');
+        const syllableMode = document.getElementById('syllableMode');
+        const metronomeToggle = document.getElementById('metronomeToggle');
+        const metronomeVolume = document.getElementById('metronomeVolume');
+        const metronomeVolumeText = document.getElementById('metronomeVolumeText');
+        const currentTime = document.getElementById('currentTime');
+        const wordsPerMinute = document.getElementById('wordsPerMinute');
+        const prosodicCanvas = document.getElementById('prosodicCanvas');
+        const prosodicIndicator = document.getElementById('prosodicIndicator');
+        const customTextArea = document.getElementById('customTextArea');
+        const customText = document.getElementById('customText');
+        const loadCustomText = document.getElementById('loadCustomText');
+        const pasteText = document.getElementById('pasteText');
+        const clearText = document.getElementById('clearText');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const finishBtn = document.getElementById('finishBtn');
+        const textDisplay = document.getElementById('textDisplay');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const statusDisplay = document.getElementById('statusDisplay');
+        
+        // Therapist panel elements
+        const blockBtn = document.getElementById('blockBtn');
+        const repetitionBtn = document.getElementById('repetitionBtn');
+        const prolongationBtn = document.getElementById('prolongationBtn');
+        const hesitationBtn = document.getElementById('hesitationBtn');
+        const clearDisfluencies = document.getElementById('clearDisfluencies');
+        const blockCount = document.getElementById('blockCount');
+        const repetitionCount = document.getElementById('repetitionCount');
+        const prolongationCount = document.getElementById('prolongationCount');
+        const hesitationCount = document.getElementById('hesitationCount');
+        const totalDisfluencies = document.getElementById('totalDisfluencies');
+
+        // Breathing guide elements
+        const breathingGuideToggle = document.getElementById('breathingGuideToggle');
+        const breathingPatternSelect = document.getElementById('breathingPattern');
+        const breathingDurationSelect = document.getElementById('breathingDuration');
+        const breathingText = document.getElementById('breathingText');
+        const leftLung = document.getElementById('leftLung');
+        const rightLung = document.getElementById('rightLung');
+
+        // Initialize tongue twister dropdown
+        function populateTongueTwisters() {
+            tongueTwisterSelect.innerHTML = '';
+            tongueTwisters.forEach((twister, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${index + 1}. ${twister.substring(0, 50)}${twister.length > 50 ? '...' : ''}`;
+                tongueTwisterSelect.appendChild(option);
+            });
+        }
+
+        // Update disfluency counters display
+        function updateDisfluencyCounters() {
+            blockCount.textContent = disfluencies.blocks;
+            repetitionCount.textContent = disfluencies.repetitions;
+            prolongationCount.textContent = disfluencies.prolongations;
+            hesitationCount.textContent = disfluencies.hesitations;
+            
+            const total = disfluencies.blocks + disfluencies.repetitions + 
+                         disfluencies.prolongations + disfluencies.hesitations;
+            totalDisfluencies.textContent = total;
+        }
+
+        // Finish reading button functionality
+        function finishReading() {
+            if (isPlaying) {
+                pause();
+            }
+            
+            const finalTime = Math.floor(elapsedTime / 1000);
+            const minutes = Math.floor(finalTime / 60);
+            const seconds = finalTime % 60;
+            const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+            const finalWPM = elapsedTime > 0 ? Math.round(words.length / (elapsedTime / 60000)) : 0;
+            const totalDisfluenciesCount = disfluencies.blocks + disfluencies.repetitions + 
+                                         disfluencies.prolongations + disfluencies.hesitations;
+            
+            updateStatus(`🏁 Lectura finalizada manualmente | Tiempo: ${timeStr} | ${finalWPM} PPM | ${totalDisfluenciesCount} disfluencias totales`);
+        }
+
+        // Assessment functions
+        function loadQuestion(index) {
+            if (index >= assessmentQuestions.length) {
+                completeAssessment();
+                return;
+            }
+
+            const question = assessmentQuestions[index];
+            const content = document.getElementById('assessmentContent');
+            
+            content.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="text-sm text-gray-500 mb-2">Pregunta ${index + 1} de ${assessmentQuestions.length}</div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                        <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: ${((index + 1) / assessmentQuestions.length) * 100}%"></div>
+                    </div>
+                </div>
+                
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6">${question.question}</h3>
+                
+                <div class="space-y-3">
+                    ${question.options.map((option, i) => `
+                        <label class="flex items-center p-4 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="assessmentAnswer" value="${option.value}" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+                            <span class="ml-3 text-gray-700 dark:text-gray-300">${option.text}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+
+            const nextBtn = document.getElementById('nextQuestion');
+            nextBtn.textContent = index === assessmentQuestions.length - 1 ? 'Finalizar' : 'Siguiente';
+            
+            currentQuestionIndex = index;
+        }
+
+        function completeAssessment() {
+            assessmentProfile = generateAssessmentProfile(assessmentAnswers);
+            document.getElementById('assessmentModal').classList.add('hidden');
+            applyPersonalizedSettings(assessmentProfile);
+            showAssessmentResults(assessmentProfile);
+        }
+
+        function generateAssessmentProfile(answers) {
+            const frequency = answers[0] || 1;
+            const type = answers[1] || 'mixed';
+            const situation = answers[2] || 'all';
+            const impact = answers[3] || 1;
+            const therapy = answers[4] || 'never';
+
+            let severity = 'mild';
+            if (frequency >= 4 || impact >= 4) severity = 'severe';
+            else if (frequency >= 3 || impact >= 3) severity = 'moderate';
+
+            let recommendedSpeed = 600;
+            if (severity === 'severe') recommendedSpeed = 1200;
+            else if (severity === 'moderate') recommendedSpeed = 800;
+
+            return {
+                severity,
+                primaryType: type,
+                triggerSituation: situation,
+                impact,
+                therapyHistory: therapy,
+                recommendedSpeed,
+                recommendedModes: severity === 'severe' ? ['highlight', 'bounce-syllable'] : ['highlight'],
+                breathingRecommended: frequency >= 3
+            };
+        }
+
+        function applyPersonalizedSettings(profile) {
+            speedSelect.value = profile.recommendedSpeed;
+            
+            visualModeCheckboxes.forEach(checkbox => {
+                checkbox.checked = profile.recommendedModes.includes(checkbox.value);
+            });
+
+            if (profile.severity === 'severe') {
+                syllableMode.value = 'word';
+            }
+
+            updateStatus(`🎯 Configuración personalizada aplicada para ${profile.severity} disfemia`);
+        }
+
+        function showAssessmentResults(profile) {
+            const severityNames = {
+                mild: 'Leve',
+                moderate: 'Moderada',
+                severe: 'Severa'
+            };
+
+            updateStatus(`📊 Evaluación completada: Disfemia ${severityNames[profile.severity]} - Configuración optimizada automáticamente`);
+        }
+
+        // Syllable segmentation for Spanish
+        function splitIntoSyllables(word) {
+            const vowels = 'aeiouáéíóúü';
+            const consonants = 'bcdfghjklmnpqrstvwxyzñ';
+            
+            word = word.toLowerCase();
+            let syllables = [];
+            let currentSyllable = '';
+            
+            for (let i = 0; i < word.length; i++) {
+                const char = word[i];
+                currentSyllable += char;
+                
+                if (vowels.includes(char)) {
+                    let nextChar = word[i + 1];
+                    let nextNextChar = word[i + 2];
+                    
+                    if (!nextChar || vowels.includes(nextChar)) {
+                        syllables.push(currentSyllable);
+                        currentSyllable = '';
+                    } else if (consonants.includes(nextChar) && consonants.includes(nextNextChar)) {
+                        syllables.push(currentSyllable + nextChar);
+                        currentSyllable = '';
+                        i++;
+                    }
+                }
+            }
+            
+            if (currentSyllable) {
+                syllables.push(currentSyllable);
+            }
+            
+            return syllables.length > 0 ? syllables : [word];
+        }
+
+        // Enhanced prosodic data generation with natural Spanish patterns
+        function generateProsodicData(words) {
+            const data = [];
+            words.forEach((word, index) => {
+                const wordLength = word.original.length;
+                const cleanWord = word.original.toLowerCase().replace(/[.,!?;:]/g, '');
+                let intonation = 45;
+                
+                if (word.original.includes('!')) intonation = 85;
+                else if (word.original.includes('?')) intonation = 75;
+                else if (word.isFirstInSentence) intonation = 65;
+                else if (index === words.length - 1) intonation = 25;
+                else if (word.original.includes(',')) intonation = 55;
+                
+                const contentWords = ['en', 'el', 'la', 'los', 'las', 'de', 'del', 'a', 'al', 'con', 'para', 'por', 'que', 'se', 'y', 'o', 'un', 'una', 'unos', 'unas'];
+                if (!contentWords.includes(cleanWord) && wordLength > 3) intonation += 8;
+                
+                if (wordLength > 7) intonation += 12;
+                else if (wordLength > 5) intonation += 6;
+                
+                if (index % 4 === 0 && !word.isFirstInSentence) intonation += 5;
+                if (index % 4 === 2) intonation -= 5;
+                
+                const questionWords = ['qué', 'cómo', 'cuándo', 'dónde', 'quién', 'por qué', 'para qué'];
+                if (questionWords.some(qw => cleanWord.includes(qw))) intonation += 15;
+                
+                data.push({
+                    intonation: Math.max(15, Math.min(95, intonation)),
+                    pause: word.original.includes('.') || word.original.includes('!') || word.original.includes('?'),
+                    emphasis: wordLength > 6 || word.isFirstInSentence || !contentWords.includes(cleanWord)
+                });
+            });
+            return data;
+        }
+
+        // Draw prosodic graph
+        function drawProsodicGraph() {
+            if (!words.length || !prosodicCanvas) return;
+            
+            const ctx = prosodicCanvas.getContext('2d');
+            const canvas = prosodicCanvas;
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            prosodicData = generateProsodicData(words);
+            const segmentWidth = canvas.width / words.length;
+            
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
+            prosodicData.forEach((data, index) => {
+                if (data.emphasis) {
+                    ctx.fillRect(index * segmentWidth, 0, segmentWidth, canvas.height);
+                }
+            });
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            prosodicData.forEach((data, index) => {
+                const x = (index + 0.5) * segmentWidth;
+                const y = canvas.height - (data.intonation / 100) * canvas.height;
+                
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            ctx.fillStyle = '#ef4444';
+            prosodicData.forEach((data, index) => {
+                if (data.pause) {
+                    const x = (index + 1) * segmentWidth - 2;
+                    ctx.fillRect(x, 0, 4, canvas.height);
+                }
+            });
+        }
+
+        // Update prosodic indicator
+        function updateProsodicIndicator() {
+            if (!words.length) return;
+            
+            const progress = (currentWordIndex / words.length) * 100;
+            prosodicIndicator.style.left = `${progress}%`;
+        }
+
+        // Metronome functions
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function playMetronomeClick() {
+            if (!isMetronomeActive || !metronomeToggle.checked) return;
+            
+            const ctx = initAudioContext();
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            oscillator.frequency.value = 440;
+            oscillator.type = 'sine';
+            
+            const volume = metronomeVolume.value / 100 * 0.03;
+            gainNode.gain.setValueAtTime(0, ctx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+            
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.15);
+        }
+
+        // Initialize
+        function init() {
+            populateTongueTwisters();
+            loadText();
+            updateDisfluencyCounters();
+            drawProsodicGraph();
+            updateStatus("Listo para comenzar");
+        }
+
+        // Load selected text
+        function loadText() {
+            const selectedIndex = parseInt(textSelect.value);
+            if (selectedIndex === 3) {
+                if (customText.value.trim()) {
+                    loadWords(customText.value);
+                } else {
+                    loadWords("Escribe tu texto personalizado arriba y presiona 'Cargar Texto'");
+                }
+            } else {
+                loadWords(sampleTexts[selectedIndex]);
+            }
+        }
+
+        // Function to extend first syllable
+        function extendFirstSyllable(word) {
+            const vowels = 'aeiouáéíóúü';
+            const wordLower = word.toLowerCase();
+            
+            for (let i = 0; i < wordLower.length; i++) {
+                if (vowels.includes(wordLower[i])) {
+                    const extendedVowel = wordLower[i].repeat(4);
+                    return word.slice(0, i) + extendedVowel + word.slice(i + 1);
+                }
+            }
+            
+            return word;
+        }
+
+        // Split text into words and display
+        function loadWords(text) {
+            const mode = syllableMode.value;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim() !== '');
+            
+            words = [];
+            syllables = [];
+            
+            sentences.forEach((sentence, sentenceIndex) => {
+                const sentenceWords = sentence.trim().split(' ').filter(word => word.trim() !== '');
+                
+                sentenceWords.forEach((word, index) => {
+                    let displayWord = word;
+                    
+                    if (mode === 'sentence' && index === 0) {
+                        displayWord = extendFirstSyllable(word);
+                    } else if (mode === 'word') {
+                        displayWord = extendFirstSyllable(word);
+                    }
+                    
+                    const wordObj = {
+                        original: word,
+                        display: displayWord,
+                        isFirstInSentence: index === 0,
+                        syllables: splitIntoSyllables(word)
+                    };
+                    
+                    words.push(wordObj);
+                    
+                    wordObj.syllables.forEach((syllable, sylIndex) => {
+                        syllables.push({
+                            text: syllable,
+                            wordIndex: words.length - 1,
+                            syllableIndex: sylIndex,
+                            isLastInWord: sylIndex === wordObj.syllables.length - 1
+                        });
+                    });
+                });
+            });
+            
+            currentWordIndex = 0;
+            currentSyllableIndex = 0;
+            displayText();
+            updateProgress();
+            resetTimer();
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (!startTime) {
+                startTime = Date.now() - elapsedTime;
+            }
+            
+            timerInterval = setInterval(updateTimer, 100);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function resetTimer() {
+            stopTimer();
+            startTime = null;
+            elapsedTime = 0;
+            totalReadingTime = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimer() {
+            if (startTime) {
+                elapsedTime = Date.now() - startTime;
+                updateTimerDisplay();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const seconds = Math.floor(elapsedTime / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            const timeStr = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            currentTime.textContent = timeStr;
+            
+            if (elapsedTime > 0 && currentWordIndex > 0) {
+                const wordsRead = currentWordIndex;
+                const minutesElapsed = elapsedTime / 60000;
+                const wpm = Math.round(wordsRead / minutesElapsed);
+                wordsPerMinute.textContent = `${wpm} PPM`;
+            } else {
+                wordsPerMinute.textContent = '0 PPM';
+            }
+        }
+
+        // Get active visual modes from checkboxes
+        function getActiveVisualModes() {
+            const activeModes = [];
+            visualModeCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    activeModes.push(checkbox.value);
+                }
+            });
+            return activeModes;
+        }
+
+        // Group words into lines for prosodic display
+        function groupWordsIntoLines(words, containerWidth = 600) {
+            const lines = [];
+            let currentLine = [];
+            let currentLineWidth = 0;
+            const avgCharWidth = 20; // Approximate character width
+            
+            words.forEach((word, index) => {
+                const wordWidth = word.display.length * avgCharWidth + 40; // Include margins
+                
+                if (currentLineWidth + wordWidth > containerWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = [{ word, index }];
+                    currentLineWidth = wordWidth;
+                } else {
+                    currentLine.push({ word, index });
+                    currentLineWidth += wordWidth;
+                }
+            });
+            
+            if (currentLine.length > 0) {
+                lines.push(currentLine);
+            }
+            
+            return lines;
+        }
+
+        // Create prosodic graph for a specific line
+        function createLineProsodicGraph(lineWords, lineIndex) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 500;
+            canvas.height = 32;
+            canvas.className = 'w-full h-8 rounded';
+            
+            const ctx = canvas.getContext('2d');
+            const segmentWidth = canvas.width / lineWords.length;
+            
+            // Draw emphasis areas (green)
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
+            lineWords.forEach((item, index) => {
+                const data = prosodicData[item.index];
+                if (data && data.emphasis) {
+                    ctx.fillRect(index * segmentWidth, 0, segmentWidth, canvas.height);
+                }
+            });
+            
+            // Draw intonation line (blue)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            lineWords.forEach((item, index) => {
+                const data = prosodicData[item.index] || { intonation: 50 };
+                const x = (index + 0.5) * segmentWidth;
+                const y = canvas.height - (data.intonation / 100) * canvas.height;
+                
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Draw pause markers (red)
+            ctx.fillStyle = '#ef4444';
+            lineWords.forEach((item, index) => {
+                const data = prosodicData[item.index];
+                if (data && data.pause) {
+                    const x = (index + 1) * segmentWidth - 2;
+                    ctx.fillRect(x, 0, 4, canvas.height);
+                }
+            });
+            
+            // Draw current position indicator
+            const currentWordInLine = lineWords.findIndex(item => item.index === currentWordIndex);
+            if (currentWordInLine >= 0) {
+                const x = (currentWordInLine / lineWords.length) * canvas.width;
+                ctx.fillStyle = '#6366f1';
+                ctx.fillRect(x - 1, 0, 2, canvas.height);
+                
+                // Add pulse dot
+                ctx.beginPath();
+                ctx.arc(x, canvas.height / 2, 3, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            return canvas;
+        }
+
+        // Function to detect stressed syllable in Spanish words
+        function findStressedSyllable(word) {
+            const cleanWord = word.toLowerCase().replace(/[.,!?;:]/g, '');
+            const syllables = splitIntoSyllables(cleanWord);
+            
+            // Rules for Spanish stress
+            // 1. If word has accent mark, that syllable is stressed
+            const accentedSyllableIndex = syllables.findIndex(syl => 
+                /[áéíóúü]/.test(syl)
+            );
+            if (accentedSyllableIndex !== -1) {
+                return accentedSyllableIndex;
+            }
+            
+            // 2. If no accent mark, apply default rules
+            const lastChar = cleanWord[cleanWord.length - 1];
+            const isVowelNOrS = /[aeiou]|n|s/.test(lastChar);
+            
+            if (isVowelNOrS) {
+                // Palabras llanas/graves - stress on second-to-last syllable
+                return Math.max(0, syllables.length - 2);
+            } else {
+                // Palabras agudas - stress on last syllable
+                return syllables.length - 1;
+            }
+        }
+
+        // Apply stressed syllable highlighting with yellow underline - ONLY ONE VOWEL per ENTIRE WORD
+        function applyStressedSyllableFormatting(word, syllables) {
+            const stressedIndex = findStressedSyllable(word);
+            let wordVowelFound = false; // Global flag for the entire word
+            
+            return syllables.map((syllable, index) => {
+                if (index === stressedIndex && !wordVowelFound) {
+                    // Apply yellow underline and make ONLY THE FIRST VOWEL in stressed syllable prominent
+                    const vowelPattern = /([aeiouáéíóúü])/i;
+                    const stressedSyllable = syllable.replace(vowelPattern, (match) => {
+                        if (!wordVowelFound) {
+                            wordVowelFound = true; // Set global flag so no more vowels get highlighted
+                            return `<span style="text-decoration: underline; text-decoration-color: #fbbf24; text-decoration-thickness: 3px; font-weight: bold; color: #f59e0b;">${match.toUpperCase()}</span>`;
+                        }
+                        return match;
+                    });
+                    return `<span class="stressed-syllable">${stressedSyllable}</span>`;
+                } else {
+                    return `<span class="syllable">${syllable}</span>`;
+                }
+            });
+        }
+
+        // Create prosodic curve guidance for words
+        function addProsodicCurve(wordIndex, word, prosodicInfo) {
+            // Remove any existing curve for this word
+            const existingCurve = document.querySelector(`[data-curve-for="${wordIndex}"]`);
+            if (existingCurve) {
+                existingCurve.remove();
+            }
+
+            const wordElement = document.querySelector(`[data-index="${wordIndex}"]`);
+            if (!wordElement) return;
+
+            // Create SVG element for the curve
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '120');
+            svg.setAttribute('height', '120');
+            svg.setAttribute('data-curve-for', wordIndex);
+            svg.style.position = 'absolute';
+            svg.style.top = '-90px';
+            svg.style.left = '50%';
+            svg.style.transform = 'translateX(-50%)';
+            svg.style.pointerEvents = 'none';
+            svg.style.zIndex = '8';
+
+            // Determine curve type based on word characteristics
+            const curveType = getCurveTypeForWord(word.original, prosodicInfo);
+            const curvePath = generateCurvePathForType(curveType, prosodicInfo.intonation);
+
+            // Create the path element
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', curvePath);
+            path.setAttribute('stroke', '#6366f1');
+            path.setAttribute('stroke-width', '3');
+            path.setAttribute('stroke-dasharray', '5,3');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', 'round');
+
+            // Add animation
+            const pathLength = 100; // Approximate length
+            path.style.strokeDasharray = `${pathLength} ${pathLength}`;
+            path.style.strokeDashoffset = pathLength;
+            path.style.animation = 'drawCurve 0.8s ease-out forwards';
+
+            svg.appendChild(path);
+            wordElement.style.position = 'relative';
+            wordElement.appendChild(svg);
+
+            // Remove curve after animation
+            setTimeout(() => {
+                if (svg.parentNode) {
+                    svg.remove();
+                }
+            }, 2000);
+        }
+
+        // Determine the type of prosodic curve based on word characteristics
+        function getCurveTypeForWord(word, prosodicInfo) {
+            const cleanWord = word.toLowerCase().replace(/[.,!?;:]/g, '');
+            
+            // Question words - rising curve
+            if (['qué', 'cómo', 'cuándo', 'dónde', 'quién'].includes(cleanWord)) {
+                return 'rising';
+            }
+            
+            // Long words with multiple syllables - wave curve
+            if (cleanWord.length > 8) {
+                return 'wave';
+            }
+            
+            // Words ending in punctuation
+            if (word.includes('!')) return 'exclamation';
+            if (word.includes('?')) return 'question';
+            if (word.includes('.')) return 'falling';
+            
+            // High intonation words - peak curve
+            if (prosodicInfo.intonation > 70) return 'peak';
+            
+            // Low intonation words - valley curve
+            if (prosodicInfo.intonation < 35) return 'valley';
+            
+            // Default - gentle arc
+            return 'arc';
+        }
+
+        // Generate SVG path for different curve types
+        function generateCurvePathForType(curveType, intonation) {
+            const intensity = (intonation / 100) * 0.8 + 0.2; // Scale 0.2-1.0
+            
+            switch (curveType) {
+                case 'rising':
+                    return `M 20 80 Q 40 ${80 - intensity * 30} 60 ${60 - intensity * 20} T 100 ${40 - intensity * 25}`;
+                
+                case 'falling':
+                    return `M 20 ${40 - intensity * 10} Q 40 ${50 - intensity * 15} 60 ${65 + intensity * 10} T 100 ${80 + intensity * 15}`;
+                
+                case 'wave':
+                    return `M 20 60 Q 35 ${40 - intensity * 20} 45 60 Q 55 ${75 + intensity * 15} 65 60 Q 75 ${45 - intensity * 10} 85 60 T 100 65`;
+                
+                case 'exclamation':
+                    return `M 20 70 Q 35 ${30 - intensity * 20} 50 ${25 - intensity * 15} Q 65 ${35 - intensity * 10} 80 50 T 100 65`;
+                
+                case 'question':
+                    return `M 20 65 Q 40 70 60 ${55 - intensity * 15} Q 75 ${35 - intensity * 20} 90 ${30 - intensity * 15} L 100 ${25 - intensity * 10}`;
+                
+                case 'peak':
+                    return `M 20 65 Q 45 ${35 - intensity * 15} 60 ${30 - intensity * 20} Q 75 ${40 - intensity * 10} 100 60`;
+                
+                case 'valley':
+                    return `M 20 50 Q 45 ${65 + intensity * 15} 60 ${70 + intensity * 20} Q 75 ${60 + intensity * 10} 100 55`;
+                
+                case 'arc':
+                default:
+                    return `M 20 60 Q 60 ${45 - intensity * 15} 100 55`;
+            }
+        }
+
+        // Display text with line-by-line prosodic graphs and stressed syllables
+        function displayText() {
+            if (words.length === 0) {
+                textDisplay.innerHTML = '<div class="text-gray-500 italic">Selecciona un texto para comenzar</div>';
+                return;
+            }
+            
+            const activeModes = getActiveVisualModes();
+            const containerWidth = textDisplay.offsetWidth * 0.8;
+            const lines = groupWordsIntoLines(words, containerWidth);
+            
+            let htmlContent = '<div class="space-y-6">';
+            
+            lines.forEach((lineWords, lineIndex) => {
+                // Create text line with stress highlighting
+                const lineHtml = lineWords.map(({ word, index }) => {
+                    const isActive = index === currentWordIndex;
+                    const isPast = index < currentWordIndex;
+                    let className = 'word';
+                    
+                    if (isActive) {
+                        const prosodicInfo = prosodicData[index] || { intonation: 50 };
+                        const prosodicClass = getProsodicClass(prosodicInfo.intonation);
+                        
+                        // Apply different visual modes with prosodic enhancements
+                        activeModes.forEach(mode => {
+                            switch (mode) {
+                                case 'highlight':
+                                    className += ' word-highlight';
+                                    break;
+                                case 'appear':
+                                    className += ' word-appear';
+                                    break;
+                                case 'fade':
+                                    className += ' word-fade';
+                                    break;
+                                case 'bounce-word':
+                                    className += ` word-bounce ${prosodicClass}`;
+                                    // Add prosodic curve guidance
+                                    setTimeout(() => addProsodicCurve(index, word, prosodicInfo), 100);
+                                    break;
+                                case 'bounce-syllable':
+                                    className += ' word-bounce-syllable';
+                                    break;
+                            }
+                        });
+                    } else if (isPast) {
+                        className += ' opacity-60';
+                    }
+
+                    // Apply stressed syllable formatting and syllable extension
+                    let displayText = word.display; // This already includes the extension from loadWords
+                    if (activeModes.includes('bounce-syllable')) {
+                        const syllables = word.syllables;
+                        const formattedSyllables = applyStressedSyllableFormatting(word.original, syllables);
+                        displayText = formattedSyllables.join('');
+                    }
+                    
+                    return `<span class="${className}" data-index="${index}">${displayText}</span>`;
+                }).join(' ');
+                
+                // Add line with text and prosodic graph
+                htmlContent += `
+                    <div class="line-container">
+                        <div class="text-line flex flex-wrap justify-center items-center mb-2">
+                            ${lineHtml}
+                        </div>
+                        <div class="prosodic-line-container flex justify-center mb-1">
+                            <div id="prosodic-line-${lineIndex}" class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded border border-indigo-200 dark:border-indigo-700 overflow-hidden" style="width: min(100%, 500px); height: 32px;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            htmlContent += '</div>';
+            textDisplay.innerHTML = htmlContent;
+            
+            // Generate prosodic data and add graphs to each line
+            prosodicData = generateProsodicData(words);
+            lines.forEach((lineWords, lineIndex) => {
+                const container = document.getElementById(`prosodic-line-${lineIndex}`);
+                if (container) {
+                    const canvas = createLineProsodicGraph(lineWords, lineIndex);
+                    container.appendChild(canvas);
+                }
+            });
+        }
+
+        // Update prosodic graphs to persist during reading
+        function updateLineProsodicGraphs() {
+            const containerWidth = textDisplay.offsetWidth * 0.8;
+            const lines = groupWordsIntoLines(words, containerWidth);
+            
+            lines.forEach((lineWords, lineIndex) => {
+                const container = document.getElementById(`prosodic-line-${lineIndex}`);
+                if (container) {
+                    // Clear existing canvas
+                    container.innerHTML = '';
+                    
+                    // Create updated canvas
+                    const canvas = createLineProsodicGraph(lineWords, lineIndex);
+                    container.appendChild(canvas);
+                }
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = words.length > 0 ? (currentWordIndex / words.length) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+
+        // Check if breathing cue should be triggered
+        function checkBreathingCue(wordIndex) {
+            if (!breathingGuideEnabled) return false;
+            
+            const word = words[wordIndex];
+            if (!word) return false;
+            
+            if (breathingPattern === 'punctuation') {
+                return word.original.includes('.') || word.original.includes('!') || 
+                       word.original.includes('?') || word.original.includes(',');
+            } else {
+                const wordsCount = parseInt(breathingPattern.split('-')[1]);
+                return (wordIndex + 1) % wordsCount === 0;
+            }
+        }
+
+        // Animate breathing circle with pulse effect
+        function animateBreathing() {
+            if (!breathingGuideEnabled) return;
+            
+            const circle = document.getElementById('breathingCircle');
+            const duration = parseInt(breathingDuration);
+            
+            // INHALE PHASE - Expand circle
+            breathingText.textContent = 'Inspirar profundamente';
+            document.getElementById('breathingRate').textContent = 'Inhalando...';
+            
+            circle.style.transform = 'scale(1.5)';
+            circle.className = 'w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mb-4 transition-all duration-2000';
+            
+            setTimeout(() => {
+                // EXHALE PHASE - Contract circle
+                breathingText.textContent = 'Expirar lentamente';
+                document.getElementById('breathingRate').textContent = 'Exhalando...';
+                
+                circle.style.transform = 'scale(0.8)';
+                circle.className = 'w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center mb-4 transition-all duration-2000';
+                
+                setTimeout(() => {
+                    // Reset to normal
+                    circle.style.transform = 'scale(1)';
+                    circle.className = 'w-32 h-32 rounded-full bg-gradient-to-br from-breath to-cyan-500 flex items-center justify-center mb-4 transition-all duration-2000';
+                    breathingText.textContent = 'Respiración completa';
+                    document.getElementById('breathingRate').textContent = `${60000 / duration} resp/min`;
+                }, duration / 4);
+                
+            }, duration / 2);
+        }
+
+        // Play reading
+        function play() {
+            if (words.length === 0) {
+                updateStatus("⚠️ Selecciona un texto primero");
+                return;
+            }
+
+            isPlaying = true;
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            playBtn.classList.add('playing-indicator');
+            
+            speed = parseInt(speedSelect.value);
+            updateStatus("🎵 Reproduciendo...");
+            startTimer();
+            drawProsodicGraph();
+
+            const activeModes = getActiveVisualModes();
+            if (activeModes.includes('bounce-syllable')) {
+                intervalId = setInterval(() => {
+                    if (currentSyllableIndex < syllables.length) {
+                        playMetronomeClick();
+                        
+                        const currentSyllable = syllables[currentSyllableIndex];
+                        currentWordIndex = currentSyllable.wordIndex;
+                        
+                        displaySyllableMode(currentSyllable);
+                        updateProgress();
+                        updateProsodicIndicator();
+                        
+                        currentSyllableIndex++;
+                    } else {
+                        pause();
+                        updateStatus(`📖 Texto completado. Presiona "Finalizar Lectura" para obtener estadísticas completas con disfluencias.`);
+                        
+                        finishBtn.style.animation = 'pulse 1s infinite';
+                        finishBtn.style.backgroundColor = '#dc2626';
+                        
+                        currentWordIndex = 0;
+                        currentSyllableIndex = 0;
+                        displayText();
+                        updateProgress();
+                        updateProsodicIndicator();
+                    }
+                }, speed / 3);
+            } else {
+                intervalId = setInterval(() => {
+                    if (currentWordIndex < words.length) {
+                        playMetronomeClick();
+                        
+                        if (checkBreathingCue(currentWordIndex)) {
+                            animateBreathing();
+                        }
+                        
+                        displayText();
+                        updateProgress();
+                        updateProsodicIndicator();
+                        updateLineProsodicGraphs();
+                        
+                        currentWordIndex++;
+                    } else {
+                        pause();
+                        updateStatus(`📖 Texto completado. Presiona "Finalizar Lectura" para obtener estadísticas completas con disfluencias.`);
+                        
+                        finishBtn.style.animation = 'pulse 1s infinite';
+                        finishBtn.style.backgroundColor = '#dc2626';
+                        
+                        currentWordIndex = 0;
+                        displayText();
+                        updateProgress();
+                        updateProsodicIndicator();
+                    }
+                }, speed);
+            }
+        }
+
+        // Pause reading
+        function pause() {
+            isPlaying = false;
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            playBtn.classList.remove('playing-indicator');
+            
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            
+            stopTimer();
+            updateStatus("⏸️ Pausado");
+        }
+
+        // Reset reading
+        function reset() {
+            pause();
+            currentWordIndex = 0;
+            displayText();
+            updateProgress();
+            updateStatus("🔄 Reiniciado - Listo para comenzar");
+        }
+
+        // Update status message
+        function updateStatus(message) {
+            statusDisplay.innerHTML = `
+                <div class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-full">
+                    <i class="fas fa-info-circle mr-2 text-primary"></i>
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+            `;
+        }
+
+        // Get prosodic class based on intonation level
+        function getProsodicClass(intonation) {
+            if (intonation <= 35) return 'prosodic-low';
+            else if (intonation <= 55) return 'prosodic-medium';
+            else if (intonation <= 75) return 'prosodic-high';
+            else return 'prosodic-very-high';
+        }
+
+        // Display text for syllable mode with separated syllables
+        function displaySyllableMode(currentSyllable) {
+            if (words.length === 0) return;
+            
+            const textHtml = words.map((word, wordIndex) => {
+                const isCurrentWord = wordIndex === currentSyllable.wordIndex;
+                const isPast = wordIndex < currentSyllable.wordIndex;
+                let className = 'word';
+                
+                if (isCurrentWord) {
+                    const syllables = word.syllables;
+                    const prosodicInfo = prosodicData[wordIndex] || { intonation: 50 };
+                    const prosodicClass = getProsodicClass(prosodicInfo.intonation);
+                    
+                    let syllableHtml = '';
+                    syllables.forEach((syllable, sylIndex) => {
+                        if (sylIndex === currentSyllable.syllableIndex) {
+                            syllableHtml += `<span class="syllable word-bounce-syllable ${prosodicClass}">${syllable}</span>`;
+                        } else if (sylIndex < currentSyllable.syllableIndex) {
+                            syllableHtml += `<span class="syllable opacity-60">${syllable}</span>`;
+                        } else {
+                            syllableHtml += `<span class="syllable">${syllable}</span>`;
+                        }
+                        
+                        if (sylIndex < syllables.length - 1) {
+                            syllableHtml += `<span class="syllable-separator">·</span>`;
+                        }
+                    });
+                    
+                    return `<span class="${className}" data-index="${wordIndex}">${syllableHtml}</span>`;
+                } else if (isPast) {
+                    className += ' opacity-60';
+                    return `<span class="${className}" data-index="${wordIndex}">${word.display}</span>`;
+                } else {
+                    const syllables = word.syllables;
+                    let syllableHtml = '';
+                    syllables.forEach((syllable, sylIndex) => {
+                        syllableHtml += `<span class="syllable">${syllable}</span>`;
+                        if (sylIndex < syllables.length - 1) {
+                            syllableHtml += `<span class="syllable-separator">·</span>`;
+                        }
+                    });
+                    return `<span class="${className}" data-index="${wordIndex}">${syllableHtml}</span>`;
+                }
+            }).join(' ');
+            
+            textDisplay.innerHTML = `<div class="flex flex-wrap justify-center items-center">${textHtml}</div>`;
+        }
+
+        // Event listeners setup
+        function setupEventListeners() {
+            // Assessment modal event listeners
+            const skipBtn = document.getElementById('skipAssessment');
+            const nextBtn = document.getElementById('nextQuestion');
+            
+            if (skipBtn) {
+                skipBtn.addEventListener('click', () => {
+                    document.getElementById('assessmentModal').classList.add('hidden');
+                    updateStatus("📋 Evaluación omitida - usando configuración por defecto");
+                });
+            }
+
+            // Event delegation for next button since it gets recreated
+            document.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'nextQuestion') {
+                    const selectedAnswer = document.querySelector('input[name="assessmentAnswer"]:checked');
+                    if (!selectedAnswer) {
+                        updateStatus('⚠️ Por favor selecciona una respuesta');
+                        return;
+                    }
+                    
+                    assessmentAnswers[currentQuestionIndex] = selectedAnswer.value;
+                    loadQuestion(currentQuestionIndex + 1);
+                }
+            });
+
+            // Manual modal event listeners
+            document.getElementById('showManual').addEventListener('click', () => {
+                document.getElementById('manualModal').classList.remove('hidden');
+            });
+
+            document.getElementById('closeManual').addEventListener('click', () => {
+                document.getElementById('manualModal').classList.add('hidden');
+            });
+
+            // Speed control
+            speedSelect.addEventListener('change', () => {
+                speed = parseInt(speedSelect.value);
+                updateStatus(`⚡ Velocidad cambiada`);
+            });
+
+            // Text selection
+            textSelect.addEventListener('change', () => {
+                if (textSelect.value === '3') {
+                    customTextArea.classList.remove('hidden');
+                    tongueTwisterArea.classList.add('hidden');
+                } else if (textSelect.value === '4') {
+                    tongueTwisterArea.classList.remove('hidden');
+                    customTextArea.classList.add('hidden');
+                } else {
+                    customTextArea.classList.add('hidden');
+                    tongueTwisterArea.classList.add('hidden');
+                    
+                    if (textSelect.value === '1') {
+                        const randomIndex = Math.floor(Math.random() * tongueTwisters.length);
+                        loadWords(tongueTwisters[randomIndex]);
+                    } else {
+                        loadText();
+                    }
+                    reset();
+                }
+            });
+
+            // Tongue twister selection
+            tongueTwisterSelect.addEventListener('change', () => {
+                const selectedIndex = parseInt(tongueTwisterSelect.value);
+                loadWords(tongueTwisters[selectedIndex]);
+                reset();
+                updateStatus(`📚 Trabalenguas seleccionado: #${selectedIndex + 1}`);
+            });
+
+            // Visual mode checkboxes
+            visualModeCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    if (words.length > 0) {
+                        displayText();
+                        const activeModes = getActiveVisualModes();
+                        if (activeModes.length > 0) {
+                            updateStatus(`Modos visuales activados: ${activeModes.length}`);
+                        } else {
+                            updateStatus("Sin modos visuales activos");
+                        }
+                    }
+                });
+            });
+
+            // Syllable mode
+            syllableMode.addEventListener('change', () => {
+                if (words.length > 0) {
+                    loadText();
+                    reset();
+                    updateStatus("Modo de sílabas actualizado");
+                }
+            });
+
+            // Custom text controls
+            loadCustomText.addEventListener('click', () => {
+                if (customText.value.trim()) {
+                    loadText();
+                    reset();
+                    updateStatus("📝 Texto personalizado cargado");
+                } else {
+                    updateStatus("⚠️ Escribe un texto antes de cargar");
+                }
+            });
+
+            pasteText.addEventListener('click', async () => {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text.trim()) {
+                        customText.value = text;
+                        updateStatus("📋 Texto pegado del portapapeles");
+                    } else {
+                        updateStatus("⚠️ El portapapeles está vacío");
+                    }
+                } catch (err) {
+                    updateStatus("❌ No se pudo acceder al portapapeles");
+                }
+            });
+
+            clearText.addEventListener('click', () => {
+                customText.value = '';
+                words = [];
+                currentWordIndex = 0;
+                displayText();
+                updateProgress();
+                updateStatus("🗑️ Texto limpiado");
+            });
+
+            // Playback controls
+            playBtn.addEventListener('click', play);
+            pauseBtn.addEventListener('click', pause);
+            resetBtn.addEventListener('click', reset);
+            finishBtn.addEventListener('click', () => {
+                finishBtn.style.animation = '';
+                finishBtn.style.backgroundColor = '#ef4444';
+                finishReading();
+            });
+
+            // Therapist panel
+            blockBtn.addEventListener('click', () => {
+                disfluencies.blocks++;
+                updateDisfluencyCounters();
+                updateStatus("🛑 Bloqueo registrado");
+            });
+
+            repetitionBtn.addEventListener('click', () => {
+                disfluencies.repetitions++;
+                updateDisfluencyCounters();
+                updateStatus("🔄 Repetición registrada");
+            });
+
+            prolongationBtn.addEventListener('click', () => {
+                disfluencies.prolongations++;
+                updateDisfluencyCounters();
+                updateStatus("⏳ Prolongación registrada");
+            });
+
+            hesitationBtn.addEventListener('click', () => {
+                disfluencies.hesitations++;
+                updateDisfluencyCounters();
+                updateStatus("⏸️ Vacilación registrada");
+            });
+
+            clearDisfluencies.addEventListener('click', () => {
+                disfluencies = {
+                    blocks: 0,
+                    repetitions: 0,
+                    prolongations: 0,
+                    hesitations: 0
+                };
+                updateDisfluencyCounters();
+                updateStatus("🧹 Contadores limpiados");
+            });
+
+            // Metronome
+            metronomeVolume.addEventListener('input', () => {
+                metronomeVolumeText.textContent = `${metronomeVolume.value}%`;
+            });
+
+            metronomeToggle.addEventListener('change', () => {
+                isMetronomeActive = metronomeToggle.checked;
+                if (isMetronomeActive) {
+                    initAudioContext();
+                    updateStatus("🎵 Metrónomo activado");
+                } else {
+                    updateStatus("🔇 Metrónomo desactivado");
+                }
+            });
+
+            // Breathing guide
+            breathingGuideToggle.addEventListener('change', () => {
+                breathingGuideEnabled = breathingGuideToggle.checked;
+                if (breathingGuideEnabled) {
+                    breathingText.textContent = 'Respiración activada';
+                    updateStatus('🫁 Guía de respiración activada');
+                } else {
+                    breathingText.textContent = 'Respiración desactivada';
+                    leftLung.setAttribute('opacity', '0.7');
+                    rightLung.setAttribute('opacity', '0.7');
+                    updateStatus('🫁 Guía de respiración desactivada');
+                }
+            });
+
+            breathingPatternSelect.addEventListener('change', () => {
+                breathingPattern = breathingPatternSelect.value;
+                updateStatus(`🫁 Patrón de respiración actualizado`);
+            });
+
+            breathingDurationSelect.addEventListener('change', () => {
+                breathingDuration = parseInt(breathingDurationSelect.value);
+                updateStatus(`🫁 Duración de respiración: ${breathingDuration / 1000}s`);
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    if (isPlaying) {
+                        pause();
+                    } else {
+                        play();
+                    }
+                } else if (e.code === 'Escape') {
+                    reset();
+                }
+            });
+
+            // Click on words
+            textDisplay.addEventListener('click', (e) => {
+                if (e.target.classList.contains('word')) {
+                    const index = parseInt(e.target.dataset.index);
+                    currentWordIndex = index;
+                    displayText();
+                    updateProgress();
+                    updateStatus(`📍 Posición cambiada a: "${words[index].original}"`);
+                }
+            });
+        }
+
+        // Initialize app
+        function initializeApp() {
+            init();
+            setupEventListeners();
+            
+            // Set up intro page
+            document.getElementById('startAppBtn').addEventListener('click', () => {
+                document.getElementById('introPage').style.opacity = '0';
+                document.getElementById('introPage').style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    document.getElementById('introPage').style.display = 'none';
+                    document.getElementById('assessmentModal').classList.remove('hidden');
+                    loadQuestion(0);
+                }, 300);
+            });
+        }
+
+        // Start the app
+        initializeApp();
+    </script>
+
+
+</body></html>

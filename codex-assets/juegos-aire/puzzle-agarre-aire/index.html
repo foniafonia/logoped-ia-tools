@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puzzle agarre en el aire</title>
+  <link rel="stylesheet" href="./styles.css?v=puzzle-grab-v6" />
+</head>
+<body>
+  <main class="app">
+    <section class="stage-shell">
+      <header class="topbar">
+        <div>
+          <span class="version">puzzle-grab-v6</span>
+          <h1>Puzzle con agarre real</h1>
+        </div>
+        <button id="cameraButton" type="button">Activar camara</button>
+      </header>
+
+      <nav class="mode-tabs" aria-label="Nivel de puzzle">
+        <button class="mode-tab" type="button" data-mode="letters">Letras</button>
+        <button class="mode-tab active" type="button" data-mode="2">2 piezas</button>
+        <button class="mode-tab" type="button" data-mode="4">4 piezas</button>
+        <button class="mode-tab" type="button" data-mode="8">8 piezas</button>
+        <button class="help-toggle active" type="button" id="helpToggle">Ayuda visual</button>
+      </nav>
+
+      <div id="stage" class="stage" aria-label="Puzzle controlado con camara y gesto de puno">
+        <div id="slots" class="slots"></div>
+        <div id="pieces" class="pieces"></div>
+        <canvas id="handsLayer" class="hands-layer"></canvas>
+        <div id="fingerCursor" class="finger-cursor" hidden></div>
+
+        <div class="camera-card" id="cameraCard">
+          <video id="camera" playsinline muted></video>
+          <div>
+            <strong id="gestureLabel">Sin camara</strong>
+            <span id="cameraStatus">Pulsa activar camara. Fallback tactil disponible.</span>
+            <small id="debugLine">frames 0 · mano 0 · estado idle</small>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback">Acerca la mano a una pieza</div>
+      </div>
+
+      <footer class="controls">
+        <button id="resetButton" type="button">Reiniciar puzzle</button>
+        <span>Cierra dedos para agarrar · gira la mano para rotar · abre dedos para soltar · doble toque/click gira 90°</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="../vendor/mediapipe/hands.js"></script>
+  <script src="./app.js?v=puzzle-grab-v6"></script>
+</body>
+</html>

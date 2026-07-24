@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escritura en el aire</title>
+  <link rel="stylesheet" href="./styles.css?v=air-writing-v1" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <span class="version">air-writing-v1</span>
+        <h1>Escritura en el aire</h1>
+      </div>
+      <div class="actions">
+        <button id="cameraButton" type="button">Activar camara</button>
+        <button id="modeButton" type="button">Vocales</button>
+        <button id="nextButton" type="button">Siguiente</button>
+        <button id="clearButton" type="button">Borrar</button>
+      </div>
+    </header>
+
+    <section id="stage" class="stage" aria-label="Juego de escribir en el aire">
+      <div class="task-card">
+        <span id="modeLabel">VOCALES</span>
+        <strong id="targetText">A</strong>
+        <small>Pinta encima del modelo con el rotulador del aire</small>
+      </div>
+
+      <canvas id="templateCanvas" class="template-canvas"></canvas>
+      <canvas id="drawCanvas" class="draw-canvas"></canvas>
+      <canvas id="handsCanvas" class="hands-canvas"></canvas>
+
+      <div id="marker" class="marker" aria-hidden="true">
+        <span class="marker-tip"></span>
+        <span class="marker-body">ROTULADOR</span>
+      </div>
+
+      <div id="cursor" class="air-cursor" aria-hidden="true"></div>
+
+      <aside class="side-panel">
+        <div class="score-box">
+          <span>Cobertura</span>
+          <strong id="coverageLabel">0%</strong>
+          <div class="meter"><i id="coverageBar"></i></div>
+        </div>
+        <div class="camera-card" id="cameraCard">
+          <video id="camera" playsinline muted></video>
+          <div>
+            <strong id="gestureLabel">Sin camara</strong>
+            <span id="cameraStatus">Tambien puedes probar con el dedo o raton.</span>
+            <small id="debugLine">estado inicial</small>
+          </div>
+        </div>
+      </aside>
+
+      <div id="feedback" class="feedback">Agarra el rotulador con pinza</div>
+    </section>
+  </main>
+
+  <script src="./app.js?v=air-writing-v1"></script>
+</body>
+</html>

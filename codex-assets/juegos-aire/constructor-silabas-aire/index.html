@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Constructor de silabas en el aire</title>
+  <link rel="stylesheet" href="./styles.css?v=tasks-vision-facepointer-v20" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="stage" aria-label="Constructor de palabras por gestos">
+      <video id="camera" playsinline muted></video>
+      <canvas id="handsLayer" aria-hidden="true"></canvas>
+      <div class="hand-debug" id="handDebug">Build tasks-vision-facepointer-v20 · Mano: sin camara</div>
+      <div class="build-badge">tasks-vision-facepointer-v20</div>
+
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">MediaPipe Hands + escritura</span>
+          <h1>Constructor de silabas</h1>
+        </div>
+        <div class="session-stats" aria-label="Marcador">
+          <div><strong id="score">0</strong><span>aciertos</span></div>
+          <div><strong id="streak">0</strong><span>racha</span></div>
+          <div><strong id="attempts">0</strong><span>intentos</span></div>
+        </div>
+      </header>
+
+      <section class="target-panel" aria-live="polite">
+        <span class="label">Construye</span>
+        <strong id="targetWord">CASA</strong>
+        <small id="targetHint">Une CA + SA</small>
+      </section>
+
+      <section class="wheel-field" aria-label="Ruedas de silabas">
+        <div class="wheel-block">
+          <div class="wheel-label">Primera silaba</div>
+          <div class="wheel" id="leftWheel" data-wheel="left"></div>
+        </div>
+
+        <div class="word-builder">
+          <div class="slots" aria-label="Palabra construida">
+            <button class="slot" id="leftSlot" type="button">--</button>
+            <button class="slot" id="rightSlot" type="button">--</button>
+          </div>
+          <div class="result-word" id="resultWord">Toca dos silabas</div>
+          <div class="feedback" id="feedback">Activa la camara o usa raton/tacto.</div>
+        </div>
+
+        <div class="wheel-block">
+          <div class="wheel-label">Segunda silaba</div>
+          <div class="wheel" id="rightWheel" data-wheel="right"></div>
+        </div>
+      </section>
+
+      <div class="air-cursor" id="airCursor" hidden>
+        <span></span>
+      </div>
+      <div class="gaze-cursor" id="gazeCursor" hidden>
+        <span></span>
+      </div>
+      <div class="calibration-target" id="calibrationTarget" hidden>
+        <span></span>
+      </div>
+
+      <footer class="toolbar">
+        <button id="cameraButton" type="button">Activar camara</button>
+        <button id="controlModeButton" type="button" aria-pressed="false">Modo mano</button>
+        <button id="handModeButton" type="button" aria-pressed="false">1 mano</button>
+        <button id="gazeCalibrateButton" type="button">Calibrar ojos</button>
+        <button id="gazeCalibrateVerticalButton" type="button">Cal. vertical</button>
+        <button id="gazeCalibrateHorizontalButton" type="button">Cal. horizontal</button>
+        <button id="nextButton" type="button">Nueva palabra</button>
+        <button id="readButton" type="button">Leer</button>
+        <button id="clearButton" type="button">Borrar</button>
+        <button id="levelButton" type="button" aria-pressed="false">Modo apoyo</button>
+      </footer>
+    </section>
+
+    <p class="sr-status"><strong id="cameraStatus">MediaPipe pendiente.</strong></p>
+  </main>
+
+  <script src="../vendor/mediapipe/hands.js"></script>
+  <script src="../vendor/mediapipe/drawing_utils.js"></script>
+  <script src="./app.js?v=tasks-vision-facepointer-v20"></script>
+</body>
+</html>

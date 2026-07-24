@@ -1,0 +1,12 @@
+{
+  "id": "module-07",
+  "title": "Proyecto final y profesionalizacion",
+  "description": "Integrar todo lo aprendido en casos complejos y plan profesional.",
+  "goal": "Entregar un sistema personal de IA aplicable a la consulta logopedica.",
+  "lessons": [
+    {"id":"lesson-07-01","title":"Caso integrador infantil","duration_minutes":24,"theory":["Resolver casos completos, no tareas aisladas.","Alinear objetivos, material y comunicacion familiar.","Justificar decisiones de prompt con evidencia."],"example":"Caso 4 anos: lenguaje expresivo, familia no tecnica, plan semanal.","checklist":["Coherencia","Aplicabilidad","Seguridad","Seguimiento"]},
+    {"id":"lesson-07-02","title":"Caso lectoescritura","duration_minutes":26,"theory":["Combinar conciencia fonologica y comprension.","Evitar sobrecarga y adaptar nivel.","Coordinar con escuela y familia."],"example":"Caso 7 anos: secuencia de sesiones con adaptaciones.","checklist":["Progresion","Adaptaciones","Comunicacion","Medicion"]},
+    {"id":"lesson-07-03","title":"Defensa con evidencia","duration_minutes":18,"theory":["Comparar V1-V2-V3 con notas.","Explicar por que un prompt es mejor.","Reconocer limites del modelo."],"example":"Defensa de mejora de nota 6.2 a 8.6 en 3 iteraciones.","checklist":["Evidencia","Argumentacion","Limites","Siguiente paso"]},
+    {"id":"lesson-07-04","title":"Plan 30-60-90","duration_minutes":20,"theory":["Plan por fases para integrar IA en consulta.","Definir metricas de impacto.","Ajustar segun resultados."],"example":"Roadmap trimestral de adopcion IA clinica.","checklist":["Objetivos","Metricas","Riesgos","Revision"]}
+  ]
+}
