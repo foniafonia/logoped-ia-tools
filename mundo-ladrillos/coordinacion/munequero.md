@@ -83,6 +83,28 @@ lógica del juego ni las escenas de nadie.
 > Lo que **sí** conviene re-tirar es `MinifigureFactory.ts` (trae caras expresivas,
 > `villagerSkin`/aldeanos y el arreglo de Yehoshúa que aún no tienes).
 
+## 🔍 AUDITORÍA VISUAL del juego montado (integrador, iter.10) — 24-jul
+Barrido headless de los 6 mundos (`?phase=camp|jordan|rahab|shofarot|cruce|muralla`).
+**Todos arrancan con 0 errores.** El juego está muy bien: completo, poblado y con
+clímax épico. Recomendaciones concretas (de más a menos impacto):
+
+1. **[ALTA] Re-tirar `MinifigureFactory.ts`** (`git checkout` del archivo): el
+   montado tiene versión vieja de muñecos → le faltan las **6 caras expresivas**,
+   `villagerSkin`/aldeanos y el **Yehoshúa con boca libre** (hoy sale con la barba
+   antigua). Es la mejora de personajes que aún no tienes y no duplica nada.
+2. **[MEDIA] Jordán (esc.9):** la **orilla cercana está vacía** (suelo+agua sin
+   nada). Meter juncos/palmeras/rocas y algún aldeano en primer plano. (Ya lo
+   tenías anotado como "abre con suelo vacío por delante".)
+3. **[MEDIA] Cruce (esc.34):** los **muros de agua con peces** solo aparecen al
+   acercarse → el encuadre inicial NO enseña el milagro. Sugiero spawn/cámara que
+   ya muestre los muros (o un travelling de revelado) para no perder el "wow".
+4. **[MEDIA] Rahab (esc.17):** el HUD dice *"escóndete entre la gente"* pero hay
+   **poca gente** alrededor. Subir densidad de NPCs (tus Wanderers o mi
+   `buildCrowd`/`villagerSkin`) para que el verbo tenga sentido.
+5. **[BAJA] Muralla:** clímax algo **lavado de luz** (mediodía pálido). Un cielo
+   de atardecer + menos exposición lo dramatizaría.
+6. **[PERF] Muralla ~22 s síncronos** (ya sabido, tarea LEAD): trocear el build.
+
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
 `MinifigureFactory.ts` es **autónomo** (solo depende de THREE + PlasticMaterialFactory,
