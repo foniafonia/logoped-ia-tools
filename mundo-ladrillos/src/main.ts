@@ -13,6 +13,7 @@ import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
 import { CampLife } from './scenes/min00/campLife';
 import { Journey } from './scenes/min00/journey';
 import { buildHorizon } from './scenes/min00/horizon';
+import { buildSky } from './scenes/min00/sky';
 import { StudioIntro } from './scenes/min00/studioIntro';
 import { INTRO_VIDEO } from './video/intro';
 import { Director, Beat } from './scenes/min00/Director';
@@ -67,6 +68,7 @@ const plastic = new PlasticMaterialFactory();
 // === ENTORNO + CAMPAMENTO + VIDA + VIAJE ===
 setupEnvironment(scene);
 buildHorizon(scene);                                        // cerros de arenisca que acotan el valle
+const sky = buildSky(scene);                                // telón de montañas + nubes de juguete
 const camp = buildCamp(scene, plastic);
 const dust = new Dust(scene);
 const life = new CampLife(scene, plastic, dust);           // aldeanos, animales, gag del beduino
@@ -405,6 +407,7 @@ function animate(now: number): void {
     renderer.toneMappingExposure = 1.02 * (1 - nightF) + 0.85 * nightF;
   }
 
+  sky.update(dt, nightF);                                   // deriva de nubes + telón que oscurece de noche
   tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }

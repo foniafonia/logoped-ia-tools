@@ -36,7 +36,7 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   ], false)!;
   const tentMat = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 });
   const cloth = [0x9a9184, 0x8a7a5a, 0xb9a36f, 0x6f6558, 0xa8926a];
-  const N = IS_MOBILE ? 26 : 48;
+  const N = IS_MOBILE ? 34 : 70;
   const tents = new THREE.InstancedMesh(tentGeo, tentMat, N);
   tents.castShadow = true; tents.receiveShadow = true;
   const d = new THREE.Object3D();
@@ -44,9 +44,9 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   let placed = 0;
   for (let i = 0; i < N; i++) {
     // repartidas por el campamento, dejando libre el pasillo central del jugador
-    let x = (Math.random() - 0.5) * 78;
+    let x = (Math.random() - 0.5) * 82;
     if (Math.abs(x) < 9) x += Math.sign(x || 1) * 9;
-    const z = 12 + Math.random() * 78;
+    const z = 12 + Math.random() * 82;
     const s = 0.8 + Math.random() * 0.7;
     d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);
     d.updateMatrix();
@@ -56,6 +56,29 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   }
   tents.instanceMatrix.needsUpdate = true;
   group.add(tents);
+
+  // --- MAR DE TIENDAS lejano: un campo denso hacia los cerros (a los lados y al
+  //     sur), más pequeño y desaturado → el campamento se extiende hasta el
+  //     horizonte, como en la peli. Instanciado (barato), no pisa el valle norte.
+  const M = IS_MOBILE ? 40 : 90;
+  const farTents = new THREE.InstancedMesh(tentGeo, tentMat.clone(), M);
+  farTents.receiveShadow = true;
+  let fp = 0;
+  for (let i = 0; i < M && fp < M; i++) {
+    const a = Math.random() * Math.PI * 2;
+    if (Math.sin(a) < -0.3) continue;                 // deja libre el norte (camino de la caravana)
+    const r = 58 + Math.random() * 34;                // entre la zona jugable y los cerros
+    const x = Math.cos(a) * r, z = 18 + Math.sin(a) * r;
+    const s = 0.55 + Math.random() * 0.5;
+    d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);
+    d.updateMatrix();
+    farTents.setMatrixAt(fp, d.matrix);
+    farTents.setColorAt(fp, col.set(cloth[(Math.random() * cloth.length) | 0]).multiplyScalar(0.94));
+    fp++;
+  }
+  for (let i = fp; i < M; i++) { d.scale.setScalar(0); d.updateMatrix(); farTents.setMatrixAt(i, d.matrix); }
+  farTents.instanceMatrix.needsUpdate = true;
+  group.add(farTents);
 
   // --- Fogatas (piedras + llama emisiva; unas pocas con luz cálida) ---
   const stoneMat = new THREE.MeshStandardMaterial({ color: 0x6b6058, roughness: 1 });
