@@ -33,6 +33,17 @@ export class AudioManager {
     }
   }
 
+  /** Reanuda el contexto de audio (p.ej. tras un vídeo que lo suspendió). */
+  resume(): void {
+    if (!this.ac) return;
+    void this.ac.resume();
+    try {
+      const b = this.ac.createBuffer(1, 1, 22050);
+      const s = this.ac.createBufferSource();
+      s.buffer = b; s.connect(this.ac.destination); s.start(0);
+    } catch { /* noop */ }
+  }
+
   /**
    * Sonido en bucle (ambiente): p.ej. el estruendo del ejército durante la
    * marcha. Espera a que el buffer esté decodificado y devuelve un control
@@ -81,6 +92,7 @@ export class AudioManager {
     const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, stopped: false };
     const startWhenReady = (tries = 0): void => {
       if (st.stopped || !this.ac) return;
+      if (this.ac.state === 'suspended') void this.ac.resume();   // el vídeo pudo suspender el contexto
       const buf = this.buffers.get(name);
       if (!buf) { if (tries < 40) setTimeout(() => startWhenReady(tries + 1), 100); return; }
       const src = this.ac.createBufferSource();

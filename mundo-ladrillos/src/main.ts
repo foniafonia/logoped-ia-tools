@@ -303,6 +303,7 @@ function reproducirIntroVideo(): void {
 function empezarJuegoTrasVideo(): void {
   villager.root.visible = true;
   if (esMovil && !touchCreado) { new TouchControls(controller); touchCreado = true; }
+  audio.resume();   // el vídeo suspendió el contexto: hay que reanudarlo o no se oye
   director.setSpine(audio.playSpine('narracion_min0-5', 0.95, 25));
   director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
 }
