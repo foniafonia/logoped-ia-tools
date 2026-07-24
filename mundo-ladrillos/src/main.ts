@@ -109,21 +109,24 @@ for (const [tx, tz] of [[-6, 6], [6, 6], [-16, 30], [8, 28]] as Array<[number, n
 }
 
 // ---- Vecinos de Jericó (mundo lleno): aldeanos por la calle, de noche ----
-// Junto a las casas y antorchas, mirando a la calle; algunos inquietos por la
-// noche. Variedad garantizada por villagerSkin(i) (no se clonan).
-const crowd = buildCrowd(scene, plastic, [
-  { x: -6, z: 8, yaw: 1.3, emotion: 'worried' },   // junto a la antorcha izq.
+// Comunidad de todas las edades (hay niños a menor escala), junto a casas y
+// antorchas, mirando a la calle; algunos inquietos por la noche. Variedad
+// garantizada por villagerSkin(i) (no se clonan). En móvil se recorta.
+const CROWD_SPOTS = [
+  { x: -6, z: 8, yaw: 1.3, emotion: 'worried' as const },  // junto a la antorcha izq.
   { x: -8, z: 16, yaw: 1.5 },
-  { x: -7, z: 25, yaw: 1.4, emotion: 'surprised' },
+  { x: -7, z: 25, yaw: 1.4, emotion: 'surprised' as const },
   { x: -9, z: 33, yaw: 1.5 },
-  { x: -3, z: 12, yaw: 0.5, emotion: 'happy' },     // un chico mirando la calle
-  { x: 6, z: 8, yaw: -1.3 },                          // junto a la antorcha der.
-  { x: 8, z: 18, yaw: -1.5, emotion: 'worried' },
+  { x: -3, z: 12, yaw: 0.5, emotion: 'happy' as const, scale: 0.68 },  // niño mirando
+  { x: 6, z: 8, yaw: -1.3 },                                            // antorcha der.
+  { x: 8, z: 18, yaw: -1.5, emotion: 'worried' as const },
   { x: 7, z: 27, yaw: -1.4 },
-  { x: 7, z: 29, yaw: -1.2, emotion: 'surprised' },  // junto a la antorcha (8,28)
+  { x: 7, z: 29, yaw: -1.2, emotion: 'surprised' as const },           // antorcha (8,28)
+  { x: 4.4, z: 21, yaw: -0.4, emotion: 'happy' as const, scale: 0.64 }, // niña
   { x: 3, z: 20, yaw: -0.5 },
-  { x: -14, z: 26, yaw: 1.2, emotion: 'neutral' }    // cerca de casa de Rahab
-]);
+  { x: -14, z: 26, yaw: 1.2, emotion: 'neutral' as const }             // casa de Rahab
+];
+const crowd = buildCrowd(scene, plastic, IS_MOBILE ? CROWD_SPOTS.slice(0, 6) : CROWD_SPOTS);
 (window as any).__crowd = crowd;
 
 // --- Fondo real de la peli (plano fijo 2.5D): textura de fondo ---

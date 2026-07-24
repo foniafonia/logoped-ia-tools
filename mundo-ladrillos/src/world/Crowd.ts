@@ -8,6 +8,7 @@ export interface CrowdSpot {
   z: number;
   yaw?: number;        // orientación (0 = mira hacia +Z)
   emotion?: Emotion;   // fuerza una cara para el mood de la escena
+  scale?: number;      // <1 = niño/a; 1 = adulto (comunidad de todas las edades)
 }
 
 /**
@@ -34,7 +35,8 @@ export function buildCrowd(
     fig.root.position.set(s.x, 0, s.z);
     const y = s.yaw ?? 0;
     fig.root.rotation.y = y;
-    if (opts.scale) fig.root.scale.setScalar(opts.scale);
+    const sc = s.scale ?? opts.scale ?? 1;
+    if (sc !== 1) fig.root.scale.setScalar(sc);
     group.add(fig.root);
     figs.push(fig);
     baseYaw.push(y);
