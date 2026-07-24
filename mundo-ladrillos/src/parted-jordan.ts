@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { createMinifigure, YOSHUA_SKIN, PRIEST_SKIN } from './characters/MinifigureFactory';
 import { buildPartedRiver } from './world/PartedRiver';
+import { buildHorizon } from './world/Horizon';
+import { buildCrowd } from './world/Crowd';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1); renderer.setSize(innerWidth, innerHeight);
@@ -12,15 +14,9 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const plastic = new PlasticMaterialFactory();
 
-// cielo de amanecer + niebla
-function sky(): THREE.Texture {
-  const c = document.createElement('canvas'); c.width = 16; c.height = 256; const x = c.getContext('2d')!;
-  const g = x.createLinearGradient(0, 0, 0, 256);
-  g.addColorStop(0, '#1c3a6e'); g.addColorStop(0.5, '#6a7ea8'); g.addColorStop(0.78, '#f0b06a'); g.addColorStop(1, '#f8dca6');
-  x.fillStyle = g; x.fillRect(0, 0, 16, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
-}
-scene.background = sky();
-scene.fog = new THREE.Fog(0xe6b87a, 40, 200);
+// Horizonte simulado en ladrillo: mesas, colinas, palmeras y Jericó al fondo
+// (mundo lleno, nunca un descampado vacío alrededor).
+buildHorizon(scene, 'rio-oasis');
 
 scene.add(new THREE.HemisphereLight(0xffe0b0, 0x6a5a44, 1.35));
 const sun = new THREE.DirectionalLight(0xffd08a, 2.2); sun.position.set(6, 22, -30); sun.castShadow = true;
@@ -45,6 +41,24 @@ for (const ax of [-1.0, 1.0]) ark.add(new THREE.Mesh(new THREE.CylinderGeometry(
 ark.position.set(0, 0, -2); scene.add(ark);
 const yeho = createMinifigure(plastic, YOSHUA_SKIN); yeho.root.position.set(0, 0, 5); yeho.root.rotation.y = Math.PI; scene.add(yeho.root);
 
+// El PUEBLO: espera en la orilla (mirando el milagro con asombro) y algunos ya
+// entran al cauce siguiendo al Arca. Reusa buildCrowd (variedad + paseantes).
+const people = buildCrowd(scene, plastic, [
+  { x: -5, z: 10, yaw: Math.PI, emotion: 'surprised' },
+  { x: -2.6, z: 12, yaw: Math.PI, emotion: 'worried' },
+  { x: 0, z: 13.5, yaw: Math.PI, emotion: 'surprised', scale: 0.66 }, // niño
+  { x: 2.6, z: 12, yaw: Math.PI, emotion: 'happy' },
+  { x: 5, z: 10, yaw: Math.PI, emotion: 'surprised' },
+  { x: -6.5, z: 14, yaw: Math.PI, emotion: 'neutral' },
+  { x: 6.5, z: 14, yaw: Math.PI, emotion: 'worried' }
+], {
+  walkers: [
+    { ax: -2, az: 8, bx: -2, bz: 1, speed: 1.2 },   // entran al cauce siguiendo al Arca
+    { ax: 2, az: 8.6, bx: 2, bz: 1.6, speed: 1.0, emotion: 'happy' },
+    { ax: 0, az: 9, bx: 0, bz: 2.4, speed: 0.9, scale: 0.66 } // niño cruzando
+  ]
+});
+
 const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 400);
 camera.position.set(3.5, 6.5, 20); camera.lookAt(0, 5, -20);
 
@@ -53,6 +67,7 @@ function loop(ms: number): void {
   requestAnimationFrame(loop);
   const dt = Math.min(0.05, (ms - last) / 1000 || 0.016); last = ms;
   river.update(dt); priestA.update(dt, false); priestB.update(dt, false); yeho.update(dt, false);
+  people.update(dt);
   renderer.render(scene, camera);
   (window as any).__ready = true;
 }
