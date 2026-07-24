@@ -270,3 +270,17 @@ const tav = buildTavern(scene, plastic, { rahab: true });
 ```
 Es el patrón de "interior lleno": copiadlo y adaptad para otros interiores
 (tienda de Yehoshúa, etc.). Interior = sin horizonte, pero SALA VESTIDA.
+
+### 🌊 MOMENTO "WOW": río Jordán PARTIDO — `src/world/PartedRiver.ts`
+Para la escena del cruce (E34): dos **muros de agua translúcida con PECES** de
+colores + cauce seco con piedras (fiel al frame `escenas/jordan-partido`). El
+audit decía "no basta narrarlo, hay que verlo". Verificado: `proto/parted_jordan.png`.
+```ts
+import { buildPartedRiver } from '../world/PartedRiver';
+const river = buildPartedRiver(scene, plastic);   // muros + peces + cauce
+// en el loop:  river.update(dt);                  // peces suben/bajan, coletazos
+// al salir:    river.dispose();
+```
+Colocad al frente los **sacerdotes con el Arca** y detrás el pueblo bajando por
+el cauce. Cielo de amanecer + niebla (o `buildHorizon`). Traer:
+`git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/PartedRiver.ts`
