@@ -339,7 +339,9 @@ const startGame = (): void => {
   // escena actual. Asíncrono: cuando termine de decodificar, empieza a sonar.
   void sound.loadFilm('narracion_min5-10').then((ok) => {
     filmReady = ok;
-    if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0);
+    // arranca SOLO el segmento de la escena actual (mismo criterio acotado que
+    // al cambiar de escena): [beat, beat siguiente) + etiqueta. Sin bleed.
+    if (ok && currentDef) sound.playFilmFrom(BEAT_LOCAL[currentDef.numero] ?? 0, BEAT_LOCAL[currentDef.numero + 1], 0.9, `esc${currentDef.numero}`);
   });
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
   if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
