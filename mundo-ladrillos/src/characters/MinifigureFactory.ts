@@ -514,9 +514,10 @@ export class Minifigure {
       this.addBrows(4.15, 0.54, emotion, 0x3a2a1a, 0.2, s.feminine);
       if (s.feminine) { this.addLashes(3.98, 0.55); this.addBlush(3.74, 0.53); }
       if (s.glasses !== undefined) this.addGlasses(3.98, 0.56, s.glasses);
-      // Boca: labios (fem), o sonrisa si no hay barba tapándola
+      // Boca: labios (fem) o sonrisa. Siempre visible: en barbudos la barba
+      // arranca en la barbilla y el bigote va por encima → boca libre.
       if (s.lips !== undefined) this.addLips(3.64, 0.55, s.lips);
-      else if (!s.beard || s.beardStyle === 'short') this.addSmile(3.62, 0.55);
+      else this.addSmile(3.62, 0.55);
     }
 
     // --- Barba ---
@@ -542,18 +543,21 @@ export class Minifigure {
       this.root.add(this.box(0.2, 0.6, 0.16, col, -0.5, 3.78, 0.28)); // patilla
       this.root.add(this.box(0.2, 0.6, 0.16, col, 0.5, 3.78, 0.28));
     } else {
-      // Barba larga de patriarca: cuelga del mentón y se afila en punta redondeada
-      // a media altura del pecho. Limpia y compacta → deja ver la túnica y lee como
-      // barba (no como plancha ni pompones). Ojos a la vista (~3.98).
-      // Patillas + bigote que enmarcan la cara
-      this.root.add(this.box(0.2, 0.66, 0.32, col, -0.42, 3.64, 0.34));
-      this.root.add(this.box(0.2, 0.66, 0.32, col, 0.42, 3.64, 0.34));
-      this.root.add(this.box(0.78, 0.32, 0.36, col, 0, 3.64, 0.44)); // bigote
-      // Cuerpo: cono que baja del mentón y termina en punta hacia el pecho
-      const bg = new THREE.ConeGeometry(0.52, 1.55, 22);
+      // Barba larga de patriarca con la BOCA LIBRE: bigote por encima del labio y
+      // la barba arrancando en la barbilla (no tapa la boca) → cae en punta al
+      // pecho. Deja ver la túnica y lee como barba, no como pañuelo.
+      // Bigote: dos mitades con hueco central, por encima de la boca (~3.62)
+      const mL = this.box(0.36, 0.13, 0.32, col, -0.17, 3.79, 0.42); mL.rotation.z = 0.24;
+      const mR = this.box(0.36, 0.13, 0.32, col, 0.17, 3.79, 0.42); mR.rotation.z = -0.24;
+      this.root.add(mL, mR);
+      // Patillas que enmarcan la cara por los lados (no cruzan la boca)
+      this.root.add(this.box(0.18, 0.62, 0.3, col, -0.44, 3.6, 0.32));
+      this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
+      // Cuerpo: cono que arranca en la barbilla (~3.45) y baja en punta al pecho
+      const bg = new THREE.ConeGeometry(0.5, 1.45, 22);
       bg.rotateX(Math.PI);
       bg.scale(1, 1, 0.72);
-      this.root.add(this.mesh(bg, col, 0, 2.96, 0.34));
+      this.root.add(this.mesh(bg, col, 0, 2.72, 0.32));
     }
   }
 
