@@ -32,14 +32,17 @@ function tentClothTexture(): THREE.CanvasTexture {
   const c = document.createElement('canvas'); c.width = c.height = S;
   const x = c.getContext('2d')!;
   x.fillStyle = '#efeae0'; x.fillRect(0, 0, S, S);
-  // costuras verticales (paneles de lona)
+  // costuras verticales (paneles de lona) — marcadas
   for (let i = 0; i <= 8; i++) {
-    x.strokeStyle = 'rgba(120,104,78,.28)'; x.lineWidth = i % 2 ? 1 : 2;
+    x.strokeStyle = 'rgba(96,80,54,.42)'; x.lineWidth = i % 2 ? 2 : 3;
     const px = (i / 8) * S;
     x.beginPath(); x.moveTo(px, 0); x.lineTo(px, S); x.stroke();
+    // sombra sutil al lado de la costura → relieve de panel
+    x.strokeStyle = 'rgba(96,80,54,.14)'; x.lineWidth = 5;
+    x.beginPath(); x.moveTo(px + 4, 0); x.lineTo(px + 4, S); x.stroke();
   }
-  // trama horizontal muy tenue
-  x.strokeStyle = 'rgba(120,104,78,.08)'; x.lineWidth = 1;
+  // trama horizontal tenue
+  x.strokeStyle = 'rgba(120,104,78,.10)'; x.lineWidth = 1;
   for (let y = 4; y < S; y += 6) { x.beginPath(); x.moveTo(0, y); x.lineTo(S, y); x.stroke(); }
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -69,8 +72,30 @@ function tentGuyRopesGeometry(): THREE.BufferGeometry {
   return mergeGeometries(parts, false)!;
 }
 
+/** Huellas y sendero gastado en la arena: manchas oscuras ovaladas, más densas
+ *  por el corredor central (por donde anda el pueblo). Instanciado y barato. */
+function buildTracks(): THREE.InstancedMesh {
+  const geo = new THREE.CircleGeometry(0.5, 10); geo.rotateX(-Math.PI / 2);
+  const mat = new THREE.MeshBasicMaterial({ color: 0x8a6f45, transparent: true, opacity: 0.16, depthWrite: false });
+  const M = IS_MOBILE ? 60 : 100;
+  const mesh = new THREE.InstancedMesh(geo, mat, M);
+  const d = new THREE.Object3D();
+  for (let i = 0; i < M; i++) {
+    let x: number, z: number;
+    if (i < M * 0.6) { z = 6 + Math.random() * 82; x = (Math.random() - 0.5) * 8; }   // sendero central
+    else { x = (Math.random() - 0.5) * 72; z = 12 + Math.random() * 78; }              // dispersas
+    d.position.set(x, -0.37, z);
+    d.rotation.set(0, Math.random() * Math.PI, 0);
+    d.scale.set(0.5 + Math.random() * 0.7, 1, 0.9 + Math.random() * 1.3);              // ovaladas (pisada)
+    d.updateMatrix(); mesh.setMatrixAt(i, d.matrix);
+  }
+  mesh.renderOrder = 1;
+  return mesh;
+}
+
 export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): CampBuild {
   const group = new THREE.Group();
+  group.add(buildTracks());   // huellas/sendero en la arena
 
   // --- Tienda de campaña (cono de 6 lados + remate), instanciada ---
   const tentGeo = mergeGeometries([
