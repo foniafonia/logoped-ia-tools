@@ -67,6 +67,27 @@ túnica beige + turbante gris-azulado) y **`SPY2_CAMP_SKIN`** (`espia2Camp`, tú
 marrón + turbante azul claro), cara amable. Úsalas en las escenas 9–11 y cambia a
 `SPY_SKIN`/`SPY2_SKIN` (sigilo) desde la 12. Guardia y jefe canónicos ya estaban.
 
+## Reparto de CARAS para la multitud (recomendación para LEAD y creadores)
+Ahora cada minifig acepta `emotion` con 6 valores y la cara cambia de verdad
+(cejas + boca). Para que las multitudes NO tengan todas la misma cara, propongo
+elegir la emoción **por índice de instancia** (determinista, sin `Math.random`
+que rompe el resume) según el contexto de la escena:
+
+- **Aldeanos de Jericó (ejército marchando / muralla temblando):** mayoría
+  `worried`, algunos `surprised`, pocos `neutral`. → miedo/tensión.
+- **Tropa/soldados de Jericó:** mayoría `stern`, centinelas `alert`.
+- **Pueblo de Israel (marcha, y celebración tras la caída):** `happy` +
+  algún `surprised` de asombro.
+- **Mercado / fondo neutro:** mayoría `neutral` + `happy`, algún `worried`.
+
+Patrón sugerido (determinista, en el spawner de cada multitud):
+```
+const CARAS = ['worried','worried','surprised','neutral']; // pesos por repetición
+skin.emotion = CARAS[i % CARAS.length];
+```
+Cambiando el array por contexto se consigue variedad sin clonar caras. Los
+espías (ninja) ya emocionan solos: `alert` en sigilo, `happy` en campamento.
+
 ## Ofrezco / pendiente
 - **Versión LITE para multitudes:** OJO — `Army.ts` (del LEAD) ya instancia su
   propia tropa con geometría fusionada; un "lite" como minifig **puede ser
