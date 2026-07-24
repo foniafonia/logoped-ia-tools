@@ -9,6 +9,7 @@ import { buildGuard } from './props/Guard';
 import { Collectibles } from './props/Collectibles';
 import { RugHide } from './props/RugHide';
 import { KILIM_PALS } from '../min00/textiles';
+import { RAHAB_MUJER } from './skins';
 
 /**
  * ESCENA 16 (545–604s) — LOS GUARDIAS VUELVEN POR LAS CALLES BUSCÁNDOLOS.
@@ -54,8 +55,30 @@ export const escena16: Min05Scene = {
     (door.material as THREE.MeshPhysicalMaterial).emissive = new THREE.Color(0xff8a2a);
     (door.material as THREE.MeshPhysicalMaterial).emissiveIntensity = 0.7; group.add(door);
     const doorLight = new THREE.PointLight(0xffb066, 2.2, 18, 1.6); doorLight.position.set(0, 4, 33); group.add(doorLight);
-    group.add(brickBox(plastic, 0.4, 3, 0.4, BrickPalette.RED, 3, 6, 33.6)); // cordón rojo (guiño)
-    const sign = buildBanner(plastic, BrickPalette.WARM_SAND, 4, 1.6); sign.position.set(0, 8.5, 33.7); group.add(sign);
+    const sign = buildBanner(plastic, BrickPalette.WARM_SAND, 4, 1.6); sign.position.set(4.2, 9.2, 33.9); group.add(sign);
+
+    // VENTANA de Rahab (iluminada) + ella asomada + el CORDÓN ROJO (la señal de
+    // Josué 2: se descuelga por la ventana al llegar los espías al refugio).
+    const WINX = -2.4;
+    const winFrame = brickBox(plastic, 2.8, 3.2, 0.4, BrickPalette.DARK_BROWN, WINX, 7, 33.7);
+    const winGlow = brickBox(plastic, 2.1, 2.5, 0.2, BrickPalette.WARM_SAND, WINX, 7, 33.55);
+    (winGlow.material as THREE.MeshPhysicalMaterial).emissive = new THREE.Color(0xffcb7a);
+    (winGlow.material as THREE.MeshPhysicalMaterial).emissiveIntensity = 0.95;
+    group.add(winFrame); group.add(winGlow);
+    const winSill = brickBox(plastic, 3.0, 0.6, 0.8, BrickPalette.DARK_RED, WINX, 5.5, 33.45); group.add(winSill);
+    const winLight = new THREE.PointLight(0xffcb7a, 1.7, 14, 1.6); winLight.position.set(WINX, 7, 32.5); group.add(winLight);
+    // Rahab a la puerta, recibiendo a los espías (a ras de suelo, mirando la calle)
+    const rahab = new Npc(plastic, RAHAB_MUJER, 1.4, 32.2, Math.PI); group.add(rahab.root);
+    // el cordón rojo cuelga de la ventana; crece al cumplir el objetivo
+    // el cordón de grana atado a la ventana (Josué 2:21) — la señal de salvación.
+    // Lleva un leve brillo para que se lea de noche desde lejos.
+    const cordMat = (plastic.get(BrickPalette.RED) as THREE.MeshPhysicalMaterial).clone();
+    cordMat.emissive = new THREE.Color(0xc21f1f); cordMat.emissiveIntensity = 0.5;
+    const cord = brickBox(plastic, 0.7, 5.6, 0.7, BrickPalette.RED, WINX, 4.5, 33.95);
+    cord.material = cordMat; group.add(cord);
+    group.add(brickBox(plastic, 0.9, 0.6, 0.9, BrickPalette.DARK_RED, WINX, 7.2, 33.98)); // nudo en la barra
+    const cordTassel = brickBox(plastic, 1.1, 0.6, 0.8, BrickPalette.RED, WINX, 1.9, 33.9);
+    cordTassel.material = cordMat; group.add(cordTassel); // borla al pie
 
     const braziers = [buildBrazier(plastic, -8, 10, -2), buildBrazier(plastic, 8, 10, 20)];
     braziers.forEach((b) => group.add(b.group));

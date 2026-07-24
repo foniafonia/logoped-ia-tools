@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { buildRiver, buildReeds, buildPalm, studdedPlate, buildDistantJericho } from './props/BrickProps';
+import { buildRiver, buildReeds, buildPalm, studdedPlate, buildDistantJericho, buildFish } from './props/BrickProps';
 import { buildLantern } from './props/NightAmbience';
 import { RopeCrossing } from './mechanics/RopeCrossing';
 import { Npc } from './props/Npc';
@@ -56,6 +56,20 @@ export const escena13: Min05Scene = {
 
     const buddy = new Npc(plastic, ESPIA2_SIGILO, 0, 22, Math.PI); group.add(buddy.root);
 
+    // PECES: el río está VIVO (nadan bajo la cuerda y de vez en cuando saltan).
+    const fishCols = [BrickPalette.ORANGE, BrickPalette.YELLOW, BrickPalette.WHITE, 0x9fd0e8];
+    interface Fish { g: THREE.Group; z: number; x: number; dir: number; speed: number; phase: number; jump: number; }
+    const fishes: Fish[] = [];
+    for (let i = 0; i < 7; i++) {
+      const g = buildFish(plastic, fishCols[i % fishCols.length]);
+      const fz = -4 + ((i * 2.7) % 16);
+      const fx = -14 + ((i * 4.3) % 28);
+      g.position.set(fx, 0.34, fz); g.scale.setScalar(0.85 + (i % 3) * 0.13);
+      group.add(g);
+      fishes.push({ g, z: fz, x: fx, dir: i % 2 ? 1 : -1, speed: 2.2 + (i % 3) * 0.7, phase: i * 1.3, jump: 0 });
+    }
+    let jumpTimer = 2.5;
+
     // gemas en el centro del puente (recompensan mantener el equilibrio)
     const gems = new Collectibles(plastic, ctx.sound, [{ x: 0, z: -3 }, { x: 0, z: 2 }, { x: 0, z: 7 }, { x: 0, z: 12 }]);
     group.add(gems.group);
@@ -69,6 +83,23 @@ export const escena13: Min05Scene = {
       group,
       update(dt, t, player) {
         river.update(t); buddy.update(dt); lanterns.forEach((l) => l.update(t));
+        // peces: nadan de orilla a orilla serpenteando; uno salta cada pocos seg.
+        jumpTimer -= dt;
+        if (jumpTimer <= 0) { const f = fishes[Math.floor(t * 7) % fishes.length]; if (f.jump <= 0) f.jump = 0.95; jumpTimer = 3.5 + (Math.sin(t) + 1) * 2; }
+        for (const f of fishes) {
+          if (f.jump > 0) {
+            f.jump -= dt; const k = 1 - f.jump / 0.95;
+            f.g.position.y = 0.34 + Math.sin(THREE.MathUtils.clamp(k, 0, 1) * Math.PI) * 2.1;
+            f.g.rotation.x = (f.dir > 0 ? -1 : 1) * Math.sin(k * Math.PI) * 0.5;
+            if (f.jump <= 0) { f.g.position.y = 0.34; f.g.rotation.x = 0; }
+          } else {
+            f.x += f.dir * f.speed * dt;
+            if (f.x > 16) { f.x = 16; f.dir = -1; } else if (f.x < -16) { f.x = -16; f.dir = 1; }
+            f.g.position.set(f.x, 0.34, f.z + Math.sin(t * 1.2 + f.phase) * 0.5);
+            f.g.rotation.y = f.dir > 0 ? 0 : Math.PI;
+            f.g.rotation.z = Math.sin(t * 6 + f.phase) * 0.12;
+          }
+        }
         const r = rope.update(dt, t, player);
         onBridge = r.onSpan;
         balance = r.onSpan ? (player.x - r.centerX) / rope.safeMargin : 0;

@@ -1,6 +1,6 @@
 import {
   MinifigureSkin, SPY_SKIN, SPY2_SKIN, YOSHUA_SKIN, GUARD_SKIN, GUARD_CHIEF_SKIN,
-  SPY_CAMP_SKIN, SPY2_CAMP_SKIN
+  SPY_CAMP_SKIN, SPY2_CAMP_SKIN, RAHAB_SKIN
 } from '../../characters/MinifigureFactory';
 
 /**
@@ -21,3 +21,4 @@ export const JEFE_GUARDIA_SKIN: MinifigureSkin = GUARD_CHIEF_SKIN; // plumas + c
 // Variantes de CAMPAMENTO de los espías (canónicas del muñequero, escenas 9–11):
 export const ESPIA1_CAMP: MinifigureSkin = SPY_CAMP_SKIN;   // túnica beige + turbante gris-azulado
 export const ESPIA2_CAMP: MinifigureSkin = SPY2_CAMP_SKIN;  // túnica marrón + turbante azul claro
+export const RAHAB_MUJER: MinifigureSkin = RAHAB_SKIN;      // Rahab: melena larga, vestido humilde, cordón carmesí

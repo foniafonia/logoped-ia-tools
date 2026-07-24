@@ -103,6 +103,33 @@ export function buildRiver(
 }
 
 /**
+ * PECECITO de ladrillo (cuerpo + cola + aleta + ojo). Mira hacia +x. Para dar
+ * vida al río del cruce nocturno (nadan y a veces saltan). Simpático, de juguete.
+ */
+export function buildFish(plastic: PlasticMaterialFactory, color: number = BrickPalette.ORANGE): THREE.Group {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new RoundedBoxGeometry(1.1, 0.5, 0.42, 3, 0.18), plastic.get(color));
+  body.castShadow = true; g.add(body);
+  // cola (dos placas en V)
+  for (const s of [-1, 1]) {
+    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.34, 0.06), plastic.get(color));
+    tail.position.set(-0.72, s * 0.16, 0); tail.rotation.z = s * 0.5; g.add(tail);
+  }
+  // aleta dorsal
+  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.24, 0.06), plastic.get(color));
+  fin.position.set(0.05, 0.34, 0); fin.rotation.z = 0.2; g.add(fin);
+  // ojos (a ambos lados)
+  for (const s of [-1, 1]) {
+    const eye = new THREE.Mesh(new THREE.CircleGeometry(0.08, 10), new THREE.MeshBasicMaterial({ color: 0x101018 }));
+    eye.position.set(0.38, 0.1, s * 0.22); eye.rotation.y = s < 0 ? Math.PI : 0; g.add(eye);
+    const glow = new THREE.Mesh(new THREE.CircleGeometry(0.13, 10), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    glow.position.set(0.37, 0.1, s * 0.225); glow.rotation.y = s < 0 ? Math.PI : 0; g.add(glow);
+    eye.renderOrder = 1;
+  }
+  return g;
+}
+
+/**
  * CARPA / TIENDA de campaña de ladrillo (la tienda de Yehoshúa y la carpa de
  * los espías). Cuatro postes, faldón a dos aguas de placas y una entrada.
  */
