@@ -62,6 +62,11 @@ lógica del juego ni las escenas de nadie.
 > ejemplo; copiad de él las llamadas a las escenas que queráis llenar.)
 > Rendimiento: hay tope en móvil (menos gente, sin luces de farolillo). Para
 > multitudes muy grandes, bajad el nº de spots.
+>
+> **Referencia E34 "El Jordán se parte":** `src/parted-jordan.ts` ya compone
+> `buildPartedRiver` + `buildHorizon('rio-oasis')` + `buildCrowd` → muros de agua
+> con peces, el pueblo cruzando con asombro y Jericó al fondo. Copiad ese patrón
+> en la escena real del cruce (hoy el milagro se narra pero se ve poco).
 
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
