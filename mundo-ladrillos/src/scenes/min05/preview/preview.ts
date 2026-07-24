@@ -54,9 +54,11 @@ let filmReady = false;
 // ventanas REALES del clip, calibradas de oído — se rellenan a medida.
 // Cada entrada: numero de escena → [inicio, fin] en segundos DEL CLIP.
 const USE_FILM_SPINE = true;
+// Analicé el clip (decodificado + envolvente + cross-correlación del gag): el RÍO
+// está en [0,~11.5]s y el grito del avión en 22.2s. El clip está condensado y NO
+// tiene audio separable por escena para 10–13, así que solo asigno lo verificado.
 const CLIP_SEG: Record<number, [number, number]> = {
-  9: [0, 15]   // orilla del Jordán: el sonido de RÍO del principio, cortado ANTES
-               //   del avión (verificado por el usuario). Resto: pendiente calibrar.
+  9: [0, 11.5]   // orilla del Jordán: RÍO puro del principio, cortado antes del avión. ✅
 };
 
 // --- Luces (se reconfiguran día/noche) ---
