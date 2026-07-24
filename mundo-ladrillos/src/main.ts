@@ -147,8 +147,9 @@ const beats: Beat[] = [
     obj: 'Visita el Tabernáculo', onEnter: () => setTarget({ x: 26, z: 22 })
   },
   {
-    t: 133, sub: '¡El camello del beduino va cargadísimo! Ve a ayudarle.',
-    obj: 'Ve con el beduino y su camello', onEnter: () => setTarget(life.beduinoPos)
+    t: 133, sub: '¡Al camello del beduino se le cae toda la carga! 💥 Ayuda a cargar la caravana.',
+    obj: 'Recoge los bultos para la caravana',
+    onEnter: () => { life.derrumbar(); activarBultos(); }   // gag automático + mini-juego claro
   },
   {
     t: 228, sub: '¡La caravana se pone en marcha!',
@@ -221,11 +222,6 @@ function checkTargets(): void {
   // visita el Tabernáculo (esc. 06, beat 5)
   if (i === 5 && target && !done.has('tab') && Math.hypot(p.x - 26, p.z - 22) < 6.5) {
     done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Qué bonito el Tabernáculo!'); setTarget(null);
-  }
-  // ayuda al beduino → el camello se derrumba (esc. 07, beat 6)
-  if (i === 6 && target && !done.has('bed') && Math.hypot(p.x - life.beduinoPos.x, p.z - life.beduinoPos.z) < 6) {
-    done.add('bed'); life.derrumbar(); audio.sfxSuccess(); director.star(); director.logro('¡Uy! ¡Al camello se le cae la carga! 💥');
-    activarBultos();   // arranca el mini-juego de cargar la caravana
   }
   // sigue la caravana al norte (esc. 08, beat 7)
   if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {

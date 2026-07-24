@@ -173,15 +173,14 @@ export class Journey {
       for (const to of this.torches) to.intensity = (7 + Math.sin(t * 8 + to.position.x) * 2.5) * this.nightF;
     }
 
-    // marcha de la caravana hacia el norte (−z) hasta la orilla
+    // marcha de la caravana hacia el norte (−z): se aleja y se pierde en la
+    // bruma del horizonte (no se amontona ni choca con los cerros).
     if (this.marching) {
       for (const u of this.caravan) {
-        if (u.root.position.z > Journey.ORILLA_Z + 3) {
-          u.root.position.z -= u.speed * dt;
-          u.fig?.update(dt, true, 1);
-        } else {
-          u.fig?.update(dt, false, 1);
-        }
+        if (!u.root.visible) continue;
+        u.root.position.z -= u.speed * dt;
+        u.fig?.update(dt, true, 1);
+        if (u.root.position.z < -118) u.root.visible = false;   // desaparece en la niebla
       }
     }
   }

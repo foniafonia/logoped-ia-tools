@@ -19,12 +19,14 @@ export function buildHorizon(scene: THREE.Scene): THREE.Group {
   const N = IS_MOBILE ? 26 : 40;
   for (let i = 0; i < N; i++) {
     const a = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.08;
-    const north = Math.cos(a - Math.PI / 2) > 0.82;      // pasillo estrecho al norte
-    const r = (north ? 165 : 100) + Math.random() * 44;
+    // VALLE ABIERTO al norte (−z, amplio): ahí NO hay cerros, solo bruma — la
+    // caravana marcha y se pierde en el horizonte, sin pared que la empotre.
+    if (Math.sin(a) < -0.45) continue;
+    const r = 100 + Math.random() * 44;
     const x = cx + Math.cos(a) * r, z = cz + Math.sin(a) * r;
     const w = 26 + Math.random() * 40;
     const d = 24 + Math.random() * 34;
-    const h = (north ? 16 : 26) + Math.random() * 30;    // más altos → cierran de verdad
+    const h = 26 + Math.random() * 30;                   // altos → cierran los lados y el fondo
     const base = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, 2.2), mat(tones[(Math.random() * tones.length) | 0]));
     base.position.set(x, h / 2 - 3, z); base.rotation.y = Math.random() * Math.PI; base.receiveShadow = true;
     g.add(base);
@@ -41,7 +43,7 @@ export function buildHorizon(scene: THREE.Scene): THREE.Group {
   const nFill = IS_MOBILE ? 16 : 26;
   for (let i = 0; i < nFill; i++) {
     const a = Math.random() * Math.PI * 2;
-    if (Math.cos(a - Math.PI / 2) > 0.7) continue;        // deja libre el pasillo norte
+    if (Math.sin(a) < -0.45) continue;                    // deja libre el valle norte (−z, camino de la caravana)
     const r = 84 + Math.random() * 34;                    // borde exterior de la zona jugable
     const x = cx + Math.cos(a) * r, z = cz + Math.sin(a) * r;
     if (Math.random() < 0.5) {
