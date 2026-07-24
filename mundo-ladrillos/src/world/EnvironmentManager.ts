@@ -1,35 +1,67 @@
 import * as THREE from 'three';
 
-/** Textura de placa base (tetones) para el suelo, barata (un plano). */
+/**
+ * Textura de suelo = placa base de tetones con ALMA DE ARENA: base cálida (no se
+ * revienta a blanco con la luz fuerte), + ondas del desierto + parches y motas
+ * → deja de parecer un plano liso repetido. Tile grande (8 u.) para disimular
+ * la repetición. Barata (un plano).
+ */
 function studTexture(): THREE.CanvasTexture {
+  const T = 512, UN = 8;               // 512 px = 8 unidades (8×8 tetones)
   const c = document.createElement('canvas');
-  c.width = c.height = 256;
+  c.width = c.height = T;
   const x = c.getContext('2d')!;
-  x.fillStyle = '#d9c08a';
-  x.fillRect(0, 0, 256, 256);
-  const step = 64;
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      const cx = i * step + step / 2, cy = j * step + step / 2;
-      const g = x.createRadialGradient(cx - 8, cy - 8, 2, cx, cy, 26);
-      g.addColorStop(0, '#efdcae'); g.addColorStop(0.7, '#d4bb85'); g.addColorStop(1, '#c2a870');
-      x.fillStyle = g;
-      x.beginPath(); x.arc(cx, cy, 24, 0, Math.PI * 2); x.fill();
-      x.strokeStyle = 'rgba(120,90,40,.25)'; x.lineWidth = 2;
-      x.beginPath(); x.arc(cx, cy, 24, 0, Math.PI * 2); x.stroke();
+
+  // base arena cálida con degradado suave (rompe el tono plano)
+  const base = x.createLinearGradient(0, 0, T, T);
+  base.addColorStop(0, '#cdb082'); base.addColorStop(0.5, '#c6a974'); base.addColorStop(1, '#c9ab77');
+  x.fillStyle = base; x.fillRect(0, 0, T, T);
+
+  // parches de arena (más claros/oscuros) — macro variación
+  for (let i = 0; i < 26; i++) {
+    const px = Math.random() * T, py = Math.random() * T, pr = 30 + Math.random() * 90;
+    const g = x.createRadialGradient(px, py, 0, px, py, pr);
+    const dark = Math.random() < 0.5;
+    g.addColorStop(0, dark ? 'rgba(150,120,72,.16)' : 'rgba(238,220,176,.16)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.beginPath(); x.arc(px, py, pr, 0, Math.PI * 2); x.fill();
+  }
+  // ondas del desierto (líneas suaves)
+  x.lineWidth = 2;
+  for (let i = 0; i < 22; i++) {
+    x.strokeStyle = `rgba(150,120,72,${0.05 + Math.random() * 0.06})`;
+    const y0 = Math.random() * T, amp = 4 + Math.random() * 8;
+    x.beginPath();
+    for (let px = 0; px <= T; px += 12) x.lineTo(px, y0 + Math.sin(px * 0.03 + i) * amp);
+    x.stroke();
+  }
+
+  // tetones (8×8) sutiles y cálidos
+  const step = T / UN;
+  for (let i = 0; i < UN; i++) {
+    for (let j = 0; j < UN; j++) {
+      const cx = i * step + step / 2, cy = j * step + step / 2, rr = step * 0.36;
+      const g = x.createRadialGradient(cx - rr * 0.35, cy - rr * 0.35, 1, cx, cy, rr);
+      g.addColorStop(0, 'rgba(233,215,170,.55)'); g.addColorStop(0.7, 'rgba(203,175,124,.28)'); g.addColorStop(1, 'rgba(184,154,99,.10)');
+      x.fillStyle = g; x.beginPath(); x.arc(cx, cy, rr, 0, Math.PI * 2); x.fill();
+      x.strokeStyle = 'rgba(120,90,40,.14)'; x.lineWidth = 1.5;
+      x.beginPath(); x.arc(cx, cy, rr, 0, Math.PI * 2); x.stroke();
     }
   }
+
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.anisotropy = 4;
+  t.anisotropy = 8;
+  t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
 
 /** Suelo tipo placa base, muy grande, hecho con UN plano texturizado. */
 export function createStuddedGround(size = 600): THREE.Mesh {
   const tex = studTexture();
-  tex.repeat.set(size / 4, size / 4); // 1 tetón ≈ 1 unidad
-  const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, metalness: 0 });
+  tex.repeat.set(size / 8, size / 8); // el tile cubre 8 unidades
+  // color de material cálido: aunque la luz fuerte lo suba, NO se va a blanco
+  const mat = new THREE.MeshStandardMaterial({ map: tex, color: 0xdcc290, roughness: 0.96, metalness: 0 });
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -0.4;

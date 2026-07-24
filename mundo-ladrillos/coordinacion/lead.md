@@ -47,4 +47,12 @@ tocados variados + variedad de piel/barba en la lite; P2 mantos y tetones solo e
 héroes. Entorno (suelo/tiendas/luz) lo asume LEAD. Al usuario le paso una hoja de
 primeros planos de la peli para reenviársela.
 
+**🌄 EL CAMINO — estándar de ENTORNO para TODOS (2026-07-24):** el usuario marca
+el **campamento mejorado como listón de todo el juego** ("es esperable para todo
+el juego"). Ninguna escena entrega con suelo blanco/cielo plano/horizonte vacío.
+Receta + piezas reutilizables en `coordinacion/estandar-entorno.md`. Ya integrado
+en la rama: `sky.ts` (`buildSky`: telón de montañas + nubes), suelo de **arena**
+mejorado en `EnvironmentManager.ts` (COMPARTIDO → todas las escenas lo heredan),
+mar de tiendas denso en `camp.ts`. Copiad y adaptad a vuestra escena.
+
 **Preguntas:** ninguna abierta ahora mismo.
