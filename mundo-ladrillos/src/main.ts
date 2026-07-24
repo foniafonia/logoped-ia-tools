@@ -4,6 +4,7 @@ import { buildJericho } from './structures/BrickStructureBuilder';
 import { createMinifigure, SPY_SKIN } from './characters/MinifigureFactory';
 import { buildCrowd } from './world/Crowd';
 import { buildStall } from './world/Market';
+import { buildLanternString, buildLaundryLine, buildWell } from './world/StreetProps';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
 import { createStuddedGround } from './world/EnvironmentManager';
@@ -119,6 +120,21 @@ const STALLS: Array<[number, number, number, number]> = [
 (IS_MOBILE ? STALLS.slice(0, 2) : STALLS).forEach(([sx, sz, syaw, sv]) => {
   city.add(buildStall(plastic, { x: sx, z: sz, yaw: syaw, variant: sv }));
 });
+
+// ---- Vida de calle: farolillos, ropa tendida y un pozo ----
+// Guirnaldas de farolillos cruzando la avenida (calidez nocturna; luces reales
+// solo en escritorio para no penalizar el móvil).
+for (const z of [13, 29]) {
+  city.add(buildLanternString(plastic, {
+    ax: -10, az: z, bx: 10, bz: z + 2,
+    height: 6.4, count: IS_MOBILE ? 5 : 7, lights: IS_MOBILE ? 0 : 2
+  }));
+}
+// Ropa tendida entre casas (vida vertical)
+city.add(buildLaundryLine(plastic, { ax: -11, az: 13, bx: -12.5, bz: 20, height: 5, count: 4, seed: 1 }));
+city.add(buildLaundryLine(plastic, { ax: 11, az: 22, bx: 12.5, bz: 29, height: 5, count: 4, seed: 3 }));
+// Pozo de la plaza (punto de reunión), a un lado del paso
+city.add(buildWell(plastic, { x: -4.6, z: 41 }));
 
 // ---- Vecinos de Jericó (mundo lleno): aldeanos por la calle, de noche ----
 // Comunidad de todas las edades (hay niños a menor escala), junto a casas y
