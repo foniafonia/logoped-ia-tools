@@ -14,6 +14,7 @@ import { CampLife } from './scenes/min00/campLife';
 import { Journey } from './scenes/min00/journey';
 import { buildHorizon } from './scenes/min00/horizon';
 import { StudioIntro } from './scenes/min00/studioIntro';
+import { INTRO_VIDEO } from './video/intro';
 import { Director, Beat } from './scenes/min00/Director';
 
 const app = document.getElementById('app')!;
@@ -243,15 +244,68 @@ Object.assign(startEl.style, {
 document.body.appendChild(startEl);
 startEl.addEventListener('pointerdown', () => {
   audio.init();
-  // la NARRACIÓN real de la peli conduce el tramo (si está embebida en la entrega)
-  director.setSpine(audio.playSpine('narracion_min0-5', 0.95));   // el reloj del audio real conduce
-  introActiva = true;              // arranca la cinemática de estudio
-  studio.setActive(true);
-  villager.root.visible = false;   // el jugador aparece al terminar la intro
-  director.start();
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
+  // Entrega con el vídeo real de la peli como intro; si no, la intro 3D de estudio.
+  if (INTRO_VIDEO) reproducirIntroVideo();
+  else arrancarConEstudio3D();
 }, { once: true });
+
+// intro 3D de estudio (respaldo cuando no hay vídeo embebido)
+function arrancarConEstudio3D(): void {
+  director.setSpine(audio.playSpine('narracion_min0-5', 0.95));
+  introActiva = true;
+  studio.setActive(true);
+  villager.root.visible = false;
+  director.start();
+}
+
+// data:video → blob URL (más compatible con la política de contenido del artefacto)
+function videoBlobUrl(dataUri: string): string {
+  if (!dataUri.startsWith('data:')) return dataUri;
+  try {
+    const b64 = dataUri.slice(dataUri.indexOf(',') + 1);
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([bytes], { type: 'video/mp4' }));
+  } catch { return dataUri; }
+}
+
+// intro con el VÍDEO REAL de la peli (arranque: logo → título → estudio)
+function reproducirIntroVideo(): void {
+  const wrap = document.createElement('div');
+  Object.assign(wrap.style, {
+    position: 'fixed', inset: '0', zIndex: '55', background: '#000',
+    display: 'flex', alignItems: 'center', justifyContent: 'center'
+  } as CSSStyleDeclaration);
+  const v = document.createElement('video');
+  v.src = videoBlobUrl(INTRO_VIDEO); v.autoplay = true; v.playsInline = true; v.setAttribute('playsinline', '');
+  Object.assign(v.style, { maxWidth: '100%', maxHeight: '100%' } as CSSStyleDeclaration);
+  const skip = document.createElement('button');
+  skip.textContent = 'Saltar intro ▶';
+  Object.assign(skip.style, {
+    position: 'fixed', right: '16px', bottom: '16px', zIndex: '56', font: '700 16px system-ui, sans-serif',
+    color: '#0a0705', background: '#e8b04b', border: 'none', borderRadius: '12px', padding: '10px 18px', cursor: 'pointer'
+  } as CSSStyleDeclaration);
+  let done = false;
+  const fin = (): void => {
+    if (done) return; done = true;
+    try { v.pause(); } catch { /* noop */ }
+    wrap.remove(); empezarJuegoTrasVideo();
+  };
+  v.onended = fin; skip.addEventListener('pointerdown', fin);
+  wrap.append(v, skip); document.body.appendChild(wrap);
+  v.play().catch(() => { /* si no arranca, el botón Saltar lleva al juego */ });
+}
+
+// al terminar el vídeo: entra al campamento y la narración continúa desde el seg 25
+function empezarJuegoTrasVideo(): void {
+  villager.root.visible = true;
+  if (esMovil && !touchCreado) { new TouchControls(controller); touchCreado = true; }
+  director.setSpine(audio.playSpine('narracion_min0-5', 0.95, 25));
+  director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
+}
 
 // ---- Bucle ----
 addEventListener('resize', () => {

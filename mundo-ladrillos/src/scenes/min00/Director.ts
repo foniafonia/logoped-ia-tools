@@ -106,7 +106,13 @@ export class Director {
   /** Engancha (o cambia) la narración que hace de reloj maestro. */
   setSpine(spine: Spine): void { this.spine = spine; }
 
-  start(): void { this.started = true; this.wallStart = performance.now(); }
+  /** Arranca el tramo. offsetSec: segundo inicial (tras un vídeo intro).
+   *  fromBeat: índice del último beat ya cubierto (para saltar la intro). */
+  start(offsetSec = 0, fromBeat = -1): void {
+    this.started = true;
+    this.wallStart = performance.now() - offsetSec * 1000;
+    this.i = fromBeat;
+  }
 
   /** Reloj maestro: el del audio si suena; si no, el de pared. */
   private clock(): number {

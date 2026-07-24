@@ -75,10 +75,10 @@ export class AudioManager {
    * nunca se pone a true y el Director usa su reloj de pared como respaldo:
    * la secuencia se reproduce igual, solo que sin voz.
    */
-  playSpine(name: string, volume = 1): {
+  playSpine(name: string, volume = 1, offset = 0): {
     ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean; stop: () => void;
   } {
-    const st = { started: false, startAt: 0, dur: 0, src: null as AudioBufferSourceNode | null, stopped: false };
+    const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, stopped: false };
     const startWhenReady = (tries = 0): void => {
       if (st.stopped || !this.ac) return;
       const buf = this.buffers.get(name);
@@ -87,15 +87,15 @@ export class AudioManager {
       src.buffer = buf;
       const g = this.ac.createGain(); g.gain.value = volume;
       src.connect(g); g.connect(this.ac.destination);
-      try { src.start(); } catch { /* noop */ }
+      try { src.start(0, offset); } catch { /* noop */ }   // arranca desde `offset` seg (tras el vídeo intro)
       st.src = src; st.startAt = this.ac.currentTime; st.dur = buf.duration; st.started = true;
     };
     startWhenReady();
     return {
       ready: () => st.started,
-      elapsed: () => (st.started && this.ac ? this.ac.currentTime - st.startAt : 0),
+      elapsed: () => (st.started && this.ac ? st.offset + (this.ac.currentTime - st.startAt) : st.offset),
       duration: () => st.dur,
-      ended: () => st.started && !!this.ac && this.ac.currentTime - st.startAt >= st.dur,
+      ended: () => st.started && !!this.ac && (st.offset + (this.ac.currentTime - st.startAt)) >= st.dur,
       stop: () => { st.stopped = true; try { st.src?.stop(); } catch { /* noop */ } }
     };
   }
