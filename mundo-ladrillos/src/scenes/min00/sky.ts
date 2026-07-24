@@ -27,16 +27,7 @@ function backdropTexture(): THREE.CanvasTexture {
   // franja cálida bajo el horizonte (por si asoma; se funde con el suelo/bruma)
   ctx.fillStyle = '#eccf86'; ctx.fillRect(0, HORIZ, W, H - HORIZ);
 
-  // --- nubes pintadas MUY sutiles (las de verdad son 3D; estas solo dan textura) ---
-  ctx.globalAlpha = 0.28;
-  for (let i = 0; i < 6; i++) {
-    const cx = Math.random() * W, cy = 40 + Math.random() * (HORIZ - 180), r = 20 + Math.random() * 34;
-    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-    grd.addColorStop(0, 'rgba(255,255,255,.85)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = grd;
-    for (let k = 0; k < 4; k++) ctx.fillRect(cx - r + k * r * 0.5 - r * 0.5, cy - r * 0.5, r * 1.3, r);
-  }
-  ctx.globalAlpha = 1;
+  // (las nubes son 3D, no pintadas: el telón queda limpio para las mesetas)
 
   // --- mesetas de cima plana en el horizonte (capas con perspectiva aérea:
   //     lejana clara → cercana oscura). Siluetas MARCADAS: cima plana nítida,

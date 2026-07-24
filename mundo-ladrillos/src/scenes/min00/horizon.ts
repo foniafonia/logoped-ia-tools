@@ -12,29 +12,39 @@ import { IS_MOBILE } from '../../core/Quality';
 export function buildHorizon(scene: THREE.Scene): THREE.Group {
   const g = new THREE.Group();
   const tones = [0xcdb083, 0xc2a870, 0xd4bb85, 0xbfa06a, 0xd0b57e, 0xb89a68, 0xc9b58a];
-  const mat = (c: number): THREE.Material => new THREE.MeshStandardMaterial({ color: c, roughness: 1, metalness: 0 });
+  const mat = (c: THREE.ColorRepresentation): THREE.Material => new THREE.MeshStandardMaterial({ color: c, roughness: 1, metalness: 0 });
   const cx = 0, cz = 18;
 
-  // ---------- anillo de cerros/mesetas (cerrado, alto y cerca) ----------
-  const N = IS_MOBILE ? 26 : 40;
+  // ---------- anillo de MESETAS de cima plana, por CAPAS (estratos) ----------
+  // Buttes tipo Monument Valley/peli: cima plana nítida (poco bevel), losas
+  // apiladas cada vez más estrechas y con tono alterno → leen como montaña de
+  // roca, no como paredes redondeadas.
+  const N = IS_MOBILE ? 24 : 38;
+  const col = new THREE.Color();
   for (let i = 0; i < N; i++) {
     const a = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.08;
     // VALLE ABIERTO al norte (−z, amplio): ahí NO hay cerros, solo bruma — la
     // caravana marcha y se pierde en el horizonte, sin pared que la empotre.
     if (Math.sin(a) < -0.45) continue;
-    const r = 100 + Math.random() * 44;
+    const r = 92 + Math.random() * 42;
     const x = cx + Math.cos(a) * r, z = cz + Math.sin(a) * r;
-    const w = 26 + Math.random() * 40;
-    const d = 24 + Math.random() * 34;
-    const h = 26 + Math.random() * 30;                   // altos → cierran los lados y el fondo
-    const base = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, 2.2), mat(tones[(Math.random() * tones.length) | 0]));
-    base.position.set(x, h / 2 - 3, z); base.rotation.y = Math.random() * Math.PI; base.receiveShadow = true;
-    g.add(base);
-    if (Math.random() < 0.6) {   // meseta escalonada
-      const h2 = h * (0.4 + Math.random() * 0.35);
-      const top = new THREE.Mesh(new RoundedBoxGeometry(w * 0.62, h2, d * 0.62, 2, 1.6), mat(tones[(Math.random() * tones.length) | 0]));
-      top.position.set(x + (Math.random() - 0.5) * 6, h + h2 / 2 - 3, z + (Math.random() - 0.5) * 6);
-      top.rotation.y = Math.random() * Math.PI; g.add(top);
+    const rot = Math.random() * Math.PI;
+    const baseTone = tones[(Math.random() * tones.length) | 0];
+    const h = 30 + Math.random() * 34;                    // mesetas altas → cierran los lados
+    const layers = 2 + (Math.random() < 0.6 ? 1 : 0);     // 2–3 estratos
+    let cw = 30 + Math.random() * 40;
+    let cd = 26 + Math.random() * 30;
+    let yb = -3;                                           // arranca algo bajo el suelo
+    for (let L = 0; L < layers; L++) {
+      const lh = h * (L === 0 ? 0.55 : 0.3) * (0.8 + Math.random() * 0.4);
+      // estrato: base más oscura, cimas más claras (perspectiva aérea + roca)
+      col.set(baseTone).multiplyScalar(0.86 + L * 0.09);
+      const slab = new THREE.Mesh(new RoundedBoxGeometry(cw, lh, cd, 1, 0.8), mat(col.getHex()));
+      slab.position.set(x + (Math.random() - 0.5) * 4, yb + lh / 2, z + (Math.random() - 0.5) * 4);
+      slab.rotation.y = rot; slab.receiveShadow = true;
+      g.add(slab);
+      yb += lh - 0.5;
+      cw *= 0.66; cd *= 0.66;
     }
   }
 
