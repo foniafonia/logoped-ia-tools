@@ -32,10 +32,36 @@ lógica del juego ni las escenas de nadie.
   multitud** (aldeanos preocupados, guardias serios, espías en alerta). Los espías
   (ninja) también emocionan. **Retrocompatible**: si no pones `emotion`, queda neutral.
 
-> 🔔 **AVISO INTEGRADOR / LEAD / min05:** hay **versión nueva** de personajes
-> (Yehoshúa con boca libre + set de caras). El juego montado aún tiene la vieja.
-> Para actualizar, **volved a hacer el `git checkout` del archivo** (comando abajo).
-> Sigue sin añadir/renombrar exports: solo campos opcionales → no rompe nada.
+> 🔔🔔 **AVISO INTEGRADOR / LEAD / min05 — INTEGRAR ESTO (24-jul, tarde):**
+> Hay bastante material NUEVO en `claude/munecos-ifepfa` listo para recoger. El
+> juego montado aún NO lo tiene. Todo verificado en runtime (0 errores de consola).
+>
+> **1) Personajes (`src/characters/MinifigureFactory.ts`):** Yehoshúa con boca
+>    libre, set de 6 caras (`Emotion` + `addMouth`), y **aldeanos** para multitud
+>    (`villagerSkin(i)`, `VILLAGER_PRESETS`). Solo campos opcionales, sin romper API.
+> **2) Helpers de escena NUEVOS (autónomos, solo THREE + plastic):**
+>    - `src/world/Crowd.ts` → `buildCrowd(scene, plastic, spots, { walkers })`
+>      (aldeanos quietos + paseantes + niños por `scale`).
+>    - `src/world/Market.ts` → `buildStall(...)` (puesto de mercado).
+>    - `src/world/StreetProps.ts` → `buildLanternString`, `buildLaundryLine`,
+>      `buildWell` (farolillos, ropa tendida, pozo).
+> **3) Ejemplo montado:** `src/main.ts` ya usa TODO junto → la calle de Jericó
+>    pasó de descampado a pueblo vivo (gente de todas las edades + paseantes +
+>    puestos + farolillos + ropa + pozo). Miradlo como referencia de colocación.
+>
+> **Cómo traerlo (quirúrgico, sin conflictos):**
+> ```
+> git fetch origin claude/munecos-ifepfa
+> git checkout origin/claude/munecos-ifepfa -- \
+>   mundo-ladrillos/src/characters/MinifigureFactory.ts \
+>   mundo-ladrillos/src/world/Crowd.ts \
+>   mundo-ladrillos/src/world/Market.ts \
+>   mundo-ladrillos/src/world/StreetProps.ts
+> ```
+> (Los helpers son archivos NUEVOS → no pisan nada vuestro. `main.ts` es el
+> ejemplo; copiad de él las llamadas a las escenas que queráis llenar.)
+> Rendimiento: hay tope en móvil (menos gente, sin luces de farolillo). Para
+> multitudes muy grandes, bajad el nº de spots.
 
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
