@@ -5,7 +5,7 @@ import { ThirdPersonCamera } from '../../../camera/ThirdPersonCamera';
 import { createMinifigure, MinifigureSkin } from '../../../characters/MinifigureFactory';
 import { createStuddedGround } from '../../../world/EnvironmentManager';
 import { PreviewController } from './PreviewController';
-import { MIN05_SCENES, BEAT_LOCAL } from '../registry';
+import { MIN05_SCENES } from '../registry';
 import { Min05Scene, SceneInstance, SceneContext } from '../types';
 import { SoundEngine } from '../audio/SoundEngine';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
@@ -48,13 +48,16 @@ const plastic = new PlasticMaterialFactory();
 // escena (BEAT_LOCAL). No hay música sintética.
 const sound = new SoundEngine();
 let filmReady = false;
-// AUDIO de la peli. El clip `narracion_min5-10` está DESALINEADO con el desglose
-// (el gag del avión suena en ~seg 21, no en 212), así que NO salto a un segundo
-// por escena (esos tiempos no son fiables). En su lugar reproduzco la peli DE
-// FONDO DESDE EL PRINCIPIO, en orden (así hay audio de la peli, no silencio). Para
-// afinar: el usuario copia la chapita en el momento que casa y ajusto los offsets.
+// AUDIO de la peli. El clip `narracion_min5-10` está CONDENSADO y NO casa con el
+// desglose oficial (verificado de oído con el usuario: empieza con el RÍO y a los
+// ~20s ya está el gag del avión). Por eso NO uso los tiempos del desglose, sino
+// ventanas REALES del clip, calibradas de oído — se rellenan a medida.
+// Cada entrada: numero de escena → [inicio, fin] en segundos DEL CLIP.
 const USE_FILM_SPINE = true;
-const PER_SCENE_JUMP = false;   // saltos por escena OFF hasta tener offsets reales
+const CLIP_SEG: Record<number, [number, number]> = {
+  9: [0, 15]   // orilla del Jordán: el sonido de RÍO del principio, cortado ANTES
+               //   del avión (verificado por el usuario). Resto: pendiente calibrar.
+};
 
 // --- Luces (se reconfiguran día/noche) ---
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.5);
@@ -268,6 +271,15 @@ function disposeGroup(g: THREE.Group): void {
   g.traverse((o: THREE.Object3D) => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
 }
 
+// Reproduce la ventana de peli de una escena (si está calibrada en CLIP_SEG);
+// si no, PARA el audio de la peli (queda el ambiente) para no soltar audio ajeno.
+function startSceneFilm(def: Min05Scene): void {
+  if (!filmReady) return;
+  const seg = CLIP_SEG[def.numero];
+  if (seg) sound.playFilmFrom(seg[0], seg[1], 0.9, `esc${def.numero}`);
+  else sound.stopFilm();
+}
+
 function loadScene(i: number): void {
   const idx = ((i % MIN05_SCENES.length) + MIN05_SCENES.length) % MIN05_SCENES.length;
   const def = MIN05_SCENES[idx];
@@ -278,8 +290,7 @@ function loadScene(i: number): void {
   if (sound.ready) sound.setAmbience(amb); // viento/grillos/agua, por debajo de la peli
   // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
   // lo que se ve). Si el clip no está (build del repo), no-op.
-  // (saltos por escena OFF: la peli suena de fondo continua desde startGame)
-  if (filmReady && PER_SCENE_JUMP) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0, BEAT_LOCAL[def.numero + 1], 0.9, `esc${def.numero}`);
+  startSceneFilm(def);   // ventana de peli de ESTA escena (o para el audio si falta)
   setPlayerSkin(def.jugador ?? 'spy');
   player.root.visible = true; // por si la escena anterior escondió al jugador
 
@@ -347,9 +358,7 @@ const startGame = (): void => {
   if (USE_FILM_SPINE) {
     void sound.loadFilm('narracion_min5-10').then((ok) => {
       filmReady = ok;
-      // la peli suena de fondo DESDE EL PRINCIPIO, en orden (no silencio). El clip
-      // completo como columna vertebral; el usuario afina con la chapita.
-      if (ok) sound.playFilmFrom(0, undefined, 0.85, 'peli');
+      if (ok && currentDef) startSceneFilm(currentDef);  // ventana de la escena actual
     });
   }
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
