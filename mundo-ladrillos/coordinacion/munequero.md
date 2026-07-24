@@ -298,3 +298,14 @@ const ENE_BANNERS = [0xc0392b, 0xf1c40f, 0x1c1c22];                     // rojo/
 ```
 Los ISRAELITAS (`ROBES`/`TURBANS`, tierra + azul) quedan bien con Yehoshúa → no tocar.
 (Si quieres, te renderizo un swatch antes/después; pídelo.)
+
+### ⛺ INTERIOR: tienda de Yehoshúa — `src/world/Tent.ts`
+Para E10 (reclutar espías) y E12 (trajes de sigilo). Lona a rayas, alfombra,
+mesa baja con mapa, cojines, **perchero con los trajes de sigilo colgados**,
+baúl, faroles y Yehoshúa dentro. Verificado: `proto/tent.png`.
+```ts
+import { buildTent } from '../world/Tent';
+const tent = buildTent(scene, plastic, { yehoshua: true, suits: true });  // suits=perchero
+// tent.yehoshua = Minifigure; al salir: tent.dispose();
+```
+Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Tent.ts`
