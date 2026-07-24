@@ -400,9 +400,6 @@ export class Minifigure {
     // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
     if (s.vestPanel !== undefined) {
       this.root.add(this.box(0.92, 1.5, 0.12, s.vestPanel, 0, 2.5, 0.4));   // pechera
-      // Ribetes laterales del chaleco (dos tiras verticales)
-      this.root.add(this.box(0.14, 1.5, 0.14, s.belt, -0.5, 2.5, 0.4));
-      this.root.add(this.box(0.14, 1.5, 0.14, s.belt, 0.5, 2.5, 0.4));
     }
     // Cuello en V marcado (dos tiras cruzadas del color del collar)
     if (s.collar !== undefined) {
@@ -545,28 +542,18 @@ export class Minifigure {
       this.root.add(this.box(0.2, 0.6, 0.16, col, -0.5, 3.78, 0.28)); // patilla
       this.root.add(this.box(0.2, 0.6, 0.16, col, 0.5, 3.78, 0.28));
     } else {
-      // Barba larga y FRONDOSA (pieza de patriarca, cubre el pecho): capas de
-      // bloques que se ensanchan bajo las mejillas y se afilan en punta, para
-      // que se lea como mechones y no como un cono liso. Ojos a la vista (~3.98).
-      // Marco lateral (patillas anchas que arrancan de las orejas)
-      this.root.add(this.box(0.24, 0.9, 0.34, col, -0.52, 3.66, 0.3));
-      this.root.add(this.box(0.24, 0.9, 0.34, col, 0.52, 3.66, 0.3));
-      // Cuerpo de la barba: capas anchas que caen y se estrechan
-      const layers: Array<[number, number, number, number]> = [
-        // [ancho, alto, y, z]
-        [0.98, 0.5, 3.58, 0.34],
-        [1.06, 0.5, 3.24, 0.32],
-        [0.92, 0.5, 2.9, 0.3],
-        [0.7, 0.46, 2.58, 0.28],
-        [0.44, 0.42, 2.3, 0.26],
-      ];
-      layers.forEach(([w, h, y, z]) => this.root.add(this.box(w, h, 0.4, col, 0, y, z)));
-      // Punta final
-      const tip = new THREE.ConeGeometry(0.22, 0.4, 14);
-      tip.rotateX(Math.PI);
-      this.root.add(this.mesh(tip, col, 0, 2.06, 0.24));
-      // Bigote grueso que enlaza con la cara
-      this.root.add(this.box(0.9, 0.34, 0.36, col, 0, 3.66, 0.44));
+      // Barba larga de patriarca: cuelga del mentón y se afila en punta redondeada
+      // a media altura del pecho. Limpia y compacta → deja ver la túnica y lee como
+      // barba (no como plancha ni pompones). Ojos a la vista (~3.98).
+      // Patillas + bigote que enmarcan la cara
+      this.root.add(this.box(0.2, 0.66, 0.32, col, -0.42, 3.64, 0.34));
+      this.root.add(this.box(0.2, 0.66, 0.32, col, 0.42, 3.64, 0.34));
+      this.root.add(this.box(0.78, 0.32, 0.36, col, 0, 3.64, 0.44)); // bigote
+      // Cuerpo: cono que baja del mentón y termina en punta hacia el pecho
+      const bg = new THREE.ConeGeometry(0.52, 1.55, 22);
+      bg.rotateX(Math.PI);
+      bg.scale(1, 1, 0.72);
+      this.root.add(this.mesh(bg, col, 0, 2.96, 0.34));
     }
   }
 
