@@ -99,6 +99,17 @@ const fig = createMinifigure(plastic, villagerSkin(i)); // i = índice de la ins
 Determinista (estable en resume). Se pueden sobreescribir campos sueltos
 (`{ ...villagerSkin(i), emotion:'surprised' }`) para ajustar el mood por escena.
 
+**Helpers de escena listos para llenar calles/plazas (nuevos, autónomos):**
+- `buildCrowd(scene, plastic, spots, { walkers })` (`world/Crowd.ts`): coloca
+  aldeanos quietos (idle) y **paseantes** que andan de A a B; soporta niños
+  (`scale`) y cara por sitio. Devuelve `{ group, update(dt), dispose() }`.
+- `buildStall(plastic, { x, z, yaw, variant })` (`world/Market.ts`): **puesto de
+  mercado** (mostrador, toldo a rayas, tela de fondo, vasijas/cesta/fruta/rollos).
+  Devuelve un `THREE.Group`. Da textura y punto de reunión.
+- **Ejemplo real:** la calle de Jericó de `main.ts` ya usa los tres (puestos +
+  multitud + paseantes) → de escena vacía a pueblo vivo. Copiad ese patrón en
+  otras escenas exteriores. Todo verificado en runtime (0 errores).
+
 ## Ofrezco / pendiente
 - **Versión LITE para multitudes:** OJO — `Army.ts` (del LEAD) ya instancia su
   propia tropa con geometría fusionada; un "lite" como minifig **puede ser
