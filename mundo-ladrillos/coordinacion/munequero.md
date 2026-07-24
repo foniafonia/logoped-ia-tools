@@ -217,3 +217,22 @@ cordón/aguas/taberna ya existen. Ahora, lo que MÁS lastra el conjunto (por imp
 (horizonte), `proto/jerico_noche.png` (calle-noche llena), `proto/rug_in.png`
 (detalle estrella). Objetivo: que CUALQUIER captura se parezca más a esas que a
 un descampado pálido.
+
+### ✅ HELPER LISTO PARA ENCHUFAR: `buildHorizon(modo)`
+Para quitaros fricción, dejo el kit **ya montado y autocontenido** (solo THREE):
+`src/world/Horizon.ts` (en mi rama `claude/munecos-ifepfa`). **Copiadlo tal cual**
+a vuestra rama. Verificado (demo: `proto/horizon_rio-oasis.png`,
+`proto/horizon_muralla-noche.png`; fuente `src/horizon-demo.ts`).
+
+```ts
+import { buildHorizon } from '../world/Horizon';
+const horizon = buildHorizon(scene, 'rio-oasis');   // 1 línea → mundo lleno
+// al salir de la escena:
+horizon.dispose();                                    // limpia grupo + niebla
+```
+Modos: `desierto-atardecer | desierto-noche | rio-oasis | muralla-noche | calle-noche`.
+Pone cielo con color + niebla + cerros de arenisca + Jericó al fondo + luna/estrellas
+(noche) + palmeras. Opts: `{ jericho, palms, fog }`. Barato (fog + pocas mallas).
+INTERIORES no lo usan (se visten con paredes/props). Mapear cada escena a su modo
+según la tabla de arriba. Traerlo con:
+`git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Horizon.ts`
