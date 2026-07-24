@@ -7,6 +7,8 @@ import { StealthSystem } from './mechanics/StealthSystem';
 import { VisionCone, Npc } from './props/Npc';
 import { buildGuard } from './props/Guard';
 import { Collectibles } from './props/Collectibles';
+import { RugHide } from './props/RugHide';
+import { KILIM_PALS } from '../min00/textiles';
 
 /**
  * ESCENA 16 (545–604s) — LOS GUARDIAS VUELVEN POR LAS CALLES BUSCÁNDOLOS.
@@ -57,7 +59,7 @@ export const escena16: Min05Scene = {
 
     const braziers = [buildBrazier(plastic, -8, 10, -2), buildBrazier(plastic, 8, 10, 20)];
     braziers.forEach((b) => group.add(b.group));
-    const lanterns = [buildLantern(plastic, -8, 5, 6), buildLantern(plastic, 8, 5, 14), buildLantern(plastic, -8, 5, 30)];
+    const lanterns = [buildLantern(plastic, -8, 5, 6), buildLantern(plastic, 8, 5, 14), buildLantern(plastic, -8, 5, 30), buildLantern(plastic, 8.6, 5, 9)];
     lanterns.forEach((l) => group.add(l.group));
 
     const barrelPos = [{ x: -8, z: 3 }, { x: 8, z: 3 }, { x: -8, z: 20 }, { x: 8, z: 20 }, { x: -7, z: 33 }];
@@ -86,12 +88,21 @@ export const escena16: Min05Scene = {
     for (const b of barrelPos) stealth.addHidingSpot({ x: b.x, z: b.z, radio: 2.2 });
     for (const s of stealth.marksGroup) group.add(s);
 
+    // ESCONDITE ESTRELLA — la ALFOMBRA de kilim colgada (el "toque memorable").
+    // Te agachas detrás y la tela se abomba hacia la cámara (bulto que respira,
+    // piernas asomando). Es un escondite más para el sigilo, junto a un farol.
+    const rug = new RugHide(plastic, { x: 6, z: 12, pal: KILIM_PALS[0], radio: 2.4 });
+    group.add(rug.group);
+    stealth.addHidingSpot(rug.hidingSpot);
+
     const gems = new Collectibles(plastic, ctx.sound, [{ x: -8, z: 3 }, { x: 8, z: 10 }, { x: -8, z: 20 }, { x: 6, z: 26 }, { x: 0, z: 30 }]);
     group.add(gems.group);
 
     ctx.scene.add(group);
 
     let doneFlag = false;
+    let rugHidden = false; // ¿escondido tras la alfombra ahora mismo?
+    let rugShown = false;  // ¿ya se hizo el plano cinemático del escondite?
     return {
       group,
       update(dt, t, player) {
@@ -99,11 +110,36 @@ export const escena16: Min05Scene = {
         stealth.update(dt, t); gems.update(dt, t, player);
         doorLight.intensity = 2.2 + Math.sin(t * 6) * 0.3;
         goal.scale.setScalar(1 + Math.sin(t * 3) * 0.08);
+        // escondite de la alfombra: oculta el cuerpo del jugador y abomba la tela
+        const inRug = rug.contains(player.x, player.z);
+        rug.update(dt, t, inRug);
+        if (inRug !== rugHidden) {
+          rugHidden = inRug; ctx.setPlayerVisible?.(!inRug);
+          // La PRIMERA vez que te escondes, la cámara hace un plano frontal de la
+          // alfombra (se ve el bulto que respira) y luego vuelve al control manual.
+          if (inRug && !rugShown) {
+            rugShown = true;
+            ctx.cameraReveal?.(
+              { x: rug.x, y: 6.2, z: rug.z - 12 }, { x: rug.x, y: 5.4, z: rug.z - 9.5 },
+              { x: rug.x, y: 4.1, z: rug.z }, { x: rug.x, y: 4.1, z: rug.z },
+              2.6
+            );
+          }
+        }
         const o = escena16.objetivo.target!;
         if (Math.hypot(player.x - o.x, player.z - o.z) < (escena16.objetivo.radio ?? 3.5)) doneFlag = true;
       },
-      status() { return stealth.status(); },
-      hud() { const p = ctx.getPlayer(); const o = escena16.objetivo.target!; return { alarm: stealth.alarmLevel, progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 54, 0, 1), gems: { got: gems.got, total: gems.total } }; },
+      status() { return rugHidden ? '🫥 ¡Escondido tras la alfombra! Pasa la patrulla' : stealth.status(); },
+      hud() {
+        const p = ctx.getPlayer(); const o = escena16.objetivo.target!;
+        const nearRug = !rugHidden && Math.hypot(p.x - rug.x, p.z - rug.z) < rug.radio + 2.4;
+        return {
+          alarm: stealth.alarmLevel,
+          progress: THREE.MathUtils.clamp(1 - Math.hypot(p.x - o.x, p.z - o.z) / 54, 0, 1),
+          gems: { got: gems.got, total: gems.total },
+          prompt: nearRug ? '🫥 Métete tras la alfombra para esconderte' : undefined
+        };
+      },
       isDone() { return doneFlag; }
     };
   }

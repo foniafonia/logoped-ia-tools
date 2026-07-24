@@ -32,6 +32,13 @@ export interface SceneContext {
   /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
   setPlayerSkin: (which: PlayerSkinId) => void;
   /**
+   * Muestra/oculta la MINIFIGURA del jugador. OPCIONAL. Para escondites
+   * "especiales" donde el cuerpo desaparece tras algo (p. ej. tras la alfombra
+   * colgada, dejando solo el bulto que respira). Si el orquestador no lo
+   * implementa, el jugador sigue visible y el juego funciona igual.
+   */
+  setPlayerVisible?: (visible: boolean) => void;
+  /**
    * MOMENTO CINEMÁTICO — "a veces el audio manda sobre el juego": la cámara
    * toma el control unos segundos (sincronizada con la peli) y luego DEVUELVE
    * el control manual. Dos variantes; ambas OPCIONALES (si el orquestador no las

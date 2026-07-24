@@ -271,6 +271,7 @@ function loadScene(i: number): void {
   // lo que se ve). Si el clip no está (build del repo), no-op.
   if (filmReady) sound.playFilmFrom(BEAT_LOCAL[def.numero] ?? 0);
   setPlayerSkin(def.jugador ?? 'spy');
+  player.root.visible = true; // por si la escena anterior escondió al jugador
 
   controller.clearObstacles();
   const ctx: SceneContext = {
@@ -282,6 +283,7 @@ function loadScene(i: number): void {
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
     setPlayerSkin: (which) => setPlayerSkin(which),
+    setPlayerVisible: (v) => { player.root.visible = v; },
     cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
     cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds)
   };
