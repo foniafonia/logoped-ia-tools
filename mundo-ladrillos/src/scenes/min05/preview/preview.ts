@@ -88,7 +88,22 @@ const nightSky = buildNightSky(); nightSky.visible = false; scene.add(nightSky);
 // descampado pálido). Se iluminan solos con la luz día/noche de la escena.
 const horizon = buildHorizon(plastic); scene.add(horizon.group);
 
-function applyLighting(noche: boolean, street: boolean): void {
+function applyLighting(noche: boolean, street: boolean, interior = false): void {
+  // interiores (tienda/taberna): sin cielo/horizonte/suelo exterior; luz base muy
+  // tenue para que manden los faroles cálidos del propio interior.
+  ground.visible = !interior;
+  horizon.group.visible = !interior;
+  if (interior) {
+    scene.environment = null;
+    renderer.toneMappingExposure = 1.12;
+    scene.background = new THREE.Color(0x140f0a);
+    scene.fog = new THREE.Fog(0x140f0a, 22, 72);
+    hemi.color.setHex(0x6a4a2a); hemi.groundColor.setHex(0x1a1006); hemi.intensity = 0.18;
+    key.color.setHex(0xffcaa0); key.intensity = 0.25; key.position.set(-6, 20, 8);
+    fill.color.setHex(0x5a4a30); fill.intensity = 0.15;
+    nightSky.visible = false;
+    return;
+  }
   if (noche) {
     scene.environment = null;
     renderer.toneMappingExposure = 1.2;
@@ -288,8 +303,8 @@ function loadScene(i: number): void {
   if (current) { scene.remove(current.group); current.dispose?.(); disposeGroup(current.group); }
   currentDef = def; done = false; advanceT = 0;
   const amb = def.ambiente ?? (def.noche ? 'night' : 'day');
-  applyLighting(!!def.noche, amb === 'street');
-  if (sound.ready) sound.setAmbience(amb); // viento/grillos/agua, por debajo de la peli
+  applyLighting(!!def.noche, amb === 'street', amb === 'interior');
+  if (sound.ready) sound.setAmbience(amb === 'interior' ? 'night' : amb); // ambiente (interior→grillos suaves)
   // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
   // lo que se ve). Si el clip no está (build del repo), no-op.
   startSceneFilm(def);   // ventana de peli de ESTA escena (o para el audio si falta)

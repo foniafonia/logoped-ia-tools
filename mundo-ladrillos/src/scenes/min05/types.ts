@@ -125,7 +125,7 @@ export interface Min05Scene {
   exito: string;            // mensaje al lograrlo
   spawn: { x: number; z: number };
   noche?: boolean;          // ambiente nocturno (11–16 son de noche)
-  ambiente?: 'day' | 'night' | 'river' | 'street'; // cama de ambiente (viento/grillos/agua)
+  ambiente?: 'day' | 'night' | 'river' | 'street' | 'interior'; // cama de ambiente (viento/grillos/agua/interior)
   camara?: CameraHint;
   /**
    * INTRO cinemática opcional: al empezar la escena, la cámara hace un travelling
