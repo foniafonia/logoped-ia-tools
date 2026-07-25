@@ -49,7 +49,6 @@ export interface MinifigureSkin {
   shield?: number;            // escudo redondo con león (color del borde)
   accessory?: 'sword' | 'staff' | 'spear' | 'shofar' | 'none'; // objeto en la mano
   sword?: boolean;            // COMPAT LEAD: false = sin arma (equivale a accessory:'none').
-                              // Las escenas del campamento lo usan para los no-combatientes.
 
   // Rasgos femeninos (Rahab): cejas finas, pestañas, mejillas y labios;
   // falda/vestido acampanado sobre las piernas (que siguen animando debajo).
