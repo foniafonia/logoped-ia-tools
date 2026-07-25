@@ -16,10 +16,13 @@ function plasticStd(color: number, extra: THREE.MeshPhysicalMaterialParameters =
 // Israelitas (túnicas/turbantes claros) y enemigos de Jericó (oscuros/rojizos).
 const ROBES = [0xb9a36f, 0x8f6a3e, 0x6f7a52, 0x9a9184, 0x7a5230, 0xc9b083, 0x86633a];
 const TURBANS = [0xf1ece0, 0x2f6db0, 0x8a6a3a, 0xb9b2a4, 0xcdb98a, 0xe6ddc9];
-const ENEMY_ROBES = [0x6e2b2b, 0x4a3040, 0x3a2a22, 0x5a3a1e, 0x552033];
-const ENEMY_HELMS = [0x8a1f1f, 0x2b2b30, 0x4a4a52, 0x6b1414];
+// Tropa de Jericó ALINEADA al guardia canónico del muñequero (recado de
+// coherencia): túnicas ROJAS (#C0392B y variantes), cascos PLATA (#95A5A6) y
+// estandartes rojo/amarillo → de cerca y de lejos son el MISMO ejército, no dos.
+const ENEMY_ROBES = [0xc0392b, 0xa93226, 0xb03a2e, 0x922b21, 0xcb4335];
+const ENEMY_HELMS = [0x95a5a6, 0xaab4b5, 0x8b979a, 0x9fa8a9];
 const ISR_BANNERS = [0x2f6db0, 0xd8b24a, 0xe6ddc9, 0x3f7a46];
-const ENE_BANNERS = [0x8a1f1f, 0x1c1c22, 0x6b1414];
+const ENE_BANNERS = [0xc0392b, 0xf1c40f, 0x8a1f1f];
 
 const KIND_SWORD = 0, KIND_ARCHER = 1, KIND_BANNER = 2;
 

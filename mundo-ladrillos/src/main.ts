@@ -189,15 +189,22 @@ let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
 let bultosActivos = false;       // mini-juego de cargar la caravana
+let cargandoBulto: THREE.Mesh | null = null;   // bulto que el jugador lleva en brazos
+const CARGA_DEST = { x: 26.5, z: 33 };          // junto al camello del beduino (zona de carga)
 const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
 
-// mini-juego "carga la caravana": recoge los bultos repartidos (fácil e intuitivo)
+// mini-juego "carga la caravana" — VERBO REAL: coge un bulto y LLÉVALO al camello.
+function bultosEntregados(): number { return camp.bultos.filter((b) => !b.visible).length; }
 function actualizarObjBultos(): void {
   if (director.beatIndex !== 6) return;
-  const got = camp.bultos.filter((b) => !b.visible).length;
-  director.setObjetivo(`📦 Carga la caravana: recoge los bultos (${got}/${camp.bultos.length})`);
+  const got = bultosEntregados();
+  director.setObjetivo(cargandoBulto
+    ? `🐫 Llévalo al camello (${got}/${camp.bultos.length})`
+    : `📦 Coge un bulto y llévalo al camello (${got}/${camp.bultos.length})`);
 }
+// La baliza guía el verbo: si llevas un bulto → apunta al camello; si no → al bulto más cercano.
 function balizaBulto(): void {
+  if (cargandoBulto) { setTarget(CARGA_DEST); return; }
   let best: THREE.Mesh | null = null, bd = 1e9;
   for (const b of camp.bultos) {
     if (!b.visible) continue;
@@ -384,18 +391,31 @@ function animate(now: number): void {
     }
   }
 
-  // mini-juego: cargar la caravana (recoge los bultos) — solo en el beat del beduino
+  // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)
   if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {
-    let cambio = false;
-    for (const b of camp.bultos) {
-      if (!b.visible) continue;
-      b.rotation.y += dt * 1.2;
-      b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
-      if (controller.pos.distanceTo(b.position) < 2.6) {
-        b.visible = false; audio.sfxPickup(); dust.burst(b.position.x, 0.7, b.position.z, 8); cambio = true;
+    if (cargandoBulto) {
+      // llevas un bulto: va en brazos (sobre el jugador) hasta que lo sueltas en el camello
+      const b = cargandoBulto;
+      b.position.set(controller.pos.x, 3.0, controller.pos.z);
+      b.rotation.y += dt * 2;
+      if (Math.hypot(controller.pos.x - CARGA_DEST.x, controller.pos.z - CARGA_DEST.z) < 3.5) {
+        b.visible = false; cargandoBulto = null;           // ENTREGADO en el camello
+        audio.sfxPickup(); dust.burst(CARGA_DEST.x, 1.0, CARGA_DEST.z, 12);
+        actualizarObjBultos(); balizaBulto();
+      }
+    } else {
+      // no llevas nada: los bultos flotan invitando a cogerlos; al tocar uno, lo coges
+      for (const b of camp.bultos) {
+        if (!b.visible) continue;
+        b.rotation.y += dt * 1.2;
+        b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
+        if (controller.pos.distanceTo(b.position) < 2.6) {
+          cargandoBulto = b; audio.sfxPickup();            // ¡COGIDO! ahora llévalo
+          actualizarObjBultos(); balizaBulto();
+          break;
+        }
       }
     }
-    if (cambio) { actualizarObjBultos(); balizaBulto(); }
     if (camp.bultos.every((b) => !b.visible)) {
       done.add('bultos'); audio.sfxSuccess(); director.star(); director.logro('¡Caravana cargada! 🐫'); setTarget(null);
     }
