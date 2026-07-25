@@ -15,6 +15,10 @@ import { COURT, ROAD } from '../core/Layout';
  */
 class BrickAccumulator {
   private byColor = new Map<number, THREE.BufferGeometry[]>();
+  // CACHÉ de geometría por (w,d,kind): el muro de Jericó llama a addBrick miles de
+  // veces con ladrillos IDÉNTICOS (2×2). Antes se re-teselaba un RoundedBox+tetones
+  // en cada llamada (→ 24 s / ~1 GB). Ahora se tesela UNA vez y se clona (barato).
+  private static geoCache = new Map<string, THREE.BufferGeometry>();
 
   addGeometry(geo: THREE.BufferGeometry, colorHex: number, x: number, y: number, z: number, rotY = 0): void {
     const g = normalizeGeometry(geo.clone());
@@ -27,8 +31,10 @@ class BrickAccumulator {
 
   addBrick(w: number, d: number, kind: 'brick' | 'plate' | 'tile', colorHex: number,
            x: number, y: number, z: number): void {
-    const { geometry } = makeBrickGeometry(w, d, kind);
-    this.addGeometry(geometry, colorHex, x, y, z);
+    const key = `${w}|${d}|${kind}`;
+    let geometry = BrickAccumulator.geoCache.get(key);
+    if (!geometry) { geometry = makeBrickGeometry(w, d, kind).geometry; BrickAccumulator.geoCache.set(key, geometry); }
+    this.addGeometry(geometry, colorHex, x, y, z);   // addGeometry clona → la caché no se muta
   }
 
   build(plastic: PlasticMaterialFactory): THREE.Group {
