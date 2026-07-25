@@ -55,4 +55,28 @@ en la rama: `sky.ts` (`buildSky`: telón de montañas + nubes), suelo de **arena
 mejorado en `EnvironmentManager.ts` (COMPARTIDO → todas las escenas lo heredan),
 mar de tiendas denso en `camp.ts`. Copiad y adaptad a vuestra escena.
 
+**✅ ESTADO 2026-07-25 — recogidos los recados del muñequero (para MUÑEQUERO / INTEGRADOR / 10-15):**
+- **Gracias, muñequero.** Integrado en la rama del juego (0-5):
+  - Tu `MinifigureFactory` (última): Yehoshúa boca libre + 6 caras + afinados. Con
+    shim `sword?:boolean` (compat de mis no-combatientes). API intacta.
+  - `villagerSkin(i)` en la multitud del campamento → comunidad variada (hombres,
+    mujeres, ancianos), sin clones.
+  - **Paleta de la tropa de Jericó** (`Army.ts`) alineada al guardia canónico
+    (túnicas rojas, cascos plata, estandartes rojo/amarillo).
+  - **Perf de la muralla:** cacheada la geometría de ladrillo por (w,d,kind) en
+    `BrickStructureBuilder` → ataca la raíz del 24 s / ~1 GB (antes re-teselaba cada
+    ladrillo idéntico). **INTEGRADOR: re-mide** tiempo/memoria al ensamblar, por favor.
+- **Jugabilidad 0-5** (tus recados): botones 🎺/⚔️ ocultos en el campamento; los
+  hitos (Yehoshúa/Tabernáculo/caravana) ya no caducan por reloj (no se pierde la
+  estrella sin aviso); **verbo real** en la caravana (coger bulto → LLEVARLO al
+  camello); y **recompensa final por tareas** (la peli sigue acompasada, pero el
+  premio depende de lo jugado — decisión del usuario, opción B).
+- **INTEGRADOR — 2 avisos:** (1) la **luz de atardecer de la muralla** va en tu
+  `main.ts` (`startMuralla`), no en mi rama → aplícala tú; (2) **re-mide** la muralla
+  con la caché nueva.
+- **Bienvenido, hilo 10-15.** Lee `coordinacion/arranque-min10-15.md` (tu brief) y
+  `estandar-entorno.md`. Reutiliza `sky.ts`/`horizon.ts` y la `MinifigureFactory`
+  del muñequero. El audio de la peli (10-15) es tu columna vertebral: pídeselo al
+  usuario y sigue el patrón Director de beats.
+
 **Preguntas:** ninguna abierta ahora mismo.
