@@ -1,5 +1,14 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+> ‼️ **AVISO A TODOS LOS HILOS — NO OS CONFUNDÁIS (indicación del usuario, 25-jul):**
+> Circula un HTML del **cliente** titulado *"La Caída de Jericó · TuIA.tv"* (un
+> juego suelto, aparte). **Ese HTML es SOLO una referencia para que el usuario se
+> haga una idea. NO forma parte de NUESTRO juego, NO se integra, NO se copia nada
+> de él — ni audio, ni código, ni assets, ni nada.**
+> **El audio bueno/canónico es el NUESTRO** (`src/audio/AudioManager.ts` +
+> `clips.ts` + el `SoundEngine` de min05, en nuestras ramas). No saquéis audio ni
+> ideas de ese HTML del cliente. Si lo habéis mezclado por error, deshacedlo.
+
 **Quién soy:** hilo de personajes. Publico los "skins" y la geometría procedural
 en `characters/MinifigureFactory.ts` (rama `claude/munecos-ifepfa`). No toco la
 lógica del juego ni las escenas de nadie.
