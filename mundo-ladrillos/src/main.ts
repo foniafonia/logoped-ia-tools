@@ -146,12 +146,12 @@ const beats: Beat[] = [
     onEnter: () => { ropesActivas = true; setTarget(null); }
   },
   {
-    t: 123, sub: 'Los niños llevan el pan al Tabernáculo. 🥖',
-    obj: 'Visita el Tabernáculo', onEnter: () => setTarget({ x: 26, z: 22 })
+    t: 123, sub: 'El pan va al Tabernáculo. 🥖',
+    obj: 'Ve al Tabernáculo', onEnter: () => setTarget({ x: 26, z: 22 })
   },
   {
-    t: 133, sub: '¡Al camello del beduino se le cae toda la carga! 💥 Ayuda a cargar la caravana.',
-    obj: 'Recoge los bultos para la caravana',
+    t: 133, sub: '¡Se cayó la carga del camello! 💥',
+    obj: 'Lleva los bultos al camello',
     onEnter: () => { life.derrumbar(); activarBultos(); }   // gag automático + mini-juego claro
   },
   {

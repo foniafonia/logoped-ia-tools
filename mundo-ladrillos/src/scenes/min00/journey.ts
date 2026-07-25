@@ -102,6 +102,20 @@ export class Journey {
       this.land.add(tower);
       this.land.add(rbox(7, 1.4, 7, 0xb89a68, this.plastic, tx, 13.5, cityZ + R * 0.72));
     }
+    // TORREÓN central (silueta dominante → se reconoce la ciudad-meta desde lejos)
+    this.land.add(rbox(10, 22, 10, 0xd8c090, this.plastic, 0, 11, cityZ));
+    this.land.add(rbox(11.5, 2, 11.5, 0xb89a68, this.plastic, 0, 22.5, cityZ));   // corona de almenas
+    for (const mx of [-4, 0, 4]) this.land.add(rbox(2, 2.2, 11.5, 0xc7a978, this.plastic, mx, 24, cityZ));
+    // banderas rojas en el torreón y las torres (color + vida en la silueta)
+    const flag = (fx: number, fy: number, fz: number): void => {
+      this.land.add(rbox(0.3, 6, 0.3, 0x5a3f26, this.plastic, fx, fy, fz));      // asta
+      const paño = new THREE.Mesh(new THREE.PlaneGeometry(3, 1.8),
+        new THREE.MeshStandardMaterial({ color: 0xc0392b, side: THREE.DoubleSide, roughness: 0.9 }));
+      paño.position.set(fx + 1.6, fy + 2.2, fz); this.land.add(paño);
+    };
+    flag(0, 28, cityZ);
+    flag(-R * 0.7, 17, cityZ + R * 0.72);
+    flag(R * 0.7, 17, cityZ + R * 0.72);
     // puerta + antorchas
     const gate = rbox(6, 7, 1.2, 0x5a3f26, this.plastic, 0, 3.5, cityZ + R + 0.5);
     this.land.add(gate);
