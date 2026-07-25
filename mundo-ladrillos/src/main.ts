@@ -163,17 +163,41 @@ const beats: Beat[] = [
 const director = new Director(beats, null, () => finDelTramo());
 (window as any).__director = director;
 
-// pantalla de recompensa al terminar el tramo (sensación de logro para el peque)
+// pantalla de recompensa al terminar el tramo. La peli SIGUE acompasada (no se
+// gatea), pero el PREMIO depende de las tareas hechas → hay motivo para jugar
+// (opción B acordada con el usuario). Si no juegas, llegas igual pero sin fiesta.
+const TAREAS_TRAMO: Array<[string, string]> = [
+  ['yeh', 'saludar a Yehoshúa'],
+  ['camp', 'recoger el campamento'],
+  ['tab', 'visitar el Tabernáculo'],
+  ['bultos', 'cargar la caravana'],
+  ['carav', 'seguir a la caravana']
+];
 function finDelTramo(): void {
-  director.confetti(60);
-  audio.sfxSuccess();
+  const total = TAREAS_TRAMO.length;
+  const hechas = TAREAS_TRAMO.filter(([k]) => done.has(k)).length;
+  const faltan = TAREAS_TRAMO.filter(([k]) => !done.has(k)).map(([, n]) => n);
+  const todo = hechas === total;
+
+  if (todo) { director.confetti(90); audio.sfxSuccess(); }
+  else if (hechas > 0) { director.confetti(28); audio.sfxSuccess(); }
+  // si no hizo nada: sin confeti ni fanfarria (premio ligado al juego)
+
+  const titulo = todo ? '¡Lo hiciste TODO! 🎉' : hechas > 0 ? '¡Buen trabajo!' : 'Llegaste al final…';
+  const cuerpo = todo
+    ? 'Preparaste el campamento entero y la caravana está en marcha. ¡Eres un fenómeno!<br>Muy pronto: el río Jordán y la misión de los espías.'
+    : hechas > 0
+      ? `Hiciste <b>${hechas} de ${total}</b> tareas. Te faltó: <b>${faltan.join(', ')}</b>.<br>¿Lo intentas otra vez y las haces todas?`
+      : `Casi no jugaste: te quedaron todas las tareas (${faltan.join(', ')}).<br>¡Vuelve a intentarlo y ayuda al campamento!`;
+  const btnTxt = todo ? '↻ Jugar otra vez' : '↻ Intentarlo de nuevo';
+
   const fin = document.createElement('div');
   fin.innerHTML =
     '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px;max-width:520px">' +
-    '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b">¡Bien hecho!</div>' +
-    '<div style="font:800 40px system-ui;margin:14px 0">⭐ ' + director.starCount + '</div>' +
-    '<div style="opacity:.9;margin:0 0 20px">Has preparado el campamento y la caravana está en marcha.<br>Muy pronto: el río Jordán y la misión de los espías.</div>' +
-    '<button id="reBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">↻ Volver a jugar</button></div>';
+    '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b">' + titulo + '</div>' +
+    '<div style="font:800 40px system-ui;margin:14px 0">⭐ ' + director.starCount + ' / ' + total + '</div>' +
+    '<div style="opacity:.9;margin:0 0 20px">' + cuerpo + '</div>' +
+    '<button id="reBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">' + btnTxt + '</button></div>';
   Object.assign(fin.style, {
     position: 'fixed', inset: '0', zIndex: '60', display: 'flex', alignItems: 'center',
     justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #23324f, #0a0f18 78%)',
