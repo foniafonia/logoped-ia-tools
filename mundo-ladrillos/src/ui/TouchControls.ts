@@ -5,14 +5,21 @@ import { CharacterController } from '../characters/CharacterController';
  * y botones de saltar y de interacción (shofar) a la derecha. Escribe en
  * controller.touch; la cámara se gira arrastrando en el resto de la pantalla.
  */
+/** Qué botones de acción mostrar. Por defecto TODOS (retrocompatible). Las escenas
+ *  sin shofar/combate (p.ej. el campamento 0–5) apagan los que no hacen nada, para
+ *  no confundir al peque. */
+export interface TouchOpts { shofar?: boolean; attack?: boolean; }
+
 export class TouchControls {
-  constructor(private controller: CharacterController) {
+  constructor(private controller: CharacterController, opts: TouchOpts = {}) {
+    const showShofar = opts.shofar !== false;
+    const showAttack = opts.attack !== false;
     this.buildJoystick();
     this.buildButton('⤴', 'right: 24px; bottom: 96px;', () => { this.controller.touch.jump = true; });
-    this.buildButton('🎺', 'right: 108px; bottom: 40px;', () => {
+    if (showShofar) this.buildButton('🎺', 'right: 108px; bottom: 40px;', () => {
       dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' }));
     });
-    this.buildButton('⚔️', 'right: 108px; bottom: 124px;', () => {
+    if (showAttack) this.buildButton('⚔️', 'right: 108px; bottom: 124px;', () => {
       dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyF' }));
     });
     const hint = document.createElement('div');

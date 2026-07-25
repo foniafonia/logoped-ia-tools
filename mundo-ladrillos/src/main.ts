@@ -123,7 +123,7 @@ function terminarIntro(): void {
   introActiva = false;
   studio.setActive(false);
   villager.root.visible = true;
-  if (esMovil && !touchCreado) { new TouchControls(controller); touchCreado = true; }  // controles al empezar a jugar
+  if (esMovil && !touchCreado) { new TouchControls(controller, { shofar: false, attack: false }); touchCreado = true; }  // controles al empezar a jugar
 }
 
 // Beats con los TIEMPOS OFICIALES del desglose de la peli (escenas 01–08)
@@ -218,16 +218,20 @@ const done = new Set<string>();
 function checkTargets(): void {
   const p = controller.pos;
   const i = director.beatIndex;
-  // acércate a Yehoshúa (esc. 04, beat 3)
-  if (i === 3 && target && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
-    done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); setTarget(null);
+  // acércate a Yehoshúa (esc. 04, beat 3). Se puede cumplir DESDE que empieza su
+  // beat y HASTA que se logra (no solo durante los 10 s del beat): así el peque no
+  // pierde la estrella sin aviso si tarda en llegar. (Recado de jugabilidad.)
+  if (i >= 3 && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
+    done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda');
+    if (target) setTarget(null);
   }
-  // visita el Tabernáculo (esc. 06, beat 5)
-  if (i === 5 && target && !done.has('tab') && Math.hypot(p.x - 26, p.z - 22) < 6.5) {
-    done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Qué bonito el Tabernáculo!'); setTarget(null);
+  // visita el Tabernáculo (esc. 06, beat 5) — completable hasta lograrlo
+  if (i >= 5 && !done.has('tab') && Math.hypot(p.x - 26, p.z - 22) < 6.5) {
+    done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Qué bonito el Tabernáculo!');
+    if (target) setTarget(null);
   }
   // sigue la caravana al norte (esc. 08, beat 7)
-  if (i >= 7 && target && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
+  if (i >= 7 && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
     done.add('carav'); audio.sfxSuccess(); director.star(); director.logro('¡En marcha con la caravana!'); setTarget(null);
   }
 }
@@ -304,7 +308,7 @@ function reproducirIntroVideo(): void {
 // al terminar el vídeo: entra al campamento y la narración continúa desde el seg 25
 function empezarJuegoTrasVideo(): void {
   villager.root.visible = true;
-  if (esMovil && !touchCreado) { new TouchControls(controller); touchCreado = true; }
+  if (esMovil && !touchCreado) { new TouchControls(controller, { shofar: false, attack: false }); touchCreado = true; }
   audio.resume();   // el vídeo suspendió el contexto: hay que reanudarlo o no se oye
   director.setSpine(audio.playSpine('narracion_min0-5', 0.95, 25));
   director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
