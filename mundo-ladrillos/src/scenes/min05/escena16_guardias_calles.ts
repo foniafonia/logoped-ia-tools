@@ -10,6 +10,7 @@ import { Collectibles } from './props/Collectibles';
 import { RugHide } from './props/RugHide';
 import { KILIM_PALS } from '../min00/textiles';
 import { RAHAB_MUJER } from './skins';
+import { buildLanternString, buildLaundryLine, buildWell } from '../../world/StreetProps';
 
 /**
  * ESCENA 16 (545–604s) — LOS GUARDIAS VUELVEN POR LAS CALLES BUSCÁNDOLOS.
@@ -90,6 +91,13 @@ export const escena16: Min05Scene = {
     // puestos de mercado (atmósfera de zoco nocturno + hacen de cobertura)
     const stallPos: Array<[number, number, number]> = [[-9, 10, BrickPalette.DARK_RED], [9, 25, BrickPalette.DARK_BLUE]];
     for (const [sx, sz, col] of stallPos) { const st = buildMarketStall(plastic, col); st.position.set(sx, 0, sz); st.rotation.y = sx < 0 ? 0.4 : -0.4; group.add(st); ctx.addObstacle(sx, sz, 2.6, 1.6); }
+    // vida de calle nocturna (helpers del muñequero): guirnaldas de farolillos
+    // cruzando la calle, ropa tendida y un POZO (que además hace de escondite).
+    group.add(buildLanternString(plastic, { ax: -13, az: 7, bx: 13, bz: 7, height: 9.5, count: 9, lights: 2 }));
+    group.add(buildLanternString(plastic, { ax: -13, az: 23, bx: 13, bz: 23, height: 9.5, count: 9, lights: 2 }));
+    group.add(buildLaundryLine(plastic, { ax: -11.5, az: 13, bx: -11.5, bz: 20, height: 5.6, seed: 2 }));
+    group.add(buildLaundryLine(plastic, { ax: 11.5, az: 5, bx: 11.5, bz: 12, height: 5.6, seed: 5 }));
+    const well = buildWell(plastic, { x: -8, z: 25 }); group.add(well); ctx.addObstacle(-8, 25, 1.4, 1.4);
 
     const goal = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 30); group.add(goal);
@@ -109,6 +117,7 @@ export const escena16: Min05Scene = {
       stealth.addGuard({ npc: g, cone, baseYaw: 0, followNpc: true });
     });
     for (const b of barrelPos) stealth.addHidingSpot({ x: b.x, z: b.z, radio: 2.2 });
+    stealth.addHidingSpot({ x: -8, z: 25, radio: 2.6 }); // el pozo también es cobertura
     for (const s of stealth.marksGroup) group.add(s);
 
     // ESCONDITE ESTRELLA — la ALFOMBRA de kilim colgada (el "toque memorable").

@@ -10,6 +10,7 @@ import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
 import { Collectibles } from './props/Collectibles';
 import { ESPIA2_SIGILO } from './skins';
+import { buildLanternString, buildLaundryLine } from '../../world/StreetProps';
 
 /**
  * ESCENA 15 (534–544s) — LOS ESPÍAS SE CUELAN POR LA PUERTA ABIERTA.
@@ -50,6 +51,10 @@ export const escena15: Min05Scene = {
     braziers.forEach((b) => group.add(b.group));
     const lanterns = [buildLantern(plastic, -6, 5, 18), buildLantern(plastic, 6, 5, 22)];
     lanterns.forEach((l) => group.add(l.group));
+    // vida de calle: guirnaldas de farolillos cruzando la calle interior + ropa tendida
+    group.add(buildLanternString(plastic, { ax: -11, az: 16, bx: 11, bz: 16, height: 9, count: 8, lights: 2 }));
+    group.add(buildLanternString(plastic, { ax: -11, az: 26, bx: 11, bz: 26, height: 9, count: 8, lights: 2 }));
+    group.add(buildLaundryLine(plastic, { ax: -9, az: 22, bx: -9, bz: 29, height: 5.4, seed: 3 }));
 
     // tinajas = escondites (con colisión suave)
     const barrelPos = [{ x: -5, z: 2 }, { x: 6, z: 14 }, { x: -6, z: 20 }];
