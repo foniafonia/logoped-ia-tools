@@ -14,6 +14,7 @@ import { CampLife } from './scenes/min00/campLife';
 import { Journey } from './scenes/min00/journey';
 import { buildHorizon } from './scenes/min00/horizon';
 import { buildSky } from './scenes/min00/sky';
+import { buildAtmosphere } from './scenes/min00/atmosphere';
 import { StudioIntro } from './scenes/min00/studioIntro';
 import { INTRO_VIDEO } from './video/intro';
 import { Director, Beat } from './scenes/min00/Director';
@@ -70,6 +71,7 @@ setupEnvironment(scene);
 buildHorizon(scene);                                        // cerros de arenisca que acotan el valle
 const sky = buildSky(scene);                                // telón de montañas + nubes de juguete
 const camp = buildCamp(scene, plastic);
+const atmo = buildAtmosphere(scene, camp.fires, camp.flags);  // humo + pájaros + banderas ondeando
 const dust = new Dust(scene);
 const life = new CampLife(scene, plastic, dust);           // aldeanos, animales, gag del beduino
 const journey = new Journey(scene, plastic);               // río Jordán + Jericó + caravana (ocultos)
@@ -456,6 +458,7 @@ function animate(now: number): void {
   }
 
   sky.update(dt, nightF);                                   // deriva de nubes + telón que oscurece de noche
+  atmo.update(dt, now / 1000);                              // humo de fogatas + pájaros + banderas
   tpcam.update(controller.pos);
   renderer.render(scene, camera);
 }

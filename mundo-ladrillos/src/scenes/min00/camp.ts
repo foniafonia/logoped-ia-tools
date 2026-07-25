@@ -18,6 +18,8 @@ export interface CampBuild {
   ropes: THREE.Mesh[];      // cuerdas a recoger (objetivo)
   bultos: THREE.Mesh[];     // cargamento para la caravana (mini-juego, ocultos al inicio)
   yehoshua: Minifigure;     // el líder sobre la tarima (saluda al acercarte)
+  flags: THREE.Mesh[];      // estandartes de las tribus (ondean con el viento)
+  fires: Array<[number, number]>;  // posiciones de fogatas (humo/atmósfera)
 }
 
 /**
@@ -225,11 +227,14 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const poleMat = plastic.get(0x5a4028);
   const flagColors = [0x2f6db0, 0xc0392b, 0x2e8b57, 0xe8b04b, 0x8e44ad, 0xd9702a];
   const bannerSpots: Array<[number, number]> = [[-8, 12], [8, 13], [-16, 24], [18, 26], [0, 40], [-24, 38]];
+  const flags: THREE.Mesh[] = [];
   bannerSpots.forEach(([bx, bz], i) => {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 6, 6), poleMat);
     pole.position.set(bx, 3, bz); pole.castShadow = true;
     const flag = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.1, 0.1), plastic.get(flagColors[i % flagColors.length]));
     flag.position.set(bx + 0.95, 5.2, bz); flag.castShadow = true;
+    flag.userData.phase = i * 1.3;   // desfase para que no ondeen sincronizadas
+    flags.push(flag);
     group.add(pole, flag);
   });
 
@@ -295,5 +300,5 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   });
 
   scene.add(group);
-  return { group, ropes, bultos, yehoshua: yoshua };
+  return { group, ropes, bultos, yehoshua: yoshua, flags, fires };
 }
