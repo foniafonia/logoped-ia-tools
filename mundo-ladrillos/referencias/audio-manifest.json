@@ -1,0 +1,897 @@
+{
+  "meta": {
+    "pelicula": "Construyendo la Conquista de Israel (Estilo Ladrillos LEGO)",
+    "duracion_desglose_seg": 1750,
+    "audio_maestro": "assets-privados/pelicula-audio.m4a  (PRIVADO: no va a git; ponlo aquí y no lo subas)",
+    "nota": "Fuente unica de la verdad del audio. Los spines se recortan del audio maestro por [desde_seg,hasta_seg]. Cada escena da su offset LOCAL dentro del spine + el texto para subtitulos. No hay locucion palabra-por-palabra (STT bloqueado): el texto es accion+dialogo del desglose oficial; ajusta subtitulos a lo que oigas.",
+    "aviso_tiempos": "Solo 0–600 s (tramos 0-5 y 5-10) estan validados. El desglose llega a 2910 s pero dice durar 1750 s → los tiempos > ~600 s son DUDOSOS; validar contra la duracion real del audio antes de usarlos."
+  },
+  "clips": [
+    {
+      "key": "narracion_min0-5",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 0,
+      "hasta_seg": 300,
+      "descripcion": "Voz+música del tramo 0:00–5:00 (columna vertebral)",
+      "fiable": true
+    },
+    {
+      "key": "narracion_min5-10",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 300,
+      "hasta_seg": 600,
+      "descripcion": "Voz+música del tramo 5:00–10:00 (columna vertebral)",
+      "fiable": true
+    },
+    {
+      "key": "narracion_min10-15",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 600,
+      "hasta_seg": 900,
+      "descripcion": "Voz+música del tramo 10:00–15:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min15-20",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 900,
+      "hasta_seg": 1200,
+      "descripcion": "Voz+música del tramo 15:00–20:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min20-25",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 1200,
+      "hasta_seg": 1500,
+      "descripcion": "Voz+música del tramo 20:00–25:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min25-30",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 1500,
+      "hasta_seg": 1800,
+      "descripcion": "Voz+música del tramo 25:00–30:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min30-35",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 1800,
+      "hasta_seg": 2100,
+      "descripcion": "Voz+música del tramo 30:00–35:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min35-40",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 2100,
+      "hasta_seg": 2400,
+      "descripcion": "Voz+música del tramo 35:00–40:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "narracion_min40-45",
+      "tipo": "spine",
+      "origen": "maestro",
+      "desde_seg": 2400,
+      "hasta_seg": 2700,
+      "descripcion": "Voz+música del tramo 40:00–45:00 (columna vertebral)",
+      "fiable": false
+    },
+    {
+      "key": "m0510_14_avion",
+      "tipo": "sfx-voz",
+      "origen": "maestro",
+      "desde_seg": 512,
+      "hasta_seg": 517,
+      "descripcion": "Grito \"¡Un avion!\" del gag de la escena 14 (ajustar 1-2 s al oirlo)",
+      "fiable": true
+    },
+    {
+      "key": "shofar",
+      "tipo": "sfx",
+      "origen": "sfx",
+      "archivo": "sfx/shofar.mp3",
+      "descripcion": "Cuerno/shofar",
+      "conservar_si_existe": true
+    },
+    {
+      "key": "rumble",
+      "tipo": "sfx",
+      "origen": "sfx",
+      "archivo": "sfx/rumble.mp3",
+      "descripcion": "Muro que retumba",
+      "conservar_si_existe": true
+    },
+    {
+      "key": "shout",
+      "tipo": "sfx",
+      "origen": "sfx",
+      "archivo": "sfx/shout.mp3",
+      "descripcion": "Grito de batalla",
+      "conservar_si_existe": true
+    },
+    {
+      "key": "din",
+      "tipo": "sfx",
+      "origen": "sfx",
+      "archivo": "sfx/din.mp3",
+      "descripcion": "Estruendo/fragor",
+      "conservar_si_existe": true
+    }
+  ],
+  "escenas": [
+    {
+      "id": "escena_01",
+      "orden": 1,
+      "global_desde": 0,
+      "global_hasta": 14,
+      "spine": "narracion_min0-5",
+      "local_desde": 0,
+      "escenario": "set_grabacion",
+      "personajes": [],
+      "texto": "Aparece el logo de Tula.tv en un fondo de chispas doradas. Luego corta a un pergamino de la Torá hecho completamente de ladrillos que se despliega revelando letras de colores que deletrean el título y dedicatorias — UNA PRODUCCIÓN DE TuIA.tv - R. AMRAM ANIDJAR / CONSTRUYENDO LA CONQUISTA DE ISRAEL - PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD SHEVET AHIM - PANAMÁ",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_02",
+      "orden": 2,
+      "global_desde": 15,
+      "global_hasta": 24,
+      "spine": "narracion_min0-5",
+      "local_desde": 15,
+      "escenario": "set_grabacion",
+      "personajes": [
+        "rabino_director",
+        "beduino"
+      ],
+      "texto": "El Rabino en traje azul se encuentra en el centro de su estudio de cine regañando al Beduino que se queja del trabajo de grabación. El Rabino le advierte que deje de quejarse",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_03",
+      "orden": 3,
+      "global_desde": 25,
+      "global_hasta": 44,
+      "spine": "narracion_min0-5",
+      "local_desde": 25,
+      "escenario": "camino_desierto",
+      "personajes": [],
+      "texto": "Cámara aérea en movimiento rápido recorre el camino arenoso del desierto hasta revelar un inmenso campamento militar con tiendas de campaña y fogatas que se extiende hasta perderse de vista",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_04",
+      "orden": 4,
+      "global_desde": 45,
+      "global_hasta": 54,
+      "spine": "narracion_min0-5",
+      "local_desde": 45,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Yehoshua, con una imponente barba canosa, parado sobre una tarima de piedra, levanta su mano y arenga al gran gentío que lo rodea en el campamento",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_05",
+      "orden": 5,
+      "global_desde": 55,
+      "global_hasta": 122,
+      "spine": "narracion_min0-5",
+      "local_desde": 55,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "beduino"
+      ],
+      "texto": "Montaje de personas empacando el campamento. El Beduino intenta enrollar sábanas y atarlas al lomo de su camello. Tres figuras de jóvenes israelitas enrollan una larga cuerda de LEGO. Un grupo da de beber a asnos y camellos de un bebedero largo",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_06",
+      "orden": 6,
+      "global_desde": 123,
+      "global_hasta": 132,
+      "spine": "narracion_min0-5",
+      "local_desde": 123,
+      "escenario": "campamento_israel",
+      "personajes": [],
+      "texto": "Cuatro niños israelíes cargan alegres canastas de mimbre repletas de panes redondos y rollos de tela mientras avanzan frente al Tabernáculo",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_07",
+      "orden": 7,
+      "global_desde": 133,
+      "global_hasta": 227,
+      "spine": "narracion_min0-5",
+      "local_desde": 133,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "beduino"
+      ],
+      "texto": "El Beduino sobrecarga la espalda de su camello con vasijas de plata, alfombras y una caja enorme. El camello lo mira disgustado, empieza a temblar y de repente toda la carga colapsa y explota en una nube de polvo gris, dejando al Beduino aplastado y enojado mientras una cabra se burla",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_08",
+      "orden": 8,
+      "global_desde": 228,
+      "global_hasta": 306,
+      "spine": "narracion_min0-5",
+      "local_desde": 228,
+      "escenario": "camino_desierto",
+      "personajes": [],
+      "texto": "Gran caravana de israelíes, camellos y carretas cargadas de equipaje avanza en línea cruzando las dunas del desierto bajo el sol brillante",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_09",
+      "orden": 9,
+      "global_desde": 307,
+      "global_hasta": 340,
+      "spine": "narracion_min5-10",
+      "local_desde": 7,
+      "escenario": "orilla_jordan",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Yehoshua parado de espaldas frente a la multitud observa el gran río Jordán que fluye caudaloso. Al otro lado se destaca la inmensa fortaleza amurallada de Jericó rodeada de palmeras",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_10",
+      "orden": 10,
+      "global_desde": 341,
+      "global_hasta": 439,
+      "spine": "narracion_min5-10",
+      "local_desde": 41,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Frente a su tienda de campaña, Yehoshua da instrucciones secretas a los dos espías. Los espías asienten con respeto y entusiasmo, manifestando su valentía frente a los peligros de Jericó",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_11",
+      "orden": 11,
+      "global_desde": 440,
+      "global_hasta": 449,
+      "spine": "narracion_min5-10",
+      "local_desde": 140,
+      "escenario": "murallas_jerico",
+      "personajes": [],
+      "texto": "Vista nocturna espectacular de las murallas de Jericó con sus torres iluminadas con antorchas encendidas y las ventanas con luz cálida",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_12",
+      "orden": 12,
+      "global_desde": 450,
+      "global_hasta": 500,
+      "spine": "narracion_min5-10",
+      "local_desde": 150,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Dentro de una carpa oscura iluminada por un farol de aceite, los espías se miran con complicidad y se cambian rápidamente de ropa, poniéndose trajes tácticos de sigilo negros y grises con capuchas ninja",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_13",
+      "orden": 13,
+      "global_desde": 501,
+      "global_hasta": 511,
+      "spine": "narracion_min5-10",
+      "local_desde": 201,
+      "escenario": "rio_jordan",
+      "personajes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Bajo la noche estrellada, los espías cruzan sigilosamente el río deslizándose colgados de las manos de una cuerda tensa amarrada de orilla a orilla sobre el agua que corre turbulenta",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_14",
+      "orden": 14,
+      "global_desde": 512,
+      "global_hasta": 533,
+      "spine": "narracion_min5-10",
+      "local_desde": 212,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "En la entrada de Jericó, dos guardias vigilan con antorchas. Uno menciona bostezando que es una noche tranquila. El espía de traje gris asoma la cabeza por unos arbustos lejanos y grita '¡Un avión!' (broma anacrónica), lo que confunde a los guardias",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_15",
+      "orden": 15,
+      "global_desde": 534,
+      "global_hasta": 544,
+      "spine": "narracion_min5-10",
+      "local_desde": 234,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Aprovechando la distracción de los guardias que debaten sobre el supuesto 'avión', los dos espías pasan corriendo sigilosamente por detrás de ellos cruzando el gran portón de madera abierto",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_16",
+      "orden": 16,
+      "global_desde": 545,
+      "global_hasta": 604,
+      "spine": "narracion_min5-10",
+      "local_desde": 245,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "Los guardias se dan cuenta de la mentira del 'avión' y caminan de vuelta por las calles internas de Jericó portando un farol, hablando de que los espías de Israel deben de estar cerca",
+      "tiempos_fiables": true
+    },
+    {
+      "id": "escena_17",
+      "orden": 17,
+      "global_desde": 605,
+      "global_hasta": 654,
+      "spine": "narracion_min10-15",
+      "local_desde": 5,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "Primer plano del suelo arenoso de Jericó mostrando marcas de huellas de pies descalzos de LEGO. El jefe de la guardia apunta con su linterna, grita '¡Huellas!' y salen corriendo con pánico y entusiasmo buscando intrusos",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_18",
+      "orden": 18,
+      "global_desde": 655,
+      "global_hasta": 704,
+      "spine": "narracion_min10-15",
+      "local_desde": 55,
+      "escenario": "jerico_interior",
+      "personajes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Los espías corren de prisa esquivando carros y puestos de mercado nocturno hasta llegar a una puerta con un cartel de piedra tallada que dice 'RESTAURANTE DE RAHAB' en ladrillo de relieve. Entran de prisa — RESTAURANTE DE RAHAB",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_19",
+      "orden": 19,
+      "global_desde": 705,
+      "global_hasta": 717,
+      "spine": "narracion_min10-15",
+      "local_desde": 105,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "texto": "Los espías entran en la taberna y se sientan en la barra. Rahab los recibe de manera atenta y amable. Ellos ordenan un café y un expresso doble",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_20",
+      "orden": 20,
+      "global_desde": 718,
+      "global_hasta": 725,
+      "spine": "narracion_min10-15",
+      "local_desde": 118,
+      "escenario": "jerico_interior",
+      "personajes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "Los dos guardias de Jericó con linternas se detienen justo frente al letrero iluminado del Restaurante de Rahab, decididos a entrar a inspeccionar — RESTAURANTE DE RAHAB",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_21",
+      "orden": 21,
+      "global_desde": 726,
+      "global_hasta": 754,
+      "spine": "narracion_min10-15",
+      "local_desde": 126,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "texto": "El espía negro le revela susurrando a Rahab que son emisarios de Israel enviados por Josué. Le piden que los esconda y a cambio le juran por Dios salvar su vida y darle una gran recompensa cuando conquisten Jericó",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_22",
+      "orden": 22,
+      "global_desde": 755,
+      "global_hasta": 804,
+      "spine": "narracion_min10-15",
+      "local_desde": 155,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun",
+        "rahab"
+      ],
+      "texto": "Rahab acepta de prisa ayudarlos y los manda esconderse. En ese instante, los guardias irrumpen ruidosamente pateando la puerta. El jefe exige saber dónde están los extranjeros",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_23",
+      "orden": 23,
+      "global_desde": 805,
+      "global_hasta": 840,
+      "spine": "narracion_min10-15",
+      "local_desde": 205,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "espia_negro",
+        "espia_gris",
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "Montaje de los escondites graciosos. El espía negro se oculta pegado a la pared detrás del tapiz del letrero de Rahab. El espía gris se esconde en una esquina metido dentro de una gran maceta de barro con plantas, usando una maceta pequeña boca abajo en su cabeza como camuflaje. Los guardias los buscan de cerca de manera inútil — RESTAURANTE DE RAHAB",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_24",
+      "orden": 24,
+      "global_desde": 841,
+      "global_hasta": 856,
+      "spine": "narracion_min10-15",
+      "local_desde": 241,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "rahab",
+        "guardia_jerico_jefe",
+        "guardia_jerico_comun"
+      ],
+      "texto": "Rahab miente sonriente a los guardias con calma, señalando con su dedo hacia afuera de la posada asegurando que los hombres sospechosos huyeron hacia la orilla del río. Los guardias salen corriendo gritando '¡Vamos al río!'",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_25",
+      "orden": 25,
+      "global_desde": 857,
+      "global_hasta": 910,
+      "spine": "narracion_min10-15",
+      "local_desde": 257,
+      "escenario": "taberna_rahab",
+      "personajes": [
+        "espia_negro",
+        "rahab"
+      ],
+      "texto": "El espía negro sale de detrás del tapiz aliviado, mientras que Rahab le dice amigablemente que ya es seguro moverse. El espía gris sigue asomado de la maceta",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_26",
+      "orden": 26,
+      "global_desde": 911,
+      "global_hasta": 939,
+      "spine": "narracion_min15-20",
+      "local_desde": 11,
+      "escenario": "balcon_rahab",
+      "personajes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "texto": "Reunidos en el balcón que da hacia el exterior de las murallas, Rahab les confiesa que sabe que su Dios es el único Dios verdadero y que les ha otorgado milagros inmensos desde Egipto. Ella pide ser parte del pueblo de Israel",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_27",
+      "orden": 27,
+      "global_desde": 940,
+      "global_hasta": 950,
+      "spine": "narracion_min15-20",
+      "local_desde": 40,
+      "escenario": "balcon_rahab",
+      "personajes": [
+        "espia_negro",
+        "rahab"
+      ],
+      "texto": "El espía negro le entrega a Rahab un cordón rojo brillante de lana y le indica que debe atarlo fuertemente en el marco de la ventana del balcón. Ese cordón será la señal sagrada para que las tropas israelíes perdonen la vida de todos los que estén dentro",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_28",
+      "orden": 28,
+      "global_desde": 951,
+      "global_hasta": 1019,
+      "spine": "narracion_min15-20",
+      "local_desde": 51,
+      "escenario": "balcon_rahab",
+      "personajes": [
+        "espia_negro",
+        "espia_gris",
+        "rahab"
+      ],
+      "texto": "Rahab les ayuda a descender por fuera de la muralla atando cuerdas de LEGO. Los espías van bajando lentamente en silencio y al tocar tierra firme saludan y escapan corriendo con sigilo por la calle del pueblo de abajo",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_29",
+      "orden": 29,
+      "global_desde": 1020,
+      "global_hasta": 1036,
+      "spine": "narracion_min15-20",
+      "local_desde": 120,
+      "escenario": "rio_jordan",
+      "personajes": [
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Los dos espías corren de noche cruzando un bosque espeso de pinos de bloques verdes y luego cruzan de vuelta el río Jordán tomados de la cuerda con gran agilidad salpicando agua",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_30",
+      "orden": 30,
+      "global_desde": 1037,
+      "global_hasta": 1126,
+      "spine": "narracion_min15-20",
+      "local_desde": 137,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "Los espías, de vuelta a salvo en la tienda militar de Josué, rinden su reporte. Con gestos animados le revelan que los habitantes de Jericó están aterrorizados y tiemblan de miedo de Israel. También le hablan del pacto de Rahab y su rica cafetería",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_31",
+      "orden": 31,
+      "global_desde": 1127,
+      "global_hasta": 1141,
+      "spine": "narracion_min15-20",
+      "local_desde": 227,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Los dos espías hacen un saludo militar firme. Josué, parado triunfante de espaldas a su tienda iluminada por la luna, declara solemnemente que con ayuda divina heredarán la tierra prometida y manda reunir el gran ejército",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_32",
+      "orden": 32,
+      "global_desde": 1142,
+      "global_hasta": 1213,
+      "spine": "narracion_min15-20",
+      "local_desde": 242,
+      "escenario": "campamento_israel",
+      "personajes": [],
+      "texto": "Montaje enérgico de preparación de guerra israelí. Soldados afilando espadas de bronce sobre piedras de amolar que giran, flechas de LEGO siendo ordenadas en carcaj, guerreros marchando en formación con escudos con patrones grabados y templando arcos",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_33",
+      "orden": 33,
+      "global_desde": 1214,
+      "global_hasta": 1305,
+      "spine": "narracion_min20-25",
+      "local_desde": 14,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "cohen_gadol"
+      ],
+      "texto": "El Sacerdote (Cohen Gadol) reúne a los levitas en una carpa y ordena preparar los Shofarot de cuerno. Montaje de sacerdotes tallando, puliendo y lijando los cuernos curvos de madera. Escena cómica de un carnero que huye asustado de los sacerdotes que lo persiguen para sacarle el Shofar. Un sacerdote prueba un gran Shofar soplando y emitiendo un sonido grave y vibrante",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_34",
+      "orden": 34,
+      "global_desde": 1306,
+      "global_hasta": 1418,
+      "spine": "narracion_min20-25",
+      "local_desde": 106,
+      "escenario": "rio_dividido",
+      "personajes": [
+        "cohen_gadol",
+        "yehoshua"
+      ],
+      "texto": "¡Gran escena espectacular! Los sacerdotes con túnicas ceremoniales blancas y cargando en hombros el Arca de la Alianza de oro brillante entran en el río Jordán. Al instante, las aguas se dividen verticalmente creando dos gigantescas paredes de agua translúcida a los lados. Se ve a los israelíes, liderados por Josué, cruzando asombrados por el cauce seco viendo peces multicolores de LEGO en el agua",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_35",
+      "orden": 35,
+      "global_desde": 1419,
+      "global_hasta": 1428,
+      "spine": "narracion_min20-25",
+      "local_desde": 219,
+      "escenario": "camino_desierto",
+      "personajes": [
+        "beduino"
+      ],
+      "texto": "El Beduino cómico se queda atascado hasta la cintura en un lodazal marrón de bloques LEGO sueltos. Pide ayuda con furia mientras su carnero lo mira fijamente con tranquilidad y luego huye corriendo, dejándolo atrás gritando",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_36",
+      "orden": 36,
+      "global_desde": 1429,
+      "global_hasta": 1541,
+      "spine": "narracion_min20-25",
+      "local_desde": 229,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "El ejército de Israel marcha alrededor de Jericó. Josué y el Beduino marchan al frente de la columna militar. Los sacerdotes cargan el Arca de la Alianza y soplan los Shofarot constantemente levantando polvo. Desde la muralla de Jericó, los guardias cananeos los observan asustados e incrédulos — Día 1 / Día 2 / Día 3 / Día 4 / Día 5 / Día 6 / Día 7",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_37",
+      "orden": 37,
+      "global_desde": 1542,
+      "global_hasta": 1619,
+      "spine": "narracion_min25-30",
+      "local_desde": 42,
+      "escenario": "murallas_jerico",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "¡Clímax del asedio! En el séptimo día, tras rodear Jericó siete veces, todos los israelíes gritan con fuerza y los Shofares tocan un gran sonido continuo. Las colosales murallas beige de Jericó se agrietan y se derrumban estrepitosamente, rompiéndose y separándose en miles de bloques individuales de LEGO en un estallido de polvo. Los asustados guardias salen huyendo — Día 7",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_38",
+      "orden": 38,
+      "global_desde": 1620,
+      "global_hasta": 1625,
+      "spine": "narracion_min25-30",
+      "local_desde": 120,
+      "escenario": "ruinas_jerico",
+      "personajes": [],
+      "texto": "El gran ejército israelí corre victorioso cargando a través de las ruinas y escombros caídos de las murallas de Jericó para tomar control de la ciudad",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_39",
+      "orden": 39,
+      "global_desde": 1626,
+      "global_hasta": 1701,
+      "spine": "narracion_min25-30",
+      "local_desde": 126,
+      "escenario": "balcon_rahab",
+      "personajes": [
+        "rahab",
+        "espia_negro",
+        "espia_gris"
+      ],
+      "texto": "En la única sección de muralla que quedó de pie, distinguida por el cordón rojo atado, Rahab y su familia rezan con miedo. Los dos espías entran en la habitación, saludan con alegría a Rahab y la guían de prisa para rescatarlos a todos de la destrucción",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_40",
+      "orden": 40,
+      "global_desde": 1702,
+      "global_hasta": 1721,
+      "spine": "narracion_min25-30",
+      "local_desde": 202,
+      "escenario": "ruinas_jerico",
+      "personajes": [],
+      "texto": "El resto de las construcciones internas de Jericó colapsan en escombros humeantes, dejando solo cenizas y restos de piedra",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_41",
+      "orden": 41,
+      "global_desde": 1722,
+      "global_hasta": 1743,
+      "spine": "narracion_min25-30",
+      "local_desde": 222,
+      "escenario": "ruinas_jerico",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Josué parado sobre un montón de escombros prohíbe terminantemente saquear oro, joyas o riquezas de la ciudad para demostrar al mundo que Israel pelea por orden divina y no por robo. El ejército celebra con sus espadas arriba",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_42",
+      "orden": 42,
+      "global_desde": 1744,
+      "global_hasta": 1753,
+      "spine": "narracion_min25-30",
+      "local_desde": 244,
+      "escenario": "ruinas_jerico",
+      "personajes": [
+        "beduino"
+      ],
+      "texto": "El Beduino cómico encuentra cofres llenos de rubíes y gemas de colores. Al intentar guardarlas en su saco ignorando la orden de Josué, su carnero lo embiste por detrás de un cabezazo, haciéndole soltar las gemas y quedar enterrado en escombros",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_43",
+      "orden": 43,
+      "global_desde": 1754,
+      "global_hasta": 1826,
+      "spine": "narracion_min25-30",
+      "local_desde": 254,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Bajo la gran carpa central, Josué anuncia que la siguiente ciudad cananea a conquistar es Hai (Ai) frente al gran ejército que ruge de alegría — Día 1 / Hai",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_44",
+      "orden": 44,
+      "global_desde": 1827,
+      "global_hasta": 1849,
+      "spine": "narracion_min30-35",
+      "local_desde": 27,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua"
+      ],
+      "texto": "Josué junto a sus comandantes planea la estrategia de batalla sobre una mesa de madera con un mapa dibujado. Explica la estrategia de simular una huida desorganizada para sacar a las tropas enemigas de Hai y emboscarlas por detrás — ROAD TO HAI / CITY OF HAI / ISRAELITE CAMP - GILGAL / POTENTIAL AMBUSH POSITIONS",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_45",
+      "orden": 45,
+      "global_desde": 1850,
+      "global_hasta": 1915,
+      "spine": "narracion_min30-35",
+      "local_desde": 50,
+      "escenario": "campamento_israel",
+      "personajes": [],
+      "texto": "Un niño israelí espía la reunión militar oculto debajo de la mesa de Josué. Luego sale corriendo gateando de prisa hacia una fogata cercana donde están reunidos otros tres niños para contarles todo el plan estratégico en secreto",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_46",
+      "orden": 46,
+      "global_desde": 1916,
+      "global_hasta": 2023,
+      "spine": "narracion_min30-35",
+      "local_desde": 116,
+      "escenario": "campamento_israel",
+      "personajes": [],
+      "texto": "Montaje divertido de los niños preparándose para su propia 'misión secreta'. Uno se ata cuerdas de LEGO alrededor de su cuerpo, otro baña manzanas de LEGO con miel usando pinceles, otro dibuja caras aterradoras de monstruos en máscaras de madera de LEGO usando pinturas de colores. Otro grupo carga cubetas pesadas llenas de agua y lodo — paint",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_47",
+      "orden": 47,
+      "global_desde": 2024,
+      "global_hasta": 2113,
+      "spine": "narracion_min30-35",
+      "local_desde": 224,
+      "escenario": "campo_batalla_hai",
+      "personajes": [
+        "beduino"
+      ],
+      "texto": "Las tropas de Israel con antorchas simulan huir en desbandada por el cañón arenoso. El comandante de Hai, montado en caballo en las murallas de la ciudad, ríe triunfante y ordena abrir las puertas para perseguirlos con todo su ejército",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_48",
+      "orden": 48,
+      "global_desde": 2114,
+      "global_hasta": 2210,
+      "spine": "narracion_min35-40",
+      "local_desde": 14,
+      "escenario": "campo_batalla_hai",
+      "personajes": [],
+      "texto": "En la colina de roca de Hai, los soldados que estaban escondidos de Israel asoman tras la colina bajo una luna llena enorme portando espadas y atacando al confiado ejército de Hai de regreso por el desfiladero",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_49",
+      "orden": 49,
+      "global_desde": 2211,
+      "global_hasta": 2322,
+      "spine": "narracion_min35-40",
+      "local_desde": 111,
+      "escenario": "campo_batalla_hai",
+      "personajes": [],
+      "texto": "Los niños israelíes intervienen en la batalla de manera graciosa. Lanzan manzanas pegajosas con miel que caen en las caras de los soldados enemigos, derraman cubetas de agua con jabón que hacen resbalar y caer en hilera a los guerreros, y saltan de los lados de las rocas usando las máscaras de monstruos aterradoras para espantar a los caballos enemigos que tiran a sus jinetes",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_50",
+      "orden": 50,
+      "global_desde": 2323,
+      "global_hasta": 2351,
+      "spine": "narracion_min35-40",
+      "local_desde": 223,
+      "escenario": "campo_batalla_hai",
+      "personajes": [],
+      "texto": "Celebración de la victoria sobre Hai alrededor de una inmensa fogata nocturna. Los israelíes bailan alegres cantando 'Am Israel Chai', tocan tambores de ladrillo y brindan chocando sus tazas de LEGO de manera festiva",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_51",
+      "orden": 51,
+      "global_desde": 2352,
+      "global_hasta": 2421,
+      "spine": "narracion_min35-40",
+      "local_desde": 252,
+      "escenario": "campamento_israel",
+      "personajes": [
+        "yehoshua",
+        "beduino"
+      ],
+      "texto": "El Beduino cómico celebra sonriente la victoria en el desierto. Josué, rodeado de los jefes de las doce tribus de Israel alrededor del mapa del territorio, clava banderas de LEGO de distintos colores en las porciones asignadas a cada una",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_52",
+      "orden": 52,
+      "global_desde": 2422,
+      "global_hasta": 2516,
+      "spine": "narracion_min40-45",
+      "local_desde": 22,
+      "escenario": "campos_cultivo",
+      "personajes": [],
+      "texto": "Montaje pacífico de asentamiento de las tribus. Los israelíes labran las tierras con bueyes que tiran de arados de madera, cavan hoyos con palas de LEGO para sembrar brotes verdes de uva, recolectan racimos morados de uvas en canastas de mimbre y siembran granos de trigo arrojándolos al surco labrado de tierra arenosa",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_53",
+      "orden": 53,
+      "global_desde": 2517,
+      "global_hasta": 2539,
+      "spine": "narracion_min40-45",
+      "local_desde": 117,
+      "escenario": "campos_cultivo",
+      "personajes": [],
+      "texto": "Dos niños se despiden llorando con lágrimas transparentes de LEGO. Para consolarse, uno le regala un 'celulavaso' (teléfono hecho con dos vasos de plástico de LEGO atados con un hilo largo). Los niños se comunican alegres estirando el hilo largo cruzando colinas desérticas con sus tiendas",
+      "tiempos_fiables": false
+    },
+    {
+      "id": "escena_54",
+      "orden": 54,
+      "global_desde": 2540,
+      "global_hasta": 2910,
+      "spine": "narracion_min40-45",
+      "local_desde": 140,
+      "escenario": "camino_desierto",
+      "personajes": [
+        "rabino_director",
+        "beduino"
+      ],
+      "texto": "Un camello de LEGO de pie hace un baile gracioso moviendo el cuello al ritmo de la música tradicional alegre de cierre. Reaparece el Rabino director en su estudio felicitando al Beduino que se muestra cansado pero alegre. Finaliza con los títulos de créditos flotando sobre el campamento de Shiló — PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD - SHEVET AHIM - PANAMÁ / DIRECCIÓN R. AMRAM ANIDJAR / CREACIÓN DE IMAGEN Y EDICIÓN DE VIDEO YAAKOV LEON / SUPERVISIÓN Y CONTENIDO DAVID MIZRAHI - IDAN J. ANIDJAR - ISRAEL CORTES",
+      "tiempos_fiables": false
+    }
+  ]
+}

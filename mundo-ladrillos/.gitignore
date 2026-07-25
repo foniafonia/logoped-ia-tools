@@ -3,3 +3,6 @@ dist/
 dist-single/
 *.log
 public/fondos/
+
+# Audio maestro de la peli (privado, no subir)
+assets-privados/
