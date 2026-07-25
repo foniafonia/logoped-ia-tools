@@ -52,7 +52,7 @@ const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 (window as any).__tpcam = tpcam;
 
 // ---- Luz de atardecer ----
-const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.55);
+const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.46);   // algo menos plano (el rim aporta)
 scene.add(hemi);
 const key = new THREE.DirectionalLight(0xffd9a0, 3.0);
 key.position.set(-18, 14, 16);
@@ -63,6 +63,11 @@ key.shadow.camera.left = -60; key.shadow.camera.right = 60;
 key.shadow.camera.top = 60; key.shadow.camera.bottom = -30;
 key.shadow.bias = -0.0002; key.shadow.normalBias = 0.02;
 scene.add(key);
+// Contraluz cálido (rim/back light): separa las figuras y tiendas del fondo y da
+// profundidad de atardecer. Sin sombras (barato). Pase senior de mood.
+const rim = new THREE.DirectionalLight(0xffb066, 1.15);
+rim.position.set(26, 9, -22);
+scene.add(rim);
 
 const plastic = new PlasticMaterialFactory();
 
