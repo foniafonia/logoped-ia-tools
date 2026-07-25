@@ -7,6 +7,7 @@ import {
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
 import { Collectibles } from './props/Collectibles';
+import { buildRiverbank } from '../../world/Riverbank';
 import { ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 
 /**
@@ -58,8 +59,10 @@ export const escena09: Min05Scene = {
     // vegetación + props (con colisión)
     const palms: Array<[number, number]> = [[-20, -8], [22, -12], [16, 2]];
     palms.forEach(([x, z], i) => { group.add(buildPalm(plastic, x, z, 8 + i)); ctx.addObstacle(x, z, 1, 1); });
+    // ribera exuberante a lo largo del agua (helper del muñequero): juncos,
+    // espadañas y rocas esparcidos por la orilla, para que no quede pelada.
+    group.add(buildRiverbank(plastic, { ax: -34, az: 10, bx: 34, bz: 10, clumps: 9, jitter: 1.6, seed: 5 }));
     group.add(buildReeds(plastic, -10, 9, 11));
-    group.add(buildReeds(plastic, 12, 10, 9));
 
     const boat = buildBoat(plastic); boat.position.set(-16, 0, 6); boat.rotation.y = 0.5; group.add(boat);
     ctx.addObstacle(-16, 6, 2, 4);
