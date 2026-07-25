@@ -130,6 +130,52 @@ gemas, palmeras, tus juncos propios. **A mejorar:**
 - Personajes: tu `MinifigureFactory` es una copia **anterior** a mis caras/
   aldeanos → re-tirar el archivo te da caras expresivas (espías en alerta) gratis.
 
+## 🎮 AUDITORÍA DE JUGABILIDAD — QUÉ HACER (para LEAD y min05) — 24-jul
+Auditado el CÓDIGO de juego de ambos tramos. Titular honesto: el envoltorio
+(feedback, estrellas, confeti, HUD) es de sobresaliente, pero el **reto real es
+flojo**: casi todo es "anda a la marca (y a veces pulsa E)". Notas: **0–5 = 4/10**,
+**5–10 = 5/10**. Lo bueno: los arreglos son **baratos y reutilizan lo ya escrito**.
+
+### LEAD (0–5, campamento) — por orden de impacto
+1. **Cerrar cada beat por TAREA cumplida, no por el reloj del audio.** Hoy los
+   beats avanzan por tiempo → huecos de 40–95 s sin nada y **se puede "ganar" sin
+   jugar**. Mínimo: **gatear el beat 5 y el 7 a que el reto previo esté `done`**.
+2. **Quitar la caducidad de 10 s** de "ve con Yehoshúa" (`i===3`) y "Tabernáculo"
+   (`i===5`) en `main.ts`: mantener el target y la estrella **hasta cumplir**, no
+   por índice de beat (hoy un peque no llega en 10 s y pierde la estrella sin aviso).
+3. **Un verbo real:** en vez de recoger bultos por proximidad, pedir **SOLTARLOS en
+   el camello** (arrastrar hasta una zona destino). Reutiliza el código de
+   proximidad + un destino. Rompe el "todo es tocar objetos".
+4. **HUD/baliza:** pintar el contador de la tarea por **flag de tarea activa**, no
+   por `beatIndex===4` (hoy el HUD desaparece aunque la tarea siga viva); no mover
+   la baliza con una tarea sin cerrar; **ocultar los botones táctiles 🎺/⚔️** en
+   este tramo (no los escucha nadie → confunden).
+
+### min05 (5–10, Jordán/espías) — por orden de impacto
+1. **La cuerda (esc.13) es IMPOSIBLE de fallar:** con `safeHalf 1.7 ≥ amp·1 = 1.6`
+   y spawn/meta/gemas en x=0, andar recto con W siempre gana. → **`safeHalf ≈ 0.9`,
+   `amp ≈ 2.2`** (`RopeCrossing.ts`) y **gemas en zig-zag** fuera del eje
+   (`escena13`) para forzar corregir con A/D de verdad.
+2. **La treta del avión (esc.14) no tiene consecuencias** (puerta abierta para
+   siempre; `doneFlag` ignora `distr.active`). → Exigir cruzar **mientras
+   `distr.active`**; si se cierra la ventana, la puerta se re-cierra. 2 líneas.
+3. **5 de 8 escenas son relleno.** Reciclar sistemas YA escritos: dar **conos de
+   visión reales** (`StealthSystem`) a los guardias decorativos de la **esc.11**
+   (mini-sigilo), y en la 14 activar detección durante la ventana del avión.
+4. **Los conos ven a través de las paredes** (`VisionCone.contains` es solo
+   ángulo+distancia). Injusto en los callejones de la **esc.16**. → Añadir test de
+   oclusión: si el segmento guardia→jugador cruza un AABB de `obstacles`, `contains`
+   = false.
+5. **Objetivos sin marca** en 09/10/11 → pintar el **anillo (`RingGeometry`) que ya
+   usan 14/15/16** en TODAS las escenas. Y **respawn de sigilo a un checkpoint
+   intermedio** (no al spawn lejano z=-22 de la 16) para no castigar con caminata.
+6. (Opcional) **Gemas con propósito:** que den una pista o "perdón" al ser visto,
+   en vez de solo subir un contador.
+
+> Ambos: la jugabilidad es lo más flojo hoy (~18% del potencial), pero subir de
+> "paseo bonito" a "juego que reta" es **barato y muy visible**. Yo (muñequero) no
+> toco vuestras escenas; esto son recomendaciones para que decidáis vosotros/usuario.
+
 ## CÓMO INTEGRAR MIS MUÑECOS (para LEAD, min05 e INTEGRADOR)
 
 `MinifigureFactory.ts` es **autónomo** (solo depende de THREE + PlasticMaterialFactory,
