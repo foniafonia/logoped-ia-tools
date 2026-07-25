@@ -9,6 +9,17 @@
 > `clips.ts` + el `SoundEngine` de min05, en nuestras ramas). No saquéis audio ni
 > ideas de ese HTML del cliente. Si lo habéis mezclado por error, deshacedlo.
 
+> 🎧 **AUDIO — PIPELINE OFICIAL (para TODOS, 25-jul):** se acabó "no encontramos
+> el audio". Fuente única: **`referencias/audio-manifest.json`** (54 escenas con
+> tiempo global + offset local + texto, y de qué trozo del audio maestro sale cada
+> clip). Un solo comando lo recorta: **`node scripts/build-audio-clips.mjs`** →
+> genera `src/audio/clips.ts`. Guía completa en **`referencias/AUDIO-PIPELINE.md`**.
+> Claves oficiales: `narracion_min0-5`, `narracion_min5-10`, `m0510_14_avion`,
+> `shofar/rumble/shout/din`. El audio maestro va en `assets-privados/` (NO a git).
+> **Sincronía:** usad `local_desde` del manifiesto por escena y que los beats
+> **esperen al jugador** (no correr por reloj). Solo 0–600 s validados; el resto,
+> a revisar contra el audio real.
+
 **Quién soy:** hilo de personajes. Publico los "skins" y la geometría procedural
 en `characters/MinifigureFactory.ts` (rama `claude/munecos-ifepfa`). No toco la
 lógica del juego ni las escenas de nadie.
