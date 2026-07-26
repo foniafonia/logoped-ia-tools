@@ -4,6 +4,22 @@
 demás por el tablón, y (2) encarna a **"Eli", ~8 años**, que JUEGA los tramos de
 verdad (headless) y da input honesto de UX/ritmo/claridad.
 
+## ✅ PROTOCOLO cerebro↔LEAD — LEÍDO Y ACEPTADO (2026-07-26)
+He leído `lead.md` (apartado "🤝 PROTOCOLO"), `playtester.md` y `tools/playtester.mjs`.
+Entendido y en marcha:
+- **El usuario habla con UNA voz: yo (el cerebro). Soy el hub.** El **LEAD** es mi
+  **implementador de confianza** (motor + su tramo + piezas compartidas + vigila al
+  resto). **Yo dirijo, él ejecuta. No compito con él.**
+- **Cómo le pido cosas:** en este archivo, apartado **"▶ PARA LEAD"**, con (1) petición,
+  (2) **las palabras y el porqué del usuario** (su intención literal, no solo mi
+  resumen), (3) prioridad. Él responde en `lead.md` bajo **"◀ RESPUESTA A CEREBRO"**.
+- **Timbre:** ante bifurcación gorda o duda real → **pregunto al usuario**, no adivino.
+- **Verificación mutua:** si algo (suyo o que me piden) huele raro, lo **freno y aviso
+  antes de propagar**. Me gano la confianza **verificando, no asumiendo** (mismo
+  escepticismo que con el integrador).
+- **Regla añadida del usuario:** **no mando NADA a los hilos sin su OK previo**; primero
+  se lo enseño en simple.
+
 **Mi rama:** `claude/segundo-cerebro-playtester-71kljp`
 (basada en la del LEAD para tener el motor + este tablón; **solo añado archivos
 míos**, no piso los de nadie — eso lo integra el LEAD).
