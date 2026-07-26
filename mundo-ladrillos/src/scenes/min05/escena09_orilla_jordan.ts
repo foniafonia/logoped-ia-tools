@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
 import {
-  buildRiver, buildPalm, buildBoat, buildReeds, buildRock, buildDistantJericho, studdedPlate, brickBox
+  buildRiver, buildPalm, buildBoat, buildReeds, buildRock, buildDistantJericho, studdedPlate, brickBox, buildTent, buildBarrel
 } from './props/BrickProps';
+import { buildBanner } from './props/NightAmbience';
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
 import { Collectibles } from './props/Collectibles';
@@ -69,10 +70,30 @@ export const escena09: Min05Scene = {
     const rock = buildRock(plastic, 1.1); rock.position.set(6, 0, 6); group.add(rock);
     ctx.addObstacle(6, 6, 2.5, 2);
 
+    // === P2: MÁS VIDA / BELLEZA (menos desangelado) ===
+    // campamento israelita a la IZQUIERDA (lejos del promontorio en x=6): tienda,
+    // hoguera, estandartes y barriles. Da sensación de "el pueblo acampado".
+    const camp = buildTent(plastic, BrickPalette.DARK_RED, 11, 9); camp.position.set(-26, 0, -16); camp.rotation.y = 0.5; group.add(camp); ctx.addObstacle(-26, -16, 5, 4);
+    const fire = new THREE.Group();
+    for (let a = 0; a < 8; a++) { const ang = (a / 8) * Math.PI * 2; fire.add(brickBox(plastic, 0.7, 0.5, 0.7, BrickPalette.DARK_GRAY, Math.cos(ang) * 1.4, 0.25, Math.sin(ang) * 1.4)); }
+    const ember = brickBox(plastic, 1.2, 0.5, 1.2, BrickPalette.ORANGE, 0, 0.6, 0);
+    (ember.material as THREE.MeshPhysicalMaterial).emissive = new THREE.Color(0xff6a00);
+    (ember.material as THREE.MeshPhysicalMaterial).emissiveIntensity = 0.7; fire.add(ember);
+    fire.position.set(-18, 0, -12); group.add(fire); ctx.addObstacle(-18, -12, 1.6, 1.6);
+    for (const [bx, bz, col] of [[-22, -18, BrickPalette.DARK_RED], [-30, -13, BrickPalette.WARM_SAND]] as const) { const b = buildBanner(plastic, col, 1.3, 4); b.position.set(bx, 4, bz); group.add(b); }
+    for (const [bx, bz] of [[-14, -14], [-21, -9], [-12, -18]] as const) { const br = buildBarrel(plastic); br.position.set(bx, 0, bz); group.add(br); ctx.addObstacle(bx, bz, 1, 1); }
+    // NENÚFARES y flores de loto en el agua (belleza del río)
+    for (const [lx, lz, hasFlower] of [[-24, 16, 1], [-8, 20, 0], [10, 15, 1], [24, 22, 0], [-16, 26, 1], [18, 30, 0], [2, 24, 1]] as const) {
+      group.add(brickBox(plastic, 2.2, 0.12, 2.2, 0x2f7d4f, lx, 0.55, lz));                 // hoja
+      if (hasFlower) { const fl = brickBox(plastic, 0.8, 0.5, 0.8, 0xf3b6d6, lx, 0.85, lz); (fl.material as THREE.MeshPhysicalMaterial).emissive = new THREE.Color(0x3a1020); group.add(fl); }
+    }
+    // más palmeras al fondo para enmarcar
+    for (const [px, pz, ph] of [[-34, -20, 10], [30, -18, 11], [-30, 4, 9]] as const) { group.add(buildPalm(plastic, px, pz, ph)); ctx.addObstacle(px, pz, 1, 1); }
+
     // soldados israelitas deambulando (modo campamento) + los dos futuros espías
     const life = new Wanderers(plastic, [ESPIA1_CAMP, ESPIA2_CAMP, {
       head: 0xf2c141, torso: 0x6f7a52, belt: 0x4a5030, legs: 0x556040, arms: 0x66703f, hands: 0xf2c141, headwear: 0xa9b088, headStyle: 'turban'
-    }], 5, { minX: -30, maxX: -12, minZ: -22, maxZ: -6 });
+    }], 8, { minX: -32, maxX: -8, minZ: -22, maxZ: -4 });
     group.add(life.group);
     const g1 = new Npc(plastic, ESPIA1_CAMP, -2, -20, -0.2); g1.lookAt(6, 20); group.add(g1.root);
 
