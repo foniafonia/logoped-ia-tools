@@ -6,6 +6,7 @@ import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactor
 import { buildCrowd } from './world/Crowd';
 import { buildStall } from './world/Market';
 import { buildLanternString, buildLaundryLine, buildWell } from './world/StreetProps';
+import { addBackdrop, backdropRails } from './world/Backdrop';
 import { jericoBackdrop } from './assets/jericoBackdrop';
 
 /**
@@ -26,25 +27,9 @@ const plastic = new PlasticMaterialFactory();
 plastic.update({ roughness: 0.32, clearcoat: 0.6, envMapIntensity: 1.0 });
 
 // --- Telón de fondo: imagen real de Higgsfield (llanura de Jericó, atardecer) ---
-// Anclado AL MUNDO (no a la pantalla): un plano gigante y lejano que hace de
-// matte-painting. Así se mueve acompasado con la escena (paralaje real) en vez
-// de quedar "pegado al cristal". La cámara va limitada para no romper la ilusión.
-const bgTex = new THREE.TextureLoader().load(jericoBackdrop);
-bgTex.colorSpace = THREE.SRGBColorSpace;
-// Telón CURVO (cilindro que envuelve la escena, cara interior). A distancia
-// constante desde la cámara, así siempre se ve una porción frontal de la imagen
-// aunque gires dentro del arco permitido — no queda como pared plana.
-const R = 82, H = 150, arc = 2.5; // radio, alto, arco (rad) que cubre el frente
-const backGeo = new THREE.CylinderGeometry(R, R, H, 64, 1, true, Math.PI - arc / 2, arc);
-const backMat = new THREE.MeshBasicMaterial({
-  map: bgTex, toneMapped: false, fog: false, depthWrite: false, side: THREE.BackSide
-});
-bgTex.wrapS = THREE.RepeatWrapping;
-bgTex.repeat.x = -1; bgTex.offset.x = 1; // imagen sin espejar en la cara interior
-const backdrop = new THREE.Mesh(backGeo, backMat);
-backdrop.position.set(0, 10, 5); // centrado en el punto que mira la cámara
-backdrop.renderOrder = -1;
-scene.add(backdrop);
+// Anclado AL MUNDO (no a la pantalla) → paralaje real, no "pegote". Ahora en 1
+// línea con el helper reutilizable `world/Backdrop` (mismo cilindro curvo).
+addBackdrop(scene, jericoBackdrop, { skyColor: 0xf3c48a });
 
 // Suelo de arena/empedrado cálido que enlaza con la imagen
 const floor = new THREE.Mesh(
@@ -103,9 +88,7 @@ controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.target.set(0, 3, 5);
 // Cámara "sobre raíles": arco frontal. Evita cenital y giros que rompan el telón.
 controls.minDistance = 5; controls.maxDistance = 20;
-controls.minPolarAngle = 1.24;   // ~71°: no se puede ir por encima (nada de cenital)
-controls.maxPolarAngle = 1.52;   // ~87°: casi horizontal, sin ver el suelo desde arriba
-controls.minAzimuthAngle = -0.45; controls.maxAzimuthAngle = 0.45; // arco frontal hacia la ciudad
+backdropRails(controls); // topes de azimut/polar del helper (arco frontal)
 controls.update();
 
 const hint = document.createElement('div');

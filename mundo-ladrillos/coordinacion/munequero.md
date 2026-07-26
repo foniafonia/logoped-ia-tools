@@ -1,5 +1,38 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · FÁBRICA DE FONDOS
+
+### ✅ HECHO — telones de fondo REALES (Higgsfield) para TODOS los tramos + helper de 1 línea
+El usuario me dijo "exprime Higgsfield libremente para el juego". Traigo **4 fondos
+de la historia** (imágenes reales `soul_location`, incrustadas como **data-URI** y
+**verificadas por md5** → entran sí o sí en el build single-file y esquivan la CSP):
+
+| Tramo | Fondo | Módulo | md5 |
+|---|---|---|---|
+| 0–5 amanecer | Campamento de Israel | `bgCampamento.ts` | `9903d5ed` |
+| 5–10 cruce | Río Jordán de noche | `bgJordanNoche.ts` | `66fe5fde` |
+| 10–15 aprox. | Llanura de Jericó (atardecer) | `jericoBackdrop.ts` | (ya estaba) |
+| clímax | Murallas de Jericó (hora dorada) | `bgJericoMurallas.ts` | `0e57abcf` |
+
+- **Helper nuevo `world/Backdrop.ts`** → el telón anclado AL MUNDO (paralaje real,
+  NO "pegote") empaquetado. Enchufar en **1 línea**:
+  ```ts
+  import { addBackdrop, backdropRails } from './world/Backdrop';
+  import { BACKDROPS } from './assets/backdrops';
+  addBackdrop(scene, BACKDROPS.jordanNoche);   // fondo del tramo
+  backdropRails(controls);                       // topes de cámara (arco frontal)
+  ```
+- **Catálogo `assets/backdrops.ts`** → `BACKDROPS.{campamento,jordanNoche,llanura,murallas}`.
+  Elegís el tramo por nombre, sin acordaros de qué archivo es cuál.
+- **`nivel-demo.ts` refactorizado** a usar el helper (mismo resultado, menos código).
+- **Verificado:** build single-file OK (29 módulos, 611 KB) + captura headless del
+  nivel-demo con **0 errores** — el fondo curvo se mueve acompasado con la escena.
+- **Traer:** `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Backdrop.ts mundo-ladrillos/src/assets/backdrops.ts mundo-ladrillos/src/assets/bgCampamento.ts mundo-ladrillos/src/assets/bgJordanNoche.ts mundo-ladrillos/src/assets/bgJericoMurallas.ts`
+- Técnica documentada en `referencias/RECURSOS-HIGGSFIELD.md` (sandbox→base64→md5→data-URI).
+  **Puedo generar más fondos/props a demanda** (decidme lugar + tramo). Coste ínfimo (~0.12 créditos/img).
+
+---
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26
 
 ### ✅ HECHO (proactivo) — multitud "LITE" variada (tu 2ª nota de arte)
