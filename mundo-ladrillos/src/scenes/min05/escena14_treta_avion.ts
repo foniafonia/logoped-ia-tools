@@ -1,12 +1,15 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { studdedPlate } from './props/BrickProps';
+import { studdedPlate, buildMarketStall, buildBarrel, buildPalm, buildRock, brickBox } from './props/BrickProps';
 import { buildStraightWallLike } from './props/Walls';
 import { buildArchGate, buildBrazier, buildLantern, buildBanner } from './props/NightAmbience';
+import { buildLanternString, buildLaundryLine } from '../../world/StreetProps';
+import { Wanderers } from './props/Wanderers';
 import { Distraction } from './mechanics/Distraction';
 import { buildGuard } from './props/Guard';
 import { Collectibles } from './props/Collectibles';
+import { ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 
 /** Rectángulo redondeado en canvas (para el cartel del avión). */
 function roundRect(x: CanvasRenderingContext2D, px: number, py: number, w: number, h: number, r: number): void {
@@ -57,6 +60,19 @@ export const escena14: Min05Scene = {
     const spotLantern = buildLantern(plastic, -6, 5, -2); group.add(spotLantern.group); // ilumina la zona de la marca
     for (const x of [-16, 16]) { const b = buildBanner(plastic, BrickPalette.DARK_RED, 1.4, 4.5); b.position.set(x, 9, 14.6); group.add(b); }
 
+    // === AMUEBLADO de la plaza (antes muy vacía) — props SIN luz + 1 guirnalda ===
+    group.add(buildLanternString(plastic, { ax: -14, az: 4, bx: 14, bz: 4, height: 8, count: 8, lights: 2 }));
+    group.add(buildLaundryLine(plastic, { ax: -18, az: 8, bx: -18, bz: 14, height: 5.2, seed: 5 }));
+    const stallA = buildMarketStall(plastic, BrickPalette.DARK_BLUE); stallA.position.set(-17, 0, 2); stallA.rotation.y = 0.5; group.add(stallA); ctx.addObstacle(-17, 2, 2.6, 1.6);
+    const stallB = buildMarketStall(plastic, BrickPalette.DARK_RED); stallB.position.set(17, 0, 0); stallB.rotation.y = -0.5; group.add(stallB); ctx.addObstacle(17, 0, 2.6, 1.6);
+    for (const [cx, cz] of [[-15, -8], [-13.5, -9], [15, -6], [13, -10], [19, 6]] as const) { group.add(brickBox(plastic, 1.8, 1.8, 1.8, (cx < 0 ? BrickPalette.BROWN : BrickPalette.DARK_SAND), cx, 0.9, cz)); ctx.addObstacle(cx, cz, 0.95, 0.95); }
+    for (const [bx, bz] of [[-12, -12], [16, -12], [-18, 6]] as const) { const br = buildBarrel(plastic); br.position.set(bx, 0, bz); group.add(br); ctx.addObstacle(bx, bz, 1, 1); }
+    for (const [px, pz] of [[-21, -6], [21, -8]] as const) { group.add(buildPalm(plastic, px, pz, 8)); ctx.addObstacle(px, pz, 1, 1); }
+    for (const [rx, rz, s] of [[-20, -14, 1.0], [20, -15, 0.9]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.5 * s, 1.3 * s); }
+    // vecinos de la calle (acotados a las esquinas, no estorban la marca ni la puerta)
+    const life = new Wanderers(plastic, [ESPIA1_CAMP, ESPIA2_CAMP], 3, { minX: -21, maxX: -14, minZ: -12, maxZ: 2 });
+    group.add(life.group);
+
     // dos guardias delante de la puerta
     const gA = buildGuard(plastic, -5, 11, Math.PI);
     const gB = buildGuard(plastic, 5, 11, Math.PI, true); // jefe
@@ -100,7 +116,7 @@ export const escena14: Min05Scene = {
       group,
       update(dt, t, player) {
         braziers.forEach((b) => b.update(t)); lantern.update(t); spotLantern.update(t);
-        distr.update(dt, t);
+        distr.update(dt, t); life.update(dt);
         gems.update(dt, t, player);
         if (!triggered) {
           gA.update(dt); gB.update(dt);
