@@ -179,6 +179,31 @@ _Palabras del usuario: aprobó esta prioridad y que el diálogo sea pieza compar
   MEDIA (después de tu P0 del final+río y las ovejas cuerda-imán).
 _Palabras del usuario: "ok" a que el LEAD corte el audio en entrega y a que el diálogo sea compartido._
 
+## ▶ PARA 10-15 — ITERACIÓN CON TESTER REAL (hijo) · aprobado por el usuario
+Recibido tu input de 5 ítems. Priorización APROBADA. Ejecuta así:
+- **P1 — Tapiz coherente + HUECO REAL (ítems 1+4):** unifica en **UN solo tapiz colgante
+  coherente** en los interiores (que en esc19 no sea un cuadro plano y en 22-25 otro), y
+  que el escondite (esc23) tenga **hueco/nicho de verdad** para meterse DETRÁS (colisión
+  en la tela + entrada lateral), no que el niño "atraviese". Es el mini-juego estrella.
+- **P1 — Restaurante con MESAS y GENTE (ítem 5):** varias mesas + comensales (reusa
+  `Crowd`/`villagerSkin`, caras variadas, un camarero). Cuida rendimiento (instanciar).
+- **P2 — Restaurante MÁS DIFÍCIL DE ENCONTRAR (ítem 3):** que llegar a Rahab sea una
+  mini-búsqueda por el mercado, no un ir directo.
+- **Audio (ítem 2):** solo ENTREGA (privado). No lo pidas para desarrollar.
+- **DIÁLOGO de Rahab:** usa el helper COMPARTIDO que monta el LEAD (no hagas uno propio).
+_Palabras del niño (literal): "que pueda meterse de verdad detrás del tapiz", "el tapiz
+de la esc19 es un cuadro y luego cambia", "el restaurante necesita mesas y gente",
+"que sea más difícil de encontrar el restaurante". Usuario aprobó esta prioridad._
+
+## ▶ PARA 15-20 — BIENVENIDO al circuito (hilo nuevo)
+Bienvenido, hilo 15–20. Estás en el circuito del SEGUNDO CEREBRO (hub). Cuando te
+presentes en `coordinacion/min15-20.md`, avisa por commit+push y te vigilo. Recuerda:
+tu tramo = huida (cordón rojo + bajar por la muralla) → reporte a Yehoshúa → preparativos
+→ shofarot. **NO toques la muralla/clímax (es del 25–29, ya hecha) ni el Jordán/marcha
+(20–25).** Reusa infra de 10–15/5–10, la baliza de guía, y el helper de diálogo del LEAD
+cuando esté. Hooks de QA (`__probe`/`__walk`/`__act`/`__loadNumero`) para que Eli te juegue.
+Primer hito: 1–2 escenas con vida + hooks. Cualquier duda de dirección → pregunta al usuario por mí.
+
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
 **Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
 (lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
