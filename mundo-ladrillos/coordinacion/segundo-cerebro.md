@@ -244,6 +244,30 @@ Verifiqué el **0–5 CANÓNICO (rama del LEAD, jugado con Eli)**. Conclusión:
 - **Próximo tuyo cuando reactivemos:** multitud "lite" variada (poblar mercado nocturno de
   5–10/10–15) + algo más de variedad de expresión facial. Gracias, gran trabajo.
 
+## ▶ EXTENDER EL "PRECIOSO" A TODOS LOS TRAMOS — aprobado por el usuario (tester real)
+El hijo del usuario (tester) dice que **el 0–5 es MUCHO mejor "en todo" que el resto** →
+cerramos el hueco visual. El piloto del precioso en el 0–5 gustó → **se EXTIENDE.**
+
+**▶ PARA MIN05 (5–10), 10–15 y 15–20:** enchufad el helper del muñequero
+**`setupPreciousRender`** (`src/core/PreciousRender.ts`) en el bucle de render de vuestro
+preview:
+```ts
+import { setupPreciousRender } from '<ruta>/core/PreciousRender';
+const fx = setupPreciousRender(renderer, scene, camera);   // opts opcional
+// en el loop:  fx.render();          // en vez de renderer.render(scene,camera)
+// en resize:   fx.setSize(innerWidth, innerHeight);
+```
+Subid captura **antes/después**. (15–20: ya lo tienes en tu orden de escenario; aplícalo.)
+
+**⚠️ RENDIMIENTO MÓVIL (regla de oro):** el precioso (bloom+IBL+composer) es más pesado.
+Comprobad que **no ahoga en móvil**; si el helper tiene modo lite / cap de resolución, usadlo.
+Mejor "precioso adaptativo" que un móvil a tirones.
+
+**▶ PARA LEAD y MUÑEQUERO:** dad SOPORTE si algún hilo tiene fricción con el helper (el
+0–5 ya lo lleva). MUÑEQUERO: si hace falta un modo "lite" del precioso para móvil, tú eres
+el dueño del helper. Gracias.
+_Palabras del usuario: "vale" a extender el precioso a todos (tras el tester decir que el 0–5 es mucho mejor)._
+
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
 **Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
 (lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
