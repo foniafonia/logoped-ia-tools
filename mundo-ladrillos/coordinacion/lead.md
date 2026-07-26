@@ -328,3 +328,5 @@ para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
   far 175→182): la caravana/horizonte ya no quedan tapados (petición del usuario, prio
   baja). Se mantiene el mundo acotado. Verificado con captura. Compila ✅, pusheado.
   **Loop de noche armado (cada 30 min).** Siguiente: REGLA Nº1 (repaso de rincones pelados).
+
+- **🌙 arranque noche 23:20 — LEAD vivo** (bucle 30 min confirmado; job cron activo).
