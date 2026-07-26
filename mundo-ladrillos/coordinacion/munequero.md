@@ -13,7 +13,11 @@ Añadido (todo verificado, 0 errores, subido):
 - **`src/ui/Toast.ts`** — avisos emergentes apilables (`toast('¡Reliquia!',{icon,variant})`).
 - **`src/ui/Collectibles.ts`** — chip contador de recolectables (`🏺 3/7`), late al subir.
 - **`src/ui/LoadingScreen.ts`** — pantalla de carga con barra de ladrillos + consejo.
-- Demo `extras-demo` (carga → contador + toasts).
+- **`src/ui/Health.ts`** — barra de **vidas (corazones)** para acción; late al recibir daño.
+- **`src/ui/Compass.ts`** — **brújula de objetivo**: flecha que apunta a dónde ir + distancia
+  (el LEAD pasa ángulo jugador→objetivo y metros por frame).
+- **`src/ui/Tutorial.ts`** — **onboarding guiado** para peques (para Eli): ilumina un control
+  (spotlight) con un consejo; avanza al tocar. Demos `combate-demo`, `tutorial-demo`, `extras-demo`.
 
 **Cómo lo cablea el LEAD:** `onMove` → velocidad del jugador; `onInteract` con
 chequeo de proximidad → diálogo/acción; `toast()`/contador para feedback. Todo
