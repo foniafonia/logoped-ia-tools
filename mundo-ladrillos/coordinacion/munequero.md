@@ -1,5 +1,26 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · FLUJO + FIX + EXTRAS
+Cierre del lote "con todo":
+- **`src/flujo-demo.ts`** — **vertical slice** que encadena TODO el kit de UI:
+  Portada → Mapa de tramos → diálogo → HUD/juego (7 vueltas) → tocar shofar →
+  cartela → Resultado → (desbloquea siguiente tramo). Es la **referencia de
+  cableado** para el LEAD: quién llama a quién. Verificado con click-through
+  headless completo (jugar→…→victoria, 0 errores).
+- **🐞 FIX (importante):** el degradado decorativo `::after` de la portada
+  **interceptaba los clics** de los botones (faltaba `pointer-events:none`).
+  Corregido — sin él, en producción los botones de portada podrían no responder.
+- **`src/ui/SettingsPanel.ts`** — Ajustes (música/sonido/calidad), enganchado en
+  portada y pausa.
+- **`src/world/Banner.ts`** — estandartes de tribu ondeando (6 colores) para dar
+  vida/color al campamento y la marcha.
+
+**Estado:** kit de UI completo (portada, pausa, HUD, diálogos, ajustes, mapa,
+resultado) + piezas-héroe (Arca, shofar) + estandartes, todo verificado y subido.
+El sacerdote-con-shofar ya existía como preset (`PRIEST_SKIN`). Sigo a disposición.
+
+---
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · LOTE "CON TODO"
 El usuario me dijo "con todo hasta que se acaben los tokens". Trabajé en autónomo
 en mi carril (UI + piezas) sin tocar el motor. **Todo verificado (build single-file

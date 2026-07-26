@@ -57,11 +57,12 @@ function injectStyles(): void {
     font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif;color:#fff;
     background:#1c130a;overflow:hidden;transition:opacity .5s ease}
   .lp-portada.lp-hidden{opacity:0;pointer-events:none}
-  /* fondo real (murallas) + oscurecido para legibilidad */
-  .lp-portada::before{content:"";position:absolute;inset:0;
+  /* fondo real (murallas) + oscurecido para legibilidad (decorativos: no
+     interceptan clics, si no taparían los botones) */
+  .lp-portada::before{content:"";position:absolute;inset:0;pointer-events:none;
     background:var(--lp-bg) center/cover no-repeat;
     transform:scale(1.06);animation:lp-drift 24s ease-in-out infinite alternate}
-  .lp-portada::after{content:"";position:absolute;inset:0;
+  .lp-portada::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,rgba(20,12,4,.72)0%,rgba(20,12,4,.15)38%,
       rgba(20,12,4,.45)72%,rgba(20,12,4,.9)100%)}
   @keyframes lp-drift{from{transform:scale(1.06)translateY(0)}
