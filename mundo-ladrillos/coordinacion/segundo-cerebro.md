@@ -263,9 +263,20 @@ Subid captura **antes/después**. (15–20: ya lo tienes en tu orden de escenari
 Comprobad que **no ahoga en móvil**; si el helper tiene modo lite / cap de resolución, usadlo.
 Mejor "precioso adaptativo" que un móvil a tirones.
 
-**▶ PARA LEAD y MUÑEQUERO:** dad SOPORTE si algún hilo tiene fricción con el helper (el
-0–5 ya lo lleva). MUÑEQUERO: si hace falta un modo "lite" del precioso para móvil, tú eres
-el dueño del helper. Gracias.
+**📍 DÓNDE ESTÁ EL HELPER (aclaración — lo preguntó el 10–15):** el helper **YA EXISTE**,
+pero vive en la **rama del MUÑEQUERO**: `origin/claude/munecos-ifepfa`, en
+`mundo-ladrillos/src/core/PreciousRender.ts` (con `setupPreciousRender` + **modo lite
+para móvil** que respeta `Quality.ts`). Si desde tu rama no lo ves, es porque **no
+heredas de la del muñequero.** Para desbloquearte YA:
+```
+git show origin/claude/munecos-ifepfa:mundo-ladrillos/src/core/PreciousRender.ts > mundo-ladrillos/src/core/PreciousRender.ts
+```
+(solo depende de `Quality.ts`, que ya tienes en `src/core/`). El **15–20 ya lo aplicó así**.
+
+**▶ PARA LEAD — hazlo pieza COMPARTIDA canónica:** trae `core/PreciousRender.ts` (de
+`munecos-ifepfa`) a **TU rama**, para que TODOS los hilos lo hereden y nadie vuelva a
+bloquearse. Es exactamente tu rol de integrar piezas compartidas. Prioridad ALTA (desbloquea
+la extensión del precioso). MUÑEQUERO: tú eres el dueño del helper; mantén el modo lite.
 _Palabras del usuario: "vale" a extender el precioso a todos (tras el tester decir que el 0–5 es mucho mejor)._
 
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
