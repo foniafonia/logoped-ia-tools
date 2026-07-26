@@ -17,6 +17,7 @@ export interface CampBuild {
   group: THREE.Group;
   ropes: THREE.Mesh[];      // cuerdas a recoger (objetivo)
   bultos: THREE.Mesh[];     // cargamento para la caravana (mini-juego, ocultos al inicio)
+  panes: THREE.Mesh[];      // panes del horno para llevar al Tabernáculo (mini-juego)
   yehoshua: Minifigure;     // el líder sobre la tarima (saluda al acercarte)
   flags: THREE.Mesh[];      // estandartes de las tribus (ondean con el viento)
   fires: Array<[number, number]>;  // posiciones de fogatas (humo/atmósfera)
@@ -354,6 +355,26 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     group.add(mesh); bultos.push(mesh);
   });
 
+  // --- Horno de pan + panes a llevar al Tabernáculo (mini-juego, ocultos al inicio) ---
+  // El horno está junto al puesto de amasar (noroeste): el pan "sale del horno" y
+  // el peque lo lleva al Tabernáculo (esc. 06, "el pan va al Tabernáculo").
+  const oven = new THREE.Group();
+  const ovenBody = new THREE.Mesh(new RoundedBoxGeometry(2.2, 1.6, 2.0, 2, 0.08), plastic.get(0x8a5236));
+  ovenBody.position.set(0, 0.8, 0); ovenBody.castShadow = true; oven.add(ovenBody);   // cuerpo de barro
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.05, 10, 8, 0, Math.PI * 2, 0, Math.PI / 2), plastic.get(0x7a4a30));
+  dome.position.set(0, 1.6, 0); dome.castShadow = true; oven.add(dome);   // cúpula
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.7, 0.3), new THREE.MeshStandardMaterial({ color: 0xff7a2c, emissive: 0xff5a1a, emissiveIntensity: 0.8 }));
+  mouth.position.set(0, 0.7, 1.05); oven.add(mouth);                   // boca con brasas
+  oven.position.set(-6, 0, 55); group.add(oven);
+
+  const panes: THREE.Mesh[] = [];
+  for (const [px, pz] of [[-4, 53], [-9, 54.5], [-2.5, 56.5]] as Array<[number, number]>) {
+    const pan = new THREE.Mesh(new RoundedBoxGeometry(0.9, 0.5, 0.65, 3, 0.18), plastic.get(0xd9a75a));
+    pan.position.set(px, 0.7, pz); pan.castShadow = true; pan.visible = false;
+    const hint = hintArrow(0xffd34d); pan.add(hint); pan.userData.hint = hint;   // pista dorada (pan)
+    group.add(pan); panes.push(pan);
+  }
+
   scene.add(group);
-  return { group, ropes, bultos, yehoshua: yoshua, flags, fires };
+  return { group, ropes, bultos, panes, yehoshua: yoshua, flags, fires };
 }

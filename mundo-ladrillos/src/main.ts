@@ -170,12 +170,12 @@ const beats: Beat[] = [
   },
   {
     t: 123, sub: 'El pan va al Tabernáculo. 🥖',
-    obj: 'Ve al Tabernáculo', onEnter: () => setTarget({ x: 26, z: 22 })
+    obj: 'Lleva el pan al Tabernáculo', onEnter: () => activarPan()   // oficio: horno → Tabernáculo
   },
   {
     t: 133, sub: '¡Se cayó la carga del camello! 💥',
-    obj: 'Lleva los bultos al camello',
-    onEnter: () => { life.derrumbar(); activarBultos(); }   // gag automático + mini-juego claro
+    // sin `obj`: el objetivo lo pone el mini-juego al activarse (los bultos esperan al pan)
+    onEnter: () => { life.derrumbar(); bultosPedidos = true; }   // gag automático; los bultos esperan a que acabe el pan
   },
   {
     t: 228, sub: '¡La caravana se pone en marcha!',
@@ -192,7 +192,7 @@ const director = new Director(beats, null, () => finDelTramo());
 const TAREAS_TRAMO: Array<[string, string]> = [
   ['yeh', 'saludar a Yehoshúa'],
   ['camp', 'recoger el campamento'],
-  ['tab', 'visitar el Tabernáculo'],
+  ['tab', 'llevar el pan al Tabernáculo'],
   ['bultos', 'cargar la caravana'],
   ['carav', 'seguir a la caravana']
 ];
@@ -238,8 +238,38 @@ let ropesHechas = false;         // fase A (cuerdas) completada → empieza el a
 let bultosActivos = false;       // mini-juego de cargar la caravana
 let cargandoBulto: THREE.Mesh | null = null;   // bulto que el jugador lleva en brazos
 const CARGA_DEST = { x: 26.5, z: 33 };          // junto al camello del beduino (zona de carga)
+const PAN_DEST = { x: 24, z: 27 };              // frente al Tabernáculo (ofrenda del pan)
 const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
 const entregados = new Set<THREE.Mesh>();       // bultos ya apilados en el camello
+
+// ---- OFICIO: llevar el PAN del horno al Tabernáculo (esc. 06) ----
+let panActivos = false;
+let cargandoPan: THREE.Mesh | null = null;
+let bultosPedidos = false;                      // beat 6 pedido; se activa al acabar el pan
+const panesEntregados = new Set<THREE.Mesh>();
+function actualizarObjPan(): void {
+  const got = panesEntregados.size;
+  director.setObjetivo(cargandoPan
+    ? `🕍 Lleva el pan al Tabernáculo (${got}/${camp.panes.length})`
+    : `🥖 Coge un pan del horno (${got}/${camp.panes.length})`);
+}
+function balizaPan(): void {
+  if (cargandoPan) { setTarget(PAN_DEST); return; }
+  let best: THREE.Mesh | null = null, bd = 1e9;
+  for (const b of camp.panes) {
+    if (panesEntregados.has(b) || b === cargandoPan) continue;
+    const d = controller.pos.distanceTo(b.position);
+    if (d < bd) { bd = d; best = b; }
+  }
+  setTarget(best ? { x: best.position.x, z: best.position.z } : null);
+}
+function activarPan(): void {
+  panActivos = true;
+  for (const b of camp.panes) b.visible = true;       // salen del horno con su pista dorada
+  loadPad.position.set(PAN_DEST.x, 0, PAN_DEST.z);     // tapiz de ofrenda frente al Tabernáculo
+  loadPad.visible = true;
+  actualizarObjPan(); balizaPan();
+}
 
 // mini-juego "carga la caravana" — VERBO REAL: coge un bulto y LLÉVALO al camello.
 function bultosEntregados(): number { return entregados.size; }
@@ -292,11 +322,7 @@ function checkTargets(): void {
     done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda');
     if (target) setTarget(null);
   }
-  // visita el Tabernáculo (esc. 06, beat 5) — completable hasta lograrlo
-  if (i >= 5 && !done.has('tab') && Math.hypot(p.x - 26, p.z - 22) < 6.5) {
-    done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Qué bonito el Tabernáculo!');
-    if (target) setTarget(null);
-  }
+  // (el Tabernáculo ya no es "visita": ahora es el oficio de llevarle el pan, más abajo)
   // sigue la caravana al norte (esc. 08, beat 7)
   if (i >= 7 && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
     done.add('carav'); audio.sfxSuccess(); director.star(); director.logro('¡En marcha con la caravana!'); setTarget(null);
@@ -458,6 +484,40 @@ function animate(now: number): void {
       director.logro('¡Campamento recogido! 🎉'); setTarget(null);
     }
   }
+
+  // OFICIO: LLEVAR EL PAN AL TABERNÁCULO (coge un pan del horno y llévalo a la ofrenda)
+  if (panActivos && !done.has('tab')) {
+    if (cargandoPan) {
+      const b = cargandoPan;
+      b.position.set(controller.pos.x, 3.0, controller.pos.z);
+      b.rotation.y += dt * 2;
+      if (Math.hypot(controller.pos.x - PAN_DEST.x, controller.pos.z - PAN_DEST.z) < 3.5) {
+        panesEntregados.add(b); b.visible = false; cargandoPan = null;   // ofrendado
+        audio.sfxSparkle(); dust.burst(PAN_DEST.x, 1.0, PAN_DEST.z, 12);
+        actualizarObjPan(); balizaPan();
+      }
+    } else {
+      for (const b of camp.panes) {
+        if (!b.visible || panesEntregados.has(b)) continue;
+        b.rotation.y += dt * 1.2;
+        b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
+        const h = b.userData.hint as THREE.Mesh | undefined;
+        if (h) h.position.y = 2.6 + Math.sin(now * 0.006 + b.position.x) * 0.25;
+        if (controller.pos.distanceTo(b.position) < 2.6) {
+          cargandoPan = b; audio.sfxPickup();
+          if (h) h.visible = false;
+          actualizarObjPan(); balizaPan();
+          break;
+        }
+      }
+    }
+    if (panesEntregados.size >= camp.panes.length) {
+      done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡El pan está en el Tabernáculo! 🕍');
+      loadPad.visible = false; setTarget(null);
+    }
+  }
+  // los bultos del camello esperan a que termine el pan (ambos oficios en orden, sin liar al peque)
+  if (bultosPedidos && !bultosActivos && done.has('tab')) activarBultos();
 
   // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)
   if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {
