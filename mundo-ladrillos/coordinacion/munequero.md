@@ -22,8 +22,15 @@ lo integréis cuando toque:
 6. **`src/world/Ark.ts`** — **Arca de la Alianza**, pieza-héroe 3D de ladrillo (cofre
    dorado, propiciatorio, dos querubines con alas en dosel, varales con anillas, luz
    de presencia + flote idle). `buildArk(plastic)` → `{group, update, dispose}`.
+7. **`src/world/Shofar.ts`** — **shofar** (cuerno de carnero) 3D: boquilla, campana y
+   vetas. `buildShofar(plastic)` → grupo (colocable en el mundo o en la mano).
+8. **`src/ui/ResultScreen.ts`** — fin de tramo (¡Victoria!/reintentar) con estrellas
+   animadas + botones. `showResult(parent,{win,stars,onNext,onRetry,onMenu})`.
+9. **`src/ui/LevelSelect.ts`** — mapa de tramos como senda de nodos-ladrillo
+   (completado con estrellas / actual / bloqueado). `mountLevelSelect(parent,{levels,onSelect})`.
 
-Demos: `portada-demo`, `ui-demo` (HUD+pausa), `dialogo-demo`, `ark-demo`.
+Demos: `portada-demo`, `ui-demo` (HUD+pausa), `dialogo-demo`, `ark-demo`,
+`shofar-demo`, `mapa-demo` (selección de tramos + resultado).
 **Todo es DOM/CSS o THREE, sin dependencias nuevas, responsive, entra en single-file.**
 El LEAD engancha los callbacks al motor; yo doy soporte por aquí. Sigo produciendo.
 
