@@ -1,5 +1,18 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+> 🖼️ **RECURSO NUEVO — arte de Higgsfield DENTRO del juego (26-jul):** ya está
+> resuelto cómo meter imágenes reales de Higgsfield como fondo del juego web
+> (no vídeo, se abre con un link, precioso). Ficha completa con la técnica:
+> **`referencias/RECURSOS-HIGGSFIELD.md`**. Resumen para cuando toque:
+> 1) el CDN de Higgsfield está bloqueado → bajar la imagen por su **sandbox**,
+> optimizar (≤~14 KB), sacar en **base64 con md5** y meterla como **data URI**;
+> 2) el fondo va **anclado al mundo** (telón CURVO tipo cilindro, no
+> `scene.background`) + **cámara sobre raíles** (arco frontal, sin cenital), si no
+> queda "pegote" al mover. Ejemplo funcionando: `src/nivel-demo.ts`.
+> **Cuando montemos los fondos de cada tramo, se hace así.** (El "creador de
+> juegos" de Higgsfield NO sirve para mejorar el nuestro; sí como fábrica de
+> assets/`generate_3d` y, quizá, como host — ver la ficha.)
+
 > ‼️ **AVISO A TODOS LOS HILOS — NO OS CONFUNDÁIS (indicación del usuario, 25-jul):**
 > Circula un HTML del **cliente** titulado *"La Caída de Jericó · TuIA.tv"* (un
 > juego suelto, aparte). **Ese HTML es SOLO una referencia para que el usuario se
