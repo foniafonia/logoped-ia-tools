@@ -37,6 +37,24 @@ export class PreviewController {
     this.pos.set(x, 0, z); this.vy = 0; this.grounded = true;
     this.fig.root.position.copy(this.pos);
   }
+  /** ANDA un paso hacia (tx,tz) —no teletransporta— respetando colisión y límites.
+   *  Para el jugador sintético / QA de niño (hook `__walk`). */
+  stepToward(tx: number, tz: number, step: number): void {
+    const dx = tx - this.pos.x, dz = tz - this.pos.z;
+    const d = Math.hypot(dx, dz);
+    if (d < 0.05) { this.moving = false; return; }
+    const k = Math.min(step, d) / d;
+    this.pos.x += dx * k; this.pos.z += dz * k;
+    this.facing = Math.atan2(dx, dz);
+    this.resolveCollisions();
+    const b = this.bounds;
+    this.pos.x = Math.max(b.minX, Math.min(b.maxX, this.pos.x));
+    this.pos.z = Math.max(b.minZ, Math.min(b.maxZ, this.pos.z));
+    this.fig.root.position.copy(this.pos);
+    this.fig.root.rotation.y = this.facing;
+    this.moving = true;
+  }
+
   setBounds(minX: number, maxX: number, minZ: number, maxZ: number): void { this.bounds = { minX, maxX, minZ, maxZ }; }
   clearObstacles(): void { this.obstacles = []; }
   addObstacle(x: number, z: number, hw: number, hd: number): void { this.obstacles.push({ x, z, hw, hd }); }
