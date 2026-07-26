@@ -44,7 +44,7 @@ Por cada hilo: **analizo → recomiendo → aviso a todos aquí → doy feedback
 con enlace + pocas imágenes → dejo trabajar → siguiente hilo.** El usuario habla
 conmigo; yo sostengo el resto.
 
-## ▶ PARA LEAD — Pulido del 0–5 (prioridad MEDIA, no bloqueante) · 2026-07-26
+## ▶ PARA LEAD — Pulido del 0–5 — ✅ ATENDIDO (LEAD, commit 1ced034) · verificado por Eli
 **(1) Petición:** un pequeño pase de pulido del 0–5, **a tu criterio (tienes veto)**:
 - **P1 (principal):** que **Yehoshúa se note más** al inicio, para que el niño sepa a
   quién ir a saludar. Ideas (elige tú): más alto / en su tarima con estandarte propio /
@@ -75,7 +75,44 @@ cuerdas+ovejas→pan ✅ (**ovejas 3/3**) · 0 crashes. Detalle+capturas en `eli
 - **5–10 (min05):** siguiente en el bucle. Ya instrumentado en local; 8 escenas cargan
   con 0 errores. Reporte de Eli en cuanto entremos en su turno.
 
-## 🔌 PETICIÓN A 5–10 (min05): añadid los hooks `__probe`/`__walk`
+## ▶ PARA MIN05 (tramo 5–10) — Subir la CLARIDAD al nivel del 0–5 · prioridad MEDIA-ALTA
+**(1) Petición:** el tramo va bien de base (8 escenas, 0 errores, sigilo con chispa),
+pero a un niño le cuesta saber a dónde ir y qué pulsar. Subidlo al listón del 0–5:
+- **P1 — baliza/flecha CLARA "a dónde ir"** en cada escena (como la del 0–5). Es lo que
+  más falta: el niño no debe pensar dónde está el objetivo.
+- **P2 — aro brillante en el sitio EXACTO donde se pulsa E** (el promontorio, el
+  perchero, la marca del "¡un avión!"…).
+- **P3 — más vida/luz/color** (menos vacío y marrón), y en la cuerda (esc13) que se vea
+  claro el camino a cruzar.
+- **+ Pasadme vuestra QA de completado** (¿cuántas escenas pasa un jugador guiado?): mi
+  bot solo pasó 1/8, **pero es límite del bot**, no del juego — quiero confirmarlo con
+  vuestro dato.
+
+**(2) Palabras/porqué del usuario:** *quiere que el 5–10 llegue al nivel del 0–5; que un
+niño sepa SIEMPRE a dónde va y qué pulsa, sin perderse.* El listón es el campamento 0–5.
+
+**(3) Prioridad:** MEDIA-ALTA. No hay errores; esto es para que **enganche** como el 0–5.
+Detalle + capturas de Eli en `eli-reportes.md` (y enlace que os pasa el usuario).
+
+## ▶ PARA 10-15 (Rahab) — Standby + 1 aviso
+- Vas después del 5–10 en el bucle; el cerebro te auditará en tu turno. De momento,
+  **únete al circuito** (bucle de 3 min sobre esta sección).
+- ⚠️ Tu **duda de dirección** (ceñir el tramo a escenas **17–25 "posada de Rahab"**) la
+  estoy pasando al usuario para que decida. **No estires hasta cordón rojo/muralla hasta
+  que confirme.** Te aviso aquí en cuanto tenga su respuesta.
+
+## ▶ PARA MUÑEQUERO — Standby + notas de arte (de 0–5 y 5–10)
+- **0–5:** Yehoshúa ya lo hizo "faro" el LEAD (estandartes + saluda). Nada urgente.
+- **5–10:** escenas de noche **poco pobladas** frente al 0–5; cuando toque, vendría bien
+  **gentío/props** (mercado, guardias con presencia) y algo de **color** que rompa el
+  marrón. No urgente. Te doy detalle en tu turno del bucle.
+
+## 🗑️ (obsoleto) Petición antigua de hooks a 5–10 — YA HECHO por ellos
+Ya añadieron `__probe`/`__walk`/`__interact` alineados a mi contrato + su propio arnés
+(`tools/playtester-min05.mjs`, mejor que el mío: bucle dentro del navegador). Snippet
+histórico abajo por si otro tramo lo reutiliza.
+
+### (snippet histórico) hooks `__probe`/`__walk`
 Vuestro preview (`src/scenes/min05/preview/preview.ts`) ya expone `__loadNumero`,
 `__pos`, `__setPlayer`. Faltan los 2 hooks del jugador sintético (mismo patrón que
 el 0–5). Pegad esto al final de `preview.ts` (es aditivo, no toca el juego):
