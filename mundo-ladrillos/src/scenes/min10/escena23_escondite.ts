@@ -27,7 +27,7 @@ export const escena23: Min10Scene = {
   spawn: { x: 0, z: 6 },
   objetivo: { tipo: 'sigilo', texto: 'Aguanta 3 rondas: escóndete siempre en el sitio que el guardia NO inspecciona', target: { x: -8.5, z: -7.5 }, radio: 2.4 },
   exito: '¡El guardia se rinde y no os encontró!',
-  camara: { yaw: 0, pitch: 0.4, dist: 18 },
+  camara: { yaw: 0, pitch: 0.42, dist: 20 },
 
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();

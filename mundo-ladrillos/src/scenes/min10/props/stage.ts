@@ -30,8 +30,10 @@ export interface TavernStageHandle {
   dispose(): void;
 }
 
-/** Límite del recinto interior de la taberna (para acotar al jugador). */
-export const TAVERN_BOUNDS = { minX: -11.5, maxX: 11.5, minZ: -9.2, maxZ: 8 };
+/** Límite del recinto interior de la taberna (para acotar al jugador).
+ *  Ensanchado al muro real (x±12.7, fondo z−11) para que la sala NO agobie y se
+ *  pueda llegar al arco del fondo y a los escondites de las esquinas. */
+export const TAVERN_BOUNDS = { minX: -12, maxX: 12, minZ: -10, maxZ: 8.5 };
 
 /** Textura de "ventana a la noche": silueta de Jericó con ventanas cálidas + luna. */
 function nightCityTexture(): THREE.CanvasTexture {
@@ -135,16 +137,19 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
       st.position.set(tx + Math.cos(a) * 2.0, 0.6, tz + Math.sin(a) * 2.0); group.add(st);
     }
   };
-  // mesas repartidas por el comedor (lejos de la barra, del paso central y de los escondites de z≈0)
-  diningTable(-4.5, 5.5); diningTable(4.5, 6.5); diningTable(6.5, -2.5);
+  // mesas del comedor en las esquinas/laterales DELANTEROS, FUERA de la columna de
+  // entrada (x≈0–2) y del hueco del tapiz: así el centro y el fondo (arco, hogar y
+  // los dos escondites) quedan DESPEJADOS y el niño se mueve sin agobio (feedback
+  // del playtest: "el bar es muy pequeño, te agobias").
+  diningTable(-7, 6); diningTable(7, 6); diningTable(-4.5, 3);
   // comensales + un camarero (aldeanos variados; idle sutil, sin clonar caras)
   const diners = buildCrowd(ctx.scene, P, [
-    { x: -6.2, z: 5.2, yaw: -0.7, emotion: 'happy' },
-    { x: -3.2, z: 6.8, yaw: 2.2, scale: 0.72 },
-    { x: 6.2, z: 6.4, yaw: -2.0, emotion: 'neutral' },
-    { x: 2.8, z: 6.6, yaw: 1.4, emotion: 'happy' },
-    { x: 8.0, z: -2.6, yaw: 2.4, emotion: 'neutral' },
-    { x: -2.5, z: -3.0, yaw: 0.2, emotion: 'happy' }   // camarero, junto a la barra
+    { x: -8.3, z: 5.6, yaw: -0.6, emotion: 'happy' },
+    { x: -5.7, z: 6.6, yaw: 2.3, scale: 0.72 },
+    { x: 8.3, z: 5.6, yaw: -2.4, emotion: 'neutral' },
+    { x: 5.7, z: 6.6, yaw: 1.4, emotion: 'happy' },
+    { x: -4.6, z: 1.6, yaw: 0.3, emotion: 'neutral' },
+    { x: -1.5, z: -3.4, yaw: 0.2, emotion: 'happy' }   // camarero, junto a la barra
   ], { startIndex: 11 });
 
   // ---- MOTAS de polvo flotando en la luz cálida (atmósfera senior) ----
@@ -161,11 +166,11 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
 
   // Colisiones: paredes + barra + hogar + mesas del comedor.
   ctx.addObstacle(0, -10.8, 13, 0.6);
-  ctx.addObstacle(-12.4, -1, 0.6, 10);
-  ctx.addObstacle(12.4, -1, 0.6, 10);
+  ctx.addObstacle(-12.6, -1, 0.6, 10);
+  ctx.addObstacle(12.6, -1, 0.6, 10);
   ctx.addObstacle(-1.5, -5.5, 7.6, 1.2);
   ctx.addObstacle(-10.5, -9.6, 2, 1);
-  for (const [tx, tz] of [[-4.5, 5.5], [4.5, 6.5], [6.5, -2.5]] as Array<[number, number]>) ctx.addObstacle(tx, tz, 1.3, 1.3);
+  for (const [tx, tz] of [[-7, 6], [7, 6], [-4.5, 3]] as Array<[number, number]>) ctx.addObstacle(tx, tz, 1.3, 1.3);
 
   return {
     group, tav,
@@ -202,7 +207,10 @@ export function buildHideouts(ctx: SceneContext): HideoutsHandle {
   // Escondites EXENTOS en el suelo del comedor, con COLISIÓN + hueco detrás:
   // el tapiz (izquierda) y la tinaja (derecha). Se rodean para meterse detrás.
   const rug = new RugHide(ctx.plastic, { x: -7.5, z: 0, entrada: 'derecha' });
-  const pot = new PotHide(ctx.plastic, { x: 8, z: 0 });
+  // Maceta en el FRENTE-derecha (x9,z0): su hueco (hacia −z) es accesible desde la
+  // sala y NO tapa el pasillo del fondo que lleva al arco/ventana de la esc.20
+  // (verificado por BFS: alejarla a la esquina pinchaba el paso; aquí todo alcanza).
+  const pot = new PotHide(ctx.plastic, { x: 9, z: 0 });
   group.add(rug.group); group.add(pot.group);
   rug.registerCollision(ctx.addObstacle);
   pot.registerCollision(ctx.addObstacle);

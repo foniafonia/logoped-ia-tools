@@ -19,7 +19,7 @@ export const escena19: Min10Scene = {
   spawn: { x: 0, z: 3 },
   objetivo: { tipo: 'ir_a', texto: 'Acércate a la barra y pulsa E para pedir café', target: { x: -1, z: -3 }, radio: 2.6 },
   exito: 'Rahab os sirve un café humeante. Por ahora, a salvo.',
-  camara: { yaw: 0, pitch: 0.3, dist: 14 },
+  camara: { yaw: 0, pitch: 0.32, dist: 16 },
 
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();

@@ -19,9 +19,9 @@ export const escena20: Min10Scene = {
   noche: true,
   ambiente: 'street',
   spawn: { x: 0, z: 3 },
-  objetivo: { tipo: 'ir_a', texto: 'Asómate al arco (E) para ver a los guardias', target: { x: 8, z: -8 }, radio: 2.6 },
+  objetivo: { tipo: 'ir_a', texto: 'Asómate al arco (E) para ver a los guardias', target: { x: 8, z: -8 }, radio: 3.0 },
   exito: '¡Son ellos! Hay que darse prisa.',
-  camara: { yaw: 0, pitch: 0.32, dist: 15 },
+  camara: { yaw: 0, pitch: 0.34, dist: 18 },
 
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();

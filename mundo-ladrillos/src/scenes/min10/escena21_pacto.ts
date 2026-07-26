@@ -20,7 +20,7 @@ export const escena21: Min10Scene = {
   spawn: { x: 2, z: 3 },
   objetivo: { tipo: 'ir_a', texto: 'Acércate a Rahab y susurra el pacto (E)', target: { x: -1.5, z: -3.5 }, radio: 2.4 },
   exito: 'Rahab acepta. «Escondeos, yo os cubriré.»',
-  camara: { yaw: 0, pitch: 0.3, dist: 14 },
+  camara: { yaw: 0, pitch: 0.32, dist: 16 },
 
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();

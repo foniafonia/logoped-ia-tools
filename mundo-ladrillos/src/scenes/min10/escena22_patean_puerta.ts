@@ -20,7 +20,7 @@ export const escena22: Min10Scene = {
   spawn: { x: 0, z: 5 },
   objetivo: { tipo: 'esconderse', texto: 'Escóndete tras el tapiz o dentro de la maceta', target: { x: -8.5, z: -7.5 }, radio: 2.4 },
   exito: '¡Escondido justo a tiempo!',
-  camara: { yaw: 0, pitch: 0.34, dist: 16 },
+  camara: { yaw: 0, pitch: 0.36, dist: 18 },
 
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();

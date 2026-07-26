@@ -95,9 +95,10 @@ export class RugHide {
   registerCollision(addObstacle: (x: number, z: number, hw: number, hd: number) => void): void {
     const RW = RugHide.RW;
     addObstacle(this.x, this.z + 0.1, RW / 2, 0.35);                 // la tela
-    // tapa un lado del hueco para forzar entrar por el otro (rodear)
+    // tapa un lado del hueco para forzar entrar por el otro (rodear). Tope CORTO y
+    // pegado al fondo: sólo insinúa el "rodea", sin encajonar al niño en el hueco.
     const side = this.entrada === 'derecha' ? -1 : 1;               // cierra el lado opuesto a la entrada
-    addObstacle(this.x + side * (RW / 2 + 0.3), this.z - RugHide.NOOK / 2, 0.3, RugHide.NOOK / 2 + 0.3);
+    addObstacle(this.x + side * (RW / 2 + 0.3), this.z - RugHide.NOOK * 0.75, 0.3, RugHide.NOOK * 0.55);
   }
 
   /** El punto del hueco (detrás de la tela) para el sistema de sigilo. */
@@ -105,10 +106,12 @@ export class RugHide {
     return { x: this.x, z: this.z - RugHide.NOOK, radio: 1.6 };
   }
 
-  /** TRUE solo si el jugador está en el HUECO de detrás (no sobre la tela). */
+  /** TRUE si el jugador está en el HUECO de detrás (no sobre la tela). Zona GENEROSA
+   *  (feedback del niño: "esconderse en el tapiz es difícil"): basta con estar más o
+   *  menos detrás para contar como escondido. */
   contains(px: number, pz: number): boolean {
     const dz = this.z - pz;                                          // >0 = detrás
-    return dz > 0.35 && dz < RugHide.NOOK + 1.1 && Math.abs(px - this.x) < RugHide.RW / 2 + 0.3;
+    return dz > 0.2 && dz < RugHide.NOOK + 1.7 && Math.abs(px - this.x) < RugHide.RW / 2 + 0.9;
   }
 
   update(dt: number, t: number, hidden: boolean): void {
@@ -191,7 +194,8 @@ export class PotHide {
 
   contains(px: number, pz: number): boolean {
     const dz = this.z - pz;
-    return dz > PotHide.R - 0.4 && dz < PotHide.R + PotHide.NOOK && Math.abs(px - this.x) < PotHide.R + 0.4;
+    // Zona GENEROSA detrás/al lado de la tinaja (feedback: "no puede llegar a la maceta").
+    return dz > PotHide.R - 0.9 && dz < PotHide.R + PotHide.NOOK + 0.7 && Math.abs(px - this.x) < PotHide.R + 0.9;
   }
 
   update(dt: number, t: number, hidden: boolean): void {
