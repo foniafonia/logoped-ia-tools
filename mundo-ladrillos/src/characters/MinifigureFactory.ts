@@ -11,7 +11,9 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
  */
 
 /** Expresión de las cejas para dar carácter (amable, serio, preocupado…). */
-export type Emotion = 'happy' | 'neutral' | 'worried' | 'stern' | 'surprised' | 'alert';
+export type Emotion =
+  | 'happy' | 'neutral' | 'worried' | 'stern' | 'surprised' | 'alert'
+  | 'angry' | 'sad' | 'scared' | 'sly' | 'joyful';
 
 export interface MinifigureSkin {
   head: number;      // color piel/cabeza
@@ -375,9 +377,15 @@ export class Minifigure {
   /** Cejas cuya inclinación transmite la emoción. `slim` las hace finas (fem). */
   private addBrows(y: number, z: number, emotion: Emotion, color = 0x3a2a1a, spread = 0.2, slim = false): void {
     // t>0 baja el extremo interior (enfado); t<0 lo sube (preocupación/amable)
-    const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13, surprised: -0.1, alert: 0.24 }[emotion];
-    // Elevación de la ceja: sorprendido/alerta las suben (ojos muy abiertos)
-    const lift = { neutral: 0, stern: 0, worried: 0.02, happy: 0, surprised: 0.11, alert: 0.06 }[emotion];
+    const t = {
+      neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13, surprised: -0.1, alert: 0.24,
+      angry: 0.5, sad: -0.4, scared: -0.16, sly: 0.12, joyful: -0.15
+    }[emotion];
+    // Elevación de la ceja: sorprendido/alerta/miedo las suben (ojos muy abiertos)
+    const lift = {
+      neutral: 0, stern: 0, worried: 0.02, happy: 0, surprised: 0.11, alert: 0.06,
+      angry: -0.02, sad: 0.04, scared: 0.14, sly: 0.02, joyful: 0.02
+    }[emotion];
     const h = slim ? 0.035 : 0.06;
     const w = slim ? 0.2 : 0.22;
     const bL = this.box(w, h, 0.05, color, -spread, y + lift, z); bL.rotation.z = -t; this.root.add(bL);
@@ -408,6 +416,31 @@ export class Minifigure {
         break;
       case 'alert': // boca pequeña y tensa
         this.root.add(this.box(0.18, 0.08, 0.05, color, 0, y, z));
+        break;
+      case 'angry': // mueca abierta apretada (grita/gruñe) con dientes
+        this.root.add(this.box(0.32, 0.14, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.3, 0.03, 0.055, 0xf0e6d2, 0, y + 0.02, z + 0.002)); // dientes apretados
+        break;
+      case 'sad': // comisuras muy caídas + labio inferior
+        this.root.add(this.box(0.26, 0.06, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.1, 0.12, 0.05, color, -0.15, y - 0.07, z));
+        this.root.add(this.box(0.1, 0.12, 0.05, color, 0.15, y - 0.07, z));
+        break;
+      case 'scared': { // boca abierta vertical (grito) + tensa
+        const s = new THREE.CylinderGeometry(0.07, 0.09, 0.05, 14);
+        s.rotateX(Math.PI / 2); s.scale(1, 1.5, 1);
+        this.root.add(this.mesh(s, color, 0, y - 0.02, z));
+        break;
+      }
+      case 'sly': // media sonrisa ladeada (pícaro)
+        { const m = this.box(0.26, 0.06, 0.05, color, 0.02, y, z); m.rotation.z = 0.22; this.root.add(m); }
+        this.root.add(this.box(0.09, 0.1, 0.05, color, 0.16, y + 0.06, z)); // solo una comisura sube
+        break;
+      case 'joyful': // sonrisa grande abierta con dientes (risa)
+        this.root.add(this.box(0.36, 0.16, 0.05, color, 0, y - 0.02, z));
+        this.root.add(this.box(0.32, 0.05, 0.055, 0xf0e6d2, 0, y + 0.04, z + 0.002)); // dientes
+        this.root.add(this.box(0.1, 0.1, 0.05, color, -0.2, y + 0.06, z));
+        this.root.add(this.box(0.1, 0.1, 0.05, color, 0.2, y + 0.06, z));
         break;
       default: // neutral: línea corta
         this.root.add(this.box(0.24, 0.06, 0.05, color, 0, y, z));
