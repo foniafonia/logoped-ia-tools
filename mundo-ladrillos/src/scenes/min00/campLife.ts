@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
 import { Minifigure, createMinifigure, villagerSkin, BEDOUIN_SKIN } from '../../characters/MinifigureFactory';
+import { hintArrow } from './camp';
 import { Dust } from '../../effects/Dust';
 import { IS_MOBILE } from '../../core/Quality';
 
@@ -55,7 +56,7 @@ function buildBasket(plastic: PlasticMaterialFactory): THREE.Group {
 interface Nino { fig: Minifigure; prog: number; }
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; pause: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
-interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; }
+interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; }
 type Oficio = 'moler' | 'amasar' | 'alfarero' | 'sentado';
 interface Faena { fig: Minifigure; tipo: Oficio; ph: number; spin?: THREE.Object3D; }
 
@@ -111,8 +112,9 @@ export class CampLife {
     for (const [sx, sz] of [[-19, 44], [-22, 49], [-17, 40]] as Array<[number, number]>) {
       const s = buildSheep(plastic);
       s.position.set(sx, 0, sz); s.rotation.y = Math.random() * Math.PI;
+      const hint = hintArrow(0x7bed7b); hint.visible = false; s.add(hint);   // pista verde: "arrea ESTA oveja"
       this.group.add(s);
-      this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true });
+      this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true, hint });
     }
 
     // --- 4 niños con canastas de pan que desfilan hacia el Tabernáculo (esc. 06) ---
@@ -261,8 +263,8 @@ export class CampLife {
     }
   }
 
-  /** Arranca el mini-juego de arrear ovejas al redil. */
-  activarOvejas(): void { this.penActive = true; }
+  /** Arranca el mini-juego de arrear ovejas al redil (muestra las pistas verdes). */
+  activarOvejas(): void { this.penActive = true; for (const s of this.sheep) if (s.target && s.hint) s.hint.visible = true; }
   /** Dónde está el beduino con su camello (para guiar al jugador). */
   get beduinoPos(): { x: number; z: number } { return { x: 25, z: 31 }; }
   /** Fuerza el derrumbe de la carga del camello (gag garantizado al llegar). */
@@ -280,6 +282,8 @@ export class CampLife {
     // Las OBJETIVO, además, se arrean: si el jugador las empuja al redil, se quedan.
     for (const s of this.sheep) {
       if (s.penned) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.15; continue; }
+      // pista verde que bota sobre la oveja objetivo (guía al peque)
+      if (s.hint && s.hint.visible) { s.hint.rotation.y += dt * 3; s.hint.position.y = 2.6 + Math.sin(t * 3 + s.g.position.x) * 0.25; }
       s.hopCd -= dt;
       if (playerPos && s.hopCd <= 0 && s.g.position.y < 0.05) {
         const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
@@ -306,7 +310,7 @@ export class CampLife {
           s.g.position.x += (px / d) * 0.8 * dt;
           s.g.position.z += (pz / d) * 0.8 * dt;
         }
-        if (d2 < this.pen.r * this.pen.r) { s.penned = true; s.vy = 0; onPenned?.(); }
+        if (d2 < this.pen.r * this.pen.r) { s.penned = true; s.vy = 0; if (s.hint) s.hint.visible = false; onPenned?.(); }
       }
     }
 

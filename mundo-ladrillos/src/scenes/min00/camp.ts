@@ -52,6 +52,59 @@ function tentClothTexture(): THREE.CanvasTexture {
   return t;
 }
 
+/** CUERDA ENROLLADA reconocible: un tubo que serpentea en espiral plana (como una
+ *  soga recogida en el suelo) + un cabo suelto. Se lee al instante como "cuerda",
+ *  no como un aro. Lleva su textura de trenzado para dar el aspecto de soga. */
+function ropeTexture(): THREE.CanvasTexture {
+  const S = 64;
+  const c = document.createElement('canvas'); c.width = c.height = S;
+  const x = c.getContext('2d')!;
+  x.fillStyle = '#b98a4a'; x.fillRect(0, 0, S, S);
+  // trenzado: franjas diagonales claras/oscuras que se repiten a lo largo de la soga
+  for (let i = -S; i < S * 2; i += 8) {
+    x.strokeStyle = 'rgba(90,58,16,.55)'; x.lineWidth = 3;
+    x.beginPath(); x.moveTo(i, 0); x.lineTo(i + S, S); x.stroke();
+    x.strokeStyle = 'rgba(235,205,150,.5)'; x.lineWidth = 2;
+    x.beginPath(); x.moveTo(i + 4, 0); x.lineTo(i + 4 + S, S); x.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(8, 1);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+let _ropeTex: THREE.CanvasTexture | null = null;
+function buildCoiledRope(): THREE.Mesh {
+  if (!_ropeTex) _ropeTex = ropeTexture();
+  const pts: THREE.Vector3[] = [];
+  const turns = 3.4, steps = 96;
+  for (let i = 0; i <= steps; i++) {
+    const f = i / steps;
+    const a = f * turns * Math.PI * 2;
+    const r = 0.30 + f * 0.60;                 // espiral que crece de dentro hacia fuera
+    pts.push(new THREE.Vector3(Math.cos(a) * r, 0.12 + f * 0.22, Math.sin(a) * r));
+  }
+  // cabo suelto: sale de la última vuelta hacia fuera y cae al suelo (inconfundible)
+  const last = pts[pts.length - 1];
+  pts.push(new THREE.Vector3(last.x + 0.5, 0.28, last.z + 0.3));
+  pts.push(new THREE.Vector3(last.x + 1.2, 0.14, last.z + 0.2));
+  pts.push(new THREE.Vector3(last.x + 1.7, 0.10, last.z - 0.1));
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const geo = new THREE.TubeGeometry(curve, 130, 0.13, 6, false);
+  const mat = new THREE.MeshStandardMaterial({ map: _ropeTex, roughness: 0.85, emissive: 0x3a2408, emissiveIntensity: 0.25 });
+  const m = new THREE.Mesh(geo, mat);
+  m.castShadow = true;
+  return m;
+}
+
+/** Flecha-pista que flota sobre un coleccionable para guiar al peque ("¡coge esto!"). */
+export function hintArrow(color = 0xffe08a): THREE.Mesh {
+  const m = new THREE.Mesh(new THREE.ConeGeometry(0.34, 0.7, 4),
+    new THREE.MeshBasicMaterial({ color }));
+  m.rotation.x = Math.PI;    // punta hacia abajo (señala el objeto)
+  m.position.y = 2.6;
+  return m;
+}
+
 /** 4 vientos (cuerdas tensoras) que van de cerca de la cima a estacas en el suelo. */
 function tentGuyRopesGeometry(): THREE.BufferGeometry {
   const parts: THREE.BufferGeometry[] = [];
@@ -212,13 +265,14 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     }
   }
 
-  // --- Cuerdas enrolladas a recoger (OBJETIVO) ---
-  const ropeMat = new THREE.MeshStandardMaterial({ color: 0xb98a4a, roughness: 0.8, emissive: 0x5a3a10, emissiveIntensity: 0.4 });
+  // --- Cuerdas enrolladas a recoger (OBJETIVO) — soga en espiral con cabo suelto,
+  //     y una flecha-pista encima (oculta hasta que arranca el objetivo). ---
   const ropes: THREE.Mesh[] = [];
   for (const [rx, rz] of [[-10, 34], [12, 44], [-2, 56]] as Array<[number, number]>) {
-    const rope = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.22, 8, 20), ropeMat.clone());
-    rope.rotation.x = Math.PI / 2;
-    rope.position.set(rx, 0.35, rz); rope.castShadow = true;
+    const rope = buildCoiledRope();
+    rope.position.set(rx, 0.32, rz);
+    const hint = hintArrow(0xffe08a); hint.visible = false; rope.add(hint);
+    rope.userData.hint = hint;
     group.add(rope);
     ropes.push(rope);
   }
@@ -294,8 +348,9 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     let mesh: THREE.Mesh;
     if (kind === 0) mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.72, 1.3, 10), plastic.get(0xb7b7c0));      // vasija de plata
     else if (kind === 1) mesh = new THREE.Mesh(new RoundedBoxGeometry(1.2, 1.0, 1.2, 2, 0.06), plastic.get(0x9a6a3a)); // caja de madera
-    else { mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.7, 8), plastic.get(0xc0392b)); mesh.rotation.z = Math.PI / 2; } // alfombra enrollada
+    else { const g = new THREE.CylinderGeometry(0.42, 0.42, 1.7, 8); g.rotateZ(Math.PI / 2); mesh = new THREE.Mesh(g, plastic.get(0xc0392b)); } // alfombra enrollada (giro en la geometría, no en el mesh)
     mesh.position.set(bx, 0.7, bz); mesh.castShadow = true; mesh.visible = false;
+    const hint = hintArrow(0x8fe0ff); mesh.add(hint); mesh.userData.hint = hint;   // pista "cógelo"
     group.add(mesh); bultos.push(mesh);
   });
 

@@ -114,6 +114,22 @@ const setTarget = (t: { x: number; z: number } | null): void => {
   if (t) { beacon.position.set(t.x, 0, t.z); beacon.visible = true; } else beacon.visible = false;
 };
 
+// === Zona de carga del camello (solo en el mini-juego de bultos) ===
+// Un tapiz dorado en el suelo junto al camello + flecha que bota: deja CLARÍSIMO
+// dónde llevar los bultos (antes no se entendía qué hacer con los camellos).
+const loadPad = new THREE.Group();
+const padRing = new THREE.Mesh(new THREE.TorusGeometry(2.6, 0.2, 10, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffd34d, transparent: true, opacity: 0.95 }));
+padRing.rotation.x = Math.PI / 2; padRing.position.y = 0.12;
+const padDisc = new THREE.Mesh(new THREE.CircleGeometry(2.5, 28),
+  new THREE.MeshBasicMaterial({ color: 0xffd34d, transparent: true, opacity: 0.18, side: THREE.DoubleSide }));
+padDisc.rotation.x = -Math.PI / 2; padDisc.position.y = 0.06;
+const padArrow = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.2, 4), new THREE.MeshBasicMaterial({ color: 0xffd34d }));
+padArrow.rotation.x = Math.PI; padArrow.position.y = 5.2;
+loadPad.add(padRing, padDisc, padArrow);
+loadPad.position.set(0, 0, 0); loadPad.visible = false;
+scene.add(loadPad);
+
 // === AUDIO: la narración real es la columna vertebral del tramo ===
 const audio = new AudioManager();
 (window as any).__audio = audio;
@@ -150,7 +166,7 @@ const beats: Beat[] = [
   {
     t: 55, sub: '¡A recoger el campamento!',
     obj: `Recoge las cuerdas (0/${camp.ropes.length})`,
-    onEnter: () => { ropesActivas = true; setTarget(null); }
+    onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(null); }
   },
   {
     t: 123, sub: 'El pan va al Tabernáculo. 🥖',
@@ -164,7 +180,7 @@ const beats: Beat[] = [
   {
     t: 228, sub: '¡La caravana se pone en marcha!',
     obj: 'Sigue a la caravana',
-    onEnter: () => { journey.arrancarCaravana(); camp.bultos.forEach((b) => { b.visible = false; }); setTarget({ x: 0, z: Journey.MARCHA_Z }); }
+    onEnter: () => { journey.arrancarCaravana(); camp.bultos.forEach((b) => { b.visible = false; }); loadPad.visible = false; setTarget({ x: 0, z: Journey.MARCHA_Z }); }
   }
 ];
 const director = new Director(beats, null, () => finDelTramo());
@@ -223,22 +239,23 @@ let bultosActivos = false;       // mini-juego de cargar la caravana
 let cargandoBulto: THREE.Mesh | null = null;   // bulto que el jugador lleva en brazos
 const CARGA_DEST = { x: 26.5, z: 33 };          // junto al camello del beduino (zona de carga)
 const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
+const entregados = new Set<THREE.Mesh>();       // bultos ya apilados en el camello
 
 // mini-juego "carga la caravana" — VERBO REAL: coge un bulto y LLÉVALO al camello.
-function bultosEntregados(): number { return camp.bultos.filter((b) => !b.visible).length; }
+function bultosEntregados(): number { return entregados.size; }
 function actualizarObjBultos(): void {
   if (director.beatIndex !== 6) return;
   const got = bultosEntregados();
   director.setObjetivo(cargandoBulto
-    ? `🐫 Llévalo al camello (${got}/${camp.bultos.length})`
-    : `📦 Coge un bulto y llévalo al camello (${got}/${camp.bultos.length})`);
+    ? `🐫 Llévalo al tapiz dorado, junto al camello (${got}/${camp.bultos.length})`
+    : `📦 Coge un bulto (🔵) y llévalo al camello (${got}/${camp.bultos.length})`);
 }
 // La baliza guía el verbo: si llevas un bulto → apunta al camello; si no → al bulto más cercano.
 function balizaBulto(): void {
   if (cargandoBulto) { setTarget(CARGA_DEST); return; }
   let best: THREE.Mesh | null = null, bd = 1e9;
   for (const b of camp.bultos) {
-    if (!b.visible) continue;
+    if (entregados.has(b) || b === cargandoBulto) continue;
     const d = controller.pos.distanceTo(b.position);
     if (d < bd) { bd = d; best = b; }
   }
@@ -246,8 +263,20 @@ function balizaBulto(): void {
 }
 function activarBultos(): void {
   bultosActivos = true;
-  for (const b of camp.bultos) b.visible = true;
+  for (const b of camp.bultos) b.visible = true;      // aparecen con su flecha-pista (🔵)
+  loadPad.position.set(CARGA_DEST.x, 0, CARGA_DEST.z); // tapiz dorado junto al camello
+  loadPad.visible = true;
   actualizarObjBultos(); balizaBulto();
+}
+/** Apila el bulto entregado sobre el tapiz (feedback visible: el camello se va cargando). */
+function apilarBulto(b: THREE.Mesh): void {
+  entregados.add(b);
+  if (b.userData.hint) b.userData.hint.visible = false;   // ya no hay que cogerlo
+  const n = entregados.size - 1;
+  const col = n % 2, row = (n / 2) | 0;
+  b.position.set(CARGA_DEST.x - 0.6 + col * 1.2, 0.7 + row * 0.85, CARGA_DEST.z);
+  b.rotation.set(0, (n * 0.6), 0);
+  b.visible = true;
 }
 const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling discreto al meter una oveja
 
@@ -389,6 +418,12 @@ function animate(now: number): void {
 
   // baliza
   if (beacon.visible) { ring.rotation.z += dt * 1.5; arrow.position.y = 4 + Math.sin(now * 0.004) * 0.4; }
+  // tapiz de carga del camello (pulso + flecha que bota) — guía clara del destino
+  if (loadPad.visible) {
+    const pulse = 1 + Math.sin(now * 0.006) * 0.06;
+    padRing.scale.set(pulse, pulse, 1);
+    padArrow.position.y = 5.2 + Math.sin(now * 0.005) * 0.4;
+  }
 
   // FASE A — recoger cuerdas (flotan e invitan a cogerlas)
   if (ropesActivas && !ropesHechas) {
@@ -396,8 +431,10 @@ function animate(now: number): void {
     for (const rope of camp.ropes) {
       if (!rope.visible) continue;
       left++;
-      rope.rotation.z += dt * 1.5;
-      rope.position.y = 0.35 + Math.sin(now * 0.004 + rope.position.x) * 0.15;
+      rope.rotation.y += dt * 1.0;   // la soga gira despacio sobre el suelo
+      rope.position.y = 0.32 + Math.sin(now * 0.004 + rope.position.x) * 0.15;
+      const h = rope.userData.hint as THREE.Mesh | undefined;
+      if (h) { h.rotation.y += dt * 3; h.position.y = 2.6 + Math.sin(now * 0.006 + rope.position.x) * 0.25; }
       if (controller.pos.distanceTo(rope.position) < 2.6) {
         rope.visible = false; left--;
         audio.sfxPickup();                                             // ¡pling!
@@ -425,30 +462,35 @@ function animate(now: number): void {
   // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)
   if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {
     if (cargandoBulto) {
-      // llevas un bulto: va en brazos (sobre el jugador) hasta que lo sueltas en el camello
+      // llevas un bulto: va en brazos (sobre el jugador) hasta que lo sueltas en el tapiz
       const b = cargandoBulto;
       b.position.set(controller.pos.x, 3.0, controller.pos.z);
       b.rotation.y += dt * 2;
       if (Math.hypot(controller.pos.x - CARGA_DEST.x, controller.pos.z - CARGA_DEST.z) < 3.5) {
-        b.visible = false; cargandoBulto = null;           // ENTREGADO en el camello
+        cargandoBulto = null;
+        apilarBulto(b);                                    // ENTREGADO: se apila (el camello se carga)
         audio.sfxPickup(); dust.burst(CARGA_DEST.x, 1.0, CARGA_DEST.z, 12);
         actualizarObjBultos(); balizaBulto();
       }
     } else {
-      // no llevas nada: los bultos flotan invitando a cogerlos; al tocar uno, lo coges
+      // no llevas nada: los bultos por coger flotan e invitan (flecha 🔵); al tocar uno, lo coges
       for (const b of camp.bultos) {
-        if (!b.visible) continue;
+        if (!b.visible || entregados.has(b)) continue;
         b.rotation.y += dt * 1.2;
         b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
+        const h = b.userData.hint as THREE.Mesh | undefined;
+        if (h) h.position.y = 2.6 + Math.sin(now * 0.006 + b.position.x) * 0.25;
         if (controller.pos.distanceTo(b.position) < 2.6) {
           cargandoBulto = b; audio.sfxPickup();            // ¡COGIDO! ahora llévalo
+          if (h) h.visible = false;                        // ya lo llevas: fuera la pista
           actualizarObjBultos(); balizaBulto();
           break;
         }
       }
     }
-    if (camp.bultos.every((b) => !b.visible)) {
+    if (entregados.size >= camp.bultos.length) {
       done.add('bultos'); audio.sfxSuccess(); director.star(); director.logro('¡Caravana cargada! 🐫'); setTarget(null);
+      loadPad.visible = false;
     }
   }
 
