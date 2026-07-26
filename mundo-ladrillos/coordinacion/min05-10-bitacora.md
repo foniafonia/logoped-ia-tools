@@ -78,3 +78,32 @@ cuerda → treta del "¡un avión!" → colarse → patrullas por las calles.
   equilibrio, treta con E, gemas + confeti, mandos móviles, secuencia encadenada.
 - Audio real de la peli integrado y sonando (verificado en headless).
 - Compila (`npx vite build`); capturas al día; entrega generada.
+
+## ESTADO FINAL (iteración de pulido + adopción de helpers del muñequero)
+Además de las 8 escenas base, el tramo ahora tiene:
+- **Verbo por escena** (auditoría muñequero): esc9 otea Jericó (E), esc11 estudia
+  la muralla (E), esc12 se equipa el traje (E), esc14 treta del avión (E)…
+- **Kit de horizonte** (`props/Horizon`): dunas/cerros rodean al jugador (fin del
+  "descampado pálido").
+- **Escondite estrella** (`props/RugHide`, esc16): te agachas tras la alfombra
+  colgada; la tela se abomba (bulto que respira) con plano cinemático automático.
+- **Río vivo** (`buildFish`, esc13): banco de peces que nadan y saltan.
+- **Cordón de grana de Rahab** (esc16): ventana iluminada + Rahab + cordón (Josué 2).
+- **Interior de carpa** (`world/Tent`, esc12) + **orilla vestida** (`world/Riverbank`,
+  esc9) + **calles de zoco vivo** (`world/StreetProps`: guirnaldas/ropa/pozo, esc15-16).
+- **Cámara cinemática portátil** (`props/CinematicCamera`) + hooks `cameraReveal`/
+  `cameraFocus`/`setPlayerVisible` en `SceneContext` (todos OPCIONALES).
+- **Chapita de parte** (`ui/SceneTag`) + `SoundEngine.nowPlaying()` para iterar.
+
+### AUDIO — importante para el integrador
+- El clip `narracion_min5-10` (nuestro clips.ts) está CONDENSADO y NO casa con el
+  desglose (verificado: río en [0,11.5]s, grito del avión en 22.2s por
+  cross-correlación). Uso VENTANAS REALES por escena en `CLIP_SEG` (preview):
+  de momento solo esc9=[0,11.5] (río). El resto: ambiente hasta tener los clips
+  POR ESCENA que pide `mapa-partes` (bso_min5-10 + voz_10/12/14…). Cuando existan,
+  se cablean en `startSceneFilm` (SoundEngine ya toca clips por nombre).
+- `USE_FILM_SPINE`=true, `PER_SCENE_JUMP` sustituido por `CLIP_SEG` (ventanas de oído).
+
+### Nuevo modo de iluminación
+- `applyLighting(noche, street, interior)`: 'interior' oculta cielo/horizonte/suelo
+  y baja la luz base (para que manden los faroles del propio interior — carpa/taberna).
