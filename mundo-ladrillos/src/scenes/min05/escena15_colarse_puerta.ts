@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { buildBarrel, buildHouse, studdedPlate } from './props/BrickProps';
+import { buildBarrel, buildHouse, studdedPlate, buildTorch, buildReeds, buildRock, buildPalm, buildMarketStall, brickBox } from './props/BrickProps';
 import { buildStraightWallLike } from './props/Walls';
-import { buildArchGate, buildBrazier, buildLantern } from './props/NightAmbience';
+import { buildArchGate, buildBrazier, buildLantern, buildBanner } from './props/NightAmbience';
 import { StealthSystem } from './mechanics/StealthSystem';
 import { VisionCone } from './props/Npc';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
+import { Wanderers } from './props/Wanderers';
 import { Collectibles } from './props/Collectibles';
-import { ESPIA2_SIGILO } from './skins';
+import { ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 import { buildLanternString, buildLaundryLine } from '../../world/StreetProps';
 
 /**
@@ -58,6 +59,29 @@ export const escena15: Min05Scene = {
     group.add(buildLanternString(plastic, { ax: -11, az: 16, bx: 11, bz: 16, height: 9, count: 8, lights: 2 }));
     group.add(buildLanternString(plastic, { ax: -11, az: 26, bx: 11, bz: 26, height: 9, count: 8, lights: 2 }));
     group.add(buildLaundryLine(plastic, { ax: -9, az: 22, bx: -9, bz: 29, height: 5.4, seed: 3 }));
+    group.add(buildLaundryLine(plastic, { ax: 9, az: 24, bx: 9, bz: 31, height: 5.6, seed: 8 }));
+
+    // === AMUEBLADO EXTERIOR: la aproximación a la puerta estaba desolada ===
+    // camino con 2 antorchas (ÚNICA luz nueva; el resto son props SIN luz, por el móvil)
+    const torches = [buildTorch(plastic, -8, -3, 5), buildTorch(plastic, 8, -3, 5)];
+    torches.forEach((tt) => group.add(tt.group));
+    // control/zoco fuera de la muralla: dos puestos de mercado (con colisión)
+    const stallA = buildMarketStall(plastic, BrickPalette.DARK_RED); stallA.position.set(-16, 0, -7); stallA.rotation.y = 0.5; group.add(stallA); ctx.addObstacle(-16, -7, 2.6, 1.6);
+    const stallB = buildMarketStall(plastic, BrickPalette.DARK_BLUE); stallB.position.set(16, 0, -9); stallB.rotation.y = -0.5; group.add(stallB); ctx.addObstacle(16, -9, 2.6, 1.6);
+    // cajas/sacos y barriles amontonados (caravana), sin luz
+    for (const [cx, cz] of [[-13, -12], [-11.5, -13.5], [15, -4.5], [13.5, -3], [-18.5, -3]] as const) {
+      group.add(brickBox(plastic, 2, 2, 2, (cx < 0 ? BrickPalette.BROWN : BrickPalette.DARK_SAND), cx, 1, cz)); ctx.addObstacle(cx, cz, 1, 1);
+    }
+    for (const [bx, bz] of [[-14, -6], [17, -13], [-9.5, -10]] as const) { const br = buildBarrel(plastic); br.position.set(bx, 0, bz); group.add(br); ctx.addObstacle(bx, bz, 1, 1); }
+    // vegetación y rocas del desierto (sin luz)
+    for (const [px, pz] of [[-21, -15], [21, -11]] as const) { group.add(buildPalm(plastic, px, pz, 8)); ctx.addObstacle(px, pz, 1, 1); }
+    group.add(buildReeds(plastic, -22, -8, 8)); group.add(buildReeds(plastic, 22, -4, 8));
+    for (const [rx, rz, s] of [[-19, -18, 1.1], [19, -17, 0.9], [-5, -15, 0.7]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.6 * s, 1.4 * s); }
+    // estandartes de color en la muralla
+    for (const bx2 of [-14, 14]) { const bn = buildBanner(plastic, BrickPalette.DARK_RED, 1.6, 5); bn.position.set(bx2, 9, 6.6); group.add(bn); }
+    // gente del zoco fuera (acotada a la izquierda: no estorba la puerta ni el sigilo)
+    const life = new Wanderers(plastic, [ESPIA1_CAMP, ESPIA2_CAMP], 3, { minX: -22, maxX: -13, minZ: -16, maxZ: -5 });
+    group.add(life.group);
 
     // tinajas = escondites (con colisión suave)
     const barrelPos = [{ x: -5, z: 2 }, { x: 6, z: 14 }, { x: -6, z: 20 }];
@@ -91,6 +115,7 @@ export const escena15: Min05Scene = {
       group,
       update(dt, t, player) {
         braziers.forEach((b) => b.update(t)); lanterns.forEach((l) => l.update(t));
+        torches.forEach((tt) => tt.update(t)); life.update(dt);
         stealth.update(dt, t); buddy.update(dt); gems.update(dt, t, player);
         goal.scale.setScalar(1 + Math.sin(t * 3) * 0.08);
         const o = escena15.objetivo.target!;
