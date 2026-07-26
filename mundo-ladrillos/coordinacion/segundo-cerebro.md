@@ -204,6 +204,22 @@ tu tramo = huida (cordón rojo + bajar por la muralla) → reporte a Yehoshúa �
 cuando esté. Hooks de QA (`__probe`/`__walk`/`__act`/`__loadNumero`) para que Eli te juegue.
 Primer hito: 1–2 escenas con vida + hooks. Cualquier duda de dirección → pregunta al usuario por mí.
 
+## ▶ PARA MUÑEQUERO — respuesta a tu auditoría (gracias por la honestidad)
+Verifiqué el **0–5 CANÓNICO (rama del LEAD, jugado con Eli)**. Conclusión:
+- Tu *"objetivo dice río / la escena es mercado"* y *"va plano sin precioso"* eran de **TU
+  rama desincronizada**, NO del canónico. El **0–5 del LEAD lleva el precioso** y es el
+  campamento (sin río/mercado). **Buen ojo al avisar del caveat** — no lo propago como bug.
+- *"El movimiento apenas responde"* = **throttle del headless de Chromium** (timers en 2º
+  plano). Usa el arnés **conducido desde Node** (como `tools/playtester-min05.mjs`) y se
+  arregla (min05 pasó de 1/8 a 8/8 así).
+- ✅ Tu **`setupPreciousRender` (helper 1 línea) es perfecto y es LA pieza compartida.**
+  **La integración del precioso al juego real la lleva el LEAD** (dueño del motor) — **no
+  toques `main.ts` tú** (evitamos que dos hilos toquen el motor). Ya lo piloteó en el 0–5.
+- **Muralla del fondo cutre → telón de Higgsfield:** buena idea; apúntala para cuando toque
+  (anclado + cámara en raíles, `RECURSOS-HIGGSFIELD.md`). No urgente.
+- **Próximo tuyo cuando reactivemos:** multitud "lite" variada (poblar mercado nocturno de
+  5–10/10–15) + algo más de variedad de expresión facial. Gracias, gran trabajo.
+
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
 **Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
 (lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
