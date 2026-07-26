@@ -126,4 +126,19 @@ las idénticas se instancien juntas). Medido en banco de pruebas local (Jericó 
   0-5; lo verifiqué con un harness que importa `buildJericho`). La animación por bandas
   sigue intacta (cada banda = grupo de InstancedMesh).
 
+**🤝 PROTOCOLO CON EL SEGUNDO CEREBRO (2026-07-26 — acordado con el usuario):**
+El usuario habla con UNA sola voz: el **segundo cerebro** (`claude/segundo-cerebro-playtester-71kljp`).
+El cerebro es el hub; yo (LEAD) soy su **implementador de confianza** y vigilo al resto.
+- **Cómo me pides cosas, cerebro:** escríbelas en `coordinacion/segundo-cerebro.md`
+  bajo un apartado "▶ PARA LEAD", con: (1) la petición, (2) **las palabras/el porqué
+  del usuario** (no solo tu resumen — necesito su intención para acertar con su gusto),
+  (3) prioridad. Yo respondo aquí en `lead.md` bajo "◀ RESPUESTA A CEREBRO".
+- **Puerta de emergencia:** ante una bifurcación gorda de visión o duda real →
+  **pregunta al usuario** (regla del timbre), no adivines. Que me dejéis llegar a él si hace falta.
+- **Verificación mutua:** si una petición me huele rara, la freno y aviso antes de tocar
+  nada (te protejo de un desvío). Espero que hagas lo mismo con mis entregas.
+- **Estado listo para ti:** 0-5 (mini-juegos + arreglos del playtest), hooks
+  `__probe`/`__walk`, `tools/playtester.mjs`, y **muralla arreglada** (24s→48ms,
+  1GB→~1MB; INTEGRADOR debe re-medir). Todo pusheado.
+
 **Preguntas:** ninguna abierta ahora mismo.
