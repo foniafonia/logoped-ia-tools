@@ -1,10 +1,5 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { setupPreciousRender } from './core/PreciousRender';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
@@ -49,28 +44,22 @@ scene.background = DAY_SKY.clone();
 // acotado" ni el efecto de la caravana perdiéndose a lo lejos.
 const FOG_FAR = Math.min(QUALITY.fogFar, 175);
 scene.fog = new THREE.Fog(DAY_SKY.clone(), 58, FOG_FAR);
-if (QUALITY.envMap) {
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-}
 
 const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 62 : 52, innerWidth / innerHeight, 0.1, 500);
 camera.position.set(0, 6, 24);
 const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 (window as any).__tpcam = tpcam;
 
-// === PILOTO "PRECIOSO" (solo 0-5, acotado; petición del cerebro) ===
-// Post-proceso cinemático: bloom suave + SMAA sobre el render ACES/IBL ya existente.
-// GATED a desktop: en móvil el post es caro → se mantiene el render directo.
+// === "PRECIOSO": acabado cinemático (helper COMPARTIDO core/PreciousRender) ===
+// Piloto verificado del 0-5, ahora vía la pieza compartida (IBL + bloom + SMAA +
+// tono ACES). GATED a desktop: en móvil se mantiene el render directo. Mantengo los
+// valores exactos del piloto (exposición 1.05, bloom 0.32/0.5/0.85, IBL sigma 0.04).
 const PRECIOSO = !IS_MOBILE;
-let composer: EffectComposer | null = null;
-if (PRECIOSO) {
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.32, 0.5, 0.85)); // bloom suave
-  composer.addPass(new SMAAPass(innerWidth, innerHeight));
-  composer.addPass(new OutputPass());
-}
+const fx = PRECIOSO
+  ? setupPreciousRender(renderer, scene, camera, {
+      exposure: 1.05, iblSigma: 0.04, bloom: { strength: 0.32, radius: 0.5, threshold: 0.85 },
+    })
+  : null;
 
 // ---- Luz de atardecer ----
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.46);   // algo menos plano (el rim aporta)
@@ -529,7 +518,7 @@ addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-  composer?.setSize(innerWidth, innerHeight);
+  fx?.setSize(innerWidth, innerHeight);
 });
 let last = 0;
 function animate(now: number): void {
@@ -543,7 +532,7 @@ function animate(now: number): void {
   if (introActiva) {
     studio.update(dt, now / 1000, director.tiempo);
     studio.frameCamera(camera, director.tiempo);
-    if (composer) composer.render(); else renderer.render(scene, camera);
+    if (fx) fx.render(); else renderer.render(scene, camera);
     return;
   }
 
@@ -551,7 +540,7 @@ function animate(now: number): void {
   //   dura el "ojito" al río, el gameplay no corre → no puede tocar nada. —
   if (cine.active) {
     cine.update(dt);
-    if (composer) composer.render(); else renderer.render(scene, camera);
+    if (fx) fx.render(); else renderer.render(scene, camera);
     return;
   }
 
@@ -767,7 +756,7 @@ function animate(now: number): void {
   sky.update(dt, nightF);                                   // deriva de nubes + telón que oscurece de noche
   atmo.update(dt, now / 1000);                              // humo de fogatas + pájaros + banderas
   tpcam.update(controller.pos);
-  if (composer) composer.render(); else renderer.render(scene, camera);
+  if (fx) fx.render(); else renderer.render(scene, camera);
 }
 requestAnimationFrame(animate);
 
