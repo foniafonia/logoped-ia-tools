@@ -11,7 +11,7 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
  */
 
 /** Expresión de las cejas para dar carácter (amable, serio, preocupado…). */
-export type Emotion = 'happy' | 'neutral' | 'worried' | 'stern';
+export type Emotion = 'happy' | 'neutral' | 'worried' | 'stern' | 'surprised' | 'alert';
 
 export interface MinifigureSkin {
   head: number;      // color piel/cabeza
@@ -58,6 +58,12 @@ export interface MinifigureSkin {
   cord?: number;              // cordón/faja en banda diagonal (rojo carmesí de Rahab)
   tie?: number;               // corbata sobre camisa blanca (rabino de traje)
   spearGold?: boolean;        // lanza/alabarda dorada (jefe de guardia)
+
+  // Ropa de héroe (P0 del brief del LEAD): capas de tela para clavar la peli.
+  vestPanel?: number;         // panel de chaleco (frente del torso, sobre la "camisa")
+  collar?: number;            // cuello en V marcado
+  loincloth?: number;         // faldón/tira frontal que cuelga del cinturón (Yehoshúa)
+  mantle?: number;            // manto/chal sobre los hombros (ancianos/sacerdote)
 }
 
 /** Yehoshúa (según frame): AZUL dominante — chaleco/pantalón azul, cinturón
@@ -74,6 +80,9 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   turbanStripe: 0xf4efe4, // franjas blancas
   beard: 0xbdc3c7,       // barba larga blanca/canosa
   beardStyle: 'long',
+  vestPanel: 0x184e78,   // chaleco azul más oscuro (pechera)
+  collar: 0x3a7fb5,      // cuello en V azul claro
+  loincloth: 0x6e4a2c,   // faldón de cuero al frente
   emotion: 'neutral',    // líder mayor, solemne
   accessory: 'staff'
 };
@@ -89,7 +98,7 @@ export const SPY_SKIN: MinifigureSkin = {
   headwear: 0x3a4362,   // máscara azul oscuro (no negro)
   headStyle: 'ninja',
   straps: 0x5b7bb0,     // correas azul claro (detalle alegre)
-  emotion: 'happy',
+  emotion: 'alert',     // en misión de sigilo: ojo avizor
   accessory: 'sword'
 };
 
@@ -104,7 +113,7 @@ export const SPY2_SKIN: MinifigureSkin = {
   headwear: 0x4b5560,   // máscara gris asfalto
   headStyle: 'ninja',
   straps: 0x8b98a6,
-  emotion: 'happy',
+  emotion: 'alert',     // en misión de sigilo: ojo avizor
   accessory: 'sword'
 };
 
@@ -259,6 +268,52 @@ export const CHARACTER_SKINS: Record<string, MinifigureSkin> = {
   rabino: RABBI_SKIN
 };
 
+/**
+ * ALDEANOS para multitudes: 8 presets distintos (hombres y mujeres, ropas,
+ * tocados, barbas y caras variadas) para que la gente NO se clone. Pensado para
+ * "mundo lleno" y comunidad de todas las edades. Colores terrosos de época.
+ */
+export const VILLAGER_PRESETS: MinifigureSkin[] = [
+  // 0 · hombre, túnica arena, turbante marrón, barba gris, sereno
+  { head: 0xf4d03f, torso: 0xc9b083, belt: 0x8a6a3a, legs: 0xb9a36f, arms: 0xc9b083,
+    hands: 0xf4d03f, headwear: 0x8a6a3a, headStyle: 'turban', beard: 0x9aa0a3,
+    beardStyle: 'short', emotion: 'neutral' },
+  // 1 · mujer, vestido teja, melena castaña, amable
+  { head: 0xf4d03f, torso: 0xb5654a, belt: 0x8f4c37, legs: 0xb5654a, arms: 0xb5654a,
+    hands: 0xf4d03f, headwear: 0x6b4a2f, headStyle: 'longHair', feminine: true,
+    lips: 0xc26a63, skirt: 0xb5654a, skirtLong: true, emotion: 'happy' },
+  // 2 · hombre joven, túnica oliva, pañuelo claro (cogulla), sin barba, alerta
+  { head: 0xf4d03f, torso: 0x7d8b4f, belt: 0x5a5a30, legs: 0x6f7a45, arms: 0x7d8b4f,
+    hands: 0xf4d03f, headwear: 0xd9c9a8, headStyle: 'hood', emotion: 'alert' },
+  // 3 · anciano, túnica gris-azul, turbante claro, barba larga blanca, preocupado
+  { head: 0xf4d03f, torso: 0x6f7f8c, belt: 0x4f5a63, legs: 0x62707b, arms: 0x6f7f8c,
+    hands: 0xf4d03f, headwear: 0xd7dbde, headStyle: 'turban', beard: 0xcfd4d7,
+    beardStyle: 'long', emotion: 'worried' },
+  // 4 · mujer joven, vestido azul polvo, melena negra, sorprendida
+  { head: 0xf4d03f, torso: 0x5b7b8a, belt: 0x435c66, legs: 0x5b7b8a, arms: 0x5b7b8a,
+    hands: 0xf4d03f, headwear: 0x2a2620, headStyle: 'longHair', feminine: true,
+    lips: 0xbf6a6a, skirt: 0x5b7b8a, skirtLong: true, emotion: 'surprised' },
+  // 5 · hombre, túnica marrón rojiza, pañuelo tostado, barba negra corta, serio
+  { head: 0xf4d03f, torso: 0x8a4b3a, belt: 0x5e3527, legs: 0x6e3c2e, arms: 0x8a4b3a,
+    hands: 0xf4d03f, headwear: 0xcdb79a, headStyle: 'hood', beard: 0x2a221c,
+    beardStyle: 'short', emotion: 'stern' },
+  // 6 · hombre, túnica trigo, turbante verdoso, barba castaña, amable
+  { head: 0xf4d03f, torso: 0xd9c27e, belt: 0x9a7b3a, legs: 0xc8b06a, arms: 0xd9c27e,
+    hands: 0xf4d03f, headwear: 0x6f7f5a, headStyle: 'turban', beard: 0x6b4a2f,
+    beardStyle: 'short', emotion: 'happy' },
+  // 7 · mujer mayor, vestido gris, melena plateada, neutral
+  { head: 0xf4d03f, torso: 0x9a9690, belt: 0x7c7872, legs: 0x928e88, arms: 0x9a9690,
+    hands: 0xf4d03f, headwear: 0xdadde0, headStyle: 'longHair', feminine: true,
+    lips: 0xb98a80, skirt: 0x9a9690, skirtLong: true, emotion: 'neutral' }
+];
+
+/** Aldeano determinista por índice (sin Math.random → estable en resume).
+ *  Sin arma por defecto (los aldeanos no van armados). */
+export function villagerSkin(i: number): MinifigureSkin {
+  const n = VILLAGER_PRESETS.length;
+  return { accessory: 'none', ...VILLAGER_PRESETS[((i % n) + n) % n] };
+}
+
 export class Minifigure {
   readonly root = new THREE.Group();
   readonly legL = new THREE.Group();
@@ -320,11 +375,43 @@ export class Minifigure {
   /** Cejas cuya inclinación transmite la emoción. `slim` las hace finas (fem). */
   private addBrows(y: number, z: number, emotion: Emotion, color = 0x3a2a1a, spread = 0.2, slim = false): void {
     // t>0 baja el extremo interior (enfado); t<0 lo sube (preocupación/amable)
-    const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13 }[emotion];
+    const t = { neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13, surprised: -0.1, alert: 0.24 }[emotion];
+    // Elevación de la ceja: sorprendido/alerta las suben (ojos muy abiertos)
+    const lift = { neutral: 0, stern: 0, worried: 0.02, happy: 0, surprised: 0.11, alert: 0.06 }[emotion];
     const h = slim ? 0.035 : 0.06;
     const w = slim ? 0.2 : 0.22;
-    const bL = this.box(w, h, 0.05, color, -spread, y, z); bL.rotation.z = -t; this.root.add(bL);
-    const bR = this.box(w, h, 0.05, color, spread, y, z); bR.rotation.z = t; this.root.add(bR);
+    const bL = this.box(w, h, 0.05, color, -spread, y + lift, z); bL.rotation.z = -t; this.root.add(bL);
+    const bR = this.box(w, h, 0.05, color, spread, y + lift, z); bR.rotation.z = t; this.root.add(bR);
+  }
+
+  /** Boca según emoción: sonrisa, línea seria, mueca preocupada u «O» de sorpresa. */
+  private addMouth(y: number, z: number, emotion: Emotion, color = 0x6e3f24): void {
+    switch (emotion) {
+      case 'happy': // sonrisa curva hacia arriba
+        this.root.add(this.box(0.28, 0.06, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, -0.17, y + 0.05, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, 0.17, y + 0.05, z));
+        break;
+      case 'worried': // comisuras hacia abajo
+        this.root.add(this.box(0.28, 0.06, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, -0.17, y - 0.05, z));
+        this.root.add(this.box(0.09, 0.1, 0.05, color, 0.17, y - 0.05, z));
+        break;
+      case 'surprised': { // boca abierta en «O»
+        const o = new THREE.CylinderGeometry(0.1, 0.1, 0.05, 16);
+        o.rotateX(Math.PI / 2);
+        this.root.add(this.mesh(o, color, 0, y, z));
+        break;
+      }
+      case 'stern': // línea recta ancha y firme
+        this.root.add(this.box(0.34, 0.06, 0.05, color, 0, y, z));
+        break;
+      case 'alert': // boca pequeña y tensa
+        this.root.add(this.box(0.18, 0.08, 0.05, color, 0, y, z));
+        break;
+      default: // neutral: línea corta
+        this.root.add(this.box(0.24, 0.06, 0.05, color, 0, y, z));
+    }
   }
 
   /** Pestañas: pequeños trazos en el ángulo externo de cada ojo (rasgo fem). */
@@ -387,6 +474,29 @@ export class Minifigure {
     this.root.add(this.box(1.5, 0.7, 0.86, s.torso, 0, 3.0, 0)); // hombros anchos
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
     this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
+
+    // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
+    if (s.vestPanel !== undefined) {
+      this.root.add(this.box(0.92, 1.5, 0.12, s.vestPanel, 0, 2.5, 0.4));   // pechera
+    }
+    // Cuello en V marcado (dos tiras cruzadas del color del collar)
+    if (s.collar !== undefined) {
+      const cl = this.box(0.16, 0.7, 0.1, s.collar, -0.18, 2.98, 0.47); cl.rotation.z = 0.5;
+      const cr = this.box(0.16, 0.7, 0.1, s.collar, 0.18, 2.98, 0.47); cr.rotation.z = -0.5;
+      this.root.add(cl, cr);
+    }
+    // Faldón / tira frontal que cuelga del cinturón (Yehoshúa).
+    if (s.loincloth !== undefined) {
+      this.root.add(this.box(0.5, 1.0, 0.14, s.loincloth, 0, 1.35, 0.42));
+      this.root.add(this.box(0.5, 0.18, 0.16, s.belt, 0, 1.86, 0.44)); // remache al cinturón
+    }
+    // Manto/chal sobre los hombros (ancianos, sacerdote): cae por la espalda.
+    if (s.mantle !== undefined) {
+      const drape = this.box(1.6, 2.3, 0.16, s.mantle, 0, 2.3, -0.5);
+      drape.rotation.x = -0.05;
+      this.root.add(drape);
+      this.root.add(this.box(1.5, 0.36, 0.6, s.mantle, 0, 3.16, -0.12)); // cuello del manto
+    }
 
     // Camisa blanca + corbata (rabino de traje)
     if (s.tie !== undefined) {
@@ -475,16 +585,17 @@ export class Minifigure {
       this.root.add(this.box(0.9, 0.82, 0.12, s.head, 0, 3.86, 0.5));       // cara amarilla enmarcada
       this.addEyes(4.02, 0.57, 0.22, 0x2a2016);
       this.addBrows(4.2, 0.58, emotion, 0x2a2016, 0.22);
-      this.addSmile(3.62, 0.57);
+      this.addMouth(3.62, 0.57, emotion);
     } else {
       this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30));           // cabeza de piel
       this.addEyes(3.98, 0.54, 0.19);
       this.addBrows(4.15, 0.54, emotion, 0x3a2a1a, 0.2, s.feminine);
       if (s.feminine) { this.addLashes(3.98, 0.55); this.addBlush(3.74, 0.53); }
       if (s.glasses !== undefined) this.addGlasses(3.98, 0.56, s.glasses);
-      // Boca: labios (fem), o sonrisa si no hay barba tapándola
+      // Boca según emoción (labios si es fem). Siempre visible: en barbudos la
+      // barba arranca en la barbilla y el bigote va por encima → boca libre.
       if (s.lips !== undefined) this.addLips(3.64, 0.55, s.lips);
-      else if (!s.beard || s.beardStyle === 'short') this.addSmile(3.62, 0.55);
+      else this.addMouth(3.62, 0.55, emotion);
     }
 
     // --- Barba ---
@@ -510,15 +621,21 @@ export class Minifigure {
       this.root.add(this.box(0.2, 0.6, 0.16, col, -0.5, 3.78, 0.28)); // patilla
       this.root.add(this.box(0.2, 0.6, 0.16, col, 0.5, 3.78, 0.28));
     } else {
-      // Barba larga: cono SÓLIDO invertido, colocado bajo la cara para que
-      // los ojos sigan a la vista (base ~3.7, punta ~2.4).
-      const bg = new THREE.ConeGeometry(0.56, 1.35, 22);
-      bg.rotateX(Math.PI); // punta hacia abajo, base ancha arriba
-      bg.scale(1, 1, 0.7);
-      const beard = this.mesh(bg, col, 0, 3.05, 0.3);
-      this.root.add(beard);
-      // bigote / mejillas que enlazan con la cara
-      this.root.add(this.box(0.82, 0.32, 0.34, col, 0, 3.64, 0.42));
+      // Barba larga de patriarca con la BOCA LIBRE: bigote por encima del labio y
+      // la barba arrancando en la barbilla (no tapa la boca) → cae en punta al
+      // pecho. Deja ver la túnica y lee como barba, no como pañuelo.
+      // Bigote: dos mitades con hueco central, por encima de la boca (~3.62)
+      const mL = this.box(0.36, 0.13, 0.32, col, -0.17, 3.79, 0.42); mL.rotation.z = 0.24;
+      const mR = this.box(0.36, 0.13, 0.32, col, 0.17, 3.79, 0.42); mR.rotation.z = -0.24;
+      this.root.add(mL, mR);
+      // Patillas que enmarcan la cara por los lados (no cruzan la boca)
+      this.root.add(this.box(0.18, 0.62, 0.3, col, -0.44, 3.6, 0.32));
+      this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
+      // Cuerpo: cono que arranca en la barbilla (~3.45) y baja en punta al pecho
+      const bg = new THREE.ConeGeometry(0.5, 1.45, 22);
+      bg.rotateX(Math.PI);
+      bg.scale(1, 1, 0.72);
+      this.root.add(this.mesh(bg, col, 0, 2.72, 0.32));
     }
   }
 
@@ -540,22 +657,36 @@ export class Minifigure {
       }
       case 'turban': {
         if (hw === undefined) break;
-        const dome = new THREE.SphereGeometry(0.64, 26, 18, 0, Math.PI * 2, 0, Math.PI / 2);
-        const domeMesh = this.mesh(dome, hw, 0, 4.32, 0);
-        domeMesh.scale.set(1.06, 0.95, 1.06);
+        // Turbante de TELA ENVUELTA (como en la peli): cúpula pequeña + varias
+        // vueltas (toros) apiladas y giradas para que se lean los pliegues.
+        const dome = new THREE.SphereGeometry(0.5, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+        const domeMesh = this.mesh(dome, hw, 0, 4.5, 0);
+        domeMesh.scale.set(1.02, 0.9, 1.02);
         this.root.add(domeMesh);
-        // Banda frontal (blanca si el turbante lleva franjas)
-        const band = new THREE.TorusGeometry(0.6, 0.17, 12, 30);
-        band.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(band, s.turbanStripe ?? hw, 0, 4.3, 0));
-        // Cola del turbante colgando al lado
-        this.root.add(this.cyl(0.13, 0.34, hw, 0.5, 4.34, 0.24));
-        // Franja blanca superior envolviendo la cúpula
-        if (s.turbanStripe !== undefined) {
-          const st = new THREE.TorusGeometry(0.6, 0.06, 12, 30);
-          st.rotateX(Math.PI / 2);
-          this.root.add(this.mesh(st, s.turbanStripe, 0, 4.56, 0));
-        }
+        // Vueltas de tela: radios y alturas decrecientes hacia arriba, cada una
+        // ligeramente girada para simular el envoltorio en espiral.
+        const wraps: Array<[number, number, number, number]> = [
+          // [radio, tubo, y, giro.z]
+          [0.62, 0.19, 4.14, 0.10],
+          [0.60, 0.18, 4.30, -0.08],
+          [0.54, 0.17, 4.45, 0.12],
+          [0.44, 0.15, 4.58, -0.05],
+        ];
+        wraps.forEach(([r, t, y, rz], i) => {
+          const g = new THREE.TorusGeometry(r, t, 12, 30);
+          g.rotateX(Math.PI / 2);
+          // franja blanca alternando con el color del turbante
+          const col = (s.turbanStripe !== undefined && i % 2 === 1) ? s.turbanStripe : hw;
+          const m = this.mesh(g, col, 0, y, 0);
+          m.rotation.y = rz;
+          this.root.add(m);
+        });
+        // Nudo/pliegue lateral donde se remete la tela
+        this.root.add(this.box(0.3, 0.26, 0.24, hw, 0.5, 4.24, 0.16));
+        // Cola de la tela cayendo por detrás del hombro
+        const tail = this.box(0.26, 0.7, 0.16, s.turbanStripe ?? hw, 0.46, 3.7, -0.34);
+        tail.rotation.z = 0.22;
+        this.root.add(tail);
         break;
       }
       case 'coneHelmet': {
@@ -652,11 +783,16 @@ export class Minifigure {
 
   /** Bastón de madera vertical con nudo superior (Yehoshúa). */
   private addStaff(): void {
-    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 3.4, 10), this.plastic.get(0x6e4a2c));
-    shaft.position.set(0, -0.55, 0.2); shaft.castShadow = true;
-    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.19, 14, 12), this.plastic.get(0x8a6a3a));
-    knob.position.set(0, 1.2, 0.2); knob.castShadow = true;
-    this.armR.add(shaft, knob);
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 4.0, 10), this.plastic.get(0x6e4a2c));
+    shaft.position.set(0, -0.4, 0.2); shaft.castShadow = true;
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 12), this.plastic.get(0x8a6a3a));
+    knob.position.set(0, 1.75, 0.2); knob.castShadow = true;
+    // anillo bajo el pomo (bastón de líder)
+    const ring = new THREE.TorusGeometry(0.14, 0.05, 8, 16);
+    ring.rotateX(Math.PI / 2);
+    const ringM = new THREE.Mesh(ring, this.plastic.get(0x8a6a3a));
+    ringM.position.set(0, 1.5, 0.2);
+    this.armR.add(shaft, knob, ringM);
   }
 
   /** Lanza de la guardia (o alabarda DORADA del jefe) en la mano derecha. */
