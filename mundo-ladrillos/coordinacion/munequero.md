@@ -1,5 +1,26 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · CONTROLES + HUD EXTRAS
+Petición del usuario: botones para jugar y controles (joystick móvil, botón "E").
+Añadido (todo verificado, 0 errores, subido):
+- **`src/ui/Controls.ts`** — capa de controles: **joystick virtual** (táctil,
+  abajo-izq) + **botón de interacción "E"** (táctil + tecla E) + **botón de acción**
+  (Espacio) + **WASD/flechas** + **prompt contextual** ("Pulsa E — Hablar") con la E
+  resaltada. **Detecta móvil** (muestra joystick sólo en táctil). API:
+  `onMove(x,y)`, `onInteract`, `onAction`, `setPrompt(txt|null)`.
+  Demo `controles-demo`: la minifig se mueve, mira al avance, anima el paso y al
+  acercarse al pozo salta el prompt → diálogo.
+- **`src/ui/Toast.ts`** — avisos emergentes apilables (`toast('¡Reliquia!',{icon,variant})`).
+- **`src/ui/Collectibles.ts`** — chip contador de recolectables (`🏺 3/7`), late al subir.
+- **`src/ui/LoadingScreen.ts`** — pantalla de carga con barra de ladrillos + consejo.
+- Demo `extras-demo` (carga → contador + toasts).
+
+**Cómo lo cablea el LEAD:** `onMove` → velocidad del jugador; `onInteract` con
+chequeo de proximidad → diálogo/acción; `toast()`/contador para feedback. Todo
+DOM+CSS, entra en single-file, responsive con safe-area (notch móvil).
+
+---
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · FLUJO + FIX + EXTRAS
 Cierre del lote "con todo":
 - **`src/flujo-demo.ts`** — **vertical slice** que encadena TODO el kit de UI:
