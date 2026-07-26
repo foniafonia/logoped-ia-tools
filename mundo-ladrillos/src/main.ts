@@ -505,7 +505,7 @@ function animate(now: number): void {
       : '👋 Ve a saludar a Yehoshúa');
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
-      director.logro('¡Cuerdas recogidas! ¡Arrea las ovejas antes de que acabe el tiempo! 🐑⏱');
+      director.logro('¡Cuerdas recogidas! Acércate a las ovejas para engancharlas y llévalas al redil 🐑');
       life.activarOvejas(); herdStart = now; setTarget(camp.ropes.length ? life.redil : null);
     }
   }
@@ -516,7 +516,7 @@ function animate(now: number): void {
     const queda = Math.max(0, HERD_LIMIT - elapsed);
     if (director.beatIndex === 4) {
       const reloj = queda > 0 ? `⏱ ${Math.ceil(queda)}s` : '⏱ ¡tú puedes!';
-      director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
+      director.setObjetivo(`🐑 Engancha las ovejas con la cuerda y llévalas al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
     }
     if (enRedil >= life.ovejasObjetivo) {
       done.add('camp'); audio.sfxSuccess(); director.star();
@@ -649,10 +649,11 @@ requestAnimationFrame(animate);
     const c = nearest(camp.ropes.filter((m) => m.visible).map((m) => ({ x: m.position.x, z: m.position.z })));
     if (c) goal = c;
   } else if (ropesHechas && !done.has('camp')) {
-    fase = 'arrear-ovejas';
-    const pen = life.redil;
-    const t = nearest(life._targets.filter((s) => !s.penned));
-    if (t) { const dx = t.x - pen.x, dz = t.z - pen.z, L = Math.hypot(dx, dz) || 1; goal = { x: t.x + dx / L * 3.5, z: t.z + dz / L * 3.5 }; }
+    fase = 'enganchar-ovejas';
+    // cuerda-imán: si queda alguna SIN enganchar → ve a por ella; si ya la llevas → al redil
+    const libres = life._targets.filter((s) => !s.penned && !s.leashed);
+    if (libres.length) { const c = nearest(libres); if (c) goal = c; }
+    else goal = life.redil;
   }
   return {
     beat: director.beatIndex, t: Math.round(director.tiempo),

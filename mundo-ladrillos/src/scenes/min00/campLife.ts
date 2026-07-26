@@ -56,7 +56,7 @@ function buildBasket(plastic: PlasticMaterialFactory): THREE.Group {
 interface Nino { fig: Minifigure; prog: number; }
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; pause: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
-interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; }
+interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; leashed?: boolean; leash?: THREE.Line; }
 type Oficio = 'moler' | 'amasar' | 'alfarero' | 'sentado';
 interface Faena { fig: Minifigure; tipo: Oficio; ph: number; spin?: THREE.Object3D; }
 
@@ -112,9 +112,13 @@ export class CampLife {
     for (const [sx, sz] of [[-19, 44], [-22, 49], [-17, 40]] as Array<[number, number]>) {
       const s = buildSheep(plastic);
       s.position.set(sx, 0, sz); s.rotation.y = Math.random() * Math.PI;
-      const hint = hintArrow(0x7bed7b); hint.visible = false; s.add(hint);   // pista verde: "arrea ESTA oveja"
+      const hint = hintArrow(0x7bed7b); hint.visible = false; s.add(hint);   // pista verde: "engancha ESTA oveja"
       this.group.add(s);
-      this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true, hint });
+      // cuerda-correa (visible al enganchar): línea jugador → oveja, color soga
+      const leashGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+      const leash = new THREE.Line(leashGeo, new THREE.LineBasicMaterial({ color: 0xb98a4a }));
+      leash.visible = false; leash.frustumCulled = false; this.group.add(leash);
+      this.sheep.push({ g: s, vy: 0, hopCd: 0, target: true, hint, leash });
     }
 
     // --- 4 niños con canastas de pan que desfilan hacia el Tabernáculo (esc. 06) ---
@@ -272,45 +276,63 @@ export class CampLife {
   get ovejasObjetivo(): number { return this.sheep.filter((s) => s.target).length; }
   get ovejasEnRedil(): number { return this.sheep.filter((s) => s.target && s.penned).length; }
   get redil(): { x: number; z: number } { return { x: this.pen.x, z: this.pen.z }; }
-  /** (debug) posiciones de las ovejas objetivo, para pruebas de arreo. */
-  get _targets(): Array<{ x: number; z: number; penned: boolean }> {
-    return this.sheep.filter((s) => s.target).map((s) => ({ x: s.g.position.x, z: s.g.position.z, penned: !!s.penned }));
+  /** (debug) estado de las ovejas objetivo, para el jugador sintético. */
+  get _targets(): Array<{ x: number; z: number; penned: boolean; leashed: boolean }> {
+    return this.sheep.filter((s) => s.target).map((s) => ({ x: s.g.position.x, z: s.g.position.z, penned: !!s.penned, leashed: !!s.leashed }));
   }
 
   update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void, onPenned?: () => void): void {
-    // ovejas: saltan y balan cuando el jugador se acerca (mundo que reacciona).
-    // Las OBJETIVO, además, se arrean: si el jugador las empuja al redil, se quedan.
     for (const s of this.sheep) {
       if (s.penned) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.15; continue; }
       // pista verde que bota sobre la oveja objetivo (guía al peque)
       if (s.hint && s.hint.visible) { s.hint.rotation.y += dt * 3; s.hint.position.y = 2.6 + Math.sin(t * 3 + s.g.position.x) * 0.25; }
+
+      // ---- OVEJAS OBJETIVO: mecánica "CUERDA-IMÁN" (idea del usuario, tipo Minecraft) ----
+      // te acercas → se ENGANCHA (cuerda visible) → te SIGUE → al entrar al redil se queda.
+      // Sin huidas ni ángulos: cero estrés (el arreo anterior frustraba al niño).
+      if (s.target) {
+        if (!this.penActive) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.08; continue; }
+        if (s.leashed && playerPos) {
+          const px = playerPos.x - s.g.position.x, pz = playerPos.z - s.g.position.z;
+          const d = Math.hypot(px, pz);
+          if (d > 2.4) { const sp = 6.0; s.g.position.x += (px / d) * sp * dt; s.g.position.z += (pz / d) * sp * dt; s.g.rotation.y = Math.atan2(px, pz); }
+          s.g.position.y = Math.abs(Math.sin(t * 6 + s.g.position.x)) * 0.12;   // trotecito contento
+          if (s.leash) {   // dibuja la cuerda jugador → oveja
+            const pos = s.leash.geometry.attributes.position as THREE.BufferAttribute;
+            pos.setXYZ(0, playerPos.x, 2.2, playerPos.z); pos.setXYZ(1, s.g.position.x, 1.3, s.g.position.z); pos.needsUpdate = true;
+          }
+          const dr = Math.hypot(this.pen.x - s.g.position.x, this.pen.z - s.g.position.z);
+          if (dr < this.pen.r) {   // entró al redil (siguiéndote): se queda
+            s.penned = true; s.leashed = false;
+            if (s.leash) s.leash.visible = false;
+            if (s.hint) s.hint.visible = false;
+            onPenned?.();
+          }
+        } else if (playerPos) {
+          s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.08;   // idle tranquilo (no huye)
+          const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
+          if (dx * dx + dz * dz < 9) {   // ¡ENGANCHADA! (te acercas y la coges con la cuerda)
+            s.leashed = true;
+            if (s.leash) s.leash.visible = true;
+            if (s.hint) s.hint.visible = false;
+            this.dust.burst(s.g.position.x, 0.8, s.g.position.z, 6);
+            onBaa?.();
+          }
+        }
+        continue;
+      }
+
+      // ---- OVEJAS DE AMBIENTE (no objetivo): saltan si te acercas (mundo que reacciona) ----
       s.hopCd -= dt;
       if (playerPos && s.hopCd <= 0 && s.g.position.y < 0.05) {
         const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
-        if (dx * dx + dz * dz < (s.target ? 20 : 12)) {   // objetivo: radio mayor, más fácil de arrear
-          s.vy = 6.2; s.hopCd = 1.0;
-          s.g.rotation.y = Math.atan2(-dx, -dz);   // huye del jugador
-          onBaa?.();
-        }
+        if (dx * dx + dz * dz < 12) { s.vy = 6.2; s.hopCd = 1.0; s.g.rotation.y = Math.atan2(-dx, -dz); onBaa?.(); }
       }
       if (s.g.position.y > 0 || s.vy > 0) {
-        s.vy -= 24 * dt;
-        s.g.position.y += s.vy * dt;
-        const flee = s.target ? 4.2 : 1.9;           // las de arrear avanzan más por salto
-        s.g.position.x += Math.sin(s.g.rotation.y) * flee * dt;
-        s.g.position.z += Math.cos(s.g.rotation.y) * flee * dt;
+        s.vy -= 24 * dt; s.g.position.y += s.vy * dt;
+        s.g.position.x += Math.sin(s.g.rotation.y) * 1.9 * dt;
+        s.g.position.z += Math.cos(s.g.rotation.y) * 1.9 * dt;
         if (s.g.position.y < 0) { s.g.position.y = 0; s.vy = 0; }
-      }
-      // arrear: cuando ya está cerca del redil, deriva sola hacia dentro (menos frustración)
-      if (s.target && this.penActive) {
-        const px = this.pen.x - s.g.position.x, pz = this.pen.z - s.g.position.z;
-        const d2 = px * px + pz * pz;
-        if (s.g.position.y < 0.05 && d2 < 81) {   // a menos de ~9: imán suave al corral
-          const d = Math.sqrt(d2) || 1;
-          s.g.position.x += (px / d) * 0.8 * dt;
-          s.g.position.z += (pz / d) * 0.8 * dt;
-        }
-        if (d2 < this.pen.r * this.pen.r) { s.penned = true; s.vy = 0; if (s.hint) s.hint.visible = false; onPenned?.(); }
       }
     }
 

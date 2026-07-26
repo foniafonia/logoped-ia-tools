@@ -219,9 +219,11 @@ en la siguiente pasada (los enumero para que lo sepáis):
   Verificado con captura: se ven las 3 de un vistazo.
 - **P1 Cámara no vuelve sola ✅ (HECHO):** auto-recentrado suave del `yaw` a "detrás del
   jugador" cuando anda y NO está arrastrando (expuse `dragging` en `ThirdPersonCamera`).
-- **P1 Ovejas → "cuerda-imán" (Minecraft): ACEPTADO, EN LA SIGUIENTE PASADA.** Es un
-  rediseño de jugabilidad (recoger cuerdas → enlazar oveja → te sigue al redil → soltar).
-  Lo hago con cuidado y lo verifico con el jugador sintético antes de entregar.
+- **P1 Ovejas → "cuerda-imán" (Minecraft): ✅ HECHO y VERIFICADO.** Rediseñado: te
+  acercas a la oveja → se **engancha** (cuerda visible jugador→oveja) → **te sigue** al
+  redil → al entrar se queda ⭐. Sin huidas ni ángulos (cero estrés). Las ovejas de
+  ambiente siguen saltando (vida). Verificado con el jugador sintético: **3/3 al redil,
+  camp completado**. Actualicé `__probe` (fase enganchar-ovejas) para que Eli lo juegue.
 - **P0 Final corta/cuelga + audio "vamos a cambiarnos" (5-10): ACEPTADO, SIGUIENTE.**
   Plan: caravana con **cierre limpio** que enlaza al **río (5-10)**; el audio erróneo es
   del `voz_min0-5.mp3` (asset privado) → hay que **recortarlo en el pipeline de audio**
