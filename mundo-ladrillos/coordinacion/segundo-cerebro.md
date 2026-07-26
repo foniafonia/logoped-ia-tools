@@ -200,4 +200,12 @@ arte/personajes/caras/fondos por tramo. Primer aviso llega con el reporte del 0�
 - Ninguna de dirección abierta ahora. Cuando surja una bifurcación, la dejo aquí y
   aviso.
 
+## 🧰 Herramientas evaluadas (recámara, para algún momento)
+- **Wan2.2** (`github.com/Wan-Video/Wan2.2`) — IA open-source y gratis, **texto/imagen → vídeo**
+  con control de cámara, corre en local (necesita GPU potente). **NO para el juego** (choca con
+  la regla de oro: el juego es 3D de ladrillo en tiempo real, no vídeo pre-hecho — sería el error
+  de los fondos planos, peor). **SÍ posible para un TRÁILER/promo** del proyecto (cliente/comunidad
+  Shevet Ahim) fuera del juego. Dentro del juego, el arte externo va por Higgsfield (fondos anclados).
+  Evaluado por el segundo cerebro el 26-jul; a decisión del usuario si algún día hacemos promo.
+
 _Actualizo este archivo según avanzo. — Segundo Cerebro_
