@@ -196,6 +196,10 @@ const objEl = mkDiv({ left: '50%', top: '44px', transform: 'translateX(-50%)', m
 const statusEl = mkDiv({ left: '50%', top: '84px', transform: 'translateX(-50%)', color: '#ffe', font: '700 15px system-ui', textShadow: '0 2px 8px rgba(0,0,0,.85)', textAlign: 'center' });
 const subEl = mkDiv({ left: '50%', bottom: '64px', transform: 'translateX(-50%)', maxWidth: '86%', background: 'rgba(8,6,4,.75)', color: '#ffeecb', font: '500 16px/1.35 Georgia, serif', padding: '9px 16px', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(232,176,75,.35)' });
 const flashEl = mkDiv({ left: '50%', top: '40%', transform: 'translate(-50%,-50%)', color: '#bfffce', font: '800 30px system-ui', textShadow: '0 2px 14px rgba(0,0,0,.8)', textAlign: 'center' });
+// AVISO grande de escena (gag visual "¡MIRA, UN AVIÓN!"): siempre en cuadro
+const avisoEl = mkDiv({ left: '50%', top: '30%', transform: 'translate(-50%,-50%)', maxWidth: '92%', color: '#ffe08a', background: 'rgba(10,14,22,.82)', border: '3px solid #ffd24a', font: '800 30px/1.15 Georgia, serif', padding: '12px 26px', borderRadius: '16px', textAlign: 'center', boxShadow: '0 6px 22px rgba(0,0,0,.6)', display: 'none' });
+let avisoUntil = 0;
+function sceneFlash(text: string, seconds = 3): void { avisoEl.textContent = text; avisoEl.style.display = 'block'; avisoUntil = performance.now() + seconds * 1000; }
 const promptEl = mkDiv({ left: '50%', top: '58%', transform: 'translate(-50%,-50%)', color: '#0a0705', background: '#ffd24a', font: '800 16px system-ui', padding: '8px 16px', borderRadius: '12px', boxShadow: '0 4px 14px rgba(0,0,0,.5)', display: 'none' });
 // viñeta de peligro (bordes rojos que suben con la alarma del sigilo)
 const vignette = mkDiv({ inset: '0', zIndex: '18', boxShadow: 'inset 0 0 120px 40px rgba(255,40,30,0)', transition: 'box-shadow .12s linear' });
@@ -327,8 +331,10 @@ function loadScene(i: number): void {
     setPlayerSkin: (which) => setPlayerSkin(which),
     setPlayerVisible: (v) => { player.root.visible = v; },
     cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
-    cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds)
+    cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds),
+    flash: (text, seconds) => sceneFlash(text, seconds)
   };
+  avisoEl.style.display = 'none'; avisoUntil = 0;   // limpia el aviso al cambiar de escena
   current = def.build(ctx);
 
   // CHAPITA DE PARTE: código de escena + audio en vivo + botón "📋 Copiar" para
@@ -404,6 +410,7 @@ function animate(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
 
+  if (avisoUntil && now >= avisoUntil) { avisoEl.style.display = 'none'; avisoUntil = 0; }
   const cine = cineCam.active;
   // durante la cinemática el jugador NO se mueve (solo mira); si no, control normal
   if (!cine) {

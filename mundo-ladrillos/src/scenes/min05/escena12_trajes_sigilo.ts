@@ -27,7 +27,7 @@ export const escena12: Min05Scene = {
   spawn: { x: 0, z: -6 },
   objetivo: { tipo: 'ir_a', texto: 'Ve al perchero y pulsa E para ponerte el traje', target: { x: 2, z: 2 }, radio: 3 },
   exito: 'Listos y camuflados en la oscuridad',
-  camara: { yaw: Math.PI, pitch: 0.42, dist: 17 },
+  camara: { yaw: Math.PI, pitch: 0.5, dist: 26 },
 
   build(ctx: SceneContext): SceneInstance {
     const { plastic } = ctx;
@@ -37,6 +37,7 @@ export const escena12: Min05Scene = {
     // mire a la cámara (-z) y el interior quede hacia +z (donde va el jugador).
     const tentH = buildTent(ctx.scene, plastic, { yehoshua: false, suits: false, background: false });
     tentH.group.rotation.y = Math.PI;
+    tentH.group.scale.set(1.35, 1.55, 1.35);   // cabaña MÁS grande y ALTA (feedback: se veía apretada)
     ctx.addObstacle(0, 9, 9, 0.6);                                  // pared del fondo
     ctx.addObstacle(-9, 1, 0.6, 10); ctx.addObstacle(9, 1, 0.6, 10); // laterales
 
@@ -54,10 +55,10 @@ export const escena12: Min05Scene = {
 
     // === P3: MÁS VIDA / LUZ / COLOR en la carpa (era muy marrón) ===
     // guirnalda de farolillos cálidos cruzando la carpa (vida + luz cálida)
-    group.add(buildLanternString(plastic, { ax: -7, az: -1, bx: 7, bz: -1, height: 6.6, count: 7, lights: 3 }));
-    // luz cálida de relleno para que el interior no quede plano/oscuro
-    const warm = new THREE.PointLight(0xffb066, 1.5, 30, 1.8); warm.position.set(0, 6, 1); group.add(warm);
-    const warm2 = new THREE.PointLight(0xffd9a0, 0.7, 18, 2); warm2.position.set(-4, 3.5, -3); group.add(warm2);
+    group.add(buildLanternString(plastic, { ax: -8, az: -1, bx: 8, bz: -1, height: 9, count: 8, lights: 3 }));
+    // luz cálida de relleno para que el interior (ahora más alto) no quede plano/oscuro
+    const warm = new THREE.PointLight(0xffb066, 1.7, 40, 1.8); warm.position.set(0, 8.5, 1); group.add(warm);
+    const warm2 = new THREE.PointLight(0xffd9a0, 0.8, 24, 2); warm2.position.set(-4, 4.5, -3); group.add(warm2);
     // alfombra de color bajo la zona de vestirse + cojines (calidez y color)
     const rug = brickBox(plastic, 9, 0.14, 7, 0x8a2f2a, 0, 0.07, 0); group.add(rug);
     const rug2 = brickBox(plastic, 5.4, 0.16, 3.6, 0xcaa64a, 0, 0.1, 0); group.add(rug2);

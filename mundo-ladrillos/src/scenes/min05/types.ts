@@ -29,6 +29,13 @@ export interface SceneContext {
   wantsInteract: () => boolean;
   /** Registra un obstáculo sólido (AABB en el plano XZ) para las colisiones. */
   addObstacle: (x: number, z: number, halfW: number, halfD: number) => void;
+  /**
+   * FLASH de pantalla: muestra un aviso GRANDE centrado unos segundos, siempre
+   * en cuadro (independiente de la cámara). Para gags visuales como "¡MIRA, UN
+   * AVIÓN!". OPCIONAL (no es diálogo de personajes; el bocadillo compartido lo
+   * pone el LEAD). Si el orquestador no lo implementa, no pasa nada.
+   */
+  flash?: (text: string, seconds?: number) => void;
   /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
   setPlayerSkin: (which: PlayerSkinId) => void;
   /**

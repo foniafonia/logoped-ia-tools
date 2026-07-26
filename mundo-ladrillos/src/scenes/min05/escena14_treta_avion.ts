@@ -8,6 +8,17 @@ import { Distraction } from './mechanics/Distraction';
 import { buildGuard } from './props/Guard';
 import { Collectibles } from './props/Collectibles';
 
+/** Rectángulo redondeado en canvas (para el cartel del avión). */
+function roundRect(x: CanvasRenderingContext2D, px: number, py: number, w: number, h: number, r: number): void {
+  x.beginPath();
+  x.moveTo(px + r, py);
+  x.arcTo(px + w, py, px + w, py + h, r);
+  x.arcTo(px + w, py + h, px, py + h, r);
+  x.arcTo(px, py + h, px, py, r);
+  x.arcTo(px, py, px + w, py, r);
+  x.closePath();
+}
+
 /**
  * ESCENA 14 (512–533s) — GUARDIAS EN LA PUERTA; LA TRETA DEL "¡UN AVIÓN!".
  * Dos guardias custodian el portal arqueado de Jericó. El jugador llega al punto
@@ -63,6 +74,21 @@ export const escena14: Min05Scene = {
     const goal = new THREE.Mesh(new THREE.RingGeometry(1.4, 2, 24), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
     goal.rotation.x = -Math.PI / 2; goal.position.set(0, 0.2, 22); goal.visible = false; group.add(goal);
 
+    // CARTEL grande "¡MIRA, UN AVIÓN!" (gag VISUAL: se entiende CON o SIN voz de peli).
+    // Billboard en el cielo, sobre el avión; aparece al disparar la treta.
+    const avionSign = (() => {
+      const c = document.createElement('canvas'); c.width = 1024; c.height = 256;
+      const x = c.getContext('2d')!;
+      x.fillStyle = 'rgba(10,14,22,.82)'; roundRect(x, 8, 8, 1008, 240, 40); x.fill();
+      x.lineWidth = 8; x.strokeStyle = '#ffd24a'; x.stroke();
+      x.fillStyle = '#ffe08a'; x.font = 'bold 120px Georgia, serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillText('✈  ¡MIRA, UN AVIÓN!  ✈', 512, 138);
+      const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthTest: false }));
+      spr.scale.set(20, 5, 1); spr.position.set(0, 15, 4); spr.visible = false; spr.renderOrder = 10;
+      return spr;
+    })();
+    group.add(avionSign);
+
     ctx.scene.add(group);
 
     const GOAL_Z = 20;
@@ -83,6 +109,7 @@ export const escena14: Min05Scene = {
           if (near && ctx.wantsInteract()) {
             distr.trigger(); triggered = true;
             planeSfx = ctx.sound.plane(); ctx.sound.playClip('m0510_14_avion', 1.6);
+            ctx.flash?.('✈  ¡MIRA, UN AVIÓN!  ✈', 3.2);   // gag VISUAL siempre en cuadro (con o sin voz)
             spot.visible = false; goal.visible = true;
             // la cámara mira arriba al avión ~2,4 s y luego devuelve el control
             ctx.cameraFocus?.(distr.planeObject, 2.4);
@@ -91,6 +118,12 @@ export const escena14: Min05Scene = {
           gate.setOpen(1);                       // una vez hecha la treta, la puerta queda abierta
           if (!gateSoundDone) { ctx.sound.gate(); gateSoundDone = true; }
           if (!distr.active && planeSfx) { planeSfx.stop(); planeSfx = null; }
+          // CARTEL "¡MIRA, UN AVIÓN!" mientras dura la distracción (bota y late)
+          avionSign.visible = distr.active;
+          if (distr.active) {
+            avionSign.position.set(0, 15 + Math.sin(t * 3) * 0.5, 4);
+            const s = 20 + Math.sin(t * 8) * 0.8; avionSign.scale.set(s, s * 0.25, 1);
+          }
           goal.scale.setScalar(1 + Math.sin(t * 3) * 0.1);
           if (player.z > GOAL_Z) doneFlag = true; // ¡colado por la puerta!
         }
