@@ -18,8 +18,8 @@ export const escena24: Min10Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
-  spawn: { x: -8.5, z: -7.5 },   // empiezas ya escondido tras el tapiz
-  objetivo: { tipo: 'esconderse', texto: 'Quédate quieto en el escondite mientras Rahab los engaña', target: { x: -8.5, z: -7.5 }, radio: 2.4 },
+  spawn: { x: -7.5, z: -1.6 },   // empiezas ya escondido en el hueco detrás del tapiz
+  objetivo: { tipo: 'esconderse', texto: 'Quédate quieto en el escondite mientras Rahab los engaña', target: { x: -7.5, z: -1.6 }, radio: 2.4 },
   exito: 'Los guardias se lo tragan y salen corriendo al río.',
   camara: { yaw: 0, pitch: 0.38, dist: 18 },
 

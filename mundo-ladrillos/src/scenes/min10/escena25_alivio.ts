@@ -17,7 +17,7 @@ export const escena25: Min10Scene = {
   jugador: 'spy',
   noche: true,
   ambiente: 'street',
-  spawn: { x: -8.5, z: -7.5 },   // sales del escondite del tapiz
+  spawn: { x: -7.5, z: -1.6 },   // sales del hueco detrás del tapiz
   objetivo: { tipo: 'ir_a', texto: 'Sal del escondite y reúnete con Rahab', target: { x: -1.5, z: -4 }, radio: 2.6 },
   exito: '¡A salvo en la posada de Rahab! (fin del tramo 10–15)',
   camara: { yaw: 0, pitch: 0.34, dist: 17 },

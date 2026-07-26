@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
-import { buildTavernStage, TavernStageHandle } from './props/stage';
+import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
 
 /**
  * ESCENA 19 (11:45) — ENTRAR EN LA POSADA.
@@ -24,7 +24,8 @@ export const escena19: Min10Scene = {
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();
     const stage: TavernStageHandle = buildTavernStage(ctx);
-    group.add(stage.group);
+    const hide: HideoutsHandle = buildHideouts(ctx); // el tapiz + la tinaja, coherentes en toda la posada
+    group.add(stage.group); group.add(hide.group);
 
     // dos tazas humeantes que Rahab "sirve" al pedir (aparecen al interactuar)
     const steam = new THREE.Group(); steam.visible = false; group.add(steam);
@@ -42,6 +43,7 @@ export const escena19: Min10Scene = {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        hide.update(dt, t, player.x, player.z);
         if (steam.visible) steam.children.forEach((c, i) => { c.position.y = 2.75 + Math.sin(t * 2 + i) * 0.03; });
         // Rahab saluda con leve vaivén
         if (stage.tav.rahab) stage.tav.rahab.root.rotation.y = Math.sin(t * 0.8) * 0.1;

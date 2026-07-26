@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
-import { buildTavernStage, TavernStageHandle } from './props/stage';
+import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
 
 /**
  * ESCENA 21 (12:06) — EL PACTO CON RAHAB.
@@ -25,7 +25,8 @@ export const escena21: Min10Scene = {
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();
     const stage: TavernStageHandle = buildTavernStage(ctx);
-    group.add(stage.group);
+    const hide: HideoutsHandle = buildHideouts(ctx);
+    group.add(stage.group); group.add(hide.group);
 
     // bocadillo de "susurro" (aparece al pactar)
     const bubble = makeBubble('🤝 «Os salvaremos»');
@@ -41,6 +42,7 @@ export const escena21: Min10Scene = {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        hide.update(dt, t, player.x, player.z);
         const near = Math.hypot(player.x - o.x, player.z - o.z) < (escena21.objetivo.radio ?? 2.4);
         if (near && !pacted && ctx.wantsInteract()) {
           pacted = true; bubble.visible = true; ctx.sound.success();

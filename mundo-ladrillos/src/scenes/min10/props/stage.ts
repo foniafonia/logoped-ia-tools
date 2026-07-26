@@ -118,6 +118,35 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
     herb.rotation.z = (i - 2) * 0.05; group.add(herb);
   }
 
+  // ---- MESAS + COMENSALES: un restaurante con vida (feedback del niño) ----
+  const diningTable = (tx: number, tz: number): void => {
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.25, 0.28, 14), P.get(0x6e4a2c));
+    top.position.set(tx, 2.0, tz); top.castShadow = true; group.add(top);
+    group.add(new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.3, 1.9, 8), P.get(0x4e341f)).translateX(tx).translateY(1.0).translateZ(tz));
+    // vasijas/tazas encima
+    for (let k = 0; k < 3; k++) {
+      const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.2, 0.42, 9), P.get([0xb5673a, 0xcaa14a, 0x9a9184][k]));
+      cup.position.set(tx + Math.cos(k * 2) * 0.5, 2.35, tz + Math.sin(k * 2) * 0.5); group.add(cup);
+    }
+    // taburetes
+    for (let s = 0; s < 3; s++) {
+      const a = s * 2.1 + 0.5;
+      const st = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.42, 1.2, 10), P.get(0x6e4a2c));
+      st.position.set(tx + Math.cos(a) * 2.0, 0.6, tz + Math.sin(a) * 2.0); group.add(st);
+    }
+  };
+  // mesas repartidas por el comedor (lejos de la barra, del paso central y de los escondites de z≈0)
+  diningTable(-4.5, 5.5); diningTable(4.5, 6.5); diningTable(6.5, -2.5);
+  // comensales + un camarero (aldeanos variados; idle sutil, sin clonar caras)
+  const diners = buildCrowd(ctx.scene, P, [
+    { x: -6.2, z: 5.2, yaw: -0.7, emotion: 'happy' },
+    { x: -3.2, z: 6.8, yaw: 2.2, scale: 0.72 },
+    { x: 6.2, z: 6.4, yaw: -2.0, emotion: 'neutral' },
+    { x: 2.8, z: 6.6, yaw: 1.4, emotion: 'happy' },
+    { x: 8.0, z: -2.6, yaw: 2.4, emotion: 'neutral' },
+    { x: -2.5, z: -3.0, yaw: 0.2, emotion: 'happy' }   // camarero, junto a la barra
+  ], { startIndex: 11 });
+
   // ---- MOTAS de polvo flotando en la luz cálida (atmósfera senior) ----
   const moteN = 60;
   const moteGeo = new THREE.BufferGeometry();
@@ -130,12 +159,13 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
   // ---- luz de relleno cálida hacia la cámara (el jugador no queda en sombra) ----
   const camWarm = new THREE.PointLight(0xffca85, 1.6, 30, 1.6); camWarm.position.set(0, 6, 8); group.add(camWarm);
 
-  // Colisiones: paredes + barra + hogar.
+  // Colisiones: paredes + barra + hogar + mesas del comedor.
   ctx.addObstacle(0, -10.8, 13, 0.6);
   ctx.addObstacle(-12.4, -1, 0.6, 10);
   ctx.addObstacle(12.4, -1, 0.6, 10);
   ctx.addObstacle(-1.5, -5.5, 7.6, 1.2);
   ctx.addObstacle(-10.5, -9.6, 2, 1);
+  for (const [tx, tz] of [[-4.5, 5.5], [4.5, 6.5], [6.5, -2.5]] as Array<[number, number]>) ctx.addObstacle(tx, tz, 1.3, 1.3);
 
   return {
     group, tav,
@@ -143,6 +173,7 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
       const f = 0.85 + Math.sin(t * 11) * 0.1 + Math.sin(t * 23) * 0.05;
       fireLight.intensity = 5.5 * f;
       flames.forEach((fl, i) => fl.scale.set(0.9 + f * 0.2, f * (1 + i * 0.12), 0.9 + f * 0.2));
+      diners.update(_dt);
       // motas: suben lento y reaparecen
       const mp = motes.geometry.attributes.position as THREE.BufferAttribute;
       for (let i = 0; i < moteN; i++) {
@@ -153,7 +184,7 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
       }
       mp.needsUpdate = true;
     },
-    dispose(): void { tav.dispose(); if (ctx.scene.fog) ctx.scene.fog = null; }
+    dispose(): void { tav.dispose(); diners.dispose(); if (ctx.scene.fog) ctx.scene.fog = null; }
   };
 }
 
@@ -168,9 +199,13 @@ export interface HideoutsHandle {
 
 export function buildHideouts(ctx: SceneContext): HideoutsHandle {
   const group = new THREE.Group();
-  const rug = new RugHide(ctx.plastic, { x: -8.5, z: -7.5, radio: 2.4 });
-  const pot = new PotHide(ctx.plastic, { x: 9.5, z: -6.5, radio: 2.2 });
+  // Escondites EXENTOS en el suelo del comedor, con COLISIÓN + hueco detrás:
+  // el tapiz (izquierda) y la tinaja (derecha). Se rodean para meterse detrás.
+  const rug = new RugHide(ctx.plastic, { x: -7.5, z: 0, entrada: 'derecha' });
+  const pot = new PotHide(ctx.plastic, { x: 8, z: 0 });
   group.add(rug.group); group.add(pot.group);
+  rug.registerCollision(ctx.addObstacle);
+  pot.registerCollision(ctx.addObstacle);
   return {
     group, rug, pot,
     update(dt, t, px, pz): boolean {

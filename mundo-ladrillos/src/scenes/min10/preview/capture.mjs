@@ -34,7 +34,7 @@ for (const n of NUMS) {
   await page.goto(url, { waitUntil: 'load', timeout: 30000 });
   await page.waitForFunction(() => window.__READY__ === true && window.__SCENE_READY__ === true, { timeout: 20000 });
   // en las escenas de escondite, colocar al jugador dentro del escondite del tapiz
-  if (n === 23 || n === 24 || n === 25) await page.evaluate(() => window.__setPlayer && window.__setPlayer(-8.5, -7.5));
+  if (n === 23 || n === 24 || n === 25) await page.evaluate(() => window.__setPlayer && window.__setPlayer(-7.5, -1.6));
   // esperar a que la intro cinemática (si la hay, ~2.8s) termine y se estabilice
   await page.waitForTimeout(3600);
   const file = join(OUT, `escena-${String(n).padStart(2, '0')}.png`);

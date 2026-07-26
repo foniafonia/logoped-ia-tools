@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
-import { buildTavernStage, TavernStageHandle } from './props/stage';
+import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
 import { buildGuard } from '../min05/props/Guard';
 
 /**
@@ -26,7 +26,8 @@ export const escena20: Min10Scene = {
   build(ctx: SceneContext): SceneInstance {
     const group = new THREE.Group();
     const stage: TavernStageHandle = buildTavernStage(ctx);
-    group.add(stage.group);
+    const hide: HideoutsHandle = buildHideouts(ctx);
+    group.add(stage.group); group.add(hide.group);
 
     // farol de los guardias que se acerca por FUERA del arco (x=8, z=-10.7)
     const lanternGlow = new THREE.PointLight(0xffb24d, 0, 14, 1.8);
@@ -44,6 +45,7 @@ export const escena20: Min10Scene = {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        hide.update(dt, t, player.x, player.z);
         // el farol/guardia se acerca al arco: sube la tensión con el tiempo
         tension = Math.min(1, tension + dt * 0.12);
         const gz = -18 + tension * 8;          // de -18 a -10 (junto al arco)
