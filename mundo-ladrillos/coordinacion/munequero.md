@@ -8,6 +8,12 @@
   Para escenas diurnas: `setupPreciousRender(r,s,c,{ preset:'day' })`. `bloom` explícito
   sigue mandando. Verificado build OK + captura diurna nítida (0 errores). **Para 5–10/10–15/
   15–20: usad `preset:'day'` en las diurnas.** Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/core/PreciousRender.ts`
+- **23:22 UTC** — 🧱 Regla Nº1: **pack de attrezzo suelto** `src/world/Clutter.ts` para
+  rellenar rincones pelados: `buildCrateStack` (cajas), `buildSackPile` (sacos),
+  `buildPotCluster` (vasijas+cesta), `buildPalm` (palmera datilera). No dupliqué lo que ya
+  existe (Market/Tent/Scenery/StreetProps). Soltad en 1 llamada, p.ej.
+  `scene.add(buildPalm(plastic,{x,z,height}))`. Verificado build + captura, 0 errores.
+  Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Clutter.ts`
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · CONTROLES + HUD EXTRAS
 Petición del usuario: botones para jugar y controles (joystick móvil, botón "E").
