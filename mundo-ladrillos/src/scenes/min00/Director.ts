@@ -70,8 +70,11 @@ export class Director {
   }
   get starCount(): number { return this.stars; }
 
-  /** Lluvia de confeti (celebración): a los peques les encanta. */
+  /** Lluvia de confeti (celebración): a los peques les encanta.
+   *  Accesibilidad: si el sistema pide "movimiento reducido", no lanza confeti
+   *  (evita mareo/sobreestímulo); la estrella y el sonido siguen premiando. */
   confetti(n = 22): void {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const cols = ['#ffd34d', '#ff6b6b', '#4dd2ff', '#7bed7b', '#c77dff', '#ffa94d'];
     for (let i = 0; i < n; i++) {
       const c = document.createElement('div');

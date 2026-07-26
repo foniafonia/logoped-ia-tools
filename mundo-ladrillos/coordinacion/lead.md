@@ -79,4 +79,17 @@ mar de tiendas denso en `camp.ts`. Copiad y adaptad a vuestra escena.
   del muñequero. El audio de la peli (10-15) es tu columna vertebral: pídeselo al
   usuario y sigue el patrón Director de beats.
 
+**✨ PASE SENIOR 0-5 — "mejora en TODO" (2026-07-26):** subida de nivel del tramo,
+no solo visual (mi parte es el ejemplo para los demás hilos):
+- **VIDA del campamento (`campLife.ts`):** aldeanos con **OFICIO** cada uno en su
+  puesto y su gesto en bucle — **molino de mano** (piedra que gira), **amasar pan**
+  (empuje rítmico), **alfarero** (torno + vasija girando) y **corros sentados junto
+  al fuego** (fogata de ladrillo). Los que deambulan ahora hacen **pausas** (andan,
+  se paran a mirar, siguen) → menos "robótico". *(Reutilizable por 5-10 y 10-15:
+  patrón `Faena` = figura + prop + gesto en `update`.)*
+- **Accesibilidad (`Director.ts`):** el confeti respeta `prefers-reduced-motion`
+  (no marea a quien lo pide; la estrella y el sonido siguen premiando).
+- **Rendimiento:** los oficios/corros se **capan en móvil** (un solo corro) para no
+  cargar figuras de más.
+
 **Preguntas:** ninguna abierta ahora mismo.
