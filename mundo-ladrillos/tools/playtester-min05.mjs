@@ -24,34 +24,34 @@ for (const n of [9,10,11,12,13,14,15,16]) {
     window.__loadNumero(n);
     await new Promise(res=>setTimeout(res,400));
     const t0=performance.now();
-    let done=false, maxAlarm=0, ePressed=0, stuck=0, lastD=1e9, wobble=0;
-    let px=null, pz=null;
-    for (let i=0;i<600 && (performance.now()-t0)<18000;i++){
+    let done=false, maxAlarm=0, ePressed=0, sideTicks=0, lastProg=-1, flat=0;
+    for (let i=0;i<800 && (performance.now()-t0)<18000;i++){
       const pr=window.__probe();
       maxAlarm=Math.max(maxAlarm, pr.alarm||0);
       if (pr.done){ done=true; break; }
-      // acción disponible → pulsar E
-      if (pr.prompt){ window.__interact(); ePressed++; }
-      // caminar hacia el objetivo (con pequeño rodeo si está atascado)
+      // pulsa E si hay acción anunciada O si ya estamos MUY cerca del objetivo
+      const nearGoal = (pr.progress||0) > 0.82;
+      if (pr.prompt || nearGoal){ window.__interact(); ePressed++; }
+      // camina DIRECTO al objetivo; si el progreso se estanca, un sidestep breve
+      // (time-boxed) para despegarse de una esquina, luego sigue directo.
       if (pr.goal){
         let [gx,gz]=pr.goal;
-        if (stuck>6){ // rodea: mete un desvío lateral y salta
-          const a=(wobble++ *0.9); gx += Math.cos(a)*4; gz += Math.sin(a)*4;
-          window.__jump && window.__jump();
+        if (flat>10){ // atascado de verdad: sidestep perpendicular corto + salto
+          const perp = (sideTicks++ % 24 < 12) ? 1 : -1;
+          gx += perp*3; window.__jump && window.__jump();
         }
         window.__walk(gx,gz,0.9);
       }
-      // ¿atascado? distancia al objetivo no baja
-      const d = pr.progress!=null ? (1-pr.progress) : 0;
-      if (d>=lastD-0.001) stuck++; else stuck=0;
-      lastD=d;
-      px=pr.pos[0]; pz=pr.pos[1];
+      // estancamiento del progreso
+      const prog = pr.progress||0;
+      if (prog <= lastProg+0.002) flat++; else flat=0;
+      lastProg = prog;
       await new Promise(res=>setTimeout(res,25));
     }
     const pr=window.__probe();
     return { titulo:pr.titulo, done, seg:Math.round((performance.now()-t0)/100)/10,
       gems: pr.gems?`${pr.gems.got}/${pr.gems.total}`:'-', maxAlarma:+maxAlarm.toFixed(2),
-      E:ePressed, atascado: stuck>60, prog:+(pr.progress||0).toFixed(2), pos:pr.pos };
+      E:ePressed, atascado: flat>200, prog:+(pr.progress||0).toFixed(2), pos:pr.pos };
   }, n);
   if (!r.done) await p.screenshot({ path: `${OUT}pt-FAIL-${n}.png` });
   log.push({ escena:n, ...r });

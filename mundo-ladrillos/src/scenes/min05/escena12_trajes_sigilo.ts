@@ -24,7 +24,7 @@ export const escena12: Min05Scene = {
   noche: true,
   ambiente: 'interior',
   spawn: { x: 0, z: -6 },
-  objetivo: { tipo: 'ir_a', texto: 'Ve al perchero y pulsa E para ponerte el traje', target: { x: 2, z: -4 }, radio: 3 },
+  objetivo: { tipo: 'ir_a', texto: 'Ve al perchero y pulsa E para ponerte el traje', target: { x: 2, z: 2 }, radio: 3 },
   exito: 'Listos y camuflados en la oscuridad',
   camara: { yaw: Math.PI, pitch: 0.42, dist: 17 },
 
@@ -48,8 +48,8 @@ export const escena12: Min05Scene = {
       const s = brickBox(plastic, 1.8, 3, 0.5, col, sx, 3, 0); rack.add(s); suits.push(s);
       rack.add(brickBox(plastic, 1.9, 0.4, 0.6, 0x9aa7b5, sx, 3.6, 0.05));   // percha
     }
-    rack.position.set(2, 0, -4); group.add(rack);
-    const rackLight = buildLantern(plastic, 2, 5, -5.5); group.add(rackLight.group);
+    rack.position.set(2, 0, 2); group.add(rack);
+    const rackLight = buildLantern(plastic, 2, 5, 0.5); group.add(rackLight.group);
 
     let buddy = new Npc(plastic, ESPIA2_CAMP, -4, -3, 0); group.add(buddy.root);
 
@@ -63,7 +63,7 @@ export const escena12: Min05Scene = {
       group,
       update(dt, t, player) {
         rackLight.update(t);
-        const near = Math.hypot(player.x - 2, player.z - (-4)) < 3.5;
+        const near = Math.hypot(player.x - 2, player.z - 2) < 3.5;
         if (near && !equipped && ctx.wantsInteract()) {
           equipped = true;
           ctx.setPlayerSkin('spy');                 // ¡se pone el traje de sigilo!
@@ -77,7 +77,7 @@ export const escena12: Min05Scene = {
       status() { return equipped ? '🥷 ¡Traje de sigilo puesto!' : null; },
       hud() {
         const p = ctx.getPlayer();
-        const near = Math.hypot(p.x - 2, p.z - (-4)) < 3.5;
+        const near = Math.hypot(p.x - 2, p.z - 2) < 3.5;
         return { progress: equipped ? 1 : 0, prompt: (near && !equipped) ? 'Pulsa E para ponerte el traje' : undefined, gems: { got: gems.got, total: gems.total } };
       },
       isDone() { return equipped; },
