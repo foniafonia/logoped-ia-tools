@@ -170,7 +170,8 @@ const beats: Beat[] = [
   },
   {
     t: 123, sub: 'El pan sale del horno. ¡Atrápalo! 🥖',
-    obj: 'Atrapa el pan del horno', onEnter: () => activarPan()   // mini-juego de atrapar
+    // sin `obj`: el pan ESPERA a que se termine el campamento (no se solapan mini-juegos)
+    onEnter: () => { panPedido = true; }
   },
   {
     t: 133, sub: '¡Se cayó la carga del camello! 💥',
@@ -245,6 +246,7 @@ const entregados = new Set<THREE.Mesh>();       // bultos ya apilados en el came
 
 // ---- MINI-JUEGO: ¡ATRAPA EL PAN! (esc. 06) — el horno lanza panes por el aire ----
 let panActivos = false;
+let panPedido = false;                          // beat 5 pedido; el pan espera a terminar el campamento
 let bultosPedidos = false;                      // beat 6 pedido; se activa al acabar el pan
 let panLaunchCd = 0;                            // cadencia de lanzamiento
 let panNextIdx = 0;                             // siguiente pan a lanzar
@@ -530,7 +532,9 @@ function animate(now: number): void {
       done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Todo el pan atrapado! 🕍'); setTarget(null);
     }
   }
-  // los bultos del camello esperan a que termine el pan (ambos oficios en orden, sin liar al peque)
+  // encadenado de mini-juegos (nunca dos a la vez, sin liar al peque):
+  // el PAN espera a recoger el campamento; los BULTOS esperan a terminar el pan.
+  if (panPedido && !panActivos && done.has('camp')) activarPan();
   if (bultosPedidos && !bultosActivos && done.has('tab')) activarBultos();
 
   // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)

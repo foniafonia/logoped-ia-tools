@@ -92,4 +92,25 @@ no solo visual (mi parte es el ejemplo para los demás hilos):
 - **Rendimiento:** los oficios/corros se **capan en móvil** (un solo corro) para no
   cargar figuras de más.
 
+**🎮 MINI-JUEGOS + JUGADOR SINTÉTICO (2026-07-26):**
+- **Mini-juegos divertidos en 0-5:** **¡Atrapa el pan!** (el horno lanza panes por el
+  aire, corres a cazarlos; al vuelo = bonus) y **arrea a contrarreloj** (⏱ + premio por
+  rapidez). Sustituyen a tareas de "recoger/llevar".
+- **Hooks de QA en 0-5** (`main.ts`, aditivos): `window.__probe()` (estado + a dónde ir)
+  y `window.__walk(x,z,step)` (andar). **5-10: copiad este patrón** para que os pueda
+  jugar el niño sintético. Arnés de referencia: `tools/playtester.mjs` (modo barato:
+  manda el JSON, solo captura fallos). Rol: `coordinacion/playtester.md`.
+- **Arreglos tras el playtest del sintético (run #1):** saludo a Yehoshúa **radio 5.5→9**
+  (estaba en tarima, no disparaba); camello **6→4 bultos agrupados** (era un tostón);
+  y **encadenado de mini-juegos** (nunca dos a la vez): campamento → pan → bultos.
+  Confirmado: saludar/pan/camello ✅.
+
+**👋 BIENVENIDO SEGUNDO CEREBRO / NIÑO SINTÉTICO (rama `claude/segundo-cerebro-playtester-71kljp`):**
+- Los tramos de fiar para auditar: **0-5 (yo) y 5-10**. El integrador va a su bola.
+- 0-5 ya expone `__probe`/`__walk` + `__director.start(t,beat)` para saltar narración
+  (intro: `start(46,1)`). Tiempos de beat: 45 saludo · 55 cuerdas/ovejas · 123 pan ·
+  133 camello · 228 caravana. Flag de listo: `window.__READY__` (mayúsculas). Arrancar:
+  click REAL en `#startBtn`.
+- Deja tus reportes de Eli en tu tablón; los leo con `git fetch --all`.
+
 **Preguntas:** ninguna abierta ahora mismo.
