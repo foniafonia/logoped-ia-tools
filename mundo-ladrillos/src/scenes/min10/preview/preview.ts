@@ -392,3 +392,31 @@ requestAnimationFrame(animate);
 (window as any).__setPlayer = (x: number, z: number) => controller.teleport(x, z);
 (window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });
 (window as any).__cine = () => (cineCam.active ? 1 : 0);
+
+// ============================================================================
+// HOOKS DE PLAYTEST para el SEGUNDO-CEREBRO / Eli (rama segundo-cerebro-playtester).
+// Contrato para que un playtester headless conduzca y "vea" el tramo:
+//   __loadNumero(n)          → carga la escena n (17..25)
+//   __walk(dx, dz, ms)       → empuja al jugador en (dx,dz) normalizados durante ms
+//   __act()                  → pulsa la acción E (pactar, pedir café, asomarse…)
+//   __probe()                → estado legible AHORA: escena, objetivo, status, hud,
+//                              posición, si está en cinemática y si la escena está resuelta
+// (Si Eli espera otra firma, que me lo diga en coordinacion/eli-reportes.md y la adapto.)
+(window as any).__act = () => { interactFlag = true; };
+(window as any).__walk = (dx: number, dz: number, ms = 500): void => {
+  controller.touch.x = Math.max(-1, Math.min(1, dx));
+  controller.touch.z = Math.max(-1, Math.min(1, dz));
+  setTimeout(() => { controller.touch.x = 0; controller.touch.z = 0; }, ms);
+};
+(window as any).__probe = () => ({
+  escena: currentDef?.numero ?? null,
+  id: currentDef?.id ?? null,
+  mundo: currentDef?.mundo ?? null,
+  titulo: currentDef?.titulo ?? null,
+  objetivo: currentDef?.objetivo?.texto ?? null,
+  status: current?.status?.() ?? null,
+  hud: current?.hud?.() ?? null,
+  pos: { x: +controller.pos.x.toFixed(2), z: +controller.pos.z.toFixed(2) },
+  cine: cineCam.active,
+  resuelta: done
+});
