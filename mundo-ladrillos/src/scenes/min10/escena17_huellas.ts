@@ -4,6 +4,7 @@ import { buildStreetStage, StreetStageHandle } from './props/stage';
 import { buildFootprints } from './props/RugHide';
 import { buildGuard } from '../min05/props/Guard';
 import { Npc } from '../min05/props/Npc';
+import { brickBox, buildBarrel } from '../min05/props/BrickProps';
 
 /**
  * ESCENA 17 (10:05) — LAS HUELLAS DESCALZAS.
@@ -39,6 +40,36 @@ export const escena17: Min10Scene = {
     const prints = buildFootprints(ctx.plastic, { ax: 1, az: -7, bx: 2, bz: 2, count: 8 });
     group.add(prints.group);
 
+    // ---- ORILLA VESTIDA al pie de la muralla (REGLA Nº1: nada pelado) ----
+    // El primer plano (z<0, de donde vienen los espías) estaba desnudo. Lo lleno con
+    // gusto reutilizando piezas: cañaveral que ondea, cestos/barriles varados, un
+    // ovillo de cuerda (con el que cruzaron) y cantos rodados. Todo a los lados y
+    // detrás del spawn → no estorba el paso hacia el mercado (+z).
+    const P = ctx.plastic;
+    const shore = new THREE.Group(); group.add(shore);
+    const reeds: THREE.Mesh[] = [];
+    const reedClump = (cx: number, cz: number, n: number): void => {
+      for (let i = 0; i < n; i++) {
+        const h = 1.6 + Math.random() * 1.6;
+        const r = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.09, h, 5), P.get(i % 2 ? 0x6f8f3a : 0x8a9a4a));
+        r.position.set(cx + (Math.random() - 0.5) * 1.2, h / 2 - 0.2, cz + (Math.random() - 0.5) * 1.2);
+        r.rotation.z = (Math.random() - 0.5) * 0.3; r.castShadow = true;
+        (r as unknown as { __ph: number }).__ph = Math.random() * 6.28;
+        shore.add(r); reeds.push(r);
+      }
+    };
+    reedClump(-8, -3, 7); reedClump(-6.5, -8, 6); reedClump(7.5, -4, 7); reedClump(6, -9, 5); reedClump(-9, 2, 4);
+    // cestos/barriles varados + ovillo de cuerda (con el que treparon)
+    [[-4.5, -6], [5.5, -8], [-7, -10]].forEach(([x, z]) => { const b = buildBarrel(P); b.position.set(x, 0, z); b.rotation.y = Math.random() * 3; shore.add(b); });
+    const coil = new THREE.Group(); coil.position.set(3.2, 0, -4.5); shore.add(coil);
+    for (let i = 0; i < 4; i++) { const ring = new THREE.Mesh(new THREE.TorusGeometry(0.5 - i * 0.06, 0.09, 6, 16), P.get(0xa9895f)); ring.rotation.x = Math.PI / 2; ring.position.y = 0.1 + i * 0.09; coil.add(ring); }
+    // cantos rodados dispersos
+    for (let i = 0; i < 9; i++) {
+      const s = 0.25 + Math.random() * 0.4;
+      const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(s, 0), P.get(i % 2 ? 0x9a9184 : 0x7d746a));
+      rock.position.set((Math.random() - 0.5) * 18, s * 0.4, -10 + Math.random() * 11); rock.rotation.set(Math.random(), Math.random(), Math.random()); rock.castShadow = true; shore.add(rock);
+    }
+
     // dos guardias a los lados examinando las huellas (salen "alerta" al verte pasar)
     const g1 = buildGuard(ctx.plastic, -6, -9, 0.6, false);
     const g2 = buildGuard(ctx.plastic, 6, -9, -0.6, true);
@@ -58,6 +89,7 @@ export const escena17: Min10Scene = {
       update(dt, t, player): void {
         street.update(dt, t);
         prints.update(t);
+        for (const r of reeds) { const ph = (r as unknown as { __ph: number }).__ph; r.rotation.z = Math.sin(t * 1.6 + ph) * 0.18; }
         // los guardias miran las huellas con leve vaivén
         g1.root.rotation.y = 0.3 + Math.sin(t * 1.2) * 0.15;
         g2.root.rotation.y = -0.3 + Math.sin(t * 1.1 + 1) * 0.15;
