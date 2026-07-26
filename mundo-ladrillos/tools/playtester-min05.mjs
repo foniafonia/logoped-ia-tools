@@ -10,7 +10,10 @@ import { chromium } from 'playwright';
 import { writeFileSync } from 'fs';
 const OUT='/tmp/claude-0/-home-user-logoped-ia-tools/9b311647-96dd-5275-8cdc-1259d5c8ea31/scratchpad/';
 const BASE='http://127.0.0.1:5178/src/scenes/min05/preview/index.html';
-const b = await chromium.launch({ headless:true, args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--use-angle=swiftshader','--no-sandbox'] });
+// OJO (clave para headless): Chromium ESTRANGULA setTimeout en páginas de fondo
+// (~1/seg). Sin estos flags, el bucle in-browser del jugador sintético solo da
+// ~15 pasos en 18s y TODO parece atascado (falso negativo). Estos 3 flags lo evitan.
+const b = await chromium.launch({ headless:true, args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--use-angle=swiftshader','--no-sandbox','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows'] });
 const p = await b.newPage({ viewport:{width:900,height:520}, isMobile:true, hasTouch:true });
 const errs=[]; p.on('pageerror',e=>errs.push('PE:'+e.message.slice(0,120))); p.on('console',m=>{if(m.type()==='error')errs.push('C:'+m.text().slice(0,120))});
 await p.goto(`${BASE}?scene=9&shot=1`,{waitUntil:'load',timeout:30000});

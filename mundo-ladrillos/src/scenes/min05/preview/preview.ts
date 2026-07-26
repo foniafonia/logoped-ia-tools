@@ -482,7 +482,9 @@ requestAnimationFrame(animate);
     tipo: def?.objetivo?.tipo ?? null,            // 'ir_a' | 'sigilo' | 'equilibrio' | ...
     objetivo: def?.objetivo?.texto ?? null,       // texto del objetivo
     pos: [+p.x.toFixed(1), +p.z.toFixed(1)],       // [x,z]
-    goal: tgt ? [tgt.x, tgt.z] : null,            // a dónde iría un jugador guiado [x,z]
+    // objetivo dinámico: si la escena publica hud.goal (p. ej. el siguiente espía
+    // por saludar), manda ese; si no, el target estático del objetivo. [x,z]
+    goal: (Array.isArray(hud.goal) ? hud.goal : (tgt ? [tgt.x, tgt.z] : null)),
     radio: def?.objetivo?.radio ?? null,
     done: current ? current.isDone(controller.pos) : false,
     prompt: hud.prompt ?? null,                   // acción necesaria (p. ej. "Pulsa E")

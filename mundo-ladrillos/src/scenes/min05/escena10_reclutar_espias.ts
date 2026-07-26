@@ -88,7 +88,11 @@ export const escena10: Min05Scene = {
         const n = (greetA ? 1 : 0) + (greetB ? 1 : 0);
         return n < 2 ? `🗣️ Espías reclutados: ${n}/2` : null;
       },
-      hud() { return { progress: ((greetA ? 1 : 0) + (greetB ? 1 : 0)) / 2, gems: { got: gems.got, total: gems.total } }; },
+      hud() {
+        // objetivo dinámico: guía al siguiente espía por saludar (marcador y QA)
+        const goal: [number, number] | undefined = !greetA ? [-4, 2] : (!greetB ? [4, 2] : undefined);
+        return { progress: ((greetA ? 1 : 0) + (greetB ? 1 : 0)) / 2, goal, prompt: goal ? '🗣️ Acércate al espía' : undefined, gems: { got: gems.got, total: gems.total } };
+      },
       isDone() { return greetA && greetB; }
     };
   }
