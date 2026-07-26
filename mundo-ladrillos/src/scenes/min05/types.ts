@@ -147,6 +147,13 @@ export interface Min05Scene {
   // `m0510_14_avion` se dispara en el gag (SoundEngine.playClip).
   /** Skin del jugador en esta escena (campamento vs sigilo). */
   jugador?: PlayerSkinId;
+  /**
+   * Límites del área jugable (AABB en XZ). OPCIONAL: si no se indica, el
+   * orquestador los deriva del spawn/objetivo. Sirve para ACOTAR el corredor de
+   * una escena y que no se pueda "rodear" por un borde abierto (evita el truco de
+   * saltarse el sigilo yéndose por el campo). Lo usan las de sigilo/corredor.
+   */
+  bounds?: { minX: number; maxX: number; minZ: number; maxZ: number };
   /** Construye el escenario 3D + NPCs. Devuelve la instancia viva. */
   build(ctx: SceneContext): SceneInstance;
 }

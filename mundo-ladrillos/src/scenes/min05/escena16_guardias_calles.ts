@@ -31,6 +31,9 @@ export const escena16: Min05Scene = {
   objetivo: { tipo: 'sigilo', texto: 'Alcanza el refugio del fondo sin que se llene la alarma', target: { x: 0, z: 30 }, radio: 3.5 },
   exito: '¡A salvo en el refugio! (fin del tramo 5–10)',
   camara: { yaw: Math.PI, pitch: 0.46, dist: 32 },
+  // corredor acotado a la calle central (donde patrullan los guardias y están los
+  // escondites): no se puede rodear por detrás de las casas por campo abierto.
+  bounds: { minX: -13, maxX: 13, minZ: -28, maxZ: 34 },
 
   build(ctx: SceneContext): SceneInstance {
     const { plastic } = ctx;

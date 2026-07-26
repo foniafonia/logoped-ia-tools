@@ -342,7 +342,10 @@ function loadScene(i: number): void {
     getExtra: () => `objetivo: ${def.objetivo.texto}`
   });
 
-  controller.setBounds(-72, 72, def.spawn.z - 8, (def.objetivo.target?.z ?? def.spawn.z) + 26);
+  // Límites del área: los de la escena si los define (corredor acotado, evita
+  // rodear el sigilo por el borde); si no, se derivan del spawn/objetivo.
+  if (def.bounds) controller.setBounds(def.bounds.minX, def.bounds.maxX, def.bounds.minZ, def.bounds.maxZ);
+  else controller.setBounds(-72, 72, def.spawn.z - 8, (def.objetivo.target?.z ?? def.spawn.z) + 26);
   controller.teleport(def.spawn.x, def.spawn.z);
 
   if (def.camara) { tpcam.yaw = def.camara.yaw ?? Math.PI; tpcam.pitch = def.camara.pitch ?? 0.4; tpcam.dist = def.camara.dist ?? 28; }

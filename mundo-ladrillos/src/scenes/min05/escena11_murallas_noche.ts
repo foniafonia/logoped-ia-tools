@@ -28,6 +28,9 @@ export const escena11: Min05Scene = {
   objetivo: { tipo: 'ir_a', texto: 'Llega al puesto entre los juncos y estudia la muralla (E)', target: { x: 10, z: -5 }, radio: 3.5 },
   exito: 'Los espías estudian la muralla desde las sombras',
   camara: { yaw: Math.PI + 0.12, pitch: 0.3, dist: 36 },
+  // corredor acotado: sin campo abierto a la derecha por el que "colarse" fácil
+  // hasta el escondite; se aproxima por la zona de juncos/rocas diseñada.
+  bounds: { minX: -32, maxX: 26, minZ: -24, maxZ: 16 },
   // establecimiento nocturno: la cámara descubre la muralla y baja a los espías
   intro: {
     from: { x: 0, y: 4, z: 9 }, lookFrom: { x: 0, y: 16, z: 22 },

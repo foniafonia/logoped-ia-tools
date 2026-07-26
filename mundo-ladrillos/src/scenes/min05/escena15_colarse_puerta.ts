@@ -30,6 +30,9 @@ export const escena15: Min05Scene = {
   objetivo: { tipo: 'sigilo', texto: 'Cruza la puerta hasta la calle sin que se llene la alarma', target: { x: 0, z: 30 }, radio: 3.5 },
   exito: '¡Dentro de Jericó, sin ser vistos!',
   camara: { yaw: Math.PI, pitch: 0.42, dist: 30 },
+  // corredor acotado: el jugador NO puede rodear la muralla por el campo abierto;
+  // se le fuerza a pasar por la PUERTA (x∈[-5,5]). Evita saltarse el sigilo.
+  bounds: { minX: -24, maxX: 24, minZ: -24, maxZ: 34 },
 
   build(ctx: SceneContext): SceneInstance {
     const { plastic } = ctx;
