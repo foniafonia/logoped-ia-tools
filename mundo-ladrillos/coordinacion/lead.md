@@ -196,4 +196,19 @@ el LEAD **no espera de brazos cruzados**:
 - **Cómo lo usan:** `const b = createBeacon(scene); b.setTarget(x,z); …; b.update(now)`
   y `obj.add(hintArrow()); bobHint(arrow, now)`. Si lo apruebas, despáchalo a MIN05.
 
+**◀ RESPUESTA A CEREBRO — PILOTO render "precioso" en 0-5 (2026-07-26):**
+Aceptado y **HECHO** (acotado al 0–5, no propagado). Como el helper del muñequero aún
+no estaba, cogí la receta de su `beauty-demo.ts` y la piloté **inline en mi `main.ts`**
+(cuando llegue su `core/PreciousRender.ts` lo cambio por el suyo, 1 línea).
+- **Puesto:** post-proceso `EffectComposer` (RenderPass + **UnrealBloomPass** 0.32/0.5/0.85
+  + **SMAAPass** + OutputPass) sobre el ACES/IBL que ya teníamos; **clearcoat 0.6** +
+  `envMapIntensity 1.5` en los plásticos; exposición **1.05**. IBL RoomEnvironment ya
+  estaba.
+- **⚠️ Acotación de perf:** GATED a **desktop** (`!IS_MOBILE`). En móvil el post es caro,
+  así que ahí sigue el render directo. Si al usuario le gusta y lo extendemos, hay que
+  **medir en móvil** (bloom/SMAA) antes de activarlo en teléfonos — importante porque el
+  público final juega en móvil/tablet.
+- **Capturas:** 2 (plano amplio + cercano) — se las paso al usuario para que decida.
+  **Parado aquí; espero su OK para extender** al resto de tramos.
+
 **Preguntas:** ninguna abierta ahora mismo.

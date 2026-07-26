@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { ThirdPersonCamera } from './camera/ThirdPersonCamera';
 import { CharacterController } from './characters/CharacterController';
@@ -27,7 +32,7 @@ renderer.setPixelRatio(QUALITY.pixelRatio);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.02;
+renderer.toneMappingExposure = 1.05;   // PILOTO "precioso": exposición cálida
 renderer.shadowMap.enabled = QUALITY.shadows;
 renderer.shadowMap.type = IS_MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 app.appendChild(renderer.domElement);
@@ -53,6 +58,19 @@ camera.position.set(0, 6, 24);
 const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 (window as any).__tpcam = tpcam;
 
+// === PILOTO "PRECIOSO" (solo 0-5, acotado; petición del cerebro) ===
+// Post-proceso cinemático: bloom suave + SMAA sobre el render ACES/IBL ya existente.
+// GATED a desktop: en móvil el post es caro → se mantiene el render directo.
+const PRECIOSO = !IS_MOBILE;
+let composer: EffectComposer | null = null;
+if (PRECIOSO) {
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.32, 0.5, 0.85)); // bloom suave
+  composer.addPass(new SMAAPass(innerWidth, innerHeight));
+  composer.addPass(new OutputPass());
+}
+
 // ---- Luz de atardecer ----
 const hemi = new THREE.HemisphereLight(0xffe9c0, 0xa9895f, 0.46);   // algo menos plano (el rim aporta)
 scene.add(hemi);
@@ -72,6 +90,8 @@ rim.position.set(26, 9, -22);
 scene.add(rim);
 
 const plastic = new PlasticMaterialFactory();
+// PILOTO "precioso": plástico que refleja el IBL (clearcoat + más reflejo). Solo desktop.
+if (PRECIOSO && QUALITY.envMap) plastic.update({ roughness: 0.28, clearcoat: 0.6, envMapIntensity: 1.5 });
 
 // === ENTORNO + CAMPAMENTO + VIDA + VIAJE ===
 setupEnvironment(scene);
@@ -412,6 +432,7 @@ addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+  composer?.setSize(innerWidth, innerHeight);
 });
 let last = 0;
 function animate(now: number): void {
@@ -425,7 +446,7 @@ function animate(now: number): void {
   if (introActiva) {
     studio.update(dt, now / 1000, director.tiempo);
     studio.frameCamera(camera, director.tiempo);
-    renderer.render(scene, camera);
+    if (composer) composer.render(); else renderer.render(scene, camera);
     return;
   }
 
@@ -583,13 +604,13 @@ function animate(now: number): void {
     (scene.fog as THREE.Fog).color.copy(DAY_SKY).lerp(NIGHT_SKY, nightF);
     key.intensity = 3.0 * (1 - nightF) + 0.5 * nightF;
     hemi.intensity = 0.55 * (1 - nightF) + 0.18 * nightF;
-    renderer.toneMappingExposure = 1.02 * (1 - nightF) + 0.85 * nightF;
+    renderer.toneMappingExposure = 1.05 * (1 - nightF) + 0.85 * nightF;
   }
 
   sky.update(dt, nightF);                                   // deriva de nubes + telón que oscurece de noche
   atmo.update(dt, now / 1000);                              // humo de fogatas + pájaros + banderas
   tpcam.update(controller.pos);
-  renderer.render(scene, camera);
+  if (composer) composer.render(); else renderer.render(scene, camera);
 }
 requestAnimationFrame(animate);
 
