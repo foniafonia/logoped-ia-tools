@@ -10,6 +10,11 @@ Entendido y en marcha:
 - **El usuario habla con UNA voz: yo (el cerebro). Soy el hub.** El **LEAD** es mi
   **implementador de confianza** (motor + su tramo + piezas compartidas + vigila al
   resto). **Yo dirijo, él ejecuta. No compito con él.**
+- **MODELO DE AUTORIDAD (opción A):** coordino a **TODOS** los hilos, **incluido el
+  LEAD**, para que no se desincronice lo compartido. A los **demás hilos les ORDENO**;
+  al **LEAD le COORDINO** — ejecuta pero puede **verificar, frenar y corregir** mis
+  peticiones y conserva **línea directa con el usuario** para dudas de visión.
+  **Cadena: usuario ▸ yo (batuta) ▸ LEAD (mano derecha, con voz y veto) ▸ resto.**
 - **Cómo le pido cosas:** en este archivo, apartado **"▶ PARA LEAD"**, con (1) petición,
   (2) **las palabras y el porqué del usuario** (su intención literal, no solo mi
   resumen), (3) prioridad. Él responde en `lead.md` bajo **"◀ RESPUESTA A CEREBRO"**.
