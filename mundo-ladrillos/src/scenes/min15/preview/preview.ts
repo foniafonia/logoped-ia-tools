@@ -7,6 +7,8 @@ import { PreviewController } from '../../min05/preview/PreviewController';
 import { CinematicCamera } from '../../min05/props/CinematicCamera';
 import { SoundEngine } from '../../min05/audio/SoundEngine';
 import { mountSceneTag, SceneTagHandle } from '../../../ui/SceneTag';
+import { buildSky } from '../../min00/sky';
+import { buildHorizon as buildMesaRing } from '../../min00/horizon';
 import { ESPIA1_SIGILO, ESPIA2_SIGILO } from '../../min05/skins';
 import { MIN15_SCENES } from '../registry';
 import { Min15Scene, SceneContext, SceneInstance } from '../types';
@@ -59,6 +61,14 @@ key.shadow.camera.top = 70; key.shadow.camera.bottom = -60;
 key.shadow.bias = -0.0002; key.shadow.normalBias = 0.02;
 scene.add(key);
 const fill = new THREE.DirectionalLight(0x6a86c0, 0.5); fill.position.set(12, 12, -6); scene.add(fill);
+
+// Telón de MONTAÑAS pintadas + nubes que derivan (kit del LEAD, listón 0–5) y anillo
+// de MESETAS 3D que cierran el mundo → matan el vacío negro del fondo. buildSky no
+// expone su grupo, lo capturo por diferencia. Todos mis mundos son exteriores nocturnos.
+const beforeSky = new Set(scene.children);
+const sky = buildSky(scene);
+const skyGroup = scene.children.find((c) => !beforeSky.has(c)) as THREE.Object3D;
+const mesaRing = buildMesaRing(scene);
 
 function applyLighting(mundo: Min15Scene['mundo']): void {
   // Todos mis mundos son NOCTURNOS. El balcón sobre la muralla se ilumina con la
@@ -305,6 +315,8 @@ function animate(now: number): void {
   requestAnimationFrame(animate);
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
+
+  sky.update(dt, 0.82); // deriva de nubes + tinte noche del telón de montañas
 
   const cine = cineCam.active;
   if (!cine) {

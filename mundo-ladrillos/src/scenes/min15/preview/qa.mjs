@@ -36,15 +36,26 @@ async function walkTo(x, z) {
   }
 }
 
-// ---------------- ESCENA 27: cordón rojo ----------------
+// ---------------- ESCENA 27: cordón rojo (2 pasos: coger → atar) ----------------
 console.log('· Escena 27 — cordón rojo');
 await page.evaluate(() => window.__loadNumero(27));
 await sleep(400);
 let p = await probe();
-await walkTo(p.goal[0], p.goal[1] + 0.4);
+// paso 1: ir al ovillo (mesita en -6,1.2) y COGERLO
+await walkTo(-6, 1.2);
 await sleep(120);
 p = await probe();
-console.log('  prompt en la ventana:', p.prompt);
+console.log('  paso1 prompt (coger):', p.prompt);
+await page.evaluate(() => window.__act());
+await sleep(400);
+p = await probe();
+console.log('  tras coger → status:', p.status);
+await page.screenshot({ path: join(OUT, 'escena-27-lleva.png') });
+// paso 2: llevarlo a la ventana (goal) y ATARLO
+await walkTo(p.goal[0], p.goal[1] + 0.3);
+await sleep(120);
+p = await probe();
+console.log('  paso2 prompt (atar):', p.prompt);
 await page.evaluate(() => window.__act());
 await sleep(2200);
 p = await probe();
