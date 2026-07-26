@@ -9,6 +9,7 @@ import { AudioManager } from './audio/AudioManager';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
 import { Cutscene } from './ui/Cutscene';
+import { Dialogue } from './ui/Dialogue';
 import { Dust } from './effects/Dust';
 import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
 import { CampLife } from './scenes/min00/campLife';
@@ -95,6 +96,10 @@ const journey = new Journey(scene, plastic);               // río Jordán + Jer
 const studio = new StudioIntro(scene, plastic);            // plató de cine (cinemática de apertura)
 let introActiva = false;                                   // true durante la intro del estudio
 (window as any).__life = life; (window as any).__journey = journey; (window as any).__camp = camp;
+// Helper de DIÁLOGO compartido (bocadillos) — disponible para todos los tramos.
+// En el 0-5 aún no se usa (tiene su narración); lo dejo instanciado + hook de QA.
+const dlg = new Dialogue();
+(window as any).__dlg = dlg;
 
 // === JUGADOR: un joven levita del campamento ===
 const villager = createMinifigure(plastic, VILLAGER_SKIN);
