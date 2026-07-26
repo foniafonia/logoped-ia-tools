@@ -394,29 +394,33 @@ requestAnimationFrame(animate);
 (window as any).__cine = () => (cineCam.active ? 1 : 0);
 
 // ============================================================================
-// HOOKS DE PLAYTEST para el SEGUNDO-CEREBRO / Eli (rama segundo-cerebro-playtester).
-// Contrato para que un playtester headless conduzca y "vea" el tramo:
+// HOOKS DE QA / JUGADOR SINTÉTICO para el SEGUNDO-CEREBRO / Eli.
+// Alineados AL CONTRATO del cerebro (mismo que 0–5 y 5–10) para que su arnés
+// (tools/playtester*.mjs) juegue este tramo SIN adaptaciones:
 //   __loadNumero(n)          → carga la escena n (17..25)
-//   __walk(dx, dz, ms)       → empuja al jugador en (dx,dz) normalizados durante ms
-//   __act()                  → pulsa la acción E (pactar, pedir café, asomarse…)
-//   __probe()                → estado legible AHORA: escena, objetivo, status, hud,
-//                              posición, si está en cinemática y si la escena está resuelta
-// (Si Eli espera otra firma, que me lo diga en coordinacion/eli-reportes.md y la adapto.)
+//   __walk(x, z, step)→bool  → avanza hacia el punto ABSOLUTO (x,z) un paso `step`;
+//                              devuelve true al llegar (patrón de su snippet)
+//   __act()                  → dispara la acción E (pactar, pedir café, asomarse…)
+//   __probe()                → estado legible AHORA (mismos campos que su contrato)
+//   __setPlayer(x,z), __pos()  (ya definidos arriba)
 (window as any).__act = () => { interactFlag = true; };
-(window as any).__walk = (dx: number, dz: number, ms = 500): void => {
-  controller.touch.x = Math.max(-1, Math.min(1, dx));
-  controller.touch.z = Math.max(-1, Math.min(1, dz));
-  setTimeout(() => { controller.touch.x = 0; controller.touch.z = 0; }, ms);
+(window as any).__walk = (x: number, z: number, step: number): boolean => {
+  const p = controller.pos; const dx = x - p.x, dz = z - p.z; const d = Math.hypot(dx, dz);
+  if (d < 0.05) return true;
+  const s = Math.min(step, d); controller.pos.set(p.x + dx / d * s, 0, p.z + dz / d * s);
+  return d <= step;
 };
-(window as any).__probe = () => ({
-  escena: currentDef?.numero ?? null,
-  id: currentDef?.id ?? null,
-  mundo: currentDef?.mundo ?? null,
-  titulo: currentDef?.titulo ?? null,
-  objetivo: currentDef?.objetivo?.texto ?? null,
-  status: current?.status?.() ?? null,
-  hud: current?.hud?.() ?? null,
-  pos: { x: +controller.pos.x.toFixed(2), z: +controller.pos.z.toFixed(2) },
-  cine: cineCam.active,
-  resuelta: done
-});
+(window as any).__probe = () => {
+  const p = controller.pos; const def = currentDef; const hud = current?.hud?.() ?? {};
+  return {
+    numero: def?.numero ?? null, titulo: def?.titulo ?? null, mundo: def?.mundo ?? null,
+    tipo: def?.objetivo.tipo ?? null, objetivo: def?.objetivo.texto ?? null,
+    pos: [Math.round(p.x), Math.round(p.z)],
+    goal: def?.objetivo.target ? [Math.round(def.objetivo.target.x), Math.round(def.objetivo.target.z)] : null,
+    radio: def?.objetivo.radio ?? null,
+    done: done || (current ? current.isDone(p) : false),
+    cine: cineCam.active ? 1 : 0,
+    alarm: hud.alarm ?? 0, progress: hud.progress ?? null,
+    gems: hud.gems ?? null, prompt: hud.prompt ?? null, status: current?.status?.() ?? null
+  };
+};
