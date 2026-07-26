@@ -12,6 +12,7 @@ import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
 import { buildHorizon } from '../props/Horizon';
 import { CinematicCamera } from '../props/CinematicCamera';
 import { NavBeacon } from './NavBeacon';
+import { setupPreciousRender } from '../../../core/PreciousRender';
 import { mountSceneTag, SceneTagHandle } from '../../../ui/SceneTag';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -42,6 +43,13 @@ const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+// ACABADO "PRECIOSO" (helper compartido del muñequero): bloom + SMAA + tono ACES.
+// `ibl:false` porque el IBL ya lo gestiona este preview por escena (envTex /
+// applyLighting). En móvil el helper va en modo LITE solo (sin SMAA, bloom suave).
+// Bloom SELECTIVO (umbral alto): brillan faroles/reflejos, NO el arenal de día
+// (con el umbral por defecto se sobreexponían las escenas diurnas). Suave.
+const fx = setupPreciousRender(renderer, scene, camera, { ibl: false, bloom: { strength: 0.26, radius: 0.5, threshold: 0.9 } });
 
 const plastic = new PlasticMaterialFactory();
 // El SoundEngine da el AMBIENTE + EFECTOS y reproduce el AUDIO REAL DE LA PELÍCULA
@@ -402,7 +410,7 @@ const startIdx = Number.isFinite(startNum) ? MIN05_SCENES.findIndex((s) => s.num
 loadScene(startIdx >= 0 ? startIdx : 0);
 if (params.get('shot') === '1') { startEl.remove(); } // capturas: sin overlay
 
-addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
 let last = 0;
 function animate(now: number): void {
@@ -467,7 +475,7 @@ function animate(now: number): void {
 
   // ---- Cámara ---- (si hay cinemática la controla el helper; si no, la normal)
   if (!cineCam.update(dt, controller.pos.x, controller.pos.z)) tpcam.update(controller.pos);
-  renderer.render(scene, camera);
+  fx.render();   // acabado precioso (bloom+SMAA+ACES) en vez de renderer.render(scene,camera)
 }
 function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivElement }, v?: number): void {
   if (v === undefined || v <= 0.001) { b.wrap.style.display = 'none'; b.lab.style.display = 'none'; return; }
