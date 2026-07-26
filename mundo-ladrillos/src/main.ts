@@ -581,4 +581,54 @@ function animate(now: number): void {
   renderer.render(scene, camera);
 }
 requestAnimationFrame(animate);
+
+// === SONDEO DE QA / JUGADOR SINTÉTICO (aditivo, no afecta al juego) ===
+// Devuelve el estado y "a dónde debería ir" un jugador guiado ahora mismo, para que
+// un arnés de pruebas (o un "niño sintético") pueda jugar el tramo y opinar.
+(window as any).__probe = () => {
+  const p = controller.pos;
+  const nearest = (arr: Array<{ x: number; z: number }>): { x: number; z: number } | null => {
+    let best: { x: number; z: number } | null = null, bd = 1e9;
+    for (const o of arr) { const d = (o.x - p.x) ** 2 + (o.z - p.z) ** 2; if (d < bd) { bd = d; best = o; } }
+    return best;
+  };
+  let goal: { x: number; z: number } | null = target ? { x: target.x, z: target.z } : null;
+  let fase = 'explorar';
+  if (cargandoBulto) { goal = CARGA_DEST; fase = 'llevar-bulto'; }
+  else if (panActivos && !done.has('tab')) {
+    fase = 'atrapar-pan';
+    const c = nearest(camp.panes.filter((m) => m.visible && !m.userData.caught).map((m) => ({ x: m.position.x, z: m.position.z })));
+    if (c) goal = c;
+  } else if (bultosActivos && !done.has('bultos')) {
+    fase = 'cargar-camello';
+    const c = nearest(camp.bultos.filter((m) => m.visible && !entregados.has(m)).map((m) => ({ x: m.position.x, z: m.position.z })));
+    if (c) goal = c;
+  } else if (ropesActivas && !ropesHechas) {
+    fase = 'recoger-cuerdas';
+    const c = nearest(camp.ropes.filter((m) => m.visible).map((m) => ({ x: m.position.x, z: m.position.z })));
+    if (c) goal = c;
+  } else if (ropesHechas && !done.has('camp')) {
+    fase = 'arrear-ovejas';
+    const pen = life.redil;
+    const t = nearest(life._targets.filter((s) => !s.penned));
+    if (t) { const dx = t.x - pen.x, dz = t.z - pen.z, L = Math.hypot(dx, dz) || 1; goal = { x: t.x + dx / L * 3.5, z: t.z + dz / L * 3.5 }; }
+  } else if (director.beatIndex >= 3 && !done.has('yeh')) { fase = 'saludar-yehoshua'; }
+  return {
+    beat: director.beatIndex, t: Math.round(director.tiempo),
+    fase, pos: [Math.round(p.x), Math.round(p.z)],
+    goal: goal ? [Math.round(goal.x), Math.round(goal.z)] : null,
+    stars: director.starCount, done: [...done],
+    pan: [camp.panes.filter((m) => m.userData.caught).length, camp.panes.length],
+    sheep: [life.ovejasEnRedil, life.ovejasObjetivo],
+    bultos: [entregados.size, camp.bultos.length]
+  };
+};
+/** Mueve al jugador un paso hacia (x,z) — anda, no teletransporta (para el arnés). */
+(window as any).__walk = (x: number, z: number, step: number): boolean => {
+  const p = controller.pos; const dx = x - p.x, dz = z - p.z; const d = Math.hypot(dx, dz);
+  if (d < 0.05) return true;
+  const s = Math.min(step, d); p.x += dx / d * s; p.z += dz / d * s;
+  villager.root.rotation.y = Math.atan2(dx, dz);
+  return d <= step;
+};
 (window as any).__READY__ = true;
