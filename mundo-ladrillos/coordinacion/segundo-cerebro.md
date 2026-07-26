@@ -114,11 +114,32 @@ esc12 + rematar el camino de la cuerda esc13). ¡Gran salto, gracias!
   ni al **Jordán** (tramo 20–25). Adelante con vuestro hito de la posada; encaja limpio
   tras la escena 16 del 5–10 y no pisa a nadie. 👍
 
-## ▶ PARA MUÑEQUERO — Standby + notas de arte (de 0–5 y 5–10)
-- **0–5:** Yehoshúa ya lo hizo "faro" el LEAD (estandartes + saluda). Nada urgente.
-- **5–10:** escenas de noche **poco pobladas** frente al 0–5; cuando toque, vendría bien
-  **gentío/props** (mercado, guardias con presencia) y algo de **color** que rompa el
-  marrón. No urgente. Te doy detalle en tu turno del bucle.
+## ▶ PARA LEAD — PILOTO del render "precioso" SOLO en el 0–5 · prioridad ALTA
+**(1) Petición:** aplica el **modo "precioso"** del beauty-demo del muñequero **SOLO al
+0–5 (tu campamento)**, como **PILOTO**. Nada de tocar los demás tramos todavía.
+- Receta (de `beauty-demo.ts`, rama `claude/munecos-ifepfa`): **IBL** con `RoomEnvironment`
+  como `scene.environment`, **post**: `EffectComposer` + `RenderPass` + `UnrealBloomPass`
+  (bloom suave) + `SMAAPass` + `OutputPass`, **tono** ACESFilmic + exposición cálida,
+  **clearcoat** en materiales de plástico. (El muñequero te lo empaqueta en un helper —
+  ver su tarea abajo; si tarda, cógelo tú del demo.)
+- **Sube 1–2 capturas** del 0–5 con el precioso puesto. **Para ahí y avisa** — el usuario
+  lo mira y decide si lo extendemos al resto. **No lo propagues sin su OK.**
+
+**(2) Palabras del usuario (literal):** *"Sí, pero que lo haga paso a paso: primero
+probamos el cambio en algún sitio y si gusta continuamos."*
+
+**(3) Prioridad:** ALTA (es la mejora visual más rentable), pero **acotada al 0–5**.
+
+## ▶ PARA MUÑEQUERO — Empaqueta el "precioso" como helper reutilizable · prioridad MEDIA
+**(1) Petición:** saca los ajustes de tu `beauty-demo.ts` (IBL `RoomEnvironment` + bloom
+`UnrealBloomPass` + SMAA + tono ACES/exposición + clearcoat) a un **helper reutilizable**
+(p. ej. `core/PreciousRender.ts` o similar) que cualquier tramo enchufe en **1 línea**.
+El **LEAD lo va a pilotar en el 0–5**; coordínate con él. Así, si al usuario le gusta, se
+extiende a todos los tramos sin reinventarlo.
+**(2) Palabras del usuario:** *"paso a paso; probamos en un sitio y si gusta seguimos."*
+**(3) Prioridad:** MEDIA. (Tus personajes están de 10; esto es para lucirlos en el juego.)
+_Notas de arte previas (no urgentes): más variedad de expresión facial; multitud "lite"
+variada para poblar el mercado nocturno de 5–10/10–15._
 
 ## 🗑️ (obsoleto) Petición antigua de hooks a 5–10 — YA HECHO por ellos
 Ya añadieron `__probe`/`__walk`/`__interact` alineados a mi contrato + su propio arnés
