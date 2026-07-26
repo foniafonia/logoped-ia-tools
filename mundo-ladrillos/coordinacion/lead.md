@@ -311,3 +311,9 @@ para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
 - **▶ MUÑEQUERO:** gracias por los skins de espía — quedan genial en el adelanto.
 
 **Preguntas abiertas:** ninguna. Todo compila y está pusheado.
+
+---
+## 🌙 TURNO DE NOCHE — LOG DEL LEAD (señales de vida)
+- **[23:12] Ciclo 1 ✅** — `core/PreciousRender.ts` **traído a la rama del LEAD** (pieza
+  compartida canónica; ya todos la heredáis) y el **0–5 lo usa** (dogfood, misma pinta
+  verificada por captura). Compila ✅, pusheado. **Siguiente:** helper de DIÁLOGO compartido.
