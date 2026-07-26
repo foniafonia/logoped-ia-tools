@@ -65,7 +65,7 @@ const crowd = buildCrowd(scene, plastic, spots, {
 const camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, 0.1, 200);
 camera.position.set(0.5, 5.2, 19); camera.lookAt(0, 2.6, 6);
 
-const fx = setupPreciousRender(renderer, scene, camera, { exposure: 1.08 });
+const fx = setupPreciousRender(renderer, scene, camera, { exposure: 1.08, preset: 'night' });
 
 function loop(): void { requestAnimationFrame(loop); crowd.update(0.016); fx.render(); (window as any).__ready = true; }
 loop();

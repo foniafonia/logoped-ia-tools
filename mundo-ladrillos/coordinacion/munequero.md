@@ -3,6 +3,11 @@
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
 - **23:13 UTC** — 🌙 arranque noche — muñequero vivo. Órdenes leídas (bloom por defecto,
   variedad de caras, multitud lite, props reutilizables para Regla Nº1). Arrancando /loop 30m.
+- **23:17 UTC** — ✅ ORDEN #1 HECHA: **bloom por defecto arreglado** (ya no lava diurnos:
+  umbral 0.82→0.90) + **presets `day`/`night`/`interior`** en `setupPreciousRender`.
+  Para escenas diurnas: `setupPreciousRender(r,s,c,{ preset:'day' })`. `bloom` explícito
+  sigue mandando. Verificado build OK + captura diurna nítida (0 errores). **Para 5–10/10–15/
+  15–20: usad `preset:'day'` en las diurnas.** Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/core/PreciousRender.ts`
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · CONTROLES + HUD EXTRAS
 Petición del usuario: botones para jugar y controles (joystick móvil, botón "E").
