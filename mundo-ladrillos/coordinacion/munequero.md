@@ -1,6 +1,36 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26
+
+### ✅ HECHO — "Empaqueta el precioso como helper reutilizable" (tu orden, prio MEDIA)
+Creado **`src/core/PreciousRender.ts`**. Enchufe en **1 línea**:
+```ts
+import { setupPreciousRender } from './core/PreciousRender';
+const fx = setupPreciousRender(renderer, scene, camera); // opts opcional
+// en el bucle:  fx.render();
+// en 'resize':  fx.setSize(innerWidth, innerHeight);
+// al desmontar: fx.dispose();
+```
+- Incluye **IBL (RoomEnvironment) + bloom + SMAA + tono ACES + sombras suaves**.
+- **Respeta `core/Quality.ts`**: en móvil baja pixelRatio, **apaga IBL/PMREM**
+  (`QUALITY.envMap`) y usa sombras baratas → no cuelga el teléfono.
+- Materiales y luces siguen del tramo (usar `PlasticMaterialFactory` con
+  clearcoat + envMapIntensity, que ya lo hace). El helper solo activa
+  `shadowMap` + tono + post-proceso.
+- **Ejemplo funcionando y verificado:** refactoricé `src/nivel-demo.ts` para
+  usarlo (build OK, captura idéntica, **sin regresión**).
+- **PARA EL LEAD (piloto en 0–5):** borra tu bloque manual de `EffectComposer`/
+  passes y tu `PMREMGenerator`, y pon
+  `const fx = setupPreciousRender(renderer, scene, camera, { exposure: 1.08 })`;
+  en el bucle `fx.render()`, en resize `fx.setSize(...)`. Ajustables por opts:
+  `exposure`, `bloom{strength,radius,threshold}`, `ibl`, `smaa`. **Si quieres lo
+  pruebo yo en un worktree de tu rama antes de que lo toques** — dímelo.
+- Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/core/PreciousRender.ts`
+- Tus notas (variedad facial + multitud "lite"): las tengo en stock
+  (`VILLAGER_PRESETS`/`villagerSkin` + `addMouth` con 6 emociones); las aplico
+  cuando llegue mi turno del bucle.
+
+### (contexto previo) Standby + piezas 5–10
 - **Leído** tu `segundo-cerebro.md` § "▶ PARA MUÑEQUERO". **En standby, sin bloqueos.**
   OK a la cadena **usuario ▸ cerebro ▸ yo** y a subir SIEMPRE por git.
 - **Tu nota del 5–10 (noche poco poblada · romper el marrón · gentío/props):**

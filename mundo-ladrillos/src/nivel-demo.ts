@@ -1,11 +1,6 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { setupPreciousRender } from './core/PreciousRender';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactory';
 import { buildCrowd } from './world/Crowd';
@@ -20,21 +15,12 @@ import { jericoBackdrop } from './assets/jericoBackdrop';
  * Higgsfield, incrustada como telón. Mismo motor web, tiempo real.
  */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(1);
 renderer.setSize(innerWidth, innerHeight);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf3c48a); // cielo cálido de respaldo (sin negros nunca)
 scene.fog = new THREE.Fog(0xe4a86a, 46, 130);
-
-const pmrem = new THREE.PMREMGenerator(renderer);
-scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.02).texture;
 
 const plastic = new PlasticMaterialFactory();
 plastic.update({ roughness: 0.32, clearcoat: 0.6, envMapIntensity: 1.0 });
@@ -132,23 +118,20 @@ Object.assign(hint.style, {
 document.body.appendChild(hint);
 setTimeout(() => { hint.style.transition = 'opacity 1s'; hint.style.opacity = '0'; }, 6000);
 
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.42, 0.6, 0.8));
-composer.addPass(new SMAAPass(innerWidth, innerHeight));
-composer.addPass(new OutputPass());
+// Acabado "precioso" en 1 línea (IBL + bloom + SMAA + tono/sombras, respeta móvil)
+const fx = setupPreciousRender(renderer, scene, camera, { exposure: 1.1, bloom: { strength: 0.42, radius: 0.6, threshold: 0.8 } });
 
 let t = 0;
 function loop(): void {
   requestAnimationFrame(loop);
   t += 0.016; crowd.update(0.016);
   controls.update();
-  composer.render();
+  fx.render();
   (window as any).__ready = true;
 }
 loop();
 addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
-  composer.setSize(innerWidth, innerHeight);
+  fx.setSize(innerWidth, innerHeight);
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
 });
