@@ -30,7 +30,8 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xe4a86a, 42, 118);
+scene.background = new THREE.Color(0xf3c48a); // cielo cálido de respaldo (sin negros nunca)
+scene.fog = new THREE.Fog(0xe4a86a, 46, 130);
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.02).texture;
@@ -39,10 +40,25 @@ const plastic = new PlasticMaterialFactory();
 plastic.update({ roughness: 0.32, clearcoat: 0.6, envMapIntensity: 1.0 });
 
 // --- Telón de fondo: imagen real de Higgsfield (llanura de Jericó, atardecer) ---
-// Se pinta a pantalla completa detrás de todo (matte-painting). La calle 3D va delante.
+// Anclado AL MUNDO (no a la pantalla): un plano gigante y lejano que hace de
+// matte-painting. Así se mueve acompasado con la escena (paralaje real) en vez
+// de quedar "pegado al cristal". La cámara va limitada para no romper la ilusión.
 const bgTex = new THREE.TextureLoader().load(jericoBackdrop);
 bgTex.colorSpace = THREE.SRGBColorSpace;
-scene.background = bgTex;
+// Telón CURVO (cilindro que envuelve la escena, cara interior). A distancia
+// constante desde la cámara, así siempre se ve una porción frontal de la imagen
+// aunque gires dentro del arco permitido — no queda como pared plana.
+const R = 82, H = 150, arc = 2.5; // radio, alto, arco (rad) que cubre el frente
+const backGeo = new THREE.CylinderGeometry(R, R, H, 64, 1, true, Math.PI - arc / 2, arc);
+const backMat = new THREE.MeshBasicMaterial({
+  map: bgTex, toneMapped: false, fog: false, depthWrite: false, side: THREE.BackSide
+});
+bgTex.wrapS = THREE.RepeatWrapping;
+bgTex.repeat.x = -1; bgTex.offset.x = 1; // imagen sin espejar en la cara interior
+const backdrop = new THREE.Mesh(backGeo, backMat);
+backdrop.position.set(0, 10, 5); // centrado en el punto que mira la cámara
+backdrop.renderOrder = -1;
+scene.add(backdrop);
 
 // Suelo de arena/empedrado cálido que enlaza con la imagen
 const floor = new THREE.Mesh(
@@ -99,9 +115,11 @@ camera.position.set(2.6, 4.2, 20); camera.lookAt(0, 3.4, 4);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.target.set(0, 3, 5);
-controls.minDistance = 4; controls.maxDistance = 30;
-controls.maxPolarAngle = Math.PI / 2.05;
-controls.minAzimuthAngle = -0.8; controls.maxAzimuthAngle = 0.8; // mira hacia la ciudad al fondo
+// Cámara "sobre raíles": arco frontal. Evita cenital y giros que rompan el telón.
+controls.minDistance = 5; controls.maxDistance = 20;
+controls.minPolarAngle = 1.24;   // ~71°: no se puede ir por encima (nada de cenital)
+controls.maxPolarAngle = 1.52;   // ~87°: casi horizontal, sin ver el suelo desde arriba
+controls.minAzimuthAngle = -0.45; controls.maxAzimuthAngle = 0.45; // arco frontal hacia la ciudad
 controls.update();
 
 const hint = document.createElement('div');
