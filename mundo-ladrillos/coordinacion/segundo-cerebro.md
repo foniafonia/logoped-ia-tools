@@ -44,12 +44,30 @@ Por cada hilo: **analizo → recomiendo → aviso a todos aquí → doy feedback
 con enlace + pocas imágenes → dejo trabajar → siguiente hilo.** El usuario habla
 conmigo; yo sostengo el resto.
 
+## ▶ PARA LEAD — Pulido del 0–5 (prioridad MEDIA, no bloqueante) · 2026-07-26
+**(1) Petición:** un pequeño pase de pulido del 0–5, **a tu criterio (tienes veto)**:
+- **P1 (principal):** que **Yehoshúa se note más** al inicio, para que el niño sepa a
+  quién ir a saludar. Ideas (elige tú): más alto / en su tarima con estandarte propio /
+  que **salude con la mano** / baliza más clara sobre él. *Motivo (playtest Eli): el
+  niño no sabe quién es Yehoshúa entre el gentío hasta que lo ve azul en la tarima.*
+- **P2 (menor, si lo ves):** camello con menos ida/vuelta (acercar los bultos o dejar
+  cargar 2 de golpe) y bajar un pelín la **neblina/polvo** del arranque de la caravana.
+
+**(2) Palabras y porqué del usuario (literal):** *"El 0–5 es el que mejor va y el que
+hace las cosas más chulas. No lo damos por cerrado: quiero que lo pulas un poco más con
+tu criterio. Si el hombre de confianza lo ve bien, adelante y a trabajar; si no, tú
+frenas."* → El usuario confía en tu gusto (conoces el suyo); por eso te lo **coordino,
+no te lo impongo**. Si algo no lo ves, **frénalo y dímelo** por `◀ RESPUESTA A CEREBRO`.
+
+**(3) Prioridad:** MEDIA. No bloquea nada; es mejora. Cuando tengas hito, avísame.
+
+**Verificado por mí (Eli, build actual):** saludo ✅ · camello 4 bultos ✅ · encadenado
+cuerdas+ovejas→pan ✅ (**ovejas 3/3**) · 0 crashes. Detalle+capturas en `eli-reportes.md`.
+
 ## 🎯 Estado (2026-07-26)
-- **0–5 (LEAD): ✅ JUGADO Y AUDITADO.** Reporte de Eli + verificación en
-  `eli-reportes.md`. **Los arreglos del run #1 están verificados:** el saludo a
-  Yehoshúa ya se completa solo (radio 9 + persistente) y el camello es de 4 bultos.
-  0 crashes. Recomendaciones de pulido (no bloqueantes) en el reporte; la que miraría
-  el LEAD con cariño: **ventana de cuerdas+ovejas** (que no caduque por el beat del pan).
+- **0–5 (LEAD): ✅ JUGADO Y AUDITADO — REDONDO.** Los arreglos del run #1 **y** el
+  encadenado de mini-juegos (`8be5dcc`) están **verificados** (saludo, camello 4 bultos,
+  ovejas 3/3, 0 crashes). Orden de pulido no bloqueante enviada arriba (▶ PARA LEAD).
 - **Aviso técnico (para quien reutilice el arnés):** NO valida el saludo saltando a
   beat 1 (saludar exige `beatIndex>=3`, `main.ts:317`) y saltar de beat en beat rompe
   los `onEnter`. Lo bueno es la **pasada natural**: `__director.start(44,1)` una vez y

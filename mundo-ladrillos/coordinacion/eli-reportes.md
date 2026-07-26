@@ -22,13 +22,14 @@
 | **Camello** 6→4 bultos | ✅ confirmado (total=4) | Sigue siendo la tarea más larga (ida y vuelta); el sintético llegó a **3/4** antes de agotar el tiempo (inflado por su lentitud). |
 | Estabilidad | ✅ | **0 crashes, 0 errores de consola** en toda la pasada. |
 
-**Métricas de la pasada natural** (estrellas 4/5; pan 5/5; camello 3/4; **ovejas 0/3**):
-- `yeh` (saludo) ✅ · `tab` (atrapar pan) ✅ 5/5 · `carav` (seguir caravana) ✅
-- `camp` (cuerdas+ovejas) ❌ **se saltó (0/3)** — el beat del **pan** arrancó antes de
-  que el sintético (lento) terminara las cuerdas. El propio juego lo avisa en la
-  pantalla final: *"Te faltó: recoger el campamento"*. ⚠️ **A confirmar con niño real:**
-  ¿un peque que se entretiene en el saludo pierde la ventana de las ovejas? (probable
-  artefacto de la lentitud del sintético, pero huele a **ventana de ritmo apretada**).
+**Métricas (2 pasadas):**
+- **Pasada 1** (build previo): ovejas 0/3 — el pan arrancaba a la vez y el sintético
+  lento se saltaba el campamento.
+- **Pasada 2** (build con el encadenado del LEAD, `8be5dcc`): **ovejas 3/3 ✅**, orden
+  verificado **saludo→cuerdas→ovejas→pan→camello sin solaparse**. Confirmado que el
+  arreglo del LEAD cierra el problema. (El camello/caravana no los remató el sintético
+  por su lentitud ~4×, no por el juego; un niño real va sobrado.)
+- **Veredicto: el encadenado de mini-juegos ya NO es un problema.** ✅
 
 ### 🎮 REPORTE ELI (~8 años) — Tramo 0–5 — 2026-07-26
 - **Qué creo que hay que hacer:** recojo el campamento, saludo al señor azul de la
@@ -49,8 +50,7 @@
 - **Si fuera mío cambiaría (1-3):**
   1. Que **Yehoshúa "me llame"** (flecha/baliza más clara sobre él, o un "¡ven!") para
      saber a quién saludar sin buscarlo.
-  2. Que la **ventana de cuerdas+ovejas no caduque** por el beat del pan (hacerla
-     persistente como el saludo, o que el pan no empiece hasta terminar el campamento).
+  2. ~~Ventana de cuerdas+ovejas~~ → **YA ARREGLADO por el LEAD** (encadenado). ✅
   3. **Camello:** acercar los bultos al camello o dejar cargar 2 de golpe (menos ida/vuelta).
 - **Veredicto niño (0-10):** **8** · el mejor tramo, va fino y con vida.
 - **Para MUÑEQUERO:** caras dibujadas y turbantes bien y variados; **Yehoshúa azul en
@@ -61,9 +61,9 @@
 **Capturas** (pocas, MODO BARATO): campamento+saludo, atrapar-pan, caravana, pantalla
 final. Enlace visual para el usuario aparte (Artifact).
 
-**Para el LEAD:** enhorabuena, el saludo quedó arreglado y verificado. Las 3 mejoras
-de arriba son de pulido de ritmo, no bloqueantes. La única que miraría con cariño es
-la **ventana de cuerdas+ovejas** (mismo patrón "persistente" que ya aplicaste al saludo).
+**Para el LEAD:** enhorabuena — saludo, camello (4 bultos) y **encadenado de mini-juegos
+verificados** (ovejas 3/3). Queda solo pulido no bloqueante: **Yehoshúa más visible** y
+(menor) camello/neblina. Orden concreta en `segundo-cerebro.md` ▶ PARA LEAD.
 
 ---
 
