@@ -11,57 +11,66 @@ import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactor
 import { buildCrowd } from './world/Crowd';
 import { buildStall } from './world/Market';
 import { buildLanternString, buildLaundryLine, buildWell } from './world/StreetProps';
+import { jericoBackdrop } from './assets/jericoBackdrop';
 
 /**
- * NIVEL demo: nuestra calle nocturna de Jericó con el acabado "precioso"
- * (IBL + post-proceso bloom/tono + sombras suaves + luces cálidas). Mismo
- * motor web, tiempo real. Enseña a dónde llega el juego sin salir del navegador.
+ * NIVEL demo: nuestra calle de Jericó al atardecer con el acabado "precioso"
+ * (IBL + post-proceso bloom/tono + sombras suaves + luces cálidas). El fondo
+ * lejano (llanura de Jericó amurallada) es una imagen real generada en
+ * Higgsfield, incrustada como telón. Mismo motor web, tiempo real.
  */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(1);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
+renderer.toneMappingExposure = 1.1;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0e1426);
-scene.fog = new THREE.Fog(0x0e1426, 24, 60);
+scene.fog = new THREE.Fog(0xe4a86a, 42, 118);
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.02).texture;
 
 const plastic = new PlasticMaterialFactory();
-plastic.update({ roughness: 0.3, clearcoat: 0.6, envMapIntensity: 0.9 });
+plastic.update({ roughness: 0.32, clearcoat: 0.6, envMapIntensity: 1.0 });
 
-// Suelo empedrado oscuro
+// --- Telón de fondo: imagen real de Higgsfield (llanura de Jericó, atardecer) ---
+// Se pinta a pantalla completa detrás de todo (matte-painting). La calle 3D va delante.
+const bgTex = new THREE.TextureLoader().load(jericoBackdrop);
+bgTex.colorSpace = THREE.SRGBColorSpace;
+scene.background = bgTex;
+
+// Suelo de arena/empedrado cálido que enlaza con la imagen
 const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(120, 120),
-  new THREE.MeshStandardMaterial({ color: 0x3a3730, roughness: 0.95 })
+  new THREE.PlaneGeometry(200, 200),
+  new THREE.MeshStandardMaterial({ color: 0x8a6a44, roughness: 0.96 })
 );
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 
-// Luna fría + relleno cálido + hemisférica de noche
-const moon = new THREE.DirectionalLight(0xcfe0ff, 1.4);
-moon.position.set(-12, 20, 8); moon.castShadow = true;
-moon.shadow.mapSize.set(2048, 2048);
-moon.shadow.camera.left = -30; moon.shadow.camera.right = 30; moon.shadow.camera.top = 24; moon.shadow.camera.bottom = -18;
-moon.shadow.bias = -0.0002; moon.shadow.radius = 4;
-scene.add(moon);
-scene.add(new THREE.HemisphereLight(0x384868, 0x14100a, 0.6));
+// Sol bajo de atardecer (cálido, desde la derecha como en la imagen) + relleno
+const sun = new THREE.DirectionalLight(0xffd39a, 2.2);
+sun.position.set(16, 12, -6); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -34; sun.shadow.camera.right = 34;
+sun.shadow.camera.top = 26; sun.shadow.camera.bottom = -20;
+sun.shadow.bias = -0.0002; sun.shadow.radius = 5;
+scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xffcf9a, 0x5a3d24, 0.85));
+scene.add(new THREE.AmbientLight(0xffe6c2, 0.25));
 
-// Casas a ambos lados
+// Casas a ambos lados (tonos arena cálidos)
 function house(x: number, z: number, color: number, h = 5): void {
   const w = new THREE.Mesh(new THREE.BoxGeometry(6, h, 6), plastic.get(color));
   w.position.set(x, h / 2, z); w.castShadow = true; w.receiveShadow = true;
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.6, 6.6), plastic.get(0x6e4a2c));
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.6, 6.6), plastic.get(0x7a4f28));
   roof.position.set(x, h + 0.3, z); roof.castShadow = true;
   scene.add(w, roof);
 }
-for (const z of [-4, 4, 12]) { house(-9, z, 0xb9a36f); house(9, z, 0xc9b083); }
+for (const z of [-4, 4, 12]) { house(-9, z, 0xc7a866); house(9, z, 0xd8b877); }
 
 // Attrezzo de calle: farolillos, ropa tendida, pozo, puestos
 scene.add(buildLanternString(plastic, { ax: -8, az: 2, bx: 8, bz: 2, height: 6.2, count: 8, lights: 4 }));
@@ -79,26 +88,27 @@ const crowd = buildCrowd(scene, plastic, [
   { x: 3.2, z: 8, yaw: -1.2, emotion: 'worried' },
   { x: -3.5, z: 9, yaw: 0.8, emotion: 'happy', scale: 0.66 }
 ]);
-// Héroe azul de espaldas, entrando por la calle
+// Héroe azul de espaldas, entrando por la calle hacia la ciudad
 const hero = createMinifigure(plastic, CHARACTER_SKINS.yehoshua);
 hero.root.position.set(0, 0, 14); hero.root.rotation.y = Math.PI; scene.add(hero.root);
 
-const camera = new THREE.PerspectiveCamera(46, innerWidth / innerHeight, 0.1, 200);
-camera.position.set(2.6, 4.2, 20); camera.lookAt(0, 2.2, 4);
+const camera = new THREE.PerspectiveCamera(46, innerWidth / innerHeight, 0.1, 400);
+camera.position.set(2.6, 4.2, 20); camera.lookAt(0, 3.4, 4);
 
 // Explorar: arrastrar = mirar alrededor · pellizcar/rueda = acercar
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
-controls.target.set(0, 2.2, 5);
-controls.minDistance = 4; controls.maxDistance = 34;
+controls.target.set(0, 3, 5);
+controls.minDistance = 4; controls.maxDistance = 30;
 controls.maxPolarAngle = Math.PI / 2.05;
+controls.minAzimuthAngle = -0.8; controls.maxAzimuthAngle = 0.8; // mira hacia la ciudad al fondo
 controls.update();
 
 const hint = document.createElement('div');
 hint.textContent = 'Arrastra para mirar · pellizca para acercar';
 Object.assign(hint.style, {
   position: 'fixed', left: '0', right: '0', bottom: '14px', textAlign: 'center',
-  color: '#f4e9d2', font: '600 15px system-ui, sans-serif', textShadow: '0 2px 6px #000',
+  color: '#fff2dc', font: '600 15px system-ui, sans-serif', textShadow: '0 2px 6px #000',
   pointerEvents: 'none', opacity: '0.9'
 } as CSSStyleDeclaration);
 document.body.appendChild(hint);
@@ -106,7 +116,7 @@ setTimeout(() => { hint.style.transition = 'opacity 1s'; hint.style.opacity = '0
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.6, 0.7));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.42, 0.6, 0.8));
 composer.addPass(new SMAAPass(innerWidth, innerHeight));
 composer.addPass(new OutputPass());
 
