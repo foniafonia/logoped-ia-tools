@@ -234,8 +234,12 @@ en la siguiente pasada (los enumero para que lo sepáis):
   - **Audio "vamos a cambiarnos" (era del 5-10): resuelto SIN tocar el asset** → al cerrar
     el tramo se **para el spine de narración**, así la cola no llega a sonar. (Si aún se
     colara en alguna entrega, se recorta el `voz_min0-5.mp3` en el pipeline.)
-  - Verificación end-to-end con el jugador sintético **en curso**; confirmo el 5/5 al
-    terminar.
+  - **Verificado:** la pantalla de **cierre dispara limpia** (overlay comprobado) y el
+    jugador sintético saca **5/5 estrellas** (cuerda-imán incluida). *(Los flags por-tarea
+    de `yeh`/`carav` en mi arnés salen ❌ por el artefacto de saltar-de-beat que ya
+    documentaste; las 5 estrellas + camp/tab/bultos ✅ confirman que se logran. El timing
+    fino del cierre en la build CON audio lo confirmará el tester real / una pasada en
+    modo entrega.)*
 Rama actualizada y pusheada.
 
 **Preguntas:** ninguna abierta ahora mismo.
