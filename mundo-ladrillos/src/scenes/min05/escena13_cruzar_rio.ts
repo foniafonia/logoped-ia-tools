@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { buildRiver, buildReeds, buildPalm, studdedPlate, buildDistantJericho, buildFish } from './props/BrickProps';
+import { buildRiver, buildReeds, buildPalm, studdedPlate, buildDistantJericho, buildFish, buildRock, buildBoat, buildBarrel, brickBox } from './props/BrickProps';
 import { buildLantern } from './props/NightAmbience';
 import { RopeCrossing } from './mechanics/RopeCrossing';
 import { Npc } from './props/Npc';
@@ -62,6 +62,15 @@ export const escena13: Min05Scene = {
     group.add(buildReeds(plastic, 18, 16, 10));
     [[-22, -14], [22, 22]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 8)); });
     const jericho = buildDistantJericho(plastic, 80); jericho.position.set(0, 0, 40); group.add(jericho);
+
+    // === AMUEBLADO orilla cercana (punto de salida de los espías; estaba pelada) ===
+    // props SIN luz (ya hay 4 faroles): barca varada, rocas, juncos, palmeras y pertrechos
+    const boat = buildBoat(plastic); boat.position.set(-12, 0, -12); boat.rotation.y = 0.6; group.add(boat);
+    for (const [rx, rz, s] of [[-16, -16, 1.1], [14, -14, 0.9], [9, -17, 0.7], [-7, -8, 0.8]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); }
+    group.add(buildReeds(plastic, -9, -7, 8)); group.add(buildReeds(plastic, 9, -7, 8));
+    [[-20, -10], [20, -8]].forEach(([x, z]) => group.add(buildPalm(plastic, x, z, 8)));
+    for (const [cx, cz] of [[5, -15], [6.4, -16], [-6, -16]] as const) group.add(brickBox(plastic, 1.8, 1.8, 1.8, (cx < 0 ? BrickPalette.BROWN : BrickPalette.DARK_SAND), cx, 0.9, cz));
+    const gear = buildBarrel(plastic); gear.position.set(-4.5, 0, -15); group.add(gear);
 
     const buddy = new Npc(plastic, ESPIA2_SIGILO, 0, 22, Math.PI); group.add(buddy.root);
 

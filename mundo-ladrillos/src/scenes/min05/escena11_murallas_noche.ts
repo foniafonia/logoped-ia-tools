@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
 import { buildStraightWallLike } from './props/Walls';
-import { buildReeds, buildRock, buildPalm, studdedPlate } from './props/BrickProps';
+import { buildReeds, buildRock, buildPalm, studdedPlate, buildBarrel, buildMarketStall, brickBox } from './props/BrickProps';
 import { buildBrazier, buildBanner, buildLantern } from './props/NightAmbience';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
@@ -72,6 +72,15 @@ export const escena11: Min05Scene = {
     const r1 = buildRock(plastic, 1.3); group.add(r1); ctx.addObstacle(0, 0, 2.5, 2);
     const r2 = buildRock(plastic, 0.9); r2.position.set(-24, 0, -10); group.add(r2); ctx.addObstacle(-24, -10, 2, 1.5);
     [[-30, -14], [26, -12]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 8)); ctx.addObstacle(x, z, 1, 1); });
+
+    // === AMUEBLADO: el pie de la muralla / lado derecho estaba desangelado ===
+    // props SIN luz (ya hay 4 braseros + 3 faroles): más cañaveral, rocas, un puesto,
+    // pertrechos (cajas/barriles) y matojos, para que la base de la muralla tenga vida.
+    group.add(buildReeds(plastic, 18, -6, 12)); group.add(buildReeds(plastic, 24, 2, 10)); group.add(buildReeds(plastic, -10, 2, 10));
+    const stall = buildMarketStall(plastic, BrickPalette.DARK_RED); stall.position.set(20, 0, -8); stall.rotation.y = -0.6; group.add(stall); ctx.addObstacle(20, -8, 2.6, 1.6);
+    for (const [cx, cz] of [[16, -5], [17.5, -6.4], [-16, 2], [22, -14]] as const) { group.add(brickBox(plastic, 1.8, 1.8, 1.8, (cx < 0 ? BrickPalette.BROWN : BrickPalette.DARK_SAND), cx, 0.9, cz)); ctx.addObstacle(cx, cz, 0.95, 0.95); }
+    for (const [bx, bz] of [[14, -9], [23, -2], [-22, 4]] as const) { const br = buildBarrel(plastic); br.position.set(bx, 0, bz); group.add(br); ctx.addObstacle(bx, bz, 1, 1); }
+    for (const [rx, rz, s] of [[24, -16, 1.0], [-16, -16, 0.8], [8, 4, 0.7]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.5 * s, 1.3 * s); }
 
     // el compañero espía acompaña al jugador
     const buddy = new Npc(plastic, ESPIA2_CAMP, -20, -20, 0.4);
