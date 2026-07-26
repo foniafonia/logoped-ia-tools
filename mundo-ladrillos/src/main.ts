@@ -201,9 +201,10 @@ const beats: Beat[] = [
     onEnter: () => { life.derrumbar(); bultosPedidos = true; }   // gag automático; los bultos esperan a que acabe el pan
   },
   {
-    t: 228, sub: '¡La caravana se pone en marcha!',
-    obj: 'Sigue a la caravana',
-    onEnter: () => { journey.arrancarCaravana(); camp.bultos.forEach((b) => { b.visible = false; }); loadPad.visible = false; setTarget({ x: 0, z: Journey.MARCHA_Z }); }
+    t: 228, sub: 'La caravana está casi lista para partir…',
+    // sin `obj`: la caravana ESPERA a que acabes los mini-juegos (no secuestra); el gate del
+    // bucle la arranca cuando estén hechos (o con un salvavidas de tiempo).
+    onEnter: () => { caravanaPedida = true; }
   }
 ];
 const director = new Director(beats, null, () => finDelTramo());
@@ -219,7 +220,14 @@ const TAREAS_TRAMO: Array<[string, string]> = [
   ['bultos', 'cargar la caravana'],
   ['carav', 'seguir a la caravana']
 ];
+let spine: { stop: () => void } | null = null;   // control del audio narración (para cortarlo al cerrar)
+let tramoCerrado = false;
+let caravanaPedida = false;      // beat 7 pedido; la caravana ESPERA a los mini-juegos (no secuestra)
+let caravanaEnMarcha = false;
 function finDelTramo(): void {
+  if (tramoCerrado) return;      // cierre idempotente (lo puede disparar el jugador o el fin del audio)
+  tramoCerrado = true;
+  spine?.stop();                 // corta el audio → no suena la cola "vamos a cambiarnos" (es del 5-10)
   const total = TAREAS_TRAMO.length;
   const hechas = TAREAS_TRAMO.filter(([k]) => done.has(k)).length;
   const faltan = TAREAS_TRAMO.filter(([k]) => !done.has(k)).map(([, n]) => n);
@@ -231,7 +239,7 @@ function finDelTramo(): void {
 
   const titulo = todo ? '¡Lo hiciste TODO! 🎉' : hechas > 0 ? '¡Buen trabajo!' : 'Llegaste al final…';
   const cuerpo = todo
-    ? 'Preparaste el campamento entero y la caravana está en marcha. ¡Eres un fenómeno!<br>Muy pronto: el río Jordán y la misión de los espías.'
+    ? 'Preparaste el campamento y la caravana parte hacia el <b>río Jordán</b>. ¡Eres un fenómeno!<br>👉 La aventura sigue en el <b>río con los dos espías</b> (min 5–10).'
     : hechas > 0
       ? `Hiciste <b>${hechas} de ${total}</b> tareas. Te faltó: <b>${faltan.join(', ')}</b>.<br>¿Lo intentas otra vez y las haces todas?`
       : `Casi no jugaste: te quedaron todas las tareas (${faltan.join(', ')}).<br>¡Vuelve a intentarlo y ayuda al campamento!`;
@@ -343,9 +351,12 @@ function checkTargets(): void {
     if (target) setTarget(null);
   }
   // (el Tabernáculo ya no es "visita": ahora es el oficio de llevarle el pan, más abajo)
-  // sigue la caravana al norte (esc. 08, beat 7)
-  if (i >= 7 && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
-    done.add('carav'); audio.sfxSuccess(); director.star(); director.logro('¡En marcha con la caravana!'); setTarget(null);
+  // sigue la caravana al norte (esc. 08, beat 7) → al alcanzarla, CIERRE limpio que
+  // enlaza con el río (tras un ratito para verla alejarse). finDelTramo corta el audio.
+  if (i >= 7 && caravanaEnMarcha && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
+    done.add('carav'); audio.sfxSuccess(); director.star();
+    director.logro('¡Con la caravana rumbo al río! 🐫'); setTarget(null);
+    setTimeout(() => finDelTramo(), 2600);
   }
 }
 
@@ -372,7 +383,7 @@ startEl.addEventListener('pointerdown', () => {
 
 // intro 3D de estudio (respaldo cuando no hay vídeo embebido)
 function arrancarConEstudio3D(): void {
-  director.setSpine(audio.playSpine('narracion_min0-5', 0.95));
+  spine = audio.playSpine('narracion_min0-5', 0.95); director.setSpine(spine);
   introActiva = true;
   studio.setActive(true);
   villager.root.visible = false;
@@ -423,7 +434,7 @@ function empezarJuegoTrasVideo(): void {
   villager.root.visible = true;
   if (esMovil && !touchCreado) { new TouchControls(controller, { shofar: false, attack: false }); touchCreado = true; }
   audio.resume();   // el vídeo suspendió el contexto: hay que reanudarlo o no se oye
-  director.setSpine(audio.playSpine('narracion_min0-5', 0.95, 25));
+  spine = audio.playSpine('narracion_min0-5', 0.95, 25); director.setSpine(spine);
   director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
 }
 
@@ -569,6 +580,20 @@ function animate(now: number): void {
   // el PAN espera a recoger el campamento; los BULTOS esperan a terminar el pan.
   if (panPedido && !panActivos && done.has('camp')) activarPan();
   if (bultosPedidos && !bultosActivos && done.has('tab')) activarBultos();
+  // CARAVANA: NO secuestra. Espera a que estén hechos los mini-juegos (o un salvavidas de
+  // tiempo para no dejar al peque atascado). Al arrancar, AVISA y guía a seguirla.
+  if (caravanaPedida && !caravanaEnMarcha) {
+    const listos = done.has('camp') && done.has('tab') && done.has('bultos');
+    if (listos || director.tiempo > 272) {
+      caravanaEnMarcha = true;
+      journey.arrancarCaravana();
+      camp.bultos.forEach((b) => { b.visible = false; });
+      loadPad.visible = false;
+      director.logro('¡La caravana se pone en marcha! ¡Síguela hacia el río! 🐫');
+      director.setObjetivo('🐫 Sigue a la caravana');
+      setTarget({ x: 0, z: Journey.MARCHA_Z });
+    }
+  }
 
   // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)
   if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {

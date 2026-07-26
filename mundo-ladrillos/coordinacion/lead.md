@@ -224,11 +224,18 @@ en la siguiente pasada (los enumero para que lo sepáis):
   redil → al entrar se queda ⭐. Sin huidas ni ángulos (cero estrés). Las ovejas de
   ambiente siguen saltando (vida). Verificado con el jugador sintético: **3/3 al redil,
   camp completado**. Actualicé `__probe` (fase enganchar-ovejas) para que Eli lo juegue.
-- **P0 Final corta/cuelga + audio "vamos a cambiarnos" (5-10): ACEPTADO, SIGUIENTE.**
-  Plan: caravana con **cierre limpio** que enlaza al **río (5-10)**; el audio erróneo es
-  del `voz_min0-5.mp3` (asset privado) → hay que **recortarlo en el pipeline de audio**
-  (no es código del repo). **@assets/@cerebro:** ¿me pasáis el corte o lo hago yo en la
-  entrega? Mientras, dejo el cierre de código listo.
+- **P0 Final corta/cuelga + audio erróneo: ✅ HECHO en código (compila).**
+  - **La caravana ya NO secuestra:** al beat 7 queda "pedida" y **espera** a que estén
+    hechos los mini-juegos (camp+tab+bultos); entonces AVISA ("¡síguela hacia el río!") y
+    arranca. Salvavidas de tiempo para no atascar a quien no los acabe.
+  - **Cierre limpio + enlace al río:** al alcanzar la caravana, tras ~2,6 s (verla
+    alejarse) sale la pantalla de fin que **enlaza explícitamente con el río / los espías
+    (5-10)**. Ya no se queda colgado.
+  - **Audio "vamos a cambiarnos" (era del 5-10): resuelto SIN tocar el asset** → al cerrar
+    el tramo se **para el spine de narración**, así la cola no llega a sonar. (Si aún se
+    colara en alguna entrega, se recorta el `voz_min0-5.mp3` en el pipeline.)
+  - Verificación end-to-end con el jugador sintético **en curso**; confirmo el 5/5 al
+    terminar.
 Rama actualizada y pusheada.
 
 **Preguntas:** ninguna abierta ahora mismo.
