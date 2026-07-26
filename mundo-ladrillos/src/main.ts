@@ -166,7 +166,7 @@ const beats: Beat[] = [
   {
     t: 55, sub: '¡A recoger el campamento!',
     obj: `Recoge las cuerdas (0/${camp.ropes.length})`,
-    onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(null); }
+    onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(done.has('yeh') ? null : YEHOSHUA); }   // si aún no saludó, la baliza sigue en Yehoshúa
   },
   {
     t: 123, sub: 'El pan sale del horno. ¡Atrápalo! 🥖',
@@ -464,7 +464,10 @@ function animate(now: number): void {
       }
     }
     const got = camp.ropes.length - left;
-    if (director.beatIndex === 4) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
+    // mientras no haya saludado a Yehoshúa, la guía SIGUE en él (no se pierde el saludo)
+    if (director.beatIndex === 4) director.setObjetivo(done.has('yeh')
+      ? `🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`
+      : '👋 Ve a saludar a Yehoshúa');
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
       director.logro('¡Cuerdas recogidas! ¡Arrea las ovejas antes de que acabe el tiempo! 🐑⏱');
@@ -594,7 +597,8 @@ requestAnimationFrame(animate);
   };
   let goal: { x: number; z: number } | null = target ? { x: target.x, z: target.z } : null;
   let fase = 'explorar';
-  if (cargandoBulto) { goal = CARGA_DEST; fase = 'llevar-bulto'; }
+  if (director.beatIndex >= 3 && !done.has('yeh')) { goal = YEHOSHUA; fase = 'saludar-yehoshua'; }   // el saludo va primero
+  else if (cargandoBulto) { goal = CARGA_DEST; fase = 'llevar-bulto'; }
   else if (panActivos && !done.has('tab')) {
     fase = 'atrapar-pan';
     const c = nearest(camp.panes.filter((m) => m.visible && !m.userData.caught).map((m) => ({ x: m.position.x, z: m.position.z })));
@@ -612,7 +616,7 @@ requestAnimationFrame(animate);
     const pen = life.redil;
     const t = nearest(life._targets.filter((s) => !s.penned));
     if (t) { const dx = t.x - pen.x, dz = t.z - pen.z, L = Math.hypot(dx, dz) || 1; goal = { x: t.x + dx / L * 3.5, z: t.z + dz / L * 3.5 }; }
-  } else if (director.beatIndex >= 3 && !done.has('yeh')) { fase = 'saludar-yehoshua'; }
+  }
   return {
     beat: director.beatIndex, t: Math.round(director.tiempo),
     fase, pos: [Math.round(p.x), Math.round(p.z)],

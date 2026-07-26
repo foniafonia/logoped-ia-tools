@@ -343,7 +343,8 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
 
   // --- Bultos de carga para la caravana (mini-juego; ocultos hasta su beat) ---
   const bultos: THREE.Mesh[] = [];
-  const bultoSpots: Array<[number, number]> = [[-6, 26], [15, 24], [-16, 36], [9, 48], [21, 40], [-11, 18]];
+  // 4 bultos AGRUPADOS cerca del camello (CARGA_DEST ~26.5,33): viajes cortos, sin maratón
+  const bultoSpots: Array<[number, number]> = [[20, 27], [33, 28], [21, 39], [32, 39]];
   bultoSpots.forEach(([bx, bz], i) => {
     const kind = i % 3;
     let mesh: THREE.Mesh;

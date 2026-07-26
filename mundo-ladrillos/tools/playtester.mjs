@@ -40,19 +40,20 @@ const tasks = [
 ];
 const STEP = 8 * 0.12;
 const log = [];
+// MODO BARATO: manda el JSON; solo se captura una imagen por tarea que FALLE (+ inicio/fin).
 for (const task of tasks) {
   jump(task.jump[0], task.jump[1]); await p.waitForTimeout(300);
-  const st = await probe(); const t0 = Date.now(); await shot(task.key + '_start');
-  let done = false, ticks = 0, aShots = 0;
+  const st = await probe(); const t0 = Date.now();
+  let done = false;
   while ((Date.now() - t0) / 1000 < task.timeout) {
     const pr = await probe();
     if (pr.done.includes(task.key)) { done = true; break; }
     let goal = pr.goal; if (!goal && task.key === 'yeh') goal = [0, 8];
     if (goal) await walk(goal[0], goal[1], STEP);
-    if (ticks % 18 === 9 && aShots < 2) { await shot(task.key + '_play' + aShots); aShots++; }
-    ticks++; await p.waitForTimeout(120);
+    await p.waitForTimeout(120);
   }
-  const pr = await probe(); await shot(task.key + '_end');
+  const pr = await probe();
+  if (!done) await shot('FAIL_' + task.key);   // solo capturamos lo que falla
   log.push({ task: task.key, label: task.label, completada: done, segundos: Math.round((Date.now() - t0) / 100) / 10,
     estrellas: pr.stars, contadores: { pan: pr.pan, ovejas: pr.sheep, bultos: pr.bultos }, faseVista: st.fase });
 }
