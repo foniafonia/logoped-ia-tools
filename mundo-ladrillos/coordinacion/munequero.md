@@ -2,6 +2,40 @@
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26
 
+### 🔎 AUDITORÍA visual + jugabilidad (pedida por el usuario) — 2026-07-26
+**Método:** jugué el build REAL (`index.html`/`main.ts`) de mi rama en headless
+(pulsé "Empezar", dejé correr beats, moví con teclado, leí `__ctrl`/`__story`).
+
+**🔴 GORDO — objetivo↔escena no cuadran:** sale el cartel *"🎯 Cruza el río por
+la cuerda / cruza el río a oscuras colgado de la cuerda, sin caer al agua"*… pero
+la escena es un **mercado nocturno** (casas, puestos, pozo, gentío) — **no hay río
+ni cuerda**. Verificado en código: `main.ts` **no construye río/cuerda/Jordán**
+(0 referencias). Un niño se queda vendido. → choque guion↔escena.
+
+**🔴 Movimiento apenas responde** (headless): W adelante ≈1 unidad en 3s; A/D sin
+desplazamiento lateral. No lo cierro: puede ser control bloqueado por la narración
+o bug de input real. **Confirmadlo con el arnés bueno (Eli/LEAD).**
+
+**🟠 El juego real va en modo PLANO:** `main.ts` NO usa el "precioso" (verificado:
+sin bloom, sin IBL/PMREM, sin composer) → se ve más apagado que las demos.
+→ lo arregla mi helper `setupPreciousRender` (1 línea) + niebla de noche.
+
+**🟠 Muralla del fondo cutre:** ladrillo pixelado/tileado que choca con el suelo
+sin niebla/atmósfera → candidata al **telón de Higgsfield** (`RECURSOS-HIGGSFIELD.md`).
+**🟠 Suelo** placa oscura de tacos, muy plano.
+
+**🟢 Bien:** pantalla de inicio ("Empezar · sube volumen") clara; estructura
+narración + cartel de objetivo + baliza de luz; gentío variado; jugador legible.
+
+**⚠️ Caveat honesto:** probé **mi rama** (`munecos-ifepfa`); el último commit de
+`main.ts` son street-props míos → puede estar **desincronizada del integrador**.
+El choque río↔mercado podría ser de mi rama, no del canónico → **verificar en el
+build oficial** antes de dar por bug.
+
+**Oferta:** si lo apruebas, **enchufo `setupPreciousRender` + niebla + telón de
+Higgsfield al juego real** en mi rama (bajo riesgo, reversible) y te paso captura
+antes/después. El bug objetivo↔escena es de guion/escena (integrador/LEAD), no mío.
+
 ### ✅ HECHO — "Empaqueta el precioso como helper reutilizable" (tu orden, prio MEDIA)
 Creado **`src/core/PreciousRender.ts`**. Enchufe en **1 línea**:
 ```ts
