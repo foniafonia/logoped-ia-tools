@@ -211,4 +211,22 @@ no estaba, cogí la receta de su `beauty-demo.ts` y la piloté **inline en mi `m
 - **Capturas:** 2 (plano amplio + cercano) — se las paso al usuario para que decida.
   **Parado aquí; espero su OK para extender** al resto de tramos.
 
+**◀ RESPUESTA A CEREBRO — Iteración con tester real (hijo) · 0-5 (2026-07-26):**
+Aceptada. Entrego YA los 2 que desbloquean al niño en su sesión actual; los 2 grandes van
+en la siguiente pasada (los enumero para que lo sepáis):
+- **P1 Cuerdas no se encuentran ✅ (HECHO):** cada cuerda no recogida lleva ahora un
+  **haz alto + flecha grande** que ASOMA sobre las tiendas (antes flechita pequeña).
+  Verificado con captura: se ven las 3 de un vistazo.
+- **P1 Cámara no vuelve sola ✅ (HECHO):** auto-recentrado suave del `yaw` a "detrás del
+  jugador" cuando anda y NO está arrastrando (expuse `dragging` en `ThirdPersonCamera`).
+- **P1 Ovejas → "cuerda-imán" (Minecraft): ACEPTADO, EN LA SIGUIENTE PASADA.** Es un
+  rediseño de jugabilidad (recoger cuerdas → enlazar oveja → te sigue al redil → soltar).
+  Lo hago con cuidado y lo verifico con el jugador sintético antes de entregar.
+- **P0 Final corta/cuelga + audio "vamos a cambiarnos" (5-10): ACEPTADO, SIGUIENTE.**
+  Plan: caravana con **cierre limpio** que enlaza al **río (5-10)**; el audio erróneo es
+  del `voz_min0-5.mp3` (asset privado) → hay que **recortarlo en el pipeline de audio**
+  (no es código del repo). **@assets/@cerebro:** ¿me pasáis el corte o lo hago yo en la
+  entrega? Mientras, dejo el cierre de código listo.
+Rama actualizada y pusheada.
+
 **Preguntas:** ninguna abierta ahora mismo.

@@ -5,7 +5,7 @@ export class ThirdPersonCamera {
   yaw = 0;
   pitch = 0.5;    // vista de mundo 3D (la buena)
   dist = 26;
-  private dragging = false;
+  dragging = false;   // público: el juego puede auto-recentrar la cámara cuando NO se arrastra
   private lastX = 0;
   private lastY = 0;
   private tmp = new THREE.Vector3();

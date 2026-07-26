@@ -451,6 +451,14 @@ function animate(now: number): void {
   }
 
   const moving = controller.update(dt, tpcam.yaw);
+  // Cámara que VUELVE SOLA: si el peque anda y NO está arrastrando la cámara, el yaw
+  // deriva suave a "detrás del jugador" (petición del tester real). No pelea con el drag.
+  if (moving && !tpcam.dragging) {
+    let d = villager.root.rotation.y - tpcam.yaw;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    tpcam.yaw += d * Math.min(1, dt * 2.2);
+  }
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil);
   journey.update(dt, now / 1000);
   dust.update(dt);
@@ -482,8 +490,8 @@ function animate(now: number): void {
       left++;
       rope.rotation.y += dt * 1.0;   // la soga gira despacio sobre el suelo
       rope.position.y = 0.32 + Math.sin(now * 0.004 + rope.position.x) * 0.15;
-      const h = rope.userData.hint as THREE.Mesh | undefined;
-      if (h) { h.rotation.y += dt * 3; h.position.y = 2.6 + Math.sin(now * 0.006 + rope.position.x) * 0.25; }
+      const h = rope.userData.hint as THREE.Object3D | undefined;
+      if (h) { h.rotation.y += dt * 2; h.position.y = Math.sin(now * 0.005 + rope.position.x) * 0.15; }
       if (controller.pos.distanceTo(rope.position) < 2.6) {
         rope.visible = false; left--;
         audio.sfxPickup();                                             // ¡pling!

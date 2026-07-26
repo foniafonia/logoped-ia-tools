@@ -289,8 +289,17 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   for (const [rx, rz] of [[-10, 34], [12, 44], [-2, 56]] as Array<[number, number]>) {
     const rope = buildCoiledRope();
     rope.position.set(rx, 0.32, rz);
-    const hint = hintArrow(0xffe08a); hint.visible = false; rope.add(hint);
-    rope.userData.hint = hint;
+    // MARCA VISIBLE (tester real: "no encuentro las cuerdas"): haz alto que ASOMA sobre
+    // las tiendas + flecha grande. Oculta hasta que arranca el objetivo.
+    const marker = new THREE.Group();
+    const beam = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.14, 0.14, 7, 6),
+      new THREE.MeshBasicMaterial({ color: 0xffd34d, transparent: true, opacity: 0.5, depthWrite: false })
+    );
+    beam.position.y = 4; marker.add(beam);
+    const arr = hintArrow(0xffd34d); arr.position.y = 7.4; arr.scale.setScalar(1.8); marker.add(arr);
+    marker.visible = false; rope.add(marker);
+    rope.userData.hint = marker;
     group.add(rope);
     ropes.push(rope);
   }
