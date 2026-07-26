@@ -11,6 +11,7 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
  *   scene.add(buildSackPile(plastic, { x: -3, z: 1 }));
  *   scene.add(buildPotCluster(plastic, { x: 2, z: 3 }));
  *   const palm = buildPalm(plastic, { x: -6, z: -4, height: 5 });
+ *   scene.add(buildFirePit(plastic, { x: 0, z: 0 }));  // fogata con luz cálida
  */
 
 type Pos = { x?: number; z?: number; yaw?: number };
@@ -119,5 +120,38 @@ export function buildPalm(plastic: PlasticMaterialFactory, o: Pos & { height?: n
     d.position.set(Math.cos(i * 2) * 0.2, -0.1, Math.sin(i * 2) * 0.2); crown.add(d);
   }
   g.add(crown);
+  return place(g, o);
+}
+
+/**
+ * Fogata: cerco de piedras + leños cruzados + llama emisiva + luz cálida. Para
+ * campamentos y calles de noche (Regla Nº1: rincones con vida y calor). Estática.
+ */
+export function buildFirePit(plastic: PlasticMaterialFactory, o: Pos = {}): THREE.Group {
+  const g = new THREE.Group();
+  const stone = plastic.get(0x8a8477);
+  const wood = plastic.get(0x5f4527);
+  // cerco de piedras
+  const N = 9;
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2;
+    const s = new THREE.Mesh(new THREE.DodecahedronGeometry(0.18 + (i % 3) * 0.03), stone);
+    s.position.set(Math.cos(a) * 0.62, 0.12, Math.sin(a) * 0.62);
+    s.rotation.set(i, i * 2, i); s.castShadow = true; s.receiveShadow = true; g.add(s);
+  }
+  // leños cruzados
+  for (const r of [0, 1, 2]) {
+    const log = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.0, 8), wood);
+    log.rotation.z = Math.PI / 2; log.rotation.y = r * 1.05; log.position.y = 0.14 + r * 0.02;
+    log.castShadow = true; g.add(log);
+  }
+  // llamas emisivas (conos que brillan con el bloom, sin toneMapping)
+  const flameMat = (c: number): THREE.MeshBasicMaterial =>
+    new THREE.MeshBasicMaterial({ color: c, toneMapped: false, transparent: true, opacity: 0.92 });
+  const f1 = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.7, 10), flameMat(0xff8a2a)); f1.position.y = 0.5; g.add(f1);
+  const f2 = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.5, 10), flameMat(0xffd24a)); f2.position.y = 0.62; g.add(f2);
+  // luz cálida
+  const light = new THREE.PointLight(0xffa845, 3.2, 7, 2);
+  light.position.set(0, 0.7, 0); g.add(light);
   return place(g, o);
 }

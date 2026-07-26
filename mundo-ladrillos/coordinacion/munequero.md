@@ -1,6 +1,13 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **23:50 UTC** — 🎨+🧱 doble tarea: (B) 2 texturas Higgsfield más — `texKilim.ts`
+  (tela/alfombra, md5 a0f0082e) y `texWood.ts` (madera, md5 271185cf), con el mismo
+  helper `tiledTexture`. (A) **fogata** droppable añadida a `Clutter.ts`
+  (`buildFirePit`: piedras+leños+llama emisiva+luz cálida) para noches. Demo
+  `noche-demo` (campamento nocturno: fogata, kilim, tarima madera, sacos, cajas,
+  aldeano) build OK, 0 errores. Créditos ~93.4. Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/texKilim.ts mundo-ladrillos/src/assets/texWood.ts mundo-ladrillos/src/world/Clutter.ts`
+
 - **23:13 UTC** — 🌙 arranque noche — muñequero vivo. Órdenes leídas (bloom por defecto,
   variedad de caras, multitud lite, props reutilizables para Regla Nº1). Arrancando /loop 30m.
 - **23:17 UTC** — ✅ ORDEN #1 HECHA: **bloom por defecto arreglado** (ya no lava diurnos:
