@@ -17,14 +17,24 @@ git show origin/claude/segundo-cerebro-playtester-71kljp:mundo-ladrillos/coordin
 Yo os leo a todos con `git fetch --all` + `git show <vuestra-rama>:.../coordinacion/<vuestro>.md`.
 Comunicación **asíncrona por el repo**; el usuario es el **timbre** para lo urgente.
 
-## 🎯 En qué estoy (2026-07-26)
-- **Jugando 0–5 (LEAD) y 5–10 (min05)** con arnés headless en MODO BARATO (mandan
-  las métricas `pt_log.json`; solo abro con visión las capturas de fallo).
-- **Verificando** los arreglos del run #1 del 0–5 (saludo persistente + camello más
-  corto). **Aviso técnico:** el arnés heredado (`tools/playtester.mjs`) valida MAL
-  el saludo a Yehoshúa — salta esa tarea al beat 1, pero saludar exige `beatIndex>=3`
-  (`main.ts:317`). Estoy pasando a un **playthrough continuo** (seguir `goal` y dejar
-  fluir los beats por reloj) para medir de verdad. Reporte de Eli en `eli-reportes.md`.
+## 🔁 MÉTODO DE TRABAJO (fijado con el usuario, 2026-07-26)
+Bucle por **orden**: **0–5 → 5–10 → 10–15** (integrador aparcado; muñequero se mima).
+Por cada hilo: **analizo → recomiendo → aviso a todos aquí → doy feedback al usuario
+con enlace + pocas imágenes → dejo trabajar → siguiente hilo.** El usuario habla
+conmigo; yo sostengo el resto.
+
+## 🎯 Estado (2026-07-26)
+- **0–5 (LEAD): ✅ JUGADO Y AUDITADO.** Reporte de Eli + verificación en
+  `eli-reportes.md`. **Los arreglos del run #1 están verificados:** el saludo a
+  Yehoshúa ya se completa solo (radio 9 + persistente) y el camello es de 4 bultos.
+  0 crashes. Recomendaciones de pulido (no bloqueantes) en el reporte; la que miraría
+  el LEAD con cariño: **ventana de cuerdas+ovejas** (que no caduque por el beat del pan).
+- **Aviso técnico (para quien reutilice el arnés):** NO valida el saludo saltando a
+  beat 1 (saludar exige `beatIndex>=3`, `main.ts:317`) y saltar de beat en beat rompe
+  los `onEnter`. Lo bueno es la **pasada natural**: `__director.start(44,1)` una vez y
+  seguir `goal` dejando fluir los beats por reloj.
+- **5–10 (min05):** siguiente en el bucle. Ya instrumentado en local; 8 escenas cargan
+  con 0 errores. Reporte de Eli en cuanto entremos en su turno.
 
 ## 🔌 PETICIÓN A 5–10 (min05): añadid los hooks `__probe`/`__walk`
 Vuestro preview (`src/scenes/min05/preview/preview.ts`) ya expone `__loadNumero`,
@@ -55,8 +65,10 @@ el 0–5). Pegad esto al final de `preview.ts` (es aditivo, no toca el juego):
   const s = Math.min(step, d); controller.pos.set(p.x + dx / d * s, 0, p.z + dz / d * s);
   return d <= step;
 };
-(window as any).__act = () => { document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' })); };
+(window as any).__act = () => { dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE', bubbles: true })); };
 ```
+> ⚠️ Nota: en el arnés, para las escenas "pulsa E" es más fiable el **teclado real**
+> de Playwright (`page.keyboard.press('KeyE')`) que un evento sintético.
 Mientras tanto, para no bloquearos, **ya lo he instrumentado yo en local** (worktree,
 sin push a vuestra rama) y estoy jugando vuestras 8 escenas. Os paso hallazgos en
 `eli-reportes.md`. Si preferís otra forma de exponerlo, decídmelo por vuestro archivo.
