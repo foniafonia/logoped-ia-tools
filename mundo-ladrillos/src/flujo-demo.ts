@@ -6,6 +6,7 @@ import { mountPauseMenu } from './ui/PauseMenu';
 import { mountSettings } from './ui/SettingsPanel';
 import { showResult } from './ui/ResultScreen';
 import { mountDialogue, showTitleCard } from './ui/DialogueBox';
+import { mountCredits } from './ui/Credits';
 
 /**
  * Flujo completo del kit de UI encadenado (vertical slice), como referencia para
@@ -28,7 +29,7 @@ function goPortada(): void {
     onPlay: () => { portada.destroy(); goMapa(); },
     onContinue: () => { portada.destroy(); goMapa(); },
     onSettings: () => mountSettings(document.body, {}),
-    onCredits: () => alert('Créditos — Shevet Ahim')
+    onCredits: () => mountCredits(document.body, {})
   });
 }
 

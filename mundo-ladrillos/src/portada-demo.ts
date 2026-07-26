@@ -1,5 +1,6 @@
 import { mountPortada } from './ui/Portada';
 import { mountSettings } from './ui/SettingsPanel';
+import { mountCredits } from './ui/Credits';
 
 /**
  * Demo de la PORTADA (pantalla de título con botones de ladrillo) sobre el fondo
@@ -16,7 +17,7 @@ const portada = mountPortada(document.body, {
   },
   onContinue: () => alert('Continuar partida guardada.'),
   onSettings: () => mountSettings(document.body, { onChange: (v) => console.log('ajustes', v) }),
-  onCredits: () => alert('Créditos — Shevet Ahim.')
+  onCredits: () => mountCredits(document.body, {})
 });
 
 (window as any).__ready = true;
