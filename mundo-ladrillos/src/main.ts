@@ -13,6 +13,7 @@ import { setupEnvironment } from './world/EnvironmentManager';
 import { AudioManager } from './audio/AudioManager';
 import { QUALITY, IS_MOBILE } from './core/Quality';
 import { TouchControls } from './ui/TouchControls';
+import { Cutscene } from './ui/Cutscene';
 import { Dust } from './effects/Dust';
 import { buildCamp, VILLAGER_SKIN } from './scenes/min00/camp';
 import { CampLife } from './scenes/min00/campLife';
@@ -246,8 +247,7 @@ let spine: { stop: () => void } | null = null;   // control del audio narración
 let tramoCerrado = false;
 let caravanaPedida = false;      // beat 7 pedido; la caravana ESPERA a los mini-juegos (no secuestra)
 let caravanaEnMarcha = false;
-// ---- ADELANTO DE LOS ESPÍAS: dispara / actualiza / termina (todo aislado) --------
-let teaserDustCd = 0;
+// ---- ADELANTO DE LOS ESPÍAS: usa el helper compartido Cutscene ----------------
 function dispararTeaserEspias(): void {
   if (teaserVisto) return;       // una sola vez
   teaserVisto = true;
@@ -260,52 +260,31 @@ function dispararTeaserEspias(): void {
   espiaA.root.rotation.y = 0; espiaB.root.rotation.y = 0;   // miran al norte (−z, al agua)
   scene.add(espiaA.root); scene.add(espiaB.root);
   camSaved.yaw = tpcam.yaw; camSaved.pitch = tpcam.pitch; camSaved.dist = tpcam.dist;
-  teaserT = 0; teaserActivo = true;
+  teaserClock = 0; teaserDustCd = 0;
   audio.sfxSparkle();
-  // cartel de "adelanto"
-  teaserBanner = document.createElement('div');
-  teaserBanner.innerHTML = '🔦 <b>Yehoshúa envía a dos hombres discretos</b> al otro lado del río…<br><b>¡pronto los guiarás tú!</b> 🕵️🕵️';
-  Object.assign(teaserBanner.style, {
-    position: 'fixed', top: '22px', left: '50%', transform: 'translateX(-50%)', maxWidth: '84%',
-    font: '700 18px system-ui, sans-serif', color: '#fff', textAlign: 'center', lineHeight: '1.5',
-    background: 'linear-gradient(180deg,rgba(20,30,55,.92),rgba(20,30,55,.72))', padding: '12px 20px',
-    borderRadius: '14px', border: '2px solid rgba(255,220,120,.6)', zIndex: '40',
-    boxShadow: '0 6px 24px rgba(0,0,0,.5)', pointerEvents: 'none'
-  } as CSSStyleDeclaration);
-  document.body.appendChild(teaserBanner);
-  // botón de saltar (por si el peque quiere seguir ya)
-  teaserSkipBtn = document.createElement('button');
-  teaserSkipBtn.textContent = 'Saltar ▶';
-  teaserSkipBtn.style.cssText = `position:fixed;right:22px;bottom:22px;padding:12px 20px;border-radius:12px;
-    background:rgba(232,176,75,.92);border:2px solid rgba(255,255,255,.5);font:700 16px system-ui,sans-serif;
-    color:#2a2010;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer;`;
-  teaserSkipBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); terminarTeaser(); });
-  document.body.appendChild(teaserSkipBtn);
-}
-function actualizarTeaser(dt: number, now: number): void {
-  teaserT += dt;
-  const k = Math.min(1, teaserT / TEASER_DUR);
-  const z = ESPIA_Z0 + (ESPIA_Z1 - ESPIA_Z0) * k;          // avanzan hacia el agua
-  if (espiaA) { espiaA.root.position.z = z; espiaA.update(dt, true, 1); }
-  if (espiaB) { espiaB.root.position.z = z + 1.8; espiaB.update(dt, true, 1); }
-  journey.update(dt, now / 1000);                          // deja subir el río + animar antorchas
-  teaserDustCd -= dt;
-  if (teaserDustCd <= 0 && espiaA) { dust.burst(espiaA.root.position.x, 0.2, espiaA.root.position.z + 0.6, 2); teaserDustCd = 0.25; }
-  dust.update(dt);
-  // cámara cinematográfica: dolly lento tras los espías, mirando al río
-  const midZ = z + 0.9;
-  camera.position.set(4 - k * 3, 6.4 - k * 0.8, midZ + 15 - k * 4);
-  camera.lookAt(0, 1.8, midZ - 8);
-  if (teaserT >= TEASER_DUR) terminarTeaser();
-}
-function terminarTeaser(): void {
-  if (!teaserActivo) return;
-  teaserActivo = false;
-  tpcam.yaw = camSaved.yaw; tpcam.pitch = camSaved.pitch; tpcam.dist = camSaved.dist;   // restaura cámara
-  if (espiaA) { scene.remove(espiaA.root); espiaA = null; }
-  if (espiaB) { scene.remove(espiaB.root); espiaB = null; }
-  teaserBanner?.remove(); teaserBanner = null;
-  teaserSkipBtn?.remove(); teaserSkipBtn = null;
+  cine.start({
+    duration: TEASER_DUR,
+    bannerHTML: '🔦 <b>Yehoshúa envía a dos hombres discretos</b> al otro lado del río…<br><b>¡pronto los guiarás tú!</b> 🕵️🕵️',
+    onFrame: (k, dt) => {
+      teaserClock += dt;
+      const z = ESPIA_Z0 + (ESPIA_Z1 - ESPIA_Z0) * k;          // avanzan hacia el agua
+      if (espiaA) { espiaA.root.position.z = z; espiaA.update(dt, true, 1); }
+      if (espiaB) { espiaB.root.position.z = z + 1.8; espiaB.update(dt, true, 1); }
+      journey.update(dt, teaserClock);                          // deja subir el río + animar antorchas
+      teaserDustCd -= dt;
+      if (teaserDustCd <= 0 && espiaA) { dust.burst(espiaA.root.position.x, 0.2, espiaA.root.position.z + 0.6, 2); teaserDustCd = 0.25; }
+      dust.update(dt);
+      // cámara cinematográfica: dolly lento tras los espías, mirando al río
+      const midZ = z + 0.9;
+      camera.position.set(4 - k * 3, 6.4 - k * 0.8, midZ + 15 - k * 4);
+      camera.lookAt(0, 1.8, midZ - 8);
+    },
+    onEnd: () => {
+      tpcam.yaw = camSaved.yaw; tpcam.pitch = camSaved.pitch; tpcam.dist = camSaved.dist;   // restaura cámara
+      if (espiaA) { scene.remove(espiaA.root); espiaA = null; }
+      if (espiaB) { scene.remove(espiaB.root); espiaB = null; }
+    },
+  });
 }
 
 (window as any).__teaser = () => dispararTeaserEspias();   // hook de pruebas (playtester)
@@ -367,17 +346,17 @@ const entregados = new Set<THREE.Mesh>();       // bultos ya apilados en el came
 // Idea del peque: cuando Yehoshúa envía a los "hombres discretos", asomarse al
 // siguiente mundo. La cámara "asoma" 6 s al río (ya construido) y ves a los DOS
 // espías escabullirse hacia el agua, con un cartel. Luego vuelve al jugador.
-// Se dispara UNA sola vez, al arrancar la caravana. Está BLINDADO como la intro:
-// tiene su propio guard en el bucle → NO toca ninguna variable del juego (estrellas,
+// Se dispara UNA sola vez, al arrancar la caravana. Usa el helper compartido
+// `Cutscene` (src/ui/Cutscene.ts), BLINDADO con su propio guard en el bucle → el
+// gameplay NO corre mientras dura → NO toca ninguna variable del juego (estrellas,
 // tareas, caravana…). Si algo fallara, la cámara vuelve y el nivel sigue igual.
-let teaserActivo = false;
+const cine = new Cutscene();
 let teaserVisto = false;
-let teaserT = 0;
+let teaserClock = 0;
 const TEASER_DUR = 6.2;
 let espiaA: Minifigure | null = null, espiaB: Minifigure | null = null;
 const camSaved = { yaw: 0, pitch: 0, dist: 0 };
-let teaserBanner: HTMLDivElement | null = null;
-let teaserSkipBtn: HTMLButtonElement | null = null;
+let teaserDustCd = 0;
 // z de arranque de los espías (cerca de la orilla) y meta (al borde del agua)
 const ESPIA_Z0 = -50, ESPIA_Z1 = -66;
 
@@ -570,8 +549,8 @@ function animate(now: number): void {
 
   // — ADELANTO DE LOS ESPÍAS: guard propio (como la intro). Blinda el juego: mientras
   //   dura el "ojito" al río, el gameplay no corre → no puede tocar nada. —
-  if (teaserActivo) {
-    actualizarTeaser(dt, now);
+  if (cine.active) {
+    cine.update(dt);
     if (composer) composer.render(); else renderer.render(scene, camera);
     return;
   }
