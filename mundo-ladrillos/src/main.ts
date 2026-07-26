@@ -314,7 +314,7 @@ function checkTargets(): void {
   // acércate a Yehoshúa (esc. 04, beat 3). Se puede cumplir DESDE que empieza su
   // beat y HASTA que se logra (no solo durante los 10 s del beat): así el peque no
   // pierde la estrella sin aviso si tarda en llegar. (Recado de jugabilidad.)
-  if (i >= 3 && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 5.5) {
+  if (i >= 3 && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 9) {   // radio amplio: Yehoshúa está en tarima, no hace falta pegarse
     done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda');
     if (target) setTarget(null);
   }
