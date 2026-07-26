@@ -102,9 +102,9 @@ function applyLighting(noche: boolean, street: boolean, interior = false): void 
     renderer.toneMappingExposure = 1.12;
     scene.background = new THREE.Color(0x140f0a);
     scene.fog = new THREE.Fog(0x140f0a, 22, 72);
-    hemi.color.setHex(0x6a4a2a); hemi.groundColor.setHex(0x1a1006); hemi.intensity = 0.18;
-    key.color.setHex(0xffcaa0); key.intensity = 0.25; key.position.set(-6, 20, 8);
-    fill.color.setHex(0x5a4a30); fill.intensity = 0.15;
+    hemi.color.setHex(0x7a5636); hemi.groundColor.setHex(0x1a1006); hemi.intensity = 0.28;
+    key.color.setHex(0xffcaa0); key.intensity = 0.34; key.position.set(-6, 20, 8);
+    fill.color.setHex(0x6a5330); fill.intensity = 0.22;
     nightSky.visible = false;
     return;
   }

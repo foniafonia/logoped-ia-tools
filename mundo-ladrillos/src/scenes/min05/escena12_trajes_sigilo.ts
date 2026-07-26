@@ -6,6 +6,7 @@ import { buildLantern } from './props/NightAmbience';
 import { buildTent } from '../../world/Tent';
 import { Npc } from './props/Npc';
 import { Collectibles } from './props/Collectibles';
+import { buildLanternString } from '../../world/StreetProps';
 import { ESPIA2_CAMP, ESPIA2_SIGILO } from './skins';
 
 /**
@@ -50,6 +51,22 @@ export const escena12: Min05Scene = {
     }
     rack.position.set(2, 0, 2); group.add(rack);
     const rackLight = buildLantern(plastic, 2, 5, 0.5); group.add(rackLight.group);
+
+    // === P3: MÁS VIDA / LUZ / COLOR en la carpa (era muy marrón) ===
+    // guirnalda de farolillos cálidos cruzando la carpa (vida + luz cálida)
+    group.add(buildLanternString(plastic, { ax: -7, az: -1, bx: 7, bz: -1, height: 6.6, count: 7, lights: 3 }));
+    // luz cálida de relleno para que el interior no quede plano/oscuro
+    const warm = new THREE.PointLight(0xffb066, 1.5, 30, 1.8); warm.position.set(0, 6, 1); group.add(warm);
+    const warm2 = new THREE.PointLight(0xffd9a0, 0.7, 18, 2); warm2.position.set(-4, 3.5, -3); group.add(warm2);
+    // alfombra de color bajo la zona de vestirse + cojines (calidez y color)
+    const rug = brickBox(plastic, 9, 0.14, 7, 0x8a2f2a, 0, 0.07, 0); group.add(rug);
+    const rug2 = brickBox(plastic, 5.4, 0.16, 3.6, 0xcaa64a, 0, 0.1, 0); group.add(rug2);
+    for (const [cx, cz, col] of [[-3.4, -1, 0x2f6f5e], [3.2, -2, 0x3a5f8a], [-1.5, -3.4, 0xcaa64a]] as const) {
+      group.add(brickBox(plastic, 1.5, 0.7, 1.5, col, cx, 0.45, cz));   // cojines
+    }
+    // baúl abierto con telas de color asomando (detalle de campamento)
+    group.add(brickBox(plastic, 2.4, 1.4, 1.6, BrickPalette.DARK_BROWN, -6, 0.7, 3));
+    group.add(brickBox(plastic, 2.0, 0.5, 1.2, 0x9a3b6e, -6, 1.4, 3));
 
     let buddy = new Npc(plastic, ESPIA2_CAMP, -4, -3, 0); group.add(buddy.root);
 

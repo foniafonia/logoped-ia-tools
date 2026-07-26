@@ -41,13 +41,22 @@ export const escena13: Min05Scene = {
 
     const rope = new RopeCrossing(plastic, -6, 14, { amp: 1.6, safeHalf: 1.7 });
     group.add(rope.group);
-    // faroles en los postes de amarre
-    const lanterns = [buildLantern(plastic, 2.4, 5.5, -6), buildLantern(plastic, -2.4, 5.5, 14)];
+    // faroles en los postes de amarre + faroles a media travesía (P3: camino con luz)
+    const lanterns = [
+      buildLantern(plastic, 2.4, 5.5, -6), buildLantern(plastic, -2.4, 5.5, 14),
+      buildLantern(plastic, 2.2, 5, 1), buildLantern(plastic, -2.2, 5, 8)
+    ];
     lanterns.forEach((l) => group.add(l.group));
 
-    // guía del centro móvil
-    const guide = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.8, 20), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
-    guide.rotation.x = -Math.PI / 2; guide.position.y = 0.5; group.add(guide);
+    // guía del centro móvil (P3: "pisa aquí" bien claro): aro brillante + galón que
+    // bota encima, con el mismo lenguaje visual que la baliza de navegación.
+    const guide = new THREE.Group(); guide.position.y = 0.5; group.add(guide);
+    const guideRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 1.15, 24), new THREE.MeshBasicMaterial({ color: 0x8fe0ff, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }));
+    guideRing.rotation.x = -Math.PI / 2; guide.add(guideRing);
+    const guideChev = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.9, 4), new THREE.MeshBasicMaterial({ color: 0x8fe0ff }));
+    guideChev.rotation.x = Math.PI; guideChev.position.y = 2.2; guide.add(guideChev);
+    const guideMat = guideRing.material as THREE.MeshBasicMaterial;
+    const guideChevMat = guideChev.material as THREE.MeshBasicMaterial;
 
     group.add(buildReeds(plastic, -18, -8, 10));
     group.add(buildReeds(plastic, 18, 16, 10));
@@ -106,7 +115,10 @@ export const escena13: Min05Scene = {
         progress = THREE.MathUtils.clamp((player.z - (-6)) / 20, 0, 1);
         const gz = THREE.MathUtils.clamp(player.z, -6, 14);
         guide.position.set(r.onSpan ? r.centerX : 0, 0.5, gz);
-        (guide.material as THREE.MeshBasicMaterial).color.setHex(r.nearMiss ? 0xffcc44 : 0x8fe0ff);
+        const gcol = r.nearMiss ? 0xffcc44 : 0x8fe0ff;
+        guideMat.color.setHex(gcol); guideChevMat.color.setHex(gcol);
+        guideChev.position.y = 2.2 + Math.sin(t * 4) * 0.3;   // bota: "pisa aquí"
+        guideRing.scale.setScalar(1 + Math.sin(t * 4) * 0.1);
         if (r.fell) { ctx.sound.splash(); ctx.setPlayer(escena13.spawn.x, escena13.spawn.z); }
         if (player.z > 18) doneFlag = true;
         gems.update(dt, t, player);
