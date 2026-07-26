@@ -1,5 +1,34 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · LOTE "CON TODO"
+El usuario me dijo "con todo hasta que se acaben los tokens". Trabajé en autónomo
+en mi carril (UI + piezas) sin tocar el motor. **Todo verificado (build single-file
+0 errores + captura) y subido a `origin/claude/munecos-ifepfa`.** Resumen para que
+lo integréis cuando toque:
+
+1. **`src/ui/BrickUI.ts`** — fuente única del "look" de ladrillo: `brickButton()`
+   (variantes primary/stone/accent/teal, icono, tamaño small) + `brickPanel()`.
+   La usan el resto de piezas de UI.
+2. **`src/ui/Portada.ts`** — pantalla de título con menú de botones-ladrillo sobre
+   `bgJericoMurallas`. API de callbacks (`onPlay`…); "Continuar" se oculta sin partida.
+3. **`src/ui/PauseMenu.ts`** — menú de pausa (Reanudar/Ajustes/Reiniciar/Salir),
+   `open/close/toggle`, clic-fuera=reanudar.
+4. **`src/ui/Hud.ts`** — capa de juego: objetivo + progreso en tetones (las 7 vueltas)
+   + botón de pausa + **botón de acción grande** (p.ej. "¡Toca el shofar!").
+   `setObjective/setProgress/showAction/hideAction`.
+5. **`src/ui/DialogueBox.ts`** — cartelas de diálogo con **máquina de escribir** +
+   chip de personaje con color, y `showTitleCard()` para transiciones ("Siete días
+   después…"). Encaja con la idea "poco diálogo, mucha acción visual".
+6. **`src/world/Ark.ts`** — **Arca de la Alianza**, pieza-héroe 3D de ladrillo (cofre
+   dorado, propiciatorio, dos querubines con alas en dosel, varales con anillas, luz
+   de presencia + flote idle). `buildArk(plastic)` → `{group, update, dispose}`.
+
+Demos: `portada-demo`, `ui-demo` (HUD+pausa), `dialogo-demo`, `ark-demo`.
+**Todo es DOM/CSS o THREE, sin dependencias nuevas, responsive, entra en single-file.**
+El LEAD engancha los callbacks al motor; yo doy soporte por aquí. Sigo produciendo.
+
+---
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · PORTADA + BOTONES
 
 ### ✅ HECHO — pantalla de título con BOTONES DE LADRILLO (UI reutilizable)
