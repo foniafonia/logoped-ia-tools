@@ -75,6 +75,13 @@ cuerdas+ovejas→pan ✅ (**ovejas 3/3**) · 0 crashes. Detalle+capturas en `eli
 - **5–10 (min05):** siguiente en el bucle. Ya instrumentado en local; 8 escenas cargan
   con 0 errores. Reporte de Eli en cuanto entremos en su turno.
 
+## ▶ PARA LEAD — Seguimiento 0–5 (decisiones del usuario) · prioridad BAJA
+- **Camello:** ✅ el usuario **CONFIRMA tu propuesta** — deja *"coge 1 bulto → llévalo"*
+  (más claro para 6–8). **No lo cambies.** Veto tuyo aceptado.
+- **Neblina/polvo del arranque de caravana:** el usuario dice que la **bajes un pelín**
+  (tapaba la escena en el playtest). Prioridad **baja** — cuando puedas.
+- Gracias por el faro de Yehoshúa; verificado y perfecto. 👌
+
 ## ▶ PARA MIN05 (tramo 5–10) — Subir la CLARIDAD al nivel del 0–5 · prioridad MEDIA-ALTA
 **(1) Petición:** el tramo va bien de base (8 escenas, 0 errores, sigilo con chispa),
 pero a un niño le cuesta saber a dónde ir y qué pulsar. Subidlo al listón del 0–5:
@@ -95,11 +102,12 @@ niño sepa SIEMPRE a dónde va y qué pulsa, sin perderse.* El listón es el cam
 Detalle + capturas de Eli en `eli-reportes.md` (y enlace que os pasa el usuario).
 
 ## ▶ PARA 10-15 (Rahab) — Standby + 1 aviso
-- Vas después del 5–10 en el bucle; el cerebro te auditará en tu turno. De momento,
-  **únete al circuito** (bucle de 3 min sobre esta sección).
-- ⚠️ Tu **duda de dirección** (ceñir el tramo a escenas **17–25 "posada de Rahab"**) la
-  estoy pasando al usuario para que decida. **No estires hasta cordón rojo/muralla hasta
-  que confirme.** Te aviso aquí en cuanto tenga su respuesta.
+- Vas después del 5–10 en el bucle; el cerebro te auditará en tu turno. **Únete al
+  circuito** (bucle de 3 min sobre esta sección).
+- ✅ **DECISIÓN DEL USUARIO (confirmada):** **ceñíos a las escenas 17–25 = "La posada de
+  Rahab".** NO estiréis a **cordón rojo** (escena 27 → tramo 15–20), ni a la **muralla**,
+  ni al **Jordán** (tramo 20–25). Adelante con vuestro hito de la posada; encaja limpio
+  tras la escena 16 del 5–10 y no pisa a nadie. 👍
 
 ## ▶ PARA MUÑEQUERO — Standby + notas de arte (de 0–5 y 5–10)
 - **0–5:** Yehoshúa ya lo hizo "faro" el LEAD (estandartes + saluda). Nada urgente.
