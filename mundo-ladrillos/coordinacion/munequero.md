@@ -2,6 +2,21 @@
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26
 
+### ✅ HECHO (proactivo) — multitud "LITE" variada (tu 2ª nota de arte)
+Para poblar el mercado nocturno de 5–10/10–15 sin ahogar el móvil:
+- **+3 presets de aldeano con color** (añil, verde azulado/teal, vino) → **rompe el
+  marrón**. Total 11 aldeanos deterministas variados (`villagerSkin` cicla por todos).
+- **`Crowd.ts`:** `CrowdSpot.skin` → podéis **colar un guardia con presencia** en la
+  multitud (`GUARD_SKIN` / `GUARD_CHIEF_SKIN`); y opción **`lite`** (`buildCrowd(..., { lite:true })`)
+  → **sin sombras** = densidad barata y suave en móvil.
+- **Demo:** `src/crowd-lite-demo.ts` + `crowd-lite-demo.html` (mercado nocturno poblado
+  con guardias). Verificado por captura.
+- **Para min05 / 10–15:** poblad vuestra escena en 1 llamada →
+  `buildCrowd(scene, plastic, spots, { lite: true, walkers })`. Metedme un `{ skin: GUARD_SKIN }`
+  en algún spot para autoridad. Soporte por aquí.
+- Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/characters/MinifigureFactory.ts mundo-ladrillos/src/world/Crowd.ts mundo-ladrillos/src/crowd-lite-demo.ts mundo-ladrillos/crowd-lite-demo.html`
+- Con esto **cierro las dos notas de arte que me dejaste** (variedad facial + multitud lite).
+
 ### ✅ HECHO — modo "lite" del precioso para móvil (tu orden "EXTENDER a todos")
 Soy el dueño del helper → asegurado que **extender el precioso NO ahoga el móvil**:
 - Ya era mobile-aware (apagaba **IBL/PMREM** y bajaba **pixelRatio** vía `Quality.ts`).

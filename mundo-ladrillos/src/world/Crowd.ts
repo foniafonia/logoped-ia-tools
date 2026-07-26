@@ -9,6 +9,7 @@ export interface CrowdSpot {
   yaw?: number;        // orientación (0 = mira hacia +Z)
   emotion?: Emotion;   // fuerza una cara para el mood de la escena
   scale?: number;      // <1 = niño/a; 1 = adulto (comunidad de todas las edades)
+  skin?: MinifigureSkin; // skin propio (p.ej. un guardia con presencia); si no, aldeano auto
 }
 
 /** Un caminante: pasea despacio entre A y B (ida y vuelta) con animación de andar. */
@@ -30,19 +31,24 @@ export function buildCrowd(
   scene: THREE.Scene,
   plastic: PlasticMaterialFactory,
   spots: CrowdSpot[],
-  opts: { startIndex?: number; scale?: number; walkers?: CrowdWalker[] } = {}
+  opts: { startIndex?: number; scale?: number; walkers?: CrowdWalker[]; lite?: boolean } = {}
 ): { group: THREE.Group; update: (dt: number) => void; dispose: () => void } {
   const group = new THREE.Group();
   const figs: Minifigure[] = [];
   const baseYaw: number[] = [];
   let idx = opts.startIndex ?? 0;
 
+  // Modo "lite": quita sombras (barato para densidad de fondo, suave en móvil).
+  const noShadows = (fig: Minifigure): void => {
+    if (opts.lite) fig.root.traverse((o: any) => { o.castShadow = false; o.receiveShadow = false; });
+  };
+
   spots.forEach((s) => {
-    const skin: MinifigureSkin = s.emotion
-      ? { ...villagerSkin(idx), emotion: s.emotion }
-      : villagerSkin(idx);
+    const auto = s.emotion ? { ...villagerSkin(idx), emotion: s.emotion } : villagerSkin(idx);
+    const skin: MinifigureSkin = s.skin ? (s.emotion ? { ...s.skin, emotion: s.emotion } : s.skin) : auto;
     idx++;
     const fig = createMinifigure(plastic, skin);
+    noShadows(fig);
     fig.root.position.set(s.x, 0, s.z);
     const y = s.yaw ?? 0;
     fig.root.rotation.y = y;
@@ -60,6 +66,7 @@ export function buildCrowd(
     const skin: MinifigureSkin = w.emotion ? { ...villagerSkin(idx), emotion: w.emotion } : villagerSkin(idx);
     idx++;
     const fig = createMinifigure(plastic, skin);
+    noShadows(fig);
     const dx = w.bx - w.ax, dz = w.bz - w.az;
     const len = Math.hypot(dx, dz) || 1;
     const sc = w.scale ?? opts.scale ?? 1;

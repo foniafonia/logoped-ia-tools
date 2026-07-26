@@ -307,7 +307,18 @@ export const VILLAGER_PRESETS: MinifigureSkin[] = [
   // 7 · mujer mayor, vestido gris, melena plateada, neutral
   { head: 0xf4d03f, torso: 0x9a9690, belt: 0x7c7872, legs: 0x928e88, arms: 0x9a9690,
     hands: 0xf4d03f, headwear: 0xdadde0, headStyle: 'longHair', feminine: true,
-    lips: 0xb98a80, skirt: 0x9a9690, skirtLong: true, emotion: 'neutral' }
+    lips: 0xb98a80, skirt: 0x9a9690, skirtLong: true, emotion: 'neutral' },
+  // 8 · hombre, túnica añil, turbante mostaza, barba negra corta, feliz (rompe el marrón)
+  { head: 0xf4d03f, torso: 0x3b4a8a, belt: 0x27305c, legs: 0x323e70, arms: 0x3b4a8a,
+    hands: 0xf4d03f, headwear: 0xc79a3a, headStyle: 'turban', beard: 0x241d16,
+    beardStyle: 'short', emotion: 'happy' },
+  // 9 · mujer joven, vestido verde azulado (teal), melena castaña, alerta
+  { head: 0xf4d03f, torso: 0x2f8f86, belt: 0x1f6159, legs: 0x2a7d75, arms: 0x2f8f86,
+    hands: 0xf4d03f, headwear: 0x5a3f2a, headStyle: 'longHair', feminine: true,
+    lips: 0xc26a63, skirt: 0x2f8f86, skirtLong: true, emotion: 'alert' },
+  // 10 · hombre joven, túnica vino/granate, cogulla crema, sin barba, neutral
+  { head: 0xf4d03f, torso: 0x8e3b4e, belt: 0x5e2836, legs: 0x7a3243, arms: 0x8e3b4e,
+    hands: 0xf4d03f, headwear: 0xe0d3b4, headStyle: 'hood', emotion: 'neutral' }
 ];
 
 /** Aldeano determinista por índice (sin Math.random → estable en resume).
