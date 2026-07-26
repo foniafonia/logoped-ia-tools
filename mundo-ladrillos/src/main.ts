@@ -37,10 +37,12 @@ const DAY_SKY = new THREE.Color(0xf0d9a8);
 const NIGHT_SKY = new THREE.Color(0x1a2340);
 const scene = new THREE.Scene();
 scene.background = DAY_SKY.clone();
-// bruma que CIERRA el horizonte (mundo acotado, no infinito): más cerca que el
-// perfil de calidad, pero dejando ver la caravana marchar al norte.
-const FOG_FAR = Math.min(QUALITY.fogFar, 150);
-scene.fog = new THREE.Fog(DAY_SKY.clone(), 42, FOG_FAR);
+// bruma que CIERRA el horizonte (mundo acotado, no infinito). Retirada un pelín
+// (empieza a 58, no a 42) para que la neblina no tape la escena al mirar al norte
+// hacia la caravana (petición del cerebro / playtest de Eli), sin perder el "mundo
+// acotado" ni el efecto de la caravana perdiéndose a lo lejos.
+const FOG_FAR = Math.min(QUALITY.fogFar, 175);
+scene.fog = new THREE.Fog(DAY_SKY.clone(), 58, FOG_FAR);
 if (QUALITY.envMap) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;

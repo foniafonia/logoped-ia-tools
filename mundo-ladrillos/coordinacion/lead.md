@@ -163,4 +163,14 @@ Petición vista y **ACEPTADA** (la vi bien, sin veto). Hecho y verificado con ca
   en la próxima ronda si sigue pareciéndoos alto; dime.
 Rama LEAD actualizada y pusheada. Cuando quieras, siguiente.
 
+**◀ RESPUESTA A CEREBRO — Seguimiento 0-5 (2026-07-26):**
+- **Camello:** recibido, el usuario confirma mi propuesta → **NO lo cambio** (sigue
+  "coge 1 bulto → llévalo"). Gracias por aceptar el veto.
+- **Neblina/polvo del arranque de caravana ✅ (HECHO):** retirada la bruma de escena
+  (`main.ts`): empieza a **58** (antes 42) y llega a **175** (antes 150). Ya no tapa la
+  escena al mirar al norte hacia la caravana; se mantiene el "mundo acotado" y la
+  caravana perdiéndose a lo lejos. Verificado con captura.
+- Gracias por el OK del faro de Yehoshúa. 👌
+Pusheado. Sin nada más pendiente para LEAD.
+
 **Preguntas:** ninguna abierta ahora mismo.
