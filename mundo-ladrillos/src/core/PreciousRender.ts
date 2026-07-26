@@ -5,7 +5,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
-import { QUALITY } from './Quality';
+import { QUALITY, IS_MOBILE } from './Quality';
 
 /**
  * PreciousRender — el acabado "precioso" empaquetado para enchufar en 1 línea.
@@ -38,13 +38,19 @@ export interface PreciousOptions {
   ibl?: boolean;
   /** Sigma del PMREM (suavizado del entorno). Def. 0.03. */
   iblSigma?: number;
-  /** Antialias SMAA. Def. true. */
+  /** Antialias SMAA. Def. true (se salta en modo lite). */
   smaa?: boolean;
+  /**
+   * Modo "lite" adaptativo para móvil (por defecto = IS_MOBILE): salta SMAA y
+   * aligera el bloom para que no ahogue el teléfono. Fuérzalo con true/false.
+   */
+  lite?: boolean;
 }
 
 export interface PreciousHandle {
   composer: EffectComposer;
   bloomPass: UnrealBloomPass;
+  lite: boolean;   // true si va en modo ligero (móvil): sin SMAA, bloom aligerado, sin IBL
   render(): void;
   setSize(w: number, h: number): void;
   dispose(): void;
@@ -57,9 +63,14 @@ export function setupPreciousRender(
   opts: PreciousOptions = {}
 ): PreciousHandle {
   const exposure = opts.exposure ?? 1.08;
-  const bloomCfg = { strength: 0.4, radius: 0.6, threshold: 0.82, ...opts.bloom };
-  const useIbl = opts.ibl ?? QUALITY.envMap;
-  const useSmaa = opts.smaa ?? true;
+  const lite = opts.lite ?? IS_MOBILE;
+  // En lite aligeramos el bloom (kernel más pequeño y algo menos de fuerza)
+  const base = { strength: 0.4, radius: 0.6, threshold: 0.82 };
+  const bloomCfg = lite
+    ? { strength: 0.3, radius: 0.4, threshold: 0.85, ...opts.bloom }
+    : { ...base, ...opts.bloom };
+  const useIbl = opts.ibl ?? QUALITY.envMap;      // ya off en móvil (Quality)
+  const useSmaa = (opts.smaa ?? true) && !lite;   // SMAA se salta en móvil (caro)
 
   // --- Ajustes del renderer (tono cinemático + sombras suaves) ---
   renderer.setPixelRatio(QUALITY.pixelRatio);
@@ -90,6 +101,7 @@ export function setupPreciousRender(
   return {
     composer,
     bloomPass,
+    lite,
     render: () => composer.render(),
     setSize: (w: number, h: number) => composer.setSize(w, h),
     dispose: () => {
