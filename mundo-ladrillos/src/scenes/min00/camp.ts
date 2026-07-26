@@ -367,11 +367,15 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   mouth.position.set(0, 0.7, 1.05); oven.add(mouth);                   // boca con brasas
   oven.position.set(-6, 0, 55); group.add(oven);
 
+  // 5 panes: empiezan OCULTOS dentro del horno; el mini-juego los lanza por el aire.
   const panes: THREE.Mesh[] = [];
-  for (const [px, pz] of [[-4, 53], [-9, 54.5], [-2.5, 56.5]] as Array<[number, number]>) {
-    const pan = new THREE.Mesh(new RoundedBoxGeometry(0.9, 0.5, 0.65, 3, 0.18), plastic.get(0xd9a75a));
-    pan.position.set(px, 0.7, pz); pan.castShadow = true; pan.visible = false;
-    const hint = hintArrow(0xffd34d); pan.add(hint); pan.userData.hint = hint;   // pista dorada (pan)
+  for (let i = 0; i < 5; i++) {
+    // corteza tostada (naranja) para que DESTAQUE sobre la arena, y algo más grande
+    const pan = new THREE.Mesh(new RoundedBoxGeometry(1.05, 0.6, 0.72, 3, 0.2),
+      new THREE.MeshStandardMaterial({ color: 0xcf7d33, roughness: 0.7, emissive: 0x4a2a08, emissiveIntensity: 0.35 }));
+    pan.position.set(-6, 1.2, 55); pan.castShadow = true; pan.visible = false;
+    const hint = hintArrow(0xffd34d); hint.visible = false; pan.add(hint); pan.userData.hint = hint;   // pista dorada
+    pan.userData.vel = { vx: 0, vy: 0, vz: 0 }; pan.userData.flying = false; pan.userData.caught = false;
     group.add(pan); panes.push(pan);
   }
 

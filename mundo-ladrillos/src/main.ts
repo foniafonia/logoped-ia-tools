@@ -169,8 +169,8 @@ const beats: Beat[] = [
     onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(null); }
   },
   {
-    t: 123, sub: 'El pan va al Tabernáculo. 🥖',
-    obj: 'Lleva el pan al Tabernáculo', onEnter: () => activarPan()   // oficio: horno → Tabernáculo
+    t: 123, sub: 'El pan sale del horno. ¡Atrápalo! 🥖',
+    obj: 'Atrapa el pan del horno', onEnter: () => activarPan()   // mini-juego de atrapar
   },
   {
     t: 133, sub: '¡Se cayó la carga del camello! 💥',
@@ -192,7 +192,7 @@ const director = new Director(beats, null, () => finDelTramo());
 const TAREAS_TRAMO: Array<[string, string]> = [
   ['yeh', 'saludar a Yehoshúa'],
   ['camp', 'recoger el campamento'],
-  ['tab', 'llevar el pan al Tabernáculo'],
+  ['tab', 'atrapar el pan del horno'],
   ['bultos', 'cargar la caravana'],
   ['carav', 'seguir a la caravana']
 ];
@@ -235,40 +235,36 @@ function finDelTramo(): void {
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
+let herdStart = 0;               // marca de tiempo al arrancar el arreo (contrarreloj)
+const HERD_LIMIT = 30;           // segundos "objetivo" para arrear rápido (sin castigo)
 let bultosActivos = false;       // mini-juego de cargar la caravana
 let cargandoBulto: THREE.Mesh | null = null;   // bulto que el jugador lleva en brazos
 const CARGA_DEST = { x: 26.5, z: 33 };          // junto al camello del beduino (zona de carga)
-const PAN_DEST = { x: 24, z: 27 };              // frente al Tabernáculo (ofrenda del pan)
 const baa = (): void => { /* las ovejas saltan sin sonido (fuera musiquita sintética) */ };
 const entregados = new Set<THREE.Mesh>();       // bultos ya apilados en el camello
 
-// ---- OFICIO: llevar el PAN del horno al Tabernáculo (esc. 06) ----
+// ---- MINI-JUEGO: ¡ATRAPA EL PAN! (esc. 06) — el horno lanza panes por el aire ----
 let panActivos = false;
-let cargandoPan: THREE.Mesh | null = null;
 let bultosPedidos = false;                      // beat 6 pedido; se activa al acabar el pan
-const panesEntregados = new Set<THREE.Mesh>();
-function actualizarObjPan(): void {
-  const got = panesEntregados.size;
-  director.setObjetivo(cargandoPan
-    ? `🕍 Lleva el pan al Tabernáculo (${got}/${camp.panes.length})`
-    : `🥖 Coge un pan del horno (${got}/${camp.panes.length})`);
-}
-function balizaPan(): void {
-  if (cargandoPan) { setTarget(PAN_DEST); return; }
-  let best: THREE.Mesh | null = null, bd = 1e9;
-  for (const b of camp.panes) {
-    if (panesEntregados.has(b) || b === cargandoPan) continue;
-    const d = controller.pos.distanceTo(b.position);
-    if (d < bd) { bd = d; best = b; }
-  }
-  setTarget(best ? { x: best.position.x, z: best.position.z } : null);
-}
+let panLaunchCd = 0;                            // cadencia de lanzamiento
+let panNextIdx = 0;                             // siguiente pan a lanzar
+const OVEN_MOUTH = { x: -6, y: 2.2, z: 56 };    // boca del horno (de donde salen los panes)
+function objPan(caz: number): void { director.setObjetivo(`🥖 ¡Atrapa el pan! (${caz}/${camp.panes.length})`); }
 function activarPan(): void {
-  panActivos = true;
-  for (const b of camp.panes) b.visible = true;       // salen del horno con su pista dorada
-  loadPad.position.set(PAN_DEST.x, 0, PAN_DEST.z);     // tapiz de ofrenda frente al Tabernáculo
-  loadPad.visible = true;
-  actualizarObjPan(); balizaPan();
+  panActivos = true; panLaunchCd = 0.4; panNextIdx = 0;
+  setTarget(null);                              // sin baliza: las flechas 🔻 sobre cada pan guían
+  objPan(0);
+}
+/** El horno "escupe" el siguiente pan en un arco hacia el campo abierto. */
+function lanzarPan(): void {
+  const m = camp.panes[panNextIdx++];
+  m.visible = true; m.userData.flying = true; m.userData.caught = false;
+  m.position.set(OVEN_MOUTH.x, OVEN_MOUTH.y, OVEN_MOUTH.z);
+  const ang = (Math.random() - 0.5) * 1.4;
+  m.userData.vel = { vx: Math.sin(ang) * 3.5, vy: 12.5 + Math.random() * 3, vz: -(3 + Math.random() * 3) };  // arco alto y atrapable
+  if (m.userData.hint) m.userData.hint.visible = true;
+  dust.burst(OVEN_MOUTH.x, OVEN_MOUTH.y, OVEN_MOUTH.z, 8);   // puff del horno
+  audio.sfxPickup();
 }
 
 // mini-juego "carga la caravana" — VERBO REAL: coge un bulto y LLÉVALO al camello.
@@ -471,49 +467,64 @@ function animate(now: number): void {
     if (director.beatIndex === 4) director.setObjetivo(`🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`);
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
-      director.logro('¡Cuerdas recogidas! Ahora arrea las ovejas 🐑');
-      life.activarOvejas(); setTarget(camp.ropes.length ? life.redil : null);
+      director.logro('¡Cuerdas recogidas! ¡Arrea las ovejas antes de que acabe el tiempo! 🐑⏱');
+      life.activarOvejas(); herdStart = now; setTarget(camp.ropes.length ? life.redil : null);
     }
   }
-  // FASE B — arrear las ovejas al redil (empújalas acercándote)
+  // FASE B — ARREA A CONTRARRELOJ: mete las ovejas en el redil antes de que baje el reloj
   if (ropesHechas && !done.has('camp')) {
     const enRedil = life.ovejasEnRedil;
-    if (director.beatIndex === 4) director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo})`);
+    const elapsed = (now - herdStart) / 1000;
+    const queda = Math.max(0, HERD_LIMIT - elapsed);
+    if (director.beatIndex === 4) {
+      const reloj = queda > 0 ? `⏱ ${Math.ceil(queda)}s` : '⏱ ¡tú puedes!';
+      director.setObjetivo(`🐑 Arrea las ovejas al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
+    }
     if (enRedil >= life.ovejasObjetivo) {
       done.add('camp'); audio.sfxSuccess(); director.star();
-      director.logro('¡Campamento recogido! 🎉'); setTarget(null);
+      // premio por rapidez: cuanto antes, más fiesta (sin castigo si tardas)
+      if (elapsed < 14) { director.confetti(60); director.logro('¡RAPIDÍSIMO! 🐑⚡ ⭐⭐⭐'); }
+      else if (elapsed < 24) { director.confetti(30); director.logro('¡Bien arreado! 🐑 ⭐⭐'); }
+      else director.logro('¡Campamento recogido! 🎉');
+      setTarget(null);
     }
   }
 
-  // OFICIO: LLEVAR EL PAN AL TABERNÁCULO (coge un pan del horno y llévalo a la ofrenda)
+  // MINI-JUEGO: ¡ATRAPA EL PAN! (el horno lanza panes; corre a cazarlos; al vuelo = bonus)
   if (panActivos && !done.has('tab')) {
-    if (cargandoPan) {
-      const b = cargandoPan;
-      b.position.set(controller.pos.x, 3.0, controller.pos.z);
-      b.rotation.y += dt * 2;
-      if (Math.hypot(controller.pos.x - PAN_DEST.x, controller.pos.z - PAN_DEST.z) < 3.5) {
-        panesEntregados.add(b); b.visible = false; cargandoPan = null;   // ofrendado
-        audio.sfxSparkle(); dust.burst(PAN_DEST.x, 1.0, PAN_DEST.z, 12);
-        actualizarObjPan(); balizaPan();
-      }
-    } else {
-      for (const b of camp.panes) {
-        if (!b.visible || panesEntregados.has(b)) continue;
-        b.rotation.y += dt * 1.2;
-        b.position.y = 0.7 + Math.sin(now * 0.004 + b.position.x) * 0.12;
-        const h = b.userData.hint as THREE.Mesh | undefined;
-        if (h) h.position.y = 2.6 + Math.sin(now * 0.006 + b.position.x) * 0.25;
-        if (controller.pos.distanceTo(b.position) < 2.6) {
-          cargandoPan = b; audio.sfxPickup();
-          if (h) h.visible = false;
-          actualizarObjPan(); balizaPan();
-          break;
+    if (panNextIdx < camp.panes.length) {   // ir lanzando panes en cadencia
+      panLaunchCd -= dt;
+      if (panLaunchCd <= 0) { lanzarPan(); panLaunchCd = 1.5; }
+    }
+    let cazados = 0;
+    for (const b of camp.panes) {
+      if (b.userData.caught) { cazados++; continue; }
+      if (!b.visible) continue;             // aún dentro del horno
+      const v = b.userData.vel as { vx: number; vy: number; vz: number };
+      if (b.userData.flying) {
+        v.vy -= 22 * dt;
+        b.position.x += v.vx * dt; b.position.y += v.vy * dt; b.position.z += v.vz * dt;
+        b.rotation.y += dt * 5;             // gira sobre su eje (la flecha sigue arriba)
+        if (b.position.y <= 0.6) {          // toca suelo: rebota y acaba parándose
+          b.position.y = 0.6; v.vy = Math.abs(v.vy) * 0.4; v.vx *= 0.5; v.vz *= 0.5;
+          if (v.vy < 1.2) { b.userData.flying = false; v.vx = v.vy = v.vz = 0; }
         }
+      } else {
+        b.position.y = 0.6 + Math.abs(Math.sin(now * 0.005 + b.position.x)) * 0.12;   // botecito en el suelo
+      }
+      const h = b.userData.hint as THREE.Mesh | undefined;
+      if (h) h.rotation.y += dt * 3;
+      if (controller.pos.distanceTo(b.position) < 2.4) {          // ¡ATRAPADO!
+        const alVuelo = b.userData.flying && b.position.y > 1.6;
+        b.userData.caught = true; b.visible = false; if (h) h.visible = false; cazados++;
+        dust.burst(b.position.x, b.position.y, b.position.z, 8);
+        if (alVuelo) { audio.sfxSparkle(); director.confetti(10); director.logro('¡Al vuelo! 🥖'); }
+        else audio.sfxPickup();
+        objPan(cazados);
       }
     }
-    if (panesEntregados.size >= camp.panes.length) {
-      done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡El pan está en el Tabernáculo! 🕍');
-      loadPad.visible = false; setTarget(null);
+    if (cazados >= camp.panes.length) {
+      done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Todo el pan atrapado! 🕍'); setTarget(null);
     }
   }
   // los bultos del camello esperan a que termine el pan (ambos oficios en orden, sin liar al peque)
