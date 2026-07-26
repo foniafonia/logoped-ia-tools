@@ -19,7 +19,7 @@ export const escena14: Min05Scene = {
   id: 'm05_14_treta_avion',
   numero: 14,
   titulo: 'La treta del avión',
-  subtitulo: 'Dos guardias vigilan la puerta. «¡Mirad… un avión!» — y todos alzan la vista.',
+  subtitulo: '«Es una noche tranquila…» — «¡UN AVIÓN!» Y todos alzan la vista.',
   jugador: 'spy',
   noche: true,
   ambiente: 'street',

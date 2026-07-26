@@ -22,7 +22,7 @@ export const escena15: Min05Scene = {
   id: 'm05_15_colarse_puerta',
   numero: 15,
   titulo: 'Colarse por la puerta',
-  subtitulo: 'Aprovechando el despiste, los espías se deslizan por la puerta abierta.',
+  subtitulo: '«Vamos, ya es hora.» Aprovechan el despiste y se deslizan por la puerta.',
   jugador: 'spy',
   noche: true,
   ambiente: 'street',

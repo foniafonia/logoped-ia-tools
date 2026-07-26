@@ -20,7 +20,7 @@ export const escena11: Min05Scene = {
   id: 'm05_11_murallas_noche',
   numero: 11,
   titulo: 'Murallas de noche',
-  subtitulo: 'De noche, la fortaleza de Jericó se alza enorme, iluminada por los braseros de la muralla.',
+  subtitulo: 'La fortaleza se alza enorme en la noche. «Es peligroso: si os descubren, os matarán.»',
   jugador: 'spy_camp',
   noche: true,
   ambiente: 'night',

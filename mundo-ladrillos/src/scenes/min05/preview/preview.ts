@@ -43,22 +43,25 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 const plastic = new PlasticMaterialFactory();
-// El SoundEngine da el AMBIENTE + EFECTOS y también reproduce el AUDIO REAL DE
-// LA PELÍCULA (`narracion_min5-10`) por segmentos, saltando al segundo de cada
-// escena (BEAT_LOCAL). No hay música sintética.
+// El SoundEngine da el AMBIENTE + EFECTOS y reproduce el AUDIO REAL DE LA PELÍCULA
+// por escena: cada escena toca su recorte `voz_NN` (ver SCENE_CLIP). No hay música
+// sintética.
 const sound = new SoundEngine();
-let filmReady = false;
-// AUDIO de la peli. El clip `narracion_min5-10` está CONDENSADO y NO casa con el
-// desglose oficial (verificado de oído con el usuario: empieza con el RÍO y a los
-// ~20s ya está el gag del avión). Por eso NO uso los tiempos del desglose, sino
-// ventanas REALES del clip, calibradas de oído — se rellenan a medida.
-// Cada entrada: numero de escena → [inicio, fin] en segundos DEL CLIP.
-const USE_FILM_SPINE = true;
-// Analicé el clip (decodificado + envolvente + cross-correlación del gag): el RÍO
-// está en [0,~11.5]s y el grito del avión en 22.2s. El clip está condensado y NO
-// tiene audio separable por escena para 10–13, así que solo asigno lo verificado.
-const CLIP_SEG: Record<number, [number, number]> = {
-  9: [0, 11.5]   // orilla del Jordán: RÍO puro del principio, cortado antes del avión. ✅
+// AUDIO de la peli, POR ESCENA. Cada escena reproduce su recorte `voz_NN` (voz +
+// música de la peli, ya sincronizado). Mapeado por CONTENIDO con la transcripción
+// con tiempos del vídeo completo. Los recortes se cortan del audio del vídeo por
+// estas ventanas (segundos del VÍDEO) y se suben a `clips.ts` (solo en la entrega,
+// PRIVADO). Hasta que existan, `playSceneClip` no suena (queda el ambiente):
+//   9  voz_09  [0:46–1:03]  «…el poderoso río Jordán, la tierra prometida»
+//   10 voz_10  [3:41–4:16]  «Necesito hombres… que vayan a espiar Jericó»
+//   11 voz_11  [4:24–4:34]  «Es peligroso: si os descubren, os matarán»
+//   12 voz_12  [4:44–5:00]  «¿Estás listo? — Vamos a cambiarnos»
+//   13 (música/ambiente, sin diálogo)
+//   14 voz_14  [5:12–5:37]  «Es una noche tranquila… ¡UN AVIÓN!»  (+ gag corto)
+//   15 voz_15  [5:37–5:54]  «Vamos, ya es hora» (colarse)
+//   16 voz_16  [5:54–6:44]  «Miren estas huellas… ¿vieron algo raro?»
+const SCENE_CLIP: Record<number, string> = {
+  9: 'voz_09', 10: 'voz_10', 11: 'voz_11', 12: 'voz_12', 14: 'voz_14', 15: 'voz_15', 16: 'voz_16'
 };
 
 // --- Luces (se reconfiguran día/noche) ---
@@ -288,13 +291,11 @@ function disposeGroup(g: THREE.Group): void {
   g.traverse((o: THREE.Object3D) => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
 }
 
-// Reproduce la ventana de peli de una escena (si está calibrada en CLIP_SEG);
-// si no, PARA el audio de la peli (queda el ambiente) para no soltar audio ajeno.
+// Reproduce el recorte de voz/BSO de la peli de ESTA escena (voz_NN). Si el clip
+// aún no existe, playSceneClip no suena (queda el ambiente). Sin errores.
 function startSceneFilm(def: Min05Scene): void {
-  if (!filmReady) return;
-  const seg = CLIP_SEG[def.numero];
-  if (seg) sound.playFilmFrom(seg[0], seg[1], 0.9, `esc${def.numero}`);
-  else sound.stopFilm();
+  if (!sound.ready) return;
+  void sound.playSceneClip(SCENE_CLIP[def.numero]);
 }
 
 function loadScene(i: number): void {
@@ -370,14 +371,9 @@ Object.assign(startEl.style, { position: 'fixed', inset: '0', zIndex: '50', disp
 document.body.appendChild(startEl);
 const startGame = (): void => {
   sound.init();
-  // carga el audio de la peli (voces + música) y arranca en el segundo de la
-  // escena actual. Asíncrono: cuando termine de decodificar, empieza a sonar.
-  if (USE_FILM_SPINE) {
-    void sound.loadFilm('narracion_min5-10').then((ok) => {
-      filmReady = ok;
-      if (ok && currentDef) startSceneFilm(currentDef);  // ventana de la escena actual
-    });
-  }
+  // reproduce el recorte de voz/BSO de la escena actual (voz_NN). Si el recorte
+  // aún no está en clips.ts, no suena (queda el ambiente) — el audio se mete después.
+  if (currentDef) startSceneFilm(currentDef);
   void sound.preloadClip('m0510_14_avion'); // el "¡un avión!" para el gag (esc. 14)
   if (currentDef) sound.setAmbience(currentDef.ambiente ?? (currentDef.noche ? 'night' : 'day'));
   started = true;
@@ -459,7 +455,7 @@ function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivEle
 requestAnimationFrame(animate);
 
 (window as any).__READY__ = true;
-(window as any).__filmReady = () => filmReady;
+(window as any).__filmReady = () => sound.ready;
 // hooks de depuración/captura
 (window as any).__setPlayer = (x: number, z: number) => controller.teleport(x, z);
 (window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });

@@ -23,7 +23,7 @@ export const escena16: Min05Scene = {
   id: 'm05_16_guardias_calles',
   numero: 16,
   titulo: 'Patrullas en las calles',
-  subtitulo: 'Los guardias recorren las calles buscándolos. Llega al refugio sin ser visto.',
+  subtitulo: '«Miren estas huellas, vienen de fuera.» Los guardias buscan a los espías por las calles.',
   jugador: 'spy',
   noche: true,
   ambiente: 'street',

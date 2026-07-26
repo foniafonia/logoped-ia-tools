@@ -21,7 +21,7 @@ export const escena09: Min05Scene = {
   id: 'm05_09_orilla_jordan',
   numero: 9,
   titulo: 'Orilla del Jordán',
-  subtitulo: 'Yehoshúa contempla el Jordán y, al otro lado, la fortaleza de Jericó.',
+  subtitulo: 'Frente a ellos, el poderoso río Jordán; más allá, la tierra que Hashem prometió a sus padres.',
   jugador: 'yoshua',
   ambiente: 'river',
   spawn: { x: -8, z: -14 },

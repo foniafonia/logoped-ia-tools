@@ -33,6 +33,7 @@ export class SoundEngine {
   private filmLabel = '';
   private clipUntil = 0;
   private clipName = '';
+  private sceneBufs = new Map<string, AudioBuffer>(); // voces/BSO por escena (voz_NN)
 
   init(): void {
     if (this.ac) { void this.ac.resume(); return; }
@@ -107,6 +108,38 @@ export class SoundEngine {
     try { src.stop(t + segLen + 0.05); } catch { /* noop */ }
     this.filmSrc = src;
     this.filmStartAt = t; this.filmOff = off; this.filmSegLen = segLen; this.filmLabel = label;
+  }
+
+  /**
+   * Reproduce el CLIP DE VOZ/BSO de una escena (recorte de la peli, p. ej.
+   * `voz_10`) a través del canal de la peli, con fundido. Corta el anterior. Si el
+   * clip aún NO existe en CLIPS (build sin audio), NO suena nada (queda el
+   * ambiente) — así el cableado ya está listo y el audio "se mete después".
+   */
+  async playSceneClip(name?: string, gain = 0.9): Promise<void> {
+    if (!this.ac || !this.filmGain) return;
+    const t0 = this.ac.currentTime;
+    if (this.filmSrc) { try { this.filmSrc.stop(t0 + 0.25); } catch { /* noop */ } this.filmSrc = null; }
+    this.filmLabel = '';
+    if (!name || !CLIPS[name]) return;           // sin recorte todavía → solo ambiente
+    let buf = this.sceneBufs.get(name);
+    if (!buf) {
+      try {
+        const uri = CLIPS[name]; const b64 = uri.slice(uri.indexOf(',') + 1);
+        const bin = atob(b64); const by = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) by[i] = bin.charCodeAt(i);
+        buf = await this.ac.decodeAudioData(by.buffer);
+        this.sceneBufs.set(name, buf);
+      } catch { return; }
+    }
+    if (!this.ac || !this.filmGain) return;
+    const t = this.ac.currentTime;
+    const src = this.ac.createBufferSource(); src.buffer = buf; src.loop = false;
+    const g = this.ac.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.4);
+    src.connect(g); g.connect(this.filmGain); src.start(t);
+    this.filmSrc = src;
+    this.filmStartAt = t; this.filmOff = 0; this.filmSegLen = buf.duration; this.filmLabel = name;
   }
 
   /** Descripción legible de lo que SUENA ahora (para la chapita de parte). */

@@ -19,7 +19,7 @@ export const escena10: Min05Scene = {
   id: 'm05_10_reclutar_espias',
   numero: 10,
   titulo: 'Reclutar a los espías',
-  subtitulo: '«Id y reconoced la tierra, y Jericó.» Yehoshúa encomienda la misión a dos hombres.',
+  subtitulo: '«Necesito hombres discretos y valientes que vayan a espiar la tierra, sobre todo Jericó.»',
   jugador: 'yoshua',
   ambiente: 'day',
   spawn: { x: 0, z: -13 },

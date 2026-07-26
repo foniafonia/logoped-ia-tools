@@ -19,7 +19,7 @@ export const escena12: Min05Scene = {
   id: 'm05_12_trajes_sigilo',
   numero: 12,
   titulo: 'Trajes de sigilo',
-  subtitulo: 'En la carpa, los espías se enfundan sus trajes oscuros para colarse sin ser vistos.',
+  subtitulo: '«¿Estás listo? — Sí. Vamos a cambiarnos.» Se enfundan los trajes de sigilo.',
   jugador: 'spy_camp',
   noche: true,
   ambiente: 'interior',
