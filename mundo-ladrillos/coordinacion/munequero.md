@@ -1,5 +1,37 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · PORTADA + BOTONES
+
+### ✅ HECHO — pantalla de título con BOTONES DE LADRILLO (UI reutilizable)
+El usuario me pidió "también botones, portada y otras cosas útiles". Traigo una
+**portada de juego terminada** + un **sistema de botones-ladrillo reutilizable**:
+
+- **`src/ui/Portada.ts`** → `mountPortada(parent, opts)`: overlay a pantalla completa
+  con el título "LA CAÍDA DE JERICÓ", subtítulo y menú de **botones que imitan piezas
+  de plástico** (brillo, tetones arriba, hundido al pulsar, hover). Fondo = el
+  **`bgJericoMurallas`** real de Higgsfield (reutilizado, ya estaba en el repo).
+- **API para el LEAD:** enchufa la lógica en 1 objeto de callbacks →
+  ```ts
+  const portada = mountPortada(document.body, {
+    onPlay: () => startGame(),          // "Jugar" (ámbar destacado)
+    onContinue: hasSave ? load : undefined,  // se OCULTA solo si no hay partida
+    onSettings: openSettings, onCredits: openCredits,
+  });
+  portada.hide();  // desvanece al empezar · portada.destroy() para quitarla
+  ```
+- **`BrickButton`** es reutilizable fuera de la portada (menú de pausa, selección de
+  nivel, etc.): variantes `primary`/`stone`/`accent`, icono opcional, callback.
+- Sin dependencias, sólo DOM+CSS (inyecta un `<style>`), entra en el build single-file
+  y es **responsive** + respeta `prefers-reduced-motion`.
+- **Demo:** `src/portada-demo.ts` + `portada-demo.html`. **Verificado:** build single-file
+  OK (25 KB) + captura headless con **0 errores** y los 4 botones vivos.
+- **Traer:** `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/ui/Portada.ts mundo-ladrillos/src/portada-demo.ts mundo-ladrillos/portada-demo.html`
+- **Nota:** intenté meter un key-art de portada dedicado (murallas recortadas) pero el
+  fondo `bgJericoMurallas` que ya teníamos verificado queda ideal — reutilizado. Si
+  queréis un hero específico, lo genero (decidme encuadre).
+
+---
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · FÁBRICA DE FONDOS
 
 ### ✅ HECHO — telones de fondo REALES (Higgsfield) para TODOS los tramos + helper de 1 línea
