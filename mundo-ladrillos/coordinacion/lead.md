@@ -243,3 +243,71 @@ en la siguiente pasada (los enumero para que lo sepáis):
 Rama actualizada y pusheada.
 
 **Preguntas:** ninguna abierta ahora mismo.
+
+---
+
+## 🌟 PARA TODO EL EQUIPO — recetas, lecciones y un mensaje del usuario (2026-07-26)
+
+**Mensaje del usuario (literal, os lo traslado):** está **muy contento** con cómo va
+esto y quería que lo supierais todos — cerebro, creadores y el compañero técnico
+(humano, con experiencia, que se lleva su 25% y se lo está currando). Va en serio:
+"sois lo mejor". Así que esto no es solo tablón: es un **gracias** con recetas dentro,
+para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
+
+### Lo que ha entrado en el 0–5 esta pasada (iteración con el hijo como tester real)
+- **Cámara que mareaba (giraba sola):** el auto-recentrado continuo perseguía a la
+  cámara en bucle → cualquier toque lateral la hacía girar sin parar. **Arreglo:**
+  recentrado **de UN solo toque al soltar el arrastre**, con objetivo **congelado** en
+  ese instante (no persigue). El peque confirmó: "va mejor".
+- **Mishkán tapado / redil aplastado por cabañas:** patrón **"zona despejada"** (ver
+  receta 2). Plazas libres alrededor de los dos hitos.
+- **El bulto no se podía coger:** el mini-juego estaba tras `beatIndex === 6` y el reloj
+  del audio pasaba al **beat 7** mientras el niño cargaba → dejaba de responder (ver
+  lección 3).
+- **Tecla E + botón "TIRA (E)":** el arreo de ovejas ahora es **verbo con botón** (y
+  tecla), no imán automático (ver receta 4).
+- **Yehoshúa encabeza la marcha:** el peque notó que "no iba con nosotros". Ahora, al
+  arrancar la caravana, **baja de la tarima y camina delante** guiando al río (un
+  personaje clave debe ACOMPAÑAR, no quedarse decorando).
+- **Adelanto de los espías:** cinemática de 6 s que asoma al río (idea del niño). Hecha
+  con el helper nuevo (receta 1).
+
+### 📚 RECETAS REUTILIZABLES (copiadlas, no reinventéis)
+
+**1) Cinemática/adelanto AISLADO y SALTABLE → `src/ui/Cutscene.ts` (NUEVO, compartido).**
+   Para revelar un sitio, presentar personaje o un gag en cualquier tramo. El blindaje
+   es la clave: en el bucle `if (cine.active) { cine.update(dt); render(); return; }`
+   → mientras dura, el gameplay NO corre → **imposible que rompa** tareas/estrellas/
+   cámara. Tú solo pones cámara+actores en `onFrame(k,dt)` y limpieza en `onEnd()`.
+   Ya lo usa el 0–5. **MIN05-10 y MIN10-15: es vuestro para las cinemáticas de peli.**
+
+**2) "Zona despejada" para que las multitudes no tapen un hito.** Al repartir tiendas/
+   gente instanciada, re-tira la posición hasta que caiga FUERA de un círculo alrededor
+   del hito: `for (let t=0;t<16;t++){ pos=random(); if (lejos(pos,HITO,r)) break; }`.
+   Úsalo para Mishkán, redil, altar, casa de Rahab… cualquier cosa que deba verse.
+
+**3) LECCIÓN (gotcha de oro): puertas de beat con `>=`, no `==`.** Si un verbo/mini-juego
+   depende del reloj de la narración, NO lo cierres con `beatIndex === N`: el audio
+   avanza y el jugador lento se queda sin poder actuar. Usa `>= N` y controla el fin por
+   la TAREA, no por el beat. (Esto bloqueaba al niño con el bulto.)
+
+**4) Verbo con botón + tecla (agencia y accesibilidad).** Para un niño, "se pega solo al
+   acercarse" se siente a poco. Mejor: al lado del objeto, **pulsar** (botón táctil con
+   etiqueta clara "TIRA (E)" **y** tecla) dispara la acción, con feedback (polvo+sonido).
+   El botón puede pulsar/brillar cuando hay algo enganchable.
+
+### 🤝 Handoffs concretos
+- **▶ MIN05-10 (río / espías, `min-05-10-jordan-spies`):** el adelanto del 0–5 usa
+  **vuestras** `SPY_CAMP_SKIN` / `SPY2_CAMP_SKIN` y ahora **llamo a `journey.revelarRio()`**
+  al arrancar la caravana. Para que empalme fino: vuestra **apertura del 5–10 debería
+  arrancar con los dos espías yendo al agua** (misma imagen que dejo yo), y el río ya
+  revelado. Si cambiáis el look de los espías, avisad y lo sincronizo. Os dejo la
+  `Cutscene` lista para vuestras cinemáticas.
+- **▶ INTEGRADOR:** hay un hook de pruebas `window.__teaser()` (dispara el adelanto) y el
+  helper `Cutscene`. El adelanto está **blindado** (guard propio), no interfiere con el
+  encadenado de tramos. Si al unir 0–5 con 5–10 preferís que el adelanto NO salga (para
+  no duplicar el río antes del 5–10), basta con no llamar a `dispararTeaserEspias()`; es
+  una sola línea en el bloque de la caravana.
+- **▶ MUÑEQUERO:** gracias por los skins de espía — quedan genial en el adelanto.
+
+**Preguntas abiertas:** ninguna. Todo compila y está pusheado.
