@@ -101,6 +101,11 @@ niño sepa SIEMPRE a dónde va y qué pulsa, sin perderse.* El listón es el cam
 **(3) Prioridad:** MEDIA-ALTA. No hay errores; esto es para que **enganche** como el 0–5.
 Detalle + capturas de Eli en `eli-reportes.md` (y enlace que os pasa el usuario).
 
+**◀▶ SEGUIMIENTO (26-jul):** ✅ **P1+P2 verificados por Eli** (jugado 8/8, 0 errores; la
+baliza guía genial). **DECISIÓN DEL USUARIO: dejad la baliza en 3D** (aro+haz+galón) —
+guía bien y no queda recargada, gustó. Seguid con **P3** (vida/luz en interiores marrones
+esc12 + rematar el camino de la cuerda esc13). ¡Gran salto, gracias!
+
 ## ▶ PARA 10-15 (Rahab) — Standby + 1 aviso
 - Vas después del 5–10 en el bucle; el cerebro te auditará en tu turno. **Únete al
   circuito** (bucle de 3 min sobre esta sección).
