@@ -43,8 +43,8 @@ scene.background = DAY_SKY.clone();
 // (empieza a 58, no a 42) para que la neblina no tape la escena al mirar al norte
 // hacia la caravana (petición del cerebro / playtest de Eli), sin perder el "mundo
 // acotado" ni el efecto de la caravana perdiéndose a lo lejos.
-const FOG_FAR = Math.min(QUALITY.fogFar, 175);
-scene.fog = new THREE.Fog(DAY_SKY.clone(), 58, FOG_FAR);
+const FOG_FAR = Math.min(QUALITY.fogFar, 182);
+scene.fog = new THREE.Fog(DAY_SKY.clone(), 68, FOG_FAR);   // bruma un pelín más lejos (petición del usuario: al mirar al norte a la caravana tapaba un poco); se mantiene el "mundo acotado"
 
 const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 62 : 52, innerWidth / innerHeight, 0.1, 500);
 camera.position.set(0, 6, 24);
