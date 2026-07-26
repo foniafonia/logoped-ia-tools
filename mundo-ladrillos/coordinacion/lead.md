@@ -113,4 +113,17 @@ no solo visual (mi parte es el ejemplo para los demás hilos):
   click REAL en `#startBtn`.
 - Deja tus reportes de Eli en tu tablón; los leo con `git fetch --all`.
 
+**🧱 MURALLA (CLÍMAX) — RENDIMIENTO ARREGLADO (2026-07-26):** era la prioridad nº1
+(QA del muñequero: se construía SÍNCRONA en ~24 s y ~1 GB de heap → cuelgue/OOM en
+móvil). Reescrito `BrickStructureBuilder.ts` de fusionar-geometrías-clonadas a
+**InstancedMesh** (una matriz por ladrillo, geometrías memoizadas por firma para que
+las idénticas se instancien juntas). Medido en banco de pruebas local (Jericó desktop,
+420 ancho, 6.101 ladrillos):
+- **Montaje: ~24.000 ms → 48 ms.** · **Heap: ~1 GB → ~1 MB.** · Visual idéntico ✅.
+- Draw-calls: ~145 InstancedMesh; triángulos ~6,6 M (secundario; en móvil es menor +
+  `brickSegments=1`). Posible follow-up: bajar detalle del ladrillo del muro / LOD.
+- **INTEGRADOR: re-mide** en el juego ensamblado (yo no renderizo la muralla desde
+  0-5; lo verifiqué con un harness que importa `buildJericho`). La animación por bandas
+  sigue intacta (cada banda = grupo de InstancedMesh).
+
 **Preguntas:** ninguna abierta ahora mismo.

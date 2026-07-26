@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { makeBrickGeometry, normalizeGeometry } from '../bricks/BrickGeometryFactory';
 import { STUD_WIDTH, BRICK_HEIGHT, BEVEL_SIZE } from '../bricks/BrickDimensions';
@@ -8,43 +7,60 @@ import { BrickPalette } from '../materials/BrickPalette';
 import { IS_MOBILE } from '../core/Quality';
 import { COURT, ROAD } from '../core/Layout';
 
+/** Memo GLOBAL de geometrías por firma: idénticas comparten UN objeto → se instancian
+ *  juntas (clave para no clonar miles de veces ni disparar draw-calls). */
+const geoMemo = new Map<string, THREE.BufferGeometry>();
+function memoGeo(key: string, make: () => THREE.BufferGeometry): THREE.BufferGeometry {
+  let g = geoMemo.get(key);
+  if (!g) { g = normalizeGeometry(make()); geoMemo.set(key, g); }
+  return g;
+}
+
 /**
- * Acumula geometrías por color y las fusiona en una malla por color
- * (pocas draw-calls). Suficiente para un render estático de estructura;
- * la variante InstancedMesh llegará en la fase de rendimiento.
+ * Acumula ladrillos como INSTANCIAS (matriz por ladrillo) agrupadas por
+ * (geometría, color) y las emite como InstancedMesh: sin clonar geometría por
+ * ladrillo ni fusionar arrays gigantes. Antes se clonaba+fusionaba miles de veces
+ * (→ 24 s / ~1 GB al montar Jericó); ahora es una matriz por ladrillo (barato).
  */
 class BrickAccumulator {
-  private byColor = new Map<number, THREE.BufferGeometry[]>();
-  // CACHÉ de geometría por (w,d,kind): el muro de Jericó llama a addBrick miles de
-  // veces con ladrillos IDÉNTICOS (2×2). Antes se re-teselaba un RoundedBox+tetones
-  // en cada llamada (→ 24 s / ~1 GB). Ahora se tesela UNA vez y se clona (barato).
+  // geometría base → (color → matrices de instancia)
+  private byGeo = new Map<THREE.BufferGeometry, Map<number, THREE.Matrix4[]>>();
   private static geoCache = new Map<string, THREE.BufferGeometry>();
 
+  private push(geo: THREE.BufferGeometry, colorHex: number, m: THREE.Matrix4): void {
+    let byColor = this.byGeo.get(geo);
+    if (!byColor) { byColor = new Map(); this.byGeo.set(geo, byColor); }
+    let arr = byColor.get(colorHex);
+    if (!arr) { arr = []; byColor.set(colorHex, arr); }
+    arr.push(m);
+  }
+
+  /** Añade una instancia de `geo` (¡debe venir de memoGeo/geoCache para compartir!). */
   addGeometry(geo: THREE.BufferGeometry, colorHex: number, x: number, y: number, z: number, rotY = 0): void {
-    const g = normalizeGeometry(geo.clone());
     const m = new THREE.Matrix4().makeRotationY(rotY);
     m.setPosition(x, y, z);
-    g.applyMatrix4(m);
-    if (!this.byColor.has(colorHex)) this.byColor.set(colorHex, []);
-    this.byColor.get(colorHex)!.push(g);
+    this.push(geo, colorHex, m);
   }
 
   addBrick(w: number, d: number, kind: 'brick' | 'plate' | 'tile', colorHex: number,
            x: number, y: number, z: number): void {
     const key = `${w}|${d}|${kind}`;
     let geometry = BrickAccumulator.geoCache.get(key);
-    if (!geometry) { geometry = makeBrickGeometry(w, d, kind).geometry; BrickAccumulator.geoCache.set(key, geometry); }
-    this.addGeometry(geometry, colorHex, x, y, z);   // addGeometry clona → la caché no se muta
+    if (!geometry) { geometry = normalizeGeometry(makeBrickGeometry(w, d, kind).geometry); BrickAccumulator.geoCache.set(key, geometry); }
+    this.push(geometry, colorHex, new THREE.Matrix4().setPosition(x, y, z));
   }
 
   build(plastic: PlasticMaterialFactory): THREE.Group {
     const group = new THREE.Group();
-    for (const [colorHex, geos] of this.byColor) {
-      const merged = mergeGeometries(geos, false)!;
-      const mesh = new THREE.Mesh(merged, plastic.get(colorHex));
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      group.add(mesh);
+    for (const [geo, byColor] of this.byGeo) {
+      for (const [colorHex, mats] of byColor) {
+        const inst = new THREE.InstancedMesh(geo, plastic.get(colorHex), mats.length);
+        for (let i = 0; i < mats.length; i++) inst.setMatrixAt(i, mats[i]);
+        inst.instanceMatrix.needsUpdate = true;
+        inst.castShadow = true;
+        inst.receiveShadow = true;
+        group.add(inst);
+      }
     }
     return group;
   }
@@ -58,19 +74,23 @@ function sandFor(x: number, y: number): number {
   return SAND_TONES[h % SAND_TONES.length];
 }
 
-/** Ménsula redondeada (medio cilindro tumbado que sobresale del muro). */
+/** Ménsula redondeada (medio cilindro tumbado que sobresale del muro). Memoizada. */
 function corbelGeo(len: number, axis: 'x' | 'z' = 'x'): THREE.BufferGeometry {
-  const g = new THREE.CylinderGeometry(0.5, 0.5, len, 16, 1, false, 0, Math.PI);
-  if (axis === 'x') g.rotateZ(Math.PI / 2);
-  else g.rotateX(Math.PI / 2);
-  return normalizeGeometry(g);
+  return memoGeo(`corbel|${len}|${axis}`, () => {
+    const g = new THREE.CylinderGeometry(0.5, 0.5, len, 16, 1, false, 0, Math.PI);
+    if (axis === 'x') g.rotateZ(Math.PI / 2);
+    else g.rotateX(Math.PI / 2);
+    return g;
+  });
 }
 
-/** Bloque genérico biselado (para almenas, dinteles, puerta). */
+/** Bloque genérico biselado (para almenas, dinteles, puerta). Memoizado. */
 function blockGeo(w: number, h: number, d: number): THREE.BufferGeometry {
-  const g = new RoundedBoxGeometry(w, h, d, 3, BEVEL_SIZE);
-  g.translate(0, h / 2, 0);
-  return normalizeGeometry(g);
+  return memoGeo(`block|${w}|${h}|${d}`, () => {
+    const g = new RoundedBoxGeometry(w, h, d, 3, BEVEL_SIZE);
+    g.translate(0, h / 2, 0);
+    return g;
+  });
 }
 
 interface WallOptions { x0: number; z: number; widthStuds: number; courses: number; gate?: boolean; }
@@ -117,18 +137,24 @@ function addCrown(acc: BrickAccumulator, x0: number, x1: number, topY: number, z
 function addBatter(acc: BrickAccumulator, cx: number, z: number, sideTop: number, sideBot: number, height: number): void {
   const rTop = sideTop / Math.SQRT2;
   const rBot = sideBot / Math.SQRT2;
-  const g = new THREE.CylinderGeometry(rTop, rBot, height, 4, 1, false);
-  g.rotateY(Math.PI / 4); // caras alineadas a los ejes
-  g.translate(0, height / 2, 0);
-  acc.addGeometry(normalizeGeometry(g), BrickPalette.DARK_SAND, cx, 0, z);
+  const g = memoGeo(`batter|${sideTop}|${sideBot}|${height}`, () => {
+    const c = new THREE.CylinderGeometry(rTop, rBot, height, 4, 1, false);
+    c.rotateY(Math.PI / 4); // caras alineadas a los ejes
+    c.translate(0, height / 2, 0);
+    return c;
+  });
+  acc.addGeometry(g, BrickPalette.DARK_SAND, cx, 0, z);
 }
 
 /** Ventana de flecha: hueco oscuro rematado en arco. */
 function addSlitWindow(acc: BrickAccumulator, cx: number, y: number, zFace: number): void {
   acc.addGeometry(blockGeo(0.75, BRICK_HEIGHT * 2.1, 0.5), BrickPalette.DARK_BROWN, cx, y, zFace);
-  const arch = new THREE.CylinderGeometry(0.42, 0.42, 0.5, 12, 1, false, 0, Math.PI);
-  arch.rotateX(Math.PI / 2);
-  acc.addGeometry(normalizeGeometry(arch), BrickPalette.DARK_BROWN, cx, y + BRICK_HEIGHT * 2.1, zFace);
+  const arch = memoGeo('archSlit', () => {
+    const a = new THREE.CylinderGeometry(0.42, 0.42, 0.5, 12, 1, false, 0, Math.PI);
+    a.rotateX(Math.PI / 2);
+    return a;
+  });
+  acc.addGeometry(arch, BrickPalette.DARK_BROWN, cx, y + BRICK_HEIGHT * 2.1, zFace);
 }
 
 /** Merlones (almenas) a lo largo de un borde recto. */
