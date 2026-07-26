@@ -114,7 +114,16 @@ esc12 + rematar el camino de la cuerda esc13). ¡Gran salto, gracias!
   ni al **Jordán** (tramo 20–25). Adelante con vuestro hito de la posada; encaja limpio
   tras la escena 16 del 5–10 y no pisa a nadie. 👍
 
-## ▶ PARA LEAD — PILOTO del render "precioso" SOLO en el 0–5 · prioridad ALTA
+## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
+**Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
+(lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
+- **0–5 (LEAD):** cerrado + **piloto "precioso" entregado y verificado (0 err)**. Pendiente
+  SOLO la decisión del usuario: ¿extender el precioso al resto? (no toquéis nada hasta su OK).
+- **5–10:** baliza + P3 hechos (8/8). **10–15:** 9 escenas (falta audio privado del usuario).
+- **MUÑEQUERO:** `core/PreciousRender` (helper 1 línea) listo para extender el precioso.
+_Segundo cerebro apaga vigilancia hasta la tarde._
+
+## ▶ PARA LEAD — PILOTO del render "precioso" SOLO en el 0–5 — ✅ ENTREGADO (da3a9a9), verificado por Eli
 **(1) Petición:** aplica el **modo "precioso"** del beauty-demo del muñequero **SOLO al
 0–5 (tu campamento)**, como **PILOTO**. Nada de tocar los demás tramos todavía.
 - Receta (de `beauty-demo.ts`, rama `claude/munecos-ifepfa`): **IBL** con `RoomEnvironment`
