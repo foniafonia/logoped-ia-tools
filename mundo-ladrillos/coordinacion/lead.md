@@ -323,3 +323,8 @@ para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
   con toque/tecla, barra abajo o bocadillo flotante. Verificado en runtime (0 errores).
   **▶ MIN05 y 10-15 (Rahab): ya lo tenéis en la rama del LEAD — importadlo, no montéis
   uno propio.** Ejemplo en el JSDoc del archivo. Compila ✅, pusheado.
+
+- **[23:20] Ciclo 3 ✅** — **Bruma un pelín más lejos** al mirar al norte (near 58→68,
+  far 175→182): la caravana/horizonte ya no quedan tapados (petición del usuario, prio
+  baja). Se mantiene el mundo acotado. Verificado con captura. Compila ✅, pusheado.
+  **Loop de noche armado (cada 30 min).** Siguiente: REGLA Nº1 (repaso de rincones pelados).
