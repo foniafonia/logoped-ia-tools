@@ -1,0 +1,30 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { setupPreciousRender } from './core/PreciousRender';
+import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
+import { addBackdrop, backdropRails } from './world/Backdrop';
+import { bgCampamento } from './assets/bgCampamento';
+import { buildBannerRow } from './world/Banner';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+addBackdrop(scene, bgCampamento, { skyColor: 0xd8c090 });
+scene.fog = new THREE.Fog(0xdcb47f, 30, 90);
+const plastic = new PlasticMaterialFactory();
+plastic.update({ roughness: 0.42, clearcoat: 0.45, envMapIntensity: 0.9 });
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(120,120), new THREE.MeshStandardMaterial({ color: 0xc7a878, roughness: 0.96 }));
+floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; scene.add(floor);
+const sun = new THREE.DirectionalLight(0xffe8c8, 1.8); sun.position.set(5,12,6); sun.castShadow = true; sun.shadow.mapSize.set(2048,2048); scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xffe6bf, 0x6b4a2a, 0.6));
+const banners = buildBannerRow(plastic, { x: -5, z: 0, gap: 2, count: 6, height: 4 });
+scene.add(banners.group);
+const camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.1, 300);
+camera.position.set(0, 3.4, 11); camera.lookAt(0, 3, 0);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.target.set(0, 3, 0); controls.minDistance=6; controls.maxDistance=16; backdropRails(controls); controls.update();
+const fx = setupPreciousRender(renderer, scene, camera, { exposure: 1.05, bloom: { strength: 0.28, threshold: 0.86 } });
+function loop(){ requestAnimationFrame(loop); banners.update(0.016); controls.update(); fx.render(); (window as any).__ready = true; }
+loop();
+addEventListener('resize', () => { renderer.setSize(innerWidth,innerHeight); fx.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); });
