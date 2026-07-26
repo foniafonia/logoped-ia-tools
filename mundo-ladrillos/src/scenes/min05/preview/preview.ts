@@ -461,24 +461,36 @@ requestAnimationFrame(animate);
 (window as any).__pos = () => ({ x: controller.pos.x, z: controller.pos.z });
 (window as any).__cine = () => (cineCam.active ? 1 : 0);
 // === JUGADOR SINTÉTICO / QA de niño (rol reutilizable, ver coordinacion/playtester.md) ===
-// __walk: anda un paso hacia (x,z). __interact: pulsa "E". __probe: estado para guiarse.
-(window as any).__walk = (x: number, z: number, step = 0.9) => controller.stepToward(x, z, step);
+// Contrato ACORDADO con el hilo Segundo Cerebro / Eli (coordinacion/segundo-cerebro.md):
+// __probe() estado para guiarse (pos/goal como [x,z]); __walk(x,z,step)->bool "llegó"
+// (anda respetando colisión, no teletransporta); __act()/__interact() pulsan "E";
+// __jump() salta. Es aditivo: no toca el juego.
+(window as any).__walk = (x: number, z: number, step = 0.9): boolean => {
+  controller.stepToward(x, z, step);
+  return Math.hypot(controller.pos.x - x, controller.pos.z - z) <= step;
+};
 (window as any).__interact = () => { interactFlag = true; };
+(window as any).__act = () => { interactFlag = true; };
+(window as any).__jump = () => { controller.touch.jump = true; };
 (window as any).__probe = () => {
   const p = controller.pos; const def = currentDef;
   const hud = (current && current.hud) ? current.hud() : {};
   const tgt = def?.objetivo?.target;
   return {
     numero: def?.numero ?? null,
-    titulo: def?.titulo ?? '',
-    pos: { x: +p.x.toFixed(1), z: +p.z.toFixed(1) },
-    goal: tgt ? [tgt.x, tgt.z] : null,           // a dónde iría un jugador guiado
+    titulo: def?.titulo ?? null,
+    tipo: def?.objetivo?.tipo ?? null,            // 'ir_a' | 'sigilo' | 'equilibrio' | ...
+    objetivo: def?.objetivo?.texto ?? null,       // texto del objetivo
+    pos: [+p.x.toFixed(1), +p.z.toFixed(1)],       // [x,z]
+    goal: tgt ? [tgt.x, tgt.z] : null,            // a dónde iría un jugador guiado [x,z]
+    radio: def?.objetivo?.radio ?? null,
     done: current ? current.isDone(controller.pos) : false,
     prompt: hud.prompt ?? null,                   // acción necesaria (p. ej. "Pulsa E")
     alarm: hud.alarm ?? 0,                         // sigilo: 0..1
+    balance: hud.balance ?? null,                  // equilibrio (esc13): -1..1
     progress: hud.progress ?? 0,
     gems: hud.gems ?? null,
     status: (current && current.status) ? current.status() : null,
-    cine: cineCam.active
+    cine: cineCam.active ? 1 : 0
   };
 };
