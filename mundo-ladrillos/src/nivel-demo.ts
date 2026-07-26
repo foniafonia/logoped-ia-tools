@@ -5,6 +5,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { createMinifigure, CHARACTER_SKINS } from './characters/MinifigureFactory';
 import { buildCrowd } from './world/Crowd';
@@ -85,6 +86,24 @@ hero.root.position.set(0, 0, 14); hero.root.rotation.y = Math.PI; scene.add(hero
 const camera = new THREE.PerspectiveCamera(46, innerWidth / innerHeight, 0.1, 200);
 camera.position.set(2.6, 4.2, 20); camera.lookAt(0, 2.2, 4);
 
+// Explorar: arrastrar = mirar alrededor · pellizcar/rueda = acercar
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.target.set(0, 2.2, 5);
+controls.minDistance = 4; controls.maxDistance = 34;
+controls.maxPolarAngle = Math.PI / 2.05;
+controls.update();
+
+const hint = document.createElement('div');
+hint.textContent = 'Arrastra para mirar · pellizca para acercar';
+Object.assign(hint.style, {
+  position: 'fixed', left: '0', right: '0', bottom: '14px', textAlign: 'center',
+  color: '#f4e9d2', font: '600 15px system-ui, sans-serif', textShadow: '0 2px 6px #000',
+  pointerEvents: 'none', opacity: '0.9'
+} as CSSStyleDeclaration);
+document.body.appendChild(hint);
+setTimeout(() => { hint.style.transition = 'opacity 1s'; hint.style.opacity = '0'; }, 6000);
+
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.6, 0.7));
@@ -95,6 +114,7 @@ let t = 0;
 function loop(): void {
   requestAnimationFrame(loop);
   t += 0.016; crowd.update(0.016);
+  controls.update();
   composer.render();
   (window as any).__ready = true;
 }
