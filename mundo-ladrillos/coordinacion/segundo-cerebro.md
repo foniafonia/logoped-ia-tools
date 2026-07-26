@@ -114,6 +114,43 @@ esc12 + rematar el camino de la cuerda esc13). ¡Gran salto, gracias!
   ni al **Jordán** (tramo 20–25). Adelante con vuestro hito de la posada; encaja limpio
   tras la escena 16 del 5–10 y no pisa a nadie. 👍
 
+## ▶ PARA LEAD — ITERACIÓN CON TESTER REAL (hijo del usuario) · 0–5 · PRIORIDAD ALTA
+**Reabierto: el usuario está probando el 0–5 con su HIJO (tester real) y quiere que
+trabajes esto mientras él sigue testeando otro hilo.** Hallazgos y fixes (por impacto):
+
+**P0 — El final del 0–5 CORTA de golpe y se queda colgado.**
+- La caravana arranca **por reloj (beat t=228)** aunque el niño no haya acabado los
+  mini-juegos → *"de repente se va con la caravana"* y **se salta el resto**. Al final de
+  seguir la caravana, **el niño se queda colgado** (sin cierre). Y suena un audio
+  *"…vamos a cambiarnos"* que **es del 5–10 (espías, esc.12), NO del 0–5.**
+- **FIX:** que la caravana **ESPERE** a que estén hechos los mini-juegos (gate en `done`,
+  no reloj) **y AVISE** antes de arrancar (no secuestrar). **Rematar el final** con cierre
+  limpio y **ENLAZARLO con el nivel del RÍO (arranque del 5–10)** — transición
+  campamento → caravana → río Jordán. **Quitar el audio "vamos a cambiarnos" del final del 0–5.**
+
+**P1 — Ovejas: rediseño a "cuerda-imán" tipo Minecraft (idea del usuario).**
+- El arreo actual (la oveja huye, exige ángulo exacto) **estresa al niño** (lo logró, pero
+  a duras penas). **Cámbialo:** **recoges las cuerdas → con esas cuerdas ATRAPAS las
+  ovejas** (imán/correa tipo *lead* de Minecraft): te acercas con la cuerda, la oveja se
+  engancha y **te sigue al redil**, la sueltas → ⭐. Conecta cuerdas+ovejas con sentido.
+  **Sin violencia:** correa simpática, la oveja te sigue contenta.
+
+**P1 — Cuerdas: no se encuentran (solo 1 de 3).** Están repartidas y tras las tiendas, y
+solo tienen una flechita pequeña. **FIX:** guía VISIBLE sobre cada cuerda no recogida
+(haz + flecha grande / tu helper de guía `734a713`), que desaparezca al cogerla.
+
+**P1 — Cámara: no vuelve sola.** Al girarla para buscar, se queda torcida. **FIX:**
+auto-recentrar el `yaw` (lerp suave a "detrás del jugador") al soltar / al moverse.
+
+**Palabras del usuario (literal):** *"el final es un poco raro; [el niño] dice que está
+guay pero sería guay que se junte con el nivel del río. Al final de la caravana se queda
+colgado."* · *"las ovejas deberían ser cazadas con cuerdas tipo imán, capturarlas y
+llevarlas al redil, tipo Minecraft."* · *"que la cámara vuelva a una visión más adecuada
+aunque la mueva para buscar algo."* · *"solo se encuentra una cuerda, es difícil encontrar
+las dos restantes."*
+
+**Iterad y subid captura. El usuario sigue testeando en paralelo → llegarán más hallazgos.**
+
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
 **Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
 (lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
