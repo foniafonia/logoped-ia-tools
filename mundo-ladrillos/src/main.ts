@@ -104,7 +104,7 @@ const life = new CampLife(scene, plastic, dust);           // aldeanos, animales
 const journey = new Journey(scene, plastic);               // río Jordán + Jericó + caravana (ocultos)
 const studio = new StudioIntro(scene, plastic);            // plató de cine (cinemática de apertura)
 let introActiva = false;                                   // true durante la intro del estudio
-(window as any).__life = life; (window as any).__journey = journey;
+(window as any).__life = life; (window as any).__journey = journey; (window as any).__camp = camp;
 
 // === JUGADOR: un joven levita del campamento ===
 const villager = createMinifigure(plastic, VILLAGER_SKIN);
@@ -135,6 +135,28 @@ const setTarget = (t: { x: number; z: number } | null): void => {
   target = t;
   if (t) { beacon.position.set(t.x, 0, t.z); beacon.visible = true; } else beacon.visible = false;
 };
+
+// === Botón "🪢 TIRA" para enganchar ovejas (petición del peque: que ÉL pulse para
+// tirar de la cuerda y coger la oveja, en vez de que se pegue sola al acercarse) ===
+// Se crea siempre (vale con dedo o con ratón); solo se muestra durante el arreo.
+let grabReq = false;                          // se activa al pulsar; se consume cada frame
+const grabBtn = document.createElement('button');
+grabBtn.textContent = '🪢';
+grabBtn.style.cssText = `position:fixed;right:26px;bottom:186px;width:88px;height:88px;
+  border-radius:50%;background:rgba(120,80,40,.55);border:3px solid rgba(255,255,255,.4);
+  font-size:36px;z-index:21;touch-action:none;box-shadow:0 3px 12px rgba(0,0,0,.45);
+  display:none;transition:transform .08s,background .15s,box-shadow .15s;`;
+const grabLabel = document.createElement('div');
+grabLabel.textContent = 'TIRA';
+grabLabel.style.cssText = `position:fixed;right:26px;bottom:166px;width:88px;text-align:center;
+  font:800 13px system-ui,sans-serif;color:#fff;text-shadow:0 1px 3px #000;z-index:21;
+  display:none;pointer-events:none;letter-spacing:.05em;`;
+const pressGrab = (): void => { grabReq = true; grabBtn.style.transform = 'scale(.86)'; };
+grabBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); pressGrab(); });
+grabBtn.addEventListener('pointerup', () => { grabBtn.style.transform = 'scale(1)'; });
+document.body.appendChild(grabBtn); document.body.appendChild(grabLabel);
+addEventListener('keydown', (e) => { if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'KeyG') grabReq = true; });
+(window as any).__grab = pressGrab;   // para el playtester sintético
 
 // === Zona de carga del camello (solo en el mini-juego de bultos) ===
 // Un tapiz dorado en el suelo junto al camello + flecha que bota: deja CLARÍSIMO
@@ -477,7 +499,19 @@ function animate(now: number): void {
     while (d < -Math.PI) d += Math.PI * 2;
     if (Math.abs(d) < 0.03) { camRecenter = false; } else tpcam.yaw += d * Math.min(1, dt * 4);
   }
-  life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil);
+  life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil, grabReq);
+  // Botón "🪢 TIRA": visible solo mientras se arrean ovejas; se ilumina y late
+  // cuando hay una oveja al alcance (así el peque sabe CUÁNDO pulsar).
+  const arreando = ropesHechas && !done.has('camp');
+  grabBtn.style.display = grabLabel.style.display = arreando ? 'block' : 'none';
+  if (arreando) {
+    const cerca = life.ovejaEnganchable(controller.pos);
+    grabBtn.style.background = cerca ? 'rgba(90,190,90,.92)' : 'rgba(120,80,40,.55)';
+    grabBtn.style.boxShadow = cerca
+      ? `0 0 ${16 + Math.sin(now * 0.012) * 8}px 3px rgba(120,240,120,.85)`
+      : '0 3px 12px rgba(0,0,0,.45)';
+  }
+  grabReq = false;   // consumido este frame
   journey.update(dt, now / 1000);
   dust.update(dt);
   checkTargets();
@@ -488,7 +522,18 @@ function animate(now: number): void {
 
   // Yehoshúa LLAMA con la mano desde el principio (hasta que le saludas) → el peque
   // ve a quién ir entre el gentío; al saludarle, saludo más enérgico un ratito.
-  if (waveT > 0) { waveT -= dt; camp.yehoshua.armR.rotation.x = -2.2 + Math.sin(now * 0.02) * 0.5; }
+  // Y cuando arranca la caravana, BAJA de la tarima y ENCABEZA la marcha hacia el río
+  // (el peque notó que "no iba con nosotros": es el líder, así que ahora guía él).
+  if (caravanaEnMarcha) {
+    const y = camp.yehoshua.root;
+    y.position.y += (0 - y.position.y) * Math.min(1, dt * 3);              // baja de la tarima
+    const lead = Math.max(Journey.ORILLA_Z + 4, controller.pos.z - 12);   // 12 por delante, hacia el río
+    const dz = lead - y.position.z;
+    const andando = Math.abs(dz) > 0.35;
+    if (andando) y.position.z += Math.sign(dz) * Math.min(Math.abs(dz), 7 * dt);
+    y.rotation.y += (0 - y.rotation.y) * Math.min(1, dt * 4);             // mira al río (norte, −z)
+    camp.yehoshua.update(dt, andando, 1);                                 // braceo/piernas al andar
+  } else if (waveT > 0) { waveT -= dt; camp.yehoshua.armR.rotation.x = -2.2 + Math.sin(now * 0.02) * 0.5; }
   else if (director.beatIndex >= 3 && !done.has('yeh')) { camp.yehoshua.armR.rotation.x = -2.4 + Math.sin(now * 0.006) * 0.45; }
 
   // baliza
@@ -523,7 +568,7 @@ function animate(now: number): void {
       : '👋 Ve a saludar a Yehoshúa');
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
-      director.logro('¡Cuerdas recogidas! Acércate a las ovejas para engancharlas y llévalas al redil 🐑');
+      director.logro('¡Cuerdas recogidas! Acércate a una oveja y pulsa 🪢 para tirar de la cuerda 🐑');
       life.activarOvejas(); herdStart = now; setTarget(camp.ropes.length ? life.redil : null);
     }
   }
@@ -534,7 +579,7 @@ function animate(now: number): void {
     const queda = Math.max(0, HERD_LIMIT - elapsed);
     if (director.beatIndex === 4) {
       const reloj = queda > 0 ? `⏱ ${Math.ceil(queda)}s` : '⏱ ¡tú puedes!';
-      director.setObjetivo(`🐑 Engancha las ovejas con la cuerda y llévalas al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
+      director.setObjetivo(`🐑 Acércate a una oveja y pulsa 🪢 para engancharla; llévala al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
     }
     if (enRedil >= life.ovejasObjetivo) {
       done.add('camp'); audio.sfxSuccess(); director.star();
@@ -596,8 +641,8 @@ function animate(now: number): void {
       journey.arrancarCaravana();
       camp.bultos.forEach((b) => { b.visible = false; });
       loadPad.visible = false;
-      director.logro('¡La caravana se pone en marcha! ¡Síguela hacia el río! 🐫');
-      director.setObjetivo('🐫 Sigue a la caravana');
+      director.logro('¡Yehoshúa encabeza la marcha! ¡Síguele hacia el río! 🐫');
+      director.setObjetivo('🐫 Sigue a Yehoshúa hacia el río');
       setTarget({ x: 0, z: Journey.MARCHA_Z });
     }
   }
@@ -682,14 +727,15 @@ requestAnimationFrame(animate);
     if (c) goal = c;
   } else if (ropesHechas && !done.has('camp')) {
     fase = 'enganchar-ovejas';
-    // cuerda-imán: si queda alguna SIN enganchar → ve a por ella; si ya la llevas → al redil
+    // ahora hay que PULSAR 🪢 al lado de una oveja libre; si ya la llevas → al redil
     const libres = life._targets.filter((s) => !s.penned && !s.leashed);
     if (libres.length) { const c = nearest(libres); if (c) goal = c; }
     else goal = life.redil;
   }
+  const grabNow = ropesHechas && !done.has('camp') && life.ovejaEnganchable(p);
   return {
     beat: director.beatIndex, t: Math.round(director.tiempo),
-    fase, pos: [Math.round(p.x), Math.round(p.z)],
+    fase, pos: [Math.round(p.x), Math.round(p.z)], grabNow,
     goal: goal ? [Math.round(goal.x), Math.round(goal.z)] : null,
     stars: director.starCount, done: [...done],
     pan: [camp.panes.filter((m) => m.userData.caught).length, camp.panes.length],

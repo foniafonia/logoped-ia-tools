@@ -57,6 +57,9 @@ interface Nino { fig: Minifigure; prog: number; }
 interface Wander { fig: Minifigure; tx: number; tz: number; speed: number; ph: number; pause: number; }
 interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
 interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; leashed?: boolean; leash?: THREE.Line; }
+
+// alcance (al cuadrado) para enganchar una oveja al pulsar el botón 🪢
+const GRAB_R2 = 16;   // ~4 m: generoso, que el peque no tenga que clavarse encima
 type Oficio = 'moler' | 'amasar' | 'alfarero' | 'sentado';
 interface Faena { fig: Minifigure; tipo: Oficio; ph: number; spin?: THREE.Object3D; }
 
@@ -281,7 +284,18 @@ export class CampLife {
     return this.sheep.filter((s) => s.target).map((s) => ({ x: s.g.position.x, z: s.g.position.z, penned: !!s.penned, leashed: !!s.leashed }));
   }
 
-  update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void, onPenned?: () => void): void {
+  /** ¿Hay alguna oveja libre al alcance para engancharla? (para que la UI avise/ilumine el botón). */
+  ovejaEnganchable(playerPos: THREE.Vector3): boolean {
+    if (!this.penActive) return false;
+    for (const s of this.sheep) {
+      if (!s.target || s.penned || s.leashed) continue;
+      const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
+      if (dx * dx + dz * dz < GRAB_R2) return true;
+    }
+    return false;
+  }
+
+  update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void, onPenned?: () => void, grab = false): void {
     for (const s of this.sheep) {
       if (s.penned) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.15; continue; }
       // pista verde que bota sobre la oveja objetivo (guía al peque)
@@ -311,7 +325,9 @@ export class CampLife {
         } else if (playerPos) {
           s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.08;   // idle tranquilo (no huye)
           const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
-          if (dx * dx + dz * dz < 9) {   // ¡ENGANCHADA! (te acercas y la coges con la cuerda)
+          // Ahora NO se engancha sola: el peque tiene que PULSAR el botón "🪢 tira"
+          // cuando está al lado (así se ve que él tira de la cuerda y la coge).
+          if (grab && dx * dx + dz * dz < GRAB_R2) {   // ¡ENGANCHADA! (tiró de la cuerda)
             s.leashed = true;
             if (s.leash) s.leash.visible = true;
             if (s.hint) s.hint.visible = false;
