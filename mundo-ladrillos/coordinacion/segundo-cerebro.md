@@ -374,3 +374,66 @@ arte/personajes/caras/fondos por tramo. Primer aviso llega con el reporte del 0�
   Evaluado por el segundo cerebro el 26-jul; a decisión del usuario si algún día hacemos promo.
 
 _Actualizo este archivo según avanzo. — Segundo Cerebro_
+
+---
+---
+
+# 🌙 TURNO DE NOCHE — ORDEN A TODOS LOS HILOS (26-jul, noche) · autorizado por el usuario
+
+> El usuario se va a dormir. **Trabajamos toda la noche sin su supervisión.** Objetivo:
+> que por la mañana se encuentre **avance real y bonito**, y **cero cosas rotas**.
+> El usuario ha dado el OK expreso para lanzar estas órdenes.
+
+## 🔴 REGLA Nº1 DE LA NOCHE (para TODOS, palabras del usuario)
+**Ningún escenario desolado ni vacío.** TODO relleno de cosas, con **sentido y buen gusto**,
+cada espacio con lo suyo — nada de suelos infinitos vacíos ni fondos pelados.
+Y **copiad / emulad / recoged piezas de los demás hilos y del MUÑEQUERO** para enriquecer
+TODAS las escenas: si otro hilo ya hizo un puesto de mercado, un brasero, una alfombra kilim,
+un pozo, una multitud "lite", un farol… **se reutiliza** (no se reinventa). Mirad las ramas
+de los demás (`git fetch --all`, `git show <rama>:<ruta>`) y traeos lo bueno a vuestras escenas.
+
+## 🟢 REGLAS DE SEGURIDAD (para NO romper nada de noche)
+1. **Solo TU rama y TU carpeta** `src/scenes/minXX/`. **No toques archivos compartidos**
+   (`main.ts`, `story/`, `camera/`, `core/`) — los integra el LEAD. (El LEAD sí puede tocarlos.)
+2. **Antes de subir NADA: `cd mundo-ladrillos && npx vite build`.** Si no compila,
+   **arréglalo o revierte — NO subas roto.** Roto = noche perdida.
+3. **Cada ~30 min: commit + push + UNA línea de estado con la hora** en tu archivo
+   `coordinacion/<tu-nombre>.md` (así el usuario ve "señales de vida cada media hora").
+4. **Nada de refactors arriesgados ni decisiones de dirección.** Si dudas si algo es
+   "de dirección" → **NO lo hagas**, deja la duda en el board y sigue con lo seguro.
+5. **No borres trabajo de otros. No fuerces push sobre ramas ajenas.**
+
+## ▶ PARA LEAD (0–5 · juego principal · `pelicula-videojuego-primera-persona`)
+1. **`core/PreciousRender.ts` → pieza COMPARTIDA canónica** (lo debes; desbloquea a todos).
+2. **Helper de DIÁLOGO compartido** (bloquea las conversaciones de 5–10 y de Rahab en 10–15).
+3. Pulido 0–5: **Yehoshúa más visible** (estandarte/flecha/gesto de saludo), **menos neblina**
+   al arrancar la caravana, **camello** menos ida-y-vuelta (cargar 2 bultos de golpe).
+4. Regla Nº1: repasa que ningún rincón del campamento quede pelado.
+
+## ▶ PARA 5–10 (`min-05-10-jordan-spies`)
+1. **Regla Nº1 a fondo:** ya amueblaste esc12/14/15/16 — repasa **esc9/10/11/13** y que
+   NINGUNA quede desolada (arenal pelado, orilla vacía → rellena con props con gusto).
+2. Verifica las 8 escenas con tu `capture.mjs` (**0 errores**) cada ciclo.
+3. Precioso ya enchufado ✅ (día nítido / noche con glow). Si alguna diurna se lava, ajusta bloom.
+
+## ▶ PARA 10–15 (`min-10-15-rajav-jordan`)
+1. **Regla Nº1:** posada + escenas de Rahab bien vestidas (ya tienen precioso). Que la posada
+   y las calles no queden vacías — trae braseros/telas/vasijas/gentío de otros hilos.
+2. Cuando el LEAD publique el **helper de DIÁLOGO**, cablea la conversación de Rahab; si aún
+   no está, deja puente local y una nota en el board.
+
+## ▶ PARA 15–20 (`min-15-20-jerico-shofar`)
+1. Sigue el tramo (Hito 2: más escenas con vida tras esc27 cordón / esc28 descuelgue).
+2. **Mantén el listón del 0–5** (precioso, escenario vestido) y la **Regla Nº1**: tejados de
+   Jericó y calles con vida, nada pelado.
+
+## ▶ PARA MUÑEQUERO (`munecos-ifepfa`)
+1. **Arregla el bloom por defecto del helper** (preset "exterior día" / subir threshold) — el
+   5–10 avisó de que **lava las escenas diurnas**. Es lo que más ayuda a todos.
+2. **Variedad de expresiones** (feedback repetido: se parecen entre sí).
+3. **Multitud "lite" variada** para escenas de noche (gentío barato, instanciado) — es justo lo
+   que los demás necesitan para cumplir la Regla Nº1 sin matar el móvil.
+
+_(INTEGRADOR sigue en standby por decisión del usuario — no montar todavía.)_
+
+**— Segundo Cerebro (turno de noche)**
