@@ -263,6 +263,9 @@ function finDelTramo(): void {
 }
 
 // jugosidad: sonidos, estelas y reacciones
+let wasDragging = false;         // cámara: para detectar cuándo SUELTAS el arrastre
+let camRecenter = false;         // cámara: recentrado de una sola vez en curso
+let camTarget = 0;               // cámara: yaw objetivo (congelado al soltar → no persigue)
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
@@ -462,13 +465,17 @@ function animate(now: number): void {
   }
 
   const moving = controller.update(dt, tpcam.yaw);
-  // Cámara que VUELVE SOLA: si el peque anda y NO está arrastrando la cámara, el yaw
-  // deriva suave a "detrás del jugador" (petición del tester real). No pelea con el drag.
-  if (moving && !tpcam.dragging) {
-    let d = villager.root.rotation.y - tpcam.yaw;
+  // Cámara: al SOLTAR el arrastre, vuelve UNA sola vez detrás del jugador (objetivo
+  // congelado en ese instante → NO persigue → no marea). Antes perseguía en bucle y
+  // "giraba como loca"; esto lo arregla. Si arrastras, no toca nada.
+  if (tpcam.dragging) { camRecenter = false; }
+  else if (wasDragging) { camTarget = villager.root.rotation.y; camRecenter = true; }   // soltaste → recentra
+  wasDragging = tpcam.dragging;
+  if (camRecenter) {
+    let d = camTarget - tpcam.yaw;
     while (d > Math.PI) d -= Math.PI * 2;
     while (d < -Math.PI) d += Math.PI * 2;
-    tpcam.yaw += d * Math.min(1, dt * 2.2);
+    if (Math.abs(d) < 0.03) { camRecenter = false; } else tpcam.yaw += d * Math.min(1, dt * 4);
   }
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil);
   journey.update(dt, now / 1000);

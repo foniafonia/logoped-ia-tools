@@ -178,11 +178,16 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const d = new THREE.Object3D();
   const col = new THREE.Color();
   let placed = 0;
+  const TAB_CLEAR = { x: 26, z: 22, r: 17 };   // plaza despejada alrededor del Mishkán (que no lo tapen)
   for (let i = 0; i < N; i++) {
-    // repartidas por el campamento, dejando libre el pasillo central del jugador
-    let x = (Math.random() - 0.5) * 82;
-    if (Math.abs(x) < 9) x += Math.sign(x || 1) * 9;
-    const z = 12 + Math.random() * 82;
+    // repartidas por el campamento, dejando libre el pasillo central del jugador Y el Mishkán
+    let x = 0, z = 0;
+    for (let tryI = 0; tryI < 12; tryI++) {
+      x = (Math.random() - 0.5) * 82;
+      if (Math.abs(x) < 9) x += Math.sign(x || 1) * 9;
+      z = 12 + Math.random() * 82;
+      if (Math.hypot(x - TAB_CLEAR.x, z - TAB_CLEAR.z) > TAB_CLEAR.r) break;   // sitio válido (lejos del Mishkán)
+    }
     const s = 0.8 + Math.random() * 0.7;
     d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);
     d.updateMatrix();
@@ -365,6 +370,7 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const roof = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 3.8), gold);
   roof.position.set(0, 4.1, -1.5); roof.castShadow = true; tab.add(roof);
   tab.position.set(26, 0, 22); tab.rotation.y = -0.35;
+  tab.scale.setScalar(1.7);   // MUCHO más grande: el Mishkán es precioso, que luzca y no lo tapen las tiendas
   group.add(tab);
 
   // --- Bultos de carga para la caravana (mini-juego; ocultos hasta su beat) ---
