@@ -101,6 +101,12 @@ export const escena09: Min05Scene = {
     const gems = new Collectibles(plastic, ctx.sound, [{ x: -6, z: -8 }, { x: 2, z: -6 }, { x: -2, z: 0 }, { x: 8, z: -2 }, { x: 0, z: -12 }]);
     group.add(gems.group);
 
+    // === REGLA Nº1: vestir el ARENAL de la orilla (bordes y frente, sin tocar el agua ni el promontorio) ===
+    for (const [rx, rz, s] of [[-32, -16, 1.2], [33, -13, 1.0], [31, 2, 0.9], [-15, -19, 0.8], [17, -18, 0.9], [24, 8, 0.7]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.5 * s, 1.3 * s); }
+    for (const [mx, mz] of [[28, -4], [20, -12], [-6, -18], [10, -16], [30, 6]] as const) { for (let k = 0; k < 3; k++) group.add(brickBox(plastic, 0.7, 0.6 + (k % 2) * 0.4, 0.7, k % 2 ? 0x6f7a3a : 0x566a2e, mx + (k - 1) * 0.7, 0.35, mz + (k % 2))); }
+    for (const [px, pz] of [[34, -10], [31, -13], [-34, -8]] as const) group.add(buildPalm(plastic, px, pz, 8 + ((px + pz + 60) % 3)));
+    for (const [bx, bz] of [[12, 7], [-9, 8]] as const) { const br = buildBarrel(plastic); br.position.set(bx, 0, bz); group.add(br); }
+
     ctx.scene.add(group);
 
     const start = new THREE.Vector2(escena09.spawn.x, escena09.spawn.z);

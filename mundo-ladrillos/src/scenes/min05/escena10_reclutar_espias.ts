@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
-import { buildTent, buildPalm, studdedPlate, brickBox, buildBarrel } from './props/BrickProps';
+import { buildTent, buildPalm, studdedPlate, brickBox, buildBarrel, buildRock } from './props/BrickProps';
 import { buildBanner } from './props/NightAmbience';
 import { Npc } from './props/Npc';
 import { Wanderers } from './props/Wanderers';
@@ -74,6 +74,23 @@ export const escena10: Min05Scene = {
     // alfombrilla de color junto a la hoguera
     const rug2 = buildRug(5, 3.5, KILIM_PALS[1] ?? KILIM_PALS[0]); rug2.position.set(-14, 0.03, 1); group.add(rug2);
 
+    // === REGLA Nº1: VESTIR el ARENAL exterior (el anillo del desierto no puede quedar pelado) ===
+    // rocas dispersas por el desierto (con colisión)
+    for (const [rx, rz, s] of [[-28, -18, 1.3], [27, -20, 1.0], [-30, 14, 1.1], [29, 20, 1.2], [-24, 24, 0.9], [22, 27, 0.8], [-8, -22, 0.7], [11, -24, 0.9]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.5 * s, 1.3 * s); }
+    // matojos secos del desierto: grupitos bajos verdosos (sin luz, sin colisión)
+    for (const [mx, mz] of [[-26, -8], [26, -6], [-16, 22], [16, 24], [4, -20], [-6, 26], [24, 12]] as const) {
+      for (let k = 0; k < 3; k++) group.add(brickBox(plastic, 0.7, 0.6 + (k % 2) * 0.4, 0.7, k % 2 ? 0x6f7a3a : 0x566a2e, mx + (k - 1) * 0.7, 0.35, mz + (k % 2)));
+    }
+    // palmeras en grupos (oasis) por las esquinas
+    for (const [px, pz] of [[-29, -6], [-27, -10], [28, 8], [30, 12], [-22, 26], [24, -14]] as const) group.add(buildPalm(plastic, px, pz, 8 + ((px + pz + 60) % 3)));
+    // tiendas lejanas al fondo (el campamento continúa) + corral de estacas
+    const t4 = buildTent(plastic, BrickPalette.WARM_SAND, 7, 6); t4.position.set(-10, 0, 24); t4.rotation.y = Math.PI * 0.9; group.add(t4); ctx.addObstacle(-10, 24, 3.5, 2.5);
+    const t5 = buildTent(plastic, BrickPalette.BROWN, 6, 6); t5.position.set(13, 0, 26); t5.rotation.y = -Math.PI * 0.8; group.add(t5); ctx.addObstacle(13, 26, 3, 2.5);
+    for (let a = 0; a < 10; a++) { const ang = (a / 10) * Math.PI * 2; group.add(brickBox(plastic, 0.25, 1.4, 0.25, BrickPalette.DARK_BROWN, 24 + Math.cos(ang) * 3.4, 0.7, 20 + Math.sin(ang) * 3.4)); } // corral
+    // más aldeanos repartidos al fondo (gentío lite, instanciado)
+    const life2 = new Wanderers(plastic, [ESPIA1_CAMP, ESPIA2_CAMP], 3, { minX: -20, maxX: -6, minZ: 16, maxZ: 26 });
+    group.add(life2.group);
+
     for (let i = 0; i < 5; i++) { const bx = 16 + (i % 2) * 2.2, bz = 2 + i * 2.4; group.add(brickBox(plastic, 2, 2, 2, i % 2 ? BrickPalette.BROWN : BrickPalette.DARK_SAND, bx, 1, bz)); ctx.addObstacle(bx, bz, 1, 1); }
     for (let x = -30; x <= 30; x += 2.4) group.add(brickBox(plastic, 0.5, 3, 0.5, BrickPalette.DARK_BROWN, x, 1.5, 26));
     [[-26, 10], [26, 12]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 9)); ctx.addObstacle(x, z, 1, 1); });
@@ -102,7 +119,7 @@ export const escena10: Min05Scene = {
         if (!greetB && Math.hypot(player.x - 4, player.z - 2) < 3.5) { greetB = true; spyB.lookAt(player.x, player.z); ctx.sound.pickup(); }
         if (greetA) spyA.lookAt(player.x, player.z);
         if (greetB) spyB.lookAt(player.x, player.z);
-        spyA.update(dt); spyB.update(dt); life.update(dt); gems.update(dt, t, player);
+        spyA.update(dt); spyB.update(dt); life.update(dt); life2.update(dt); gems.update(dt, t, player);
       },
       status() {
         const n = (greetA ? 1 : 0) + (greetB ? 1 : 0);
