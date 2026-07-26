@@ -102,11 +102,13 @@ export const escena14: Min05Scene = {
       hud() {
         const p = ctx.getPlayer();
         if (!triggered) {
+          // objetivo dinámico FASE 1: guía a la MARCA de la treta (no a la puerta)
           const near = Math.hypot(p.x - 0, p.z - (-4)) < 3.2;
-          return { progress: 0, prompt: near ? 'Pulsa E: «¡un avión!»' : undefined, gems: { got: gems.got, total: gems.total } };
+          return { progress: 0, goal: [0, -4] as [number, number], prompt: near ? 'Pulsa E: «¡un avión!»' : undefined, gems: { got: gems.got, total: gems.total } };
         }
+        // objetivo dinámico FASE 2: ahora sí, guía a la PUERTA
         const prog = THREE.MathUtils.clamp((p.z - (-4)) / (GOAL_Z + 4), 0, 1);
-        return { progress: prog, prompt: distr.active ? '🏃 ¡AHORA! ¡Cuélate por la puerta!' : undefined, gems: { got: gems.got, total: gems.total } };
+        return { progress: prog, goal: [0, GOAL_Z + 2] as [number, number], prompt: distr.active ? '🏃 ¡AHORA! ¡Cuélate por la puerta!' : undefined, gems: { got: gems.got, total: gems.total } };
       },
       isDone() { return doneFlag; }
     };
