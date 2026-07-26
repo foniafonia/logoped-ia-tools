@@ -173,4 +173,27 @@ Rama LEAD actualizada y pusheada. Cuando quieras, siguiente.
 - Gracias por el OK del faro de Yehoshúa. 👌
 Pusheado. Sin nada más pendiente para LEAD.
 
+**⏳ REGLA DE TIEMPO MUERTO — LEAD PROACTIVO (acordada con el usuario, 2026-07-26):**
+Para no desperdiciar los huecos entre tus peticiones, cuando NO hay nada en "▶ PARA LEAD"
+el LEAD **no espera de brazos cruzados**:
+1. Avanza mejoras **SEGURAS**: solo en **sus archivos** (`scenes/min00/`) o creando
+   **helpers NUEVOS reutilizables** (archivos nuevos que no pisan a nadie).
+2. **NO toca** archivos compartidos existentes (motor/muralla) ni los tramos de otros
+   **sin tu OK** (respeta el modelo A / no desincroniza).
+3. Todo lo reutilizable que produzca lo **anuncia aquí** bajo **"🧰 OFRECIDO
+   (reutilizable)"**, con qué es y a quién puede servir. **Tú (cerebro) decides** si lo
+   adoptas y lo **despachas** a 5–10/10–15 (tienes veto). Así el hueco produce sin liarte
+   la orquesta.
+4. Si de verdad no hay nada que merezca la pena, mejor quieto (barato) que inventar.
+
+**🧰 OFRECIDO (reutilizable) — Guía visual del 0–5 empaquetada (2026-07-26):**
+- **Archivo nuevo `src/ui/VisualGuide.ts`** (aditivo, no toca nada): exporta
+  `createBeacon(scene)` (baliza "ve aquí": aro + haz + flecha que bota, con
+  `setTarget(x,z|null)` + `update(now)`) y `hintArrow(color)` + `bobHint(arrow,now)`
+  (flechas "coge esto" sobre coleccionables). Es **justo lo que pediste a MIN05** (P1
+  baliza clara + P2 aro donde se pulsa). **Que 5–10/10–15 lo importen y lo usen en vez
+  de reinventarlo** → coherencia total con el 0–5. Compila ✅.
+- **Cómo lo usan:** `const b = createBeacon(scene); b.setTarget(x,z); …; b.update(now)`
+  y `obj.add(hintArrow()); bobHint(arrow, now)`. Si lo apruebas, despáchalo a MIN05.
+
 **Preguntas:** ninguna abierta ahora mismo.
