@@ -39,6 +39,7 @@ export interface MinifigureSkin {
   mustache?: number;          // bigote suelto (jefe de guardia)
 
   emotion?: Emotion;          // expresión de las cejas (por defecto 'happy')
+  greeting?: boolean;         // gesto de saludo: brazo derecho levantado (p.ej. Yehoshúa)
   glasses?: number;           // montura de gafas cuadradas (rabino)
 
   straps?: number;            // correas tácticas del chaleco (espía ninja)
@@ -581,8 +582,10 @@ export class Minifigure {
     // --- Brazos cortos (pivote en el hombro, y ~3.15) ---
     this.armL.position.set(-0.82, 3.15, 0.05);
     this.armR.position.set(0.82, 3.15, 0.05);
-    this.armL.rotation.z = 0.18;
     this.armR.rotation.z = -0.18;
+    // Gesto de saludo: brazo IZQUIERDO en alto y hacia fuera (el derecho suele llevar cayado)
+    if (s.greeting) { this.armL.rotation.z = 2.55; this.armL.rotation.x = 0.35; }
+    else { this.armL.rotation.z = 0.18; }
     this.armL.add(this.box(0.42, 1.05, 0.52, s.arms, 0, -0.5, 0.08));
     this.armR.add(this.box(0.42, 1.05, 0.52, s.arms, 0, -0.5, 0.08));
     const handGeo = new THREE.TorusGeometry(0.19, 0.1, 10, 18);
