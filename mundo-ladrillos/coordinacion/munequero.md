@@ -14,6 +14,13 @@
   existe (Market/Tent/Scenery/StreetProps). Soltad en 1 llamada, p.ej.
   `scene.add(buildPalm(plastic,{x,z,height}))`. Verificado build + captura, 0 errores.
   Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/world/Clutter.ts`
+- **23:37 UTC** — 🎨 HIGGSFIELD (doble tarea): **texturas tileables reales** para matar
+  suelos/muros planos (Regla Nº1). `assets/texSand.ts` (arena, md5 4831c0ce) +
+  `assets/texWall.ts` (sillería, md5 36add388) + helper `materials/tiling.ts`
+  (`tiledTexture(dataUri, repeat)`). USO en 1 línea:
+  `new THREE.MeshStandardMaterial({ map: tiledTexture(texSand, 14), roughness:0.98 })`.
+  Verificado build + captura (suelo arena + muro sillería) 0 errores. Créditos: 93.6.
+  Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/texSand.ts mundo-ladrillos/src/assets/texWall.ts mundo-ladrillos/src/materials/tiling.ts`
 
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · CONTROLES + HUD EXTRAS
 Petición del usuario: botones para jugar y controles (joystick móvil, botón "E").
