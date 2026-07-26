@@ -178,15 +178,19 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const d = new THREE.Object3D();
   const col = new THREE.Color();
   let placed = 0;
-  const TAB_CLEAR = { x: 26, z: 22, r: 17 };   // plaza despejada alrededor del Mishkán (que no lo tapen)
+  const TAB_CLEAR = { x: 26, z: 22, r: 17 };    // plaza despejada alrededor del Mishkán (que no lo tapen)
+  const REDIL_CLEAR = { x: -30, z: 44, r: 12 }; // corral de ovejas despejado (que no lo aplasten las cabañas)
   for (let i = 0; i < N; i++) {
-    // repartidas por el campamento, dejando libre el pasillo central del jugador Y el Mishkán
+    // repartidas por el campamento, dejando libre el pasillo central del jugador,
+    // el Mishkán Y el redil de las ovejas
     let x = 0, z = 0;
-    for (let tryI = 0; tryI < 12; tryI++) {
+    for (let tryI = 0; tryI < 16; tryI++) {
       x = (Math.random() - 0.5) * 82;
       if (Math.abs(x) < 9) x += Math.sign(x || 1) * 9;
       z = 12 + Math.random() * 82;
-      if (Math.hypot(x - TAB_CLEAR.x, z - TAB_CLEAR.z) > TAB_CLEAR.r) break;   // sitio válido (lejos del Mishkán)
+      const lejosTab = Math.hypot(x - TAB_CLEAR.x, z - TAB_CLEAR.z) > TAB_CLEAR.r;
+      const lejosRedil = Math.hypot(x - REDIL_CLEAR.x, z - REDIL_CLEAR.z) > REDIL_CLEAR.r;
+      if (lejosTab && lejosRedil) break;   // sitio válido (lejos del Mishkán y del redil)
     }
     const s = 0.8 + Math.random() * 0.7;
     d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);

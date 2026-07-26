@@ -147,7 +147,7 @@ grabBtn.style.cssText = `position:fixed;right:26px;bottom:186px;width:88px;heigh
   font-size:36px;z-index:21;touch-action:none;box-shadow:0 3px 12px rgba(0,0,0,.45);
   display:none;transition:transform .08s,background .15s,box-shadow .15s;`;
 const grabLabel = document.createElement('div');
-grabLabel.textContent = 'TIRA';
+grabLabel.textContent = 'TIRA (E)';
 grabLabel.style.cssText = `position:fixed;right:26px;bottom:166px;width:88px;text-align:center;
   font:800 13px system-ui,sans-serif;color:#fff;text-shadow:0 1px 3px #000;z-index:21;
   display:none;pointer-events:none;letter-spacing:.05em;`;
@@ -327,7 +327,7 @@ function lanzarPan(): void {
 // mini-juego "carga la caravana" — VERBO REAL: coge un bulto y LLÉVALO al camello.
 function bultosEntregados(): number { return entregados.size; }
 function actualizarObjBultos(): void {
-  if (director.beatIndex !== 6) return;
+  if (director.beatIndex < 6) return;   // sigue mostrándose aunque el reloj pase al beat 7
   const got = bultosEntregados();
   director.setObjetivo(cargandoBulto
     ? `🐫 Llévalo al tapiz dorado, junto al camello (${got}/${camp.bultos.length})`
@@ -648,7 +648,9 @@ function animate(now: number): void {
   }
 
   // mini-juego: CARGAR LA CARAVANA (verbo real: coge un bulto y llévalo al camello)
-  if (bultosActivos && !done.has('bultos') && director.beatIndex === 6) {
+  // El reloj del audio puede pasar al beat 7 mientras el peque sigue cargando: por eso
+  // >= 6 (antes === 6 y el bulto dejaba de poder cogerse). La caravana igualmente espera.
+  if (bultosActivos && !done.has('bultos') && director.beatIndex >= 6) {
     if (cargandoBulto) {
       // llevas un bulto: va en brazos (sobre el jugador) hasta que lo sueltas en el tapiz
       const b = cargandoBulto;
