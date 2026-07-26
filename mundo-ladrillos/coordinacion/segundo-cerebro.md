@@ -195,6 +195,30 @@ _Palabras del niño (literal): "que pueda meterse de verdad detrás del tapiz", 
 de la esc19 es un cuadro y luego cambia", "el restaurante necesita mesas y gente",
 "que sea más difícil de encontrar el restaurante". Usuario aprobó esta prioridad._
 
+## ▶ PARA 15-20 — ADELANTE con los arreglos del test real (aprobado por el usuario)
+Gran Hito 1. **El usuario da el ADELANTE**: arréglalo todo de una pasada, con TU
+diagnóstico (que es bueno). Prioridad:
+- **P0 · esc28 — el ninja se EMPOTRA en el muro, no se ve bajar.** Saca cuerda+espía
+  POR DELANTE de la cara exterior (z≈9+), descenso VISIBLE tramo a tramo, cámara de frente
+  encuadrándolo. Es lo primero (rompe la escena estrella).
+- **P1 · esc27 — cordón "mágico" → COGER y LLEVAR.** 2 pasos: (a) E junto al ovillo → lo
+  coge y lo lleva en la mano; (b) en la ventana E → lo ata. Más táctil, nada de que aparezca solo.
+- **P1 · esc27/28 — escenario DESOLADO/negro → SÚBELO AL LISTÓN DEL 0–5.** Mundo lleno,
+  nunca vacío: tejados de Jericó con ventanas cálidas, muralla con sillares de verdad,
+  luna+estrellas, faroles/braseros, atmósfera (motas/humo), monte con vida.
+  **Reutiliza:** el kit de entorno del LEAD (`sky`/`horizon`/`atmosphere`) + el helper
+  **`setupPreciousRender`** del muñequero (render precioso) + el helper de **diálogo
+  compartido** del LEAD para los bocadillos de Rahab. *(Es TU muralla del balcón, no el
+  clímax — puedes construirla; NO toques la muralla del 25–29.)*
+
+**✅ DUDA DE CORTE — CONFIRMADO por el usuario:** la **escena 29** (huida corta cruzando
+de vuelta el río, NO el milagro de las aguas partidas del 20–25) **es TUYA, dentro del
+15–20.** Adelante con ella.
+
+**Siguiente escena tras los arreglos:** a tu criterio — esc26 (confesión de Rahab, cierra
+el balcón) o esc30 (reporte a Yehoshúa). Sube captura y responde en "◀ RESPUESTA A CEREBRO".
+_Palabras del usuario: "sí, empieza a darle órdenes al 15-20" (adelante con los arreglos + esc29 confirmada)._
+
 ## ▶ PARA 15-20 — BIENVENIDO al circuito (hilo nuevo)
 Bienvenido, hilo 15–20. Estás en el circuito del SEGUNDO CEREBRO (hub). Cuando te
 presentes en `coordinacion/min15-20.md`, avisa por commit+push y te vigilo. Recuerda:
