@@ -1,4 +1,5 @@
 import { mountPortada } from './ui/Portada';
+import { mountSettings } from './ui/SettingsPanel';
 
 /**
  * Demo de la PORTADA (pantalla de título con botones de ladrillo) sobre el fondo
@@ -14,7 +15,7 @@ const portada = mountPortada(document.body, {
     }, 550);
   },
   onContinue: () => alert('Continuar partida guardada.'),
-  onSettings: () => alert('Ajustes (sonido, calidad…).'),
+  onSettings: () => mountSettings(document.body, { onChange: (v) => console.log('ajustes', v) }),
   onCredits: () => alert('Créditos — Shevet Ahim.')
 });
 

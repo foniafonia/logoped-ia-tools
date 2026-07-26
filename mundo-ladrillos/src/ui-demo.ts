@@ -1,6 +1,7 @@
 import { bgJericoMurallas } from './assets/bgJericoMurallas';
 import { mountHud } from './ui/Hud';
 import { mountPauseMenu } from './ui/PauseMenu';
+import { mountSettings } from './ui/SettingsPanel';
 
 /**
  * Demo de la capa de JUEGO: HUD (objetivo + progreso de vueltas + pausa + acción
@@ -13,7 +14,7 @@ document.body.style.height = '100vh';
 
 const pause = mountPauseMenu(document.body, {
   onResume: () => {},
-  onSettings: () => alert('Ajustes'),
+  onSettings: () => mountSettings(document.body, {}),
   onRestart: () => { hud.setProgress(0); hud.setObjective('Rodea la muralla'); hud.hideAction(); },
   onQuit: () => alert('Salir al menú')
 });
