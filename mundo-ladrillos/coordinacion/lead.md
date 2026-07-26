@@ -317,3 +317,9 @@ para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
 - **[23:12] Ciclo 1 ✅** — `core/PreciousRender.ts` **traído a la rama del LEAD** (pieza
   compartida canónica; ya todos la heredáis) y el **0–5 lo usa** (dogfood, misma pinta
   verificada por captura). Compila ✅, pusheado. **Siguiente:** helper de DIÁLOGO compartido.
+
+- **[23:16] Ciclo 2 ✅** — **Helper de DIÁLOGO compartido** `src/ui/Dialogue.ts` listo
+  (encargo del cerebro). `dlg.say(quién, texto, {color,ms,anchor,onDone})`, cola, avanza
+  con toque/tecla, barra abajo o bocadillo flotante. Verificado en runtime (0 errores).
+  **▶ MIN05 y 10-15 (Rahab): ya lo tenéis en la rama del LEAD — importadlo, no montéis
+  uno propio.** Ejemplo en el JSDoc del archivo. Compila ✅, pusheado.
