@@ -8,6 +8,7 @@ import { studdedPlate, buildHouse, buildBarrel, brickBox } from '../../min05/pro
 import { buildLantern, buildBrazier } from '../../min05/props/NightAmbience';
 import { BrickPalette } from '../../../materials/BrickPalette';
 import { RugHide, PotHide } from './RugHide';
+import { kilimTexture, KILIM_PALS } from '../../min00/textiles';
 
 /**
  * MONTADORES DE ESCENARIO compartidos por las escenas 17–25, al LISTÓN del tramo
@@ -107,6 +108,43 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
   group.add(brickBox(P, 4.6, 0.3, 0.5, 0x4e341f, 6.5, 7.4, -10.35));   // parteluz
   const moonGlow = new THREE.PointLight(0x9fb6e8, 1.2, 16, 2); moonGlow.position.set(6.5, 7.4, -9); group.add(moonGlow);
 
+  // ---- PAREDES VESTIDAS (feedback del niño: "las paredes están vacías") ----
+  // Apliques con antorcha (brillan con el "precioso"), tapices de kilim en los
+  // laterales y platos de cobre en el fondo alto. Todo DECORATIVO (sin colisión).
+  const wallFlames: THREE.Mesh[] = [];
+  const sconce = (x: number, y: number, z: number, dirX: number, dirZ: number): void => {
+    group.add(brickBox(P, 0.35, 0.5, 0.35, 0x2a1c10, x, y, z));                 // soporte
+    const bx = x + dirX * 0.32, bz = z + dirZ * 0.32;
+    const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.16, 0.34, 10), P.get(0x3a2a18));
+    bowl.position.set(bx, y + 0.32, bz); group.add(bowl);
+    for (let i = 0; i < 3; i++) {
+      const fl = new THREE.Mesh(new THREE.ConeGeometry(0.2 - i * 0.05, 0.8 - i * 0.16, 7), fireMat);
+      fl.position.set(bx, y + 0.62 + i * 0.07, bz); group.add(fl); wallFlames.push(fl);
+    }
+    const gl = new THREE.PointLight(0xffa64d, 2.0, 11, 2); gl.position.set(bx + dirX * 0.3, y + 0.6, bz + dirZ * 0.3); group.add(gl);
+  };
+  sconce(-12.2, 8.2, 1, 1, 0); sconce(12.2, 8.2, 1, -1, 0);                     // paredes laterales
+
+  const sideKilim = (x: number, z: number, faceX: number, pal: number): void => {
+    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 5.2, 8), P.get(BrickPalette.DARK_BROWN));
+    bar.position.set(x, 9.4, z); bar.rotation.x = Math.PI / 2; group.add(bar);
+    const cloth = new THREE.Mesh(
+      new THREE.PlaneGeometry(4.6, 6.2),
+      new THREE.MeshStandardMaterial({ map: kilimTexture(KILIM_PALS[pal % KILIM_PALS.length]), roughness: 0.96, side: THREE.DoubleSide })
+    );
+    cloth.position.set(x, 6.2, z); cloth.rotation.y = faceX > 0 ? Math.PI / 2 : -Math.PI / 2; cloth.receiveShadow = true; group.add(cloth);
+  };
+  sideKilim(-12.3, -3, 1, 1); sideKilim(12.3, -3, -1, 2);                       // tapices laterales
+
+  // platos de cobre en la pared trasera alta (la zona más a la vista de la cámara)
+  const plateMat = new THREE.MeshStandardMaterial({ color: 0xc9873f, metalness: 0.25, roughness: 0.45, emissive: 0x3a1e08, emissiveIntensity: 0.4 });
+  for (let i = 0; i < 5; i++) {
+    const plate = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.08, 18), plateMat);
+    plate.position.set(-8 + i * 4, 10, -10.45); plate.rotation.x = Math.PI / 2; group.add(plate);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.06, 8, 20), P.get(0x8a5a2c));
+    rim.position.set(-8 + i * 4, 10, -10.4); group.add(rim);
+  }
+
   // ---- ATTREZZO: sacos, barriles, ristra de ajos/hierbas colgando de la viga ----
   const sack = (x: number, z: number): void => {
     const s = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 1.4, 10), P.get(0xcaa87a));
@@ -178,6 +216,7 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
       const f = 0.85 + Math.sin(t * 11) * 0.1 + Math.sin(t * 23) * 0.05;
       fireLight.intensity = 5.5 * f;
       flames.forEach((fl, i) => fl.scale.set(0.9 + f * 0.2, f * (1 + i * 0.12), 0.9 + f * 0.2));
+      wallFlames.forEach((fl, i) => { const g = 0.82 + Math.sin(t * 13 + i * 1.7) * 0.14; fl.scale.set(0.9 + g * 0.15, g, 0.9 + g * 0.15); });
       diners.update(_dt);
       // motas: suben lento y reaparecen
       const mp = motes.geometry.attributes.position as THREE.BufferAttribute;
