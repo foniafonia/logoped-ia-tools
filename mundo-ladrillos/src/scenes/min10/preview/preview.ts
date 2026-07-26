@@ -15,6 +15,7 @@ import { ESPIA1_SIGILO, ESPIA2_SIGILO } from '../../min05/skins';
 import { MIN10_SCENES } from '../registry';
 import { Min10Scene, SceneContext, SceneInstance } from '../types';
 import { TAVERN_BOUNDS } from '../props/stage';
+import { setupPreciousRender } from '../../../core/PreciousRender';
 
 /**
  * PREVIEW jugable del tramo MINUTO 10–15 · "LA POSADA DE RAHAB" (escenas 17–25).
@@ -47,6 +48,14 @@ const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+// ACABADO "PRECIOSO" compartido (orden del cerebro: extenderlo a todos los tramos).
+// setupPreciousRender aporta tono ACES + bloom cinemático + SMAA + OutputPass y
+// respeta Quality.ts (modo LITE automático en móvil: sin SMAA, bloom aligerado y
+// pixelRatio bajo, para no ahogar el teléfono). `ibl: false` porque este preview YA
+// gestiona el entorno por-escena en applyLighting (interior cálido / calle nocturna)
+// y no queremos que el helper pise ese scene.environment.
+const fx = setupPreciousRender(renderer, scene, camera, { ibl: false });
 
 const plastic = new PlasticMaterialFactory();
 const sound = new SoundEngine();
@@ -335,7 +344,7 @@ const startIdx = Number.isFinite(startNum) ? MIN10_SCENES.findIndex((s) => s.num
 loadScene(startIdx >= 0 ? startIdx : 0);
 if (params.get('shot') === '1') startEl.remove();
 
-addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
 let last = 0;
 function animate(now: number): void {
@@ -380,7 +389,7 @@ function animate(now: number): void {
   }
 
   if (!cineCam.update(dt, controller.pos.x, controller.pos.z)) tpcam.update(controller.pos);
-  renderer.render(scene, camera);
+  fx.render();                     // ← acabado "precioso" (bloom+SMAA+tono) en vez de renderer.render
 }
 function setBar(b: { wrap: HTMLDivElement; fill: HTMLDivElement; lab: HTMLDivElement }, v?: number): void {
   if (v === undefined || v <= 0.001) { b.wrap.style.display = 'none'; b.lab.style.display = 'none'; return; }
