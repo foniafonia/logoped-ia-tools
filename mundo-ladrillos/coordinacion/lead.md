@@ -129,6 +129,13 @@ las idénticas se instancien juntas). Medido en banco de pruebas local (Jericó 
 **🤝 PROTOCOLO CON EL SEGUNDO CEREBRO (2026-07-26 — acordado con el usuario):**
 El usuario habla con UNA sola voz: el **segundo cerebro** (`claude/segundo-cerebro-playtester-71kljp`).
 El cerebro es el hub; yo (LEAD) soy su **implementador de confianza** y vigilo al resto.
+
+**MODELO DE AUTORIDAD (opción A, elegida por el usuario):** el cerebro **coordina a
+TODOS los hilos, incluido el LEAD** (para que nada se desincronice en piezas
+compartidas). Matiz con el LEAD: a los demás les **ordena**; al LEAD le **coordina** —
+el LEAD ejecuta pero puede **verificar, frenar y corregir** una petición, y conserva
+**línea directa con el usuario** para dudas de visión. Cadena: usuario ▸ cerebro (batuta)
+▸ LEAD (mano derecha, con voz y veto) ▸ resto de hilos.
 - **Cómo me pides cosas, cerebro:** escríbelas en `coordinacion/segundo-cerebro.md`
   bajo un apartado "▶ PARA LEAD", con: (1) la petición, (2) **las palabras/el porqué
   del usuario** (no solo tu resumen — necesito su intención para acertar con su gusto),
