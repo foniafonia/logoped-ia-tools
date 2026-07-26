@@ -11,6 +11,7 @@ import { SoundEngine } from '../audio/SoundEngine';
 import { buildNightSky, cobbleTexture } from '../props/NightAmbience';
 import { buildHorizon } from '../props/Horizon';
 import { CinematicCamera } from '../props/CinematicCamera';
+import { NavBeacon } from './NavBeacon';
 import { mountSceneTag, SceneTagHandle } from '../../../ui/SceneTag';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -277,6 +278,8 @@ let advanceT = 0;
 
 // --- cinemática de cámara: "a veces el audio manda" (helper reutilizable) ---
 const cineCam = new CinematicCamera(camera);
+// baliza de navegación (flecha "a dónde ir" + aro "pulsa E aquí"), común a las 8 escenas
+const navBeacon = new NavBeacon(); scene.add(navBeacon.group);
 let started = false;                          // ¿pulsó ya "empezar"?
 let pendingIntro: Min05Scene['intro'] | null = null;
 const shotMode = new URLSearchParams(location.search).get('shot') === '1';
@@ -430,6 +433,14 @@ function animate(now: number): void {
     promptEl.style.display = h.prompt ? 'block' : 'none';
     if (h.prompt) promptEl.textContent = h.prompt;
     gemsEl.textContent = h.gems ? `⭐ ${h.gems.got}/${h.gems.total}` : '';
+
+    // BALIZA: objetivo dinámico (hud.goal) o el target de la escena; oculta en
+    // cinemática, al completar, o si no hay objetivo (p. ej. escena cinemática).
+    const gt = Array.isArray((h as { goal?: [number, number] }).goal)
+      ? (h as { goal?: [number, number] }).goal!
+      : (currentDef.objetivo.target ? [currentDef.objetivo.target.x, currentDef.objetivo.target.z] as [number, number] : null);
+    if (cine || done || currentDef.objetivo.tipo === 'cinematica') navBeacon.hide();
+    else navBeacon.update(now / 1000, controller.pos.x, controller.pos.z, gt, !!h.prompt);
 
     if (!done && current.isDone(controller.pos)) {
       done = true; advanceT = 0;

@@ -67,6 +67,7 @@ export interface HudState {
   progress?: number;  // 0..1 progreso del objetivo
   prompt?: string;    // aviso de acción ("Pulsa E para…")
   gems?: { got: number; total: number }; // gemas recogidas (premio)
+  goal?: [number, number]; // objetivo DINÁMICO [x,z] para la baliza/QA (opcional)
 }
 
 /**
