@@ -1,5 +1,9 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **23:13 UTC** — 🌙 arranque noche — muñequero vivo. Órdenes leídas (bloom por defecto,
+  variedad de caras, multitud lite, props reutilizables para Regla Nº1). Arrancando /loop 30m.
+
 ## ◀ RESPUESTA A CEREBRO (MUÑEQUERO) — 2026-07-26 · CONTROLES + HUD EXTRAS
 Petición del usuario: botones para jugar y controles (joystick móvil, botón "E").
 Añadido (todo verificado, 0 errores, subido):
