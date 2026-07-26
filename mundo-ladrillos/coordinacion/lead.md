@@ -148,4 +148,19 @@ el LEAD ejecuta pero puede **verificar, frenar y corregir** una petición, y con
   `__probe`/`__walk`, `tools/playtester.mjs`, y **muralla arreglada** (24s→48ms,
   1GB→~1MB; INTEGRADOR debe re-medir). Todo pusheado.
 
+**◀ RESPUESTA A CEREBRO — Pulido 0-5 (2026-07-26):**
+Petición vista y **ACEPTADA** (la vi bien, sin veto). Hecho y verificado con captura:
+- **P1 — Yehoshúa se nota más ✅ (HECHO):** ahora es un **faro**. Tarima más alta con
+  grada, **dos estandartes azules altos con remate dorado** que lo enmarcan (más altos
+  que las banderas de tribu), es **algo más grande** (×1.18), y **saluda con la mano
+  desde el inicio** (llamada en bucle hasta que le saludas; al saludarle, saludo más
+  enérgico). Con la baliza persistente + radio 9, se distingue del gentío al instante.
+  *(`camp.ts` Yehoshúa + `main.ts` beckon idle.)*
+- **P2 — camello ✅ (ya estaba):** los bultos ya se bajaron a **4 agrupados** junto a la
+  zona de carga (viajes cortos). Lo de **cargar 2 de golpe** lo dejo en veto suave: el
+  verbo "coge 1 → llévalo" es más claro para 6-8; si el usuario lo quiere, lo cambio.
+- **P2 — neblina/polvo del arranque de caravana:** PENDIENTE (baja prioridad). Lo miro
+  en la próxima ronda si sigue pareciéndoos alto; dime.
+Rama LEAD actualizada y pusheada. Cuando quieras, siguiente.
+
 **Preguntas:** ninguna abierta ahora mismo.

@@ -245,12 +245,29 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   }
 
   // --- Yehoshúa sobre una tarima, arengando (brazo en alto) ---
-  const platform = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.6, 1.4, 16), plastic.get(0xb9a36f));
-  platform.position.set(0, 0.7, 8); platform.castShadow = true; platform.receiveShadow = true;
+  // Se le da PRESENCIA de líder para que el peque lo distinga del gentío: tarima con
+  // grada, es algo más grande y lo flanquean DOS estandartes altos (azul/dorado del
+  // Mishkán) rematados en estrella — un faro que grita "ven a este".
+  const platform = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.9, 1.8, 16), plastic.get(0xcdb083));
+  platform.position.set(0, 0.9, 8); platform.castShadow = true; platform.receiveShadow = true;
   group.add(platform);
+  const step = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.6, 0.5, 16), plastic.get(0xb9a36f));
+  step.position.set(0, 0.25, 8.6); step.castShadow = true; step.receiveShadow = true; group.add(step);
+  // dos estandartes altos que enmarcan la tarima (más altos que las banderas de tribu)
+  const poleMatYoshua = plastic.get(0x6b4a26);
+  const bannerStar = (bx: number): void => {
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 10, 8), poleMatYoshua);
+    pole.position.set(bx, 5, 9.2); pole.castShadow = true; group.add(pole);
+    const flag = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.5, 0.12), plastic.get(0x2f5fb0));
+    flag.position.set(bx + (bx < 0 ? 1.3 : -1.3), 8.4, 9.2); flag.castShadow = true; group.add(flag);
+    const knob = new THREE.Mesh(new THREE.OctahedronGeometry(0.42), plastic.get(0xd9ad3c)); // remate dorado
+    knob.position.set(bx, 10.2, 9.2); group.add(knob);
+  };
+  bannerStar(-2.9); bannerStar(2.9);
   const yoshua = createMinifigure(plastic, YOSHUA_SKIN);
-  yoshua.root.position.set(0, 1.4, 8);
+  yoshua.root.position.set(0, 1.8, 8);
   yoshua.root.rotation.y = Math.PI; // de cara al campamento
+  yoshua.root.scale.setScalar(1.18);   // el líder, algo más grande
   yoshua.armR.rotation.x = -2.2;    // brazo en alto
   group.add(yoshua.root);
 

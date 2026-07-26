@@ -437,8 +437,10 @@ function animate(now: number): void {
   trailCd -= dt;
   if (moving && trailCd <= 0) { dust.burst(controller.pos.x, 0.2, controller.pos.z, 3); trailCd = 0.14; }
 
-  // Yehoshúa saluda con la mano un ratito tras acercarte
+  // Yehoshúa LLAMA con la mano desde el principio (hasta que le saludas) → el peque
+  // ve a quién ir entre el gentío; al saludarle, saludo más enérgico un ratito.
   if (waveT > 0) { waveT -= dt; camp.yehoshua.armR.rotation.x = -2.2 + Math.sin(now * 0.02) * 0.5; }
+  else if (director.beatIndex >= 3 && !done.has('yeh')) { camp.yehoshua.armR.rotation.x = -2.4 + Math.sin(now * 0.006) * 0.45; }
 
   // baliza
   if (beacon.visible) { ring.rotation.z += dt * 1.5; arrow.position.y = 4 + Math.sin(now * 0.004) * 0.4; }
