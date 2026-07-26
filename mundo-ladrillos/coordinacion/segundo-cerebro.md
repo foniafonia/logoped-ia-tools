@@ -151,6 +151,34 @@ las dos restantes."*
 
 **Iterad y subid captura. El usuario sigue testeando en paralelo → llegarán más hallazgos.**
 
+## ▶ PARA MIN05 — ITERACIÓN CON TESTER REAL (hijo) · 5–10 · aprobado por el usuario
+Recibido tu "▶ INPUT AL CEREBRO". Priorización APROBADA por el usuario. Ejecuta así:
+- **P0 — BUG "se sale por el borde y se salta el sigilo" (esc11 y esc15; REVISA esc16).**
+  Es lo gordo: el niño **rompió el juego** (rodea por el campo abierto). **FIX:** `bounds`
+  **por escena** que fuercen el paso por la puerta/corredor + **cerrar los laterales**
+  con colisión/props. Aplícalo a TODAS las de sigilo/corredor. Verifica con tu arnés.
+- **P1 — esc14 gag VISUAL del avión:** "¡MIRA, UN AVIÓN!" en grande + guardias mirando
+  arriba, para que el gag funcione **con o sin voz** (la voz es de la peli, solo entrega).
+- **P1 — esc12 cabaña más grande/alta** (+ alejar cámara para verla entera).
+- **P2 — esc9/esc10 más vida/props** (menos desangelado; ayuda extender el "precioso").
+- **DIÁLOGO (esc9/10): NO lo hagas por tu cuenta.** El LEAD va a montar un **helper de
+  diálogo COMPARTIDO** (bocadillos) que reusaréis 0–5, 5–10 y 10–15 (Rahab). Espera ese
+  helper y engánchalo; no montes un sistema propio (evitamos 3 versiones distintas).
+- **Audio voz peli:** sigue siendo de ENTREGA (privado), no lo pidas para desarrollar.
+_Palabras del usuario: aprobó esta prioridad y que el diálogo sea pieza compartida vía LEAD._
+
+## ▶ PARA LEAD — 2 confirmaciones del usuario (audio 0–5 + helper de DIÁLOGO compartido)
+- **AUDIO del final del 0–5 — CONFIRMADO por el usuario:** **córtalo tú en la ENTREGA.**
+  El **0–5 termina en la caravana**; **"vamos a cambiarnos" es del 5–10** (recorta el clip
+  `voz_min0-5` en el pipeline/manifiesto para que acabe antes de esa frase). No hace falta
+  que el usuario te pase nada nuevo. Deja el cierre de código listo (ya lo tienes en curso).
+- **HELPER DE DIÁLOGO COMPARTIDO — NUEVO ENCARGO (aprobado):** monta un helper reutilizable
+  de **diálogo/bocadillos** (estilo `ctx.say(quién, texto)`) como pieza COMPARTIDA, para
+  que lo usen **0–5 (Yehoshúa arenga), 5–10 (esc9/10 espías) y 10–15 (Rahab)**. Que no lo
+  haga cada hilo por su cuenta. Cuando esté, avisa y el 5–10/10–15 lo enganchan. Prioridad
+  MEDIA (después de tu P0 del final+río y las ovejas cuerda-imán).
+_Palabras del usuario: "ok" a que el LEAD corte el audio en entrega y a que el diálogo sea compartido._
+
 ## 🔚 ▶ PARA TODOS LOS HILOS — CIERRE DEL DÍA (26-jul, tarde)
 **Gracias, ronda completada por los 4. Paramos por hoy.** **Cortad vuestros `/loop`**
 (lo reactivamos esta tarde cuando vuelva el usuario). Estado guardado en git. Resumen:
