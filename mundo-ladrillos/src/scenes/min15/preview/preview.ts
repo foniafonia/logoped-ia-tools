@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { PlasticMaterialFactory } from '../../../materials/PlasticMaterialFactory';
+import { setupPreciousRender } from '../../../core/PreciousRender';
 import { ThirdPersonCamera } from '../../../camera/ThirdPersonCamera';
 import { createMinifigure, MinifigureSkin } from '../../../characters/MinifigureFactory';
 import { PreviewController } from '../../min05/preview/PreviewController';
@@ -30,13 +30,7 @@ const USE_FILM_SPINE = false;
 const app = document.getElementById('app')!;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 app.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -44,8 +38,18 @@ const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 90
 camera.position.set(0, 9, 30);
 const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 
-const pmrem = new THREE.PMREMGenerator(renderer);
-const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+// RENDER "PRECIOSO" compartido (muñequero): tono ACES + bloom + SMAA, en 1 línea.
+// Respeta Quality.ts → en MÓVIL baja pixelRatio (adaptativo, sin ahogar). Aprobado
+// por el cerebro/usuario para extenderlo a todos los tramos.
+// ⚠️ Mi tramo es NOCTURNO: apago la IBL de estudio (`RoomEnvironment`, pensada para
+// DÍA como el 0–5) porque lava y aclara la noche; el brillo lo da el BLOOM sobre los
+// puntos cálidos (ventanas, faroles, luna). Así el precioso suma glow+antialias+tono
+// sin cargarse el ambiente nocturno. El helper pone pixelRatio/tono/sombras.
+const fx = setupPreciousRender(renderer, scene, camera, {
+  ibl: false,
+  exposure: 1.06,
+  bloom: { strength: 0.5, radius: 0.7, threshold: 0.8 }
+});
 
 const plastic = new PlasticMaterialFactory();
 const sound = new SoundEngine();
@@ -73,7 +77,7 @@ const mesaRing = buildMesaRing(scene);
 function applyLighting(mundo: Min15Scene['mundo']): void {
   // Todos mis mundos son NOCTURNOS. El balcón sobre la muralla se ilumina con la
   // luna + faroles cálidos de la propia escena; el campamento/taller son cálidos.
-  scene.environment = envTex;
+  // (El IBL/entorno lo pone el render precioso `fx`; aquí solo fondo/niebla/luces.)
   if (mundo === 'campamento' || mundo === 'taller') {
     scene.background = new THREE.Color(0x161020);
     scene.fog = new THREE.Fog(0x161020, 40, 120);
@@ -308,7 +312,7 @@ const startIdx = Number.isFinite(startNum) ? MIN15_SCENES.findIndex((s) => s.num
 loadScene(startIdx >= 0 ? startIdx : 0);
 if (params.get('shot') === '1') startEl.remove();
 
-addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
 let last = 0;
 function animate(now: number): void {
@@ -349,7 +353,7 @@ function animate(now: number): void {
   }
 
   if (!cineCam.update(dt, controller.pos.x, controller.pos.z)) tpcam.update(controller.pos);
-  renderer.render(scene, camera);
+  fx.render(); // render "precioso" (bloom + SMAA + tono) en vez de renderer.render
 }
 requestAnimationFrame(animate);
 
