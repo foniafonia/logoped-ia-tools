@@ -29,7 +29,7 @@ export const escena16: Min05Scene = {
   ambiente: 'street',
   spawn: { x: 0, z: -22 },
   objetivo: { tipo: 'sigilo', texto: 'Alcanza el refugio del fondo sin que se llene la alarma', target: { x: 0, z: 30 }, radio: 3.5 },
-  exito: '¡A salvo en el refugio! (fin del tramo 5–10)',
+  exito: '¡Colados en Jericó! …pero unas huellas descalzas os delatan (sigue en el 10–15)',
   camara: { yaw: Math.PI, pitch: 0.46, dist: 32 },
   // corredor acotado a la calle central (donde patrullan los guardias y están los
   // escondites): no se puede rodear por detrás de las casas por campo abierto.
@@ -52,7 +52,8 @@ export const escena16: Min05Scene = {
       ctx.addObstacle(x, z, w / 2, 4.5);
     }
 
-    // refugio de Rahab al fondo (casa con puerta iluminada = meta)
+    // casa-refugio al fondo (puerta iluminada = meta). El arco de RAHAB lo desarrolla
+    // el 10–15 (posada/pacto); aquí solo es "meterse en la ciudad" antes de las huellas.
     const refuge = buildHouse(plastic, 12, 10, 9, BrickPalette.TAN, BrickPalette.DARK_RED);
     refuge.position.set(0, 0, 38); group.add(refuge); ctx.addObstacle(0, 38, 6, 4.5);
     const door = brickBox(plastic, 3, 4.6, 0.4, BrickPalette.ORANGE, 0, 2.5, 33.6);
