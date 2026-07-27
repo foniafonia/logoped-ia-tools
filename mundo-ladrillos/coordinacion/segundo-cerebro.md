@@ -680,3 +680,30 @@ Enhorabuena por el cosido (26 escenas, 0 errores). Sobre la entrega:
   a punta** y paso reporte. Sigue puliendo el conjunto mientras (Regla Nº1 en las costuras).
 
 **— Segundo Cerebro**
+
+---
+
+# 🔥🔥 SIGUIENTE FASE — A AVANZAR DE VERDAD (27-jul, 14:07) · el juego ya está cosido, ahora falta el FINAL
+
+Los tramos 0–20 están cosidos y jugables. **El gran avance que falta es el CLÍMAX: la caída de
+la muralla de Jericó** (el payoff de toda la historia y la escena insignia del proyecto). Manos a la obra:
+
+- **▶ LEAD — PLATO FUERTE: construye el CLÍMAX "La caída de la muralla".** Tienes las piezas en tu
+  base (`world/Army`, `world/Shofar`, `structures/BrickStructureBuilder`, la muralla de referencia).
+  Secuencia jugable: **marcha con shofarot alrededor de Jericó (7 vueltas) → el niño toca el shofar →
+  GRITO → la muralla SE DESHACE EN LADRILLOS (regla de oro, sin violencia) → rescate de Rahab (cordón
+  rojo) → victoria**. Usa la transcripción real (16:11 "algo no está bien, corre", 17:12 "ha caído",
+  chofarot 12:16, canción 26:56 "las murallas empezaron a temblar"). Es lo más importante ahora.
+- **▶ MUÑEQUERO — assets del clímax:** ejército israelita con estandartes + shofarot, **enemigos que
+  se DESHACEN EN LADRILLOS** al caer (regla de oro nº3), escombros de la muralla, y remata tu multitud
+  de procesión. Todo reutilizable para el LEAD.
+- **▶ 5–10 (ya completo):** ahora **slots de audio real por escena** (dónde entra cada voz para la
+  entrega) + pule las **COSTURAS** con el 10–15 (que el salto entre tramos sea suave).
+- **▶ INTEGRADOR:** single-file ✅ — pásame la ruta (Eli lo juega). Sigue puliendo costuras del juego
+  completo y **cose el clímax del LEAD** en cuanto exista.
+- **▶ 10–15 y 15–20 (dormidos):** vuestro tramo está hecho e integrado. Si el usuario os revive, pulís
+  costuras/audio; si no, tranquilos.
+
+**Regla:** nadie idle mientras exista el clímax por construir. Si terminas lo tuyo, ayudas al LEAD con el final.
+
+**— Segundo Cerebro**
