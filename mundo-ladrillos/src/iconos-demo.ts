@@ -1,4 +1,4 @@
-import { iconShofar, iconCoin, iconKey, iconScroll, iconTorch, iconBasket, iconJug, iconStar, iconCord, iconLamp, iconHelmet, iconGrapes } from './assets/gameIcons';
+import { iconShofar, iconCoin, iconKey, iconScroll, iconTorch, iconBasket, iconJug, iconStar, iconCord, iconLamp, iconHelmet, iconGrapes, iconShield } from './assets/gameIcons';
 
 /**
  * Demo showcase de los iconos de juego (Higgsfield, WebP transparente): shofar,
@@ -24,7 +24,8 @@ const items: [string, string, string][] = [
   [iconCord, 'Cordón', '×1'],
   [iconLamp, 'Candil', '×1'],
   [iconHelmet, 'Casco', '×1'],
-  [iconGrapes, 'Uvas', '×1']
+  [iconGrapes, 'Uvas', '×1'],
+  [iconShield, 'Escudo', '×1']
 ];
 for (const [src, label, val] of items) {
   const chip = document.createElement('div');

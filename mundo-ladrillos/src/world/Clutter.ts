@@ -320,3 +320,53 @@ export function buildRubblePile(
   dust.position.y = 0.03 * s; dust.receiveShadow = true; g.add(dust);
   return place(g, o);
 }
+
+/**
+ * Tenderete/puesto de mercado: mostrador de tablones + toldo a rayas sobre dos
+ * postes + mercancía encima (frutas/panes redondos). Llena calles y plazas de
+ * mercado (Regla Nº1). `buildMarketStall(plastic, { x, z, awning?, goods? })`.
+ */
+export function buildMarketStall(
+  plastic: PlasticMaterialFactory,
+  o: Pos & { awning?: number; goods?: number[]; scale?: number } = {}
+): THREE.Group {
+  const g = new THREE.Group();
+  const s = o.scale ?? 1;
+  const wood = plastic.get(0x8a5a2c);
+  const woodDk = plastic.get(0x6e4522);
+  const cloth = plastic.get(o.awning ?? 0xb5473a);
+  const clothAlt = plastic.get(0xe6dccb);
+  const W = 2.2 * s, D = 1.0 * s, HT = 1.0 * s;
+  // mostrador (tablero + patas + faldón)
+  const top = new THREE.Mesh(new THREE.BoxGeometry(W, 0.1 * s, D), wood);
+  top.position.y = HT; top.castShadow = true; top.receiveShadow = true; g.add(top);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.1 * s, HT, 0.1 * s), woodDk);
+    leg.position.set(sx * (W / 2 - 0.1 * s), HT / 2, sz * (D / 2 - 0.1 * s)); g.add(leg);
+  }
+  const skirt = new THREE.Mesh(new THREE.BoxGeometry(W, 0.5 * s, 0.06 * s), woodDk);
+  skirt.position.set(0, HT - 0.32 * s, D / 2); g.add(skirt);
+  // dos postes altos y toldo a rayas inclinado
+  for (const sx of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05 * s, 0.06 * s, 2.1 * s, 8), woodDk);
+    post.position.set(sx * (W / 2 - 0.15 * s), 1.05 * s, -D / 2 + 0.1 * s); g.add(post);
+  }
+  const nStripes = 6;
+  for (let i = 0; i < nStripes; i++) {
+    const strip = new THREE.Mesh(new THREE.BoxGeometry(W / nStripes, 0.04 * s, 1.4 * s), i % 2 ? cloth : clothAlt);
+    strip.position.set(-W / 2 + (i + 0.5) * (W / nStripes), 2.05 * s, 0);
+    strip.rotation.x = -0.4; strip.castShadow = true; g.add(strip);
+  }
+  // mercancía sobre el mostrador (montoncitos redondos)
+  const goods = o.goods ?? [0xc0392b, 0xe0b23c, 0x8e44ad, 0xd68910];
+  for (let i = 0; i < 5; i++) {
+    const gx = -W / 2 + 0.35 * s + i * (W - 0.7 * s) / 4;
+    const heap = new THREE.Mesh(new THREE.SphereGeometry(0.16 * s, 10, 8), plastic.get(goods[i % goods.length]));
+    heap.scale.set(1, 0.7, 1); heap.position.set(gx, HT + 0.12 * s, 0.05 * s); heap.castShadow = true; g.add(heap);
+    for (const d of [-0.11, 0.11]) {
+      const p2 = new THREE.Mesh(new THREE.SphereGeometry(0.1 * s, 8, 6), plastic.get(goods[(i + 1) % goods.length]));
+      p2.position.set(gx + d * s, HT + 0.1 * s, 0.05 * s - 0.15 * s); g.add(p2);
+    }
+  }
+  return place(g, o);
+}

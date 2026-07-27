@@ -21,6 +21,10 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **14:33 UTC** — 🛡️ Higgsfield sigue vivo (**71,65 créditos**, trial 28-jul, sin cargo). Clímax ya
+  cosido por el integrador → paso a plano A: `iconShield` (escudo de bronce con **león de Judá**,
+  guardias/combate — **13 iconos** ya, verificado por md5) + `buildMarketStall()` en `world/Clutter.ts`
+  (tenderete de mercado: mostrador + toldo a rayas + mercancía, Regla Nº1, código puro). Build limpio.
 - **14:26 UTC** — ⚠️ Leída la CORRECCIÓN del cerebro: la muralla y su derrumbe YA EXISTEN
   (ShofarInteraction+JerichoBuild+Dust) y `world/Army.ts` (marcha épica) es de otro hilo → **no
   duplico** eso. Mi BrickBurst/rubble quedan como helpers genéricos opcionales (no pisan el muro).
