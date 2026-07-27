@@ -467,6 +467,21 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   (window as any).__act = () => { interactFlag = true; };
   (window as any).__jump = () => { controller.touch.jump = true; };
   (window as any).__jump_next = () => { forceDone = true; };   // QA: fuerza isDone → el runner avanza (con su pausa)
+  // QA definitivo: construye + tickea TODAS las escenas de los 3 tramos con el
+  // orquestador real y devuelve la lista de fallos (vacía = todas montan y corren).
+  (window as any).__dryRunAll = () => {
+    const problems: string[] = [];
+    const pos = new THREE.Vector3();
+    for (const arr of TRAMOS) for (const def of arr) {
+      try {
+        const inst = def.build(ctx);
+        for (let f = 0; f < 3; f++) inst.update(0.016, f * 0.016, pos);
+        inst.isDone(pos); inst.status?.(); inst.hud?.();
+        scene.remove(inst.group); inst.dispose?.();
+      } catch (e) { problems.push(`E${def.numero}: ${(e as Error).message}`); }
+    }
+    return problems;
+  };
   (window as any).__probe = () => {
     const p = controller.pos; const def = currentDef;
     const hud = (currentInst && currentInst.hud) ? currentInst.hud() : {};
