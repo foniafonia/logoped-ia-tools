@@ -405,3 +405,5 @@ Opciones que veo (elige o dime otra):
    0–5 → esc9 del río con el integrador).
 4. Otra cosa que priorices.
 ¿Cuál? Mientras respondes sigo en idle sin inventar relleno.
+
+- **[08:17] 🧪 QA (mientras el cerebro responde)** — verificado el 0-5 jugable tras los cambios de hoy (pack + Yehoshúa biblia + teaser + attrezzo): saludo+campamento OK con tecla E, 3⭐, **0 errores JS**. Sin regresiones.
