@@ -25,12 +25,7 @@ export function sceneByNumero(n: number): Min05Scene | undefined {
   return MIN05_SCENES.find((s) => s.numero === n);
 }
 
-/**
- * Segundo LOCAL (dentro del clip `narracion_min5-10`, que empieza en 0) en que
- * arranca cada escena, según el desglose oficial de la peli (global − 300).
- * Al entrar en una escena, el audio de la peli salta a este segundo para que la
- * voz/música case con lo que se ve.
- */
-export const BEAT_LOCAL: Record<number, number> = {
-  9: 7, 10: 41, 11: 140, 12: 150, 13: 201, 14: 212, 15: 234, 16: 245
-};
+// NOTA AUDIO: el audio de la peli va por CLIP POR ESCENA (recortes `voz_NN`),
+// que reproduce `SoundEngine.playSceneClip(name)` según la tabla `SCENE_CLIP` del
+// preview. Es material PRIVADO: `audio/clips.ts` va VACÍO en el repo y se rellena
+// solo para entregas. (El viejo enfoque de clip condensado + `BEAT_LOCAL` quedó obsoleto.)
