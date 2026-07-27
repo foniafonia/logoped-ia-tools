@@ -258,7 +258,9 @@ function dispararTeaserEspias(): void {
   audio.sfxSparkle();
   cine.start({
     duration: TEASER_DUR,
-    bannerHTML: '🔦 <b>«Necesito hombres discretos y valientes que vayan a espiar la tierra…»</b><br>Yehoshúa envía a dos espías a Jericó — <b>¡pronto los guiarás tú!</b> 🕵️🕵️',
+    // TEASER CORTO (guiño "próximamente"), NO la escena de reclutamiento: esa es del
+    // 5–10 (esc10). Aquí solo se engancha con la frase real y un vistazo al río.
+    bannerHTML: '🎬 <b>PRÓXIMAMENTE</b> · <i>«Necesito hombres discretos y valientes que vayan a espiar la tierra…»</i><br>La misión de los dos espías en Jericó — <b>¡pronto la jugarás tú!</b> 🕵️🕵️',
     onFrame: (k, dt) => {
       teaserClock += dt;
       const z = ESPIA_Z0 + (ESPIA_Z1 - ESPIA_Z0) * k;          // avanzan hacia el agua
