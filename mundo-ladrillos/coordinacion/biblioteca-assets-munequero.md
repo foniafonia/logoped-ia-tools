@@ -65,12 +65,12 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 
 ## 🎯 Iconos de juego (WebP transparente, HUD/botones)
 ```ts
-import { iconShofar, iconCoin, iconKey, iconScroll } from './assets/gameIcons';
-img.src = iconShofar;   // shofar (objeto clave) · shékel (moneda) · llave · rollo (Torá/mapa)
+import { iconShofar, iconCoin, iconKey, iconScroll, iconTorch } from './assets/gameIcons';
+img.src = iconShofar;   // shofar · shékel · llave · rollo (Torá/mapa) · antorcha (noche)
 ```
 `iconShofar` (cuerno, derriba murallas) · `iconCoin` (shékel/recompensa) · `iconKey`
-(llave de puerta/puesto) · `iconScroll` (rollo — objetivo/pista). Todos recortados con
-IA (fondo transparente) y verificados por md5.
+(llave de puerta/puesto) · `iconScroll` (rollo — objetivo/pista) · `iconTorch` (antorcha,
+para escenas de noche/sigilo). Todos recortados con IA (fondo transparente) y verificados por md5.
 
 ## ✨ Render "precioso" (COMPARTIDO)
 ```ts

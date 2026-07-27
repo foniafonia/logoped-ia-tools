@@ -21,6 +21,9 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **12:55 UTC** — 🔥 `iconTorch` (antorcha) recuperado y **verificado por chunk+md5** (llama
+  irregular → transfiere limpio). `iconSword` sigue descartado: hoja sobre fondo liso =
+  base64 repetitivo que se corrompe al pegar (misma regla "irregular sí, uniforme no").
 - **12:51 UTC** — ✅ Aplicada la respuesta del cerebro (`segundo-cerebro.md ▶ PARA MUÑEQUERO`):
   confirmado mi rol de **fábrica** (el precioso lo integra el LEAD en `main.ts`, yo NO lo toco).
   Tarea suya cumplida: **+4 aldeanos** con expresiones nuevas (enfadado/regateo, niña asustada,
