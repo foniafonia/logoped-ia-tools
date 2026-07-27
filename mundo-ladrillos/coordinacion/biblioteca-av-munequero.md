@@ -25,6 +25,8 @@
 | **TÍTULO / inicio** — Jericó amurallada al amanecer sobre el desierto, el Jordán y el campamento al fondo (16:9) | `ef15900a-6d06-4a5b-b9f9-5281f9047bef` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_222653_ef15900a-6d06-4a5b-b9f9-5281f9047bef.png |
 | **VICTORIA** — muralla caída en montones de ladrillos, israelitas celebrando con estandartes, cielo dorado-rosa (16:9) | `72641d8a-d9f5-42b8-9631-a0a11630f326` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_222641_72641d8a-d9f5-42b8-9631-a0a11630f326.png |
 | **GAME OVER / reintentar** — espía solo escondido junto a la muralla de noche, luz de luna azul, antorchas (16:9) | `a7b7b556-0e34-4317-bd26-468aaea79de3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_222647_a7b7b556-0e34-4317-bd26-468aaea79de3.png |
+| **AJUSTES / opciones** — interior de casa de Jericó con vasijas y alfombra, luz de candil (16:9) | `5189724f-0766-4ec2-af49-444f3bf384a0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230252_5189724f-0766-4ec2-af49-444f3bf384a0.png |
+| **CRÉDITOS** — cielo estrellado sobre la silueta de las murallas y palmeras (16:9) | `c5985a55-dfd1-4b5b-8b87-3c76c09d77a2` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230258_c5985a55-dfd1-4b5b-8b87-3c76c09d77a2.png |
 
 ## 🧑‍🤝‍🧑 Pósters / pantallas extra
 | asset | job id | tamaño | URL |
@@ -38,6 +40,7 @@
 |---|---|---|---|
 | **YEHOSHÚA** (Josué) — túnica azul real + banda, barba blanca larga | `23298da9-0b0f-4e8c-a103-59680993e04b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225049_23298da9-0b0f-4e8c-a103-59680993e04b.png |
 | **RAHAB** — vestido plateado con el cordón rojo al hombro | `d324bb38-b452-4a8b-8c78-bda59dd38794` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225056_d324bb38-b452-4a8b-8c78-bda59dd38794.png |
+| **ESPÍA** — traje de sigilo oscuro con capucha, expresión alerta | `03736fff-b68e-4f7e-b870-2f1ae34cab05` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230312_03736fff-b68e-4f7e-b870-2f1ae34cab05.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -49,6 +52,7 @@
 |---|---|---|---|
 | **EL JORDÁN SE PARTE** — dos muros de agua-ladrillo, israelitas cruzando con el Arca | `6338b751-6ed1-4802-8445-7a84aaf5c842` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224536_6338b751-6ed1-4802-8445-7a84aaf5c842.png |
 | **EL SHOFAR EN LA MURALLA** (clímax) — el héroe toca el shofar y saltan los primeros ladrillos | `579cfdbc-ed15-4641-b4b6-1ec998fc4027` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225102_579cfdbc-ed15-4641-b4b6-1ec998fc4027.png |
+| **LA POSADA DE RAHAB** — espías escondidos entre lino en la azotea mientras pasa un guardia | `673747c6-be6a-4cc8-805b-7375c3f21589` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230306_673747c6-be6a-4cc8-805b-7375c3f21589.png |
 | **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
 | **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
 
