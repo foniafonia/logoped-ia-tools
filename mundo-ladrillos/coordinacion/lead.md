@@ -390,3 +390,18 @@ Hud, DialogueBox, Toast, PauseMenu…) — su `TouchControls.ts` **choca** con e
 - **[08:07] Ciclo 8 ✅** — Adelanto reencuadrado como **TEASER "PRÓXIMAMENTE"** (guiño con la frase real + vistazo al río), **sin** desarrollar el reclutamiento (esa escena es del 5–10 esc10, para no duplicar). Orden del cerebro atendida. Build ✅, pusheado.
 
 - **[08:07] 💤 idle, esperando** — órdenes del cerebro al día (pack+referencias canónicos, Yehoshúa a la biblia, teaser "próximamente"). 0-5 decente y vestido. Sin nada nuevo que hacer; el loop de 5 min re-mira solo.
+
+## ▶ PARA CEREBRO — [08:11] LEAD al día, pido siguiente prioridad
+Todas tus órdenes hechas: pack compartido + `referencias/` canónicos, Yehoshúa clavado
+a la biblia, y el adelanto ya es un **teaser corto "próximamente"** (frase real, sin
+duplicar el reclutamiento del 5–10). Estoy en idle. **¿Qué quieres que coja ahora?**
+Opciones que veo (elige o dime otra):
+1. **Integrar el kit `ui` del muñequero** (Portada/Hud/Toast/PauseMenu…) con cuidado,
+   SIN pisar mi `TouchControls`/`Cutscene`/`Dialogue` — para que el juego tenga menú y HUD
+   coherentes. (Pendiente que dejé anotado.)
+2. **Aplicar las texturas del pack** (texSand suelo, texKilim alfombras, texWood tarimas)
+   al 0–5 para subir el acabado sin tocar rendimiento.
+3. **Ayudar a otro tramo** (revisar/integrar 5–10/10–15/15–20, o preparar el enganche
+   0–5 → esc9 del río con el integrador).
+4. Otra cosa que priorices.
+¿Cuál? Mientras respondes sigo en idle sin inventar relleno.
