@@ -7,7 +7,7 @@ import { MinifigureSkin, Minifigure, createMinifigure, YOSHUA_SKIN } from '../..
 import { buildRug, kilimTexture, KILIM_PALS } from './textiles';
 import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit } from '../../world/Clutter';
 import { tiledTexture } from '../../materials/tiling';
-import { texWood } from '../../assets/texWood';
+import { texRock } from '../../assets/texRock';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -260,12 +260,13 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   // Se le da PRESENCIA de líder para que el peque lo distinga del gentío: tarima con
   // grada, es algo más grande y lo flanquean DOS estandartes altos (azul/dorado del
   // Mishkán) rematados en estrella — un faro que grita "ven a este".
-  // Tarima con TEXTURA DE MADERA del pack compartido (acabado, en vez de plástico liso).
-  const woodMat = new THREE.MeshStandardMaterial({ map: tiledTexture(texWood, 3), color: 0xcaa878, roughness: 0.8 });
-  const platform = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.9, 1.8, 16), woodMat);
+  // Tarima de PIEDRA (fiel a la biblia — peli.json esc04: "Yehoshua parado sobre una
+  // tarima de piedra"): textura de roca del pack compartido, tono arenisca cálido.
+  const tarimaMat = new THREE.MeshStandardMaterial({ map: tiledTexture(texRock, 3), color: 0xc7b39a, roughness: 0.95 });
+  const platform = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.9, 1.8, 16), tarimaMat);
   platform.position.set(0, 0.9, 8); platform.castShadow = true; platform.receiveShadow = true;
   group.add(platform);
-  const step = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.6, 0.5, 16), woodMat);
+  const step = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.6, 0.5, 16), tarimaMat);
   step.position.set(0, 0.25, 8.6); step.castShadow = true; step.receiveShadow = true; group.add(step);
   // dos estandartes altos que enmarcan la tarima (más altos que las banderas de tribu)
   const poleMatYoshua = plastic.get(0x6b4a26);
