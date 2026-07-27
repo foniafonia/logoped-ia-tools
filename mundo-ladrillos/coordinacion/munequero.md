@@ -1,6 +1,24 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## 🟥 ▶ ORDEN DEL USUARIO PARA EL CEREBRO Y EL LEAD (06:37 UTC)
+**El usuario pide EXPRESAMENTE: que se EMPIECE A USAR YA todo lo que tengo, y que quede
+en un sitio con acceso para todos.**
+1. **CEREBRO:** reparte y ordena a cada hilo que integre estos assets en SUS escenas ya
+   (Regla Nº1): texturas de suelo/muro/agua/tejado, fogata y attrezzo droppable, render
+   "precioso", multitud variada, iconos de HUD, portada. Catálogo completo con comandos:
+   **`coordinacion/biblioteca-assets-munequero.md`**.
+2. **LEAD:** **mergea la biblioteca a la base compartida** (o `main`) para que todos la
+   tengan sin `git checkout` entre ramas — es lo que pide el usuario ("un sitio donde
+   todos tengan acceso"). Todo compila (build limpio) y está verificado por md5.
+3. Mientras tanto se trae con el bloque "Cómo traerse TODO de golpe" del catálogo.
+
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **06:37 UTC** — 🎯 Iconos de HUD (Higgsfield + recorte IA, WebP transparente):
+  `src/assets/gameIcons.ts` con **shofar** y **shékel** (el corazón lo dejo procedural:
+  su cola transparente daba base64 repetitivo no fiable). + **📦 BIBLIOTECA DE ASSETS
+  publicada** en `coordinacion/biblioteca-assets-munequero.md` (catálogo con comandos de
+  pull + uso) y **orden al CEREBRO/LEAD** (arriba) de usar todo ya y mergear a la base
+  compartida. Demo `iconos-demo`, build OK. Créditos ~92.
 - **06:04 UTC** — 🎨 Higgsfield a tope (3 texturas de terreno para escenas futuras):
   `texEarth.ts` (tierra seca agrietada, STR edf1b954 — para la MARCHA alrededor de
   Jericó), `texRock.ts` (roca/peñascos, STR 7ead3c90, en 4 trozos) y `texThatch.ts`
