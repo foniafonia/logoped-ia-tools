@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
 import { buildGuard } from '../min05/props/Guard';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 24 (14:01) — RAHAB MIENTE A LOS GUARDIAS.
@@ -42,10 +43,16 @@ export const escena24: Min10Scene = {
     let progress = 0;
     let leaving = false;
     let doneFlag = false;
+    let saidLie = false;
     return {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        if (!saidLie) {                                  // la mentira de Rahab (film esc24), una vez
+          saidLie = true;
+          dlg.say('Rahab', '¿Extranjeros? Sí… pero salieron corriendo hacia la orilla del río.', { color: VOZ.rahab, ms: 3400 });
+          dlg.say('Guardia', '¡Al río, entonces! ¡Rápido!', { color: VOZ.guardia, ms: 2200 });
+        }
         const inHide = hide.update(dt, t, player.x, player.z);
         if (inHide !== hiddenNow) { hiddenNow = inHide; ctx.setPlayerVisible?.(!inHide); }
         // Rahab gesticula señalando fuera

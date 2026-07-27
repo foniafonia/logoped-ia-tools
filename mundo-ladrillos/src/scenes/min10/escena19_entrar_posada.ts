@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 19 (11:45) — ENTRAR EN LA POSADA.
@@ -50,6 +51,9 @@ export const escena19: Min10Scene = {
         const near = Math.hypot(player.x - o.x, player.z - o.z) < (escena19.objetivo.radio ?? 2.6);
         if (near && !ordered && ctx.wantsInteract()) {
           ordered = true; steam.visible = true; ctx.sound.pickup(); doneFlag = true;
+          // Diálogo (helper compartido ui/Dialogue): Rahab recibe y sirven café (film esc19)
+          dlg.say('Rahab', '¡Bienvenidos, viajeros! ¿Un café bien cargado?', { color: VOZ.rahab, ms: 2600 });
+          dlg.say('Espía', 'Dos… y un expresso doble. Gracias, señora.', { color: VOZ.espia, ms: 2600 });
         }
       },
       status(): string | null { return ordered ? '☕ Café servido. A salvo… por ahora.' : null; },

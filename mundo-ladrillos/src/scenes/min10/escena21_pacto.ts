@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 21 (12:06) — EL PACTO CON RAHAB.
@@ -46,6 +47,10 @@ export const escena21: Min10Scene = {
         const near = Math.hypot(player.x - o.x, player.z - o.z) < (escena21.objetivo.radio ?? 2.4);
         if (near && !pacted && ctx.wantsInteract()) {
           pacted = true; bubble.visible = true; ctx.sound.success();
+          // El PACTO (film esc21): susurro emisario → Rahab acepta → juramento
+          dlg.say('Espía', '(susurra) Somos emisarios de Israel; nos envía Josué. Escóndenos.', { color: VOZ.espia, ms: 3200 });
+          dlg.say('Rahab', 'Lo sé… vuestro Dios va con vosotros. Os ayudaré.', { color: VOZ.rahab, ms: 3000 });
+          dlg.say('Espía', 'Te lo juramos por Dios: salvaremos tu vida y tu casa.', { color: VOZ.espia, ms: 3200 });
         }
         if (pacted) {
           pactT += dt;

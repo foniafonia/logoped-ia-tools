@@ -16,6 +16,7 @@ import { MIN10_SCENES } from '../registry';
 import { Min10Scene, SceneContext, SceneInstance } from '../types';
 import { TAVERN_BOUNDS } from '../props/stage';
 import { setupPreciousRender } from '../../../core/PreciousRender';
+import { dlg } from '../props/rahabDialogue';
 
 /**
  * PREVIEW jugable del tramo MINUTO 10–15 · "LA POSADA DE RAHAB" (escenas 17–25).
@@ -267,6 +268,7 @@ function loadScene(i: number): void {
   const def = MIN10_SCENES[idx];
   if (current) { scene.remove(current.group); current.dispose?.(); disposeGroup(current.group); }
   currentDef = def; done = false; advanceT = 0;
+  dlg.clear();                       // cierra cualquier bocadillo de la escena anterior
   applyLighting(def.mundo);
   const amb = def.ambiente ?? 'street';
   if (sound.ready) sound.setAmbience(amb);
@@ -353,6 +355,7 @@ function animate(now: number): void {
   last = now;
 
   sky.update(dt, 0.82); // deriva de nubes + tinte noche del telón de montañas
+  dlg.update(dt);       // auto-avance de los bocadillos (ui/Dialogue del LEAD)
 
   const cine = cineCam.active;
   if (!cine) {
