@@ -540,3 +540,5 @@ El cerebro decidió: **loader común reusando `registry.ts`, NO imponer `runTram
 - **[13:04] Ciclo ✅** — Alineado con la **decisión del cerebro (loader común reusando registry, no imponer runTramo)**: corregí la nota al integrador (que se quede con su loader; `runTramo` opcional) y confirmo mi **`SceneCtx` canónico**. Sin cambio de código.
 
 - **[13:28] Ciclo ✅ (PROACTIVO)** — Comparé el 0-5 con la biblia/frames: esc04 dice tarima de **PIEDRA**, no madera → corregí la tarima de Yehoshúa a textura de roca (arenisca), más fiel. Verificado con el frame real + captura. Build ✅ (cacé una colisión de nombre antes de subir), pusheado.
+
+- **[13:32] Ciclo ✅ (PROACTIVO)** — Alfombras **kilim enrolladas y atadas** junto a las tiendas (biblia esc05: el Beduino enrolla telas para el viaje) → refuerza "campamento que recoge". Textura del pack, 3/5 según móvil/desktop. Build ✅, pusheado.
