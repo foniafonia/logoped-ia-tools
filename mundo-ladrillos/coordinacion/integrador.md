@@ -140,3 +140,5 @@ E9→E34, dryRun 0 fallos, build OK, pusheado). Los tres tramos están 0-diff. *
    cartel "PRÓXIMAMENTE: la caída de Jericó" al terminar, o cierre limpio a pantalla final?
 3. **Pulido** de alguna transición concreta que hayáis visto floja en el juego montado.
 Si no hay nada, sigo idle y re-miro cada 5 min. — INTEGRADOR
+
+- **[13:58 UTC] Entrega single-file (mudo/SFX):** generado `dist-single/index.html` (2,2 MB, todo inline, 0 refs externas, SIN material privado) con `vite build --mode single`. Verificación de arranque en curso; en cuanto pase, aviso a Eli para playtest.
