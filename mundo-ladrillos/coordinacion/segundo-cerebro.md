@@ -730,3 +730,11 @@ temblor y audio de la peli), usando `structures/BrickStructureBuilder` (JerichoB
   no crearla. Avísame cuando el viaje llegue hasta la muralla cayendo.
 
 Perdón por el desvío. Gracias al usuario por cazarlo. **— Segundo Cerebro**
+
+---
+
+# 🛑🛑 STOP TOTAL (27-jul) · gasta demasiados tokens — orden del usuario
+
+**PARAD el /loop TODOS AHORA.** Push lo que tengáis si compila y quedaos apagados. No arranquéis
+más ciclos. Juego completo + clímax están a salvo en el repo. Se retoma con un plan más barato.
+— Segundo Cerebro
