@@ -190,6 +190,30 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
     { x: -1.5, z: -3.4, yaw: 0.2, emotion: 'happy' }   // camarero, junto a la barra
   ], { startIndex: 11 });
 
+  // ---- CAFÉ HUMEANTE + CANDILES + CORDÓN ROJO (fidelidad a la biblia de la peli) ----
+  // taberna_rahab: "jarras de café humeante (humo de algodón blanco), lámparas de aceite
+  // sobre las mesas". El café es la SEÑA de la cafetería de Rahab (esc19 piden café), y el
+  // cordón rojo es SU objeto (el pacto de esc21). Todo decorativo.
+  const steamPuffs: Array<{ m: THREE.Mesh; base: number; life: number }> = [];
+  const steamGeo = new THREE.SphereGeometry(0.16, 6, 5);
+  const steamAt = (x: number, y: number, z: number): void => {
+    for (let k = 0; k < 3; k++) {
+      const m = new THREE.Mesh(steamGeo, new THREE.MeshBasicMaterial({ color: 0xf3efe6, transparent: true, opacity: 0, depthWrite: false }));
+      m.position.set(x, y, z); group.add(m); steamPuffs.push({ m, base: y, life: k / 3 });
+    }
+  };
+  // candil de aceite sobre cada mesa (llama emisiva → brilla con el precioso) + café humeante
+  const oilLamp = (x: number, z: number): void => {
+    group.add(brickBox(P, 0.5, 0.16, 0.32, 0x6d5a44, x, 2.22, z));         // platillo
+    const fl = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.3, 6), fireMat);
+    fl.position.set(x + 0.13, 2.5, z); group.add(fl); wallFlames.push(fl);  // reusa flicker de wallFlames
+  };
+  ([[-7, 6], [7, 6], [-4.5, 3]] as Array<[number, number]>).forEach(([tx, tz]) => { oilLamp(tx, tz); steamAt(tx + 0.4, 2.55, tz); });
+  steamAt(-3, 3.05, -4.9); steamAt(5.5, 3.35, -5);                          // café humeante en la barra
+  // ovillo de CORDÓN ROJO sobre la barra (objeto de Rahab; presagia el pacto)
+  const cord = new THREE.Group(); cord.position.set(2.6, 2.45, -5); group.add(cord);
+  for (let i = 0; i < 3; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.26 - i * 0.05, 0.05, 6, 14), P.get(0xc0392b)); r.rotation.x = Math.PI / 2; r.position.y = i * 0.06; cord.add(r); }
+
   // ---- MOTAS de polvo flotando en la luz cálida (atmósfera senior) ----
   const moteN = 60;
   const moteGeo = new THREE.BufferGeometry();
@@ -217,6 +241,13 @@ export function buildTavernStage(ctx: SceneContext, opts: { rahabAt?: [number, n
       fireLight.intensity = 5.5 * f;
       flames.forEach((fl, i) => fl.scale.set(0.9 + f * 0.2, f * (1 + i * 0.12), 0.9 + f * 0.2));
       wallFlames.forEach((fl, i) => { const g = 0.82 + Math.sin(t * 13 + i * 1.7) * 0.14; fl.scale.set(0.9 + g * 0.15, g, 0.9 + g * 0.15); });
+      // café humeante: cada voluta sube y se desvanece en bucle (humo de algodón blanco)
+      for (const p of steamPuffs) {
+        p.life += _dt * 0.5; if (p.life > 1) p.life -= 1;
+        p.m.position.y = p.base + p.life * 1.2;
+        p.m.scale.setScalar(0.45 + p.life * 1.5);
+        (p.m.material as THREE.MeshBasicMaterial).opacity = 0.5 * (1 - p.life) * Math.min(1, p.life * 8);
+      }
       diners.update(_dt);
       // motas: suben lento y reaparecen
       const mp = motes.geometry.attributes.position as THREE.BufferAttribute;
