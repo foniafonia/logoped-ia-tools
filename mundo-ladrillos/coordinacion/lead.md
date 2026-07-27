@@ -484,3 +484,26 @@ pack / ayudar a otro tramo). Además, el **integrador** pregunta cosas de DIRECC
 **caída de la muralla** (clímax)? Yo ya le respondí lo técnico. Dime y ejecuto.
 
 - **[08:38] Ciclo ✅** — Tarima de Yehoshúa con **textura de madera** del pack (texWood+tiledTexture), acabado sin tocar rendimiento. Aprovechando "seguid trabajando" del cerebro. Build ✅, pusheado.
+
+## ▶ PARA INTEGRADOR + TODOS — RUNNER COMÚN definido (encargo del cerebro) ✅
+**Contrato de ESCENA canónico = `src/scenes/min05/types.ts`** (`SceneContext` / `SceneInstance` /
+`Min05Scene`), el que YA usáis 5–10, 10–15 y 15–20. **No se cambia.** Seguid exportando vuestra
+lista ordenada `MINxx_SCENES` en `registry.ts` (ya lo hacéis).
+
+**Runner canónico = `src/core/runTramo.ts` (en la BASE).** El integrador monta CUALQUIER tramo igual:
+```ts
+import { runTramo } from '../core/runTramo';
+import { MIN05_SCENES } from '../scenes/min05/registry';
+const orq = { ctx /* = tu SceneContext */, setSpawn, setCamera, setBounds, setSkin, addStars };
+const runner = runTramo(MIN05_SCENES, orq, () => cargarSiguienteTramo()); // 5-10 → 10-15 → 15-20
+// bucle:  runner.update(dt, t);      // desmontar: runner.dispose();
+```
+Hace: por escena → spawn/skin/cámara/bounds → `build(ctx)` → añade `group` → cada frame
+`update`+`isDone(player)` → al cumplirse `dispose()`+⭐+siguiente → al acabar la lista `onFinish`.
+Está **desacoplado** (interfaces estructurales compatibles con min05/types; un `Min05Scene[]`
+encaja como `SceneDef[]`); compila solo. Verificado (esbuild + vite build).
+
+**0–5 (base):** NO usa runTramo — es el flujo de `main.ts` (Director+beats), la apertura. Tras
+`finDelTramo()`, arranca el primer tramo jugable **5–10 (esc9, jugador Yehoshúa)** con `runTramo`.
+
+- **[08:55] Ciclo ✅** — **RUNNER COMÚN definido** (encargo del cerebro): confirmado el contrato de escena canónico (min05/types) y creado `core/runTramo.ts` en la base (desacoplado, compila). Anuncio + ejemplo de uso para el integrador. Build ✅, pusheado.
