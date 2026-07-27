@@ -32,7 +32,16 @@ import { QUALITY, IS_MOBILE } from './Quality';
 export interface PreciousOptions {
   /** Exposición del tono ACES. Def. 1.08. */
   exposure?: number;
-  /** Bloom (brillo cinemático). Def. strength 0.4 / radius 0.6 / threshold 0.82. */
+  /**
+   * Preset de bloom por tipo de escena (elige umbral/fuerza con gusto):
+   *   · 'day'      exterior diurno — sutil, NO lava (umbral alto). RECOMENDADO de día.
+   *   · 'night'    nocturno — glow marcado (faroles, luna, oro).
+   *   · 'interior' posada/tienda — intermedio.
+   * Si no se indica, usa un default seguro (umbral alto) que no lava los diurnos.
+   * `bloom` (abajo) siempre tiene prioridad sobre el preset.
+   */
+  preset?: 'day' | 'night' | 'interior';
+  /** Bloom (brillo cinemático). Sobrescribe el preset. Def. seguro: strength .35 / radius .55 / threshold .90. */
   bloom?: { strength?: number; radius?: number; threshold?: number };
   /** Fuerza el IBL on/off. Por defecto sigue `QUALITY.envMap` (off en móvil). */
   ibl?: boolean;
@@ -64,11 +73,20 @@ export function setupPreciousRender(
 ): PreciousHandle {
   const exposure = opts.exposure ?? 1.08;
   const lite = opts.lite ?? IS_MOBILE;
-  // En lite aligeramos el bloom (kernel más pequeño y algo menos de fuerza)
-  const base = { strength: 0.4, radius: 0.6, threshold: 0.82 };
-  const bloomCfg = lite
-    ? { strength: 0.3, radius: 0.4, threshold: 0.85, ...opts.bloom }
-    : { ...base, ...opts.bloom };
+  // Presets de bloom por escena. El default sube el UMBRAL (0.90) para NO lavar
+  // los exteriores diurnos (el 5–10 avisó de esto). 'night' recupera el glow.
+  const PRESETS = {
+    day: { strength: 0.20, radius: 0.50, threshold: 0.92 },
+    night: { strength: 0.50, radius: 0.70, threshold: 0.70 },
+    interior: { strength: 0.34, radius: 0.60, threshold: 0.82 }
+  };
+  const DEFAULT_BLOOM = { strength: 0.35, radius: 0.55, threshold: 0.90 };
+  const preBase = opts.preset ? PRESETS[opts.preset] : DEFAULT_BLOOM;
+  // En lite aligeramos el bloom del preset (kernel menor + algo menos de fuerza + umbral algo más alto)
+  const lit = lite
+    ? { strength: preBase.strength * 0.75, radius: 0.4, threshold: Math.min(0.95, preBase.threshold + 0.03) }
+    : preBase;
+  const bloomCfg = { ...lit, ...opts.bloom }; // `bloom` explícito siempre gana
   const useIbl = opts.ibl ?? QUALITY.envMap;      // ya off en móvil (Quality)
   const useSmaa = (opts.smaa ?? true) && !lite;   // SMAA se salta en móvil (caro)
 
