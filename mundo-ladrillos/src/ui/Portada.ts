@@ -1,4 +1,4 @@
-import { bgJericoMurallas } from '../assets/bgJericoMurallas';
+import { bgPortadaKeyart } from '../assets/bgPortadaKeyart';
 
 /**
  * Portada — pantalla de título del juego, con BOTONES DE LADRILLO.
@@ -125,7 +125,7 @@ export function mountPortada(parent: HTMLElement, opts: PortadaOptions = {}): Po
 
   const root = document.createElement('div');
   root.className = 'lp-portada';
-  root.style.setProperty('--lp-bg', `url("${bgJericoMurallas}")`);
+  root.style.setProperty('--lp-bg', `url("${bgPortadaKeyart}")`);
 
   const head = document.createElement('div');
   head.className = 'lp-head';

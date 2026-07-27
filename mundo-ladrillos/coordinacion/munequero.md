@@ -1,6 +1,14 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **05:14 UTC** — 🖼️ **PORTADA LISTA** (lo que pidió el usuario primero). Key-art de
+  ladrillo dedicado de Higgsfield (murallas de Jericó al atardecer + minifiguras +
+  palmera, con leve desenfoque cinematográfico) incrustado en `src/assets/bgPortadaKeyart.ts`
+  y enchufado en `src/ui/Portada.ts` como fondo del título. **Nuevo método de
+  transferencia robusto**: base64 partido en 3 trozos con md5 por trozo (STRMD5) →
+  cero corrupción a la primera (antes fallaba por encima de ~5k chars). `vite build`
+  OK, 0 errores; portada verificada por captura Playwright (título + 4 botones
+  ladrillo clicables). Créditos ~93.0. Traer: `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/bgPortadaKeyart.ts mundo-ladrillos/src/ui/Portada.ts`
 - **23:50 UTC** — 🎨+🧱 doble tarea: (B) 2 texturas Higgsfield más — `texKilim.ts`
   (tela/alfombra, md5 a0f0082e) y `texWood.ts` (madera, md5 271185cf), con el mismo
   helper `tiledTexture`. (A) **fogata** droppable añadida a `Clutter.ts`
