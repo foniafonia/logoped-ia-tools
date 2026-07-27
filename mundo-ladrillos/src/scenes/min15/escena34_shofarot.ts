@@ -122,6 +122,10 @@ export const escena34: Min15Scene = {
     orderBubble.position.set(COHEN.x - 1.5, 6.2, COHEN.z); group.add(orderBubble);
     const gagBubble = makeBubble('«¡A mí no me dieron chofer!» 🐏', { w: 6 });
     gagBubble.position.set(3, 3.2, 8); gagBubble.visible = false; group.add(gagBubble);
+    // TEASER de cierre del tramo (encargo del cerebro): guiño al 20–25 (cruce del
+    // Jordán) con frases REALES de la peli (13:08 + 13:26). No construyo ese tramo.
+    const teaser = makeBubble('PRÓXIMAMENTE… «¿Cómo cruzaremos el Jordán crecido?» — «Tranquilo: Dios está con nosotros.»', { w: 11 });
+    teaser.position.set(4, 8.4, 2); teaser.visible = false; group.add(teaser);
 
     // --- CARNERO cómico que trota por el taller (gag; corre más al final) ---
     const ram = buildRam(P); ram.position.set(-6, 0, 9); group.add(ram);
@@ -175,12 +179,13 @@ export const escena34: Min15Scene = {
           if (near && ctx.wantsInteract()) {
             phase = 'done'; endT0 = t;
             carried.visible = false; cohenShofar.visible = true; gagBubble.visible = true;
-            beacon.visible = false; ctx.sound.success?.();
+            teaser.visible = true; beacon.visible = false; ctx.sound.success?.();
           }
         } else {
           cohen.root.rotation.z = Math.sin(t * 6) * 0.06; // el Cohen prueba el shofar
           gagBubble.position.set(ram.position.x, ram.position.y + 3.2, ram.position.z); // el bocadillo sigue al carnero
-          if (t - endT0 > 1.2) doneFlag = true;
+          teaser.position.y = 8.4 + Math.sin(t * 2) * 0.12; // flota el cartel de "próximamente"
+          if (t - endT0 > 2.4) doneFlag = true; // aguanta para leer el teaser de cierre
         }
       },
       status(): string | null {
@@ -206,6 +211,7 @@ export const escena34: Min15Scene = {
         beacon.dispose();
         (orderBubble.material as THREE.SpriteMaterial).map?.dispose(); orderBubble.material.dispose();
         (gagBubble.material as THREE.SpriteMaterial).map?.dispose(); gagBubble.material.dispose();
+        (teaser.material as THREE.SpriteMaterial).map?.dispose(); teaser.material.dispose();
         group.traverse((obj) => { const m = obj as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
       }
     };
