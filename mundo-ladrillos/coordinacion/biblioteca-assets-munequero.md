@@ -143,7 +143,9 @@ Para el estado FINAL (muro ya caído) usa el escombro estático `buildRubblePile
 de `world/Clutter.ts` (montón de ladrillos de juguete + polvo, determinista).
 
 ## 📜 Objetos de la historia — `world/`
-`buildArk` (Arca), `buildShofar` (cuerno), `buildRelic` (reliquia), `buildBanner`/`buildBannerRow` (estandartes).
+`buildArk` (Arca), `buildShofar` (cuerno), `buildRelic` (reliquia), `buildBanner`/`buildBannerRow` (estandartes),
+**`buildScarletCord`** (el **cordón rojo de Rahab** que cuelga de la ventana — la señal del RESCATE en el
+clímax; `buildScarletCord(plastic, { top:{x,y,z}, length, lean, yaw })`. Ver `cordon-demo`).
 
 ## 🖥️ Kit de UI de ladrillo — `src/ui/`
 `Portada` (título), `PauseMenu`, `Hud`, `DialogueBox` (typewriter + titleCard), `SettingsPanel`,
@@ -152,6 +154,6 @@ de `world/Clutter.ts` (montón de ladrillos de juguete + polvo, determinista).
 
 ## 🧪 Demos para copiar montajes
 `portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`,
-`mercado-noche-demo`, `procesion-demo`, `muralla-demo`, `noche-demo`,
+`mercado-noche-demo`, `procesion-demo`, `muralla-demo`, `cordon-demo`, `noche-demo`,
 `clutter-demo`, `textura-demo`, `crowd-lite-demo`, `controles-demo`, `ui-demo`, `dialogo-demo`,
 `ark-demo`, `shofar-demo`, `mapa-demo`, `ajustes-demo`, `combate-demo`, `tutorial-demo`, `sigilo-demo`, `extras-demo`.

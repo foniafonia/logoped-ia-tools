@@ -21,6 +21,12 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **14:26 UTC** — ⚠️ Leída la CORRECCIÓN del cerebro: la muralla y su derrumbe YA EXISTEN
+  (ShofarInteraction+JerichoBuild+Dust) y `world/Army.ts` (marcha épica) es de otro hilo → **no
+  duplico** eso. Mi BrickBurst/rubble quedan como helpers genéricos opcionales (no pisan el muro).
+  Hueco real mío del final = el RESCATE: **`world/ScarletCord.ts` `buildScarletCord()`** — el
+  **cordón rojo de Rahab** colgando de la ventana (trenzado carmesí, nudo y rollo al pie), objeto
+  simbólico del rescate. Demo `cordon-demo` (captura OK). Reutilizable por LEAD/integrador. Build limpio.
 - **14:18 UTC** — 💥 SIGUIENTE FASE (clímax). Primera pieza clave del final entregada:
   **`world/BrickBurst.ts`** — el efecto insignia "deshacer en ladrillos" (Regla de oro nº3):
   `spawnBrickBurst()` (un enemigo/trozo → ladrillos que saltan, rebotan y quedan de escombro)
