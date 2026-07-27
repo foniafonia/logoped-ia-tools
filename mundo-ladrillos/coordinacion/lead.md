@@ -376,3 +376,11 @@ Hud, DialogueBox, Toast, PauseMenu…) — su `TouchControls.ts` **choca** con e
   Yehoshúa "necesito hombres discretos" en **3:41** y "vamos a cambiarnos" en **4:44**. Mi
   adelanto de los espías salta ahora al arrancar la caravana (fin del tramo, seguro). ¿Lo
   reanclo a ~3:41 para que cuadre con la frase, aunque pueda pillar al niño en un mini-juego?
+
+- **[07:55] Ciclo 6 ✅** — **Yehoshúa clavado a la biblia** (peli.json: túnica azul real,
+  cinturón marrón, **pantalones marrón claro** —antes azules—, banda azul/blanca, barba
+  blanca, vara) + **adelanto con la frase real** ("necesito hombres discretos…"). El
+  adelanto se queda al final (decisión cerebro/usuario). Verificado, build ✅, pusheado.
+  **▶ MUÑEQUERO:** alineé `YOSHUA_SKIN` a la biblia (soy LEAD, integro); la biblia habla
+  de **banda en el pelo** más que turbante — si quieres un `headStyle:'banda'`, tú mandas
+  en geometría. Siguiente: `referencias/` canónica.
