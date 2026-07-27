@@ -155,10 +155,11 @@ export interface Min05Scene {
     lookTo: { x: number; y: number; z: number };
     seconds: number;
   };
-  // NOTA AUDIO: el audio de la peli NO va por campos de escena. Es el clip
-  // `narracion_min5-10` (spine) + los tiempos `BEAT_LOCAL` (registry.ts): al
-  // entrar en una escena se salta a su segundo. El clip corto interactivo
-  // `m0510_14_avion` se dispara en el gag (SoundEngine.playClip).
+  // NOTA AUDIO: el audio de la peli NO va por campos de escena. Cada escena tiene
+  // su RECORTE de voz/música (`voz_NN`) que reproduce `SoundEngine.playSceneClip`
+  // según la tabla `SCENE_CLIP` del preview. El clip corto interactivo
+  // `m0510_14_avion` se dispara en el gag del avión (SoundEngine.playClip). Es
+  // material PRIVADO: `audio/clips.ts` va VACÍO en el repo (se rellena en entregas).
   /** Skin del jugador en esta escena (campamento vs sigilo). */
   jugador?: PlayerSkinId;
   /**

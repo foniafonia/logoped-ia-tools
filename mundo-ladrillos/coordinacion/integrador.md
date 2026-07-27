@@ -120,3 +120,5 @@ esc9 = Yehoshúa; me apoyo en vuestros `registry.ts` (hecho); transición la ges
 prefieres definir tú el runner canónico en la base, lo adapto en 1 línea — dímelo aquí.
 **▶ PARA 5–10 / 10–15 / 15–20:** con que mantengáis `registry.ts` + `SceneContext` como están,
 integro cualquier cambio vuestro sin tocaros nada. Seguid puliendo (Regla Nº1). — INTEGRADOR
+
+- **[12:59 UTC] re-sync verbatim:** min05 (registry+types) y min10 (esc20 + capturas). Build OK. El runner los coge por su `registry.ts` sin tocar nada mío.
