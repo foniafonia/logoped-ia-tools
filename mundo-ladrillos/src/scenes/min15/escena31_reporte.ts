@@ -20,11 +20,12 @@ import { BrickPalette } from '../../materials/BrickPalette';
  * la buena nueva. Diálogo con el helper LOCAL `makeBubble` (stopgap del tramo
  * 10–15) hasta que el LEAD publique el `ctx.say` compartido; entonces se cambia.
  */
+// Diálogo REAL de la peli (transcripción 10:42–11:13; el juego reordena beats).
 type Line = { who: 'espia' | 'yehoshua'; text: string };
 const DIALOGO: Line[] = [
-  { who: 'espia', text: '«¡Josué! El Señor ha entregado toda la tierra en nuestras manos.»' },
-  { who: 'espia', text: '«Toda la gente de Jericó tiembla de miedo ante nosotros.»' },
-  { who: 'yehoshua', text: '«¡Bendito sea el Señor! Mañana cruzaremos el Jordán.»' }
+  { who: 'espia', text: '«Ya estamos aquí. Sentimos la mano de Hashem con nosotros y él nos libró de todos nuestros enemigos.»' },
+  { who: 'espia', text: '«Todos están muertos de miedo. Rahab nos contó los secretos de nuestros enemigos: esa información vale oro.»' },
+  { who: 'yehoshua', text: '«Si han hecho una promesa, esa promesa se respetará. Den esa información a los comandantes de las tropas.»' }
 ];
 
 export const escena31: Min15Scene = {
@@ -32,13 +33,13 @@ export const escena31: Min15Scene = {
   numero: 31,
   mundo: 'campamento',
   titulo: 'El parte a Josué',
-  subtitulo: 'Preséntate ante Josué en la tienda militar y dale el parte (E): la ciudad es nuestra.',
+  subtitulo: 'Ya estamos aquí: sentimos la mano de Hashem con nosotros. Preséntate ante Josué y dale el parte (E).',
   jugador: 'spy',
   noche: true,
   ambiente: 'night',
   spawn: { x: -14, z: 3 },
   objetivo: { tipo: 'ir_a', texto: 'Ve ante Josué y dale el parte (E)', target: { x: 10, z: 0 }, radio: 2.8 },
-  exito: '¡Parte entregado! «El Señor ha entregado la ciudad en nuestras manos.»',
+  exito: '¡Parte entregado! Esa promesa a Rahab se respetará y la información vale oro.',
   camara: { yaw: 0, pitch: 0.3, dist: 20 },
   intro: {
     from: { x: -22, y: 9, z: 22 }, to: { x: -13, y: 6, z: 15 },

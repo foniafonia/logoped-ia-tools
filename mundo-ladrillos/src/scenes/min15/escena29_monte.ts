@@ -28,7 +28,7 @@ export const escena29: Min15Scene = {
   numero: 29,
   mundo: 'monte',
   titulo: 'Escondidos en el monte',
-  subtitulo: 'Sube al monte y escóndete en la cueva (E). Espera tres noches, quietecito, hasta que los perseguidores se marchen.',
+  subtitulo: 'Sigue el sendero en silencio hasta pasar la colina y escóndete en la cueva (E). Espera tres noches, hasta que los perseguidores se marchen.',
   jugador: 'spy',
   noche: true,
   ambiente: 'night',

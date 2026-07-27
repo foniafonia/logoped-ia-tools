@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { Min15Scene, SceneContext, SceneInstance } from './types';
 import { GuideBeacon } from './props/guide';
 import { buildGround, buildPine, buildBush, buildMoonNight, buildPineRidge } from './props/wild';
-import { buildRiver, buildFish, buildReeds, buildRock, buildTent } from '../min05/props/BrickProps';
+import { buildRiver, buildFish, buildReeds, buildRock, buildTent, buildDistantJericho } from '../min05/props/BrickProps';
+import { buildPalm } from '../../world/Clutter';
 import { createMinifigure, Minifigure } from '../../characters/MinifigureFactory';
 import { ESPIA1_SIGILO, ESPIA2_SIGILO } from '../min05/skins';
 import { BrickPalette } from '../../materials/BrickPalette';
@@ -44,6 +45,13 @@ export const escena30: Min15Scene = {
     group.add(buildGround(P, 0x2c5a30));
     group.add(buildMoonNight(P));
     group.add(buildPineRidge(P, -24, 10));
+    // Silueta fortificada de JERICÓ al fondo (biblia escenario `orilla_jordan`): de
+    // ahí vienen los espías (orilla oeste). Solo silueta lejana, no fondo plano 2.5D.
+    const jer = buildDistantJericho(P, 80); jer.position.set(-8, 0, -34); group.add(jer);
+    // PALMERAS de tronco curvo en las orillas (biblia: palmeras a los lados del cauce)
+    for (const [x, z, h] of [[-11, -9, 5.5], [-11.5, 10, 5], [10.5, -8, 5.2], [11, 12, 4.8]] as Array<[number, number, number]>) {
+      group.add(buildPalm(P, { x, z, height: h })); ctx.addObstacle(x, z, 0.6, 0.6);
+    }
 
     // --- EL RÍO: franja vertical (corre en Z) que se cruza de oeste a este ---
     const river = buildRiver(P, 15, 48, 0, 3);

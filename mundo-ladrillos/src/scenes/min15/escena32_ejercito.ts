@@ -43,7 +43,7 @@ export const escena32: Min15Scene = {
   numero: 32,
   mundo: 'campamento',
   titulo: 'Josué reúne al ejército',
-  subtitulo: 'Josué da la orden: ¡a formar! Corre a cada corro de soldados y llámalos (E) para que se pongan firmes en la formación.',
+  subtitulo: '«¡Reúnan al ejército y a los jefes de las tribus! Vamos a cruzar el Jordán y conquistar Jericó.» Llama a cada corro de soldados (E).',
   jugador: 'spy',
   noche: true,
   ambiente: 'night',
@@ -88,7 +88,7 @@ export const escena32: Min15Scene = {
     const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.9, 10, 12, 1, true),
       new THREE.MeshBasicMaterial({ color: 0xffd98a, transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false }));
     pillar.position.set(16, 5, 0); group.add(pillar);
-    const orderBubble = makeBubble('«¡Prepárate, Israel! Marchamos sobre Jericó.»', { w: 8 });
+    const orderBubble = makeBubble('«¡Reúnan al ejército y a los jefes de las tribus!»', { w: 8.4 });
     orderBubble.position.set(13.5, 6.6, 0); group.add(orderBubble);
 
     // --- Los 3 ESCUADRONES dispersos ---
