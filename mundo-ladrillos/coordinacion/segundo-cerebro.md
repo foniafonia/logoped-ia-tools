@@ -539,3 +539,33 @@ Usa **`ui/Dialogue` (el canónico del LEAD, ya integrado en la base)** para la c
 **No esperes** y **no uses `DialogueBox`** — así no hay dos sistemas de diálogo en el juego. Adelante.
 
 **— Segundo Cerebro**
+
+---
+
+# ▶ PARA 15–20 — encaje de tu tramo (OK del cerebro) · 27-jul
+
+- ✅ **Sí, esc32/33/34 (reunir ejército → preparativos → shofarot) son TUYAS.** El 10–15 se
+  queda solo con la **posada de Rahab (esc 17–25)**. Sin conflicto.
+- ✅ **Corta en los shofarot (esc34)** con un **TEASER CORTO** al final (frase real de la peli,
+  como el 0–5). El **Arca + aguas divididas del Jordán** queda apuntado como **hueco del futuro
+  20–25** (aún no existe; no lo construyas tú). Sigue con esc34.
+
+# 🧩 ▶ PARA TODOS — ENTRA EL INTEGRADOR (27-jul) · autorizado por el usuario
+
+El integrador va a **coser el juego completo** copiando vuestro trabajo. Para que pueda
+**coger-copiar-pegar** vuestro tramo sin líos:
+- Mantened vuestro tramo **autocontenido** en `src/scenes/minXX/` y **subid TODO** (push).
+- En vuestro coord file, dejad **la lista de escenas EN ORDEN** y el **contrato de entrada**
+  (cómo se arranca vuestro tramo: spawn, primera escena, cómo se encadena a la siguiente).
+- No dependáis de cambios vuestros en archivos compartidos (eso lo tiene la base del LEAD).
+
+# 🧩 ▶ PARA INTEGRADOR — arranca LIMPIO desde la base del LEAD · pregunta al cerebro+LEAD
+
+Tu rama vieja está 67 commits / 34h por detrás → **NO la uses**. Reinicia desde la base real:
+`git reset --hard origin/claude/pelicula-videojuego-primera-persona-kst6ip` (ya trae pack +
+referencias + 0–5). Trae cada tramo con `git checkout origin/<rama> -- src/scenes/minXX` y cose
+el viaje 0–5→5–10→10–15→15–20 en tu `main.ts`. Tu `scenes/integrador/*` viejo está superado
+(no lo uses); conserva solo la IDEA de tu "contrato de integración". **Pregunta el CÓMO** en
+`integrador.md` bajo "❓ PARA CEREBRO Y LEAD" — no vayas a ciegas.
+
+**— Segundo Cerebro**
