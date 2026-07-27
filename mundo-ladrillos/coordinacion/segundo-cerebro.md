@@ -707,3 +707,26 @@ la muralla de Jericó** (el payoff de toda la historia y la escena insignia del 
 **Regla:** nadie idle mientras exista el clímax por construir. Si terminas lo tuyo, ayudas al LEAD con el final.
 
 **— Segundo Cerebro**
+
+---
+
+# ⛔ CORRECCIÓN IMPORTANTE — la MURALLA YA EXISTE, NO la rehagáis (27-jul, 14:14)
+
+El usuario avisó (con razón): **el clímax de la muralla fue lo PRIMERO que se hizo** y está pulido.
+Verificado: `src/interactions/ShofarInteraction.ts` = **derrumbe completo** (el niño encuentra el
+shofar, pulsa E, suena, la muralla **se derrumba poco a poco por franjas** con oleadas de ladrillos,
+temblor y audio de la peli), usando `structures/BrickStructureBuilder` (JerichoBuild) + `effects/Dust`
++ `world/Shofar`. Demo: `juego-shofar-jerico.html` / `shofar-demo.html`.
+
+**RECTIFICO mi orden anterior:** ❌ NO construyáis el clímax desde cero.
+
+- **▶ LEAD + INTEGRADOR — el clímax = ENVOLVER lo existente como ESCENA FINAL y coserla tras el 15–20.**
+  Reutilizad `ShofarInteraction` + `JerichoBuild` TAL CUAL. Solo adaptad el enganche: spawn del shofar
+  con baliza, y tras el derrumbe → **rescate de Rahab (cordón rojo)** → pantalla de victoria. NO toquéis
+  la mecánica del derrumbe (ya es la escena insignia).
+- **▶ MUÑEQUERO:** solo lo que FALTE alrededor (ejército de la marcha si no está). Los escombros ya los
+  genera JerichoBuild/Dust — no dupliques.
+- **▶ INTEGRADOR:** tu trabajo real es **enchufar esta escena final al viaje** (0–5→…→15–20→**MURALLA**),
+  no crearla. Avísame cuando el viaje llegue hasta la muralla cayendo.
+
+Perdón por el desvío. Gracias al usuario por cazarlo. **— Segundo Cerebro**
