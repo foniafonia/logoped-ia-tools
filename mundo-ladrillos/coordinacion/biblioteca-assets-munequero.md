@@ -75,8 +75,9 @@ noche/sigilo) · `iconBasket` (cesta de pan — comida/coleccionable, mercado) �
 (cántaro de agua — aguadoras/pozo, prop de mercado) · `iconStar` (estrella dorada —
 recompensa/nivel completado, universal) · `iconCord` (**cordón rojo** — la señal de Rahab,
 objetivo clave de E20) · `iconLamp` (candil de aceite — interiores/noche, casa de Rahab) ·
-`iconHelmet` (casco de bronce — guardias/soldados, asalto al muro). Todos recortados con IA
-(fondo transparente) y verificados por md5. **11 iconos** en total.
+`iconHelmet` (casco de bronce — guardias/soldados, asalto al muro) · `iconGrapes` (racimo de
+uvas — comida/mercado/coleccionable). Todos recortados con IA (fondo transparente) y verificados
+por md5. **12 iconos** en total.
 
 ## ✨ Render "precioso" (COMPARTIDO)
 ```ts
@@ -91,7 +92,10 @@ import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePi
 scene.add(buildCrateStack(plastic, { x: 4, z: -2 }));
 scene.add(buildFirePit(plastic, { x: 0, z: 0 }));   // fogata con luz cálida (noches)
 scene.add(buildTent(plastic, { x: 3, z: -2, rack: true }));  // carpa; rack=perchero de trajes de sigilo (E10/E12)
+scene.add(buildWell(plastic, { x: 0, z: 0 }));   // pozo de aldea (agua/aguadoras, centro de plaza)
 ```
+`buildWell(plastic, { x, z, scale? })` → pozo de aldea (brocal de piedra + poste, travesaño,
+cubo colgando y agua). Centro natural de plaza/mercado y fuente de las aguadoras (Regla Nº1).
 `buildTent(plastic, { rack?, color?, scale?, yaw? })` → tienda de campaña a dos aguas
 (frente abierto). Con `rack:true` monta dentro el perchero de trajes de sigilo (reclutar
 espías / vestuario). Ver montaje en `tienda-demo`.

@@ -231,3 +231,54 @@ export function buildTent(
   }
   return place(g, o);
 }
+
+/**
+ * Pozo de aldea (brocal de piedra + poste, travesaño y cubo colgando). Centro
+ * natural de una plaza/mercado y fuente de las aguadoras (Regla Nº1). Suéltalo
+ * en cruces y patios. `buildWell(plastic, { x, z })`.
+ */
+export function buildWell(plastic: PlasticMaterialFactory, o: Pos & { scale?: number } = {}): THREE.Group {
+  const g = new THREE.Group();
+  const s = o.scale ?? 1;
+  const stone = plastic.get(0x9a8f7d);
+  const stoneDk = plastic.get(0x7c7263);
+  const wood = plastic.get(0x6e4a28);
+  const water = plastic.get(0x2f6f8f);
+  // brocal (anillo de piedra) = toro bajo + bloques
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.72 * s, 0.8 * s, 0.62 * s, 16), stone);
+  rim.position.y = 0.31 * s; rim.castShadow = true; rim.receiveShadow = true; g.add(rim);
+  const lip = new THREE.Mesh(new THREE.TorusGeometry(0.72 * s, 0.09 * s, 8, 18), stoneDk);
+  lip.rotation.x = Math.PI / 2; lip.position.y = 0.62 * s; g.add(lip);
+  // piedras del borde (irregular, para que no sea un cilindro liso)
+  const N = 8;
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2;
+    const b = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14 * s + (i % 3) * 0.02 * s), i % 2 ? stone : stoneDk);
+    b.position.set(Math.cos(a) * 0.74 * s, 0.6 * s, Math.sin(a) * 0.74 * s);
+    b.rotation.set(i, i * 2, i); g.add(b);
+  }
+  // agua al fondo
+  const w = new THREE.Mesh(new THREE.CircleGeometry(0.62 * s, 16), water);
+  w.rotation.x = -Math.PI / 2; w.position.y = 0.2 * s; g.add(w);
+  // dos postes + travesaño + tejadillo
+  for (const sx of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06 * s, 0.07 * s, 1.5 * s, 8), wood);
+    post.position.set(sx * 0.7 * s, 0.75 * s, 0); post.castShadow = true; g.add(post);
+  }
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.05 * s, 0.05 * s, 1.6 * s, 8), wood);
+  beam.rotation.z = Math.PI / 2; beam.position.y = 1.5 * s; g.add(beam);
+  // tejadillo a dos aguas
+  for (const side of [-1, 1]) {
+    const roof = new THREE.Mesh(new THREE.BoxGeometry(1.1 * s, 0.05 * s, 0.9 * s), stoneDk);
+    roof.position.set(side * 0.28 * s, 1.68 * s, 0);
+    roof.rotation.z = -side * 0.5; roof.castShadow = true; g.add(roof);
+  }
+  // cuerda + cubo colgando
+  const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.015 * s, 0.015 * s, 0.85 * s, 6), plastic.get(0x8d7a4f));
+  rope.position.set(0.15 * s, 1.05 * s, 0); g.add(rope);
+  const bucket = new THREE.Mesh(new THREE.CylinderGeometry(0.13 * s, 0.1 * s, 0.22 * s, 10), wood);
+  bucket.position.set(0.15 * s, 0.68 * s, 0); bucket.castShadow = true; g.add(bucket);
+  const handle = new THREE.Mesh(new THREE.TorusGeometry(0.12 * s, 0.012 * s, 6, 12, Math.PI), plastic.get(0x4a3420));
+  handle.position.set(0.15 * s, 0.79 * s, 0); g.add(handle);
+  return place(g, o);
+}

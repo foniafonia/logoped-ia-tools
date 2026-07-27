@@ -21,6 +21,10 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **14:10 UTC** — 🍇 `iconGrapes` (racimo de uvas — comida/mercado, **12 iconos** ya) +
+  🪣 **`buildWell()`** en `world/Clutter.ts`: pozo de aldea (brocal de piedra, poste,
+  travesaño, cubo y agua) — centro de plaza y fuente de las aguadoras (Regla Nº1, sin gastar
+  crédito). Icono verificado por md5 (limpio a la primera). Build limpio. *(Créditos ≈ 69.)*
 - **13:58 UTC** — 🪔 +2 iconos verificados por md5: `iconLamp` (candil de aceite —
   interiores/noche, casa de Rahab) y `iconHelmet` (casco de bronce — guardias/asalto al muro).
   Higgsfield, fondo transparente. Ya son **11 iconos** de juego. Corrupción de pegado (candil
