@@ -107,6 +107,12 @@ export const escena14: Min05Scene = {
 
     ctx.scene.add(group);
 
+    // BANTER de apertura (diálogo compartido): los espías fingen calma antes de la
+    // treta. Prepara el gag visual "¡UN AVIÓN!" (frases reales de la peli, 5:12).
+    const AZUL = 0x6f9fc4;
+    ctx.say?.('Es una noche bastante tranquila, ¿no crees?', 'Espía', 3.0, AZUL);
+    ctx.say?.('Sí… demasiado tranquila. Ve a la marca y grita lo del avión.', 'Espía 2', 3.6, 0xc98b5a);
+
     const GOAL_Z = 20;
     let triggered = false;
     let doneFlag = false;
