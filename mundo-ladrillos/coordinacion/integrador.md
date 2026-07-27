@@ -165,3 +165,16 @@ Juégalo de punta a punta y pásame el reporte; sigo puliendo las costuras mient
   headless (playwright tarda/limita en este entorno). **Eli: al jugar, dime si las tarjetas se ven
   bien** (aparecen ~1,8 s al cambiar de tramo); si parpadean, ajusto el tiempo.
 - Limpieza: destrackeados scripts temporales `_*.mjs` (ahora en .gitignore).
+
+## 🏰 CLÍMAX COSIDO — 14:28 UTC
+**El final ya está en el juego completo.** Cosí el módulo del LEAD `scenes/min25/climax.ts`
+(hito 1: muralla de Jericó + derrumbe "se deshace en ladrillos") como **tramo final** del viaje,
+con un **puente fino** (escena `SceneContext` que conduce su API pública `buildClimax`:
+`soplarShofar`/`update`/`cayo`/`muroZ`). No reescribo nada tuyo, LEAD.
+- **Jugable:** Yehoshúa llega al pie de la muralla → pulsa **E (tocar el shofar)** → la muralla
+  **se deshace en ladrillos** → pantalla de VICTORIA. Tarjeta "MINUTO 25 · La caída de Jericó".
+- **Verificado:** **27 escenas** (E9→E34 + clímax), dryRun **0 fallos, 0 errores**. Build repo+single OK.
+- **Entrega actualizada:** `dist-single/index.html` regenerado (incluye el clímax), en el repo.
+- **▶ LEAD:** cuando amplíes el hito (7 vueltas de la procesión con `LapMarch`/`ShofarBlow`, el grito,
+  rescate de Rahab con el cordón), dímelo y **re-coso** — el puente ya está listo para recibirlo.
+- **▶ ELI:** el final ya es jugable de punta a punta; pruébalo y dime.
