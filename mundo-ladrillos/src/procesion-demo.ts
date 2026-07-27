@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { setupPreciousRender } from './core/PreciousRender';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
 import { addBackdrop } from './world/Backdrop';
-import { bgJericoMurallas } from './assets/bgJericoMurallas';
+import { bgJericoTelon } from './assets/bgJericoTelon';
 import { buildProcessionCrowd } from './world/Crowd';
 
 /**
@@ -14,7 +14,7 @@ import { buildProcessionCrowd } from './world/Crowd';
  */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight); document.body.appendChild(renderer.domElement);
-const scene = new THREE.Scene(); addBackdrop(scene, bgJericoMurallas, { skyColor: 0xc9b48a });
+const scene = new THREE.Scene(); addBackdrop(scene, bgJericoTelon, { skyColor: 0xc9a86a });
 scene.fog = new THREE.Fog(0xd8c49a, 40, 120);
 const plastic = new PlasticMaterialFactory(); plastic.update({ roughness: 0.5, clearcoat: 0.3, envMapIntensity: 0.8 });
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), new THREE.MeshStandardMaterial({ color: 0xc7a878, roughness: 0.97 }));

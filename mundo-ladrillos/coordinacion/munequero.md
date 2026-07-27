@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **13:30 UTC** — 🏰 `bgJericoTelon`: telón dramático de la **muralla de Jericó al atardecer**
+  (Higgsfield), el "fondo cutre" que anotó el cerebro. Plano de fondo anclado, ligero
+  (320px, 6 trozos verificados por md5). Conectado en `procesion-demo` (captura OK).
+  *(Doble plano del usuario: ✅ suscripción de Higgsfield CANCELADA — sin cargo, trial hasta
+  28-jul 23:52 UTC; sigo gastando créditos en piezas útiles. Créditos ≈ 78.)*
 - **13:10 UTC** — 🥁 Nueva orden del cerebro (REANUDAMOS ▶ MUÑEQUERO: "más multitud lite +
   expresiones"). Cumplida: **`buildProcessionCrowd()`** en `world/Crowd.ts` = multitud LITE de
   **procesión** para los momentos wow (marcha del shofar / caída de la muralla / júbilo del

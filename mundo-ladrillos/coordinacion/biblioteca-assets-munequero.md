@@ -58,6 +58,7 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 | módulo | qué es |
 |---|---|
 | `bgPortadaKeyart` | **key-art de la PORTADA** (murallas al atardecer, desenfocado) |
+| `bgJericoTelon` | **telón dramático de la muralla de Jericó al atardecer** (plano de fondo anclado; para el clímax del muro / "fondo cutre" que anotó el cerebro) |
 | `bgJericoMurallas` | murallas de Jericó (telón) |
 | `bgCampamento` | campamento israelita |
 | `bgJordanNoche` | Jordán de noche |
