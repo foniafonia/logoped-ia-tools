@@ -155,3 +155,79 @@ export function buildFirePit(plastic: PlasticMaterialFactory, o: Pos = {}): THRE
   light.position.set(0, 0.7, 0); g.add(light);
   return place(g, o);
 }
+
+/**
+ * Tienda de campaña del desierto (carpa a dos aguas, frente abierto). Con
+ * `rack:true` monta dentro un perchero con trajes de sigilo colgados — pieza
+ * pedida para reclutar espías / vestuario (E10, E12). Suéltala en campamentos
+ * e interiores de tienda (Regla Nº1).
+ *
+ *   scene.add(buildTent(plastic, { x: 3, z: -2, rack: true }));
+ */
+export function buildTent(
+  plastic: PlasticMaterialFactory,
+  o: Pos & { rack?: boolean; color?: number; scale?: number } = {}
+): THREE.Group {
+  const g = new THREE.Group();
+  const s = o.scale ?? 1;
+  const cloth = plastic.get(o.color ?? 0xbfa06a);   // lona arena
+  const clothDk = plastic.get(0x8f7440);            // pliegues/sombra
+  const pole = plastic.get(0x6e4a28);               // postes de madera
+  const W = 3.2 * s, L = 3.6 * s, H = 2.3 * s;      // ancho, fondo, alto de cumbrera
+
+  // postes de cumbrera (frente y fondo)
+  for (const pz of [-L / 2, L / 2]) {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(0.06 * s, 0.07 * s, H, 8), pole);
+    p.position.set(0, H / 2, pz); p.castShadow = true; g.add(p);
+  }
+  // dos faldones de lona (paneles inclinados a dos aguas, se juntan en cumbrera)
+  const theta = Math.atan2(H, W / 2);                 // ángulo del faldón bajo la horizontal
+  const slant = Math.hypot(W / 2, H) + 0.04 * s;      // longitud del faldón (ridge→suelo)
+  for (const side of [-1, 1]) {
+    // caja: X=longitud del faldón, Y=grosor, Z=fondo de la tienda
+    const panel = new THREE.Mesh(new THREE.BoxGeometry(slant, 0.05 * s, L), cloth);
+    panel.position.set(side * W / 4, H / 2, 0);
+    panel.rotation.z = -side * theta;                 // inclina la punta exterior hacia el suelo
+    panel.castShadow = true; panel.receiveShadow = true; g.add(panel);
+    // ribete inferior (pliegue oscuro) en el borde que toca el suelo
+    const hem = new THREE.Mesh(new THREE.BoxGeometry(0.14 * s, 0.1 * s, L), clothDk);
+    hem.position.set(side * (W / 2 - 0.05 * s), 0.06 * s, 0); g.add(hem);
+  }
+  // gablete trasero cerrado (triángulo), frente abierto
+  const gable = new THREE.Shape();
+  gable.moveTo(-W / 2, 0); gable.lineTo(W / 2, 0); gable.lineTo(0, H); gable.lineTo(-W / 2, 0);
+  const gableMesh = new THREE.Mesh(new THREE.ShapeGeometry(gable), clothDk);
+  gableMesh.position.set(0, 0, -L / 2); gableMesh.receiveShadow = true; g.add(gableMesh);
+  // solapas de entrada (dos cortinas recogidas a los lados del frente)
+  for (const side of [-1, 1]) {
+    const flap = new THREE.Mesh(new THREE.BoxGeometry(0.5 * s, H * 0.9, 0.05 * s), clothDk);
+    flap.position.set(side * (W / 2 - 0.35 * s), H * 0.45, L / 2 - 0.02 * s);
+    flap.rotation.z = side * 0.12; g.add(flap);
+  }
+
+  // perchero de trajes de sigilo (opcional)
+  if (o.rack) {
+    const rack = new THREE.Group();
+    const bar = plastic.get(0x4a3420);
+    const rw = W * 0.62, rh = H * 0.62;
+    for (const px of [-rw / 2, rw / 2]) {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04 * s, 0.04 * s, rh, 6), bar);
+      post.position.set(px, rh / 2, 0); rack.add(post);
+    }
+    const cross = new THREE.Mesh(new THREE.CylinderGeometry(0.035 * s, 0.035 * s, rw, 6), bar);
+    cross.rotation.z = Math.PI / 2; cross.position.set(0, rh, 0); rack.add(cross);
+    // trajes de sigilo colgados (paños oscuros + hombreras)
+    const garb = [0x1b2631, 0x212f3c, 0x17202a];
+    const nG = 3;
+    for (let i = 0; i < nG; i++) {
+      const gx = -rw / 2 + (i + 0.5) * (rw / nG);
+      const robe = new THREE.Mesh(new THREE.BoxGeometry(0.42 * s, 0.95 * s, 0.14 * s), plastic.get(garb[i % garb.length]));
+      robe.position.set(gx, rh - 0.52 * s, 0); robe.castShadow = true; rack.add(robe);
+      const shoulder = new THREE.Mesh(new THREE.CylinderGeometry(0.055 * s, 0.055 * s, 0.44 * s, 6), plastic.get(garb[i % garb.length]));
+      shoulder.rotation.z = Math.PI / 2; shoulder.position.set(gx, rh - 0.06 * s, 0); rack.add(shoulder);
+    }
+    rack.position.set(0, 0, -L * 0.18);
+    g.add(rack);
+  }
+  return place(g, o);
+}

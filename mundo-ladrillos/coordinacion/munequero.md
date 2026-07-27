@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **08:38 UTC** — 🎯 +2 iconos HUD verificados (`iconKey` llave, `iconScroll` rollo/Torá)
+  y 🏕️ **`buildTent()`** nuevo en `world/Clutter.ts`: carpa a dos aguas con `rack:true` =
+  **perchero de trajes de sigilo** (pieza P1 pedida para E10/E12). Demo `tienda-demo`
+  (verificada con captura). Catálogo actualizado. Build limpio. *(Descarté `iconTorch`/
+  `iconSword`: base64 corrupto en el pegado — se re-transfieren en otro ciclo.)*
 - **08:13 UTC** — ⚡ ACELERÓN: **6 texturas de golpe** (lote paralelo) — `texMarble` (templo),
   `texLeather`, `texGold` (Arca/tesoros), `texIron` (armas), `texBark` (troncos), `texParchment`
   (mapas/rollos/UI). Todas 160px, verificadas por md5 (bark reconstruida en sub-piezas por su

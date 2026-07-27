@@ -65,9 +65,12 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 
 ## 🎯 Iconos de juego (WebP transparente, HUD/botones)
 ```ts
-import { iconShofar, iconCoin } from './assets/gameIcons';
-img.src = iconShofar;   // shofar (objeto clave) · shékel (moneda)
+import { iconShofar, iconCoin, iconKey, iconScroll } from './assets/gameIcons';
+img.src = iconShofar;   // shofar (objeto clave) · shékel (moneda) · llave · rollo (Torá/mapa)
 ```
+`iconShofar` (cuerno, derriba murallas) · `iconCoin` (shékel/recompensa) · `iconKey`
+(llave de puerta/puesto) · `iconScroll` (rollo — objetivo/pista). Todos recortados con
+IA (fondo transparente) y verificados por md5.
 
 ## ✨ Render "precioso" (COMPARTIDO)
 ```ts
@@ -78,10 +81,14 @@ const fx = setupPreciousRender(renderer, scene, camera, { preset: 'day' }); // '
 
 ## 🧱 Attrezzo droppable (Regla Nº1) — `world/Clutter.ts`
 ```ts
-import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit } from './world/Clutter';
+import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit, buildTent } from './world/Clutter';
 scene.add(buildCrateStack(plastic, { x: 4, z: -2 }));
 scene.add(buildFirePit(plastic, { x: 0, z: 0 }));   // fogata con luz cálida (noches)
+scene.add(buildTent(plastic, { x: 3, z: -2, rack: true }));  // carpa; rack=perchero de trajes de sigilo (E10/E12)
 ```
+`buildTent(plastic, { rack?, color?, scale?, yaw? })` → tienda de campaña a dos aguas
+(frente abierto). Con `rack:true` monta dentro el perchero de trajes de sigilo (reclutar
+espías / vestuario). Ver montaje en `tienda-demo`.
 
 ## 🎭 Personajes y multitud — `characters/MinifigureFactory.ts`, `world/Crowd.ts`
 - `villagerSkin(i)` → **16 aldeanos** deterministas con **expresiones variadas**
@@ -108,6 +115,6 @@ marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigi
 `Toast`, `Collectibles`, `LoadingScreen`, `Health`, `Compass`, `Tutorial`, `StealthMeter`, `BrickUI` (botones/paneles).
 
 ## 🧪 Demos para copiar montajes
-`portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `noche-demo`,
+`portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`, `noche-demo`,
 `clutter-demo`, `textura-demo`, `crowd-lite-demo`, `controles-demo`, `ui-demo`, `dialogo-demo`,
 `ark-demo`, `shofar-demo`, `mapa-demo`, `ajustes-demo`, `combate-demo`, `tutorial-demo`, `sigilo-demo`, `extras-demo`.
