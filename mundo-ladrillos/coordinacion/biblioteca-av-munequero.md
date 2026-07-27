@@ -27,6 +27,8 @@
 | **GAME OVER / reintentar** — espía solo escondido junto a la muralla de noche, luz de luna azul, antorchas (16:9) | `a7b7b556-0e34-4317-bd26-468aaea79de3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_222647_a7b7b556-0e34-4317-bd26-468aaea79de3.png |
 | **AJUSTES / opciones** — interior de casa de Jericó con vasijas y alfombra, luz de candil (16:9) | `5189724f-0766-4ec2-af49-444f3bf384a0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230252_5189724f-0766-4ec2-af49-444f3bf384a0.png |
 | **CRÉDITOS** — cielo estrellado sobre la silueta de las murallas y palmeras (16:9) | `c5985a55-dfd1-4b5b-8b87-3c76c09d77a2` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230258_c5985a55-dfd1-4b5b-8b87-3c76c09d77a2.png |
+| **TUTORIAL** — calle de Jericó de día con poste indicador y mano señalando, hueco para texto de UI (16:9) | `9dddb11a-ab64-4a67-9099-8fb8b02597bb` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233056_9dddb11a-ab64-4a67-9099-8fb8b02597bb.png |
+| **CARGA / loading** — shofar brillante y ladrillos ensamblándose en el aire sobre degradado, hueco para barra (16:9) | `07ee1161-ecc7-4353-ba4f-1a9afd8388b3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233112_07ee1161-ecc7-4353-ba4f-1a9afd8388b3.png |
 
 ## 🧑‍🤝‍🧑 Pósters / pantallas extra
 | asset | job id | tamaño | URL |
@@ -51,6 +53,8 @@
 | **MUCHACHO / pastor** — túnica beige, honda de cuero, expresión valiente y curiosa | `d596a242-0329-45a1-9be8-a4e8d31f28c0` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232323_d596a242-0329-45a1-9be8-a4e8d31f28c0.png |
 | **DANZARINA / música** — vestido rosa y crema, pandereta, pañuelo, expresión radiante | `d15f1268-8e51-4893-b603-cf460bf5ee6b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232357_d15f1268-8e51-4893-b603-cf460bf5ee6b.png |
 | **REY DE JERICÓ** (jefe rival) — túnica púrpura y oro, corona enjoyada, barba trenzada, gesto altivo | `aa5c313b-4e1b-4487-ac2b-cf39ac04953c` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232601_aa5c313b-4e1b-4487-ac2b-cf39ac04953c.png |
+| **ANCIANA / abuela** — pelo gris con pañuelo marrón, sonrisa amable, chal de tonos tierra | `1494ee5f-7677-40b2-a0a9-d7b7212b595d` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233058_1494ee5f-7677-40b2-a0a9-d7b7212b595d.png |
+| **SOLDADO DE JERICÓ** — armadura de escamas de bronce, casco con carrilleras, lanza y escudo redondo | `d8508f9f-774c-45a5-829e-a09c1834b94b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233114_d8508f9f-774c-45a5-829e-a09c1834b94b.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -63,6 +67,8 @@
 | **COFRE DEL TESORO** — cofre rebosante de monedas de oro, joyas y un cáliz (recompensa/loot) | `78920a85-5ddb-45a5-9d3e-3e603dd3cea2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232507_78920a85-5ddb-45a5-9d3e-3e603dd3cea2.png |
 | **CESTA DE COMIDA** — panes, uvas moradas, higos, granadas y aceitunas (cosecha/inventario) | `15aac704-4b08-45ef-a33f-10d91fb4791b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232509_15aac704-4b08-45ef-a33f-10d91fb4791b.png |
 | **ASEDIO / defensas** — puerta de madera, escaleras de asedio, torre de vigía y antorchas (props) | `4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232603_4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b.png |
+| **SACO DE GRANO** — saco atado con cuerda derramando trigo dorado, con cazo de madera (recurso) | `02b03931-5d27-4e4d-8956-d9a38444b415` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233102_02b03931-5d27-4e4d-8956-d9a38444b415.png |
+| **LLAVE GRANDE** — llave de bronce antigua y ornamentada (objeto de misión) | `9d636d89-1cf7-43fc-838a-d096c2682a52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233117_9d636d89-1cf7-43fc-838a-d096c2682a52.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -95,6 +101,14 @@
 | **HUIDA POR LA MURALLA** — dos espías bajan por el cordón rojo de noche mientras Rahab ayuda desde la ventana | `5df014ca-32a6-40f2-a81f-cdad854484a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232327_5df014ca-32a6-40f2-a81f-cdad854484a7.png |
 | **LOS SIETE SACERDOTES** — fila solemne tocando shofarot ante la muralla al amanecer, el Arca detrás (ceremonia) | `31ddfcb7-b565-42ce-aeb5-81423880d1c3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232511_31ddfcb7-b565-42ce-aeb5-81423880d1c3.png |
 | **MERCADO NOCTURNO** — bazar animado dentro de Jericó, puestos con fruta y cerámica, luz de farol (nivel/ambiente) | `aadca81c-a0b6-4c1c-b640-3f22fc643411` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232605_aadca81c-a0b6-4c1c-b640-3f22fc643411.png |
+| **TRETA EN LA PUERTA** — un mercader con el carro de fruta volcado arma un alboroto amistoso mientras un espía se cuela (de día) | `13bd457a-446f-4c41-9dff-7700b2b672fe` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233100_13bd457a-446f-4c41-9dff-7700b2b672fe.png |
+| **CELEBRACIÓN (confeti de ladrillos)** — israelitas bailando mientras estallan ladrillos de colores como confeti, estandartes al viento | `b0db9527-8956-439a-93bc-f80a77fd6003` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233115_b0db9527-8956-439a-93bc-f80a77fd6003.png |
+
+## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
+| fondo | job id | tamaño | URL |
+|---|---|---|---|
+| **TORMENTA DE POLVO** — nubes de arena ocre y ámbar arremolinándose sobre un horizonte tenue (16:9) | `704a6f88-4566-49e4-9ddd-b56381c72205` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233103_704a6f88-4566-49e4-9ddd-b56381c72205.png |
+| **NOCHE ESTRELLADA** — cielo azul profundo con estrellas cálidas y luna creciente sobre dunas y palmeras (16:9) | `f24a2ad1-4d27-48c2-939e-06bbf3df27ab` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233118_f24a2ad1-4d27-48c2-939e-06bbf3df27ab.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
