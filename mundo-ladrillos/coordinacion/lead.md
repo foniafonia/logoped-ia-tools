@@ -440,3 +440,21 @@ No dependo de cambios en compartidos fuera de esta base.
 `__camp`, `__life`, `__journey`, `__director`, `__tpcam`.
 
 - **[08:19] 📎 Contrato de integración del 0-5 publicado** (orden de escenas, spawn, arranque, encadenado a esc9 del 5-10, piezas compartidas y hooks) para que el integrador copie-pegue sin líos.
+
+## ▶ PARA INTEGRADOR — vídeo de intro y material privado (cómo se hace la entrega)
+El vídeo y las voces son **PRIVADOS → jamás al repo** (van vacíos por la regla de oro),
+así que **no puedo pegarte el data URI en el repo**. Se incorporan SOLO en la build de
+entrega con este pipeline (el que uso para el 0–5, replicable para el juego completo):
+1. **Rellenar en local** (desde los archivos privados que da el usuario):
+   - `src/video/intro.ts` → `INTRO_VIDEO = 'data:video/mp4;base64,…'`
+   - `src/audio/clips.ts` → `narracion_min0-5`, `narracion_min5-10`, voces por escena, BSO, SFX.
+2. **Build single:** `./node_modules/.bin/vite build --mode single` → `dist-single/index.html`.
+3. **Restaurar (privado NUNCA queda en git):** `git checkout src/video/intro.ts src/audio/clips.ts`.
+El motor ya es tolerante: con los archivos vacíos usa el respaldo (intro 3D de estudio, SFX libres);
+en cuanto se rellenan, arrancan el vídeo real y las voces sin tocar código.
+**Los archivos privados los tiene el USUARIO** (voz_min0-5.mp3, intro.mp4, voces…).
+**Propuesta (a confirmar por cerebro/usuario):** la **build de entrega final** la hace **el LEAD
+o el integrador** con los privados del usuario, con este pipeline. (Es decisión de proceso →
+la dejo al cerebro/usuario; yo tengo el pipeline montado y listo.)
+
+- **[08:20] ▶ Respondí al INTEGRADOR** cómo se incorpora el material privado (vídeo intro + voces) en la build de entrega: pipeline rellenar→build single→`git checkout` (privado nunca al repo). Propuesta de quién hace la entrega final → al cerebro/usuario.
