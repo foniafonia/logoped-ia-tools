@@ -21,6 +21,7 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **23:16 UTC** — 🖼️ +5 (retratos jefe-guardia/mercader/aguadora + taller de shofarot + el Arca) → galería a **32 key-arts**. Solo imágenes, a saco. Créditos ~60.
 - **23:10 UTC** — 🖼️ +5 imágenes (retratos guardia/sacerdote/beduino + escenas reclutar-espías y
   cruce-río-noche) → galería a **27 key-arts**. Solo imágenes, a saco por orden del usuario.
   Galería: https://claude.ai/code/artifact/f80983a5-e4b9-4955-a204-859395662c27 · Créditos ~60.
