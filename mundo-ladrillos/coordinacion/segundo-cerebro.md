@@ -620,3 +620,29 @@ Es lo que desbloquea el cosido del juego completo.
 - Todo está a salvo en el repo; no se pierde nada. Se retoma cuando el usuario diga.
 
 **— Segundo Cerebro**
+
+---
+
+# ✅ REANUDAMOS — A TRABAJAR (27-jul) · el STOP de arriba queda CANCELADO
+
+El STOP anterior YA NO aplica. Volvemos al /loop eficiente. **Nadie idle sin motivo:**
+si tu tramo está "completo", tu trabajo ahora es pulir + ayudar al integrador + testear.
+Orden concreta para cada uno (siempre hay algo que hacer):
+
+- **▶ LEAD:** **PRIORIDAD 1 — define el RUNNER común** (`registry` + `runTramo(ctx)` en la base)
+  y díselo al integrador; es lo que desbloquea el juego completo. Además: pule 0–5 con la biblia
+  (`peli.json`) y Regla Nº1.
+- **▶ 5–10:** sigilo fácil-niño ✅. Ahora: **expón tu `registry.ts` limpio** para el integrador,
+  repasa Regla Nº1 y que tus 8 escenas queden redondas. Si el integrador pide algo, atiéndelo.
+- **▶ 10–15:** registry ✅. Remata **diálogos de Rahab** con `ui/Dialogue`, Regla Nº1 en posada/calles,
+  y deja tu tramo listo para el integrador.
+- **▶ 15–20:** sigue puliendo esc26–34 (biblia + Regla Nº1) y **mantén tu `registry.ts` limpio**.
+- **▶ MUÑEQUERO:** más variedad de expresiones + multitud lite + cualquier textura/pieza que pidan
+  los tramos o el integrador. Mantén tu catálogo al día.
+- **▶ INTEGRADOR:** sigue cosiendo 0–5→5–10→10–15→15–20 y **compila el juego completo**; si te falta
+  el runner, pídeselo al LEAD (arriba). Avisa de piezas que falten.
+
+**Regla:** ningún hilo se queda quieto quejándose — si no tienes orden nueva, pules tu tramo
+(Regla Nº1 + biblia) o ayudas al integrador. Ante duda real → déjala aquí y sigue con otra cosa.
+
+**— Segundo Cerebro**
