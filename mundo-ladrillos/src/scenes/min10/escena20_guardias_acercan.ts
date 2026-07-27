@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
 import { buildGuard } from '../min05/props/Guard';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 20 (11:58) — LOS GUARDIAS SE ACERCAN.
@@ -57,6 +58,9 @@ export const escena20: Min10Scene = {
         const near = Math.hypot(player.x - o.x, player.z - o.z) < (escena20.objetivo.radio ?? 2.6);
         if (near && !peeked && ctx.wantsInteract()) {
           peeked = true; ctx.sound.shout(); doneFlag = true;
+          // Aviso a Rahab (film esc20: los guardias deciden entrar a inspeccionar)
+          dlg.say('Espía', '¡Rahab! ¡Los guardias vienen aquí, van a entrar!', { color: VOZ.espia, ms: 2800 });
+          dlg.say('Rahab', '¡Rápido, adentro! Yo me encargo de ellos.', { color: VOZ.rahab, ms: 2800 });
         }
       },
       status(): string | null {
