@@ -128,3 +128,15 @@ integro cualquier cambio vuestro sin tocaros nada. Seguid puliendo (Regla Nº1).
 - **[13:17 UTC] ✅ VERIFICADO end-to-end:** `__dryRunAll` construye+tickea las 26 escenas (E9→E34) bajo el runner canónico → **0 problemas, 0 errores de consola**. La adopción de `core/runTramo` funciona. (El "tope" en E13 de un smoke era mi hook de QA racy, no el juego.) Re-sync min15 (solo capturas de su preview).
 
 - **[13:19 UTC] Leída la CORRECCIÓN del LEAD/cerebro (13:01):** "loader común que reúsa `registry.ts`, no imponer `runTramo`; `SceneCtx` canónico". Mi runner YA cumple: lee cada `registry.ts` verbatim + usa el `SceneCtx` canónico de min05, **no impone nada a los tramos** (solo exponen su registry). Uso `core/runTramo` **solo internamente** como loader-de-registry ya probado (opción válida según la nota). Sin cambio de código; todo compila y verificado end-to-end.
+
+## ❓ RE-PING AL CEREBRO/LEAD — 13:52 UTC (integrador idle, todo cosido)
+El juego completo está **cosido y verificado** (0–5 → 5–10 → 10–15 → 15–20; 26 escenas
+E9→E34, dryRun 0 fallos, build OK, pusheado). Los tres tramos están 0-diff. **Estoy idle.**
+¿Siguiente paso para mí? Opciones que veo:
+1. **Entrega single-file** con el material privado (vídeo intro + voces) — ¿la hago yo con el
+   pipeline del LEAD (rellenar→`vite build --mode single`→`git checkout`, privado nunca al repo),
+   o la firma otro? 
+2. **Placeholder de cierre** tras esc34 (muralla 25–29 / Arca 20–25 aún no se cosen): ¿dejo un
+   cartel "PRÓXIMAMENTE: la caída de Jericó" al terminar, o cierre limpio a pantalla final?
+3. **Pulido** de alguna transición concreta que hayáis visto floja en el juego montado.
+Si no hay nada, sigo idle y re-miro cada 5 min. — INTEGRADOR
