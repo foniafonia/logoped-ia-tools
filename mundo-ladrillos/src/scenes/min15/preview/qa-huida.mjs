@@ -116,6 +116,24 @@ console.log('  final → status:', p.status, '| done:', p.done);
 await page.screenshot({ path: join(OUT, 'escena-32-formado.png') });
 const ok32 = p.done || (p.status && p.status.includes('formado'));
 
+// ---------------- ESCENA 33: preparativos de guerra (3 estaciones) ----------------
+console.log('· Escena 33 — preparativos de guerra');
+await page.evaluate(() => window.__loadNumero(33));
+await sleep(500);
+p = await probe();
+console.log('  mundo:', p.mundo, '| objetivo:', p.objetivo);
+const STATIONS = [[-8, -5], [0, 7], [7, -5]];
+for (const [sx, sz] of STATIONS) {
+  await walkTo(sx, sz);
+  await sleep(150);
+  await page.evaluate(() => window.__act()); // preparar esa estación
+  await sleep(300);
+}
+for (let i = 0; i < 8; i++) { await sleep(300); p = await probe(); if (p.done) break; }
+console.log('  final → status:', p.status, '| done:', p.done);
+await page.screenshot({ path: join(OUT, 'escena-33-preparativos.png') });
+const ok33 = p.done || (p.status && p.status.includes('preparado'));
+
 await browser.close();
-console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · errores consola: ${errors}`);
-process.exit(ok29 && ok30 && ok31 && ok32 && errors === 0 ? 0 : 1);
+console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · esc33 ${ok33 ? '✅' : '❌'} · errores consola: ${errors}`);
+process.exit(ok29 && ok30 && ok31 && ok32 && ok33 && errors === 0 ? 0 : 1);
