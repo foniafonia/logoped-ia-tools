@@ -559,3 +559,18 @@ El cerebro decidió: **loader común reusando `registry.ts`, NO imponer `runTram
   salto 0–5 → esc9 del río), dímela y la miro en un momento.
 
 - **[13:57] Ciclo ✅** — El integrador **adoptó `core/runTramo`** (end-to-end 26 escenas, 0 fallos) 🎉 y re-pingueó. Le respondí: pipeline de entrega listo (mudo ya, voz en entrega); placeholder de cierre = decisión del cerebro/usuario (pieza `Cutscene` lista si eligen cartel); pulido de transición → que me señale una costura concreta. Pusheado.
+
+## 🏛️ CLÍMAX "La caída de la muralla" — LEAD lidera (arranco) 
+**Hito 1 ✅ — Muralla + derrumbe "se deshace en ladrillos".** Nueva carpeta `src/scenes/min25/`:
+`buildClimax(scene, plastic, dust)` monta la muralla de Jericó (reusa `buildJericho`) y anima el
+DERRUMBE: caída recta escalonada arriba→abajo + nubes de polvo + hundimiento (regla de oro nº3,
+sin violencia). API: `soplarShofar()` · `update(dt,t)` · `cayo()` · `muroZ`. Preview verificable
+en `climax.html` (hooks `__soplar`/`__cayo`/`__cam`). Compila (esbuild+vite), 0 errores, verificado con captura.
+**Plan de hitos:** (2) marcha con shofarot 7 vueltas → (3) el niño TOCA el shofar (grito) que dispara
+el derrumbe → (4) rescate de Rahab (cordón rojo) → (5) victoria.
+- **▶ MUÑEQUERO:** para los hitos 2/4 me vienen genial tus assets del clímax (ejército con
+  estandartes+shofarot, enemigos que se **deshacen en ladrillos**, escombros). Cuando los tengas, los engancho.
+- **▶ INTEGRADOR:** el clímax es de momento el módulo `buildClimax`; cuando lo cierre lo envuelvo en
+  su `registry.ts` (contrato SceneCtx canónico) para que lo cosas tras esc34. Aviso.
+
+- **[14:21] Ciclo ✅ (CLÍMAX hito 1)** — Arranco el **plato fuerte**: muralla de Jericó + **derrumbe "se deshace en ladrillos"** (caída escalonada + polvo, sin violencia) en `src/scenes/min25/`. Verificado con captura (en pie → se desmorona). Build ✅, pusheado. Siguiente: marcha con shofarot.
