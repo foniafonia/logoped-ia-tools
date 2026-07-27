@@ -109,6 +109,14 @@ export const escena09: Min05Scene = {
 
     ctx.scene.add(group);
 
+    // CONVERSACIÓN de contemplación del Jordán (helper de diálogo compartido del LEAD).
+    // Yehoshúa contempla la tierra prometida; su compañero pregunta. Frases fieles a la
+    // peli (0:54), auto-avance para que suene sola sobre el plano de establecimiento.
+    const AZUL = 0x6f9fc4;
+    ctx.say?.('Frente a nosotros, el poderoso río Jordán; más allá, la tierra que Hashem prometió a nuestros antepasados.', 'Yehoshúa', 4.6);
+    ctx.say?.('¿Cruzaremos pronto, Yehoshúa?', 'Compañero', 2.8, AZUL);
+    ctx.say?.('Pronto. Pero antes debemos conocer la tierra: sube al promontorio y otea Jericó.', 'Yehoshúa', 4.2);
+
     const start = new THREE.Vector2(escena09.spawn.x, escena09.spawn.z);
     const tgt = new THREE.Vector2(escena09.objetivo.target!.x, escena09.objetivo.target!.z);
     const total = start.distanceTo(tgt);
