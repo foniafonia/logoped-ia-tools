@@ -1,6 +1,16 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **05:38 UTC** — 🎨 Higgsfield: **textura de agua de río** `src/assets/texWater.ts`
+  (tileable, verificada STR 06e7c650) para el **Jordán** (min 5–10, el cruce) y
+  estanques — anímala con `map.offset` para dar corriente. Demo `rio-demo` (lámina
+  de agua animada entre orillas de arena + palmeras + attrezzo) build OK, 0 errores
+  runtime. (Descarté una lona a rayas: patrón regular → base64 repetitivo que no se
+  pega fiable; las rayas se harán procedurales, que es trivial.) **Nota de método:
+  las texturas IRREGULARES (piedra, agua, ripples) se transfieren perfectas; las
+  REGULARES/uniformes (tela lisa, rayas) no — a partir de ahora genero solo texturas
+  con detalle irregular.** Créditos ~92.8. Traer:
+  `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/texWater.ts`
 - **05:28 UTC** — 🎨+🧱 doble tarea. (B) Higgsfield: **textura de calle empedrada**
   `src/assets/texStreet.ts` (tileable, verificada STR 52efbbec) para suelos de
   calle/plaza/mercado — mata los planos pelados (Regla Nº1). (Descarté una textura de
