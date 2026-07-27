@@ -41,6 +41,9 @@
 | **YEHOSHÚA** (Josué) — túnica azul real + banda, barba blanca larga | `23298da9-0b0f-4e8c-a103-59680993e04b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225049_23298da9-0b0f-4e8c-a103-59680993e04b.png |
 | **RAHAB** — vestido plateado con el cordón rojo al hombro | `d324bb38-b452-4a8b-8c78-bda59dd38794` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225056_d324bb38-b452-4a8b-8c78-bda59dd38794.png |
 | **ESPÍA** — traje de sigilo oscuro con capucha, expresión alerta | `03736fff-b68e-4f7e-b870-2f1ae34cab05` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230312_03736fff-b68e-4f7e-b870-2f1ae34cab05.png |
+| **GUARDIA de Jericó** — cota de malla gris, bigote negro, casco de bronce, escudo con león | `244f0cce-c726-4d99-999a-5b997c267d7d` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230709_244f0cce-c726-4d99-999a-5b997c267d7d.png |
+| **SACERDOTE** — túnica blanca, pectoral dorado, mitra, shofar | `64a2d686-8dcd-4dcb-b58d-14d502da8ca2` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230714_64a2d686-8dcd-4dcb-b58d-14d502da8ca2.png |
+| **BEDUINO** — túnica verde oliva, keffiyeh arena, barba marrón | `6c41a236-1b47-4373-a50f-9bc33b0a529c` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230719_6c41a236-1b47-4373-a50f-9bc33b0a529c.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -53,6 +56,8 @@
 | **EL JORDÁN SE PARTE** — dos muros de agua-ladrillo, israelitas cruzando con el Arca | `6338b751-6ed1-4802-8445-7a84aaf5c842` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224536_6338b751-6ed1-4802-8445-7a84aaf5c842.png |
 | **EL SHOFAR EN LA MURALLA** (clímax) — el héroe toca el shofar y saltan los primeros ladrillos | `579cfdbc-ed15-4641-b4b6-1ec998fc4027` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225102_579cfdbc-ed15-4641-b4b6-1ec998fc4027.png |
 | **LA POSADA DE RAHAB** — espías escondidos entre lino en la azotea mientras pasa un guardia | `673747c6-be6a-4cc8-805b-7375c3f21589` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230306_673747c6-be6a-4cc8-805b-7375c3f21589.png |
+| **RECLUTAR ESPÍAS** — Yehoshúa instruye a dos espías al borde del campamento al atardecer, mapa en el suelo | `1c592793-8a8e-4711-ae15-6d20c24aa619` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230725_1c592793-8a8e-4711-ae15-6d20c24aa619.png |
+| **CRUCE DEL RÍO DE NOCHE** — los espías bajan por la cuerda del muro y vadean el Jordán a la luz de la luna | `add15b5a-813e-40dd-a4ce-d21abdd85a16` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230730_add15b5a-813e-40dd-a4ce-d21abdd85a16.png |
 | **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
 | **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
 
