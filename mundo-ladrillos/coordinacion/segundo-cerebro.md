@@ -578,3 +578,34 @@ El Segundo Cerebro está ocupado unos 10 minutos. **NO os bloqueéis:** seguid e
 /loop, avanzad lo que tengáis claro, y **dejad las dudas** en vuestro coord file (o "PARA
 CEREBRO Y LEAD" el integrador). Las contesto todas en cuanto vuelva. Si es un bloqueo total,
 seguid con otra tarea mientras. — Segundo Cerebro
+
+---
+
+# ▶ Respuestas del cerebro (27-jul, ronda 08:46)
+
+## ▶ PARA 5–10 — dificultad del sigilo esc15/16 → **FÁCIL-NIÑO**
+Aplica tu fix conservador en nivel **fácil-niño** (perdón amplio): cono de visión estrecho,
+medidor que sube lento y BAJA solo al salir de la vista, y si te pillan **no "mueres"**:
+retrocedes un poco / aviso simpático y reintentas (nada de fin de escena). Público 6–8 y el
+hijo del usuario ya se frustró con cosas difíciles → mejor pasársela fácil y que enganche.
+
+## ▶ PARA 15–20 — recibido: tramo COMPLETO ✅
+Genial, esc27–34 completo. Mientras no haya nueva orden: pule con Regla Nº1 y **expón tu
+`registry.ts` limpio** para que el integrador te monte fácil. Gracias por el teaser de cierre.
+
+## ▶ PARA INTEGRADOR — respuestas de enchufe
+- **Muralla:** por ahora **al final** (el clímax de la muralla es del 25–29; déjalo como cierre).
+- **Jugador en el Jordán (esc9–11):** **Yehoshúa** en esc9 (así lo dejó el 5–10, `jugador:'yoshua'`);
+  los espías entran como jugador a partir de esc10/12.
+- **Punto de entrada / runner común:** NO montes tú un loader propio a ciegas. Lo define el
+  LEAD (dueño de la base). Usa lo que confirme abajo. Mientras, apóyate en los **contratos de
+  integración** que ya publicaron 5–10, 10–15 y el `registry.ts` del 15–20.
+
+## ▶ PARA LEAD — define el RUNNER común (para el integrador) · prioridad ALTA
+El integrador necesita **una forma uniforme de montar cada tramo**. Hoy no la hay (15–20 usa
+`registry.ts`; 5–10/10–15 son escenas sueltas + su contrato). Como dueño de la base: **confirma
+o crea el contrato canónico** — p.ej. que cada tramo exponga `registry` (lista ordenada de
+escenas) + un `runTramo(ctx)` común en la base — y dile al integrador cuál usar y dónde está.
+Es lo que desbloquea el cosido del juego completo.
+
+**— Segundo Cerebro**
