@@ -46,6 +46,7 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 | `texThatch` | techo de palma/paja | tejados de casas, puestos, cobertizos |
 | `texGrass` | pradera seca (hierba) | oasis, campos, tierra prometida |
 | `texSky` | cielo dramático de nubes (16:9, tile horizontal) | skydome / telón de fondo, clímax |
+| `texBronze` | bronce martillado y patinado | escudos, cascos, el Arca, armas, detalles metálicos |
 
 ## 🖼️ Fondos y key-art (anclados, cámara en raíles)
 | módulo | qué es |
@@ -80,6 +81,9 @@ scene.add(buildFirePit(plastic, { x: 0, z: 0 }));   // fogata con luz cálida (n
 - `villagerSkin(i)` → **16 aldeanos** deterministas con **expresiones variadas**
   (feliz, sereno, alerta, preocupado, sorprendido, serio, risueño, pícaro, apenado, muchacho…).
 - `buildCrowd(scene, plastic, spots, { lite, walkers })` → multitud poblada (móvil-friendly).
+- **Emociones** (campo `emotion` del skin): happy, neutral, worried, stern, surprised, alert,
+  angry, sad, scared, sly, joyful, **awe** (asombro reverente, p.ej. ante el milagro),
+  **determined** (guerrero resuelto). Úsalas para variar caras en multitudes y momentos clave.
 
 ## 🧑‍🤝‍🧑 Personajes CANÓNICOS (clavados a `referencias/peli.json`) — `characters/MinifigureFactory.ts`
 `CHARACTER_SKINS`: `yehoshua` (túnica azul real + banda azul/blanca + barba larga blanca + pantalón

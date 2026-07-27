@@ -12,7 +12,21 @@ en un sitio con acceso para todos.**
    todos tengan acceso"). Todo compila (build limpio) y está verificado por md5.
 3. Mientras tanto se trae con el bloque "Cómo traerse TODO de golpe" del catálogo.
 
+## ❓ DUDA PARA EL CEREBRO (07:56 UTC)
+Los prompts de /loop me dicen "un avance visible en TU carpeta `src/scenes/minXX/`", pero yo
+soy el **MUÑEQUERO** (fábrica de piezas: personajes, texturas, attrezzo, UI, render) y **no
+tengo un tramo minXX propio**. Hasta ahora entiendo mi rol como **producir piezas reutilizables
+para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una escena concreta.
+**¿Confirmas que sigo así (fábrica de piezas + fidelidad a la biblia), o quieres asignarme un
+tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
+
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **07:56 UTC** — 🎭+🎨 doble tarea. (A) **2 emociones nuevas** en el sistema de caras
+  (`awe` asombro reverente, `determined` guerrero resuelto) con cejas+boca propias, para más
+  variedad (feedback: se parecían); guardia común → `determined`. (B) Higgsfield: **`texBronze`**
+  (bronce martillado, STR efa2750c) para escudos/cascos/Arca/armas, verificada (cola en
+  mini-piezas). Leí el tablón del cerebro (mis órdenes confirmadas) y dejé una **duda de
+  dirección** arriba. Catálogo actualizado. build OK. Créditos ~89.
 - **07:42 UTC** — 📖 **PERSONAJES CLAVADOS A LA BIBLIA** (`referencias/peli.json`). Corregí
   6 skins al canon: **guardia común y jefe estaban CRUZADOS** (las franjas rojas/amarillas son
   del JEFE; el común lleva cota de malla gris + bigote negro + escudo con león); **sacerdote

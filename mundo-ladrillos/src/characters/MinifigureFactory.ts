@@ -13,7 +13,8 @@ import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 /** Expresión de las cejas para dar carácter (amable, serio, preocupado…). */
 export type Emotion =
   | 'happy' | 'neutral' | 'worried' | 'stern' | 'surprised' | 'alert'
-  | 'angry' | 'sad' | 'scared' | 'sly' | 'joyful';
+  | 'angry' | 'sad' | 'scared' | 'sly' | 'joyful'
+  | 'awe' | 'determined';
 
 export interface MinifigureSkin {
   head: number;      // color piel/cabeza
@@ -181,7 +182,7 @@ export const GUARD_SKIN: MinifigureSkin = {
   headwear: 0x8f9799,    // casco de hierro semiesférico liso
   headStyle: 'coneHelmet',
   mustache: 0x171717,    // bigote negro grueso (biblia)
-  emotion: 'stern',
+  emotion: 'determined',
   shield: 0xcaa14a,      // escudo redondo con león
   accessory: 'spear'     // lanza larga
 };
@@ -412,12 +413,14 @@ export class Minifigure {
     // t>0 baja el extremo interior (enfado); t<0 lo sube (preocupación/amable)
     const t = {
       neutral: 0, stern: 0.34, worried: -0.3, happy: -0.13, surprised: -0.1, alert: 0.24,
-      angry: 0.5, sad: -0.4, scared: -0.16, sly: 0.12, joyful: -0.15
+      angry: 0.5, sad: -0.4, scared: -0.16, sly: 0.12, joyful: -0.15,
+      awe: -0.18, determined: 0.4
     }[emotion];
-    // Elevación de la ceja: sorprendido/alerta/miedo las suben (ojos muy abiertos)
+    // Elevación de la ceja: sorprendido/alerta/miedo/asombro las suben (ojos muy abiertos)
     const lift = {
       neutral: 0, stern: 0, worried: 0.02, happy: 0, surprised: 0.11, alert: 0.06,
-      angry: -0.02, sad: 0.04, scared: 0.14, sly: 0.02, joyful: 0.02
+      angry: -0.02, sad: 0.04, scared: 0.14, sly: 0.02, joyful: 0.02,
+      awe: 0.13, determined: -0.01
     }[emotion];
     const h = slim ? 0.035 : 0.06;
     const w = slim ? 0.2 : 0.22;
@@ -474,6 +477,17 @@ export class Minifigure {
         this.root.add(this.box(0.32, 0.05, 0.055, 0xf0e6d2, 0, y + 0.04, z + 0.002)); // dientes
         this.root.add(this.box(0.1, 0.1, 0.05, color, -0.2, y + 0.06, z));
         this.root.add(this.box(0.1, 0.1, 0.05, color, 0.2, y + 0.06, z));
+        break;
+      case 'awe': { // boca entreabierta pequeña (asombro reverente ante el milagro)
+        const o = new THREE.CylinderGeometry(0.075, 0.075, 0.05, 14);
+        o.rotateX(Math.PI / 2); o.scale(1, 1.25, 1);
+        this.root.add(this.mesh(o, color, 0, y - 0.01, z));
+        break;
+      }
+      case 'determined': // boca ancha firme y apretada (guerrero resuelto)
+        this.root.add(this.box(0.32, 0.05, 0.05, color, 0, y, z));
+        this.root.add(this.box(0.08, 0.08, 0.05, color, -0.16, y - 0.03, z)); // comisuras bajas y tensas
+        this.root.add(this.box(0.08, 0.08, 0.05, color, 0.16, y - 0.03, z));
         break;
       default: // neutral: línea corta
         this.root.add(this.box(0.24, 0.06, 0.05, color, 0, y, z));
