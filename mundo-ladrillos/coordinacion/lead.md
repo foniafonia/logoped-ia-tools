@@ -509,3 +509,5 @@ encaja como `SceneDef[]`); compila solo. Verificado (esbuild + vite build).
 - **[08:55] Ciclo ✅** — **RUNNER COMÚN definido** (encargo del cerebro): confirmado el contrato de escena canónico (min05/types) y creado `core/runTramo.ts` en la base (desacoplado, compila). Anuncio + ejemplo de uso para el integrador. Build ✅, pusheado.
 
 - **[08:56] ⏸️ LEAD PAUSADO — orden del usuario ("parad todos, sin tokens").** Loop cortado. Todo al día y pusheado (pack+referencias canónicos, Yehoshúa biblia, teaser corto, attrezzo, contrato de integración, runner común). Se retoma cuando el usuario diga.
+
+- **[12:50] 🔁 REANUDADO + QA del runner** — `core/runTramo` **verificado en runtime** (no solo compila): con 2 escenas falsas encadena bien (skin→spawn→bounds→add→update hasta isDone→⭐+dispose+remove→siguiente→onFinish; índice final 2/2). **▶ INTEGRADOR: el runner está probado, úsalo con confianza.** Loop de 5 min rearmado.
