@@ -110,6 +110,15 @@ export const escena10: Min05Scene = {
 
     ctx.scene.add(group);
 
+    // CONVERSACIÓN de reclutamiento (helper de diálogo compartido del LEAD). Líneas
+    // reales de la peli (transcripción 3:41–4:16), auto-avance para que se reproduzca
+    // sola mientras el niño se acerca a los espías.
+    const AZUL = 0x6f9fc4;
+    ctx.say?.('Necesito hombres discretos y valientes que vayan a espiar Jericó, la primera ciudad que vamos a conquistar.', 'Yehoshúa', 4.6);
+    ctx.say?.('Somos hombres de Israel, listos para servir a Hashem y a nuestro pueblo.', 'Espía', 3.6, AZUL);
+    ctx.say?.('Recuerden lo de hace 38 años con los doce espías… Esta vez, háganlo bien.', 'Yehoshúa', 3.8);
+    ctx.say?.('Confía en nosotros, Yoshúa; nosotros confiamos en Hashem. Será un éxito.', 'Espía', 3.6, AZUL);
+
     let greetA = false, greetB = false;
     return {
       group,

@@ -30,6 +30,13 @@ export interface SceneContext {
   /** Registra un obstáculo sólido (AABB en el plano XZ) para las colisiones. */
   addObstacle: (x: number, z: number, halfW: number, halfD: number) => void;
   /**
+   * DIÁLOGO (bocadillo) — usa el helper COMPARTIDO del LEAD (`ui/Dialogue`).
+   * Encola una línea de conversación (nombre + frase). `seconds` = auto-avance;
+   * si se omite, avanza al tocar/Space/E. OPCIONAL: si el orquestador no lo
+   * implementa, no pasa nada y el juego sigue igual.
+   */
+  say?: (text: string, who?: string, seconds?: number, color?: number) => void;
+  /**
    * FLASH de pantalla: muestra un aviso GRANDE centrado unos segundos, siempre
    * en cuadro (independiente de la cámara). Para gags visuales como "¡MIRA, UN
    * AVIÓN!". OPCIONAL (no es diálogo de personajes; el bocadillo compartido lo

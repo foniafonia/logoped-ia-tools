@@ -13,6 +13,7 @@ import { buildHorizon } from '../props/Horizon';
 import { CinematicCamera } from '../props/CinematicCamera';
 import { NavBeacon } from './NavBeacon';
 import { setupPreciousRender } from '../../../core/PreciousRender';
+import { Dialogue } from '../../../ui/Dialogue';
 import { mountSceneTag, SceneTagHandle } from '../../../ui/SceneTag';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from '../skins';
 
@@ -305,6 +306,8 @@ let advanceT = 0;
 const cineCam = new CinematicCamera(camera);
 // baliza de navegación (flecha "a dónde ir" + aro "pulsa E aquí"), común a las 8 escenas
 const navBeacon = new NavBeacon(); scene.add(navBeacon.group);
+// DIÁLOGO compartido del LEAD (bocadillos): las escenas encolan líneas vía ctx.say
+const dlg = new Dialogue();
 let started = false;                          // ¿pulsó ya "empezar"?
 let pendingIntro: Min05Scene['intro'] | null = null;
 const shotMode = new URLSearchParams(location.search).get('shot') === '1';
@@ -330,6 +333,7 @@ function loadScene(i: number): void {
   const idx = ((i % MIN05_SCENES.length) + MIN05_SCENES.length) % MIN05_SCENES.length;
   const def = MIN05_SCENES[idx];
   if (current) { scene.remove(current.group); current.dispose?.(); disposeGroup(current.group); }
+  dlg.clear();   // resetea el diálogo al cambiar de escena
   currentDef = def; done = false; advanceT = 0;
   const amb = def.ambiente ?? (def.noche ? 'night' : 'day');
   applyLighting(!!def.noche, amb === 'street', amb === 'interior');
@@ -350,6 +354,7 @@ function loadScene(i: number): void {
     sound,
     wantsInteract: consumeInteract,
     addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
+    say: (text, who = '', seconds, color) => dlg.say(who, text, { ...(seconds ? { ms: seconds * 1000 } : {}), ...(color !== undefined ? { color } : {}) }),
     setPlayerSkin: (which) => setPlayerSkin(which),
     setPlayerVisible: (v) => { player.root.visible = v; },
     cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
@@ -433,6 +438,9 @@ function animate(now: number): void {
   last = now;
 
   if (avisoUntil && now >= avisoUntil) { avisoEl.style.display = 'none'; avisoUntil = 0; }
+  dlg.update(dt);                                   // auto-avance de los bocadillos
+  subEl.style.display = dlg.active ? 'none' : 'block';   // sin doble texto cuando hay diálogo
+
   const cine = cineCam.active;
   // durante la cinemática el jugador NO se mueve (solo mira); si no, control normal
   if (!cine) {
