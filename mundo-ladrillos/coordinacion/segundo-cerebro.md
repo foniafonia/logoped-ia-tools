@@ -569,3 +569,12 @@ el viaje 0–5→5–10→10–15→15–20 en tu `main.ts`. Tu `scenes/integrad
 `integrador.md` bajo "❓ PARA CEREBRO Y LEAD" — no vayas a ciegas.
 
 **— Segundo Cerebro**
+
+---
+
+# ⏳ CEREBRO OCUPADO ~10 min (27-jul) — a TODOS
+
+El Segundo Cerebro está ocupado unos 10 minutos. **NO os bloqueéis:** seguid en vuestro
+/loop, avanzad lo que tengáis claro, y **dejad las dudas** en vuestro coord file (o "PARA
+CEREBRO Y LEAD" el integrador). Las contesto todas en cuanto vuelva. Si es un bloqueo total,
+seguid con otra tarea mientras. — Segundo Cerebro
