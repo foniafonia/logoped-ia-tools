@@ -349,11 +349,37 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   let lastIndice = -1;
   let ended = false;
 
+  // COSTURA entre tramos: tarjeta breve (minuto + título) que suaviza el salto de un
+  // mundo al siguiente y le deja claro al peque en qué parte de la historia está.
+  const TRAMO_CARDS = [
+    { min: 'MINUTO 5–10', tit: 'El Jordán y los dos espías' },
+    { min: 'MINUTO 10–15', tit: 'La posada de Rahab' },
+    { min: 'MINUTO 15–20', tit: 'El cordón rojo y los shofarot' }
+  ];
+  function showTramoCard(idx: number, done: () => void): void {
+    const c = TRAMO_CARDS[idx] ?? { min: '', tit: '' };
+    const card = document.createElement('div');
+    card.innerHTML =
+      '<div style="text-align:center;font-family:Georgia,serif">' +
+      `<div style="font:800 18px system-ui;letter-spacing:3px;color:#8fe0ff;opacity:.9">${c.min}</div>` +
+      `<div style="font:800 34px/1.15 Georgia,serif;color:#e8b04b;margin-top:10px">${c.tit}</div></div>`;
+    Object.assign(card.style, { position: 'fixed', inset: '0', zIndex: '45', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #16283f, #060b12 78%)', opacity: '0', transition: 'opacity .45s' } as CSSStyleDeclaration);
+    document.body.appendChild(card);
+    requestAnimationFrame(() => { card.style.opacity = '1'; });
+    setTimeout(() => { card.style.opacity = '0'; setTimeout(() => { card.remove(); done(); }, 460); }, 1400);
+  }
+
   function startTramo(): void {
     if (ti >= TRAMOS.length) { finalWin(); return; }
-    sceneArr = TRAMOS[ti];
-    lastIndice = -1; currentInst = null; currentDef = null;
-    runner = runTramo(wrap(sceneArr), orq, () => { ti += 1; runner?.dispose(); startTramo(); }, { pauseMs: 2600 });
+    runner = null;   // pausa los updates mientras se muestra la tarjeta de tramo
+    showTramoCard(ti, () => {
+      sceneArr = TRAMOS[ti];
+      lastIndice = -1; currentInst = null; currentDef = null;
+      // runTramo ya dispone la última escena del tramo previo (salir() al pasar de la lista).
+      runner = runTramo(wrap(sceneArr), orq, () => { ti += 1; startTramo(); }, { pauseMs: 2600 });
+      onSceneChanged();
+      lastIndice = runner.indice;
+    });
   }
 
   // Cuando el runner cambia de escena (o de tramo): aplica AMBIENTE + HUD + intro.
@@ -393,9 +419,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     fin.querySelector('#reBtn2')?.addEventListener('pointerdown', () => location.reload());
   }
 
-  startTramo();
-  onSceneChanged();   // ambiente/HUD de la primera escena (runTramo ya montó su geometría)
-  lastIndice = runner ? runner.indice : 0;
+  startTramo();   // muestra la tarjeta del tramo 5–10 y, al acabar, monta esc9 + ambiente/HUD
 
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
