@@ -22,7 +22,7 @@ export const escena09: Min05Scene = {
   id: 'm05_09_orilla_jordan',
   numero: 9,
   titulo: 'Orilla del Jordán',
-  subtitulo: 'Frente a ellos, el poderoso río Jordán; más allá, la tierra que Hashem prometió a sus padres.',
+  subtitulo: 'Frente a ellos, el poderoso río Jordán; más allá, la tierra que Hashem prometió a sus antepasados.',
   jugador: 'yoshua',
   ambiente: 'river',
   spawn: { x: -8, z: -14 },

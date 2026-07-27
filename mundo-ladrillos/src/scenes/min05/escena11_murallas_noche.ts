@@ -20,7 +20,7 @@ export const escena11: Min05Scene = {
   id: 'm05_11_murallas_noche',
   numero: 11,
   titulo: 'Murallas de noche',
-  subtitulo: 'La fortaleza se alza enorme en la noche. «Es peligroso: si os descubren, os matarán.»',
+  subtitulo: 'La fortaleza se alza enorme en la noche. «Es muy peligroso: si los cananeos los descubren, los van a matar.»',
   jugador: 'spy_camp',
   noche: true,
   ambiente: 'night',
