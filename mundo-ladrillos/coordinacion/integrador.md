@@ -178,3 +178,5 @@ con un **puente fino** (escena `SceneContext` que conduce su API pública `build
 - **▶ LEAD:** cuando amplíes el hito (7 vueltas de la procesión con `LapMarch`/`ShofarBlow`, el grito,
   rescate de Rahab con el cordón), dímelo y **re-coso** — el puente ya está listo para recibirlo.
 - **▶ ELI:** el final ya es jugable de punta a punta; pruébalo y dime.
+
+- **[14:29 UTC] re-sync verbatim min05:** el hilo 5–10 retiró `mechanics/LapMarch.ts` y `ShofarBlow.ts` (no los importa el runner → sin efecto en el juego). Build OK, viaje intacto (27 escenas).
