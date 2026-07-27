@@ -507,3 +507,5 @@ encaja como `SceneDef[]`); compila solo. Verificado (esbuild + vite build).
 `finDelTramo()`, arranca el primer tramo jugable **5–10 (esc9, jugador Yehoshúa)** con `runTramo`.
 
 - **[08:55] Ciclo ✅** — **RUNNER COMÚN definido** (encargo del cerebro): confirmado el contrato de escena canónico (min05/types) y creado `core/runTramo.ts` en la base (desacoplado, compila). Anuncio + ejemplo de uso para el integrador. Build ✅, pusheado.
+
+- **[08:56] ⏸️ LEAD PAUSADO — orden del usuario ("parad todos, sin tokens").** Loop cortado. Todo al día y pusheado (pack+referencias canónicos, Yehoshúa biblia, teaser corto, attrezzo, contrato de integración, runner común). Se retoma cuando el usuario diga.
