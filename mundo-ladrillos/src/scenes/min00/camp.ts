@@ -5,6 +5,7 @@ import { normalizeGeometry } from '../../bricks/BrickGeometryFactory';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
 import { MinifigureSkin, Minifigure, createMinifigure, YOSHUA_SKIN } from '../../characters/MinifigureFactory';
 import { buildRug, kilimTexture, KILIM_PALS } from './textiles';
+import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit } from '../../world/Clutter';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -414,6 +415,29 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     const hint = hintArrow(0xffd34d); hint.visible = false; pan.add(hint); pan.userData.hint = hint;   // pista dorada
     pan.userData.vel = { vx: 0, vy: 0, vz: 0 }; pan.userData.flying = false; pan.userData.caught = false;
     group.add(pan); panes.push(pan);
+  }
+
+  // --- REGLA Nº1: attrezzo del campamento (pack COMPARTIDO world/Clutter) para que
+  //     ningún rincón quede pelado: palmeras que enmarcan, cajas/sacos/vasijas de un
+  //     campamento que recoge, y un par de fogatas. Curado en bordes y junto a faenas,
+  //     SIN pisar el pasillo central del jugador, el Mishkán (TAB_CLEAR) ni el redil. ---
+  const attrezzo: Array<[string, number, number]> = [
+    ['palm', -46, 30], ['palm', 45, 26], ['palm', -42, 72], ['palm', 42, 76], ['palm', 10, 92],
+    ['crate', -20, 20], ['crate', 34, 58], ['crate', -42, 58],
+    ['sack', -14, 64], ['sack', 22, 72], ['sack', 41, 40],
+    ['pot', -34, 26], ['pot', 16, 72], ['pot', 33, 68],
+    ['fire', -22, 34], ['fire', 24, 52],
+  ];
+  for (const [kind, x, z] of attrezzo) {
+    if (kind === 'fire' && IS_MOBILE) continue;                 // fogatas = luz puntual: fuera en móvil
+    if (IS_MOBILE && kind === 'palm' && Math.abs(x) < 20) continue;   // aligera un pelín el móvil
+    let g: THREE.Group;
+    if (kind === 'palm') g = buildPalm(plastic, { x, z });
+    else if (kind === 'crate') g = buildCrateStack(plastic, { x, z });
+    else if (kind === 'sack') g = buildSackPile(plastic, { x, z });
+    else if (kind === 'pot') g = buildPotCluster(plastic, { x, z });
+    else g = buildFirePit(plastic, { x, z });
+    group.add(g);
   }
 
   scene.add(group);
