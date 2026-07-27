@@ -126,6 +126,20 @@ marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigi
 **mitra** + pectoral + shofar), `beduino` (verde oliva + keffiyeh arena + barba marrón), `rabino`
 (traje azul marino + gafas + corbata gris + kipá). Úsalos con `createMinifigure(plastic, CHARACTER_SKINS.yehoshua)`.
 
+## 💥 CLÍMAX — "deshacer en ladrillos" (Regla de oro nº3) — `world/BrickBurst.ts`
+Efecto insignia del final: lo que cae (un enemigo, un trozo de muralla) **se deshace en
+ladrillos de juguete** que saltan, giran, rebotan y quedan como escombro (sin violencia).
+Reutilizable por el LEAD para el clímax "La caída de la muralla".
+```ts
+import { BrickBurstSystem, spawnBrickBurst } from './world/BrickBurst';
+const bricks = new BrickBurstSystem(scene, plastic);
+bricks.burst(new THREE.Vector3(x, 1, z));                 // un enemigo derrotado → ladrillos
+bricks.wall({ x0:-7, x1:7, z:-6, height:4 }, { rows:4, sweepSecs:2.4, lite:true }); // la MURALLA cae de izq→der
+// en el loop:  bricks.update(dt);
+// (o suelto: const b = spawnBrickBurst(scene, plastic, { center }); ... if(!b.update(dt)) b.dispose();)
+```
+Los ladrillos posados hacen también de **escombros**. Ver montaje en `muralla-demo`.
+
 ## 📜 Objetos de la historia — `world/`
 `buildArk` (Arca), `buildShofar` (cuerno), `buildRelic` (reliquia), `buildBanner`/`buildBannerRow` (estandartes).
 
@@ -136,6 +150,6 @@ marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigi
 
 ## 🧪 Demos para copiar montajes
 `portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`,
-`mercado-noche-demo`, `procesion-demo`, `noche-demo`,
+`mercado-noche-demo`, `procesion-demo`, `muralla-demo`, `noche-demo`,
 `clutter-demo`, `textura-demo`, `crowd-lite-demo`, `controles-demo`, `ui-demo`, `dialogo-demo`,
 `ark-demo`, `shofar-demo`, `mapa-demo`, `ajustes-demo`, `combate-demo`, `tutorial-demo`, `sigilo-demo`, `extras-demo`.

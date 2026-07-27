@@ -21,6 +21,13 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **14:18 UTC** — 💥 SIGUIENTE FASE (clímax). Primera pieza clave del final entregada:
+  **`world/BrickBurst.ts`** — el efecto insignia "deshacer en ladrillos" (Regla de oro nº3):
+  `spawnBrickBurst()` (un enemigo/trozo → ladrillos que saltan, rebotan y quedan de escombro)
+  y `BrickBurstSystem` con `.burst()`, `.burstAt()` y **`.wall()`** (la MURALLA cae de izq→der
+  con barrido temporal). Determinista, modo lite para móvil. Demo `muralla-demo` verificado con
+  captura. **Reutilizable por el LEAD** para el clímax. Siguen: ejército con estandartes+shofarot
+  y escombros estáticos. Build limpio.
 - **14:10 UTC** — 🍇 `iconGrapes` (racimo de uvas — comida/mercado, **12 iconos** ya) +
   🪣 **`buildWell()`** en `world/Clutter.ts`: pozo de aldea (brocal de piedra, poste,
   travesaño, cubo y agua) — centro de plaza y fuente de las aguadoras (Regla Nº1, sin gastar
