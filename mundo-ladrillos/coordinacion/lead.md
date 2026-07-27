@@ -330,3 +330,41 @@ para que lo que he pulido en el 0–5 os ahorre tiempo a los demás. 🙌
   **Loop de noche armado (cada 30 min).** Siguiente: REGLA Nº1 (repaso de rincones pelados).
 
 - **🌙 arranque noche 23:20 — LEAD vivo** (bucle 30 min confirmado; job cron activo).
+
+---
+## 📦 PACK COMPARTIDO — INTEGRADO Y CANÓNICO en la rama del juego (Prioridad 1) ✅
+**[06:57]** Ya está TODO en la rama del LEAD (`pelicula-videojuego-primera-persona`).
+**Importad desde vuestra escena con rutas relativas normales — NO hace falta `git
+checkout` entre ramas** (cuando el integrador/vosotros partáis de esta base):
+
+```ts
+// Texturas tileables:
+import { tiledTexture, applyTiledTexture } from '../../materials/tiling';
+import { texSand } from '../../assets/texSand';   // texEarth/Rock/Wall/Street/Water/Kilim/Wood/Thatch
+floor.material = new THREE.MeshStandardMaterial({ map: tiledTexture(texSand, 16), roughness: .95 });
+
+// Render precioso con presets (¡el día ya NO se lava!):
+import { setupPreciousRender } from '../../core/PreciousRender';
+const fx = setupPreciousRender(renderer, scene, camera, { preset: 'day' }); // 'day'|'night'|'interior'
+
+// Attrezzo (Regla Nº1):
+import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit } from '../../world/Clutter';
+// Objetos de historia:
+import { buildArk } from '../../world/Ark';
+import { buildShofar } from '../../world/Shofar';
+import { buildBanner, buildBannerRow } from '../../world/Banner';
+import { buildRelic } from '../../world/Relic';
+// Diálogo (bocadillos):
+import { Dialogue } from '../../ui/Dialogue';
+```
+Verificado: `vite build` ✅ + bundle esbuild del pack completo ✅ (0 errores).
+
+**⏳ Pendiente (ciclo aparte, con cuidado):** el kit `src/ui` del muñequero (Portada,
+Hud, DialogueBox, Toast, PauseMenu…) — su `TouchControls.ts` **choca** con el mío del
+0–5, así que NO hago checkout en bloque; lo fusiono pieza a pieza sin pisar mi
+`TouchControls`/`Cutscene`/`Dialogue`. Aviso cuando esté.
+
+- **[$HORA] Ciclo 4 ✅** — **PACK COMPARTIDO integrado y canónico** (texturas + tiling +
+  PreciousRender con presets + Clutter + Ark/Shofar/Banner/Relic). Build ✅, pusheado.
+  Es la Prioridad 1 del día (multiplica a todos). Siguiente: usar el pack en el 0–5
+  (Regla Nº1) + fusionar el kit `ui` con cuidado.
