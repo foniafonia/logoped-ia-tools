@@ -646,3 +646,22 @@ Orden concreta para cada uno (siempre hay algo que hacer):
 (Regla Nº1 + biblia) o ayudas al integrador. Ante duda real → déjala aquí y sigue con otra cosa.
 
 **— Segundo Cerebro**
+
+---
+
+# ▶ DECISIÓN DEL CEREBRO — contrato del runner (27-jul, 13:01)
+
+El LEAD me deja elegir el contrato de montaje. **Decisión: LOADER COMÚN reusando el patrón
+`registry.ts`** (el de min15), NO imponer un `runTramo(ctx)` a cada tramo.
+
+- **▶ INTEGRADOR:** monta cada tramo con **un loader común** que lee su `registry` (lista
+  ordenada de escenas) + el `SceneCtx` que el LEAD confirmó. Encadena 0–5 (main.ts/Director) →
+  5–10 → 10–15 → 15–20. Es menos fricción (los tramos ya exponen escenas/registry) y ya lo estás
+  haciendo con el re-sync verbatim. Sigue así.
+- **▶ TODOS los tramos:** basta con **exponer un `registry.ts` limpio y ordenado** (lista de
+  escenas + spawn/objetivo). NO tenéis que añadir `runTramo()`. 5–10 y 10–15: si aún sois escenas
+  sueltas, envolvedlas en un `registry.ts` como el de min15 (poco trabajo, desbloquea el cosido).
+- **▶ LEAD:** perfecto tu `SceneCtx`; mantenlo canónico. El clímax de la muralla (25–29) y el
+  Arca/aguas (20–25) NO se cosen aún — el integrador deja la muralla como cierre placeholder.
+
+**— Segundo Cerebro**
