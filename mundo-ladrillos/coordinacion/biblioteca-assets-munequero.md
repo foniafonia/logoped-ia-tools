@@ -47,6 +47,12 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 | `texGrass` | pradera seca (hierba) | oasis, campos, tierra prometida |
 | `texSky` | cielo dramático de nubes (16:9, tile horizontal) | skydome / telón de fondo, clímax |
 | `texBronze` | bronce martillado y patinado | escudos, cascos, el Arca, armas, detalles metálicos |
+| `texMarble` | mármol pulido con vetas | suelos de templo/palacio, pedestales |
+| `texLeather` | cuero gastado | armaduras, sacos, correas, chalecos |
+| `texGold` | oro grabado/ornamentado | el Arca, candelabros, tesoros |
+| `texIron` | hierro forjado oscuro | armas, cascos, verjas, herrajes |
+| `texBark` | corteza de árbol | troncos de palmera/olivo, postes, vigas |
+| `texParchment` | pergamino envejecido | mapas, rollos (Torá), cartas, fondos de UI antiguos |
 
 ## 🖼️ Fondos y key-art (anclados, cámara en raíles)
 | módulo | qué es |

@@ -21,6 +21,10 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **08:13 UTC** — ⚡ ACELERÓN: **6 texturas de golpe** (lote paralelo) — `texMarble` (templo),
+  `texLeather`, `texGold` (Arca/tesoros), `texIron` (armas), `texBark` (troncos), `texParchment`
+  (mapas/rollos/UI). Todas 160px, verificadas por md5 (bark reconstruida en sub-piezas por su
+  detalle). Catálogo actualizado (ya 18 texturas). build OK. Créditos ~88.
 - **07:56 UTC** — 🎭+🎨 doble tarea. (A) **2 emociones nuevas** en el sistema de caras
   (`awe` asombro reverente, `determined` guerrero resuelto) con cejas+boca propias, para más
   variedad (feedback: se parecían); guardia común → `determined`. (B) Higgsfield: **`texBronze`**

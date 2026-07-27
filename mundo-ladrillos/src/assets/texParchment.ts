@@ -1,0 +1,11 @@
+/**
+ * texParchment — pergamino/vitela envejecida (Higgsfield · z_image, seamless). Para
+ * mapas, rollos (Torá), cartas y fondos de UI de estilo antiguo (Regla Nº1).
+ * `tiledTexture(texParchment, r)` o como fondo de panel. Verificada por md5 (STRMD5).
+ */
+const P1 =
+  '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCACgAKADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEDAgT/xAAiEAEBAAIDAQACAwEBAAAAAAAAAQIRAxIhMUFhBBMiUXH/xAAXAQEBAQEAAAAAAAAAAAAAAAAAAQIE/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAERAv/aAAwDAQACEQMRAD8AtjxTU16phxY4+6+s/wAW24yW7dUx25ZHRanOOf8AD/r8Wxx0emsZ1GYH0V60SGGpTD07h+ldDRiajMNFljPjo6lcTDXN/V75FMeOa+Kam2pCRbXNeP8A1q/DnFNRbW61MYmGozj8KYL6K4rialcCuKlgsTF1HPDccnLxanf3x25btSzx0ljUp8GHTCTTowjHFJpafGpGbQcha0eLTJ6LTR6EY0I1YNCjQ0CELRyGBS0NNARkq1oaFYsKxulYgnYlnjv46L4nl77ErUT4LbivEeHzHz4ticpWtHIchxpkGAoCAAFprRAUMAAZADIyAiplais2eJ8n+YplUeS7xrNWHhrSuLn/AI9t452+unGEK1DIStstAAAAAAAAEZACMqgDZogorN21aX4QYtR5ctS3XyLWJcmPbCs1qNcU1jJ/xbH4lhqxWNRK0ZSmrIMjUB';
+const P2 =
+  'GAAAAEAAFIVAvyYApEegDGXxPK+aVqWc0zVhcfyKyo8N7YrQhWo1CkNpDMgqGBDAgAAAAFYAEAAAKs6aK+CsVHltutVe/HLz9/es8Y6ai3FjrCRSRPj8isaiVqGRxWQIYUBggAFIAAAMgYAjIAzTJFYqefsq2URz/9Zqwcc8isTwnisWFahxmNRWTACgAIBSOlpAHAAMEFAKAgQoZuX4FO+xPP9tJcm58Zqw+PLz1SI8asIVuU5WTjTLQLYlUMhS2gZsnsBRL6RQVsFsbEMi2ewDNmztK0Vn1LOzelLknlq+sVqM8dVlc/Hl41jyzeiUsdOxKl3kFzm2tTFt+DcRnIfY0xXbNqXfR9tppikya2j2Pv4aYpaNo/2HeQ0xXehMkblsY5emmLbHaMXJjvq7NMVuTMy2x334Jf2mrh5+1i2a1sZ5aRzz1+7+EtWR//2Q==';
+
+export const texParchment = 'data:image/jpeg;base64,' + P1 + P2;
