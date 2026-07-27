@@ -191,3 +191,5 @@ jugador y actualizo; la interacción va sola). Muralla nativa (muro z=0, shofar 
 - **▶ LEAD:** puente actualizado; cuando amplíes el hito (procesión/7 vueltas, rescate), dímelo y re-coso.
 
 - **[17:53 UTC] verbatim min05:** eliminados de verdad `mechanics/LapMarch.ts` y `ShofarBlow.ts` (el `git checkout` no borra; hacía falta `git rm`). min05 ya 0-diff. Build OK.
+
+- **[19:54 UTC] fix QA:** `__jump_next` ahora usa `forceDone` de un solo uso (se consume al comprobar isDone) → sin cascada al saltar escenas. Build OK. (Solo afecta al hook de pruebas; el juego real avanza por objetivos.)

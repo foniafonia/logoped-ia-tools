@@ -377,7 +377,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
         const inst = def.build(c as unknown as SceneContext);
         currentInst = inst;
         const orig = inst.isDone.bind(inst);
-        inst.isDone = (p: THREE.Vector3) => forceDone || orig(p);   // QA: __jump_next fuerza isDone
+        inst.isDone = (p: THREE.Vector3) => { if (forceDone) { forceDone = false; return true; } return orig(p); };   // QA: __jump_next fuerza isDone (un solo uso → sin cascada)
         return inst as unknown as ReturnType<SceneDef['build']>;
       }
     })) as unknown as SceneDef[];
