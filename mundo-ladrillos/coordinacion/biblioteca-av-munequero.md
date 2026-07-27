@@ -33,10 +33,22 @@
 | **MAPA / selección de nivel** — mapa ilustrado del viaje (campamento → Jordán → marcha → Jericó) con senda punteada | `f463f84e-0d02-4865-8723-3e7834f57bd4` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224307_f463f84e-0d02-4865-8723-3e7834f57bd4.png |
 | **RESCATE DE RAHAB** — cordón rojo colgando de la ventana del muro de noche, espías bajando, Rahab asomada | `f5242e5c-7d73-4ae6-8d90-b61cad4bc956` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224312_f5242e5c-7d73-4ae6-8d90-b61cad4bc956.png |
 
+## 🧍 Retratos de personajes
+| personaje | job id | tamaño | URL |
+|---|---|---|---|
+| **YEHOSHÚA** (Josué) — túnica azul real + banda, barba blanca larga | `23298da9-0b0f-4e8c-a103-59680993e04b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225049_23298da9-0b0f-4e8c-a103-59680993e04b.png |
+| **RAHAB** — vestido plateado con el cordón rojo al hombro | `d324bb38-b452-4a8b-8c78-bda59dd38794` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225056_d324bb38-b452-4a8b-8c78-bda59dd38794.png |
+
+## 🚩 Emblemas / estandartes
+| asset | job id | tamaño | URL |
+|---|---|---|---|
+| **ESTANDARTES DE LAS 12 TRIBUS** — hoja 3×4 de banderines con emblemas | `3b901af8-e3d5-47a7-8166-75ad99bd1c9c` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225108_3b901af8-e3d5-47a7-8166-75ad99bd1c9c.png |
+
 ## 🎬 Escenas clave de la historia
 | escena | job id | tamaño | URL |
 |---|---|---|---|
 | **EL JORDÁN SE PARTE** — dos muros de agua-ladrillo, israelitas cruzando con el Arca | `6338b751-6ed1-4802-8445-7a84aaf5c842` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224536_6338b751-6ed1-4802-8445-7a84aaf5c842.png |
+| **EL SHOFAR EN LA MURALLA** (clímax) — el héroe toca el shofar y saltan los primeros ladrillos | `579cfdbc-ed15-4641-b4b6-1ec998fc4027` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_225102_579cfdbc-ed15-4641-b4b6-1ec998fc4027.png |
 | **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
 | **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
 
