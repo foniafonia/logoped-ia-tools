@@ -1,0 +1,174 @@
+import * as THREE from 'three';
+import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
+import { SoundEngine } from './audio/SoundEngine';
+
+/**
+ * TRAMO MINUTO 5–10 · "El Jordán y los dos espías" (CREADOR 5–10).
+ *
+ * Contrato común de todas las escenas de este tramo. Cada escena es un
+ * ESCENARIO 3D DE LADRILLO autocontenido (NO fondos planos 2.5D) + los
+ * personajes presentes como NPCs + un objetivo JUGABLE (mover, cruzar,
+ * distraer, esconderse…). El lead integra estos descriptores en el
+ * StoryEngine compartido; aquí solo se añaden archivos, nunca se editan
+ * las piezas compartidas.
+ */
+
+/** Contexto que el preview (o el StoryEngine del lead) pasa a cada escena. */
+export interface SceneContext {
+  scene: THREE.Scene;
+  plastic: PlasticMaterialFactory;
+  /** Posición actual del jugador (se consulta cada frame). */
+  getPlayer: () => THREE.Vector3;
+  /** Teletransporta al jugador (p. ej. al pillarle un guardia → vuelve al inicio). */
+  setPlayer: (x: number, z: number) => void;
+  /** Marca el objetivo como cumplido de forma externa (mecánicas propias). */
+  markDone: () => void;
+  /** Sonido: ambiente + efectos + audio real de la peli (voces/música). */
+  sound: SoundEngine;
+  /** True UNA vez cuando el jugador pulsa la acción (E / botón) este frame. */
+  wantsInteract: () => boolean;
+  /** Registra un obstáculo sólido (AABB en el plano XZ) para las colisiones. */
+  addObstacle: (x: number, z: number, halfW: number, halfD: number) => void;
+  /**
+   * DIÁLOGO (bocadillo) — usa el helper COMPARTIDO del LEAD (`ui/Dialogue`).
+   * Encola una línea de conversación (nombre + frase). `seconds` = auto-avance;
+   * si se omite, avanza al tocar/Space/E. OPCIONAL: si el orquestador no lo
+   * implementa, no pasa nada y el juego sigue igual.
+   */
+  say?: (text: string, who?: string, seconds?: number, color?: number) => void;
+  /**
+   * FLASH de pantalla: muestra un aviso GRANDE centrado unos segundos, siempre
+   * en cuadro (independiente de la cámara). Para gags visuales como "¡MIRA, UN
+   * AVIÓN!". OPCIONAL (no es diálogo de personajes; el bocadillo compartido lo
+   * pone el LEAD). Si el orquestador no lo implementa, no pasa nada.
+   */
+  flash?: (text: string, seconds?: number) => void;
+  /** Cambia el skin del jugador en caliente (p. ej. al ponerse el traje). */
+  setPlayerSkin: (which: PlayerSkinId) => void;
+  /**
+   * Muestra/oculta la MINIFIGURA del jugador. OPCIONAL. Para escondites
+   * "especiales" donde el cuerpo desaparece tras algo (p. ej. tras la alfombra
+   * colgada, dejando solo el bulto que respira). Si el orquestador no lo
+   * implementa, el jugador sigue visible y el juego funciona igual.
+   */
+  setPlayerVisible?: (visible: boolean) => void;
+  /**
+   * MOMENTO CINEMÁTICO — "a veces el audio manda sobre el juego": la cámara
+   * toma el control unos segundos (sincronizada con la peli) y luego DEVUELVE
+   * el control manual. Dos variantes; ambas OPCIONALES (si el orquestador no las
+   * implementa, no pasa nada y el juego sigue jugable):
+   *  - `cameraFocus`: sigue a un objeto en movimiento (p. ej. el avión).
+   *  - `cameraReveal`: travelling de revelado de `from`→`to` mirando de
+   *    `lookFrom`→`lookTo` (p. ej. descubrir la muralla o el río al empezar).
+   */
+  cameraFocus?: (target: THREE.Object3D, seconds: number) => void;
+  cameraReveal?: (
+    from: { x: number; y: number; z: number },
+    to: { x: number; y: number; z: number },
+    lookFrom: { x: number; y: number; z: number },
+    lookTo: { x: number; y: number; z: number },
+    seconds: number
+  ) => void;
+}
+
+/** Skins de jugador disponibles (campamento vs sigilo). */
+export type PlayerSkinId = 'yoshua' | 'spy' | 'spy2' | 'spy_camp' | 'spy2_camp';
+
+/** Datos para las barras/indicadores del HUD (detección, equilibrio, progreso). */
+export interface HudState {
+  alarm?: number;     // 0..1 nivel de alarma (sigilo)
+  balance?: number;   // -1..1 desvío del equilibrio (cuerda)
+  progress?: number;  // 0..1 progreso del objetivo
+  prompt?: string;    // aviso de acción ("Pulsa E para…")
+  gems?: { got: number; total: number }; // gemas recogidas (premio)
+  goal?: [number, number]; // objetivo DINÁMICO [x,z] para la baliza/QA (opcional)
+}
+
+/**
+ * Tipos de objetivo del tramo. Amplía los del StoryEngine con las mecánicas
+ * nuevas de este tramo (distraer, sigilo). El lead mapea `cruzar/ir_a/
+ * esconderse/huir/cinematica` 1:1 con el motor; `distraer` y `sigilo` los
+ * resuelve la propia escena vía `isDone()` (hook `isDone` del StoryEngine).
+ */
+export type Min05ObjetivoTipo =
+  | 'cinematica'
+  | 'ir_a'
+  | 'cruzar'
+  | 'esconderse'
+  | 'huir'
+  | 'distraer'   // treta del "¡un avión!": desvía la mirada de los guardias
+  | 'sigilo';    // llega al objetivo sin entrar en el cono de visión
+
+export interface Min05Objetivo {
+  tipo: Min05ObjetivoTipo;
+  texto: string;
+  target?: { x: number; z: number };
+  radio?: number;
+  dur?: number;
+}
+
+/** Ajuste inicial de cámara para encuadrar cada escena como su plano real. */
+export interface CameraHint {
+  yaw?: number;
+  pitch?: number;
+  dist?: number;
+}
+
+/** Instancia viva de una escena, tras construir su escenario 3D. */
+export interface SceneInstance {
+  /** Todo lo construido (se añade/quita de la escena de una vez). */
+  group: THREE.Group;
+  /** Lógica por frame (NPCs, mecánicas, animaciones). */
+  update(dt: number, t: number, player: THREE.Vector3): void;
+  /** ¿Se cumplió el objetivo? (para objetivos gestionados por la escena). */
+  isDone(player: THREE.Vector3): boolean;
+  /** Texto de estado opcional para el HUD (p. ej. "¡Te han visto!"). */
+  status?(): string | null;
+  /** Barras/indicadores del HUD (detección, equilibrio, progreso, prompt). */
+  hud?(): HudState;
+  /** Libera geometrías/materiales propios al salir de la escena. */
+  dispose?(): void;
+}
+
+/** Descriptor de una escena del tramo (datos + constructor del escenario). */
+export interface Min05Scene {
+  id: string;               // p. ej. "m05_09_orilla_jordan"
+  numero: number;           // 9..16 (escena real de la peli)
+  titulo: string;           // título corto para el selector del preview
+  subtitulo: string;        // frase de la peli (subtítulo inferior)
+  objetivo: Min05Objetivo;
+  exito: string;            // mensaje al lograrlo
+  spawn: { x: number; z: number };
+  noche?: boolean;          // ambiente nocturno (11–16 son de noche)
+  ambiente?: 'day' | 'night' | 'river' | 'street' | 'interior'; // cama de ambiente (viento/grillos/agua/interior)
+  camara?: CameraHint;
+  /**
+   * INTRO cinemática opcional: al empezar la escena, la cámara hace un travelling
+   * de revelado (from→to mirando lookFrom→lookTo) durante `seconds` y luego
+   * devuelve el control. Para los planos que en la peli son de establecimiento
+   * (la orilla del Jordán, la muralla de noche…). "A veces el audio manda."
+   */
+  intro?: {
+    from: { x: number; y: number; z: number };
+    to: { x: number; y: number; z: number };
+    lookFrom: { x: number; y: number; z: number };
+    lookTo: { x: number; y: number; z: number };
+    seconds: number;
+  };
+  // NOTA AUDIO: el audio de la peli NO va por campos de escena. Cada escena tiene
+  // su RECORTE de voz/música (`voz_NN`) que reproduce `SoundEngine.playSceneClip`
+  // según la tabla `SCENE_CLIP` del preview. El clip corto interactivo
+  // `m0510_14_avion` se dispara en el gag del avión (SoundEngine.playClip). Es
+  // material PRIVADO: `audio/clips.ts` va VACÍO en el repo (se rellena en entregas).
+  /** Skin del jugador en esta escena (campamento vs sigilo). */
+  jugador?: PlayerSkinId;
+  /**
+   * Límites del área jugable (AABB en XZ). OPCIONAL: si no se indica, el
+   * orquestador los deriva del spawn/objetivo. Sirve para ACOTAR el corredor de
+   * una escena y que no se pueda "rodear" por un borde abierto (evita el truco de
+   * saltarse el sigilo yéndose por el campo). Lo usan las de sigilo/corredor.
+   */
+  bounds?: { minX: number; maxX: number; minZ: number; maxZ: number };
+  /** Construye el escenario 3D + NPCs. Devuelve la instancia viva. */
+  build(ctx: SceneContext): SceneInstance;
+}

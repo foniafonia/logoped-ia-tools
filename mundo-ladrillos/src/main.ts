@@ -20,6 +20,7 @@ import { buildAtmosphere } from './scenes/min00/atmosphere';
 import { StudioIntro } from './scenes/min00/studioIntro';
 import { INTRO_VIDEO } from './video/intro';
 import { Director, Beat } from './scenes/min00/Director';
+import { startTramoRunner } from './runner';
 
 const app = document.getElementById('app')!;
 
@@ -239,6 +240,7 @@ const TAREAS_TRAMO: Array<[string, string]> = [
 ];
 let spine: { stop: () => void } | null = null;   // control del audio narración (para cortarlo al cerrar)
 let tramoCerrado = false;
+let hijacked = false;   // true cuando el RUNNER de tramos toma el control (0–5 termina)
 let caravanaPedida = false;      // beat 7 pedido; la caravana ESPERA a los mini-juegos (no secuestra)
 let caravanaEnMarcha = false;
 // ---- ADELANTO DE LOS ESPÍAS: usa el helper compartido Cutscene ----------------
@@ -284,6 +286,7 @@ function dispararTeaserEspias(): void {
 }
 
 (window as any).__teaser = () => dispararTeaserEspias();   // hook de pruebas (playtester)
+(window as any).__finDelTramo = () => finDelTramo();      // hook de pruebas: cierra el 0–5 y ofrece "Seguir"
 
 function finDelTramo(): void {
   if (tramoCerrado) return;      // cierre idempotente (lo puede disparar el jugador o el fin del audio)
@@ -300,19 +303,19 @@ function finDelTramo(): void {
 
   const titulo = todo ? '¡Lo hiciste TODO! 🎉' : hechas > 0 ? '¡Buen trabajo!' : 'Llegaste al final…';
   const cuerpo = todo
-    ? 'Preparaste el campamento y la caravana parte hacia el <b>río Jordán</b>. ¡Eres un fenómeno!<br>👉 La aventura sigue en el <b>río con los dos espías</b> (min 5–10).'
+    ? 'Preparaste el campamento y la caravana parte hacia el <b>río Jordán</b>. ¡Eres un fenómeno!'
     : hechas > 0
-      ? `Hiciste <b>${hechas} de ${total}</b> tareas. Te faltó: <b>${faltan.join(', ')}</b>.<br>¿Lo intentas otra vez y las haces todas?`
-      : `Casi no jugaste: te quedaron todas las tareas (${faltan.join(', ')}).<br>¡Vuelve a intentarlo y ayuda al campamento!`;
-  const btnTxt = todo ? '↻ Jugar otra vez' : '↻ Intentarlo de nuevo';
+      ? `Hiciste <b>${hechas} de ${total}</b> tareas. Te faltó: <b>${faltan.join(', ')}</b>.`
+      : `Casi no jugaste: te quedaron todas las tareas (${faltan.join(', ')}).`;
 
   const fin = document.createElement('div');
   fin.innerHTML =
     '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px;max-width:520px">' +
     '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b">' + titulo + '</div>' +
     '<div style="font:800 40px system-ui;margin:14px 0">⭐ ' + director.starCount + ' / ' + total + '</div>' +
-    '<div style="opacity:.9;margin:0 0 20px">' + cuerpo + '</div>' +
-    '<button id="reBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">' + btnTxt + '</button></div>';
+    '<div style="opacity:.9;margin:0 0 20px">' + cuerpo + '<br>👉 La aventura sigue en el <b>río con los dos espías</b>.</div>' +
+    '<button id="goBtn" style="font:800 22px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)">▶ Seguir la aventura 🕵️</button>' +
+    '<div style="margin-top:14px"><button id="reBtn" style="font:700 14px/1 system-ui;color:#f4e9d2;background:transparent;border:1px solid rgba(244,233,210,.4);border-radius:10px;padding:8px 16px;cursor:pointer">↻ Repetir el campamento</button></div></div>';
   Object.assign(fin.style, {
     position: 'fixed', inset: '0', zIndex: '60', display: 'flex', alignItems: 'center',
     justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #23324f, #0a0f18 78%)',
@@ -321,6 +324,21 @@ function finDelTramo(): void {
   document.body.appendChild(fin);
   requestAnimationFrame(() => { fin.style.opacity = '1'; });
   fin.querySelector('#reBtn')?.addEventListener('pointerdown', () => location.reload());
+  // ▶ ENGANCHE CON EL RUNNER: el botón (clic real = gesto que desbloquea el audio)
+  // apaga el bucle del 0–5 y arranca la aventura de los tramos 5–20 en el mismo lienzo.
+  fin.querySelector('#goBtn')?.addEventListener('pointerdown', () => {
+    hijacked = true;
+    spine?.stop();
+    fin.remove();
+    // Traspaso limpio: oculta TODO el HUD/mandos/overlays del 0–5 (el runner monta los
+    // suyos). Se mantiene solo el lienzo (#app, con el canvas del renderer compartido).
+    beacon.visible = false; loadPad.visible = false;
+    Array.from(document.body.children).forEach((el) => {
+      if ((el as HTMLElement).id === 'app') return;
+      (el as HTMLElement).style.display = 'none';
+    });
+    startTramoRunner(renderer);
+  });
 }
 
 // jugosidad: sonidos, estelas y reacciones
@@ -529,6 +547,7 @@ addEventListener('resize', () => {
 });
 let last = 0;
 function animate(now: number): void {
+  if (hijacked) return;   // el RUNNER de tramos tomó el lienzo → el bucle del 0–5 se detiene
   requestAnimationFrame(animate);
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
