@@ -7,6 +7,7 @@ import { buildBrazier, buildBanner, buildLantern } from './props/NightAmbience';
 import { buildGuard } from './props/Guard';
 import { Npc } from './props/Npc';
 import { Collectibles } from './props/Collectibles';
+import { buildCrateStack, buildSackPile, buildPotCluster, buildFirePit } from '../../world/Clutter';
 import { ESPIA2_CAMP } from './skins';
 
 /**
@@ -72,6 +73,13 @@ export const escena11: Min05Scene = {
     const r1 = buildRock(plastic, 1.3); group.add(r1); ctx.addObstacle(0, 0, 2.5, 2);
     const r2 = buildRock(plastic, 0.9); r2.position.set(-24, 0, -10); group.add(r2); ctx.addObstacle(-24, -10, 2, 1.5);
     [[-30, -14], [26, -12]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 8)); ctx.addObstacle(x, z, 1, 1); });
+
+    // PIE DE MURALLA (antes desangelado): pertrechos de la guarnición con los props
+    // del muñequero (Clutter). Hoguera de guardia + cajas/sacos/vasijas apiladas.
+    const guardFire = buildFirePit(plastic, { x: 0, z: 14 }); group.add(guardFire); ctx.addObstacle(0, 14, 1.4, 1.4);
+    for (const [cx, cz] of [[18, 15], [-18, 15], [22, 12]] as const) { group.add(buildCrateStack(plastic, { x: cx, z: cz, n: 3 })); ctx.addObstacle(cx, cz, 1.6, 1.6); }
+    for (const [sx, sz] of [[11, 14], [-12, 13]] as const) { group.add(buildSackPile(plastic, { x: sx, z: sz })); ctx.addObstacle(sx, sz, 1.4, 1.2); }
+    for (const [px, pz] of [[-8, 12], [7, 11]] as const) { group.add(buildPotCluster(plastic, { x: px, z: pz })); ctx.addObstacle(px, pz, 1.2, 1.2); }
 
     // === AMUEBLADO: el pie de la muralla / lado derecho estaba desangelado ===
     // props SIN luz (ya hay 4 braseros + 3 faroles): más cañaveral, rocas, un puesto,

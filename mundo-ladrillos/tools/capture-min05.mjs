@@ -4,13 +4,13 @@
 //   npx vite build --config src/scenes/min05/preview/vite.preview.config.mjs
 import { chromium } from 'playwright';
 const OUT=process.env.OUT || '/tmp/claude-0/-home-user-logoped-ia-tools/9b311647-96dd-5275-8cdc-1259d5c8ea31/scratchpad/';
-const FILE='file:///home/user/logoped-ia-tools/mundo-ladrillos/dist-min05/index.html';
+const FILE='file:///home/user/logoped-ia-tools/mundo-ladrillos/dist-min05/index.html?shot=1';
 const b=await chromium.launch({headless:true,args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--no-sandbox','--disable-background-timer-throttling','--allow-file-access-from-files']});
 const p=await b.newPage({viewport:{width:960,height:560}}); await p.bringToFront();
 const errs=[]; p.on('pageerror',e=>errs.push('PE:'+e.message.slice(0,140))); p.on('console',m=>{if(m.type()==='error'){const t=m.text();if(!/EncodingError|decodeAudio/i.test(t))errs.push('C:'+t.slice(0,140));}});
 await p.goto(FILE,{waitUntil:'load',timeout:30000});
 await p.waitForFunction(()=>window.__READY__&&window.__SCENE_READY__,{timeout:20000});
-await p.evaluate(()=>{ const bt=document.getElementById('startBtn'); if(bt) bt.click(); }); // arranca/desbloquea
+// (con ?shot=1 el preview ya quita el overlay y dispara la intro; no hace falta click)
 for (const n of [9,10,11,12,13,14,15,16]){
   await p.evaluate(n=>window.__loadNumero(n), n);
   await p.waitForTimeout(4800); // pasa intro/cámara
