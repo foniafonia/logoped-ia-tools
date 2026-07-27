@@ -67,6 +67,9 @@
 | **TEJEDORA** — vestido terracota, chal tejido de colores, huso de hilo, pelo recogido | `b89eb06d-dbe5-4f1f-bf58-bd23376685a1` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235047_b89eb06d-dbe5-4f1f-bf58-bd23376685a1.png |
 | **MENSAJERO / corredor** — túnica corta ceñida para correr, funda de cuero con rollo, pelo al viento | `205a09f7-d6f2-4602-9f12-6766b3e4c1aa` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235048_205a09f7-d6f2-4602-9f12-6766b3e4c1aa.png |
 | **VIEJO PROFETA** — túnica marrón basta, barba blanca larga, ojos sabios hundidos, bastón | `cf0a0184-88e0-4f9f-a7a3-5aa70256c948` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235059_cf0a0184-88e0-4f9f-a7a3-5aa70256c948.png |
+| **CANTORA LEVITA** — túnica blanca y oro, arpa de mano, expresión serena y devota, cabello con velo de lino | `b9b858a1-c5fb-4246-94d3-bd023c25d731` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235454_b9b858a1-c5fb-4246-94d3-bd023c25d731.png |
+| **NIÑO PEQUEÑO** — túnica corta, pelo oscuro alborotado, juguete de madera, sonrisa curiosa | `a27a43a3-6919-459a-aa57-055e2f38b74f` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235456_a27a43a3-6919-459a-aa57-055e2f38b74f.png |
+| **CAPITÁN** — peto de bronce sobre túnica roja, casco con cresta bajo el brazo, cicatriz, gesto de mando | `a0363448-6a56-4082-a0ad-b54029abb8ef` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235523_a0363448-6a56-4082-a0ad-b54029abb8ef.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -89,6 +92,9 @@
 | **ESTANDARTE INDIVIDUAL** — banderín azul con emblema de león dorado y borlas en asta de madera | `aa8c4ce8-3457-49d2-8002-7e0338fb7543` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234545_aa8c4ce8-3457-49d2-8002-7e0338fb7543.png |
 | **PAN Y ACEITE** — hogaza redonda, jarrita de aceite de oliva y cuenco de aceitunas sobre un paño (comida) | `4908eae9-d6c1-435f-9cb4-9236584f1c8a` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235053_4908eae9-d6c1-435f-9cb4-9236584f1c8a.png |
 | **ÁNFORA DE VINO** — ánfora de barro alta de dos asas con tapón y base trenzada, franjas pintadas | `623f830b-ee64-423c-91ae-fdfebcb4d978` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235103_623f830b-ee64-423c-91ae-fdfebcb4d978.png |
+| **CAYADO DE PASTOR** — cayado de madera pulida con curva y empuñadura de cuero (objeto/símbolo) | `28ce29fe-bb11-4900-933a-9dd276571e52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235500_28ce29fe-bb11-4900-933a-9dd276571e52.png |
+| **HONDA** — honda de cuero y cuerda con una piedra lisa al lado (arma humilde, no violenta) | `51561b5b-57b4-4ed4-bd68-16741d19df5c` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235526_51561b5b-57b4-4ed4-bd68-16741d19df5c.png |
+| **SELLO / MONEDA ANTIGUA** — sello cilíndrico y moneda de bronce gastada con motivo de león (coleccionable) | `6f9df363-46ee-466f-976a-09ad0af8d6e7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235529_6f9df363-46ee-466f-976a-09ad0af8d6e7.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -108,6 +114,7 @@
 | **POWER-UP x2 (multiplicador)** — símbolo dorado "x2" de ladrillos rodeado de chispas y monedas | `2ea64d7d-2727-4b62-b8f3-911f66e79a07` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234547_2ea64d7d-2727-4b62-b8f3-911f66e79a07.png |
 | **POWER-UP ESCUDO DE FUERZA** — burbuja hexagonal de energía azul y ladrillos con chispas | `2c467ceb-f58a-4717-8527-fd58e40db4c3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235053_2c467ceb-f58a-4717-8527-fd58e40db4c3.png |
 | **POWER-UP CONGELAR TIEMPO** — reloj de arena envuelto en cristales de hielo azul con chispas y ladrillos | `e8ed8fb3-f3a3-4e52-bbe3-e21a0ad0c4bd` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235129_e8ed8fb3-f3a3-4e52-bbe3-e21a0ad0c4bd.png |
+| **POWER-UP CORAZÓN EXTRA (vida)** — corazón rojo de ladrillos con aura dorada y chispas | `506b3657-b4b5-4683-a633-15266f0b0464` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235528_506b3657-b4b5-4683-a633-15266f0b0464.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -139,6 +146,8 @@
 | **HOGUERA DEL CONSEJO** — ancianos sentados en piedras deliberando alrededor del fuego de noche, tiendas y estrellas detrás | `46e60234-0923-46dd-9b7f-1d7a0814e066` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234543_46e60234-0923-46dd-9b7f-1d7a0814e066.png |
 | **TALLER DE ALFARERÍA** — alfarero al torno, estantes de vasijas secándose y un hornillo, luz de día (nivel/oficio) | `c4a09b11-2094-4d36-9582-258794b513cc` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235051_c4a09b11-2094-4d36-9582-258794b513cc.png |
 | **CAMPAMENTO AL AMANECER** — filas de tiendas con humo suave, minifiguras despertando, luz rosa-dorada sobre el desierto | `ae786ed2-cf3a-4610-ae9c-ad0e9e4d58f4` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235101_ae786ed2-cf3a-4610-ae9c-ad0e9e4d58f4.png |
+| **PROCESIÓN CON EL ARCA (de día)** — procesión solemne portando el Arca dorada en varas, sacerdotes de blanco, estandartes y multitud, luz de desierto | `2d3e9215-82c9-4e3f-b67f-c385444a2fa5` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235458_2d3e9215-82c9-4e3f-b67f-c385444a2fa5.png |
+| **HUERTO / VIÑEDO** — laderas con viñas cargadas de uvas moradas, higueras y olivos, minifiguras vendimiando (día) | `8de471e1-79dd-4032-9910-219ba4ec39bd` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235525_8de471e1-79dd-4032-9910-219ba4ec39bd.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -149,6 +158,7 @@
 | **MEDIODÍA DESPEJADO** — azul vivo con nubes de ladrillo blancas sobre horizonte pálido de desierto (16:9) | `21444758-ae17-4593-b445-e011fb3441f1` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234128_21444758-ae17-4593-b445-e011fb3441f1.png |
 | **ECLIPSE ROJO** — luna oscura con corona rojo sangre sobre un horizonte tenue y ominoso (16:9) | `c89e169a-4ed1-43c4-a4d7-32174beeb3af` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234548_c89e169a-4ed1-43c4-a4d7-32174beeb3af.png |
 | **CIELO DE TORMENTA (con rayos)** — nubarrones oscuros y rayos dorados sobre un horizonte tenue (16:9) | `f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235131_f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6.png |
+| **ATARDECER PÚRPURA** — degradados suaves de violeta, rosa y ámbar sobre un horizonte tenue y sereno (16:9) | `ae7e0824-6ffc-40e6-9125-bf7da6f5557c` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235501_ae7e0824-6ffc-40e6-9125-bf7da6f5557c.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
