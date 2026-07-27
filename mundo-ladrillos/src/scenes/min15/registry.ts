@@ -1,25 +1,33 @@
 import { Min15Scene } from './types';
 import { escena27 } from './escena27_cordon_rojo';
 import { escena28 } from './escena28_descuelgue';
+import { escena29 } from './escena29_monte';
+import { escena30 } from './escena30_cruce';
+import { escena31 } from './escena31_reporte';
 
 /**
- * Escenas del tramo MINUTO 15–20 ("El cordón rojo y los shofarot"), en orden de
- * la película. Ventana confirmada con el desglose oficial: escenas 26–33.
+ * Escenas del tramo MINUTO 15–20 ("El cordón rojo y la huida"), en orden jugable.
+ * Ventana confirmada con el desglose oficial (escenas de peli 26–33).
  *
- *   26  balcón: Rahab confiesa su fe y pide unirse a Israel   (911–939s)
- *   27  el CORDÓN ROJO en la ventana (señal de salvación)     (940–950s)  ✅ HITO 1
- *   28  DESCUELGUE por la muralla con cuerdas                 (951–1019s) ✅ HITO 1
- *   29  huida: bosque de pinos + cruce de vuelta del río      (1020–1036s)
- *   30  REPORTE a Yehoshúa en la tienda militar               (1037–1126s)
- *   31  Yehoshúa manda reunir al gran ejército                (1127–1141s)
- *   32  montaje de PREPARATIVOS de guerra                     (1142–1213s)
- *   33  los SHOFAROT del Cohén (gag del carnero)              (1214–1305s)
+ * NOTA DE NUMERACIÓN (decisión del usuario, Hito 2): la HUIDA de la peli (una
+ * escena continua de ~16 s: monte + cruce) se despliega en TRES mini-juegos
+ * jugables separados, uno por latido bíblico. Eso DESPLAZA la numeración jugable
+ * respecto a la de la peli a partir del reporte (el usuario lo aprobó así):
  *
- * HITO 1 (este commit): escenas 27 y 28 jugables con vida. El resto llega en los
- * siguientes hitos. El LEAD las integra en el StoryEngine igual que min05/min10.
+ *   27  el CORDÓN ROJO en la ventana (señal de salvación)   ✅ HITO 1
+ *   28  DESCUELGUE por la muralla con cuerdas                ✅ HITO 1
+ *   29  ESCONDERSE en el monte 3 días (patrulla)            🎮 HITO 2 (huida 1/3)
+ *   30  CRUCE de vuelta del Jordán (de piedra en piedra)    🎮 HITO 2 (huida 2/3)
+ *   31  el PARTE a Josué en el campamento (diálogo)         🎮 HITO 2 (huida 3/3)
+ *   32  (peli 31) Josué manda reunir al ejército            — pendiente
+ *   33  (peli 32) montaje de PREPARATIVOS de guerra         — pendiente
+ *   34  (peli 33) los SHOFAROT del Cohén (gag del carnero)  — pendiente (taller)
+ *
+ * HITO 2 (este commit): la HUIDA completa jugable con vida (esconderse → cruzar →
+ * parte a Josué). El LEAD las integra en el StoryEngine igual que min05/min10.
  */
 export const MIN15_SCENES: Min15Scene[] = [
-  escena27, escena28
+  escena27, escena28, escena29, escena30, escena31
 ];
 
 export function sceneById(id: string): Min15Scene | undefined {
@@ -36,5 +44,5 @@ export function sceneByNumero(n: number): Min15Scene | undefined {
  * min05/min10, y APAGADO hasta que llegue el audio privado del usuario.
  */
 export const BEAT_LOCAL: Record<number, number> = {
-  26: 11, 27: 40, 28: 51, 29: 120, 30: 137, 31: 227, 32: 242, 33: 314
+  26: 11, 27: 40, 28: 51, 29: 120, 30: 128, 31: 137, 32: 227, 33: 242, 34: 314
 };
