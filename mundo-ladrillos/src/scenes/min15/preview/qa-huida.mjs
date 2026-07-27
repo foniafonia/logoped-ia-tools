@@ -34,15 +34,33 @@ async function walkTo(x, z) {
   }
 }
 
-await page.goto(`${BASE}${PATH}?scene=29&shot=1`, { waitUntil: 'load' });
+await page.goto(`${BASE}${PATH}?scene=26&shot=1`, { waitUntil: 'load' });
 await page.waitForFunction(() => window.__READY__ && window.__SCENE_READY__, { timeout: 20000 });
 await sleep(600);
+
+// ---------------- ESCENA 26: la confesión de Rahab (diálogo en el balcón) ----------------
+// (escena de la sesión paralela; su cierre es time-based por dt → espera tolerante headless)
+console.log('· Escena 26 — la confesión de Rahab');
+await page.evaluate(() => window.__loadNumero(26));
+await sleep(500);
+let p = await probe();
+console.log('  mundo:', p.mundo, '| objetivo:', p.objetivo);
+await walkTo(p.goal[0], p.goal[1] + 1);
+await sleep(150);
+p = await probe();
+console.log('  prompt ante Rahab:', p.prompt);
+// pasar las 4 frases de la confesión (cada E cerca avanza una)
+for (let i = 0; i < 5; i++) { await page.evaluate(() => window.__act()); await sleep(500); }
+for (let i = 0; i < 30; i++) { await sleep(600); p = await probe(); if (p.done) break; }
+console.log('  final → status:', p.status, '| done:', p.done);
+await page.screenshot({ path: join(OUT, 'escena-26-confesion.png') });
+const ok26 = p.done;
 
 // ---------------- ESCENA 29: esconderse en el monte ----------------
 console.log('· Escena 29 — escondidos en el monte');
 await page.evaluate(() => window.__loadNumero(29));
 await sleep(500);
-let p = await probe();
+p = await probe();
 console.log('  mundo:', p.mundo, '| objetivo:', p.objetivo, '| goal:', p.goal);
 await walkTo(p.goal[0], p.goal[1]);
 await sleep(150);
@@ -158,5 +176,5 @@ await page.screenshot({ path: join(OUT, 'escena-34-shofarot.png') });
 const ok34 = p.done || (p.status && p.status.includes('listos'));
 
 await browser.close();
-console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · esc33 ${ok33 ? '✅' : '❌'} · esc34 ${ok34 ? '✅' : '❌'} · errores consola: ${errors}`);
-process.exit(ok29 && ok30 && ok31 && ok32 && ok33 && ok34 && errors === 0 ? 0 : 1);
+console.log(`\nRESULTADO: esc26 ${ok26 ? '✅' : '❌'} · esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · esc33 ${ok33 ? '✅' : '❌'} · esc34 ${ok34 ? '✅' : '❌'} · errores consola: ${errors}`);
+process.exit(ok26 && ok29 && ok30 && ok31 && ok32 && ok33 && ok34 && errors === 0 ? 0 : 1);

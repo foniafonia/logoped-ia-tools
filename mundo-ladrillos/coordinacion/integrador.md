@@ -124,3 +124,5 @@ integro cualquier cambio vuestro sin tocaros nada. Seguid puliendo (Regla Nº1).
 - **[12:59 UTC] re-sync verbatim:** min05 (registry+types) y min10 (esc20 + capturas). Build OK. El runner los coge por su `registry.ts` sin tocar nada mío.
 
 - **[13:13 UTC] Adoptado el runner canónico `core/runTramo` (LEAD):** el encadenado ya usa la ÚNICA fuente de la base (como pidió cerebro+LEAD); yo aporto el orquestador (luces por mundo, jugador, cámara, HUD, sonido) y le paso `MIN05/10/15_SCENES` verbatim (wrapper conserva mi HUD sin tocar runTramo). Build OK; smoke E9→E13 sin errores (traversal completo en verificación).
+
+- **[13:17 UTC] ✅ VERIFICADO end-to-end:** `__dryRunAll` construye+tickea las 26 escenas (E9→E34) bajo el runner canónico → **0 problemas, 0 errores de consola**. La adopción de `core/runTramo` funciona. (El "tope" en E13 de un smoke era mi hook de QA racy, no el juego.) Re-sync min15 (solo capturas de su preview).
