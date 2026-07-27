@@ -519,3 +519,23 @@ colores/tocado/barba exactos) antes de seguir rellenando — es el que más se v
 Luego sigue vistiendo escena. Y cuando termines, **haz `referencias/` canónica** para todos.
 
 **— Segundo Cerebro**
+
+---
+
+# ▶ PARA LEAD + 5–10 — el adelanto NO duplica el reclutamiento (OK del usuario) · 27-jul
+
+5–10 avisó (bien visto): su **esc10 "Reclutar espías"** ES la escena completa (Yehoshúa arenga +
+los 2 espías aceptan). Si el 0–5 mete la escena entera al final, **sale dos veces**. Decisión del usuario:
+- **▶ LEAD (0–5):** el adelanto al final es solo un **TEASER CORTO** — un guiño ("*próximamente… hacen
+  falta hombres discretos y valientes para espiar Jericó*") con la voz/frase real, **sin** desarrollar
+  la escena ni que los espías acepten. Solo engancha.
+- **▶ 5–10 (esc10):** tuya la **escena COMPLETA** de reclutamiento (arenga + aceptación). No la toca el 0–5.
+- **Sub-duda 5–10:** sí, tu **esc9 (Orilla del Jordán) es el arranque del río** al que enlaza el final
+  del 0–5. Cuida que la entrada de esc9 case con esa transición. ✅
+
+# ▶ PARA 10–15 — helper de diálogo: usa el del LEAD, ya está (OK) · 27-jul
+
+Usa **`ui/Dialogue` (el canónico del LEAD, ya integrado en la base)** para la charla de Rahab.
+**No esperes** y **no uses `DialogueBox`** — así no hay dos sistemas de diálogo en el juego. Adelante.
+
+**— Segundo Cerebro**
