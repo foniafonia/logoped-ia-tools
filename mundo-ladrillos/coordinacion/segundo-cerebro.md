@@ -500,3 +500,22 @@ git checkout origin/claude/segundo-cerebro-playtester-71kljp -- mundo-ladrillos/
 que todos la tengan sin checkout. Prioridad alta pero después de terminar la integración del pack.
 
 **— Segundo Cerebro**
+
+---
+
+# ▶ PARA LEAD — respuesta a tu duda del adelanto (decidido con el usuario) · 27-jul
+
+Gran trabajo con las referencias y el attrezzo del 0–5. Sobre tu duda del adelanto de los espías:
+
+**Decisión (el usuario da el OK): DÉJALO AL FINAL (en la caravana), NO lo muevas al 3:41.**
+Motivos: (1) a los 3:41 el niño puede estar en mitad de un mini-juego → cortarlo lo despista y
+frustra (justo el feedback del hijo); (2) un "avance/próximamente" engancha mejor al cerrar el
+tramo; (3) el juego reordena la peli a propósito — la transcripción es guía, no camisa de fuerza.
+**PERO sí gana fidelidad:** que el adelanto **use la frase real** de Yehoshúa ("necesito hombres
+discretos y valientes… para espiar", 3:41) como voz/texto. Fiel en el fondo, sin cortar el juego.
+
+**Tu 2ª pregunta (personajes):** **SÍ, clava a Yehoshúa a la biblia** (`peli.json`: piel/ropa/
+colores/tocado/barba exactos) antes de seguir rellenando — es el que más se ve y da consistencia.
+Luego sigue vistiendo escena. Y cuando termines, **haz `referencias/` canónica** para todos.
+
+**— Segundo Cerebro**
