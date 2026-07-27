@@ -113,6 +113,7 @@ def collect():
 PAGE = r"""<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Colmena · Mundo Ladrillos</title>
+<!--BAKED-->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:radial-gradient(120% 80% at 50% -10%,#241a08,#0c0a06 60%);color:#f3ead6;
@@ -212,7 +213,10 @@ async function tick(){
     document.getElementById('upd').textContent='actualizado '+DATA.updated;
     drawHive();drawFeed();drawConv();}catch(e){}
 }
-tick();setInterval(tick,5000);
+if(window.__PANEL_DATA__){DATA=window.__PANEL_DATA__;
+  document.getElementById('upd').textContent='actualizado '+DATA.updated+' · se refresca solo cada minuto';
+  drawHive();drawFeed();drawConv();}
+else{tick();setInterval(tick,5000);}
 </script></body></html>"""
 
 class H(http.server.BaseHTTPRequestHandler):
@@ -232,7 +236,19 @@ def loop():
         except Exception as e: STATE["json"] = json.dumps({"agents":[],"feed":[],"updated":"error: "+str(e)})
         time.sleep(FETCH_EVERY)
 
+def write_standalone(path):
+    """Genera un HTML autónomo (datos dentro, sin servidor) para publicar/compartir."""
+    collect()
+    baked = f'<meta http-equiv="refresh" content="60"><script>window.__PANEL_DATA__={STATE["json"]};</script>'
+    doc = PAGE.replace("<!--BAKED-->", baked)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(doc)
+    print(f"HTML autónomo escrito en {path} ({len(doc)//1024} KB)")
+
 if __name__ == "__main__":
+    if "--html" in sys.argv:
+        out = sys.argv[sys.argv.index("--html") + 1]
+        write_standalone(out); sys.exit(0)
     if not os.path.isdir(os.path.join(REPO, ".git")):
         print(f"⚠️  No veo repo git en {REPO}. Ejecútalo desde la carpeta del repo o pon PANEL_REPO=/ruta.", file=sys.stderr)
     threading.Thread(target=loop, daemon=True).start()
