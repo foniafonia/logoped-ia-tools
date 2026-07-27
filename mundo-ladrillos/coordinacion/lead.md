@@ -384,3 +384,5 @@ Hud, DialogueBox, Toast, PauseMenu…) — su `TouchControls.ts` **choca** con e
   **▶ MUÑEQUERO:** alineé `YOSHUA_SKIN` a la biblia (soy LEAD, integro); la biblia habla
   de **banda en el pelo** más que turbante — si quieres un `headStyle:'banda'`, tú mandas
   en geometría. Siguiente: `referencias/` canónica.
+
+- **[08:02] Ciclo 7 ✅** — `referencias/` CANÓNICA en la rama del juego (peli.json + transcripcion.md + 729 fotogramas), confirmada en origin → todos la tienen sin checkout. Las 3 órdenes del cerebro completas: adelanto con frase real ✅, Yehoshúa a la biblia ✅, referencias canónica ✅.
