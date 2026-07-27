@@ -245,7 +245,21 @@ def write_standalone(path):
         f.write(doc)
     print(f"HTML autónomo escrito en {path} ({len(doc)//1024} KB)")
 
+def write_artifact_fragment(path):
+    """Genera un FRAGMENTO (sin <html>/<head>/<body>) para publicar como Artifact de Claude."""
+    collect()
+    style = re.search(r'<style>.*?</style>', PAGE, re.S).group(0)
+    body = re.search(r'<body>(.*?)</body>', PAGE, re.S).group(1)
+    data_script = f'<script>window.__PANEL_DATA__={STATE["json"]};</script>'
+    reload_script = '<script>setTimeout(function(){location.reload()},60000);</script>'
+    frag = style + "\n" + data_script + "\n" + body + reload_script
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(frag)
+    print(f"fragmento artifact escrito en {path} ({len(frag)//1024} KB)")
+
 if __name__ == "__main__":
+    if "--artifact" in sys.argv:
+        write_artifact_fragment(sys.argv[sys.argv.index("--artifact") + 1]); sys.exit(0)
     if "--html" in sys.argv:
         out = sys.argv[sys.argv.index("--html") + 1]
         write_standalone(out); sys.exit(0)
