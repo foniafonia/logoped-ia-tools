@@ -76,6 +76,12 @@ export const escena12: Min05Scene = {
 
     ctx.scene.add(group);
 
+    // CONVERSACIÓN antes de cambiarse (diálogo compartido). Frases reales de la peli
+    // (4:44). Auto-avance; ambienta el "modo sigilo" que empieza aquí.
+    const AZUL = 0x6f9fc4;
+    ctx.say?.('¿Estás listo?', 'Espía', 2.4, AZUL);
+    ctx.say?.('Sí. Vamos a cambiarnos: al perchero, a por el traje de sigilo.', 'Espía 2', 3.4, 0xc98b5a);
+
     let equipped = false;
     return {
       group,
