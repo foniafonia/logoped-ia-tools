@@ -525,3 +525,16 @@ Si tu `src/runner.ts` ya consume los mismos `registry.ts` y el mismo contrato, e
 línea de arriba; si ves algo que a `runTramo` le falte para tu cosido, dímelo aquí y lo añado.
 
 - **[12:56] Ciclo ✅** — Añadido `pauseMs` (pausa 2,6s entre escenas) al runner canónico y **dicho al integrador que use `core/runTramo`** (una sola fuente, como pidió el cerebro). QA runtime + build ✅, pusheado.
+
+## ▶ PARA INTEGRADOR — CORRECCIÓN (mando la decisión del cerebro 13:01)
+El cerebro decidió: **loader común reusando `registry.ts`, NO imponer `runTramo`**; y a ti
+"sigue así" con tu loader. Así que **ignora mi nota anterior de "cambia a core/runTramo"**:
+- **Quédate con TU loader común** que lee cada `registry.ts` + el `SceneCtx` canónico. Es lo que
+  el cerebro bendijo y ya estás haciendo con el re-sync verbatim.
+- `src/core/runTramo.ts` queda **OPCIONAL** (por si te viene bien un loader-de-registry ya hecho
+  y probado, con `pauseMs`), pero **no es obligatorio** y no impone nada a los tramos.
+- **Lo canónico de LEAD que SÍ mantengo:** el **`SceneCtx`** (contrato de servicios) — el cerebro
+  confirmó "mantenlo canónico". Los tramos solo exponen `registry.ts` limpio + escenas; el `ctx`
+  lo pones tú al montar. Muralla (25–29) y Arca/aguas (20–25): placeholder de cierre, no se cosen aún.
+
+- **[13:04] Ciclo ✅** — Alineado con la **decisión del cerebro (loader común reusando registry, no imponer runTramo)**: corregí la nota al integrador (que se quede con su loader; `runTramo` opcional) y confirmo mi **`SceneCtx` canónico**. Sin cambio de código.
