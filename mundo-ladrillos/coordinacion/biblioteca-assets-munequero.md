@@ -139,6 +139,8 @@ bricks.wall({ x0:-7, x1:7, z:-6, height:4 }, { rows:4, sweepSecs:2.4, lite:true 
 // (o suelto: const b = spawnBrickBurst(scene, plastic, { center }); ... if(!b.update(dt)) b.dispose();)
 ```
 Los ladrillos posados hacen también de **escombros**. Ver montaje en `muralla-demo`.
+Para el estado FINAL (muro ya caído) usa el escombro estático `buildRubblePile(plastic, {x,z})`
+de `world/Clutter.ts` (montón de ladrillos de juguete + polvo, determinista).
 
 ## 📜 Objetos de la historia — `world/`
 `buildArk` (Arca), `buildShofar` (cuerno), `buildRelic` (reliquia), `buildBanner`/`buildBannerRow` (estandartes).

@@ -282,3 +282,41 @@ export function buildWell(plastic: PlasticMaterialFactory, o: Pos & { scale?: nu
   handle.position.set(0.15 * s, 0.79 * s, 0); g.add(handle);
   return place(g, o);
 }
+
+/**
+ * Montón de ESCOMBROS de la muralla caída: ladrillos de juguete desperdigados y
+ * apilados + polvo, para el "después" del clímax (Regla de oro: quedan ladrillos,
+ * no ruinas violentas). Estático y determinista. Combínalo con BrickBurst para el
+ * momento de la caída y deja esto como estado final. `buildRubblePile(plastic, {x,z})`.
+ */
+export function buildRubblePile(
+  plastic: PlasticMaterialFactory,
+  o: Pos & { n?: number; scale?: number; colors?: number[] } = {}
+): THREE.Group {
+  const g = new THREE.Group();
+  const s = o.scale ?? 1;
+  const cols = o.colors ?? [0xcaa15e, 0xb07a45, 0xd8c193, 0x9c6b3f, 0xc7ad7a];
+  const n = o.n ?? 16;
+  const bw = 0.34 * s, bh = 0.2 * s, bd = 0.32 * s;
+  for (let i = 0; i < n; i++) {
+    const c = cols[i % cols.length];
+    const brick = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(bw * (0.85 + (i % 3) * 0.15), bh, bd), plastic.get(c));
+    body.castShadow = true; body.receiveShadow = true; brick.add(body);
+    for (const sx of [-1, 1]) {
+      const stud = new THREE.Mesh(new THREE.CylinderGeometry(0.05 * s, 0.05 * s, 0.05 * s, 6), plastic.get(c));
+      stud.position.set(sx * bw * 0.26, bh * 0.55, 0); brick.add(stud);
+    }
+    // amontonamiento determinista: espiral achatada que sube hacia el centro
+    const a = i * 2.4;
+    const rr = (0.9 - (i / n) * 0.6) * s * (0.6 + (i % 3) * 0.2);
+    const y = (i / n) * 0.5 * s;
+    brick.position.set(Math.cos(a) * rr, y + bh * 0.5, Math.sin(a) * rr * 0.8);
+    brick.rotation.set((i % 4) * 0.4, a, ((i % 5) - 2) * 0.25);
+    g.add(brick);
+  }
+  // base de polvo/cascotes finos (disco bajo irregular)
+  const dust = new THREE.Mesh(new THREE.CylinderGeometry(1.15 * s, 1.35 * s, 0.06 * s, 12), plastic.get(0xbfa06a));
+  dust.position.y = 0.03 * s; dust.receiveShadow = true; g.add(dust);
+  return place(g, o);
+}

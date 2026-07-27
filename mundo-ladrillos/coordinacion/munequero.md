@@ -26,8 +26,10 @@ tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, 
   `spawnBrickBurst()` (un enemigo/trozo → ladrillos que saltan, rebotan y quedan de escombro)
   y `BrickBurstSystem` con `.burst()`, `.burstAt()` y **`.wall()`** (la MURALLA cae de izq→der
   con barrido temporal). Determinista, modo lite para móvil. Demo `muralla-demo` verificado con
-  captura. **Reutilizable por el LEAD** para el clímax. Siguen: ejército con estandartes+shofarot
-  y escombros estáticos. Build limpio.
+  captura. **Reutilizable por el LEAD** para el clímax. Build limpio.
+- **14:22 UTC** — 🧱 `buildRubblePile()` en `world/Clutter.ts`: **escombros estáticos** de la
+  muralla caída (montón de ladrillos + polvo) para el estado FINAL tras la caída. Encadena con
+  BrickBurst. Queda: ejército con estandartes+shofarot. Build limpio.
 - **14:10 UTC** — 🍇 `iconGrapes` (racimo de uvas — comida/mercado, **12 iconos** ya) +
   🪣 **`buildWell()`** en `world/Clutter.ts`: pozo de aldea (brocal de piedra, poste,
   travesaño, cubo y agua) — centro de plaza y fuente de las aguadoras (Regla Nº1, sin gastar
