@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildStreetStage, StreetStageHandle } from './props/stage';
 import { createMinifigure, villagerSkin, Minifigure } from '../../characters/MinifigureFactory';
+import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm } from '../../world/Clutter';
 
 /**
  * ESCENA 18 (10:55) — ENCONTRAR EL RESTAURANTE DE RAHAB (mini-búsqueda).
@@ -55,6 +56,22 @@ export const escena18: Min10Scene = {
     informantes.forEach((inf) => { inf.fig.root.position.set(inf.x, 0, inf.z); inf.fig.root.rotation.y = inf.x < 0 ? 1.2 : -1.2; group.add(inf.fig.root); });
     // signo "?" sobre los informantes sin hablar
     const marks = informantes.map((inf) => { const s = makeSprite('?', '#ffd24a'); s.position.set(0, 5.6, 0); inf.fig.root.add(s); return s; });
+
+    // === REGLA Nº1: vestir el PRIMER PLANO (junto al spawn) y rincones sueltos ===
+    // El mercado ya está poblado de z=4 a z=46; lo pelado era la entrada (z≈-2..2) y
+    // algún hueco. Attrezzo reutilizable del muñequero (world/Clutter), arrimado a las
+    // paredes (x≈±9.5) para NO tapar el pasillo central por donde sube el niño.
+    const clutter: THREE.Group[] = [];
+    const drop = (g: THREE.Group, x: number, z: number, rx = 1, rz = 1): void => {
+      group.add(g); clutter.push(g); ctx.addObstacle(x, z, rx, rz);
+    };
+    drop(buildCrateStack(P, { x: -9.5, z: 0.5, yaw: 0.3, n: 3 }), -9.5, 0.5, 1.1, 1.1);
+    drop(buildPotCluster(P, { x: -9.3, z: -1.6 }), -9.3, -1.6, 1, 1);
+    drop(buildSackPile(P, { x: 9.4, z: 1.4 }), 9.4, 1.4, 1.1, 1);
+    drop(buildCrateStack(P, { x: 9.5, z: -1.4, yaw: -0.25, n: 2 }), 9.5, -1.4, 1, 1);
+    // rincones sueltos lejos de puestos/barriles: palmera de encuadre y vasijas al fondo
+    drop(buildPalm(P, { x: -9.6, z: 33, height: 6 }), -9.6, 33, 1, 1);
+    drop(buildPotCluster(P, { x: 9.5, z: 49 }), 9.5, 49, 1, 1);
 
     ctx.scene.add(group);
 
