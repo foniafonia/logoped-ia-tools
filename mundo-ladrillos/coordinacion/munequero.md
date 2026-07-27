@@ -21,6 +21,7 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **23:22 UTC** — 🖼️ +5 (milagro de luz, hoja de VFX/magias, shofar mágico, tierra prometida, mapa-pergamino) → galería-índice a **37**. IMPORTANTE: los enlaces del CDN de Higgsfield son privados de la sesión (dan "denied" fuera de Higgsfield); las imágenes se ven en la cuenta de Higgsfield; embeber inline no es viable por tokens. Añadido aviso en la galería. Créditos ~58.
 - **23:16 UTC** — 🖼️ +5 (retratos jefe-guardia/mercader/aguadora + taller de shofarot + el Arca) → galería a **32 key-arts**. Solo imágenes, a saco. Créditos ~60.
 - **23:10 UTC** — 🖼️ +5 imágenes (retratos guardia/sacerdote/beduino + escenas reclutar-espías y
   cruce-río-noche) → galería a **27 key-arts**. Solo imágenes, a saco por orden del usuario.

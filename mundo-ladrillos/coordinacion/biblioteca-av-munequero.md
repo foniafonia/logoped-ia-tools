@@ -52,6 +52,14 @@
 | objeto | job id | tamaño | URL |
 |---|---|---|---|
 | **EL ARCA DE LA ALIANZA** — cofre dorado con dos querubines alados y varas, brillo suave | `1c064e49-1a5f-4e88-95b3-65799d102a24` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231117_1c064e49-1a5f-4e88-95b3-65799d102a24.png |
+| **MAPA-PERGAMINO** — mapa antiguo de la ruta a Jericó con senda punteada y rosa de los vientos | `aaaaa297-4765-4eda-b778-9a217c0e3914` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231632_aaaaa297-4765-4eda-b778-9a217c0e3914.png |
+
+## ✨ Magias / VFX (efectos)
+| efecto | job id | tamaño | URL |
+|---|---|---|---|
+| **HOJA DE VFX** — anillo de choque, chispas, remolino de polvo, escudo de luz, onda de trompeta | `68dfa99e-f9c5-45f3-9e68-e15591b587fa` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231612_68dfa99e-f9c5-45f3-9e68-e15591b587fa.png |
+| **SHOFAR MÁGICO** — el cuerno brillando con energía dorada y anillos de sonido | `058274a4-6637-43a0-be78-3f68504aa5c0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231618_058274a4-6637-43a0-be78-3f68504aa5c0.png |
+| **MILAGRO DE LUZ** — rayo dorado divino rompiendo las nubes sobre las murallas | `19fccc65-9585-47b4-8b72-0b3736833c06` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231604_19fccc65-9585-47b4-8b72-0b3736833c06.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -67,6 +75,7 @@
 | **RECLUTAR ESPÍAS** — Yehoshúa instruye a dos espías al borde del campamento al atardecer, mapa en el suelo | `1c592793-8a8e-4711-ae15-6d20c24aa619` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230725_1c592793-8a8e-4711-ae15-6d20c24aa619.png |
 | **CRUCE DEL RÍO DE NOCHE** — los espías bajan por la cuerda del muro y vadean el Jordán a la luz de la luna | `add15b5a-813e-40dd-a4ce-d21abdd85a16` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_230730_add15b5a-813e-40dd-a4ce-d21abdd85a16.png |
 | **TALLER DE SHOFAROT** — artesanos dando forma y puliendo cuernos de carnero en un banco, dentro de una tienda | `bae39555-77f0-4846-98d1-264686823a60` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231111_bae39555-77f0-4846-98d1-264686823a60.png |
+| **ENTRADA A LA TIERRA PROMETIDA** — multitud jubilosa con estandartes por campos verdes hacia un horizonte luminoso | `f81e57e7-d48c-4598-8e42-b89e9ac6885b` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231625_f81e57e7-d48c-4598-8e42-b89e9ac6885b.png |
 | **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
 | **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
 
