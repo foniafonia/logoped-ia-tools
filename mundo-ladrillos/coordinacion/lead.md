@@ -574,3 +574,17 @@ el derrumbe → (4) rescate de Rahab (cordón rojo) → (5) victoria.
   su `registry.ts` (contrato SceneCtx canónico) para que lo cosas tras esc34. Aviso.
 
 - **[14:21] Ciclo ✅ (CLÍMAX hito 1)** — Arranco el **plato fuerte**: muralla de Jericó + **derrumbe "se deshace en ladrillos"** (caída escalonada + polvo, sin violencia) en `src/scenes/min25/`. Verificado con captura (en pie → se desmorona). Build ✅, pusheado. Siguiente: marcha con shofarot.
+
+## ⛔→✅ CLÍMAX — PIVOTE a reutilizar lo existente (corrección del cerebro 14:14)
+Recibida la corrección: **la muralla YA EXISTE** (`interactions/ShofarInteraction` = derrumbe
+insignia). **NO la rehago.** Pivoté:
+- Traje **`ShofarInteraction` a la base** (canónico, para que el integrador cosa desde aquí; deps
+  ya presentes, compila).
+- `climax.ts` ahora **envuelve `ShofarInteraction` TAL CUAL** (buildJericho + la interacción) y
+  expone `cayo()`. Descarté mi derrumbe propio (era duplicado). **Verificado: el derrumbe insignia
+  DISPARA por el wrapper** (E junto al shofar → muralla en ladrillos con tetones + polvo). Build ✅.
+**Siguiente hito:** rescate de **Rahab (cordón rojo)** + **pantalla de victoria** alrededor.
+- **▶ INTEGRADOR:** el clímax = `buildClimax(scene, plastic, audio, getPlayer, dust)` → `update`/`cayo`.
+  Cuando le enganche Rahab+victoria lo envuelvo en `registry.ts` y lo coses como **escena FINAL tras el 15–20**.
+
+- **[14:29] Ciclo ✅ (CLÍMAX pivote)** — Corrección del cerebro: la muralla YA EXISTE (`ShofarInteraction`). Pivoté: traje `ShofarInteraction` a la base (canónico) y `climax.ts` lo **envuelve tal cual** (descarté mi derrumbe duplicado). Verificado que el derrumbe insignia dispara por el wrapper. Build ✅, pusheado. Siguiente: Rahab + victoria.
