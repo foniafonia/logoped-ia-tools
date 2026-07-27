@@ -407,3 +407,36 @@ Opciones que veo (elige o dime otra):
 ¿Cuál? Mientras respondes sigo en idle sin inventar relleno.
 
 - **[08:17] 🧪 QA (mientras el cerebro responde)** — verificado el 0-5 jugable tras los cambios de hoy (pack + Yehoshúa biblia + teaser + attrezzo): saludo+campamento OK con tecla E, 3⭐, **0 errores JS**. Sin regresiones.
+
+## 🧩 CONTRATO DE INTEGRACIÓN — 0–5 (para el INTEGRADOR)
+**La rama del LEAD ES la base.** El integrador parte de aquí (`git reset --hard
+origin/claude/pelicula-videojuego-primera-persona-kst6ip`): ya trae **pack compartido +
+referencias + el 0–5 entero** en `main.ts` + `src/scenes/min00/`. Encima añade 5–10/10–15/15–20.
+
+**Arranque / contrato de entrada:**
+- Pantalla "▶ Empezar" → intro (plató `StudioIntro`, o `INTRO_VIDEO` si existe) → `director.start(25,1)`.
+- **Spawn del jugador:** `controller.pos.set(0,0,64)`; bounds `minX -88/maxX 88, minZ -68 (orilla Jordán)/maxZ 88`.
+
+**Escenas/beats EN ORDEN (por reloj de narración, s):**
+1. `t0` — portada del estudio (cinemática).
+2. `t15` — gag rabino/beduino ("¡a grabar!").
+3. `t25` — **campamento** (empieza el gameplay; objetivo: saluda a Yehoshúa).
+4. `t45` — Yehoshúa arenga.
+5. `t55` — recoger campamento → **cuerdas** → **arrear ovejas al redil** (botón 🪢 TIRA / tecla E).
+6. `t123` — **¡atrapa el pan!** (horno → Tabernáculo).
+7. `t133` — se cae la carga del camello → **cargar la caravana** (bultos).
+8. `t228` — caravana casi lista → **espera** a los mini-juegos → arranca; **Yehoshúa encabeza** la marcha.
+9. **fin** — al alcanzar la caravana (z ≤ `Journey.MARCHA_Z`) → **TEASER espías "PRÓXIMAMENTE"** (6 s,
+   saltable, `journey.revelarRio()` + 2 espías) → **pantalla de cierre** que enlaza al río.
+
+**Encadenado 0–5 → 5–10:** el cierre del 0–5 lleva al **río con los dos espías**; enchufar la
+**primera escena del 5–10 = esc9 (Orilla del Jordán)** justo después de `finDelTramo()`.
+
+**Piezas compartidas que usa (ya en la base):** `core/PreciousRender`, `ui/Cutscene`, `ui/Dialogue`,
+`world/Clutter`, `materials/tiling`, `assets/tex*`, `characters/MinifigureFactory`, `referencias/`.
+No dependo de cambios en compartidos fuera de esta base.
+
+**Hooks de QA (para Eli/integrador):** `__probe`, `__walk`, `__grab`(=tecla E), `__teaser`, `__ctrl`,
+`__camp`, `__life`, `__journey`, `__director`, `__tpcam`.
+
+- **[08:19] 📎 Contrato de integración del 0-5 publicado** (orden de escenas, spawn, arranque, encadenado a esc9 del 5-10, piezas compartidas y hooks) para que el integrador copie-pegue sin líos.
