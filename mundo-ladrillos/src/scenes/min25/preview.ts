@@ -36,9 +36,19 @@ const plastic = new PlasticMaterialFactory();
 const dust = new Dust(scene);
 const audio = new AudioManager();
 const player = new THREE.Vector3(0, 0, 40);          // jugador-proxy (la orquestación real lo da el juego)
-const cl = buildClimax(scene, plastic, audio, () => player, dust);
+const victoria = (): void => {
+  const v = document.createElement('div');
+  v.innerHTML = '🎺 <b>¡JERICÓ HA CAÍDO!</b><br>Rahab está a salvo. ¡VICTORIA!';
+  v.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;
+    font:800 40px system-ui;color:#fff;background:rgba(20,30,55,.9);padding:28px 48px;border-radius:20px;
+    border:3px solid rgba(255,220,120,.7);box-shadow:0 10px 40px rgba(0,0,0,.6);z-index:50;line-height:1.5`;
+  document.body.appendChild(v);
+};
+const cl = buildClimax(scene, plastic, audio, () => player, dust, victoria);
 
 (window as any).__setPlayer = (x: number, z: number) => player.set(x, 0, z);
+(window as any).__aRahab = () => player.set(34, 0, 2);   // llevar al jugador a Rahab (victoria)
+(window as any).__ganado = () => cl.ganado();
 // acerca al jugador al shofar y "pulsa E" → dispara el derrumbe (la escena insignia)
 (window as any).__soplar = () => { player.set(cl.shofarPos.x, 0, cl.shofarPos.z); dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' })); };
 (window as any).__cayo = () => cl.cayo();
