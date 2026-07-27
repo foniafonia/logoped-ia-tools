@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Min15Scene, SceneContext, SceneInstance } from './types';
 import { buildWallBalcony, BalconyHandle, WINDOW_POS } from './props/balcony';
 import { GuideBeacon, makeBubble } from './props/guide';
+import { buildCrateStack, buildSackPile, buildPotCluster } from '../../world/Clutter';
 
 /**
  * ESCENA 27 (15:40) — EL CORDÓN ROJO.
@@ -59,6 +60,16 @@ export const escena27: Min15Scene = {
 
     const bubble = makeBubble('«¡Que Dios os proteja!» — Rahab');
     bubble.position.set(4.2, 6.4, -3.4); bubble.visible = false; group.add(bubble);
+
+    // === REGLA Nº1: enseres de azotea en esquinas y lado derecho (no tapan el
+    // recorrido spawn→mesita(-6,1.2)→ventana(0,-4.6) ni a Rahab en (4.2,-3.4)).
+    // Attrezzo reutilizable del muñequero (world/Clutter): vasijas, cajas y sacos. ===
+    const drop = (g: THREE.Group, x: number, z: number, r = 1): void => { group.add(g); ctx.addObstacle(x, z, r, r); };
+    drop(buildCrateStack(ctx.plastic, { x: -8.2, z: -4.3, yaw: 0.3, n: 2 }), -8.2, -4.3);
+    drop(buildPotCluster(ctx.plastic, { x: 7.6, z: -4.4 }), 7.6, -4.4);
+    drop(buildSackPile(ctx.plastic, { x: 8.6, z: 2.2 }), 8.6, 2.2);
+    drop(buildPotCluster(ctx.plastic, { x: -8.5, z: 6 }), -8.5, 6);
+    drop(buildCrateStack(ctx.plastic, { x: 8.7, z: 6, yaw: -0.3, n: 3 }), 8.7, 6);
 
     ctx.scene.add(group);
 
