@@ -329,7 +329,14 @@ export const VILLAGER_PRESETS: MinifigureSkin[] = [
   // 13 · mujer mayor, vestido malva apagado, melena gris, apenada (duelo/plegaria)
   { head: 0xf4d03f, torso: 0x8f7a86, belt: 0x6d5b64, legs: 0x8a7580, arms: 0x8f7a86,
     hands: 0xf4d03f, headwear: 0xcfc6cc, headStyle: 'longHair', feminine: true,
-    lips: 0xa8807c, skirt: 0x8f7a86, skirtLong: true, emotion: 'sad' }
+    lips: 0xa8807c, skirt: 0x8f7a86, skirtLong: true, emotion: 'sad' },
+  // 14 · muchacho, túnica amarillo azafrán, pelo corto castaño, feliz (rompe con brillo)
+  { head: 0xf4d03f, torso: 0xe6c033, belt: 0xb8912a, legs: 0xcaa72d, arms: 0xe6c033,
+    hands: 0xf4d03f, headwear: 0x6b4a2f, headStyle: 'kippah', emotion: 'happy' },
+  // 15 · mujer, vestido índigo, melena negra, serena (aguadora)
+  { head: 0xf4d03f, torso: 0x394a86, belt: 0x27305c, legs: 0x33407a, arms: 0x394a86,
+    hands: 0xf4d03f, headwear: 0x241f1a, headStyle: 'longHair', feminine: true,
+    lips: 0xbf6a6a, skirt: 0x394a86, skirtLong: true, emotion: 'neutral' }
 ];
 
 /** Aldeano determinista por índice (sin Math.random → estable en resume).

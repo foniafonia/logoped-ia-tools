@@ -44,6 +44,8 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 | `texKilim` | alfombra/tela con motivo | interiores, posada, tiendas |
 | `texWood` | tablones de madera | tarimas, puestos, muelles |
 | `texThatch` | techo de palma/paja | tejados de casas, puestos, cobertizos |
+| `texGrass` | pradera seca (hierba) | oasis, campos, tierra prometida |
+| `texSky` | cielo dramático de nubes (16:9, tile horizontal) | skydome / telón de fondo, clímax |
 
 ## 🖼️ Fondos y key-art (anclados, cámara en raíles)
 | módulo | qué es |
@@ -75,8 +77,8 @@ scene.add(buildFirePit(plastic, { x: 0, z: 0 }));   // fogata con luz cálida (n
 ```
 
 ## 🎭 Personajes y multitud — `characters/MinifigureFactory.ts`, `world/Crowd.ts`
-- `villagerSkin(i)` → 14 aldeanos deterministas con **expresiones variadas**
-  (feliz, sereno, alerta, preocupado, sorprendido, serio, **risueño, pícaro, apenado**).
+- `villagerSkin(i)` → **16 aldeanos** deterministas con **expresiones variadas**
+  (feliz, sereno, alerta, preocupado, sorprendido, serio, risueño, pícaro, apenado, muchacho…).
 - `buildCrowd(scene, plastic, spots, { lite, walkers })` → multitud poblada (móvil-friendly).
 
 ## 📜 Objetos de la historia — `world/`

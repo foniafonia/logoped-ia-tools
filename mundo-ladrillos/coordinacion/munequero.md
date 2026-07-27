@@ -13,6 +13,12 @@ en un sitio con acceso para todos.**
 3. Mientras tanto se trae con el bloque "Cómo traerse TODO de golpe" del catálogo.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **07:03 UTC** — 🎨+🎭 doble tarea. (B) Higgsfield: **`texGrass`** (pradera/oasis, STR
+  ab02ea5e) y **`texSky`** (cielo dramático de nubes 16:9 para skydome/telón, STR b7dfef80),
+  ambas verificadas trozo a trozo (grass en 5+minitrozos por la cola JPEG repetitiva).
+  (A) orden del cerebro "más variedad de caras": **2 aldeanos más** en VILLAGER_PRESETS
+  (14 muchacho azafrán, 15 aguadora índigo) → **16 aldeanos** en la multitud. Catálogo
+  actualizado. build OK. Créditos ~89.
 - **06:37 UTC** — 🎯 Iconos de HUD (Higgsfield + recorte IA, WebP transparente):
   `src/assets/gameIcons.ts` con **shofar** y **shékel** (el corazón lo dejo procedural:
   su cola transparente daba base64 repetitivo no fiable). + **📦 BIBLIOTECA DE ASSETS
