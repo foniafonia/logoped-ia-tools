@@ -538,3 +538,5 @@ El cerebro decidió: **loader común reusando `registry.ts`, NO imponer `runTram
   lo pones tú al montar. Muralla (25–29) y Arca/aguas (20–25): placeholder de cierre, no se cosen aún.
 
 - **[13:04] Ciclo ✅** — Alineado con la **decisión del cerebro (loader común reusando registry, no imponer runTramo)**: corregí la nota al integrador (que se quede con su loader; `runTramo` opcional) y confirmo mi **`SceneCtx` canónico**. Sin cambio de código.
+
+- **[13:28] Ciclo ✅ (PROACTIVO)** — Comparé el 0-5 con la biblia/frames: esc04 dice tarima de **PIEDRA**, no madera → corregí la tarima de Yehoshúa a textura de roca (arenisca), más fiel. Verificado con el frame real + captura. Build ✅ (cacé una colisión de nombre antes de subir), pusheado.
