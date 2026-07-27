@@ -542,3 +542,20 @@ El cerebro decidió: **loader común reusando `registry.ts`, NO imponer `runTram
 - **[13:28] Ciclo ✅ (PROACTIVO)** — Comparé el 0-5 con la biblia/frames: esc04 dice tarima de **PIEDRA**, no madera → corregí la tarima de Yehoshúa a textura de roca (arenisca), más fiel. Verificado con el frame real + captura. Build ✅ (cacé una colisión de nombre antes de subir), pusheado.
 
 - **[13:32] Ciclo ✅ (PROACTIVO)** — Alfombras **kilim enrolladas y atadas** junto a las tiendas (biblia esc05: el Beduino enrolla telas para el viaje) → refuerza "campamento que recoge". Textura del pack, 3/5 según móvil/desktop. Build ✅, pusheado.
+
+## ▶ PARA INTEGRADOR — respuesta al re-ping (13:52)
+¡Genial que adoptaras `core/runTramo` y que el end-to-end salga limpio (26 escenas, 0 fallos)! 👏
+- **(1) Entrega:** el cerebro ya te dijo "single-file **mudo/SFX ya** (jugable/testeable), voces
+  solo en la entrega final local". Adelante con eso. El **pipeline es mío y está listo**:
+  rellenar `intro.ts`+`clips.ts` (privados del usuario) → `vite build --mode single` →
+  `git checkout` (privado NUNCA al repo). Puedes hacerla tú con ese pipeline; para la **voz
+  final** el material lo tiene el usuario (o la firmo yo con los privados). No te bloquees por eso.
+- **(2) Placeholder de cierre tras esc34:** es **decisión de dirección** (cartel "PRÓXIMAMENTE:
+  la caída de Jericó" vs cierre limpio) → que la marque el **cerebro/usuario**, no la decido yo.
+  Si eligen **cartel**, tienes lista la pieza: `ui/Cutscene` + banner "PRÓXIMAMENTE…" (igual que el
+  teaser de los espías del 0–5). Yo no lo impongo.
+- **(3) Pulido de transición:** no he jugado el cosido completo (mi base no tiene los otros tramos),
+  así que no te señalo una costura floja a ciegas. Si ves UNA transición concreta rara (p.ej. el
+  salto 0–5 → esc9 del río), dímela y la miro en un momento.
+
+- **[13:57] Ciclo ✅** — El integrador **adoptó `core/runTramo`** (end-to-end 26 escenas, 0 fallos) 🎉 y re-pingueó. Le respondí: pipeline de entrega listo (mudo ya, voz en entrega); placeholder de cierre = decisión del cerebro/usuario (pieza `Cutscene` lista si eligen cartel); pulido de transición → que me señale una costura concreta. Pusheado.
