@@ -49,7 +49,20 @@ const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 // applyLighting). En móvil el helper va en modo LITE solo (sin SMAA, bloom suave).
 // Bloom SELECTIVO (umbral alto): brillan faroles/reflejos, NO el arenal de día
 // (con el umbral por defecto se sobreexponían las escenas diurnas). Suave.
-const fx = setupPreciousRender(renderer, scene, camera, { ibl: false, bloom: { strength: 0.26, radius: 0.5, threshold: 0.9 } });
+const fx = setupPreciousRender(renderer, scene, camera, { ibl: false });
+// Bloom POR AMBIENTE (presets del muñequero): día suave (no lava el arenal), noche
+// con glow en faroles, interior intermedio. En móvil (fx.lite) se aligera un poco.
+const BLOOM_PRESET = {
+  day: { s: 0.20, r: 0.50, t: 0.92 },
+  night: { s: 0.50, r: 0.70, t: 0.70 },
+  interior: { s: 0.34, r: 0.60, t: 0.82 }
+} as const;
+function applyBloom(mood: 'day' | 'night' | 'interior'): void {
+  const b = BLOOM_PRESET[mood]; const k = fx.lite ? 0.72 : 1;
+  fx.bloomPass.strength = b.s * k;
+  fx.bloomPass.radius = b.r;
+  fx.bloomPass.threshold = Math.min(0.95, b.t + (fx.lite ? 0.03 : 0));
+}
 
 const plastic = new PlasticMaterialFactory();
 // El SoundEngine da el AMBIENTE + EFECTOS y reproduce el AUDIO REAL DE LA PELÍCULA
@@ -320,6 +333,7 @@ function loadScene(i: number): void {
   currentDef = def; done = false; advanceT = 0;
   const amb = def.ambiente ?? (def.noche ? 'night' : 'day');
   applyLighting(!!def.noche, amb === 'street', amb === 'interior');
+  applyBloom(amb === 'interior' ? 'interior' : (def.noche ? 'night' : 'day'));
   if (sound.ready) sound.setAmbience(amb === 'interior' ? 'night' : amb); // ambiente (interior→grillos suaves)
   // AUDIO DE LA PELÍCULA: salta al segundo de ESTA escena (la voz/música casa con
   // lo que se ve). Si el clip no está (build del repo), no-op.
