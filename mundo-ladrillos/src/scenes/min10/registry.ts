@@ -42,3 +42,17 @@ export function sceneByNumero(n: number): Min10Scene | undefined {
 export const BEAT_LOCAL: Record<number, number> = {
   17: 5, 18: 55, 19: 105, 20: 118, 21: 126, 22: 155, 23: 205, 24: 241, 25: 257
 };
+
+/**
+ * VENTANA de audio real por escena `[inicioLocal, finLocal]` en segundos dentro del
+ * clip `narracion_min10-15` (global − 600s). Fuente: `referencias/peli.json`
+ * (`inicio_seg`/`fin_seg` de las escenas 17–25, VERIFICADO 1:1). Es el "slot de audio
+ * real por escena" para la ENTREGA con voces (mismo patrón que `CLIP_SEG` de min05):
+ * al montar la entrega, cada escena reproduce SU ventana del clip. Hasta que llegue el
+ * audio privado, el film-spine sigue APAGADO (`USE_FILM_SPINE = false`) — esto es solo
+ * el mapa listo para calibrar. `BEAT_LOCAL[n] === CLIP_SEG[n][0]` (el inicio coincide).
+ */
+export const CLIP_SEG: Record<number, [number, number]> = {
+  17: [5, 54], 18: [55, 104], 19: [105, 117], 20: [118, 125], 21: [126, 154],
+  22: [155, 204], 23: [205, 240], 24: [241, 256], 25: [257, 310]
+};
