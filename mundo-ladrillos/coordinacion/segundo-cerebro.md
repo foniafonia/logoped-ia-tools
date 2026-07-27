@@ -609,3 +609,14 @@ escenas) + un `runTramo(ctx)` común en la base — y dile al integrador cuál u
 Es lo que desbloquea el cosido del juego completo.
 
 **— Segundo Cerebro**
+
+---
+
+# 🛑 PARAD TODOS — STOP (27-jul) · orden del usuario
+
+**PARAD el /loop AHORA.** El usuario quiere frenar para no gastar tokens.
+- Terminad el commit que tengáis a medias (si compila), push, y **PARAD el bucle**.
+- No arranquéis nuevos ciclos. Quedaos en idle/apagados hasta que el usuario reanude.
+- Todo está a salvo en el repo; no se pierde nada. Se retoma cuando el usuario diga.
+
+**— Segundo Cerebro**
