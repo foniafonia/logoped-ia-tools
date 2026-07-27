@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 25 (14:17) — ALIVIO (fin del tramo 10–15).
@@ -32,16 +33,25 @@ export const escena25: Min10Scene = {
 
     let hiddenNow = true;
     let doneFlag = false;
+    let saidSafe = false;
+    let thanked = false;
     const o = escena25.objetivo.target!;
     return {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        if (!saidSafe) {                                 // Rahab avisa de que ya es seguro (film esc25)
+          saidSafe = true;
+          dlg.say('Rahab', 'Ya podéis salir… se han ido. Estáis a salvo.', { color: VOZ.rahab, ms: 3200 });
+        }
         const inHide = hide.update(dt, t, player.x, player.z);
         if (inHide !== hiddenNow) { hiddenNow = inHide; ctx.setPlayerVisible?.(!inHide); }
         // Rahab, aliviada, saluda con la mano (leve vaivén alegre)
         if (stage.tav.rahab) stage.tav.rahab.root.rotation.y = Math.sin(t * 2) * 0.14;
-        if (Math.hypot(player.x - o.x, player.z - o.z) < (escena25.objetivo.radio ?? 2.6)) doneFlag = true;
+        if (Math.hypot(player.x - o.x, player.z - o.z) < (escena25.objetivo.radio ?? 2.6)) {
+          if (!doneFlag && !thanked) { thanked = true; dlg.say('Espía', 'Gracias, Rahab. Cumpliremos nuestra promesa.', { color: VOZ.espia, ms: 3000 }); }
+          doneFlag = true;
+        }
       },
       status(): string | null { return hiddenNow ? '🫥 Sal del escondite…' : '😌 ¡Aliviado! Ve con Rahab'; },
       hud() {

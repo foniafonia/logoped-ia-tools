@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Min10Scene, SceneContext, SceneInstance } from './types';
 import { buildTavernStage, buildHideouts, TavernStageHandle, HideoutsHandle } from './props/stage';
+import { dlg, VOZ } from './props/rahabDialogue';
 
 /**
  * ESCENA 22 (12:35) — ¡PATEAN LA PUERTA! → ESCÓNDETE.
@@ -37,10 +38,15 @@ export const escena22: Min10Scene = {
     let hiddenNow = false;
     let doneFlag = false;
     let kickT = 0;
+    let saidHide = false;
     return {
       group,
       update(dt, t, player): void {
         stage.update(dt, t);
+        if (!saidHide) {                                 // Rahab, urgente, los manda esconderse (film esc22)
+          saidHide = true;
+          dlg.say('Rahab', '¡Rápido, escondeos! Detrás del tapiz o en la maceta. ¡Yo los despisto!', { color: VOZ.rahab, ms: 3400 });
+        }
         const inHide = hide.update(dt, t, player.x, player.z);
         if (inHide !== hiddenNow) { hiddenNow = inHide; ctx.setPlayerVisible?.(!inHide); }
         // patadas periódicas a la puerta (sacudida + golpe grave)
