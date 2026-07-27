@@ -12,6 +12,7 @@ import { Wanderers } from './props/Wanderers';
 import { Collectibles } from './props/Collectibles';
 import { ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from './skins';
 import { buildLanternString, buildLaundryLine } from '../../world/StreetProps';
+import { buildCrateStack, buildSackPile, buildPotCluster, buildFirePit } from '../../world/Clutter';
 
 /**
  * ESCENA 15 (534–544s) — LOS ESPÍAS SE CUELAN POR LA PUERTA ABIERTA.
@@ -60,6 +61,19 @@ export const escena15: Min05Scene = {
     group.add(buildLanternString(plastic, { ax: -11, az: 26, bx: 11, bz: 26, height: 9, count: 8, lights: 2 }));
     group.add(buildLaundryLine(plastic, { ax: -9, az: 22, bx: -9, bz: 29, height: 5.4, seed: 3 }));
     group.add(buildLaundryLine(plastic, { ax: 9, az: 24, bx: 9, bz: 31, height: 5.6, seed: 8 }));
+
+    // REGLA Nº1: el APPROACH (z<8) estaba pelado ("desolado"). Enseres de la
+    // guarnición con Clutter del muñequero + pertrechos en la calle. Se respetan
+    // el hueco de la puerta (x∈[-5,5]) y los escondites (tinajas).
+    group.add(buildFirePit(plastic, { x: -15, z: -3 })); ctx.addObstacle(-15, -3, 1.4, 1.4);
+    for (const [cx, cz] of [[16, -8], [-17, -12], [19, 20], [-18, 24]] as const) { group.add(buildCrateStack(plastic, { x: cx, z: cz, n: 3 })); ctx.addObstacle(cx, cz, 1.6, 1.6); }
+    for (const [sx, sz] of [[-16, -6], [15, -14], [16, 16]] as const) { group.add(buildSackPile(plastic, { x: sx, z: sz })); ctx.addObstacle(sx, sz, 1.4, 1.2); }
+    for (const [px, pz] of [[13, -4], [-17, 30]] as const) { group.add(buildPotCluster(plastic, { x: px, z: pz })); ctx.addObstacle(px, pz, 1.2, 1.2); }
+    // rocas/palmeras al borde del arenal de aproximación (que no quede plano)
+    for (const [rx, rz, s] of [[-22, -16, 1.1], [22, -18, 1.0], [-21, 6, 0.9]] as const) { const rk = buildRock(plastic, s); rk.position.set(rx, 0, rz); group.add(rk); ctx.addObstacle(rx, rz, 1.5 * s, 1.3 * s); }
+    [[-23, -12], [23, -6]].forEach(([x, z]) => { group.add(buildPalm(plastic, x, z, 8)); ctx.addObstacle(x, z, 1, 1); });
+    // estandartes colgados en la muralla, a los lados de la puerta
+    for (const [bx] of [[-16], [16]] as const) { const b = buildBanner(plastic, BrickPalette.DARK_RED, 1.4, 4); b.position.set(bx, 6, 7.4); group.add(b); }
 
     // === AMUEBLADO EXTERIOR: la aproximación a la puerta estaba desolada ===
     // camino con 2 antorchas (ÚNICA luz nueva; el resto son props SIN luz, por el móvil)
