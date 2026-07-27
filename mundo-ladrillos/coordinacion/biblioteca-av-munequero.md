@@ -1,5 +1,9 @@
 # 🎬 BIBLIOTECA AUDIOVISUAL — MUÑEQUERO (Higgsfield)
 
+> 🖼️ **GALERÍA WEB (ver todo de un vistazo):** https://claude.ai/code/artifact/f80983a5-e4b9-4955-a204-859395662c27
+> (privada del usuario; cada key-art abre a tamaño completo).
+
+
 > Assets **grandes** (carátula, pantallas, vídeo, voz) generados en Higgsfield para
 > **toda la historia y todos los hilos**. Son demasiado pesados para embeber en base64
 > en el repo, así que viven en la **biblioteca de Higgsfield del usuario** (cuenta
@@ -29,7 +33,14 @@
 | **MAPA / selección de nivel** — mapa ilustrado del viaje (campamento → Jordán → marcha → Jericó) con senda punteada | `f463f84e-0d02-4865-8723-3e7834f57bd4` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224307_f463f84e-0d02-4865-8723-3e7834f57bd4.png |
 | **RESCATE DE RAHAB** — cordón rojo colgando de la ventana del muro de noche, espías bajando, Rahab asomada | `f5242e5c-7d73-4ae6-8d90-b61cad4bc956` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224312_f5242e5c-7d73-4ae6-8d90-b61cad4bc956.png |
 
-## 🎞️ Vídeo (intro cinemática)
+## 🎬 Escenas clave de la historia
+| escena | job id | tamaño | URL |
+|---|---|---|---|
+| **EL JORDÁN SE PARTE** — dos muros de agua-ladrillo, israelitas cruzando con el Arca | `6338b751-6ed1-4802-8445-7a84aaf5c842` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224536_6338b751-6ed1-4802-8445-7a84aaf5c842.png |
+| **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
+| **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
+
+## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
 |---|---|---|---|
 | **INTRO** — la muralla de Jericó tiembla y se deshace en ladrillos a cámara lenta, cámara acercándose | `728c5fee-1688-4bf5-8b05-98cf19f134af` | kling3_0_turbo (5s, 720p, 16:9) | ✅ listo. https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_222724_728c5fee-1688-4bf5-8b05-98cf19f134af.mp4 |

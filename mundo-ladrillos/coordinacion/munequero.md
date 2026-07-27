@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **22:47 UTC** — 🖼️ GALERÍA WEB publicada para VER TODO lo creado (orden del usuario):
+  **https://claude.ai/code/artifact/f80983a5-e4b9-4955-a204-859395662c27** (carátula, pósters,
+  pantallas, escenas, e inventario de piezas de fábrica). +3 escenas nuevas catalogadas (Jordán
+  partiéndose, marcha 7 vueltas, pantalla de pausa). El usuario pidió **solo imágenes** (no voz/vídeo).
+  Sigo generando tandas. Créditos ~62.
 - **22:28 UTC** — 🎬 MODO AGRESIVO (orden del usuario: exprimir Higgsfield sin parar, biblioteca
   visual+audio+vídeo para todo el juego, carátula tipo CD). Generados 4 key-arts (2048px) + 1 vídeo:
   **CARÁTULA** del juego, pantalla de **TÍTULO/inicio**, **VICTORIA**, **GAME OVER**, y **vídeo de
