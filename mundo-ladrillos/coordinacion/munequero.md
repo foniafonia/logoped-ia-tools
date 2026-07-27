@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **13:47 UTC** — ⭐ +2 iconos verificados por md5: `iconStar` (estrella de recompensa,
+  universal para niveles/premios) y `iconCord` (**cordón rojo** — la señal de Rahab, objetivo
+  clave de E20). Higgsfield, fondo transparente. Sin orden nueva del cerebro → gasto de créditos
+  en piezas útiles (plano A). Estrella tenía 2 chars de más, cordón 1 sustitución; ambos
+  corregidos localmente por md5 (sin gastar créditos). iconos-demo y catálogo al día. *(Créditos ≈ 72.)*
 - **13:36 UTC** — 🧺 +2 iconos de prop verificados por md5: `iconBasket` (cesta de pan —
   comida/coleccionable de mercado) y `iconJug` (cántaro de agua — aguadoras/pozo). Higgsfield,
   fondo transparente. Sin orden nueva del cerebro → gasto de créditos en piezas pequeñas útiles
