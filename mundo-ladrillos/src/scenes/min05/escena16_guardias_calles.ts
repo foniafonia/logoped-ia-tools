@@ -135,6 +135,13 @@ export const escena16: Min05Scene = {
 
     ctx.scene.add(group);
 
+    // CONVERSACIÓN de los guardias (diálogo compartido). Descubren las huellas y se
+    // alarman — el gag cómico de la peli (6:07-6:16). Auto-avance; da vida al finale.
+    const ROJO = 0xd06a4a, PLUMA = 0xe0b050;
+    ctx.say?.('¡Miren estas huellas! Vienen de fuera…', 'Guardia', 3.2, ROJO);
+    ctx.say?.('¡Ya están adentro! ¡Hay que atraparlos!', 'Jefe de guardia', 3.0, PLUMA);
+    ctx.say?.('Ey, ey, cálmate. Ojos bien abiertos: busquemos por las calles.', 'Jefe de guardia', 3.6, PLUMA);
+
     let doneFlag = false;
     let rugHidden = false; // ¿escondido tras la alfombra ahora mismo?
     let rugShown = false;  // ¿ya se hizo el plano cinemático del escondite?
