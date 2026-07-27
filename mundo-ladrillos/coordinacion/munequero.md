@@ -21,6 +21,10 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **13:36 UTC** — 🧺 +2 iconos de prop verificados por md5: `iconBasket` (cesta de pan —
+  comida/coleccionable de mercado) y `iconJug` (cántaro de agua — aguadoras/pozo). Higgsfield,
+  fondo transparente. Sin orden nueva del cerebro → gasto de créditos en piezas pequeñas útiles
+  (plano A). iconos-demo y catálogo al día. Build limpio. *(Créditos ≈ 74.)*
 - **13:30 UTC** — 🏰 `bgJericoTelon`: telón dramático de la **muralla de Jericó al atardecer**
   (Higgsfield), el "fondo cutre" que anotó el cerebro. Plano de fondo anclado, ligero
   (320px, 6 trozos verificados por md5). Conectado en `procesion-demo` (captura OK).

@@ -71,7 +71,9 @@ img.src = iconShofar;   // shofar · shékel · llave · rollo (Torá/mapa) · a
 ```
 `iconShofar` (cuerno, derriba murallas) · `iconCoin` (shékel/recompensa) · `iconKey`
 (llave de puerta/puesto) · `iconScroll` (rollo — objetivo/pista) · `iconTorch` (antorcha,
-para escenas de noche/sigilo). Todos recortados con IA (fondo transparente) y verificados por md5.
+noche/sigilo) · `iconBasket` (cesta de pan — comida/coleccionable, mercado) · `iconJug`
+(cántaro de agua — aguadoras/pozo, prop de mercado). Todos recortados con IA (fondo
+transparente) y verificados por md5.
 
 ## ✨ Render "precioso" (COMPARTIDO)
 ```ts

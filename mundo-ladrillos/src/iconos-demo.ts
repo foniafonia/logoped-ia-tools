@@ -1,4 +1,4 @@
-import { iconShofar, iconCoin, iconKey, iconScroll, iconTorch } from './assets/gameIcons';
+import { iconShofar, iconCoin, iconKey, iconScroll, iconTorch, iconBasket, iconJug } from './assets/gameIcons';
 
 /**
  * Demo showcase de los iconos de juego (Higgsfield, WebP transparente): shofar,
@@ -17,7 +17,9 @@ const items: [string, string, string][] = [
   [iconCoin, 'Shékel', '128'],
   [iconKey, 'Llave', '×1'],
   [iconScroll, 'Rollo', '×1'],
-  [iconTorch, 'Antorcha', '×1']
+  [iconTorch, 'Antorcha', '×1'],
+  [iconBasket, 'Pan', '×5'],
+  [iconJug, 'Agua', '×1']
 ];
 for (const [src, label, val] of items) {
   const chip = document.createElement('div');
