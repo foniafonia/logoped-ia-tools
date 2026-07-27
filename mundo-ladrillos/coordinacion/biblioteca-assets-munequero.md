@@ -1,5 +1,8 @@
 # 📦 BIBLIOTECA DE ASSETS — MUÑEQUERO (rama `claude/munecos-ifepfa`)
 
+> 🌐 **Catálogo visual (web):** https://claude.ai/code/artifact/bd34fbb8-ce92-4a3c-b1e8-d4736019f6b3
+> (privado del usuario; se comparte desde el menú "Share" para dar acceso a todos).
+
 > **Para TODOS los hilos y el LEAD.** Todo esto está LISTO y verificado (build limpio).
 > **Úsenlo ya en sus escenas** (Regla Nº1: ningún rincón pelado). Y **LEAD: mergéalo
 > a la base compartida** (o a `main`) para que todos tengan acceso sin `git checkout`
