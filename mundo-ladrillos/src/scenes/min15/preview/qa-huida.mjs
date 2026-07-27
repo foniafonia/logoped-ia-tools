@@ -134,6 +134,29 @@ console.log('  final → status:', p.status, '| done:', p.done);
 await page.screenshot({ path: join(OUT, 'escena-33-preparativos.png') });
 const ok33 = p.done || (p.status && p.status.includes('preparado'));
 
+// ---------------- ESCENA 34: taller de shofarot (recoger 3 + entregar) ----------------
+console.log('· Escena 34 — taller de shofarot');
+await page.evaluate(() => window.__loadNumero(34));
+await sleep(500);
+p = await probe();
+console.log('  mundo:', p.mundo, '| objetivo:', p.objetivo);
+const BENCHES = [[-8, -4], [0, 6], [6, -4]];
+for (const [bx, bz] of BENCHES) {
+  await walkTo(bx, bz);
+  await sleep(150);
+  await page.evaluate(() => window.__act()); // recoger shofar
+  await sleep(300);
+}
+await walkTo(12, 0); // al Cohen
+await sleep(150);
+p = await probe();
+console.log('  prompt ante el Cohen:', p.prompt);
+await page.evaluate(() => window.__act()); // entregar
+for (let i = 0; i < 8; i++) { await sleep(300); p = await probe(); if (p.done) break; }
+console.log('  final → status:', p.status, '| done:', p.done);
+await page.screenshot({ path: join(OUT, 'escena-34-shofarot.png') });
+const ok34 = p.done || (p.status && p.status.includes('listos'));
+
 await browser.close();
-console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · esc33 ${ok33 ? '✅' : '❌'} · errores consola: ${errors}`);
-process.exit(ok29 && ok30 && ok31 && ok32 && ok33 && errors === 0 ? 0 : 1);
+console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · esc33 ${ok33 ? '✅' : '❌'} · esc34 ${ok34 ? '✅' : '❌'} · errores consola: ${errors}`);
+process.exit(ok29 && ok30 && ok31 && ok32 && ok33 && ok34 && errors === 0 ? 0 : 1);
