@@ -1,6 +1,15 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **06:04 UTC** — 🎨 Higgsfield a tope (3 texturas de terreno para escenas futuras):
+  `texEarth.ts` (tierra seca agrietada, STR edf1b954 — para la MARCHA alrededor de
+  Jericó), `texRock.ts` (roca/peñascos, STR 7ead3c90, en 4 trozos) y `texThatch.ts`
+  (techo de palma/paja, STR 99efb4d5 — tejados de casas/puestos). Todas tileables,
+  verificadas trozo a trozo. Demo `terreno-demo` (suelo de tierra + peñascos de roca
+  + choza con techo de palma + palmeras) build OK, 0 errores runtime (Playwright).
+  (Descartado el follaje: fibra de altísima frecuencia → 14KB, no rentable; el verde
+  ya lo dan las palmeras.) Créditos ~92.5. Traer:
+  `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/texEarth.ts mundo-ladrillos/src/assets/texRock.ts mundo-ladrillos/src/assets/texThatch.ts`
 - **05:38 UTC** — 🎨 Higgsfield: **textura de agua de río** `src/assets/texWater.ts`
   (tileable, verificada STR 06e7c650) para el **Jordán** (min 5–10, el cruce) y
   estanques — anímala con `map.offset` para dar corriente. Demo `rio-demo` (lámina
