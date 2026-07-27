@@ -99,6 +99,11 @@ espías / vestuario). Ver montaje en `tienda-demo`.
   **curada para MERCADO NOCTURNO** (5–10 / 10–15): elenco variado de noche (mercader que
   regatea, encapuchados, asombro, niña asustada, aguadoras) alrededor de un centro + caminantes.
   Determinista y sin sombras (barato). Ver `mercado-noche-demo`. Devuelve `{ group, update, dispose }`.
+- **`buildProcessionCrowd(scene, plastic, { mode, origin, rows, perRow, facingYaw })`** →
+  multitud LITE de **PROCESIÓN** para los momentos "wow": `mode:'march'` (marcha alrededor
+  de Jericó, caras resueltas avanzando hacia la muralla) o `mode:'celebration'` (júbilo/asombro
+  cuando cae la muralla o el campamento celebra). Forma FILAS que miran a un objetivo común
+  (`facingYaw`), con niños mezclados. Ver `procesion-demo`.
 - **Emociones** (campo `emotion` del skin): happy, neutral, worried, stern, surprised, alert,
   angry, sad, scared, sly, joyful, **awe** (asombro reverente, p.ej. ante el milagro),
   **determined** (guerrero resuelto). Úsalas para variar caras en multitudes y momentos clave.
@@ -121,6 +126,6 @@ marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigi
 
 ## 🧪 Demos para copiar montajes
 `portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`,
-`mercado-noche-demo`, `noche-demo`,
+`mercado-noche-demo`, `procesion-demo`, `noche-demo`,
 `clutter-demo`, `textura-demo`, `crowd-lite-demo`, `controles-demo`, `ui-demo`, `dialogo-demo`,
 `ark-demo`, `shofar-demo`, `mapa-demo`, `ajustes-demo`, `combate-demo`, `tutorial-demo`, `sigilo-demo`, `extras-demo`.

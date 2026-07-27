@@ -183,3 +183,89 @@ export function buildNightMarketCrowd(
 
   return buildCrowd(scene, plastic, spots, { walkers, lite: true, startIndex: opts.startIndex });
 }
+
+/**
+ * Multitud LITE de PROCESIÓN para los momentos "wow": la marcha alrededor de
+ * Jericó, la muralla cayendo o el júbilo del campamento. En vez de un anillo que
+ * mira al centro, forma FILAS que miran todas a un mismo objetivo (la muralla /
+ * el frente) → lee como un pueblo en marcha o celebrando, no como corrillos.
+ *
+ *   - `mode:'march'`  → caras resueltas/serias (determined/stern/alert): el ejército
+ *      que rodea la ciudad. Avanzan hacia el objetivo.
+ *   - `mode:'celebration'` → caras de júbilo/asombro (joyful/awe/surprised/happy):
+ *      cuando cae la muralla o el campamento celebra.
+ *
+ * `facingYaw` = hacia dónde miran todos (0 = +Z; usa `Math.atan2(tx-x, tz-z)` si
+ * apuntas a un punto). Determinista y sin sombras (barato, suave en móvil).
+ *
+ *   const proc = buildProcessionCrowd(scene, plastic, { mode: 'march', rows: 3, perRow: 6, facingYaw: 0 });
+ *   // en el loop: proc.update(dt);
+ */
+export function buildProcessionCrowd(
+  scene: THREE.Scene,
+  plastic: PlasticMaterialFactory,
+  opts: {
+    mode?: 'march' | 'celebration';
+    origin?: { x: number; z: number };
+    rows?: number;
+    perRow?: number;
+    spacing?: number;
+    facingYaw?: number;
+    advance?: boolean;      // en 'march', añade caminantes que avanzan hacia el frente
+    startIndex?: number;
+    extraSpots?: CrowdSpot[];
+  } = {}
+): { group: THREE.Group; update: (dt: number) => void; dispose: () => void } {
+  const ox = opts.origin?.x ?? 0;
+  const oz = opts.origin?.z ?? 0;
+  const rows = opts.rows ?? 3;
+  const perRow = opts.perRow ?? 6;
+  const gap = opts.spacing ?? 1.5;
+  const yaw = opts.facingYaw ?? 0;
+  const march = (opts.mode ?? 'march') === 'march';
+
+  // Moods según el momento. scale<1 = niños entre la multitud (comunidad real).
+  const marchMoods: Emotion[] = ['determined', 'stern', 'alert', 'determined', 'neutral', 'stern'];
+  const joyMoods: Emotion[] = ['joyful', 'awe', 'surprised', 'happy', 'awe', 'joyful'];
+  const moods = march ? marchMoods : joyMoods;
+
+  // Dirección "hacia el frente" (adonde miran) y su perpendicular (ancho de fila).
+  const fx = Math.sin(yaw), fz = Math.cos(yaw);       // vector de avance
+  const rx = Math.cos(yaw), rz = -Math.sin(yaw);      // vector lateral (fila)
+
+  const spots: CrowdSpot[] = [];
+  let k = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < perRow; c++) {
+      // fila r (más atrás cuanto mayor r), columna c centrada; leve zigzag determinista.
+      const lateral = (c - (perRow - 1) / 2) * gap + ((r % 2) * 0.5 * gap);
+      const depth = -r * gap * 1.1 - ((c * 3) % 2) * 0.18;   // filas hacia atrás
+      const x = ox + rx * lateral + fx * depth;
+      const z = oz + rz * lateral + fz * depth;
+      const isChild = ((r * perRow + c) % 5) === 0;          // ~1 de cada 5 es niño/a
+      spots.push({
+        x, z, yaw,
+        emotion: moods[(r + c) % moods.length],
+        scale: isChild ? 0.7 : 1
+      });
+      k++;
+    }
+  }
+  if (opts.extraSpots) spots.push(...opts.extraSpots);
+
+  // En modo marcha, un par de figuras que AVANZAN hacia el frente (dan sensación de columna).
+  const walkers: CrowdWalker[] = [];
+  if (march && (opts.advance ?? true)) {
+    for (const side of [-1, 1]) {
+      const lx = ox + rx * side * (perRow / 2) * gap * 0.7;
+      const lz = oz + rz * side * (perRow / 2) * gap * 0.7;
+      walkers.push({
+        ax: lx - fx * gap, az: lz - fz * gap,
+        bx: lx + fx * gap * 3, bz: lz + fz * gap * 3,
+        speed: 1.2, emotion: 'determined'
+      });
+    }
+  }
+
+  return buildCrowd(scene, plastic, spots, { walkers, lite: true, startIndex: opts.startIndex });
+}

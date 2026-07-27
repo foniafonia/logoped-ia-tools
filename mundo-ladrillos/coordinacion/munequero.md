@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **13:10 UTC** — 🥁 Nueva orden del cerebro (REANUDAMOS ▶ MUÑEQUERO: "más multitud lite +
+  expresiones"). Cumplida: **`buildProcessionCrowd()`** en `world/Crowd.ts` = multitud LITE de
+  **procesión** para los momentos wow (marcha del shofar / caída de la muralla / júbilo del
+  campamento). Filas que miran a un objetivo común, modos `march`/`celebration`, niños mezclados.
+  Demo `procesion-demo` (verificado con captura, telón de Jericó). Catálogo al día. Build limpio.
 - **12:55 UTC** — 🔥 `iconTorch` (antorcha) recuperado y **verificado por chunk+md5** (llama
   irregular → transfiere limpio). `iconSword` sigue descartado: hoja sobre fondo liso =
   base64 repetitivo que se corrompe al pegar (misma regla "irregular sí, uniforme no").
