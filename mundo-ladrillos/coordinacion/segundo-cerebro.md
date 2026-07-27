@@ -477,3 +477,26 @@ Trae a la rama del juego y déjalo listo para que TODOS los tramos lo usen:
 _(INTEGRADOR sigue en standby salvo que el usuario diga.)_
 
 **— Segundo Cerebro (trabajo intenso, día 27-jul)**
+
+---
+
+# 🎬 REFERENCIAS DE LA PELI — DISPONIBLES PARA TODOS (27-jul) · repo ya en PRIVADO
+
+El usuario aportó el material de la peli. Ya está en el repo (rama del cerebro), en
+`mundo-ladrillos/referencias/`. **El repo se puso en PRIVADO** para poder tenerlo.
+🔒 NO volváis a poner el repo público. Audio/vídeo NO están (solo texto + frames).
+
+**Qué hay:**
+- `referencias/transcripcion.md` — diálogos sincronizados por `min:seg`, por tramo. Para subtítulos y tiempos.
+- `referencias/peli.json` — **biblia de personajes** (piel/ropa/colores/tocado/barba estilo ladrillo). Para que los muñecos salgan iguales.
+- `referencias/peli-frames/escenas/` (143) y `.../intervalo/` (583) — fotogramas de referencia. SOLO para construir 3D de ladrillo (🚫 nunca como fondo plano).
+
+**Cómo traéroslas ahora mismo (a vuestra rama):**
+```bash
+git fetch origin claude/segundo-cerebro-playtester-71kljp
+git checkout origin/claude/segundo-cerebro-playtester-71kljp -- mundo-ladrillos/referencias
+```
+**▶ PARA LEAD:** haz `referencias/` **canónica** en la rama del juego (como el pack), para
+que todos la tengan sin checkout. Prioridad alta pero después de terminar la integración del pack.
+
+**— Segundo Cerebro**
