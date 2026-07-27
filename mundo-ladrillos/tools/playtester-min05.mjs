@@ -13,8 +13,9 @@
 import { chromium } from 'playwright';
 import { writeFileSync } from 'fs';
 const OUT='/tmp/claude-0/-home-user-logoped-ia-tools/9b311647-96dd-5275-8cdc-1259d5c8ea31/scratchpad/';
-const BASE='http://127.0.0.1:5178/src/scenes/min05/preview/index.html';
-const b = await chromium.launch({ headless:true, args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--use-angle=swiftshader','--no-sandbox','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows'] });
+// Robusto para la noche: single-file construido vía file:// (sin dev server).
+const BASE='file:///home/user/logoped-ia-tools/mundo-ladrillos/dist-min05/index.html';
+const b = await chromium.launch({ headless:true, args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--use-angle=swiftshader','--no-sandbox','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--allow-file-access-from-files'] });
 const p = await b.newPage({ viewport:{width:900,height:520}, isMobile:true, hasTouch:true });
 await p.bringToFront();
 const errs=[]; p.on('pageerror',e=>errs.push('PE:'+e.message.slice(0,120))); p.on('console',m=>{if(m.type()==='error')errs.push('C:'+m.text().slice(0,120))});
