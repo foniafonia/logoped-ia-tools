@@ -97,6 +97,25 @@ console.log('  final → status:', p.status, '| done:', p.done);
 await page.screenshot({ path: join(OUT, 'escena-31-fin.png') });
 const ok31 = p.done || (p.status && p.status.includes('nuestra'));
 
+// ---------------- ESCENA 32: Josué reúne al ejército (reunir 3 corros) ----------------
+console.log('· Escena 32 — Josué reúne al ejército');
+await page.evaluate(() => window.__loadNumero(32));
+await sleep(500);
+p = await probe();
+console.log('  mundo:', p.mundo, '| objetivo:', p.objetivo);
+const RALLIES = [[-9, -5], [-4, 8], [5, -6]];
+for (const [rx, rz] of RALLIES) {
+  await walkTo(rx, rz);
+  await sleep(150);
+  await page.evaluate(() => window.__act()); // dar la orden a ese escuadrón
+  await sleep(300);
+}
+await page.screenshot({ path: join(OUT, 'escena-32-ejercito.png') });
+for (let i = 0; i < 12; i++) { await sleep(400); p = await probe(); if (p.done) break; }
+console.log('  final → status:', p.status, '| done:', p.done);
+await page.screenshot({ path: join(OUT, 'escena-32-formado.png') });
+const ok32 = p.done || (p.status && p.status.includes('formado'));
+
 await browser.close();
-console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · errores consola: ${errors}`);
-process.exit(ok29 && ok30 && ok31 && errors === 0 ? 0 : 1);
+console.log(`\nRESULTADO: esc29 ${ok29 ? '✅' : '❌'} · esc30 ${ok30 ? '✅' : '❌'} · esc31 ${ok31 ? '✅' : '❌'} · esc32 ${ok32 ? '✅' : '❌'} · errores consola: ${errors}`);
+process.exit(ok29 && ok30 && ok31 && ok32 && errors === 0 ? 0 : 1);
