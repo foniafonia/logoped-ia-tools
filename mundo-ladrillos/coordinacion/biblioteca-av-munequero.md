@@ -58,6 +58,9 @@
 | **HERRERO** — delantal de cuero sobre túnica teja, cara tiznada, martillo en mano | `9b304109-e9ad-4ff5-8ed2-769b28ba88c7` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233648_9b304109-e9ad-4ff5-8ed2-769b28ba88c7.png |
 | **GRANJERA** — vestido verde oliva, sombrero de paja, gavilla de trigo, sonrisa pecosa | `cefe142e-0b89-4231-869c-d25cc87cc99d` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233650_cefe142e-0b89-4231-869c-d25cc87cc99d.png |
 | **LÍDER TRIBAL** — túnica con estampado tierra, bastón, barba gris larga, faja de su tribu | `a310e4d0-7deb-4730-aa6f-80bf4efd0879` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233702_a310e4d0-7deb-4730-aa6f-80bf4efd0879.png |
+| **ARQUERO** — armadura de cuero ligera sobre túnica arena, carcaj, arco de madera, gesto decidido | `44062152-4fe4-4641-b799-f5b828a8a07e` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234107_44062152-4fe4-4641-b799-f5b828a8a07e.png |
+| **PANADERO** — delantal crema con harina, hogaza de pan, mejillas redondas, gorro de tela | `03e90a1f-79b1-4177-ab60-36de48c984f8` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234108_03e90a1f-79b1-4177-ab60-36de48c984f8.png |
+| **NIÑA** — vestido ocre, dos trencitas, corderito de ladrillos en brazos, ojos alegres | `cd60b6cd-7b35-485b-935d-5ca3043936ac` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234119_cd60b6cd-7b35-485b-935d-5ca3043936ac.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -74,6 +77,8 @@
 | **LLAVE GRANDE** — llave de bronce antigua y ornamentada (objeto de misión) | `9d636d89-1cf7-43fc-838a-d096c2682a52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233117_9d636d89-1cf7-43fc-838a-d096c2682a52.png |
 | **LIRA / ARPA** — lira de madera con cuerdas doradas y marco tallado (instrumento) | `3e866584-be59-4353-8200-7c225320f6a3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233651_3e866584-be59-4353-8200-7c225320f6a3.png |
 | **TAMBOR** — tambor de mano con parche de piel y aro de madera tallado (instrumento) | `202283c7-51ef-42f0-b757-6cc3aceaf465` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233706_202283c7-51ef-42f0-b757-6cc3aceaf465.png |
+| **BRASERO** — brasero de bronce de tres patas con brasas y llamas cálidas (attrezzo) | `02440b34-e200-4fa5-b7b9-9830a75af991` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234112_02440b34-e200-4fa5-b7b9-9830a75af991.png |
+| **RUEDA DE CARRO** — rueda de madera con llanta de hierro gastada, ligeramente inclinada (attrezzo) | `0c5f15a9-834d-4c93-8723-0c804dbc1fdf` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234123_0c5f15a9-834d-4c93-8723-0c804dbc1fdf.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -87,6 +92,8 @@
 | **TERREMOTO** — el suelo se abre en una grieta dorada con ladrillos y polvo saltando (VFX de la caída) | `89a6a3ff-9709-45ee-8d1c-1bb915f2de57` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232606_89a6a3ff-9709-45ee-8d1c-1bb915f2de57.png |
 | **POWER-UP CURACIÓN** — cruz verde luminosa dentro de un corazón de luz con chispas y ladrillos | `976e10ac-0a90-40de-88c6-6d073c92c840` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233652_976e10ac-0a90-40de-88c6-6d073c92c840.png |
 | **POWER-UP PRISA** — sandalias aladas brillantes con estelas de movimiento y ladrillos | `e834245c-bf01-45c3-85b4-59640eec5c70` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233724_e834245c-bf01-45c3-85b4-59640eec5c70.png |
+| **POWER-UP INVISIBILIDAD** — capa con capucha translúcida y reluciente, chispas y ladrillos desvaneciéndose | `ec3f5e46-ed9f-4d27-921c-2ade7b95274b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234113_ec3f5e46-ed9f-4d27-921c-2ade7b95274b.png |
+| **POWER-UP IMÁN DE MONEDAS** — imán de herradura atrayendo un remolino de monedas de oro con chispas | `48c55e99-8268-4dd2-8ef8-5e3ab7f5c92d` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234127_48c55e99-8268-4dd2-8ef8-5e3ab7f5c92d.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -112,6 +119,8 @@
 | **CELEBRACIÓN (confeti de ladrillos)** — israelitas bailando mientras estallan ladrillos de colores como confeti, estandartes al viento | `b0db9527-8956-439a-93bc-f80a77fd6003` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233115_b0db9527-8956-439a-93bc-f80a77fd6003.png |
 | **ASAMBLEA DEL CAMPAMENTO** — minifiguras en semicírculo de tiendas escuchando a un líder sobre una roca, fogata y estandartes (de día) | `f93f5a89-e65c-433d-ad51-52a23703aba9` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233704_f93f5a89-e65c-433d-ad51-52a23703aba9.png |
 | **FESTÍN DE VICTORIA** — mesas largas con pan, fruta y jarras bajo guirnaldas de faroles al anochecer | `731a9ba1-809b-419a-b06a-234e5ef1e27f` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233654_731a9ba1-809b-419a-b06a-234e5ef1e27f.png |
+| **PATRULLA NOCTURNA** — guardias con antorchas y lanzas caminando por lo alto de la muralla, luz de luna azul | `beb4159d-1160-420b-9e11-bfe2a4596816` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234111_beb4159d-1160-420b-9e11-bfe2a4596816.png |
+| **RECONSTRUCCIÓN CON LADRILLOS** — minifiguras reconstruyendo una casa con ladrillos de colores tras la caída (día, cooperativo) | `44c31a18-dc27-4a4e-bec5-9d7001ef7049` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234121_44c31a18-dc27-4a4e-bec5-9d7001ef7049.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -119,6 +128,7 @@
 | **TORMENTA DE POLVO** — nubes de arena ocre y ámbar arremolinándose sobre un horizonte tenue (16:9) | `704a6f88-4566-49e4-9ddd-b56381c72205` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233103_704a6f88-4566-49e4-9ddd-b56381c72205.png |
 | **NOCHE ESTRELLADA** — cielo azul profundo con estrellas cálidas y luna creciente sobre dunas y palmeras (16:9) | `f24a2ad1-4d27-48c2-939e-06bbf3df27ab` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233118_f24a2ad1-4d27-48c2-939e-06bbf3df27ab.png |
 | **AURORA DORADA** — rayos cálidos rompiendo sobre un horizonte pálido dorado con nubes suaves (16:9) | `6757bd4a-3627-4ea5-8292-ba5b8070e310` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_233717_6757bd4a-3627-4ea5-8292-ba5b8070e310.png |
+| **MEDIODÍA DESPEJADO** — azul vivo con nubes de ladrillo blancas sobre horizonte pálido de desierto (16:9) | `21444758-ae17-4593-b445-e011fb3441f1` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_234128_21444758-ae17-4593-b445-e011fb3441f1.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
