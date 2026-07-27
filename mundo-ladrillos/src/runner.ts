@@ -18,6 +18,55 @@ import { setupPreciousRender } from './core/PreciousRender';
 import { Dialogue } from './ui/Dialogue';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from './scenes/min05/skins';
 import { runTramo, TramoRunner, Orquestador, SceneDef } from './core/runTramo';
+import { buildClimax } from './scenes/min25/climax';
+import { Dust } from './effects/Dust';
+
+/**
+ * CLÍMAX (min 25) — puente FINO del integrador sobre el módulo del LEAD `buildClimax`
+ * (hito 1: muralla de Jericó + derrumbe "se deshace en ladrillos"). NO reescribe nada:
+ * envuelve su API pública (`soplarShofar` / `update` / `cayo` / `muroZ`) en una escena
+ * del contrato compartido `SceneContext`, para coserlo como final del viaje. El jugador
+ * (Yehoshúa) llega al pie de la muralla y toca el shofar (E) → la muralla cae.
+ */
+const CLIMAX_SCENE: Min05Scene = {
+  id: 'm25_climax_muralla',
+  numero: 35,
+  titulo: 'La caída de la muralla',
+  subtitulo: '«…y las murallas de Jericó empezaron a temblar.»',
+  objetivo: { tipo: 'ir_a', texto: 'Llega al pie de la muralla y toca el shofar (E)', target: { x: 0, z: -28 }, radio: 8 },
+  exito: '¡La muralla se deshace en ladrillos!',
+  spawn: { x: 0, z: 14 },
+  ambiente: 'day',
+  jugador: 'yoshua',
+  bounds: { minX: -42, maxX: 42, minZ: -30, maxZ: 20 },
+  camara: { yaw: Math.PI, pitch: 0.42, dist: 30 },
+  build(ctx: SceneContext): SceneInstance {
+    const dust = new Dust(ctx.scene);
+    const cl = buildClimax(ctx.scene, ctx.plastic, dust);
+    const GRITO_Z = cl.muroZ + 12;   // punto desde donde se toca el shofar
+    let soplado = false;
+    return {
+      group: cl.group,
+      update(dt, t, player): void {
+        cl.update(dt, t); dust.update(dt);
+        if (!soplado && player.z <= GRITO_Z + 6 && ctx.wantsInteract()) {
+          soplado = true; cl.soplarShofar();
+          ctx.flash?.('¡GRITAD! 🎺', 2.4);
+          ctx.sound.success();
+        }
+      },
+      isDone(): boolean { return soplado && cl.cayo(); },
+      status(): string | null { return soplado && !cl.cayo() ? '¡La muralla se derrumba! 🧱' : null; },
+      hud() {
+        if (soplado) return { progress: cl.cayo() ? 1 : 0.5 };
+        const p = ctx.getPlayer();
+        const near = p.z <= GRITO_Z + 6;
+        return near ? { prompt: 'Pulsa E para tocar el shofar 🎺' } : { goal: [0, GRITO_Z] as [number, number] };
+      },
+      dispose(): void { ctx.scene.remove(cl.group); }
+    };
+  }
+};
 
 /**
  * RUNNER DEL INTEGRADOR — cose los tres tramos jugables en UNA aventura continua:
@@ -38,6 +87,7 @@ const TRAMOS: AnyScene[][] = [
   MIN05_SCENES as AnyScene[],
   MIN10_SCENES as unknown as AnyScene[],
   MIN15_SCENES as unknown as AnyScene[],
+  [CLIMAX_SCENE as AnyScene],            // min 25 — el clímax (muralla) del LEAD, cosido como final
 ];
 
 export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
@@ -354,7 +404,8 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   const TRAMO_CARDS = [
     { min: 'MINUTO 5–10', tit: 'El Jordán y los dos espías' },
     { min: 'MINUTO 10–15', tit: 'La posada de Rahab' },
-    { min: 'MINUTO 15–20', tit: 'El cordón rojo y los shofarot' }
+    { min: 'MINUTO 15–20', tit: 'El cordón rojo y los shofarot' },
+    { min: 'MINUTO 25', tit: 'La caída de Jericó' }
   ];
   function showTramoCard(idx: number, done: () => void): void {
     const c = TRAMO_CARDS[idx] ?? { min: '', tit: '' };
@@ -411,7 +462,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px;max-width:560px">' +
       '<div style="font:800 32px/1.1 Georgia,serif;color:#e8b04b">¡Aventura completada! 🎉</div>' +
       '<div style="opacity:.9;margin:16px 0 22px">Cruzaste el Jordán con los espías, os escondisteis en la posada de Rahab, ' +
-      'huisteis con el cordón rojo y preparasteis los <b>shofarot</b>. ¡Buen trabajo!</div>' +
+      'huisteis con el cordón rojo, tocasteis los <b>shofarot</b> y las <b>murallas de Jericó cayeron</b>. ¡VICTORIA! 🎉</div>' +
       '<button id="reBtn2" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:14px 26px;cursor:pointer">↻ Jugar otra vez</button></div>';
     Object.assign(fin.style, { position: 'fixed', inset: '0', zIndex: '60', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #23324f, #0a0f18 78%)', opacity: '0', transition: 'opacity .6s' } as CSSStyleDeclaration);
     document.body.appendChild(fin);

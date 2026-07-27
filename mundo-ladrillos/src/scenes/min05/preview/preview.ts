@@ -75,14 +75,15 @@ const sound = new SoundEngine();
 // con tiempos del vídeo completo. Los recortes se cortan del audio del vídeo por
 // estas ventanas (segundos del VÍDEO) y se suben a `clips.ts` (solo en la entrega,
 // PRIVADO). Hasta que existan, `playSceneClip` no suena (queda el ambiente):
-//   9  voz_09  [0:46–1:03]  «…el poderoso río Jordán, la tierra prometida»
-//   10 voz_10  [3:41–4:16]  «Necesito hombres… que vayan a espiar Jericó»
-//   11 voz_11  [4:24–4:34]  «Es peligroso: si os descubren, os matarán»
-//   12 voz_12  [4:44–5:00]  «¿Estás listo? — Vamos a cambiarnos»
-//   13 (música/ambiente, sin diálogo)
-//   14 voz_14  [5:12–5:37]  «Es una noche tranquila… ¡UN AVIÓN!»  (+ gag corto)
-//   15 voz_15  [5:37–5:54]  «Vamos, ya es hora» (colarse)
-//   16 voz_16  [5:54–6:44]  «Miren estas huellas… ¿vieron algo raro?»
+// (tiempos del VÍDEO original, según referencias/transcripcion.md canónica):
+//   9  voz_09  [0:54–1:03]  «Frente a ellos el poderoso río Jordán… la tierra prometida a sus antepasados»
+//   10 voz_10  [3:41–4:16]  «Necesito hombres discretos y valientes que vayan a espiar Jericó…»
+//   11 voz_11  [4:24–4:34]  «Es muy peligroso: si los cananeos los descubren, los van a matar»
+//   12 voz_12  [4:44–4:48]  «¿Estás listo? — Sí. Vamos a cambiarnos»
+//   13 (sin diálogo — música/ambiente; no hay voz_13)
+//   14 voz_14  [5:12–5:37]  «Es una noche bastante tranquila… ¡UN AVIÓN!»  (+ gag "eso es del futuro")
+//   15 voz_15  [5:37–5:47]  «Vamos, ya es hora» (colarse por la puerta)
+//   16 voz_16  [5:54–6:44]  «Sabemos que Israel enviará espías… / Miren estas huellas, vienen de fuera»
 const SCENE_CLIP: Record<number, string> = {
   9: 'voz_09', 10: 'voz_10', 11: 'voz_11', 12: 'voz_12', 14: 'voz_14', 15: 'voz_15', 16: 'voz_16'
 };
