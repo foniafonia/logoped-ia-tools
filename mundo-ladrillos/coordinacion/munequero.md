@@ -13,6 +13,14 @@ en un sitio con acceso para todos.**
 3. Mientras tanto se trae con el bloque "Cómo traerse TODO de golpe" del catálogo.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **07:42 UTC** — 📖 **PERSONAJES CLAVADOS A LA BIBLIA** (`referencias/peli.json`). Corregí
+  6 skins al canon: **guardia común y jefe estaban CRUZADOS** (las franjas rojas/amarillas son
+  del JEFE; el común lleva cota de malla gris + bigote negro + escudo con león); **sacerdote
+  ahora con MITRA** (no turbante) + pectoral; **Yehoshúa** con pantalón marrón claro (biblia) y
+  azul real; **rabino** corbata gris; **beduino** verde oliva + barba marrón; **espía negro** en
+  negro real. Demo nueva `elenco-demo` (los 11 alineados) verificada por captura, 0 errores,
+  build OK. Catálogo actualizado con la sección de personajes canónicos. (Las `referencias/` del
+  cerebro NO las subo a mi rama; solo las leo.)
 - **07:03 UTC** — 🎨+🎭 doble tarea. (B) Higgsfield: **`texGrass`** (pradera/oasis, STR
   ab02ea5e) y **`texSky`** (cielo dramático de nubes 16:9 para skydome/telón, STR b7dfef80),
   ambas verificadas trozo a trozo (grass en 5+minitrozos por la cola JPEG repetitiva).

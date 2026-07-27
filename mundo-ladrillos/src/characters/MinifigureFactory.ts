@@ -73,9 +73,9 @@ export interface MinifigureSkin {
  *  marrón, barba larga blanca-canosa, turbante cobalto y bastón. */
 export const YOSHUA_SKIN: MinifigureSkin = {
   head: 0xf4d03f,
-  torso: 0x1f618d,       // chaleco/túnica azul
-  belt: 0x6e4a2c,        // cinturón cuero oscuro
-  legs: 0x1f618d,        // pantalón azul
+  torso: 0x2471c2,       // túnica azul real (biblia #2980B9)
+  belt: 0x8d4f2a,        // cinturón marrón (biblia #8D4F2A)
+  legs: 0xa9743f,        // pantalones marrón claro (biblia)
   arms: 0x2c7bb0,        // mangas azul algo más claro
   hands: 0xf4d03f,
   headwear: 0x2980b9,    // turbante azul cobalto
@@ -93,14 +93,14 @@ export const YOSHUA_SKIN: MinifigureSkin = {
 /** Espía 1 (ninja simpático): traje azul pizarra, máscara azulada, cara amable. */
 export const SPY_SKIN: MinifigureSkin = {
   head: 0xf2c141,
-  torso: 0x2c3550,
-  belt: 0x3a4a6b,
-  legs: 0x2c3550,
-  arms: 0x2c3550,
+  torso: 0x1b2631,      // traje de sigilo negro (biblia)
+  belt: 0x2c3a45,
+  legs: 0x1b2631,
+  arms: 0x1b2631,
   hands: 0xf2c141,
-  headwear: 0x3a4362,   // máscara azul oscuro (no negro)
+  headwear: 0x1b2631,   // pasamontañas negro con abertura de ojos
   headStyle: 'ninja',
-  straps: 0x5b7bb0,     // correas azul claro (detalle alegre)
+  straps: 0x6b7784,     // placas/detalles de armadura impresos
   emotion: 'alert',     // en misión de sigilo: ojo avizor
   accessory: 'sword'
 };
@@ -173,33 +173,36 @@ export const RAHAB_SKIN: MinifigureSkin = {
  *  escudo redondo con león y lanza. */
 export const GUARD_SKIN: MinifigureSkin = {
   head: 0xf4d03f,
-  torso: 0xc0392b,       // rojo (#C0392B)
-  belt: 0x7a5433,
-  legs: 0x8a5a2c,        // grebas de cuero marrón
-  arms: 0xc0392b,
+  torso: 0x7f8c8d,       // cota de malla gris (biblia #7F8C8D)
+  belt: 0x4a3524,        // cinturón de cuero ancho
+  legs: 0x8a5a2c,        // faldón marrón (biblia #D35400 tostado)
+  arms: 0x7f8c8d,
   hands: 0xf4d03f,
-  headwear: 0x95a5a6,    // casco plateado (#95A5A6)
+  headwear: 0x8f9799,    // casco de hierro semiesférico liso
   headStyle: 'coneHelmet',
-  tunicStripe: 0xf1c40f, // rayas amarillas (#F1C40F)
+  mustache: 0x171717,    // bigote negro grueso (biblia)
   emotion: 'stern',
-  shield: 0xcaa14a,
-  accessory: 'spear'
+  shield: 0xcaa14a,      // escudo redondo con león
+  accessory: 'spear'     // lanza larga
 };
 
-/** Jefe de guardia: casco con plumas negras, bigote marrón, rayas rojas/amarillas. */
+/** Jefe de guardia: túnica de franjas rojas/amarillas, chaleco de cuero tachonado,
+ *  casco con pluma, barba rubia cuadrada (biblia). */
 export const GUARD_CHIEF_SKIN: MinifigureSkin = {
   head: 0xf4d03f,
-  torso: 0x87663c,       // peto de metal reforzado (bronce)
-  belt: 0x4a3a26,
-  legs: 0x4a4038,
-  arms: 0x87663c,
+  torso: 0xc0392b,       // túnica roja (biblia #C0392B)
+  belt: 0x5a3a1f,
+  legs: 0x7a4a24,        // pantalones de cuero
+  arms: 0xc0392b,
   hands: 0xf4d03f,
-  headwear: 0xa8adb0,    // casco metálico
+  headwear: 0xb8bdc0,    // casco cónico plateado con pluma
   headStyle: 'plumeHelmet',
-  cape: 0x161616,        // capa negra
-  mustache: 0x3a2a1a,    // bigote marrón oscuro
+  tunicStripe: 0xf1c40f, // franjas amarillas verticales (biblia #F1C40F)
+  vestPanel: 0x5a3a1f,   // chaleco de cuero tachonado
+  beard: 0xcaa15e,       // barba rubia recortada cuadrada (biblia)
+  beardStyle: 'short',
   emotion: 'stern',
-  spearGold: true,       // alabarda dorada
+  spearGold: true,       // arma dorada (hacha/alabarda)
   accessory: 'spear'
 };
 
@@ -211,8 +214,8 @@ export const PRIEST_SKIN: MinifigureSkin = {
   legs: 0xece7dc,
   arms: 0xf4efe4,
   hands: 0xf4d03f,
-  headwear: 0xf7f3ea,    // turbante sacerdotal blanco
-  headStyle: 'turban',
+  headwear: 0xf7f3ea,    // mitra sacerdotal blanca alta (biblia)
+  headStyle: 'mitre',
   beard: 0x2a221c,       // barba negra poblada
   beardStyle: 'long',
   pectoral: 0xcaa14a,    // pectoral multicolor
@@ -224,14 +227,14 @@ export const PRIEST_SKIN: MinifigureSkin = {
  *  cejas de preocupación. */
 export const BEDOUIN_SKIN: MinifigureSkin = {
   head: 0xf4d03f,
-  torso: 0x7d6608,       // verde oliva descolorido (#7D6608)
+  torso: 0x4e7a34,       // túnica verde oliva (biblia #1E8449)
   belt: 0x5a4028,
-  legs: 0x5a4028,        // pantalones marrones
-  arms: 0x7d6608,
+  legs: 0x5a4028,        // pantalones marrón oscuro
+  arms: 0x4e7a34,
   hands: 0xf4d03f,
-  headwear: 0xf5cba7,    // turbante beige/arena (#F5CBA7)
+  headwear: 0xe6cfa8,    // keffiyeh color arena
   headStyle: 'turban',
-  beard: 0x2a221c,       // barba negra desaliñada
+  beard: 0x4a3420,       // barba marrón oscuro (biblia)
   beardStyle: 'short',
   patches: 0x9a7a3a,     // remiendos
   emotion: 'worried',    // cejas de preocupación
@@ -251,7 +254,7 @@ export const RABBI_SKIN: MinifigureSkin = {
   beard: 0x7f8c8d,       // barba gris corta (#7F8C8D)
   beardStyle: 'short',
   glasses: 0x14140f,     // gafas negras cuadradas
-  tie: 0x2b4a7a,         // camisa blanca + corbata azul
+  tie: 0x7f8c8d,         // camisa blanca + corbata gris (biblia #7F8C8D)
   emotion: 'happy',
   accessory: 'none'
 };

@@ -81,6 +81,14 @@ scene.add(buildFirePit(plastic, { x: 0, z: 0 }));   // fogata con luz cálida (n
   (feliz, sereno, alerta, preocupado, sorprendido, serio, risueño, pícaro, apenado, muchacho…).
 - `buildCrowd(scene, plastic, spots, { lite, walkers })` → multitud poblada (móvil-friendly).
 
+## 🧑‍🤝‍🧑 Personajes CANÓNICOS (clavados a `referencias/peli.json`) — `characters/MinifigureFactory.ts`
+`CHARACTER_SKINS`: `yehoshua` (túnica azul real + banda azul/blanca + barba larga blanca + pantalón
+marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigilo negro/gris +
+`espiaCamp`/`espia2Camp` de viaje), `guardia` (cota de malla gris + bigote negro + escudo con león),
+`jefeGuardia` (túnica roja a franjas + casco con pluma + barba rubia), `sacerdote` (túnica blanca +
+**mitra** + pectoral + shofar), `beduino` (verde oliva + keffiyeh arena + barba marrón), `rabino`
+(traje azul marino + gafas + corbata gris + kipá). Úsalos con `createMinifigure(plastic, CHARACTER_SKINS.yehoshua)`.
+
 ## 📜 Objetos de la historia — `world/`
 `buildArk` (Arca), `buildShofar` (cuerno), `buildRelic` (reliquia), `buildBanner`/`buildBannerRow` (estandartes).
 
