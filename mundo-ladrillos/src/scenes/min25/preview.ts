@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PlasticMaterialFactory } from '../../materials/PlasticMaterialFactory';
+import { AudioManager } from '../../audio/AudioManager';
 import { Dust } from '../../effects/Dust';
 import { tiledTexture } from '../../materials/tiling';
 import { texEarth } from '../../assets/texEarth';
@@ -33,9 +34,13 @@ ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground)
 
 const plastic = new PlasticMaterialFactory();
 const dust = new Dust(scene);
-const cl = buildClimax(scene, plastic, dust);
+const audio = new AudioManager();
+const player = new THREE.Vector3(0, 0, 40);          // jugador-proxy (la orquestación real lo da el juego)
+const cl = buildClimax(scene, plastic, audio, () => player, dust);
 
-(window as any).__soplar = () => cl.soplarShofar();
+(window as any).__setPlayer = (x: number, z: number) => player.set(x, 0, z);
+// acerca al jugador al shofar y "pulsa E" → dispara el derrumbe (la escena insignia)
+(window as any).__soplar = () => { player.set(cl.shofarPos.x, 0, cl.shofarPos.z); dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' })); };
 (window as any).__cayo = () => cl.cayo();
 (window as any).__cam = (x: number, y: number, z: number, lx: number, ly: number, lz: number) => {
   camera.position.set(x, y, z); camera.lookAt(lx, ly, lz);

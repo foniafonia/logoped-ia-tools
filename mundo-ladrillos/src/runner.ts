@@ -20,6 +20,7 @@ import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP }
 import { runTramo, TramoRunner, Orquestador, SceneDef } from './core/runTramo';
 import { buildClimax } from './scenes/min25/climax';
 import { Dust } from './effects/Dust';
+import { AudioManager } from './audio/AudioManager';
 
 /**
  * CLÍMAX (min 25) — puente FINO del integrador sobre el módulo del LEAD `buildClimax`
@@ -33,36 +34,26 @@ const CLIMAX_SCENE: Min05Scene = {
   numero: 35,
   titulo: 'La caída de la muralla',
   subtitulo: '«…y las murallas de Jericó empezaron a temblar.»',
-  objetivo: { tipo: 'ir_a', texto: 'Llega al pie de la muralla y toca el shofar (E)', target: { x: 0, z: -28 }, radio: 8 },
+  // muralla nativa: muro en z=0, shofar delante en z≈16 (lo gestiona ShofarInteraction).
+  objetivo: { tipo: 'ir_a', texto: 'Ve hasta el shofar y tócalo (E)', target: { x: 0, z: 16 }, radio: 6 },
   exito: '¡La muralla se deshace en ladrillos!',
-  spawn: { x: 0, z: 14 },
+  spawn: { x: 0, z: 30 },
   ambiente: 'day',
   jugador: 'yoshua',
-  bounds: { minX: -42, maxX: 42, minZ: -30, maxZ: 20 },
+  bounds: { minX: -34, maxX: 34, minZ: 8, maxZ: 38 },
   camara: { yaw: Math.PI, pitch: 0.42, dist: 30 },
   build(ctx: SceneContext): SceneInstance {
     const dust = new Dust(ctx.scene);
-    const cl = buildClimax(ctx.scene, ctx.plastic, dust);
-    const GRITO_Z = cl.muroZ + 12;   // punto desde donde se toca el shofar
-    let soplado = false;
+    const audio = new AudioManager(); audio.init();   // el clic de arranque ya fue el gesto
+    // ShofarInteraction (dentro de buildClimax) pone el shofar + baliza + prompt "Pulsa E",
+    // lee al jugador por proximidad y dispara el derrumbe → cayo(). Solo lo alimento y actualizo.
+    const cl = buildClimax(ctx.scene, ctx.plastic, audio, () => ctx.getPlayer(), dust);
     return {
       group: cl.group,
-      update(dt, t, player): void {
-        cl.update(dt, t); dust.update(dt);
-        if (!soplado && player.z <= GRITO_Z + 6 && ctx.wantsInteract()) {
-          soplado = true; cl.soplarShofar();
-          ctx.flash?.('¡GRITAD! 🎺', 2.4);
-          ctx.sound.success();
-        }
-      },
-      isDone(): boolean { return soplado && cl.cayo(); },
-      status(): string | null { return soplado && !cl.cayo() ? '¡La muralla se derrumba! 🧱' : null; },
-      hud() {
-        if (soplado) return { progress: cl.cayo() ? 1 : 0.5 };
-        const p = ctx.getPlayer();
-        const near = p.z <= GRITO_Z + 6;
-        return near ? { prompt: 'Pulsa E para tocar el shofar 🎺' } : { goal: [0, GRITO_Z] as [number, number] };
-      },
+      update(dt, t): void { cl.update(dt, t); dust.update(dt); },
+      isDone(): boolean { return cl.cayo(); },
+      status(): string | null { return cl.cayo() ? '¡La muralla ha caído! 🎉' : null; },
+      hud() { return cl.cayo() ? { progress: 1 } : { goal: [cl.shofarPos.x, cl.shofarPos.z] as [number, number] }; },
       dispose(): void { ctx.scene.remove(cl.group); }
     };
   }

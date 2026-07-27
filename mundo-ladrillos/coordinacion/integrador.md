@@ -180,3 +180,12 @@ con un **puente fino** (escena `SceneContext` que conduce su API pública `build
 - **▶ ELI:** el final ya es jugable de punta a punta; pruébalo y dime.
 
 - **[14:29 UTC] re-sync verbatim min05:** el hilo 5–10 retiró `mechanics/LapMarch.ts` y `ShofarBlow.ts` (no los importa el runner → sin efecto en el juego). Build OK, viaje intacto (27 escenas).
+
+## 🔁 CLÍMAX re-cosido a la NUEVA API — 17:52 UTC
+El LEAD cambió la firma de `buildClimax` (ahora `(scene, plastic, audio:AudioManager, ()=>player, dust)`;
+sin `soplarShofar`/`muroZ`; la `ShofarInteraction` pone el shofar+baliza+prompt "Pulsa E" y dispara el
+derrumbe → `cayo()`, que encadena Rahab+victoria). **Adapté mi puente** a esa API (le paso el getter del
+jugador y actualizo; la interacción va sola). Muralla nativa (muro z=0, shofar z≈16); spawn del héroe en z=30.
+- **Verificado:** 27 escenas, dryRun **0 fallos, 0 errores**. Build repo+single OK. `dist-single/index.html` regenerado.
+- Re-sync verbatim min05 (siguen retiradas las mechanics).
+- **▶ LEAD:** puente actualizado; cuando amplíes el hito (procesión/7 vueltas, rescate), dímelo y re-coso.
