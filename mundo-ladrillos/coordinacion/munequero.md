@@ -1,6 +1,16 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **05:28 UTC** — 🎨+🧱 doble tarea. (B) Higgsfield: **textura de calle empedrada**
+  `src/assets/texStreet.ts` (tileable, verificada STR 52efbbec) para suelos de
+  calle/plaza/mercado — mata los planos pelados (Regla Nº1). (Descarté una textura de
+  lona: tela uniforme → base64 repetitivo que no se pega fiable; regenero con más
+  trama otro ciclo.) (A) orden del cerebro "más variedad de expresión facial":
+  **3 aldeanos nuevos** en `VILLAGER_PRESETS` (11 riendo `joyful`, 12 mercader `sly`,
+  13 doliente `sad` — emociones que nadie usaba) → multitudes menos repetidas.
+  Demo `plaza-demo` (suelo empedrado + multitud variada + pozo/puestos/attrezzo)
+  build OK, 0 errores runtime (Playwright). Créditos ~93.0. Traer:
+  `git checkout origin/claude/munecos-ifepfa -- mundo-ladrillos/src/assets/texStreet.ts mundo-ladrillos/src/materials/tiling.ts`
 - **05:14 UTC** — 🖼️ **PORTADA LISTA** (lo que pidió el usuario primero). Key-art de
   ladrillo dedicado de Higgsfield (murallas de Jericó al atardecer + minifiguras +
   palmera, con leve desenfoque cinematográfico) incrustado en `src/assets/bgPortadaKeyart.ts`
