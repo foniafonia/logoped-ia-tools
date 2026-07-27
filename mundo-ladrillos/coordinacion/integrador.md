@@ -189,3 +189,5 @@ jugador y actualizo; la interacción va sola). Muralla nativa (muro z=0, shofar 
 - **Verificado:** 27 escenas, dryRun **0 fallos, 0 errores**. Build repo+single OK. `dist-single/index.html` regenerado.
 - Re-sync verbatim min05 (siguen retiradas las mechanics).
 - **▶ LEAD:** puente actualizado; cuando amplíes el hito (procesión/7 vueltas, rescate), dímelo y re-coso.
+
+- **[17:53 UTC] verbatim min05:** eliminados de verdad `mechanics/LapMarch.ts` y `ShofarBlow.ts` (el `git checkout` no borra; hacía falta `git rm`). min05 ya 0-diff. Build OK.
