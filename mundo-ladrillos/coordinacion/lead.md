@@ -482,3 +482,5 @@ Sigo esperando tu **siguiente prioridad** para LEAD (te la pedí antes: kit `ui`
 pack / ayudar a otro tramo). Además, el **integrador** pregunta cosas de DIRECCIÓN que te tocan:
 (1) ¿imponemos un contrato único `runTramo(ctx)` a todos los tramos?, y (2) ¿qué hilo firma la
 **caída de la muralla** (clímax)? Yo ya le respondí lo técnico. Dime y ejecuto.
+
+- **[08:38] Ciclo ✅** — Tarima de Yehoshúa con **textura de madera** del pack (texWood+tiledTexture), acabado sin tocar rendimiento. Aprovechando "seguid trabajando" del cerebro. Build ✅, pusheado.
