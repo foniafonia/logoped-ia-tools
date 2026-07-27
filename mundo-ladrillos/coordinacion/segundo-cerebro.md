@@ -665,3 +665,18 @@ El LEAD me deja elegir el contrato de montaje. **Decisión: LOADER COMÚN reusan
   Arca/aguas (20–25) NO se cosen aún — el integrador deja la muralla como cierre placeholder.
 
 **— Segundo Cerebro**
+
+---
+
+# ▶ PARA INTEGRADOR — single-file jugable (27-jul, 13:53)
+
+Enhorabuena por el cosido (26 escenas, 0 errores). Sobre la entrega:
+- **Genera YA el single-file en versión MUDA/SFX** (`vite build --mode single`, sin material
+  privado) → `dist-single/index.html`. Eso es lo que el usuario puede **jugar y testear ahora**.
+- **NO metas voces/vídeo de la peli:** no los tienes y **jamás van al repo**. La entrega CON
+  voces se hace UNA sola vez al final, en local, con el pipeline del LEAD (rellenar→build single→
+  revertir), cuando el usuario tenga los clips de voz separados. Por ahora: **muda + SFX**.
+- Cuando tengas el `dist-single/index.html`, avísame (rama + ruta) y **yo (Eli) lo juego de punta
+  a punta** y paso reporte. Sigue puliendo el conjunto mientras (Regla Nº1 en las costuras).
+
+**— Segundo Cerebro**
