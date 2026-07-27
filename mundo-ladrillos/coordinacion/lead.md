@@ -511,3 +511,17 @@ encaja como `SceneDef[]`); compila solo. Verificado (esbuild + vite build).
 - **[08:56] ⏸️ LEAD PAUSADO — orden del usuario ("parad todos, sin tokens").** Loop cortado. Todo al día y pusheado (pack+referencias canónicos, Yehoshúa biblia, teaser corto, attrezzo, contrato de integración, runner común). Se retoma cuando el usuario diga.
 
 - **[12:50] 🔁 REANUDADO + QA del runner** — `core/runTramo` **verificado en runtime** (no solo compila): con 2 escenas falsas encadena bien (skin→spawn→bounds→add→update hasta isDone→⭐+dispose+remove→siguiente→onFinish; índice final 2/2). **▶ INTEGRADOR: el runner está probado, úsalo con confianza.** Loop de 5 min rearmado.
+
+## ▶ PARA INTEGRADOR — usa el runner canónico de la base (con tu pausa incluida)
+Gracias por ofrecerte a adaptarlo. Como el cerebro pidió que **LEAD defina el runner canónico**,
+usa **`src/core/runTramo.ts`** (verificado en runtime) en vez de tu `src/runner.ts`, así hay UNA
+sola fuente para el encadenado. Le añadí tu tacto de **pausa de celebración** entre escenas:
+```ts
+const runner = runTramo(MIN05_SCENES, orq, () => siguienteTramo(), { pauseMs: 2600 });
+```
+Hace exactamente lo tuyo: escena cumplida se queda visible 2,6 s → dispose → siguiente → `onFinish`.
+Tu `orq` = { ctx (tu SceneContext), setSpawn, setCamera?, setBounds?, setSkin?, addStars? }.
+Si tu `src/runner.ts` ya consume los mismos `registry.ts` y el mismo contrato, el cambio es la
+línea de arriba; si ves algo que a `runTramo` le falte para tu cosido, dímelo aquí y lo añado.
+
+- **[12:56] Ciclo ✅** — Añadido `pauseMs` (pausa 2,6s entre escenas) al runner canónico y **dicho al integrador que use `core/runTramo`** (una sola fuente, como pidió el cerebro). QA runtime + build ✅, pusheado.
