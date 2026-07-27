@@ -87,16 +87,28 @@ export interface TramoRunner {
   readonly total: number;
 }
 
+/** Opciones del runner. */
+export interface RunTramoOpts {
+  /** Pausa de "celebración" (ms) entre que se cumple una escena y arranca la siguiente
+   *  (la escena cumplida se queda visible ese ratito). Def. 0 = inmediato. El integrador
+   *  usaba 2600 ms ("isDone → 2.6s → siguiente"); pásalo aquí para el mismo tacto. */
+  pauseMs?: number;
+}
+
 /** Monta y encadena una lista ORDENADA de escenas. Llama `onFinish` al terminar todas. */
-export function runTramo(scenes: SceneDef[], orq: Orquestador, onFinish?: () => void): TramoRunner {
+export function runTramo(scenes: SceneDef[], orq: Orquestador, onFinish?: () => void, opts: RunTramoOpts = {}): TramoRunner {
+  const pauseMs = opts.pauseMs ?? 0;
   let i = -1;
   let inst: SceneRunnable | null = null;
+  let pendiente = false;   // objetivo cumplido, esperando la pausa antes de pasar
+  let pausa = 0;           // ms restantes de la pausa de celebración
 
   const salir = (): void => {
     if (inst) { orq.ctx.scene.remove(inst.group); inst.dispose?.(); inst = null; }
   };
   const entrar = (n: number): void => {
     salir();
+    pendiente = false; pausa = 0;
     if (n >= scenes.length) { i = n; onFinish?.(); return; }
     i = n;
     const def = scenes[n];
@@ -116,8 +128,14 @@ export function runTramo(scenes: SceneDef[], orq: Orquestador, onFinish?: () => 
     update(dt, t) {
       if (!inst) return;
       const p = orq.ctx.getPlayer();
-      inst.update(dt, t, p);
-      if (inst.isDone(p)) { orq.addStars?.(1); entrar(i + 1); }
+      inst.update(dt, t, p);                       // sigue animando (idle) también en la pausa
+      if (!pendiente && inst.isDone(p)) {          // objetivo cumplido: ⭐ y arranca la pausa
+        pendiente = true; pausa = pauseMs; orq.addStars?.(1);
+      }
+      if (pendiente) {
+        pausa -= dt * 1000;
+        if (pausa <= 0) entrar(i + 1);             // pasa a la siguiente (o onFinish al final)
+      }
     },
     dispose() { salir(); },
   };
