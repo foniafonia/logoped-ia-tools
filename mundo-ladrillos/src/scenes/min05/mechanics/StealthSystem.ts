@@ -83,27 +83,33 @@ export class StealthSystem {
       if (sees) seenBy++;
     }
 
-    // subir/bajar la alarma
+    // subir/bajar la alarma — NIVEL FÁCIL-NIÑO (perdón amplio): sube LENTO (da
+    // tiempo a reaccionar/esconderse) y BAJA RÁPIDO al salir de la vista.
     if (seenBy > 0 && this.resetCooldown <= 0) {
-      this.alarm = Math.min(1, this.alarm + dt * (0.6 + 0.4 * seenBy));
+      this.alarm = Math.min(1, this.alarm + dt * (0.28 + 0.16 * seenBy));
       if (this.alarm < 1 && Math.random() < dt * 2) this.sound.shout();
     } else {
-      this.alarm = Math.max(0, this.alarm - dt * (hiding ? 1.4 : 0.7));
+      this.alarm = Math.max(0, this.alarm - dt * (hiding ? 1.9 : 1.15));
     }
 
     if (this.alarm >= 1 && this.resetCooldown <= 0) {
-      this.caughtFlash = 1.4;
-      this.resetCooldown = 1.6;
+      // FÁCIL-NIÑO: si te pillan NO "mueres" ni vuelves al inicio → retrocedes un
+      // poco (hacia el spawn) con un aviso simpático y reintentas. Nada de fin de escena.
+      this.caughtFlash = 1.6;
+      this.resetCooldown = 1.8;   // margen: los guardias no te vuelven a ver un momento
       this.alarm = 0;
       this.sound.alarm();
-      this.onCaught(this.spawn.x, this.spawn.z);
+      const dx = this.spawn.x - p.x, dz = this.spawn.z - p.z;
+      const d = Math.hypot(dx, dz) || 1;
+      const back = Math.min(7, d);              // solo un empujoncito atrás, no al inicio
+      this.onCaught(p.x + (dx / d) * back, p.z + (dz / d) * back);
     }
   }
 
   status(): string | null {
-    if (this.justCaught) return '🚨 ¡Te han visto! Vuelves al inicio';
+    if (this.justCaught) return '😅 ¡Casi! Retrocede un poquito y vuelve a intentarlo';
     if (this.hidden) return '🫥 Escondido — pasa sin que te vean';
-    if (this.alarm > 0.35) return '👁️ ¡Cuidado, te están viendo!';
+    if (this.alarm > 0.45) return '👁️ ¡Cuidado, te están viendo! Escóndete';
     return null;
   }
 }

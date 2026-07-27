@@ -116,7 +116,7 @@ export const escena16: Min05Scene = {
       const g = buildGuard(plastic, wp[0].x, wp[0].z, 0, i === 2);
       g.setPatrol(wp, 2.4 + i * 0.4);
       group.add(g.root);
-      const cone = new VisionCone(16, 22); group.add(cone.mesh);
+      const cone = new VisionCone(12, 16); group.add(cone.mesh); // fácil-niño: cono corto y estrecho
       stealth.addGuard({ npc: g, cone, baseYaw: 0, followNpc: true });
     });
     for (const b of barrelPos) stealth.addHidingSpot({ x: b.x, z: b.z, radio: 2.2 });
@@ -134,6 +134,13 @@ export const escena16: Min05Scene = {
     group.add(gems.group);
 
     ctx.scene.add(group);
+
+    // CONVERSACIÓN de los guardias (diálogo compartido). Descubren las huellas y se
+    // alarman — el gag cómico de la peli (6:07-6:16). Auto-avance; da vida al finale.
+    const ROJO = 0xd06a4a, PLUMA = 0xe0b050;
+    ctx.say?.('¡Miren estas huellas! Vienen de fuera…', 'Guardia', 3.2, ROJO);
+    ctx.say?.('¡Ya están adentro! ¡Hay que atraparlos!', 'Jefe de guardia', 3.0, PLUMA);
+    ctx.say?.('Ey, ey, cálmate. Ojos bien abiertos: busquemos por las calles.', 'Jefe de guardia', 3.6, PLUMA);
 
     let doneFlag = false;
     let rugHidden = false; // ¿escondido tras la alfombra ahora mismo?

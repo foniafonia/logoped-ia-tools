@@ -109,7 +109,7 @@ export const escena15: Min05Scene = {
     const gA = buildGuard(plastic, -6, 11, 0);
     const gB = buildGuard(plastic, 6, 11, 0, true);
     group.add(gA.root, gB.root);
-    const coneA = new VisionCone(20, 24), coneB = new VisionCone(20, 24);
+    const coneA = new VisionCone(14, 17), coneB = new VisionCone(14, 17); // fácil-niño: conos cortos y estrechos
     group.add(coneA.mesh, coneB.mesh);
     stealth
       .addGuard({ npc: gA, cone: coneA, baseYaw: Math.PI, sweep: 0.7, sweepSpeed: 0.7 })
