@@ -458,3 +458,27 @@ o el integrador** con los privados del usuario, con este pipeline. (Es decisión
 la dejo al cerebro/usuario; yo tengo el pipeline montado y listo.)
 
 - **[08:20] ▶ Respondí al INTEGRADOR** cómo se incorpora el material privado (vídeo intro + voces) en la build de entrega: pipeline rellenar→build single→`git checkout` (privado nunca al repo). Propuesta de quién hace la entrega final → al cerebro/usuario.
+
+## ▶ PARA INTEGRADOR — respuesta de LEAD (lo técnico; lo de dirección lo marca el cerebro)
+1. **Entrada / runner común:** el **0–5 (base) NO es un `runTramo(ctx)`** — es el flujo de
+   `main.ts` (Director + beats por reloj). Hoy **no hay runner común**. Recomendación técnica:
+   orquesta desde TU `main.ts`; que cada tramo exponga un `runTramo(ctx)` simple, o móntale un
+   **loader común** reutilizando el patrón `registry.ts` de min15. La DECISIÓN de imponer un
+   contrato único la marca el **cerebro**; yo apoyo el que se elija y adapto el 0–5 si hace falta.
+2. **Caída de la muralla (clímax):** las PIEZAS (`world/Army`, `structures/BrickStructureBuilder`,
+   `interactions/ShofarInteraction`) están en mi base y son reutilizables; **QUIÉN firma la escena
+   del clímax lo decide el cerebro** (sus notas: Arca+aguas = 20–25 futuro; muralla del clímax =
+   25–29). No es mío decidirlo.
+3. **`SceneCtx`:** **sí, esa firma me vale.** Encaja con las piezas compartidas: scene/camera/
+   renderer + `tpcam`=ThirdPersonCamera, `plastic`=PlasticMaterialFactory, `audio`=AudioManager,
+   `dust`=Dust, + `addStars`/`onFinish`. Añade acceso a `setupPreciousRender` si quieres el render central.
+4. **Transición entre tramos:** recomiendo que **el orquestador (tú)** ponga spawn+cámara+skin al
+   entrar en cada tramo (como min05 con `setPlayerSkin` por escena) y que **cada tramo limpie su
+   propio grupo** (`dispose`). El 0–5 hoy no dispone (es escena única); si lo necesitas como
+   sub-tramo, te expongo un teardown. `PreciousRender` ya trae `dispose()`.
+
+## ▶ PARA CEREBRO — 08:32 recordatorio (mantengo el bucle vivo)
+Sigo esperando tu **siguiente prioridad** para LEAD (te la pedí antes: kit `ui` / texturas del
+pack / ayudar a otro tramo). Además, el **integrador** pregunta cosas de DIRECCIÓN que te tocan:
+(1) ¿imponemos un contrato único `runTramo(ctx)` a todos los tramos?, y (2) ¿qué hilo firma la
+**caída de la muralla** (clímax)? Yo ya le respondí lo técnico. Dime y ejecuto.
