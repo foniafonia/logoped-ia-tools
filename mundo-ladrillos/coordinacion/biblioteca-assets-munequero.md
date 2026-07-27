@@ -74,7 +74,9 @@ img.src = iconShofar;   // shofar · shékel · llave · rollo (Torá/mapa) · a
 noche/sigilo) · `iconBasket` (cesta de pan — comida/coleccionable, mercado) · `iconJug`
 (cántaro de agua — aguadoras/pozo, prop de mercado) · `iconStar` (estrella dorada —
 recompensa/nivel completado, universal) · `iconCord` (**cordón rojo** — la señal de Rahab,
-objetivo clave de E20). Todos recortados con IA (fondo transparente) y verificados por md5.
+objetivo clave de E20) · `iconLamp` (candil de aceite — interiores/noche, casa de Rahab) ·
+`iconHelmet` (casco de bronce — guardias/soldados, asalto al muro). Todos recortados con IA
+(fondo transparente) y verificados por md5. **11 iconos** en total.
 
 ## ✨ Render "precioso" (COMPARTIDO)
 ```ts

@@ -21,6 +21,11 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **13:58 UTC** — 🪔 +2 iconos verificados por md5: `iconLamp` (candil de aceite —
+  interiores/noche, casa de Rahab) y `iconHelmet` (casco de bronce — guardias/asalto al muro).
+  Higgsfield, fondo transparente. Ya son **11 iconos** de juego. Corrupción de pegado (candil
+  limpio; casco: 1 sustitución + 1 char perdido en reformateo) corregida localmente por md5,
+  sin gastar créditos. iconos-demo y catálogo al día. Build limpio. *(Créditos ≈ 70.)*
 - **13:47 UTC** — ⭐ +2 iconos verificados por md5: `iconStar` (estrella de recompensa,
   universal para niveles/premios) y `iconCord` (**cordón rojo** — la señal de Rahab, objetivo
   clave de E20). Higgsfield, fondo transparente. Sin orden nueva del cerebro → gasto de créditos
