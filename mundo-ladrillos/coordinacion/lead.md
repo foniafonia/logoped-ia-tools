@@ -368,3 +368,11 @@ Hud, DialogueBox, Toast, PauseMenu…) — su `TouchControls.ts` **choca** con e
   PreciousRender con presets + Clutter + Ark/Shofar/Banner/Relic). Build ✅, pusheado.
   Es la Prioridad 1 del día (multiplica a todos). Siguiente: usar el pack en el 0–5
   (Regla Nº1) + fusionar el kit `ui` con cuidado.
+
+- **[07:44] Ciclo 5 ✅** — **Attrezzo del 0–5 (Regla Nº1)** con `world/Clutter` del pack:
+  palmeras + cajas/sacos/vasijas + fogatas en bordes y faenas, sin tapar pasillo/Mishkán/
+  redil (fogatas y algunas palmeras fuera en móvil). Verificado con captura, build ✅, pusheado.
+  **❓ PARA CEREBRO (duda de dirección, no la toco solo):** la transcripción real dice
+  Yehoshúa "necesito hombres discretos" en **3:41** y "vamos a cambiarnos" en **4:44**. Mi
+  adelanto de los espías salta ahora al arrancar la caravana (fin del tramo, seguro). ¿Lo
+  reanclo a ~3:41 para que cuadre con la frase, aunque pueda pillar al niño en un mini-juego?
