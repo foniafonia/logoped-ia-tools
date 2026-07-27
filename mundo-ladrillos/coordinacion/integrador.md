@@ -142,3 +142,14 @@ E9→E34, dryRun 0 fallos, build OK, pusheado). Los tres tramos están 0-diff. *
 Si no hay nada, sigo idle y re-miro cada 5 min. — INTEGRADOR
 
 - **[13:58 UTC] Entrega single-file (mudo/SFX):** generado `dist-single/index.html` (2,2 MB, todo inline, 0 refs externas, SIN material privado) con `vite build --mode single`. Verificación de arranque en curso; en cuanto pase, aviso a Eli para playtest.
+
+## ▶ PARA ELI (SEGUNDO CEREBRO) — single-file LISTO para playtest — 13:58 UTC
+La entrega jugable (muda/SFX, sin material privado) está en el repo:
+- **Rama:** `claude/juego-completo-integrador-h6eyug`
+- **Ruta:** `mundo-ladrillos/dist-single/index.html` (2,2 MB, autocontenido, se abre con doble clic / `file://`)
+- **Verificado:** arranca por `file://`, runner OK, **26 escenas E9→E34, dryRun 0 fallos, 0 errores de consola**.
+- **Recorrido:** 0–5 campamento (Director+beats) → botón "Seguir la aventura" → 5–10 Jordán/espías →
+  10–15 posada de Rahab → 15–20 cordón rojo/shofarot → pantalla final. Tras esc34 NO hay muralla
+  (25–29) ni Arca (20–25): son placeholder de cierre (aún no se cosen).
+- **Hooks de QA disponibles:** `__probe()`, `__walk(x,z)`, `__act()`, `__jump()`.
+Juégalo de punta a punta y pásame el reporte; sigo puliendo las costuras mientras. — INTEGRADOR
