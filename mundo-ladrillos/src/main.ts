@@ -258,7 +258,7 @@ function dispararTeaserEspias(): void {
   audio.sfxSparkle();
   cine.start({
     duration: TEASER_DUR,
-    bannerHTML: '🔦 <b>Yehoshúa envía a dos hombres discretos</b> al otro lado del río…<br><b>¡pronto los guiarás tú!</b> 🕵️🕵️',
+    bannerHTML: '🔦 <b>«Necesito hombres discretos y valientes que vayan a espiar la tierra…»</b><br>Yehoshúa envía a dos espías a Jericó — <b>¡pronto los guiarás tú!</b> 🕵️🕵️',
     onFrame: (k, dt) => {
       teaserClock += dt;
       const z = ESPIA_Z0 + (ESPIA_Z1 - ESPIA_Z0) * k;          // avanzan hacia el agua

@@ -69,23 +69,27 @@ export interface MinifigureSkin {
 
 /** Yehoshúa (según frame): AZUL dominante — chaleco/pantalón azul, cinturón
  *  marrón, barba larga blanca-canosa, turbante cobalto y bastón. */
+// Alineado a la BIBLIA (referencias/peli.json → "yehoshua"): túnica AZUL REAL cruzada,
+// cinturón marrón, PANTALONES MARRÓN CLARO (antes azules), banda azul con patrones
+// blancos, barba blanca larga, vara. (Geometría de "banda en el pelo" vs turbante:
+// apuntado al muñequero; de momento turbante con franja blanca, buena aproximación.)
 export const YOSHUA_SKIN: MinifigureSkin = {
-  head: 0xf4d03f,
-  torso: 0x1f618d,       // chaleco/túnica azul
-  belt: 0x6e4a2c,        // cinturón cuero oscuro
-  legs: 0x1f618d,        // pantalón azul
-  arms: 0x2c7bb0,        // mangas azul algo más claro
-  hands: 0xf4d03f,
-  headwear: 0x2980b9,    // turbante azul cobalto
+  head: 0xf1c40f,        // piel (biblia #F1C40F)
+  torso: 0x2980b9,       // túnica azul real (biblia #2980B9)
+  belt: 0x8d4f2a,        // cinturón marrón (biblia #8D4F2A)
+  legs: 0xbfa06a,        // pantalones marrón claro (biblia) — antes iban azules
+  arms: 0x2980b9,        // mangas de la túnica azul
+  hands: 0xf1c40f,
+  headwear: 0x2980b9,    // banda/tocado azul
   headStyle: 'turban',
-  turbanStripe: 0xf4efe4, // franjas blancas
-  beard: 0xbdc3c7,       // barba larga blanca/canosa
+  turbanStripe: 0xf4efe4, // patrones blancos (biblia)
+  beard: 0xbdc3c7,       // barba larga blanca/canosa (biblia)
   beardStyle: 'long',
-  vestPanel: 0x184e78,   // chaleco azul más oscuro (pechera)
-  collar: 0x3a7fb5,      // cuello en V azul claro
-  loincloth: 0x6e4a2c,   // faldón de cuero al frente
+  vestPanel: 0x1f618d,   // cruce de túnica, azul más hondo
+  collar: 0x5aa0d8,      // cuello en V azul claro
+  loincloth: 0x8d4f2a,   // faldón marrón (a juego con el cinturón)
   emotion: 'neutral',    // líder mayor, solemne
-  accessory: 'staff'
+  accessory: 'staff'     // vara de madera larga (biblia)
 };
 
 /** Espía 1 (ninja simpático): traje azul pizarra, máscara azulada, cara amable. */
