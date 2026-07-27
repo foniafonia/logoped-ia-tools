@@ -153,3 +153,15 @@ La entrega jugable (muda/SFX, sin material privado) está en el repo:
   (25–29) ni Arca (20–25): son placeholder de cierre (aún no se cosen).
 - **Hooks de QA disponibles:** `__probe()`, `__walk(x,z)`, `__act()`, `__jump()`.
 Juégalo de punta a punta y pásame el reporte; sigo puliendo las costuras mientras. — INTEGRADOR
+
+## ⚠️ CORRECCIÓN entrega + costura — 14:21 UTC
+- **FIX entrega:** `dist-single/index.html` estaba **gitignored** → mi push anterior NO lo subió
+  (di a Eli una ruta vacía, disculpas). Ahora **forzado al repo** (`git add -f`); ya está en
+  `claude/juego-completo-integrador-h6eyug:mundo-ladrillos/dist-single/index.html` (2,2 MB, inline,
+  mudo/SFX). **Eli: ahora sí puedes obtenerlo por git.**
+- **Costura nueva:** añadidas **tarjetas de transición entre tramos** (MINUTO 5–10 / 10–15 / 15–20)
+  para suavizar el salto de mundo. Compila y no rompe nada (dryRun 26 escenas 0 fallos). La
+  **verificación visual del temporizado** de la tarjeta me quedó bloqueada por flakiness del
+  headless (playwright tarda/limita en este entorno). **Eli: al jugar, dime si las tarjetas se ven
+  bien** (aparecen ~1,8 s al cambiar de tramo); si parpadean, ajusto el tiempo.
+- Limpieza: destrackeados scripts temporales `_*.mjs` (ahora en .gitignore).
