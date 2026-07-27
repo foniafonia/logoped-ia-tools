@@ -47,12 +47,22 @@
 | **JEFE DE LA GUARDIA** — túnica roja a franjas, casco con pluma, barba rubia | `f39fbd55-e216-4464-aea9-3728c3eb98b1` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231050_f39fbd55-e216-4464-aea9-3728c3eb98b1.png |
 | **MERCADER** — túnica de rayas de colores, turbante, sonrisa pícara, moneda | `204dad1d-6fd6-4a7e-9699-7b398af2c81e` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231055_204dad1d-6fd6-4a7e-9699-7b398af2c81e.png |
 | **AGUADORA** — túnica y pañuelo índigo, cántaro al hombro | `e306dd96-8f28-47e0-99a0-3f87edf76252` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231104_e306dd96-8f28-47e0-99a0-3f87edf76252.png |
+| **RABINO / maestro** — túnica azul marino, gafas redondas, kipá, expresión sabia | `c1060a57-05d9-4249-8902-84d3f28abeae` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232053_c1060a57-05d9-4249-8902-84d3f28abeae.png |
+| **MUCHACHO / pastor** — túnica beige, honda de cuero, expresión valiente y curiosa | `d596a242-0329-45a1-9be8-a4e8d31f28c0` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232323_d596a242-0329-45a1-9be8-a4e8d31f28c0.png |
+| **DANZARINA / música** — vestido rosa y crema, pandereta, pañuelo, expresión radiante | `d15f1268-8e51-4893-b603-cf460bf5ee6b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232357_d15f1268-8e51-4893-b603-cf460bf5ee6b.png |
+| **REY DE JERICÓ** (jefe rival) — túnica púrpura y oro, corona enjoyada, barba trenzada, gesto altivo | `aa5c313b-4e1b-4487-ac2b-cf39ac04953c` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232601_aa5c313b-4e1b-4487-ac2b-cf39ac04953c.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
 |---|---|---|---|
 | **EL ARCA DE LA ALIANZA** — cofre dorado con dos querubines alados y varas, brillo suave | `1c064e49-1a5f-4e88-95b3-65799d102a24` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231117_1c064e49-1a5f-4e88-95b3-65799d102a24.png |
 | **MAPA-PERGAMINO** — mapa antiguo de la ruta a Jericó con senda punteada y rosa de los vientos | `aaaaa297-4765-4eda-b778-9a217c0e3914` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231632_aaaaa297-4765-4eda-b778-9a217c0e3914.png |
+| **MENORÁ** — candelabro dorado de siete brazos con llamas cálidas, construcción de ladrillos | `70351ef9-84e8-40d8-a228-6d80a634dcef` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232325_70351ef9-84e8-40d8-a228-6d80a634dcef.png |
+| **CARNERO** — carnero de grandes cuernos rizados (origen del shofar), luz pastoral | `2ac5237d-a0fc-4d52-b140-2deb10534fb8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232355_2ac5237d-a0fc-4d52-b140-2deb10534fb8.png |
+| **CERÁMICA** — cántaros, ánforas, cuencos y candiles de barro en tonos terracota (inventario) | `43c197c0-ffc0-49d7-9298-9ad99b1a3fa3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232358_43c197c0-ffc0-49d7-9298-9ad99b1a3fa3.png |
+| **COFRE DEL TESORO** — cofre rebosante de monedas de oro, joyas y un cáliz (recompensa/loot) | `78920a85-5ddb-45a5-9d3e-3e603dd3cea2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232507_78920a85-5ddb-45a5-9d3e-3e603dd3cea2.png |
+| **CESTA DE COMIDA** — panes, uvas moradas, higos, granadas y aceitunas (cosecha/inventario) | `15aac704-4b08-45ef-a33f-10d91fb4791b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232509_15aac704-4b08-45ef-a33f-10d91fb4791b.png |
+| **ASEDIO / defensas** — puerta de madera, escaleras de asedio, torre de vigía y antorchas (props) | `4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232603_4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -60,6 +70,10 @@
 | **HOJA DE VFX** — anillo de choque, chispas, remolino de polvo, escudo de luz, onda de trompeta | `68dfa99e-f9c5-45f3-9e68-e15591b587fa` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231612_68dfa99e-f9c5-45f3-9e68-e15591b587fa.png |
 | **SHOFAR MÁGICO** — el cuerno brillando con energía dorada y anillos de sonido | `058274a4-6637-43a0-be78-3f68504aa5c0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231618_058274a4-6637-43a0-be78-3f68504aa5c0.png |
 | **MILAGRO DE LUZ** — rayo dorado divino rompiendo las nubes sobre las murallas | `19fccc65-9585-47b4-8b72-0b3736833c06` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231604_19fccc65-9585-47b4-8b72-0b3736833c06.png |
+| **HOJA DE VFX 2** — onda de trompeta, cruz verde de curación, remolino de velocidad, burbuja-escudo, estallido de estrella | `6d042452-f337-4f84-85bd-32e1f25852e4` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232329_6d042452-f337-4f84-85bd-32e1f25852e4.png |
+| **MURO → LADRILLOS** — sección de muro deshaciéndose en una lluvia de ladrillos de colores y chispas (regla de oro nº3) | `456ccaf0-ecbf-469c-9c31-d8d58f200946` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232400_456ccaf0-ecbf-469c-9c31-d8d58f200946.png |
+| **ESCUDO DE LUZ** — cúpula protectora dorada de luz y ladrillos con runas y chispas (power-up defensa) | `c8ad789b-49a0-4fc1-8799-b3e927c5ea4b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232513_c8ad789b-49a0-4fc1-8799-b3e927c5ea4b.png |
+| **TERREMOTO** — el suelo se abre en una grieta dorada con ladrillos y polvo saltando (VFX de la caída) | `89a6a3ff-9709-45ee-8d1c-1bb915f2de57` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232606_89a6a3ff-9709-45ee-8d1c-1bb915f2de57.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -78,6 +92,9 @@
 | **ENTRADA A LA TIERRA PROMETIDA** — multitud jubilosa con estandartes por campos verdes hacia un horizonte luminoso | `f81e57e7-d48c-4598-8e42-b89e9ac6885b` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_231625_f81e57e7-d48c-4598-8e42-b89e9ac6885b.png |
 | **LA MARCHA (7 vueltas)** — procesión con estandartes y shofarot rodeando Jericó | `6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png |
 | **PANTALLA DE PAUSA / menú** — campamento tranquilo al atardecer con fogata | `3135c867-d057-4309-bb54-0ba301fa0b5d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png |
+| **HUIDA POR LA MURALLA** — dos espías bajan por el cordón rojo de noche mientras Rahab ayuda desde la ventana | `5df014ca-32a6-40f2-a81f-cdad854484a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232327_5df014ca-32a6-40f2-a81f-cdad854484a7.png |
+| **LOS SIETE SACERDOTES** — fila solemne tocando shofarot ante la muralla al amanecer, el Arca detrás (ceremonia) | `31ddfcb7-b565-42ce-aeb5-81423880d1c3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232511_31ddfcb7-b565-42ce-aeb5-81423880d1c3.png |
+| **MERCADO NOCTURNO** — bazar animado dentro de Jericó, puestos con fruta y cerámica, luz de farol (nivel/ambiente) | `aadca81c-a0b6-4c1c-b640-3f22fc643411` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_232605_aadca81c-a0b6-4c1c-b640-3f22fc643411.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
