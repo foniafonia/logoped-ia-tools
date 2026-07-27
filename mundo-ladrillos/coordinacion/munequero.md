@@ -21,6 +21,13 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **22:28 UTC** — 🎬 MODO AGRESIVO (orden del usuario: exprimir Higgsfield sin parar, biblioteca
+  visual+audio+vídeo para todo el juego, carátula tipo CD). Generados 4 key-arts (2048px) + 1 vídeo:
+  **CARÁTULA** del juego, pantalla de **TÍTULO/inicio**, **VICTORIA**, **GAME OVER**, y **vídeo de
+  intro** (muralla deshaciéndose, kling3_0_turbo 5s/720p). Son grandes → catalogados con job id + URL
+  en **`coordinacion/biblioteca-av-munequero.md`** (viven en la biblioteca de Higgsfield del usuario;
+  se piden versiones reducidas embebibles). *(Nota: el audio de Higgsfield solo permite voz/narración,
+  no música/SFX sueltos; la voz va en próximos ciclos.)* Créditos ~70 antes del lote.
 - **14:33 UTC** — 🛡️ Higgsfield sigue vivo (**71,65 créditos**, trial 28-jul, sin cargo). Clímax ya
   cosido por el integrador → paso a plano A: `iconShield` (escudo de bronce con **león de Judá**,
   guardias/combate — **13 iconos** ya, verificado por md5) + `buildMarketStall()` en `world/Clutter.ts`

@@ -54,6 +54,12 @@ floor.material = mat;   // y para muros: applyTiledTexture(mesh, texWall, 6)
 | `texBark` | corteza de árbol | troncos de palmera/olivo, postes, vigas |
 | `texParchment` | pergamino envejecido | mapas, rollos (Torá), cartas, fondos de UI antiguos |
 
+## 🎬 Biblioteca AUDIOVISUAL (carátula, pantallas, vídeo, voz)
+Assets grandes en la biblioteca de Higgsfield del usuario (no embebidos por peso). Catálogo
+con job ids + URLs en **`coordinacion/biblioteca-av-munequero.md`**: **carátula** del juego
+(tipo caja/CD), pantallas de **título/inicio**, **victoria** y **game over**, y un **vídeo
+de intro** (la muralla deshaciéndose). Se piden versiones reducidas embebibles al muñequero.
+
 ## 🖼️ Fondos y key-art (anclados, cámara en raíles)
 | módulo | qué es |
 |---|---|
