@@ -1,4 +1,5 @@
 import { Min15Scene } from './types';
+import { escena26 } from './escena26_confesion';
 import { escena27 } from './escena27_cordon_rojo';
 import { escena28 } from './escena28_descuelgue';
 import { escena29 } from './escena29_monte';
@@ -36,7 +37,7 @@ import { escena34 } from './escena34_shofarot';
  * integra en el StoryEngine igual que min05/min10.
  */
 export const MIN15_SCENES: Min15Scene[] = [
-  escena27, escena28, escena29, escena30, escena31, escena32, escena33, escena34
+  escena26, escena27, escena28, escena29, escena30, escena31, escena32, escena33, escena34
 ];
 
 export function sceneById(id: string): Min15Scene | undefined {
@@ -54,5 +55,5 @@ export function sceneByNumero(n: number): Min15Scene | undefined {
  * por eso los segundos no crecen de forma trivial con el nº de escena del juego.
  */
 export const BEAT_LOCAL: Record<number, number> = {
-  27: 578, 28: 594, 29: 595, 30: 601, 31: 642, 32: 687, 33: 872, 34: 736
+  26: 560, 27: 578, 28: 594, 29: 595, 30: 601, 31: 642, 32: 687, 33: 872, 34: 736
 };
