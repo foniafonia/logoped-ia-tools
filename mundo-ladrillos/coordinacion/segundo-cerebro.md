@@ -437,3 +437,43 @@ de los demás (`git fetch --all`, `git show <rama>:<ruta>`) y traeos lo bueno a 
 _(INTEGRADOR sigue en standby por decisión del usuario — no montar todavía.)_
 
 **— Segundo Cerebro (turno de noche)**
+
+---
+---
+
+# 🔥 TRABAJO INTENSO — ÓRDENES A TODOS (27-jul, día) · autorizado por el usuario
+
+> Objetivo del día: subir el juego de golpe reutilizando lo ya hecho. Cada hilo, en SU
+> rama y SU carpeta, build antes de push, commit+push a menudo. Regla Nº1 siempre
+> (ningún rincón pelado; copiad/emulad piezas de otros y del muñequero).
+
+## 🥇 PRIORIDAD 1 — ▶ PARA LEAD (la que multiplica a todos): INTEGRAR EL PACK COMPARTIDO
+Trae a la rama del juego y déjalo listo para que TODOS los tramos lo usen:
+1. `core/PreciousRender.ts` con los **presets día/noche/interior** del muñequero (ya no lava el día).
+2. `ui/Dialogue.ts` (tu helper de diálogo).
+3. Del muñequero (`munecos-ifepfa`): `world/Clutter.ts` (attrezzo), `materials/tiling.ts`
+   y las texturas `assets/tex*.ts` (kilim/madera/arena/empedrado) + agua del Jordán.
+4. Avisa en el board cuando esté integrado, para que cada tramo importe de la rama del juego
+   (no copias sueltas). Esto es lo más importante del día.
+
+## ▶ PARA 5–10 (`min-05-10-jordan-spies`)
+- Cablea los diálogos con `ui/Dialogue` (cuando el LEAD lo publique). Usa `world/Clutter`
+  y las texturas del muñequero para enriquecer donde aún haya suelo/pared pelada. Regla Nº1.
+
+## ▶ PARA 10–15 (`min-10-15-rajav-jordan`)
+- **Coge mi mejora:** `git merge origin/noche-cerebro/min10-15` (esc18: primer plano del
+  mercado vestido + trae `world/Clutter`). Cablea la conversación de Rahab con `ui/Dialogue`.
+  Sigue Regla Nº1 en calles/posada.
+
+## ▶ PARA 15–20 (ahora en sesión NUEVA del usuario, rama `min-15-20-jerico-shofar`)
+- Ya trae mi `noche-cerebro/min15` (esc27 con enseres). Construye la **huida de los espías**
+  (esconderse en el monte 3 días → cruzar el Jordán → dar el parte a Josué), un verbo jugable
+  por escena. 🚫 NO tocar el clímax de la muralla (es del 25–29). Pregunta al usuario el plan antes.
+
+## ▶ PARA MUÑEQUERO (`munecos-ifepfa`)
+- Sigue con **variedad de expresiones** y **multitud "lite"** para escenas de noche.
+- Más texturas/attrezzo que pidan los tramos. Gran trabajo con el pack y el agua del Jordán.
+
+_(INTEGRADOR sigue en standby salvo que el usuario diga.)_
+
+**— Segundo Cerebro (trabajo intenso, día 27-jul)**
