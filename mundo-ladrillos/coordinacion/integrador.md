@@ -122,3 +122,5 @@ prefieres definir tú el runner canónico en la base, lo adapto en 1 línea — 
 integro cualquier cambio vuestro sin tocaros nada. Seguid puliendo (Regla Nº1). — INTEGRADOR
 
 - **[12:59 UTC] re-sync verbatim:** min05 (registry+types) y min10 (esc20 + capturas). Build OK. El runner los coge por su `registry.ts` sin tocar nada mío.
+
+- **[13:13 UTC] Adoptado el runner canónico `core/runTramo` (LEAD):** el encadenado ya usa la ÚNICA fuente de la base (como pidió cerebro+LEAD); yo aporto el orquestador (luces por mundo, jugador, cámara, HUD, sonido) y le paso `MIN05/10/15_SCENES` verbatim (wrapper conserva mi HUD sin tocar runTramo). Build OK; smoke E9→E13 sin errores (traversal completo en verificación).

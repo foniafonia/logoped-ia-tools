@@ -17,26 +17,27 @@ import { NavBeacon } from './scenes/min05/preview/NavBeacon';
 import { setupPreciousRender } from './core/PreciousRender';
 import { Dialogue } from './ui/Dialogue';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from './scenes/min05/skins';
+import { runTramo, TramoRunner, Orquestador, SceneDef } from './core/runTramo';
 
 /**
- * RUNNER UNIFICADO DEL INTEGRADOR — cose los tres tramos jugables en UNA aventura
- * continua: min 5–10 (el Jordán y los espías) → min 10–15 (la posada de Rahab) →
- * min 15–20 (el cordón rojo y los shofarot). Reutiliza VERBATIM las escenas de
- * cada hilo (sus `build(ctx)` y su contrato compartido `SceneContext`) y el runner
- * canónico del tramo 5–10 (`preview.ts`); esto solo es el PEGAMENTO: encadena las
- * tres listas y adapta la luz/ambiente a los `mundo` de min10/min15.
+ * RUNNER DEL INTEGRADOR — cose los tres tramos jugables en UNA aventura continua:
+ * min 5–10 (Jordán/espías) → 10–15 (posada de Rahab) → 15–20 (cordón rojo/shofarot).
  *
- * El tramo 0–5 (campamento) lo lleva `main.ts` (mundo del LEAD); al terminarlo,
- * `main.ts` llama a `startTramoRunner(renderer)` y este toma el control del mismo
- * lienzo con su propia escena.
+ * El ENCADENADO de escenas lo hace el RUNNER CANÓNICO de la base `core/runTramo`
+ * (definido por el LEAD, verificado en runtime): una sola fuente para todos los tramos.
+ * Este módulo aporta el **ORQUESTADOR** que `runTramo` pide (escena, luces por
+ * ambiente/mundo, jugador, cámara, HUD, sonido) y le pasa cada `registry.ts` VERBATIM.
+ * Reutiliza las escenas de cada hilo tal cual (su `build(ctx)` y el contrato compartido
+ * `SceneContext`). Es el pegamento; no reescribe el trabajo de nadie.
+ *
+ * El 0–5 (campamento) lo lleva `main.ts`; al terminarlo llama a `startTramoRunner()`.
  */
 
-// El contrato es el de min05; min10/min15 solo AÑADEN `mundo`. Los unifico casteando.
 type AnyScene = Min05Scene & { mundo?: 'interior' | 'calle-noche' | 'balcon' | 'monte' | 'campamento' | 'taller' };
-const SCENES: AnyScene[] = [
-  ...(MIN05_SCENES as AnyScene[]),
-  ...(MIN10_SCENES as unknown as AnyScene[]),
-  ...(MIN15_SCENES as unknown as AnyScene[]),
+const TRAMOS: AnyScene[][] = [
+  MIN05_SCENES as AnyScene[],
+  MIN10_SCENES as unknown as AnyScene[],
+  MIN15_SCENES as unknown as AnyScene[],
 ];
 
 export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
@@ -49,7 +50,6 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-  // acabado "precioso" (bloom + SMAA + ACES); IBL por-escena vía applyAmbience.
   const fx = setupPreciousRender(renderer, scene, camera, { ibl: false });
   const BLOOM_PRESET = {
     day: { s: 0.20, r: 0.50, t: 0.92 },
@@ -91,8 +91,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   // de luz/niebla se copian VERBATIM del preview de cada hilo (no se inventan).
   function applyAmbience(def: AnyScene): void {
     const mundo = def.mundo;
-    // ---- min10: interior de la taberna ----
-    if (mundo === 'interior') {
+    if (mundo === 'interior') {                                   // min10: interior de la taberna
       ground.visible = false; horizon.group.visible = false; nightSky.visible = false;
       scene.environment = envTex; renderer.toneMappingExposure = 1.15;
       scene.background = new THREE.Color(0x14100a);
@@ -102,8 +101,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       fill.color.setHex(0xffb877); fill.intensity = 0.25;
       applyBloom('interior'); if (sound.ready) sound.setAmbience('night'); return;
     }
-    // ---- min10: calle nocturna (mercado) ----
-    if (mundo === 'calle-noche') {
+    if (mundo === 'calle-noche') {                                // min10: calle nocturna (mercado)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
       scene.environment = null; renderer.toneMappingExposure = 1.2;
       scene.background = new THREE.Color(0x102138);
@@ -115,8 +113,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       groundMat.emissive.setHex(0x0a1320); groundMat.needsUpdate = true;
       applyBloom('night'); if (sound.ready) sound.setAmbience('street'); return;
     }
-    // ---- min15: campamento militar / taller (noche cálida) ----
-    if (mundo === 'campamento' || mundo === 'taller') {
+    if (mundo === 'campamento' || mundo === 'taller') {           // min15: campamento militar / taller (noche cálida)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
       scene.environment = null; renderer.toneMappingExposure = 1.15;
       scene.background = new THREE.Color(0x161020);
@@ -127,8 +124,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       groundMat.map = groundDayTex; groundMat.color.setHex(0x6a5b48); groundMat.emissive.setHex(0x0a0806); groundMat.needsUpdate = true;
       applyBloom('night'); if (sound.ready) sound.setAmbience('night'); return;
     }
-    // ---- min15: balcón sobre la muralla / monte (noche azul con luna) ----
-    if (mundo === 'balcon' || mundo === 'monte') {
+    if (mundo === 'balcon' || mundo === 'monte') {                // min15: balcón sobre la muralla / monte (noche azul)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
       scene.environment = null; renderer.toneMappingExposure = 1.2;
       scene.background = new THREE.Color(0x0d1a30);
@@ -195,7 +191,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     controller.teleport(keep.x, keep.z);
   }
 
-  // --- Confeti de celebración ---
+  // --- Confeti de celebración (lo dispara el runner canónico vía orq.addStars) ---
   const confettiGroup = new THREE.Group(); scene.add(confettiGroup);
   let confetti: Array<{ m: THREE.Mesh; v: THREE.Vector3; life: number }> = [];
   const confettiCols = [0xff5a4d, 0xffd24a, 0x4c9e5e, 0x1f6fb2, 0xe8801e, 0xffffff];
@@ -290,56 +286,88 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     mkBtn('▲', '22px', '78px', () => { controller.touch.jump = true; });
   }
 
-  // ================= Escena activa + secuencia =================
-  let current: SceneInstance | null = null;
-  let currentDef: AnyScene | null = null;
-  let done = false;
-  let advanceT = 0;
+  // ================= Cinemática + diálogo + baliza (comunes a todas las escenas) ======
   const cineCam = new CinematicCamera(camera);
   const navBeacon = new NavBeacon(); scene.add(navBeacon.group);
   const dlg = new Dialogue();
 
-  function disposeGroup(g: THREE.Group): void {
-    g.traverse((o: THREE.Object3D) => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); });
+  // El ctx que pide cada escena (contrato compartido min05). Es ESTABLE: lo comparten
+  // todas las escenas (runTramo se lo pasa a cada `build`). Referencia el `controller`
+  // por variable (setPlayerSkin lo recrea, y el closure lee siempre el vigente).
+  const ctx: SceneContext = {
+    scene, plastic,
+    getPlayer: () => controller.pos,
+    setPlayer: (x, z) => controller.teleport(x, z),
+    markDone: () => { forceDone = true; },   // (compat: el runner canónico avanza por isDone)
+    sound,
+    wantsInteract: consumeInteract,
+    addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
+    say: (text, who = '', seconds, color) => dlg.say(who, text, { ...(seconds ? { ms: seconds * 1000 } : {}), ...(color !== undefined ? { color } : {}) }),
+    setPlayerSkin: (which) => setPlayerSkin(which),
+    setPlayerVisible: (v) => { player.root.visible = v; },
+    cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
+    cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds),
+    flash: (text, seconds) => sceneFlash(text, seconds)
+  };
+
+  // ORQUESTADOR que pide `core/runTramo`: mueve jugador/cámara/skin/bounds y premia.
+  let lastSpawn = { x: 0, z: 0 };   // runTramo llama setSpawn justo antes de setBounds
+  const orq: Orquestador = {
+    ctx,
+    setSpawn: (x, z) => { lastSpawn = { x, z }; controller.teleport(x, z); },
+    setCamera: (h) => { tpcam.yaw = h.yaw ?? Math.PI; tpcam.pitch = h.pitch ?? 0.4; tpcam.dist = h.dist ?? 28; },
+    setBounds: (b) => {
+      if (b) controller.setBounds(b.minX, b.maxX, b.minZ, b.maxZ);
+      else controller.setBounds(-72, 72, lastSpawn.z - 8, lastSpawn.z + 26);   // fallback si la escena no acota
+    },
+    setSkin: (which) => setPlayerSkin(which),
+    addStars: () => { if (currentDef) flashEl.textContent = '✅ ' + currentDef.exito; if (sound.ready) sound.success(); spawnConfetti(controller.pos.x, controller.pos.z); }
+  };
+
+  // ---- Escenas: `currentInst` (para el HUD) se captura envolviendo `build` sin tocar
+  //      runTramo; `currentDef` = descriptor original (numero/objetivo/mundo/intro…). --
+  let currentInst: SceneInstance | null = null;
+  let currentDef: AnyScene | null = null;
+  let forceDone = false;   // solo para el hook de QA __jump_next
+  function wrap(scenes: AnyScene[]): SceneDef[] {
+    return scenes.map((def) => ({
+      ...def,
+      build: (c) => {
+        const inst = def.build(c as unknown as SceneContext);
+        currentInst = inst;
+        const orig = inst.isDone.bind(inst);
+        inst.isDone = (p: THREE.Vector3) => forceDone || orig(p);   // QA: __jump_next fuerza isDone
+        return inst as unknown as ReturnType<SceneDef['build']>;
+      }
+    })) as unknown as SceneDef[];
   }
 
-  function loadScene(i: number): void {
-    if (i >= SCENES.length) { finalWin(); return; }
-    const def = SCENES[i];
-    if (current) { scene.remove(current.group); current.dispose?.(); disposeGroup(current.group); }
+  // ---- Encadenado de los TRES tramos con el runner canónico ----
+  let ti = 0;                        // índice de tramo (0=5-10, 1=10-15, 2=15-20)
+  let sceneArr: AnyScene[] = TRAMOS[0];
+  let runner: TramoRunner | null = null;
+  let lastIndice = -1;
+  let ended = false;
+
+  function startTramo(): void {
+    if (ti >= TRAMOS.length) { finalWin(); return; }
+    sceneArr = TRAMOS[ti];
+    lastIndice = -1; currentInst = null; currentDef = null;
+    runner = runTramo(wrap(sceneArr), orq, () => { ti += 1; runner?.dispose(); startTramo(); }, { pauseMs: 2600 });
+  }
+
+  // Cuando el runner cambia de escena (o de tramo): aplica AMBIENTE + HUD + intro.
+  function onSceneChanged(): void {
+    forceDone = false;
+    cineCam.stop();
     dlg.clear();
-    cineCam.stop();   // corta cualquier cinemática de la escena anterior; si esta declara intro, se relanza abajo
-    currentDef = def; done = false; advanceT = 0;
+    if (!runner || runner.indice >= sceneArr.length) return;
+    const def = sceneArr[runner.indice];
+    currentDef = def;
     applyAmbience(def);
     if (sound.ready) void sound.playSceneClip(`voz_${String(def.numero).padStart(2, '0')}`);
-    setPlayerSkin(def.jugador ?? 'spy');
     player.root.visible = true;
-
-    controller.clearObstacles();
-    const ctx: SceneContext = {
-      scene, plastic,
-      getPlayer: () => controller.pos,
-      setPlayer: (x, z) => controller.teleport(x, z),
-      markDone: () => { done = true; },
-      sound,
-      wantsInteract: consumeInteract,
-      addObstacle: (x, z, hw, hd) => controller.addObstacle(x, z, hw, hd),
-      say: (text, who = '', seconds, color) => dlg.say(who, text, { ...(seconds ? { ms: seconds * 1000 } : {}), ...(color !== undefined ? { color } : {}) }),
-      setPlayerSkin: (which) => setPlayerSkin(which),
-      setPlayerVisible: (v) => { player.root.visible = v; },
-      cameraFocus: (target, seconds) => cineCam.focus(target, seconds),
-      cameraReveal: (from, to, lookFrom, lookTo, seconds) => cineCam.reveal(from, to, lookFrom, lookTo, seconds),
-      flash: (text, seconds) => sceneFlash(text, seconds)
-    };
     avisoEl.style.display = 'none'; avisoUntil = 0;
-    current = def.build(ctx);
-
-    if (def.bounds) controller.setBounds(def.bounds.minX, def.bounds.maxX, def.bounds.minZ, def.bounds.maxZ);
-    else controller.setBounds(-72, 72, def.spawn.z - 8, (def.objetivo.target?.z ?? def.spawn.z) + 26);
-    controller.teleport(def.spawn.x, def.spawn.z);
-
-    if (def.camara) { tpcam.yaw = def.camara.yaw ?? Math.PI; tpcam.pitch = def.camara.pitch ?? 0.4; tpcam.dist = def.camara.dist ?? 28; }
-
     titleEl.textContent = `Escena ${def.numero} · ${def.titulo}`;
     objEl.textContent = def.objetivo.tipo === 'cinematica' ? '' : '🎯 ' + def.objetivo.texto;
     objEl.style.display = def.objetivo.tipo === 'cinematica' ? 'none' : 'block';
@@ -348,10 +376,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     if (def.intro) cineCam.reveal(def.intro.from, def.intro.to, def.intro.lookFrom, def.intro.lookTo, def.intro.seconds);
     (window as any).__SCENE_READY__ = true;
   }
-  let sceneIndex = 0;
 
-  // ---- Pantalla final de la aventura ----
-  let ended = false;
   function finalWin(): void {
     if (ended) return; ended = true;
     if (sound.ready) sound.success();
@@ -368,8 +393,9 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     fin.querySelector('#reBtn2')?.addEventListener('pointerdown', () => location.reload());
   }
 
-  // primera escena del runner = esc09 (arranque del tramo 5–10)
-  loadScene(0);
+  startTramo();
+  onSceneChanged();   // ambiente/HUD de la primera escena (runTramo ya montó su geometría)
+  lastIndice = runner ? runner.indice : 0;
 
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
@@ -392,11 +418,17 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       }
     }
 
-    if (current && currentDef) {
-      current.update(dt, now / 1000, controller.pos);
-      const st = current.status?.() ?? null;
+    // El runner canónico anima la escena y encadena (isDone → ⭐ → pausa → siguiente).
+    if (runner && !ended) {
+      runner.update(dt, now / 1000);
+      if (runner.indice !== lastIndice) { lastIndice = runner.indice; onSceneChanged(); }
+    }
+
+    // HUD de la escena viva (capturada por el wrapper).
+    if (currentInst && currentDef) {
+      const st = currentInst.status?.() ?? null;
       statusEl.textContent = st ?? '';
-      const h = current.hud?.() ?? {};
+      const h = currentInst.hud?.() ?? {};
       setBar(alarmBar, h.alarm);
       const a = h.alarm ?? 0;
       vignette.style.boxShadow = `inset 0 0 120px 40px rgba(255,40,30,${(a * 0.55).toFixed(3)})`;
@@ -415,18 +447,10 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       const gt = Array.isArray((h as { goal?: [number, number] }).goal)
         ? (h as { goal?: [number, number] }).goal!
         : (currentDef.objetivo.target ? [currentDef.objetivo.target.x, currentDef.objetivo.target.z] as [number, number] : null);
-      if (cine || done || currentDef.objetivo.tipo === 'cinematica') navBeacon.hide();
+      if (cine || currentDef.objetivo.tipo === 'cinematica') navBeacon.hide();
       else navBeacon.update(now / 1000, controller.pos.x, controller.pos.z, gt, !!h.prompt);
-
-      if (!done && current.isDone(controller.pos)) {
-        done = true; advanceT = 0;
-        flashEl.textContent = '✅ ' + currentDef.exito;
-        if (sound.ready) sound.success();
-        spawnConfetti(controller.pos.x, controller.pos.z);
-      }
-      updateConfetti(dt);
-      if (done) { advanceT += dt; if (advanceT > 2.6) { sceneIndex += 1; loadScene(sceneIndex); } }
     }
+    updateConfetti(dt);
 
     if (!cineCam.update(dt, controller.pos.x, controller.pos.z)) tpcam.update(controller.pos);
     fx.render();
@@ -442,23 +466,25 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   (window as any).__interact = () => { interactFlag = true; };
   (window as any).__act = () => { interactFlag = true; };
   (window as any).__jump = () => { controller.touch.jump = true; };
-  (window as any).__jump_next = () => { sceneIndex += 1; loadScene(sceneIndex); };
+  (window as any).__jump_next = () => { forceDone = true; };   // QA: fuerza isDone → el runner avanza (con su pausa)
   (window as any).__probe = () => {
     const p = controller.pos; const def = currentDef;
-    const hud = (current && current.hud) ? current.hud() : {};
+    const hud = (currentInst && currentInst.hud) ? currentInst.hud() : {};
     const tgt = def?.objetivo?.target;
+    // índice ABSOLUTO en el viaje completo (para QA): escenas de tramos previos + índice local
+    const prev = TRAMOS.slice(0, ti).reduce((s, arr) => s + arr.length, 0);
     return {
       numero: def?.numero ?? null, titulo: def?.titulo ?? null,
       tipo: def?.objetivo?.tipo ?? null, objetivo: def?.objetivo?.texto ?? null,
       pos: [+p.x.toFixed(1), +p.z.toFixed(1)],
       goal: (Array.isArray(hud.goal) ? hud.goal : (tgt ? [tgt.x, tgt.z] : null)),
       radio: def?.objetivo?.radio ?? null,
-      done: current ? current.isDone(controller.pos) : false,
+      done: currentInst ? currentInst.isDone(controller.pos) : false,
       prompt: hud.prompt ?? null, alarm: hud.alarm ?? 0, balance: hud.balance ?? null,
       progress: hud.progress ?? 0, gems: hud.gems ?? null,
-      status: (current && current.status) ? current.status() : null,
+      status: (currentInst && currentInst.status) ? currentInst.status() : null,
       cine: cineCam.active ? 1 : 0,
-      indice: sceneIndex, total: SCENES.length
+      indice: prev + (runner ? runner.indice : 0), total: TRAMOS.reduce((s, a) => s + a.length, 0)
     };
   };
   (window as any).__runnerReady = true;
