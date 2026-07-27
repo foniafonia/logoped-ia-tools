@@ -8,6 +8,7 @@ import { buildRug, kilimTexture, KILIM_PALS } from './textiles';
 import { buildCrateStack, buildSackPile, buildPotCluster, buildPalm, buildFirePit } from '../../world/Clutter';
 import { tiledTexture } from '../../materials/tiling';
 import { texRock } from '../../assets/texRock';
+import { texKilim } from '../../assets/texKilim';
 import { IS_MOBILE } from '../../core/Quality';
 
 /** Aldeano/levita jugable del campamento (túnica sencilla, turbante, cara amable). */
@@ -443,6 +444,26 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
     else if (kind === 'pot') g = buildPotCluster(plastic, { x, z });
     else g = buildFirePit(plastic, { x, z });
     group.add(g);
+  }
+
+  // --- ALFOMBRAS ENROLLADAS para el viaje (biblia esc05: "el Beduino intenta enrollar
+  //     sábanas y atarlas"): rollos de kilim atados, tirados junto a las tiendas → da
+  //     sensación de "campamento que RECOGE". Reutiliza la textura kilim del pack. ---
+  const kilimRollMat = new THREE.MeshStandardMaterial({ map: tiledTexture(texKilim, 2), roughness: 0.9 });
+  const cuerdaMat = plastic.get(0x8a6a3a);
+  const rollos: Array<[number, number, number]> = [   // x, z, giro
+    [-16, 26, 0.6], [18, 30, -0.4], [-24, 62, 1.2], [30, 64, 0.2], [-8, 70, -0.9],
+  ];
+  for (let i = 0; i < (IS_MOBILE ? 3 : rollos.length); i++) {
+    const [rx, rz, ry] = rollos[i];
+    const rollo = new THREE.Group();
+    const cuerpo = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 2.2, 12), kilimRollMat);
+    cuerpo.rotation.z = Math.PI / 2; cuerpo.castShadow = true; cuerpo.receiveShadow = true; rollo.add(cuerpo);
+    for (const cx of [-0.6, 0.6]) {   // dos cuerdas que lo atan
+      const atado = new THREE.Mesh(new THREE.TorusGeometry(0.37, 0.05, 6, 12), cuerdaMat);
+      atado.position.x = cx; rollo.add(atado);
+    }
+    rollo.position.set(rx, 0.34, rz); rollo.rotation.y = ry; group.add(rollo);
   }
 
   scene.add(group);
