@@ -112,3 +112,74 @@ export function buildCrowd(
     }
   };
 }
+
+/**
+ * Multitud LITE curada para un MERCADO NOCTURNO (tramos 5–10 / 10–15). En vez de
+ * clones serenos, reparte un elenco variado y con carácter de noche alrededor de
+ * un centro: mercader que regatea (enfadado), anciano asombrado, figuras
+ * encapuchadas (pícaras/alerta), una niña asustada (escala pequeña), aguadoras
+ * serenas… + un par de caminantes que cruzan la calle. Todo determinista (estable
+ * en resume) y sin sombras (barato para densidad de fondo, suave en móvil).
+ *
+ *   const crowd = buildNightMarketCrowd(scene, plastic, { center: { x: 0, z: -2 }, density: 'med' });
+ *   // en el loop:  crowd.update(dt);
+ *
+ * `extraSpots`/`extraWalkers` se añaden tal cual (para tu attrezzo de escena).
+ */
+export function buildNightMarketCrowd(
+  scene: THREE.Scene,
+  plastic: PlasticMaterialFactory,
+  opts: {
+    center?: { x: number; z: number };
+    radius?: number;
+    density?: 'low' | 'med';
+    startIndex?: number;
+    extraSpots?: CrowdSpot[];
+    extraWalkers?: CrowdWalker[];
+  } = {}
+): { group: THREE.Group; update: (dt: number) => void; dispose: () => void } {
+  const cx = opts.center?.x ?? 0;
+  const cz = opts.center?.z ?? 0;
+  const R = opts.radius ?? 4.2;
+  const n = opts.density === 'med' ? 12 : 7;
+
+  // Paleta de moods de noche de mercado (variada y con intención). scale<1 = niño/a.
+  const cast: { emotion: Emotion; scale?: number }[] = [
+    { emotion: 'sly' },                 // mercader que tantea en la penumbra
+    { emotion: 'angry' },               // regateo acalorado
+    { emotion: 'awe' },                 // anciano mirando el cielo/prodigio
+    { emotion: 'alert' },               // encapuchado ojo avizor
+    { emotion: 'scared', scale: 0.7 },  // niña que se asusta de las sombras
+    { emotion: 'neutral' },             // aguadora serena
+    { emotion: 'worried' },             // alguien que presiente algo
+    { emotion: 'stern' },               // guardián civil
+    { emotion: 'happy', scale: 0.72 },  // chiquillo que corretea entre puestos
+    { emotion: 'surprised' },
+    { emotion: 'sad' },                 // dolienta al margen
+    { emotion: 'determined' }
+  ];
+
+  // Reparto determinista en anillo irregular alrededor del centro (sin Math.random).
+  const spots: CrowdSpot[] = [];
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + i * 0.37;         // ángulo desfasado
+    const rr = R * (0.55 + ((i * 7) % 5) * 0.11);        // radios variados
+    const x = cx + Math.cos(a) * rr;
+    const z = cz + Math.sin(a) * rr;
+    const c = cast[i % cast.length];
+    spots.push({ x, z, yaw: Math.atan2(cx - x, cz - z), emotion: c.emotion, scale: c.scale }); // miran al centro
+  }
+  if (opts.extraSpots) spots.push(...opts.extraSpots);
+
+  // Caminantes que cruzan la calle del mercado (paseo lento).
+  const walkers: CrowdWalker[] = [
+    { ax: cx - R - 1, az: cz + 1.2, bx: cx + R + 1, bz: cz + 1.8, speed: 1.3, emotion: 'neutral' },
+    { ax: cx + R + 1, az: cz - 1.6, bx: cx - R - 1, bz: cz - 1.0, speed: 1.1, emotion: 'alert' }
+  ];
+  if (opts.density === 'med') {
+    walkers.push({ ax: cx - 2, az: cz - R, bx: cx + 2, bz: cz - R + 0.6, speed: 1.5, emotion: 'happy', scale: 0.72 });
+  }
+  if (opts.extraWalkers) walkers.push(...opts.extraWalkers);
+
+  return buildCrowd(scene, plastic, spots, { walkers, lite: true, startIndex: opts.startIndex });
+}

@@ -91,9 +91,14 @@ scene.add(buildTent(plastic, { x: 3, z: -2, rack: true }));  // carpa; rack=perc
 espías / vestuario). Ver montaje en `tienda-demo`.
 
 ## 🎭 Personajes y multitud — `characters/MinifigureFactory.ts`, `world/Crowd.ts`
-- `villagerSkin(i)` → **16 aldeanos** deterministas con **expresiones variadas**
-  (feliz, sereno, alerta, preocupado, sorprendido, serio, risueño, pícaro, apenado, muchacho…).
+- `villagerSkin(i)` → **20 aldeanos** deterministas con **expresiones variadas**
+  (feliz, sereno, alerta, preocupado, sorprendido, serio, risueño, pícaro, apenado, muchacho,
+  **enfadado (regateo), niña asustada, anciano en asombro, mujer resuelta**…).
 - `buildCrowd(scene, plastic, spots, { lite, walkers })` → multitud poblada (móvil-friendly).
+- **`buildNightMarketCrowd(scene, plastic, { center, radius, density })`** → multitud LITE
+  **curada para MERCADO NOCTURNO** (5–10 / 10–15): elenco variado de noche (mercader que
+  regatea, encapuchados, asombro, niña asustada, aguadoras) alrededor de un centro + caminantes.
+  Determinista y sin sombras (barato). Ver `mercado-noche-demo`. Devuelve `{ group, update, dispose }`.
 - **Emociones** (campo `emotion` del skin): happy, neutral, worried, stern, surprised, alert,
   angry, sad, scared, sly, joyful, **awe** (asombro reverente, p.ej. ante el milagro),
   **determined** (guerrero resuelto). Úsalas para variar caras en multitudes y momentos clave.
@@ -115,6 +120,7 @@ marrón), `rahab` (vestido/pelo plateado + cordón rojo), `espia`/`espia2` (sigi
 `Toast`, `Collectibles`, `LoadingScreen`, `Health`, `Compass`, `Tutorial`, `StealthMeter`, `BrickUI` (botones/paneles).
 
 ## 🧪 Demos para copiar montajes
-`portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`, `noche-demo`,
+`portada-demo`, `plaza-demo`, `rio-demo`, `terreno-demo`, `iconos-demo`, `tienda-demo`,
+`mercado-noche-demo`, `noche-demo`,
 `clutter-demo`, `textura-demo`, `crowd-lite-demo`, `controles-demo`, `ui-demo`, `dialogo-demo`,
 `ark-demo`, `shofar-demo`, `mapa-demo`, `ajustes-demo`, `combate-demo`, `tutorial-demo`, `sigilo-demo`, `extras-demo`.

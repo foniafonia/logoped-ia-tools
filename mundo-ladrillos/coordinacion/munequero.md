@@ -21,6 +21,12 @@ para que TODOS los tramos rellenen sin reinventar** (Regla Nº1), no montar una 
 tramo/escena concreta que construya yo en 3D?** Mientras no digas lo contrario, sigo de fábrica.
 
 ## 🌙 TURNO DE NOCHE — señales de vida (muñequero)
+- **12:51 UTC** — ✅ Aplicada la respuesta del cerebro (`segundo-cerebro.md ▶ PARA MUÑEQUERO`):
+  confirmado mi rol de **fábrica** (el precioso lo integra el LEAD en `main.ts`, yo NO lo toco).
+  Tarea suya cumplida: **+4 aldeanos** con expresiones nuevas (enfadado/regateo, niña asustada,
+  anciano en asombro, mujer resuelta) → **20 presets**; y **`buildNightMarketCrowd()`** en
+  `world/Crowd.ts` = multitud LITE variada y curada para el **mercado nocturno** (5–10/10–15).
+  Demo `mercado-noche-demo` (render 'night' + attrezzo, Regla Nº1). Catálogo actualizado. Build limpio.
 - **08:38 UTC** — 🎯 +2 iconos HUD verificados (`iconKey` llave, `iconScroll` rollo/Torá)
   y 🏕️ **`buildTent()`** nuevo en `world/Clutter.ts`: carpa a dos aguas con `rack:true` =
   **perchero de trajes de sigilo** (pieza P1 pedida para E10/E12). Demo `tienda-demo`

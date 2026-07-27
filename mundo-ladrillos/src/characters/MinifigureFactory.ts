@@ -340,7 +340,23 @@ export const VILLAGER_PRESETS: MinifigureSkin[] = [
   // 15 · mujer, vestido índigo, melena negra, serena (aguadora)
   { head: 0xf4d03f, torso: 0x394a86, belt: 0x27305c, legs: 0x33407a, arms: 0x394a86,
     hands: 0xf4d03f, headwear: 0x241f1a, headStyle: 'longHair', feminine: true,
-    lips: 0xbf6a6a, skirt: 0x394a86, skirtLong: true, emotion: 'neutral' }
+    lips: 0xbf6a6a, skirt: 0x394a86, skirtLong: true, emotion: 'neutral' },
+  // 16 · hombre, túnica teja oscura, cogulla, barba corta, ENFADADO (regateo acalorado)
+  { head: 0xf4d03f, torso: 0x9c4a34, belt: 0x6e3020, legs: 0x7d3a29, arms: 0x9c4a34,
+    hands: 0xf4d03f, headwear: 0xc9b28f, headStyle: 'hood', beard: 0x2a221c,
+    beardStyle: 'short', emotion: 'angry' },
+  // 17 · niña, vestido verde musgo, melena castaña, ASUSTADA (úsala con scale<1)
+  { head: 0xf4d03f, torso: 0x5f7d4a, belt: 0x486036, legs: 0x5f7d4a, arms: 0x5f7d4a,
+    hands: 0xf4d03f, headwear: 0x6b4a2f, headStyle: 'longHair', feminine: true,
+    lips: 0xc98a80, skirt: 0x5f7d4a, skirtLong: true, emotion: 'scared' },
+  // 18 · anciano, túnica crema, turbante claro, barba larga blanca, ASOMBRO reverente
+  { head: 0xf4d03f, torso: 0xcfc3a3, belt: 0x9a8a62, legs: 0xbfb392, arms: 0xcfc3a3,
+    hands: 0xf4d03f, headwear: 0xe4dcc4, headStyle: 'turban', beard: 0xd7d2c8,
+    beardStyle: 'long', emotion: 'awe' },
+  // 19 · mujer joven, vestido ciruela, melena negra, RESUELTA (determinada)
+  { head: 0xf4d03f, torso: 0x7a3b56, belt: 0x552739, legs: 0x6a3349, arms: 0x7a3b56,
+    hands: 0xf4d03f, headwear: 0x241f1a, headStyle: 'longHair', feminine: true,
+    lips: 0xc26a63, skirt: 0x7a3b56, skirtLong: true, emotion: 'determined' }
 ];
 
 /** Aldeano determinista por índice (sin Math.random → estable en resume).
