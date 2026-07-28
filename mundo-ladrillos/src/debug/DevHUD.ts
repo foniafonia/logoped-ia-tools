@@ -57,6 +57,15 @@ function textoEstado(e: EstadoDev): string {
   );
 }
 
+const NOTAS_KEY = 'jerico_notas_v1';
+
+/** Lote de notas listo para pegar en el chat (una por línea, con su sitio exacto). */
+function textoNotas(notas: Array<{ e: EstadoDev; txt: string }>): string {
+  const linea = (e: EstadoDev, i: number, txt: string): string =>
+    `${i}) ${e.mundo} | ${e.escena} «${e.titulo}» | x=${e.pos[0]} z=${e.pos[1]} · ${rumboTxt(e.rumbo)}\n   → ${txt || '(sin texto)'}`;
+  return `📋 NOTAS DE JUEGO (${notas.length}):\n\n` + notas.map((n, i) => linea(n.e, i + 1, n.txt)).join('\n\n');
+}
+
 /** Copia al portapapeles con respaldo (funciona también en file:// y sin permisos). */
 function copiar(txt: string, ok: () => void): void {
   const fallback = (): void => {
@@ -135,6 +144,15 @@ export function installDevHUD(): void {
   const jumpBtn = mkBtn('🎬 Ir a…');
   btnRow.append(copyBtn, jumpBtn);
 
+  // ---- fila 2: CUADERNO DE NOTAS (apuntar jugando, copiar el lote al final) ----
+  const noteRow = document.createElement('div');
+  Object.assign(noteRow.style, { display: 'flex', gap: '6px', marginTop: '6px' } as CSSStyleDeclaration);
+  const noteBtn = mkBtn('📝 Anotar');
+  const listBtn = mkBtn('📋 Notas');
+  const clearBtn = mkBtn('🗑');
+  clearBtn.style.flex = '0 0 auto';
+  noteRow.append(noteBtn, listBtn, clearBtn);
+
   // ---- menú de salto (lista desplegable) ----
   const menu = document.createElement('div');
   Object.assign(menu.style, {
@@ -142,9 +160,36 @@ export function installDevHUD(): void {
     borderTop: '1px solid rgba(143,224,255,.25)', paddingTop: '6px'
   } as CSSStyleDeclaration);
 
-  panel.append(head, body, btnRow, menu);
+  panel.append(head, body, btnRow, noteRow, menu);
   wrap.append(pill, panel);
   document.body.appendChild(wrap);
+
+  // ---- notas: persisten entre recargas (localStorage; si file:// lo bloquea, quedan en memoria) ----
+  interface Nota { e: EstadoDev; txt: string }
+  let notas: Nota[] = [];
+  try { notas = JSON.parse(localStorage.getItem(NOTAS_KEY) || '[]'); } catch { notas = []; }
+  const guardar = (): void => { try { localStorage.setItem(NOTAS_KEY, JSON.stringify(notas)); } catch { /* file:// sin storage: se mantienen en memoria esta sesión */ } };
+  const refrescarContador = (): void => { listBtn.textContent = notas.length ? `📋 Notas·${notas.length}` : '📋 Notas'; };
+  refrescarContador();
+
+  noteBtn.addEventListener('click', () => {
+    const e = window.__estado?.(); if (!e) return;
+    const txt = prompt('📝 ¿Qué has visto AQUÍ? (Enter = guardar solo el sitio)');
+    if (txt === null) return;   // cancelado
+    notas.push({ e, txt: txt.trim() });
+    guardar(); refrescarContador();
+    const prev = noteBtn.textContent; noteBtn.textContent = '✅ Anotado'; setTimeout(() => { noteBtn.textContent = prev; }, 900);
+  });
+  listBtn.addEventListener('click', () => {
+    if (!notas.length) { const p = listBtn.textContent; listBtn.textContent = '(vacío)'; setTimeout(() => { listBtn.textContent = p; }, 900); return; }
+    copiar(textoNotas(notas), () => {
+      const p = listBtn.textContent; listBtn.textContent = '✅ ¡Copiadas!'; setTimeout(() => { listBtn.textContent = p as string; refrescarContador(); }, 1100);
+    });
+  });
+  clearBtn.addEventListener('click', () => {
+    if (!notas.length) return;
+    if (confirm(`¿Borrar las ${notas.length} notas apuntadas?`)) { notas = []; guardar(); refrescarContador(); }
+  });
 
   // ---- lógica ----
   const abrir = (v: boolean): void => { panel.style.display = v ? 'block' : 'none'; pill.style.display = v ? 'none' : 'block'; };
