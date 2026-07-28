@@ -395,6 +395,8 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   let lastIndice = -1;
   let ended = false;
   let sceneClock = 0;   // segundos dentro de la escena actual (para la etiqueta DevHUD)
+  let pausadoRun = false;   // tramo en pausa mientras se anota
+  (window as { __setPausa?: (v: boolean) => void }).__setPausa = (v: boolean): void => { pausadoRun = !!v; };
 
   // COSTURA entre tramos: tarjeta breve (minuto + título) que suaviza el salto de un
   // mundo al siguiente y le deja claro al peque en qué parte de la historia está.
@@ -490,6 +492,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     requestAnimationFrame(animate);
     const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
+    if (pausadoRun) { fx.render(); return; }   // en pausa (anotando): congela el tramo, sigue viéndose
     if (runner && !ended) sceneClock += dt;
     if (avisoUntil && now >= avisoUntil) { avisoEl.style.display = 'none'; avisoUntil = 0; }
     dlg.update(dt);

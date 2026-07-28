@@ -131,11 +131,24 @@ export class Director {
    *  descontamos el tiempo esperado (`wallHold`) para congelar el reloj de pared. */
   private clock(): number {
     if (this.spine && this.spine.ready()) return this.spine.elapsed();
-    return (performance.now() - this.wallStart) / 1000 - this.wallHold;
+    let t = (performance.now() - this.wallStart) / 1000 - this.wallHold;
+    if (this.enPausa) t -= (performance.now() - this.pausaStart) / 1000;   // congela el reloj DURANTE la pausa (build sin audio)
+    return t;
   }
 
   /** ¿La historia está esperando a que el niño termine la tarea actual? */
   get esperando(): boolean { return this.holding; }
+
+  private enPausa = false;
+  private pausaStart = 0;
+  /** Pausa el reloj (mientras se anota): congela el reloj de pared descontando la
+   *  espera. En modo con audio, la voz se pausa aparte y `elapsed()` ya se congela. */
+  setPausa(v: boolean): void {
+    if (v === this.enPausa) return;
+    this.enPausa = v;
+    if (v) this.pausaStart = performance.now();
+    else this.wallHold += (performance.now() - this.pausaStart) / 1000;
+  }
 
   /** Objetivo cumplido por el jugador (llegó a un sitio, recogió algo…). */
   logro(msg: string): void {

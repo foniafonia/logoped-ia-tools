@@ -155,7 +155,11 @@ const pressGrab = (): void => { grabReq = true; grabBtn.style.transform = 'scale
 grabBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); pressGrab(); });
 grabBtn.addEventListener('pointerup', () => { grabBtn.style.transform = 'scale(1)'; });
 document.body.appendChild(grabBtn); document.body.appendChild(grabLabel);
-addEventListener('keydown', (e) => { if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'KeyG') grabReq = true; });
+addEventListener('keydown', (e) => {
+  const t = e.target as HTMLElement | null;   // no dispares el enganche si estás escribiendo una nota (E/Enter en el campo de texto)
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'KeyG') grabReq = true;
+});
 (window as any).__grab = pressGrab;   // para el playtester sintético
 
 // === Zona de carga del camello (solo en el mini-juego de bultos) ===
@@ -246,7 +250,13 @@ const TAREAS_TRAMO: Array<[string, string]> = [
   ['bultos', 'cargar la caravana'],
   ['carav', 'seguir a la caravana']
 ];
-let spine: { stop: () => void; fade?: (sec?: number) => void } | null = null;   // control del audio narración (cortar/fundir al cerrar)
+let spine: { stop: () => void; fade?: (sec?: number) => void; pause?: () => void; resume?: () => void } | null = null;   // control del audio narración (cortar/fundir/pausar al cerrar/anotar)
+let pausado = false;   // juego en pausa mientras se anota (nota del usuario: no mezclar)
+(window as { __setPausa?: (v: boolean) => void }).__setPausa = (v: boolean): void => {
+  pausado = !!v;
+  director.setPausa(pausado);                              // congela el reloj de pared (build sin audio)
+  if (pausado) spine?.pause?.(); else spine?.resume?.();   // congela también la narración (build con voz)
+};
 let tramoCerrado = false;
 let hijacked = false;   // true cuando el RUNNER de tramos toma el control (0–5 termina)
 let caravanaPedida = false;      // beat 7 pedido; la caravana ESPERA a los mini-juegos (no secuestra)
@@ -266,6 +276,10 @@ function dispararTeaserEspias(esFinal = false): void {
   camSaved.yaw = tpcam.yaw; camSaved.pitch = tpcam.pitch; camSaved.dist = tpcam.dist;
   teaserClock = 0; teaserDustCd = 0;
   audio.sfxSparkle();
+  // VOZ de la peli del reclutamiento («Necesito hombres discretos y valientes…») — es
+  // el clip voz_10, que el AudioManager ya tiene cargado. Solo suena en la entrega
+  // (con audio); en el build del repo no hace nada. Fix nota 22/23 (los espías salían mudos).
+  audio.play('voz_10', 1.0, 12);
   cine.start({
     duration: TEASER_DUR,
     // TEASER CORTO (guiño "próximamente"), NO la escena de reclutamiento: esa es del
@@ -718,23 +732,16 @@ const TAB_C = Math.cos(0.35), TAB_S = Math.sin(0.35);
 function colisionMishkan(p: THREE.Vector3): void {
   const dx = p.x - 26, dz = p.z - 22;
   const lx = dx * TAB_C + dz * TAB_S, lz = -dx * TAB_S + dz * TAB_C;   // a coords locales del recinto
-  const HW = 6.5 * 1.7 + 0.7, HD = 4 * 1.7 + 0.7, PUERTA = 1.3 * 1.7;  // medias-extensiones (con radio) y media-puerta
+  const HW = 6.5 * 1.7 + 0.7, HD = 4 * 1.7 + 0.7;                      // medias-extensiones (con radio)
   if (Math.abs(lx) >= HW || Math.abs(lz) >= HD) return;   // fuera del recinto → nada
-  let nlx = lx, nlz = lz, corregir = false;
-  if (Math.abs(lx) < PUERTA) {
-    // PASILLO DE LA PUERTA (frente, +z): se ENTRA, pero el FONDO (−z) sigue siendo pared
-    // → se puede entrar por la puerta pero NO atravesar el Mishkán de lado a lado.
-    if (lz < -(HD - 1.6)) { nlz = -(HD - 1.6); corregir = true; }
-  } else {
-    // pared lateral o de fondo: empuja fuera por la más cercana
-    if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
-    else nlz = Math.sign(lz || 1) * HD;
-    corregir = true;
-  }
-  if (corregir) {
-    p.x = 26 + (nlx * TAB_C - nlz * TAB_S);          // de vuelta a coords de mundo
-    p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
-  }
+  // RECINTO SÓLIDO: empuja SIEMPRE a la pared más cercana (suave, sin saltos). Antes
+  // había un "pasillo de puerta" que creaba una discontinuidad en el borde → glitch
+  // (el jugador se colaba/saltaba al otro lado y no podía llegar al tapiz azul).
+  let nlx = lx, nlz = lz;
+  if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
+  else nlz = Math.sign(lz || 1) * HD;
+  p.x = 26 + (nlx * TAB_C - nlz * TAB_S);            // de vuelta a coords de mundo
+  p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
 }
 
 function animate(now: number): void {
@@ -742,6 +749,8 @@ function animate(now: number): void {
   requestAnimationFrame(animate);
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
   last = now;
+
+  if (pausado) { if (fx) fx.render(); else renderer.render(scene, camera); return; }   // en pausa (anotando): congela el juego, sigue viéndose
 
   director.update();
 

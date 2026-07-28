@@ -104,6 +104,7 @@ let poll = 0;
 function abrirModalNota(e: EstadoDev, onSave: (txt: string, voz?: string) => void): void {
   const SR = (window as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition
     || (window as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
+  (window as { __setPausa?: (v: boolean) => void }).__setPausa?.(true);   // PAUSA el juego mientras anotas (no se mezcla con el gameplay)
   const ov = document.createElement('div');
   Object.assign(ov.style, { position: 'fixed', inset: '0', zIndex: '95', background: 'rgba(0,0,0,.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto' } as CSSStyleDeclaration);
   const card = document.createElement('div');
@@ -130,7 +131,7 @@ function abrirModalNota(e: EstadoDev, onSave: (txt: string, voz?: string) => voi
       const R = new (SR as new () => any)();
       R.lang = 'es-ES'; R.interimResults = true; R.continuous = true;
       const base = ta.value ? ta.value + ' ' : '';
-      R.onresult = (ev: any): void => { let s = ''; for (let i = ev.resultIndex; i < ev.results.length; i++) s += ev.results[i][0].transcript; ta.value = base + s; };
+      R.onresult = (ev: any): void => { let s = ''; for (let i = 0; i < ev.results.length; i++) s += ev.results[i][0].transcript; ta.value = base + s; };   // acumula TODOS los resultados (antes solo desde resultIndex → al pausar se borraba lo dicho)
       R.onerror = (ev: any): void => { status.textContent = '⚠️ ' + (ev.error === 'not-allowed' ? 'micrófono bloqueado — escribe o graba' : 'no se pudo dictar'); };
       R.onend = (): void => { dicting = false; dictBtn.textContent = '🎤 Dictar'; };
       try { R.start(); rec = R; dicting = true; dictBtn.textContent = '⏹ Parar'; status.textContent = '🔴 Escuchando… habla ahora'; } catch { status.textContent = '⚠️ no se pudo iniciar el dictado'; }
@@ -163,7 +164,7 @@ function abrirModalNota(e: EstadoDev, onSave: (txt: string, voz?: string) => voi
 
   const saveBtn = mk('✅ Guardar'); saveBtn.style.marginLeft = 'auto';
   const cancelBtn = mk('Cancelar');
-  const cerrar = (): void => { try { rec?.stop(); } catch { /* noop */ } try { if (mr && recording) mr.stop(); } catch { /* noop */ } ov.remove(); };
+  const cerrar = (): void => { try { rec?.stop(); } catch { /* noop */ } try { if (mr && recording) mr.stop(); } catch { /* noop */ } ov.remove(); (window as { __setPausa?: (v: boolean) => void }).__setPausa?.(false); };   // reanuda el juego al cerrar la nota
   saveBtn.addEventListener('click', () => { onSave(ta.value.trim(), voz); cerrar(); });
   cancelBtn.addEventListener('click', cerrar);
   ov.addEventListener('click', (ev) => { if (ev.target === ov) cerrar(); });
