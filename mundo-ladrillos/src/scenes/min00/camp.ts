@@ -168,7 +168,7 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const clothTex = tentClothTexture();
   const tentMat = new THREE.MeshStandardMaterial({ map: clothTex, roughness: 0.95, metalness: 0 });
   const cloth = [0x9a9184, 0x8a7a5a, 0xb9a36f, 0x6f6558, 0xa8926a];
-  const N = IS_MOBILE ? 34 : 70;
+  const N = IS_MOBILE ? 24 : 44;   // menos tiendas cercanas y BIEN separadas (el "mar de tiendas" lejano da la densidad); antes 34/70 → apelotonadas
   const tents = new THREE.InstancedMesh(tentGeo, tentMat, N);
   tents.castShadow = true; tents.receiveShadow = true;
 
@@ -184,18 +184,22 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   let placed = 0;
   const TAB_CLEAR = { x: 26, z: 22, r: 17 };    // plaza despejada alrededor del Mishkán (que no lo tapen)
   const REDIL_CLEAR = { x: -30, z: 44, r: 15 }; // corral + CORONA de arreo despejados (las 3 ovejas objetivo se colocan aquí; ninguna tienda dentro → nunca una oveja escondida en una cabaña)
+  const SEP = 11;                                // separación MÍNIMA entre tiendas (que no se amontonen)
+  const puestas: Array<{ x: number; z: number }> = [];
   for (let i = 0; i < N; i++) {
     // repartidas por el campamento, dejando libre el pasillo central del jugador,
-    // el Mishkán Y el redil de las ovejas
+    // el Mishkán, el redil, y SEPARADAS entre sí (no apelotonadas)
     let x = 0, z = 0;
-    for (let tryI = 0; tryI < 16; tryI++) {
-      x = (Math.random() - 0.5) * 82;
+    for (let tryI = 0; tryI < 40; tryI++) {
+      x = (Math.random() - 0.5) * 88;
       if (Math.abs(x) < 9) x += Math.sign(x || 1) * 9;
-      z = 12 + Math.random() * 82;
+      z = 12 + Math.random() * 86;
       const lejosTab = Math.hypot(x - TAB_CLEAR.x, z - TAB_CLEAR.z) > TAB_CLEAR.r;
       const lejosRedil = Math.hypot(x - REDIL_CLEAR.x, z - REDIL_CLEAR.z) > REDIL_CLEAR.r;
-      if (lejosTab && lejosRedil) break;   // sitio válido (lejos del Mishkán y del redil)
+      const lejosOtras = puestas.every((p) => Math.hypot(x - p.x, z - p.z) > SEP);
+      if (lejosTab && lejosRedil && lejosOtras) break;   // sitio válido y bien separado
     }
+    puestas.push({ x, z });
     const s = 0.8 + Math.random() * 0.7;
     d.position.set(x, 0, z); d.rotation.set(0, Math.random() * Math.PI, 0); d.scale.setScalar(s);
     d.updateMatrix();

@@ -699,6 +699,24 @@ addEventListener('resize', () => {
   fx?.setSize(innerWidth, innerHeight);
 });
 let last = 0;
+// #13 — COLISIÓN DEL MISHKÁN: recinto en (26,22), girado -0.35, escala 1.7. El jugador
+// NO lo atraviesa (paredes y fondo), pero SÍ puede entrar/salir por el pasillo de la
+// PUERTA (frente, franja central). Se corrige la posición tras mover al jugador.
+const TAB_C = Math.cos(0.35), TAB_S = Math.sin(0.35);
+function colisionMishkan(p: THREE.Vector3): void {
+  const dx = p.x - 26, dz = p.z - 22;
+  const lx = dx * TAB_C + dz * TAB_S, lz = -dx * TAB_S + dz * TAB_C;   // a coords locales del recinto
+  const HW = 6.5 * 1.7 + 0.7, HD = 4 * 1.7 + 0.7, PUERTA = 1.3 * 1.7;  // medias-extensiones (con radio) y media-puerta
+  if (Math.abs(lx) < PUERTA) return;                 // pasillo de la puerta → se puede pasar
+  if (Math.abs(lx) >= HW || Math.abs(lz) >= HD) return;   // fuera del recinto → nada
+  // dentro (y fuera del pasillo): empujar a la pared lateral o de fondo más cercana
+  let nlx = lx, nlz = lz;
+  if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
+  else nlz = Math.sign(lz || 1) * HD;
+  p.x = 26 + (nlx * TAB_C - nlz * TAB_S);            // de vuelta a coords de mundo
+  p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
+}
+
 function animate(now: number): void {
   if (hijacked) return;   // el RUNNER de tramos tomó el lienzo → el bucle del 0–5 se detiene
   requestAnimationFrame(animate);
@@ -726,17 +744,25 @@ function animate(now: number): void {
   }
 
   const moving = controller.update(dt, tpcam.yaw);
+  colisionMishkan(controller.pos);   // #13: no se atraviesa el Mishkán (solo por la puerta)
   // Cámara: al SOLTAR el arrastre, vuelve UNA sola vez detrás del jugador (objetivo
   // congelado en ese instante → NO persigue → no marea). Antes perseguía en bucle y
   // "giraba como loca"; esto lo arregla. Si arrastras, no toca nada.
   if (tpcam.dragging) { camRecenter = false; }
-  else if (wasDragging) { camTarget = villager.root.rotation.y; camRecenter = true; }   // soltaste → recentra
+  else if (wasDragging) { camTarget = villager.root.rotation.y + Math.PI; camRecenter = true; }   // soltaste → recentra DETRÁS del jugador (+π; antes ponía la cámara de frente y le veías la cara)
   wasDragging = tpcam.dragging;
   if (camRecenter) {
     let d = camTarget - tpcam.yaw;
     while (d > Math.PI) d -= Math.PI * 2;
     while (d < -Math.PI) d += Math.PI * 2;
     if (Math.abs(d) < 0.03) { camRecenter = false; } else tpcam.yaw += d * Math.min(1, dt * 4);
+  } else if (!tpcam.dragging && moving) {
+    // SEGUIMIENTO GENTIL: mientras anda (y no arrastra), la cámara se coloca despacio
+    // DETRÁS del jugador → ves a dónde vas sin marear. Lento a propósito (no "gira como loca").
+    let d = (villager.root.rotation.y + Math.PI) - tpcam.yaw;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    tpcam.yaw += d * Math.min(1, dt * 1.4);
   }
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil, grabReq);
   // Botón "🪢 TIRA": visible solo mientras se arrean ovejas; se ilumina y late
