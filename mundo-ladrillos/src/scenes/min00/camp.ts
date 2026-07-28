@@ -282,7 +282,7 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   bannerStar(-2.9); bannerStar(2.9);
   const yoshua = createMinifigure(plastic, YOSHUA_SKIN);
   yoshua.root.position.set(0, 1.8, 8);
-  yoshua.root.rotation.y = Math.PI; // de cara al campamento
+  yoshua.root.rotation.y = 0; // de cara al pueblo/campamento (al sur, +z). OJO: Math.PI mira al norte (río) → le dejaba de espaldas al campamento
   yoshua.root.scale.setScalar(1.18);   // el líder, algo más grande
   yoshua.armR.rotation.x = -2.2;    // brazo en alto
   group.add(yoshua.root);

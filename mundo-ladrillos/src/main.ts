@@ -658,7 +658,7 @@ function animate(now: number): void {
     const dz = lead - y.position.z;
     const andando = Math.abs(dz) > 0.35;
     if (andando) y.position.z += Math.sign(dz) * Math.min(Math.abs(dz), 7 * dt);
-    y.rotation.y += (0 - y.rotation.y) * Math.min(1, dt * 4);             // mira al río (norte, −z)
+    y.rotation.y += (Math.PI - y.rotation.y) * Math.min(1, dt * 4);       // se GIRA a mirar al río (norte, −z) y encabeza la marcha de frente
     camp.yehoshua.update(dt, andando, 1);                                 // braceo/piernas al andar
   } else if (waveT > 0) { waveT -= dt; camp.yehoshua.armR.rotation.x = -2.2 + Math.sin(now * 0.02) * 0.5; }
   else if (director.beatIndex >= 3 && !done.has('yeh')) { camp.yehoshua.armR.rotation.x = -2.4 + Math.sin(now * 0.006) * 0.45; }
@@ -689,8 +689,11 @@ function animate(now: number): void {
       }
     }
     const got = camp.ropes.length - left;
-    // mientras no haya saludado a Yehoshúa, la guía SIGUE en él (no se pierde el saludo)
-    if (director.beatIndex === 4) director.setObjetivo(done.has('yeh')
+    // El contador se refresca SIEMPRE que haya cuerdas activas. Antes se gateaba a
+    // `beatIndex === 4`, pero los beats avanzan por TIEMPO: si recogías cuerdas en el
+    // beat 5/6, el texto se congelaba en "0/N" aunque las cogieras (bug reportado).
+    // mientras no haya saludado a Yehoshúa, la guía SIGUE en él (no se pierde el saludo).
+    director.setObjetivo(done.has('yeh')
       ? `🎯 Recoge las cuerdas del campamento (${got}/${camp.ropes.length})`
       : '👋 Ve a saludar a Yehoshúa');
     if (got >= camp.ropes.length) {
