@@ -143,6 +143,8 @@
 | **DADO DE HUESO** — dadito de hueso tallado con puntos taladrados (pieza de juego) | `0178ea01-2448-4b09-8e35-3a82a2e8d8d9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073414_0178ea01-2448-4b09-8e35-3a82a2e8d8d9.png |
 | **TINTERO Y CÁLAMO** — tintero de barro con un cálamo de caña encima, tinta oscura (escriba) | `0c158a1d-d0ca-4e87-a7b3-e680ef426302` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074347_0c158a1d-d0ca-4e87-a7b3-e680ef426302.png |
 | **CASCABEL** — cascabel de bronce redondo con anilla pequeña (attrezzo/sonido) | `28af4d9d-5685-433d-a47d-956851b92b32` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074348_28af4d9d-5685-433d-a47d-956851b92b32.png |
+| **BALANZA DE MANO** — balancita de mano con dos platillos de latón colgando de cuerdas en un brazo de madera (mercader) | `207b4705-df6e-4831-88fa-034122f443b2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075319_207b4705-df6e-4831-88fa-034122f443b2.png |
+| **SELLO DE CERA** — sello de cera roja sobre pergamino plegado con escudo de león impreso (documento) | `80145dab-4ef2-4efa-8c82-50bd136674bb` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075321_80145dab-4ef2-4efa-8c82-50bd136674bb.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -224,6 +226,7 @@
 | **MOLINO DE AGUA** — molino en un arroyo con rueda de madera girando, casa de piedra, minifiguras con sacos de grano (día) | `03a97ee0-a25a-4c50-9941-b03ff8bc85c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071423_03a97ee0-a25a-4c50-9941-b03ff8bc85c6.png |
 | **MERCADO AL AMANECER** — plaza de mercado despertando, vendedores montando toldos a rayas y cajas, luz rosa-dorada temprana (tranquila) | `39c039be-877f-4528-83eb-62a84e789e40` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073416_39c039be-877f-4528-83eb-62a84e789e40.png |
 | **PUENTE DE CUERDA** — puente de cuerdas y tablones sobre un desfiladero rocoso, una minifigura cruzando con cuidado, luz de día (aventura) | `ff1ae921-9b58-4974-93f1-d322feba20a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074350_ff1ae921-9b58-4974-93f1-d322feba20a7.png |
+| **CORRAL DE OVEJAS** — redil bajo de piedra y madera lleno de ovejas, un pastor en la puerta, luz de tarde (pastoral) | `1a75d9c7-a052-4605-a868-b3ad685d6891` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075322_1a75d9c7-a052-4605-a868-b3ad685d6891.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -298,6 +301,8 @@
 | **SAL DE ROCA** — cristales gruesos de sal translúcida blanca y rosa pálido con destellos suaves | `9e53c249-ec73-4de3-8239-a38736286353` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073413_9e53c249-ec73-4de3-8239-a38736286353.png |
 | **MÁRMOL NEGRO** — mármol carbón profundo con vetas doradas y grises finas y pulido brillante | `8a030e97-1934-49f0-b519-989af5f1fcbf` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074343_8a030e97-1934-49f0-b519-989af5f1fcbf.png |
 | **COBRE OXIDADO** — lámina de cobre cálido virada a cardenillo verde-azulado con pátina moteada | `5b9ba8f8-318b-4f32-9bf5-376a79b96687` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074346_5b9ba8f8-318b-4f32-9bf5-376a79b96687.png |
+| **ÓNIX** — piedra pulida lisa con bandas concéntricas ámbar y crema | `203b26a5-4601-44da-b177-acb6a7172dd8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075316_203b26a5-4601-44da-b177-acb6a7172dd8.png |
+| **MADREPERLA** — nácar iridiscente con destellos rosa, azul y crema suaves | `82c3987d-07d2-496b-a89f-296186b2e13f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075317_82c3987d-07d2-496b-a89f-296186b2e13f.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
