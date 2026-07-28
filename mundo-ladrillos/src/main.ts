@@ -768,21 +768,17 @@ function animate(now: number): void {
   // Cámara: al SOLTAR el arrastre, vuelve UNA sola vez detrás del jugador (objetivo
   // congelado en ese instante → NO persigue → no marea). Antes perseguía en bucle y
   // "giraba como loca"; esto lo arregla. Si arrastras, no toca nada.
+  // CÁMARA ANTERIOR (la que iba bien): recentrado de UNA sola vez al SOLTAR el arrastre,
+  // objetivo congelado en ese instante → NO persigue → no marea. Sin seguimiento continuo
+  // (el "seguimiento gentil" que probé la volvía loca; revertido a petición del usuario).
   if (tpcam.dragging) { camRecenter = false; }
-  else if (wasDragging) { camTarget = villager.root.rotation.y + Math.PI; camRecenter = true; }   // soltaste → recentra DETRÁS del jugador (+π; antes ponía la cámara de frente y le veías la cara)
+  else if (wasDragging) { camTarget = villager.root.rotation.y; camRecenter = true; }   // soltaste → recentra
   wasDragging = tpcam.dragging;
   if (camRecenter) {
     let d = camTarget - tpcam.yaw;
     while (d > Math.PI) d -= Math.PI * 2;
     while (d < -Math.PI) d += Math.PI * 2;
     if (Math.abs(d) < 0.03) { camRecenter = false; } else tpcam.yaw += d * Math.min(1, dt * 4);
-  } else if (!tpcam.dragging && moving) {
-    // SEGUIMIENTO GENTIL: mientras anda (y no arrastra), la cámara se coloca despacio
-    // DETRÁS del jugador → ves a dónde vas sin marear. Lento a propósito (no "gira como loca").
-    let d = (villager.root.rotation.y + Math.PI) - tpcam.yaw;
-    while (d > Math.PI) d -= Math.PI * 2;
-    while (d < -Math.PI) d += Math.PI * 2;
-    tpcam.yaw += d * Math.min(1, dt * 1.4);
   }
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil, grabReq);
   // Botón "🪢 TIRA": visible solo mientras se arrean ovejas; se ilumina y late
