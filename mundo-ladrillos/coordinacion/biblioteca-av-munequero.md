@@ -117,6 +117,9 @@
 | **CANASTO DE DÁTILES** — cesto de mimbre lleno de dátiles marrones brillantes, algunos sueltos en el paño (comida) | `2053d9bc-f46a-4aaa-adcd-d2154ecae966` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001627_2053d9bc-f46a-4aaa-adcd-d2154ecae966.png |
 | **TINAJA GRANDE** — tinaja de barro (pithos) de boca ancha con asas de cuerda y franjas pintadas (almacenaje) | `b0126c8d-0478-446b-81c1-2e0a2b6ed236` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002203_b0126c8d-0478-446b-81c1-2e0a2b6ed236.png |
 | **HOZ** — hoz curva con mango de madera y hoja de bronce, unas espigas al lado (herramienta de cosecha) | `099fe5fa-fa20-4172-8b3a-933f0f485851` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002228_099fe5fa-fa20-4172-8b3a-933f0f485851.png |
+| **RUECA** — rueca y huso de madera con lana cruda enrollada (oficio de hilar) | `39cb4397-84bf-416e-a509-692fb798153d` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002553_39cb4397-84bf-416e-a509-692fb798153d.png |
+| **CUERNO DE ACEITE** — cuerno de carnero pulido como vasija de aceite con tapón, una gota dorada (unción/ceremonia) | `30f19367-7108-4c8b-9eb7-ea91c8d61f08` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002554_30f19367-7108-4c8b-9eb7-ea91c8d61f08.png |
+| **AZADA** — azada de madera con hoja de bronce y mango gastado, algo de tierra en la hoja (herramienta) | `788d2bf7-04e7-4869-aab3-a852d83c82ab` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002615_788d2bf7-04e7-4869-aab3-a852d83c82ab.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -186,6 +189,7 @@
 | **HUERTO DE OLIVOS** — hileras de olivos plateados y nudosos, minifiguras vareando y recogiendo en redes, luz dorada (día) | `8430e906-231a-41c6-986b-9eb9e8b830a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001626_8430e906-231a-41c6-986b-9eb9e8b830a7.png |
 | **CELEBRACIÓN CON HOGUERA** — minifiguras bailando y palmeando alrededor de un gran fuego de noche, chispas al cielo estrellado, tiendas y estandartes | `dc6f56df-9b52-4e73-80e9-3e00bd82d5be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002201_dc6f56df-9b52-4e73-80e9-3e00bd82d5be.png |
 | **PLAZA AL MEDIODÍA** — plaza de Jericó con fuente central, minifiguras cruzando y charlando, puestos al borde, sol alto y sombras cortas | `236f6ddc-d808-46e7-85de-ec81cc6d67e3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002227_236f6ddc-d808-46e7-85de-ec81cc6d67e3.png |
+| **CAMINO DEL DESIERTO** — sendero polvoriento de caravana entre roquedales y unas palmeras, un mojón de piedras, luz de mediodía (viaje) | `aa4442fb-4932-4863-8fad-011c2f01e8c0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002616_aa4442fb-4932-4863-8fad-011c2f01e8c0.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -199,6 +203,7 @@
 | **ATARDECER PÚRPURA** — degradados suaves de violeta, rosa y ámbar sobre un horizonte tenue y sereno (16:9) | `ae7e0824-6ffc-40e6-9125-bf7da6f5557c` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235501_ae7e0824-6ffc-40e6-9125-bf7da6f5557c.png |
 | **AMANECER BRUMOSO** — luz dorada pálida y lavanda difusa entre niebla baja sobre un horizonte tenue (16:9) | `4f12b581-13fc-4013-9002-abddcd53774e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000236_4f12b581-13fc-4013-9002-abddcd53774e.png |
 | **CIELO NOCTURNO CON COMETA** — cielo índigo-violeta con un cometa brillante cruzando las estrellas sobre dunas (16:9) | `f23e84b0-e545-47bd-82ad-5127072873be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_f23e84b0-e545-47bd-82ad-5127072873be.png |
+| **CIELO ANARANJADO POLVORIENTO** — luz cálida ámbar-naranja quemado con sol tenue entre polvo en suspensión (16:9) | `e99bb655-eb26-48d4-b3cd-86653a19de71` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002617_e99bb655-eb26-48d4-b3cd-86653a19de71.png |
 
 ## 🧱 Texturas irregulares (swatches 2048px, tileables)
 | textura | job id | tamaño | URL |
@@ -213,6 +218,11 @@
 | **PIEDRA CALIZA** — sillares cortados color crema-beige con vetas suaves y líneas de mortero gastadas | `a975cbac-168a-4033-92ed-39969a801937` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002206_a975cbac-168a-4033-92ed-39969a801937.png |
 | **TELA RAYADA** — franjas cálidas de crema, ocre, teja e índigo con veta de tejido sutil | `66c9f6d4-5b1f-45c0-8e23-96887803ba31` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002230_66c9f6d4-5b1f-45c0-8e23-96887803ba31.png |
 | **ARENA ONDULADA** — dunas doradas con suaves ondas de viento y sombras tenues (suelo desierto) | `095fe7e4-b675-4ca5-81e3-46f9d5062f52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002231_095fe7e4-b675-4ca5-81e3-46f9d5062f52.png |
+| **LADRILLO COCIDO ROJO** — muro de ladrillos terracota en hiladas escalonadas con mortero claro y desgaste | `286a5cf3-26b4-4cd8-9f63-26c03b019d8c` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002548_286a5cf3-26b4-4cd8-9f63-26c03b019d8c.png |
+| **CUERO REPUJADO** — piel color tostado con motivos geométricos repujados y brillo gastado | `1f820444-34d4-48e6-8b18-ef73c4827092` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002549_1f820444-34d4-48e6-8b18-ef73c4827092.png |
+| **AGUA CLARA** — superficie de agua turquesa con suaves ondas y reflejos cáusticos | `7563544b-2264-4ba0-8971-28a3b5a60174` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002551_7563544b-2264-4ba0-8971-28a3b5a60174.png |
+| **HOJA DE PALMA** — frondas verdes solapadas con venas paralelas finas y brillos cálidos | `47416c40-ebde-4cca-adbc-88a59520d3ad` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002611_47416c40-ebde-4cca-adbc-88a59520d3ad.png |
+| **GRAVA DE CAMINO** — guijarros y polvo tostado-gris compactados (suelo de sendero) | `dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002612_dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
