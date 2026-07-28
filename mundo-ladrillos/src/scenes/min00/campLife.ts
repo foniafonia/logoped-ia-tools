@@ -286,6 +286,18 @@ export class CampLife {
   derrumbar(): void { if (this.gagState === 'cargado') this.gagT = 99; }
   get ovejasObjetivo(): number { return this.sheep.filter((s) => s.target).length; }
   get ovejasEnRedil(): number { return this.sheep.filter((s) => s.target && s.penned).length; }
+  /** AYUDA (carta mágica): mete UNA oveja objetivo aún libre dentro del redil.
+   *  Devuelve su posición (para el efecto ✨) o null si ya estaban todas. */
+  ayudaMeterUnaOveja(): { x: number; z: number } | null {
+    const s = this.sheep.find((x) => x.target && !x.penned);
+    if (!s) return null;
+    const a = Math.random() * Math.PI * 2, r = Math.random() * (this.pen.r - 1.4);
+    s.g.position.set(this.pen.x + Math.cos(a) * r, 0, this.pen.z + Math.sin(a) * r);
+    s.penned = true; s.leashed = false;
+    if (s.leash) s.leash.visible = false;
+    if (s.hint) s.hint.visible = false;
+    return { x: s.g.position.x, z: s.g.position.z };
+  }
   get redil(): { x: number; z: number } { return { x: this.pen.x, z: this.pen.z }; }
   /** (debug) estado de las ovejas objetivo, para el jugador sintético. */
   get _targets(): Array<{ x: number; z: number; penned: boolean; leashed: boolean }> {

@@ -448,6 +448,97 @@ const ovejaAlRedil = (): void => { audio.sfxPickup(); };   // pling discreto al 
 
 // hitos por jugador (una sola vez) — cada uno premia con sonido + estrella
 const done = new Set<string>();
+
+// === CARTAS DE AYUDA 🃏 — red de seguridad que SE GANA jugando ================
+// Ganas 1 carta al completar cada minijuego; si te atascas, gastas una para que
+// una "mano mágica" avance UN paso de la tarea. Si te quedas sin cartas y muy
+// atascado, se regala una (nadie se bloquea). Sustituye al viejo salto por tiempo.
+let cartas = 0;
+let modoPequenin = false;   // modo por edad (se fija en la pantalla de inicio)
+let esperandoAcc = 0;       // segundos que la historia lleva esperando (carta de cortesía)
+
+const cartasEl = document.createElement('div');
+Object.assign(cartasEl.style, {
+  position: 'fixed', left: '14px', top: '48px', zIndex: '26', color: '#ffd76a',
+  font: '800 20px system-ui, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,.6)',
+  transition: 'transform .18s', pointerEvents: 'none', display: 'none'
+} as CSSStyleDeclaration);
+document.body.appendChild(cartasEl);
+function pintarCartas(): void { cartasEl.style.display = 'block'; cartasEl.textContent = `🃏 ${cartas}`; }
+function ganarCarta(n = 1): void {
+  cartas += n; pintarCartas();
+  cartasEl.style.transform = 'scale(1.5)'; setTimeout(() => { cartasEl.style.transform = 'scale(1)'; }, 180);
+  dust.burst(controller.pos.x, 2.2, controller.pos.z, 10); audio.sfxSparkle();   // ✨
+}
+
+const ayudaBtn = document.createElement('button');
+ayudaBtn.textContent = '🃏 Ayuda';
+Object.assign(ayudaBtn.style, {
+  position: 'fixed', right: '16px', top: '96px', zIndex: '27', display: 'none',
+  font: '800 15px system-ui', color: '#3a2a00', background: '#ffd76a', border: 'none',
+  borderRadius: '12px', padding: '10px 14px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,.4)'
+} as CSSStyleDeclaration);
+document.body.appendChild(ayudaBtn);
+ayudaBtn.addEventListener('pointerdown', (ev) => { ev.preventDefault(); usarAyuda(); });
+
+/** ¿Hay una tarea activa sin terminar ahora mismo? (para mostrar el botón 🃏). */
+function tareaActivaPendiente(): boolean {
+  const i = director.beatIndex;
+  if (i >= 3 && !done.has('yeh')) return true;
+  if (ropesActivas && !ropesHechas) return true;
+  if (ropesHechas && !done.has('camp')) return true;
+  if (panActivos && !done.has('tab')) return true;
+  if (bultosActivos && !done.has('bultos')) return true;
+  return false;
+}
+
+/** Saluda a Yehoshúa "por arte de magia" (carta de ayuda en la fase del saludo). */
+function forzarSaludo(): void {
+  if (done.has('yeh')) return;
+  done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star();
+  director.logro('¡Shalom! Yehoshúa te saluda 🃏'); setTarget(null);
+}
+
+/** Avanza UN paso la tarea activa. La detección normal de fin hace el resto. */
+function avanzarUnPaso(): boolean {
+  const i = director.beatIndex;
+  if (i >= 3 && !done.has('yeh')) { forzarSaludo(); return true; }
+  if (ropesActivas && !ropesHechas) {
+    const r = camp.ropes.find((x) => x.visible);
+    if (r) { r.visible = false; audio.sfxPickup(); dust.burst(r.position.x, 0.6, r.position.z, 10); return true; }
+  }
+  if (ropesHechas && !done.has('camp')) {
+    const p = life.ayudaMeterUnaOveja();
+    if (p) { audio.sfxAnimal(); dust.burst(p.x, 1.2, p.z, 10); return true; }
+  }
+  if (panActivos && !done.has('tab')) {
+    const b = camp.panes.find((x) => x.visible && !x.userData.caught);
+    if (b) { b.userData.caught = true; b.visible = false; audio.sfxPickup(); dust.burst(b.position.x, 1.4, b.position.z, 8); return true; }
+  }
+  if (bultosActivos && !done.has('bultos')) {
+    const b = camp.bultos.find((x) => x.visible && !entregados.has(x));
+    if (b) { entregados.add(b); apilarBulto(b); audio.sfxPickup(); dust.burst(CARGA_DEST.x, 1.0, CARGA_DEST.z, 10); return true; }
+  }
+  return false;
+}
+
+/** Gasta una carta para avanzar un paso (si tienes). */
+function usarAyuda(): void {
+  if (cartas <= 0) { director.logro('Gana cartas 🃏 terminando minijuegos'); return; }
+  if (avanzarUnPaso()) { cartas--; pintarCartas(); esperandoAcc = 0; }
+}
+
+/** Gestión por frame del botón 🃏 y de la carta de cortesía (llamar con dt). */
+function actualizarCartas(dt: number): void {
+  if (tareaActivaPendiente()) {
+    ayudaBtn.style.display = 'block';
+    ayudaBtn.style.opacity = cartas > 0 ? '1' : '0.5';
+    if (director.esperando) {
+      esperandoAcc += dt;
+      if (cartas === 0 && esperandoAcc > 75) { ganarCarta(1); director.logro('¡Una carta de regalo! 🃏 Úsala si te atascas'); esperandoAcc = 0; }
+    } else esperandoAcc = Math.max(0, esperandoAcc - dt * 0.5);
+  } else { ayudaBtn.style.display = 'none'; esperandoAcc = 0; }
+}
 function checkTargets(): void {
   const p = controller.pos;
   const i = director.beatIndex;
@@ -455,7 +546,7 @@ function checkTargets(): void {
   // beat y HASTA que se logra (no solo durante los 10 s del beat): así el peque no
   // pierde la estrella sin aviso si tarda en llegar. (Recado de jugabilidad.)
   if (i >= 3 && !done.has('yeh') && Math.hypot(p.x - YEHOSHUA.x, p.z - YEHOSHUA.z) < 9) {   // radio amplio: Yehoshúa está en tarima, no hace falta pegarse
-    done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda');
+    done.add('yeh'); waveT = 2.2; audio.sfxSuccess(); director.star(); director.logro('¡Shalom! Yehoshúa te saluda'); ganarCarta(modoPequenin ? 2 : 1);
     if (target) setTarget(null);
   }
   // (el Tabernáculo ya no es "visita": ahora es el oficio de llevarle el pan, más abajo)
@@ -474,12 +565,22 @@ startEl.innerHTML =
   '<div style="text-align:center;color:#f4e9d2;font-family:system-ui,sans-serif;padding:24px">' +
   '<div style="font:800 30px/1.1 Georgia,serif;color:#e8b04b;letter-spacing:2px">LA CONQUISTA DE ISRAEL</div>' +
   '<div style="opacity:.8;margin:10px 0 22px">Minuto 0–5 · Del campamento al río Jordán</div>' +
-  '<button id="startBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)">▶ Empezar</button></div>';
+  '<button id="startBtn" style="font:800 20px/1 system-ui;color:#0a0705;background:#e8b04b;border:none;border-radius:14px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)">▶ Empezar</button>' +
+  '<div style="margin-top:16px"><button id="pequeninBtn" style="font:700 14px/1 system-ui;color:#f4e9d2;background:transparent;border:1px solid rgba(244,233,210,.4);border-radius:10px;padding:8px 16px;cursor:pointer">👶 Modo Pequeñín: OFF</button></div>' +
+  '<div style="opacity:.55;font-size:12px;margin-top:8px">(Pequeñín: empiezas con cartas de ayuda 🃏)</div></div>';
 Object.assign(startEl.style, {
   position: 'fixed', inset: '0', zIndex: '50', display: 'flex', alignItems: 'center',
   justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #3a2a12, #0a0705 72%)', transition: 'opacity .4s'
 } as CSSStyleDeclaration);
 document.body.appendChild(startEl);
+// Toggle "Modo Pequeñín" (más cartas de ayuda). stopPropagation: no arranca el juego al tocarlo.
+const pequeninBtn = startEl.querySelector('#pequeninBtn') as HTMLButtonElement | null;
+pequeninBtn?.addEventListener('pointerdown', (ev) => {
+  ev.stopPropagation();
+  modoPequenin = !modoPequenin;
+  pequeninBtn.textContent = `👶 Modo Pequeñín: ${modoPequenin ? 'ON' : 'OFF'}`;
+  pequeninBtn.style.background = modoPequenin ? 'rgba(232,176,75,.3)' : 'transparent';
+});
 // ¿venimos de un SALTO del DevHUD (#go=…)? Reetiqueta el botón para que quede claro.
 const saltoKey = saltoPedido();
 if (saltoKey) {
@@ -508,6 +609,8 @@ function arrancarConEstudio3D(): void {
   introActiva = true;
   studio.setActive(true);
   villager.root.visible = false;
+  if (modoPequenin) cartas = 3;  // modo por edad: empieza con cartas de ayuda
+  pintarCartas();
   director.start();
 }
 
@@ -555,6 +658,8 @@ function empezarJuegoTrasVideo(): void {
   villager.root.visible = true;
   if (esMovil && !touchCreado) { new TouchControls(controller, { shofar: false, attack: false }); touchCreado = true; }
   audio.resume();   // el vídeo suspendió el contexto: hay que reanudarlo o no se oye
+  if (modoPequenin) cartas = 3;  // modo por edad: empieza con cartas de ayuda
+  pintarCartas();
   spine = audio.playSpine('narracion_min0-5', 0.95, 25); director.setSpine(spine);
   director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
 }
@@ -565,6 +670,7 @@ function empezarJuegoTrasVideo(): void {
 function ejecutarSalto(key: string): void {
   limpiarSalto();
   audio.init();
+  if (modoPequenin) cartas = 3; pintarCartas();
   startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
   if (key[0] === 'b') {
     const i = Math.max(0, Math.min(beats.length - 1, parseInt(key.slice(1), 10) || 0));
@@ -608,6 +714,8 @@ function animate(now: number): void {
     if (fx) fx.render(); else renderer.render(scene, camera);
     return;
   }
+
+  actualizarCartas(dt);   // botón 🃏 de ayuda + carta de cortesía si se atasca
 
   // — ADELANTO DE LOS ESPÍAS: guard propio (como la intro). Blinda el juego: mientras
   //   dura el "ojito" al río, el gameplay no corre → no puede tocar nada. —
@@ -716,7 +824,7 @@ function animate(now: number): void {
       director.setObjetivo(`🐑 Acércate a una oveja y pulsa E (o 🪢) para engancharla; llévala al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
     }
     if (enRedil >= life.ovejasObjetivo) {
-      done.add('camp'); audio.sfxSuccess(); director.star();
+      done.add('camp'); audio.sfxSuccess(); director.star(); ganarCarta(modoPequenin ? 2 : 1);
       // premio por rapidez: cuanto antes, más fiesta (sin castigo si tardas)
       if (elapsed < 14) { director.confetti(60); director.logro('¡RAPIDÍSIMO! 🐑⚡ ⭐⭐⭐'); }
       else if (elapsed < 24) { director.confetti(30); director.logro('¡Bien arreado! 🐑 ⭐⭐'); }
@@ -759,7 +867,7 @@ function animate(now: number): void {
       }
     }
     if (cazados >= camp.panes.length) {
-      done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Todo el pan atrapado! 🕍'); setTarget(null);
+      done.add('tab'); audio.sfxSuccess(); director.star(); director.logro('¡Todo el pan atrapado! 🕍'); setTarget(null); ganarCarta(modoPequenin ? 2 : 1);
     }
   }
   // encadenado de mini-juegos (nunca dos a la vez, sin liar al peque):
@@ -814,7 +922,7 @@ function animate(now: number): void {
       }
     }
     if (entregados.size >= camp.bultos.length) {
-      done.add('bultos'); audio.sfxSuccess(); director.star(); director.logro('¡Caravana cargada! 🐫'); setTarget(null);
+      done.add('bultos'); audio.sfxSuccess(); director.star(); director.logro('¡Caravana cargada! 🐫'); setTarget(null); ganarCarta(modoPequenin ? 2 : 1);
       loadPad.visible = false;
     }
   }

@@ -1,7 +1,16 @@
 # Backlog del 0–5 (iteración con el usuario) — NO empaquetar sin su OK explícito
 
-## 💡 Ideas de diseño nuevas (a diseñar JUNTOS antes de tocar código)
+## 💡 Ideas de diseño nuevas
 
+### 1. Sistema de AYUDAS ("cartas mágicas" / vidas) — ✅ IMPLEMENTADO (v1)
+Hecho: ganas 1 carta al completar cada minijuego (2 en modo Pequeñín); botón "🃏 Ayuda"
+durante la tarea; gastar una carta hace que una "mano mágica" avance UN paso (recoge una
+cuerda, mete una oveja, atrapa un pan, entrega un bulto); carta de cortesía si te atascas
+mucho sin cartas (nadie se bloquea); toggle "Modo Pequeñín" en el inicio (empieza con 3
+cartas). Verificado en runtime. PENDIENTE futuro: variedad de cartas (brújula, reloj…),
+arte de carta-ladrillo más vistoso.
+
+--- diseño original (referencia) ---
 ### 1. Sistema de AYUDAS ("cartas mágicas" / vidas) en vez de arreglar el atasco a lo bruto
 - El riesgo de atasco (con las puertas que esperan) no se soluciona solo haciendo los
   minijuegos fáciles, sino con una **red de seguridad diegética**: si el niño ve que NO
