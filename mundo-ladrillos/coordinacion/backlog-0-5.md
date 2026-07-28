@@ -32,16 +32,16 @@ arte de carta-ladrillo más vistoso.
 - PENDIENTE: animación de lanzar (arco de la cuerda), enganche al impactar, y recolocar
   las ovejas más lejos (respetando REDIL_CLEAR / sin tiendas).
 
-## 🔧 Notas de juego pendientes (del lote de 16, aún sin hacer)
-- **5 · 7** Cámara: cuesta orientarla para ir a las cuerdas; el usuario dio su cámara base
-  preferida (nota 7: x=0 z=22, mirando al N) → ponerla por defecto + suavizar el control.
-- **6** Campamento apelotonado → más distancia entre tiendas.
-- **12** Claridad del flujo cuerdas→ovejas→"recoger campamento" (mejora con los carteles
-  nuevos, revisar tras el gating).
-- **13** No se debe poder **atravesar el Mishkán** (tabernáculo): colisión salvo por la puerta.
-- **15** Los espías del teaser llegan unos segundos antes y confunde → revisar timing del teaser.
-- **16** El final (caravana caminando) se corta muy pronto y **el audio se corta a media
-  frase** → alargar el plano final de la caravana + que la voz termine su frase.
+## 🔧 Notas de juego (del lote de 16) — ✅ TODAS HECHAS (menos la 4)
+- ✅ **5 · 7** Cámara: bug del recentrado (ponía la cámara de frente) corregido (+π) +
+  seguimiento gentil detrás mientras anda. Cámara base (detrás, al N) por defecto.
+- ✅ **6** Tiendas: menos y con separación mínima (no apelotonadas).
+- ✅ **8 · 9 · 10** Ovejas alcanzables/aleatorias + tecla + alcance (hecho antes).
+- ⏳ **12** Claridad cuerdas→ovejas→campamento: mejora con carteles + gating; revisar jugando.
+- ✅ **13** Mishkán: colisión (no se atraviesa; se entra por la puerta, el fondo es pared).
+- ✅ **15** Teaser de espías movido al FINAL (ya no salta al arrancar la caravana).
+- ✅ **16** Final: ~6s viendo la caravana + fundido de voz (no corte) + teaser + Seguir.
+- ✅ **LAZO** visible al enganchar + ovejas más lejos (arreo de verdad).
 
 ## 💭 Pregunta abierta del usuario (sin decidir aún)
 - **4** El render "precioso" brilla un poco de más → bajar bloom/exposición cuando decida
