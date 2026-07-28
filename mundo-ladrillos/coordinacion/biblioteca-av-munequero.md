@@ -126,6 +126,9 @@
 | **CUENCO DE MADERA** — cuenco torneado de madera con veta cálida y una muesca en el borde (vajilla) | `2916819b-2412-4497-b1b9-90a3f4417f24` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003624_2916819b-2412-4497-b1b9-90a3f4417f24.png |
 | **PEINE DE HUESO** — peine tallado de hueso con dientes finos y grabado sencillo (objeto personal) | `2e4e4420-2bb7-4e15-a042-1e6222ae77fb` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003625_2e4e4420-2bb7-4e15-a042-1e6222ae77fb.png |
 | **ANILLO-SELLO** — anillo de oro grabado con un pequeño escudo de león (coleccionable/autoridad) | `91c57471-adfe-4acb-b032-58b456be6eb0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003650_91c57471-adfe-4acb-b032-58b456be6eb0.png |
+| **CESTO VACÍO** — cesto de mimbre vacío con asa curva (inventario/attrezzo) | `01a1d5dc-6c76-44ef-8425-7d181df54dbe` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004206_01a1d5dc-6c76-44ef-8425-7d181df54dbe.png |
+| **CUCHARA DE MADERA** — cuchara tallada de mango largo y cuenco poco hondo, veta cálida (cocina) | `cb35941c-1c76-4c14-adc2-5015b8eb92a9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004207_cb35941c-1c76-4c14-adc2-5015b8eb92a9.png |
+| **MORTERO** — mortero de piedra con maza y unas hierbas molidas dentro (cocina/botica) | `0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004233_0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -153,6 +156,7 @@
 | **POWER-UP BRÚJULA** — brújula de latón de ladrillos con aguja roja girando y chispas (orientación) | `75d96f55-d959-433d-823d-5020b03f1d00` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002205_75d96f55-d959-433d-823d-5020b03f1d00.png |
 | **POWER-UP POCIÓN AZUL** — frasco redondo de líquido azul en remolino de ladrillos con tapón y chispas | `806bb61a-187d-483b-9bea-2bd955aeb6f3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003248_806bb61a-187d-483b-9bea-2bd955aeb6f3.png |
 | **POWER-UP RELOJ DE ARENA ROJO** — reloj de arena con arena roja de ladrillos, marco de madera y chispas (tiempo extra) | `21b12b8f-b085-494b-98d4-589f0b51e585` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003653_21b12b8f-b085-494b-98d4-589f0b51e585.png |
+| **POWER-UP CAMPANA** — campanilla de bronce de ladrillos con anillos de sonido y chispas (alerta/aviso) | `515eefee-d204-4698-8059-9cefdca07644` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004236_515eefee-d204-4698-8059-9cefdca07644.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -200,6 +204,7 @@
 | **CAMINO DEL DESIERTO** — sendero polvoriento de caravana entre roquedales y unas palmeras, un mojón de piedras, luz de mediodía (viaje) | `aa4442fb-4932-4863-8fad-011c2f01e8c0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002616_aa4442fb-4932-4863-8fad-011c2f01e8c0.png |
 | **OASIS** — charca turquesa rodeada de palmeras, minifiguras y un camello descansando, luz dorada (descanso) | `943a6cc3-72de-4143-b5b8-8b613d65fb9e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003247_943a6cc3-72de-4143-b5b8-8b613d65fb9e.png |
 | **CANTERAS** — obreros cortando sillares de caliza pálida con cuerdas, rampas y trineos de madera, polvo (oficio/industria) | `da421985-0bc5-4c79-ba2d-fa468951b7c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003652_da421985-0bc5-4c79-ba2d-fa468951b7c6.png |
+| **EMBARCADERO** — pequeño muelle de madera en el Jordán, barcas amarradas, redes secándose, pescadores cargando cestos (mañana) | `63cbd40d-95fb-455b-acbf-b13c77707ddc` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004235_63cbd40d-95fb-455b-acbf-b13c77707ddc.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -243,6 +248,11 @@
 | **CERÁMICA PINTADA** — cerámica crema con franjas geométricas pintadas a mano en terracota e índigo | `8c34dead-ba5e-4e69-9090-da968976a09b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003623_8c34dead-ba5e-4e69-9090-da968976a09b.png |
 | **HIERBA SECA** — briznas de paja dorada blanqueadas por el sol en un manto suelto | `1dca74d8-6bf8-476e-a0fe-555aace189be` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003647_1dca74d8-6bf8-476e-a0fe-555aace189be.png |
 | **PIZARRA** — losas de pizarra gris frío en capas con vetas azules y óxido sutiles | `227d046b-7b07-4a49-a023-1e0e23c86d5e` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003648_227d046b-7b07-4a49-a023-1e0e23c86d5e.png |
+| **JUNCO VERDE** — juncos y cañas verdes frescas verticales apretadas con brillos cálidos | `21335aac-a2c8-440e-a431-6ed2f35df8a4` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004201_21335aac-a2c8-440e-a431-6ed2f35df8a4.png |
+| **ARCILLA HÚMEDA** — arcilla marrón-rojiza lisa con marcas de dedos sutiles y brillo suave | `5eadec4b-3ef9-4bae-8dae-8c86393beeda` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004203_5eadec4b-3ef9-4bae-8dae-8c86393beeda.png |
+| **PANAL** — celdas hexagonales de cera dorada brillando con miel, tonos ámbar cálidos | `111db459-8dbb-474c-a1e9-f20c0fe405e8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004204_111db459-8dbb-474c-a1e9-f20c0fe405e8.png |
+| **RED ANUDADA** — cuerda tostada anudada en malla romboidal regular con nudos pequeños | `6fe95410-d806-4af8-b6a6-7451c4d6ecb2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004230_6fe95410-d806-4af8-b6a6-7451c4d6ecb2.png |
+| **GUIJARROS DE RÍO** — piedras redondeadas lisas en grises, tostados y azules suaves apretadas | `121637b7-e601-4752-959f-582d63bba670` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004232_121637b7-e601-4752-959f-582d63bba670.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
