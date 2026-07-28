@@ -87,28 +87,43 @@ export class AudioManager {
    * la secuencia se reproduce igual, solo que sin voz.
    */
   playSpine(name: string, volume = 1, offset = 0): {
-    ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean; stop: () => void;
+    ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean;
+    stop: () => void; pause: () => void; resume: () => void; paused: () => boolean;
   } {
-    const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, stopped: false };
+    const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, stopped: false, paused: false, pausedAt: 0 };
+    // Arranca (o RE-arranca, al reanudar) la fuente desde `from` segundos del clip.
+    const startSrc = (from: number): void => {
+      if (st.stopped || !this.ac) return;
+      const buf = this.buffers.get(name);
+      if (!buf) return;
+      const src = this.ac.createBufferSource();
+      src.buffer = buf;
+      const g = this.ac.createGain(); g.gain.value = volume;
+      src.connect(g); g.connect(this.ac.destination);
+      try { src.start(0, from); } catch { /* noop */ }
+      st.src = src; st.startAt = this.ac.currentTime; st.offset = from; st.dur = buf.duration; st.started = true;
+    };
     const startWhenReady = (tries = 0): void => {
       if (st.stopped || !this.ac) return;
       if (this.ac.state === 'suspended') void this.ac.resume();   // el vídeo pudo suspender el contexto
       const buf = this.buffers.get(name);
       if (!buf) { if (tries < 40) setTimeout(() => startWhenReady(tries + 1), 100); return; }
-      const src = this.ac.createBufferSource();
-      src.buffer = buf;
-      const g = this.ac.createGain(); g.gain.value = volume;
-      src.connect(g); g.connect(this.ac.destination);
-      try { src.start(0, offset); } catch { /* noop */ }   // arranca desde `offset` seg (tras el vídeo intro)
-      st.src = src; st.startAt = this.ac.currentTime; st.dur = buf.duration; st.started = true;
+      startSrc(offset);
     };
     startWhenReady();
+    // segundo actual del clip (o el congelado, si está en pausa)
+    const nowAt = (): number => (st.started && this.ac ? st.offset + (this.ac.currentTime - st.startAt) : st.offset);
     return {
       ready: () => st.started,
-      elapsed: () => (st.started && this.ac ? st.offset + (this.ac.currentTime - st.startAt) : st.offset),
+      elapsed: () => (st.paused ? st.pausedAt : nowAt()),
       duration: () => st.dur,
-      ended: () => st.started && !!this.ac && (st.offset + (this.ac.currentTime - st.startAt)) >= st.dur,
-      stop: () => { st.stopped = true; try { st.src?.stop(); } catch { /* noop */ } }
+      ended: () => st.started && !st.paused && !!this.ac && nowAt() >= st.dur,
+      stop: () => { st.stopped = true; try { st.src?.stop(); } catch { /* noop */ } },
+      // PAUSA solo la narración (los SFX/ambiente siguen): congela `elapsed()` y para la voz.
+      pause: () => { if (st.paused || !st.started) return; st.pausedAt = nowAt(); st.paused = true; try { st.src?.stop(); } catch { /* noop */ } st.src = null; },
+      // REANUDA la voz desde el segundo exacto donde se pausó.
+      resume: () => { if (!st.paused) return; st.paused = false; if (this.ac && this.ac.state === 'suspended') void this.ac.resume(); startSrc(st.pausedAt); },
+      paused: () => st.paused
     };
   }
 

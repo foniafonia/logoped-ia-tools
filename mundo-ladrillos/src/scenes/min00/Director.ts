@@ -16,15 +16,24 @@ export interface Beat {
   sub: string;           // subtítulo (abajo)
   obj?: string;          // objetivo (arriba); vacío = sin objetivo visible
   onEnter?: () => void;  // acción de escena (revelar río, noche, caravana…)
+  /** PUERTA: mientras devuelva false, la historia Y el audio ESPERAN en este beat
+   *  (no se pasa al siguiente hasta terminar la tarea). Sin gate = fluye por tiempo. */
+  gate?: () => boolean;
 }
 
-interface Spine { ready: () => boolean; elapsed: () => number; ended: () => boolean; }
+interface Spine {
+  ready: () => boolean; elapsed: () => number; ended: () => boolean;
+  pause?: () => void; resume?: () => void;
+}
 
 export class Director {
   private i = -1;
   private wallStart = 0;
   private started = false;
   private finished = false;
+  private holding = false;   // esperando a que el niño termine la tarea del beat actual
+  private holdStart = 0;     // marca (performance.now) de cuándo empezó la espera
+  private wallHold = 0;      // tiempo total esperado (solo reloj de pared / build sin audio)
   private sub: HTMLDivElement;
   private objEl: HTMLDivElement;
   private flashEl: HTMLDivElement;
@@ -117,11 +126,16 @@ export class Director {
     this.i = fromBeat;
   }
 
-  /** Reloj maestro: el del audio si suena; si no, el de pared. */
+  /** Reloj maestro: el del audio si suena; si no, el de pared. Durante una espera
+   *  (puerta cerrada) el audio se pausa → su `elapsed()` se congela; en modo mudo,
+   *  descontamos el tiempo esperado (`wallHold`) para congelar el reloj de pared. */
   private clock(): number {
     if (this.spine && this.spine.ready()) return this.spine.elapsed();
-    return (performance.now() - this.wallStart) / 1000;
+    return (performance.now() - this.wallStart) / 1000 - this.wallHold;
   }
+
+  /** ¿La historia está esperando a que el niño termine la tarea actual? */
+  get esperando(): boolean { return this.holding; }
 
   /** Objetivo cumplido por el jugador (llegó a un sitio, recogió algo…). */
   logro(msg: string): void {
@@ -148,6 +162,16 @@ export class Director {
     const c = this.clock();
     // lanzar todos los beats cuyo tiempo ya ha llegado
     while (this.i + 1 < this.beats.length && c >= this.beats[this.i + 1].t) {
+      // PUERTA: si el beat ACTUAL tiene una tarea sin terminar, la historia y el
+      // audio ESPERAN aquí (el niño oye la instrucción y hace la tarea; nada corre).
+      const cur = this.i >= 0 ? this.beats[this.i] : null;
+      if (cur && cur.gate && !cur.gate()) {
+        if (!this.holding) { this.holding = true; this.holdStart = now; this.spine?.pause?.(); }
+        return;   // congelado hasta que se cumpla la tarea
+      }
+      if (this.holding) {   // tarea cumplida → reanuda voz y descuenta la espera
+        this.holding = false; this.wallHold += (now - this.holdStart) / 1000; this.spine?.resume?.();
+      }
       this.i++;
       const b = this.beats[this.i];
       this.sub.textContent = b.sub;

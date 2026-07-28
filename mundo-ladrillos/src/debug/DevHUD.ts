@@ -45,10 +45,10 @@ const rumboTxt = (g: number): string => {
   return `${n}° (${dirs[Math.round(n / 45) % 8]})`;
 };
 
-/** Texto listo para pegar en el chat. */
-function textoEstado(e: EstadoDev): string {
+/** Texto listo para pegar en el chat. `tester` = quién juega (Papá, el niño…). */
+function textoEstado(e: EstadoDev, tester?: string): string {
   return (
-    `📍 JERICÓ · MUNDO ${e.mundo}\n` +
+    `📍 JERICÓ · MUNDO ${e.mundo}${tester ? ` · 👤 ${tester}` : ''}\n` +
     `   ${e.escena} · «${e.titulo}»\n` +
     `   Tiempo: ${Math.round(e.t)}s\n` +
     `   Jugador: x=${e.pos[0]} z=${e.pos[1]} · rumbo ${rumboTxt(e.rumbo)}\n` +
@@ -58,10 +58,12 @@ function textoEstado(e: EstadoDev): string {
 }
 
 const NOTAS_KEY = 'jerico_notas_v1';
+const TESTER_KEY = 'jerico_tester_v1';
 
 /** Lote de notas listo para pegar en el chat. Cada nota lleva TODO lo del panel
- *  (mundo, escena, tiempo, posición+rumbo, audio, objetivo) + el texto apuntado. */
-function textoNotas(notas: Array<{ e: EstadoDev; txt: string }>): string {
+ *  (mundo, escena, tiempo, posición+rumbo, audio, objetivo) + el texto apuntado.
+ *  `tester` = quién juega (Papá, el niño…), para saber de dónde viene cada opinión. */
+function textoNotas(notas: Array<{ e: EstadoDev; txt: string }>, tester?: string): string {
   const linea = (e: EstadoDev, i: number, txt: string): string =>
     `${i}) 🌍 ${e.mundo}\n` +
     `   🎬 ${e.escena} «${e.titulo}»\n` +
@@ -69,7 +71,8 @@ function textoNotas(notas: Array<{ e: EstadoDev; txt: string }>): string {
     `   🔊 ${e.audio}\n` +
     `   🎯 ${e.objetivo || '—'}\n` +
     `   📝 → ${txt || '(sin texto)'}`;
-  return `📋 NOTAS DE JUEGO (${notas.length}):\n\n` + notas.map((n, i) => linea(n.e, i + 1, n.txt)).join('\n\n');
+  const cab = `📋 NOTAS DE JUEGO${tester ? ` · 👤 ${tester}` : ''} (${notas.length}):`;
+  return `${cab}\n\n` + notas.map((n, i) => linea(n.e, i + 1, n.txt)).join('\n\n');
 }
 
 /** Copia al portapapeles con respaldo (funciona también en file:// y sin permisos). */
@@ -178,6 +181,26 @@ export function installDevHUD(): void {
   const refrescarContador = (): void => { listBtn.textContent = notas.length ? `📋 Notas·${notas.length}` : '📋 Notas'; };
   refrescarContador();
 
+  // ---- QUIÉN JUEGA: etiqueta que acompaña a las notas (Papá / el niño / otro ordenador) ----
+  let tester = '';
+  try { tester = localStorage.getItem(TESTER_KEY) || ''; } catch { tester = ''; }
+  const whoBtn = document.createElement('button');
+  Object.assign(whoBtn.style, {
+    pointerEvents: 'auto', cursor: 'pointer', width: '100%', textAlign: 'left',
+    border: '1px dashed rgba(143,224,255,.45)', background: 'rgba(20,40,60,.5)', color: '#cfe8ff',
+    borderRadius: '8px', padding: '5px 8px', margin: '0 0 6px', font: '700 11.5px system-ui'
+  } as CSSStyleDeclaration);
+  const refrescarWho = (): void => { whoBtn.textContent = `👤 Quién juega: ${tester || '(toca para poner el nombre)'}`; };
+  refrescarWho();
+  whoBtn.addEventListener('click', () => {
+    const t = prompt('👤 ¿Quién está jugando? (p.ej. Papá, o el nombre del niño)', tester);
+    if (t === null) return;
+    tester = t.trim();
+    try { localStorage.setItem(TESTER_KEY, tester); } catch { /* file:// sin storage: queda en memoria */ }
+    refrescarWho();
+  });
+  panel.insertBefore(whoBtn, body);
+
   noteBtn.addEventListener('click', () => {
     const e = window.__estado?.(); if (!e) return;
     const txt = prompt('📝 ¿Qué has visto AQUÍ? (Enter = guardar solo el sitio)');
@@ -188,7 +211,7 @@ export function installDevHUD(): void {
   });
   listBtn.addEventListener('click', () => {
     if (!notas.length) { const p = listBtn.textContent; listBtn.textContent = '(vacío)'; setTimeout(() => { listBtn.textContent = p; }, 900); return; }
-    copiar(textoNotas(notas), () => {
+    copiar(textoNotas(notas, tester), () => {
       const p = listBtn.textContent; listBtn.textContent = '✅ ¡Copiadas!'; setTimeout(() => { listBtn.textContent = p as string; refrescarContador(); }, 1100);
     });
   });
@@ -205,7 +228,7 @@ export function installDevHUD(): void {
 
   copyBtn.addEventListener('click', () => {
     const e = window.__estado?.(); if (!e) return;
-    copiar(textoEstado(e), () => {
+    copiar(textoEstado(e, tester), () => {
       const prev = copyBtn.textContent; copyBtn.textContent = '✅ ¡Copiado!';
       setTimeout(() => { copyBtn.textContent = prev; }, 1100);
     });

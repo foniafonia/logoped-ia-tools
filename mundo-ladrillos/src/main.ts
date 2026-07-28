@@ -205,22 +205,26 @@ const beats: Beat[] = [
   },
   {
     t: 45, sub: '¡Yehoshúa arenga al pueblo!',
-    obj: 'Ve con Yehoshúa', onEnter: () => { terminarIntro(); setTarget(YEHOSHUA); }
+    obj: 'Ve con Yehoshúa', onEnter: () => { terminarIntro(); setTarget(YEHOSHUA); },
+    gate: () => done.has('yeh')   // ESPERA: la historia no sigue hasta que saludes a Yehoshúa
   },
   {
     t: 55, sub: '¡A recoger el campamento!',
     obj: `Recoge las cuerdas (0/${camp.ropes.length})`,
-    onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(done.has('yeh') ? null : YEHOSHUA); }   // si aún no saludó, la baliza sigue en Yehoshúa
+    onEnter: () => { ropesActivas = true; camp.ropes.forEach((r) => { if (r.userData.hint) r.userData.hint.visible = true; }); setTarget(done.has('yeh') ? null : YEHOSHUA); },   // si aún no saludó, la baliza sigue en Yehoshúa
+    gate: () => done.has('camp')   // ESPERA: recoger cuerdas + arrear las ovejas al redil
   },
   {
     t: 123, sub: 'El pan sale del horno. ¡Atrápalo! 🥖',
     // sin `obj`: el pan ESPERA a que se termine el campamento (no se solapan mini-juegos)
-    onEnter: () => { panPedido = true; }
+    onEnter: () => { panPedido = true; },
+    gate: () => done.has('tab')   // ESPERA: atrapar todo el pan
   },
   {
     t: 133, sub: '¡Se cayó la carga del camello! 💥',
     // sin `obj`: el objetivo lo pone el mini-juego al activarse (los bultos esperan al pan)
-    onEnter: () => { life.derrumbar(); bultosPedidos = true; }   // gag automático; los bultos esperan a que acabe el pan
+    onEnter: () => { life.derrumbar(); bultosPedidos = true; },   // gag automático; los bultos esperan a que acabe el pan
+    gate: () => done.has('bultos')   // ESPERA: cargar todos los bultos en la caravana
   },
   {
     t: 228, sub: 'La caravana está casi lista para partir…',
@@ -766,7 +770,7 @@ function animate(now: number): void {
   // tiempo para no dejar al peque atascado). Al arrancar, AVISA y guía a seguirla.
   if (caravanaPedida && !caravanaEnMarcha) {
     const listos = done.has('camp') && done.has('tab') && done.has('bultos');
-    if (listos || director.tiempo > 272) {
+    if (listos) {   // con las PUERTAS del Director, el beat 7 solo llega con todo hecho: ya no forzamos por tiempo
       caravanaEnMarcha = true;
       journey.arrancarCaravana();
       camp.bultos.forEach((b) => { b.visible = false; });
