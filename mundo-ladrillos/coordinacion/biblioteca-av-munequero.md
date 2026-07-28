@@ -120,6 +120,9 @@
 | **RUECA** — rueca y huso de madera con lana cruda enrollada (oficio de hilar) | `39cb4397-84bf-416e-a509-692fb798153d` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002553_39cb4397-84bf-416e-a509-692fb798153d.png |
 | **CUERNO DE ACEITE** — cuerno de carnero pulido como vasija de aceite con tapón, una gota dorada (unción/ceremonia) | `30f19367-7108-4c8b-9eb7-ea91c8d61f08` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002554_30f19367-7108-4c8b-9eb7-ea91c8d61f08.png |
 | **AZADA** — azada de madera con hoja de bronce y mango gastado, algo de tierra en la hoja (herramienta) | `788d2bf7-04e7-4869-aab3-a852d83c82ab` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002615_788d2bf7-04e7-4869-aab3-a852d83c82ab.png |
+| **YUNQUE PEQUEÑO** — yunque de hierro sobre un tocón de madera con un martillito al lado (fragua) | `01231de4-0c4e-40c5-b43d-9ab6002e7bf4` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003204_01231de4-0c4e-40c5-b43d-9ab6002e7bf4.png |
+| **CANDIL DOBLE** — candil de barro de dos picos con dos llamitas cálidas (luz/attrezzo) | `1601288b-ec3c-4168-bea2-86c74c47dcf8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003205_1601288b-ec3c-4168-bea2-86c74c47dcf8.png |
+| **PLATO DE BRONCE** — plato de servir de bronce martillado con borde grabado (vajilla/attrezzo) | `cff328bd-bc7c-4faf-a937-fbf98715a514` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003245_cff328bd-bc7c-4faf-a937-fbf98715a514.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -145,6 +148,7 @@
 | **POWER-UP BOMBA DE LADRILLOS** — bomba redonda de ladrillos con mecha encendida y estallido de piezas de colores (lúdica, no violenta) | `74ab0b20-74a7-49dd-be55-f39bed03cb80` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000559_74ab0b20-74a7-49dd-be55-f39bed03cb80.png |
 | **POWER-UP BOTAS DE SALTO** — sandalias de cuero brillantes con suelas-resorte de ladrillos y chispas ascendentes | `d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685.png |
 | **POWER-UP BRÚJULA** — brújula de latón de ladrillos con aguja roja girando y chispas (orientación) | `75d96f55-d959-433d-823d-5020b03f1d00` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002205_75d96f55-d959-433d-823d-5020b03f1d00.png |
+| **POWER-UP POCIÓN AZUL** — frasco redondo de líquido azul en remolino de ladrillos con tapón y chispas | `806bb61a-187d-483b-9bea-2bd955aeb6f3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003248_806bb61a-187d-483b-9bea-2bd955aeb6f3.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -190,6 +194,7 @@
 | **CELEBRACIÓN CON HOGUERA** — minifiguras bailando y palmeando alrededor de un gran fuego de noche, chispas al cielo estrellado, tiendas y estandartes | `dc6f56df-9b52-4e73-80e9-3e00bd82d5be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002201_dc6f56df-9b52-4e73-80e9-3e00bd82d5be.png |
 | **PLAZA AL MEDIODÍA** — plaza de Jericó con fuente central, minifiguras cruzando y charlando, puestos al borde, sol alto y sombras cortas | `236f6ddc-d808-46e7-85de-ec81cc6d67e3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002227_236f6ddc-d808-46e7-85de-ec81cc6d67e3.png |
 | **CAMINO DEL DESIERTO** — sendero polvoriento de caravana entre roquedales y unas palmeras, un mojón de piedras, luz de mediodía (viaje) | `aa4442fb-4932-4863-8fad-011c2f01e8c0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002616_aa4442fb-4932-4863-8fad-011c2f01e8c0.png |
+| **OASIS** — charca turquesa rodeada de palmeras, minifiguras y un camello descansando, luz dorada (descanso) | `943a6cc3-72de-4143-b5b8-8b613d65fb9e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003247_943a6cc3-72de-4143-b5b8-8b613d65fb9e.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -223,6 +228,11 @@
 | **AGUA CLARA** — superficie de agua turquesa con suaves ondas y reflejos cáusticos | `7563544b-2264-4ba0-8971-28a3b5a60174` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002551_7563544b-2264-4ba0-8971-28a3b5a60174.png |
 | **HOJA DE PALMA** — frondas verdes solapadas con venas paralelas finas y brillos cálidos | `47416c40-ebde-4cca-adbc-88a59520d3ad` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002611_47416c40-ebde-4cca-adbc-88a59520d3ad.png |
 | **GRAVA DE CAMINO** — guijarros y polvo tostado-gris compactados (suelo de sendero) | `dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002612_dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9.png |
+| **LANA CARDADA** — fibras crema-blancas mullidas con sombras suaves y tono cálido (materia textil) | `227ec460-c4f8-4c2b-8485-34ec56aea510` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003202_227ec460-c4f8-4c2b-8485-34ec56aea510.png |
+| **SAL CRISTALIZADA** — cristales blancos gruesos de sal con destellos gris pálido y crema | `71511a61-f973-46af-8583-f7bf8de52d9b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003203_71511a61-f973-46af-8583-f7bf8de52d9b.png |
+| **TERRACOTA VIDRIADA** — baldosas de arcilla rojiza con vidriado ámbar brillante y craquelado sutil | `2ac32119-653e-42f6-886b-b59a55988178` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003203_2ac32119-653e-42f6-886b-b59a55988178.png |
+| **MÁRMOL VETEADO** — mármol crema pálido con vetas grises y doradas y pulido sutil | `db84155f-2816-4d4e-b647-d93164c70fb7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003242_db84155f-2816-4d4e-b647-d93164c70fb7.png |
+| **COBRE BRUÑIDO** — metal rosa-dorado con hoyuelos de martillado y reflejos suaves | `a3274c21-df43-4191-8374-d7fbba014105` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003244_a3274c21-df43-4191-8374-d7fbba014105.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
