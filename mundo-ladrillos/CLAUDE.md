@@ -3,6 +3,10 @@
 **📖 LEE `BIBLIA.md` ANTES DE TOCAR NADA.** Ahí están la visión, las decisiones y las
 correcciones del proyecto. Aquí van solo las reglas duras que no se saltan nunca:
 
+**🛠️ CÓMO SE TRABAJA (método por defecto): ver `METODOLOGIA-JUEGOS.md`** — rebanadas
+jugables, DevHUD con cuaderno de notas, iterar por lotes, y **NO empaquetar sin el OK
+explícito del usuario**.
+
 ## Reglas de oro
 1. **TODO en mundo 3D de ladrillo** (como la escena de la muralla). 🚫 **NUNCA** usar
    fotogramas de la peli como **fondo plano 2.5D** (se probó, quedó fatal, se descartó).
