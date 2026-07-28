@@ -141,6 +141,8 @@
 | **ESPEJO DE BRONCE** — espejo de mano de bronce pulido con mango ornamentado (objeto personal) | `ae85fffa-3fa7-4f3f-8b32-0939333ff69b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_072653_ae85fffa-3fa7-4f3f-8b32-0939333ff69b.png |
 | **CUCHILLO DE PEDERNAL** — cuchillo de hoja de piedra tallada y mango de cuero atado (herramienta primitiva) | `f14510d9-45af-48df-bc83-a4432af89ec3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_072654_f14510d9-45af-48df-bc83-a4432af89ec3.png |
 | **DADO DE HUESO** — dadito de hueso tallado con puntos taladrados (pieza de juego) | `0178ea01-2448-4b09-8e35-3a82a2e8d8d9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073414_0178ea01-2448-4b09-8e35-3a82a2e8d8d9.png |
+| **TINTERO Y CÁLAMO** — tintero de barro con un cálamo de caña encima, tinta oscura (escriba) | `0c158a1d-d0ca-4e87-a7b3-e680ef426302` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074347_0c158a1d-d0ca-4e87-a7b3-e680ef426302.png |
+| **CASCABEL** — cascabel de bronce redondo con anilla pequeña (attrezzo/sonido) | `28af4d9d-5685-433d-a47d-956851b92b32` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074348_28af4d9d-5685-433d-a47d-956851b92b32.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -221,6 +223,7 @@
 | **ATALAYA** — torre de vigilancia de piedra solitaria en la llanura de Jericó, un centinela con antorcha arriba, senda abajo, atardecer | `63f3f007-21f5-4181-9994-c7afed7de8bf` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065618_63f3f007-21f5-4181-9994-c7afed7de8bf.png |
 | **MOLINO DE AGUA** — molino en un arroyo con rueda de madera girando, casa de piedra, minifiguras con sacos de grano (día) | `03a97ee0-a25a-4c50-9941-b03ff8bc85c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071423_03a97ee0-a25a-4c50-9941-b03ff8bc85c6.png |
 | **MERCADO AL AMANECER** — plaza de mercado despertando, vendedores montando toldos a rayas y cajas, luz rosa-dorada temprana (tranquila) | `39c039be-877f-4528-83eb-62a84e789e40` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073416_39c039be-877f-4528-83eb-62a84e789e40.png |
+| **PUENTE DE CUERDA** — puente de cuerdas y tablones sobre un desfiladero rocoso, una minifigura cruzando con cuidado, luz de día (aventura) | `ff1ae921-9b58-4974-93f1-d322feba20a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074350_ff1ae921-9b58-4974-93f1-d322feba20a7.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -293,6 +296,8 @@
 | **HUESO PULIDO** — superficie marfil-crema con estriaciones naturales finas y brillo suave | `d993ad95-963e-4a0b-a65f-55e5a8c3d1d2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_072652_d993ad95-963e-4a0b-a65f-55e5a8c3d1d2.png |
 | **LACA ROJA** — superficie lacada bermellón profunda y brillante con reflejos suaves | `6032d24b-a3e7-4d60-8a46-e22fa7cd9fbd` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073412_6032d24b-a3e7-4d60-8a46-e22fa7cd9fbd.png |
 | **SAL DE ROCA** — cristales gruesos de sal translúcida blanca y rosa pálido con destellos suaves | `9e53c249-ec73-4de3-8239-a38736286353` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_073413_9e53c249-ec73-4de3-8239-a38736286353.png |
+| **MÁRMOL NEGRO** — mármol carbón profundo con vetas doradas y grises finas y pulido brillante | `8a030e97-1934-49f0-b519-989af5f1fcbf` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074343_8a030e97-1934-49f0-b519-989af5f1fcbf.png |
+| **COBRE OXIDADO** — lámina de cobre cálido virada a cardenillo verde-azulado con pátina moteada | `5b9ba8f8-318b-4f32-9bf5-376a79b96687` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074346_5b9ba8f8-318b-4f32-9bf5-376a79b96687.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
