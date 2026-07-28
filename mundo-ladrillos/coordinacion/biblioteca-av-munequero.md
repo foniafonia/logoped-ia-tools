@@ -72,6 +72,9 @@
 | **CAPITÁN** — peto de bronce sobre túnica roja, casco con cresta bajo el brazo, cicatriz, gesto de mando | `a0363448-6a56-4082-a0ad-b54029abb8ef` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235523_a0363448-6a56-4082-a0ad-b54029abb8ef.png |
 | **TAMBORILERO** — tambor de mano a la cintura, manos en alto a medio golpe, gran sonrisa, faja de colores | `6743cfec-be97-499b-8833-9fe3ad834bc3` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000159_6743cfec-be97-499b-8833-9fe3ad834bc3.png |
 | **AGUADOR JOVEN** — cántaro de barro al hombro, túnica arena húmeda, gesto trabajador y alegre | `5f7b1c3e-0070-4511-95a7-0950ba147dc2` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000201_5f7b1c3e-0070-4511-95a7-0950ba147dc2.png |
+| **VIUDA** — túnica y pañuelo gris oscuro, jarrita de aceite en las manos, ojos amables y cansados | `fb80a6c3-0fdc-4ed2-80e5-1597461e9d68` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000552_fb80a6c3-0fdc-4ed2-80e5-1597461e9d68.png |
+| **COMERCIANTE FENICIO** — túnica púrpura con ribete de oro, collares de cuentas, sonrisa astuta, barba negra, gorro | `927d67af-3321-4f68-8165-2adff88cec51` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000554_927d67af-3321-4f68-8165-2adff88cec51.png |
+| **ESCRIBA** — túnica crema con faja manchada de tinta, cálamo tras la oreja y rollo, gafas, gesto reflexivo | `9f0de567-b0db-4263-a754-de76e1bb1e32` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000617_9f0de567-b0db-4263-a754-de76e1bb1e32.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -99,6 +102,8 @@
 | **SELLO / MONEDA ANTIGUA** — sello cilíndrico y moneda de bronce gastada con motivo de león (coleccionable) | `6f9df363-46ee-466f-976a-09ad0af8d6e7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235529_6f9df363-46ee-466f-976a-09ad0af8d6e7.png |
 | **FAROL** — farol de metal labrado con llama de vela cálida dentro y anilla para colgar (attrezzo/luz) | `85a5820d-d240-4d74-b833-21d39061611c` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000205_85a5820d-d240-4d74-b833-21d39061611c.png |
 | **TELAR** — telar de madera vertical con tela a rayas a medio tejer y hilos colgando (oficio) | `d6f13a2d-0fdc-45b2-8647-c0c20accd67f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000233_d6f13a2d-0fdc-45b2-8647-c0c20accd67f.png |
+| **BALANZA** — balanza de bronce de dos platos colgando de cadenas sobre pie de madera (comercio) | `c08b6f3e-ac85-460a-ae4c-d36bd79174e7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000558_c08b6f3e-ac85-460a-ae4c-d36bd79174e7.png |
+| **JARRA DE MIEL** — jarra de barro con miel dorada, cazoleta de madera y un panal al lado (comida) | `4cd030c1-9047-4c53-bf1c-b99fb9ec5229` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000621_4cd030c1-9047-4c53-bf1c-b99fb9ec5229.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -121,6 +126,8 @@
 | **POWER-UP CORAZÓN EXTRA (vida)** — corazón rojo de ladrillos con aura dorada y chispas | `506b3657-b4b5-4683-a633-15266f0b0464` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235528_506b3657-b4b5-4683-a633-15266f0b0464.png |
 | **POWER-UP LLAVE DORADA** — llave dorada ornamentada de ladrillos con aura radiante y chispas (abre/desbloquea) | `5ecc2969-9ea7-470e-9d2d-a4c75175ab1e` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000205_5ecc2969-9ea7-470e-9d2d-a4c75175ab1e.png |
 | **POWER-UP ALAS (vuelo)** — par de alas blancas de plumas de ladrillos con aura dorada y chispas | `0778def0-5e87-4e42-adf0-01bfcbc5a26b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000235_0778def0-5e87-4e42-adf0-01bfcbc5a26b.png |
+| **POWER-UP BOMBA DE LADRILLOS** — bomba redonda de ladrillos con mecha encendida y estallido de piezas de colores (lúdica, no violenta) | `74ab0b20-74a7-49dd-be55-f39bed03cb80` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000559_74ab0b20-74a7-49dd-be55-f39bed03cb80.png |
+| **POWER-UP BOTAS DE SALTO** — sandalias de cuero brillantes con suelas-resorte de ladrillos y chispas ascendentes | `d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -157,6 +164,8 @@
 | **MERCADO DE DÍA (bullicioso)** — calle de mercado con toldos de colores, puestos de fruta/cerámica/tela y multitud regateando (mediodía) | `cee19f59-d432-4c9a-87f7-171e21ae026a` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000203_cee19f59-d432-4c9a-87f7-171e21ae026a.png |
 | **ERA DE TRILLAR** — minifiguras aventando grano dorado con horcas, un buey tirando del trillo, montones de paja (tarde) | `1d9c16bc-ed28-4df2-ac5f-29b38d08f0f3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000230_1d9c16bc-ed28-4df2-ac5f-29b38d08f0f3.png |
 | **POZO DEL PUEBLO (con gente)** — mujeres sacando agua en cántaros y charlando junto a un pozo de piedra, palmeras y casas (día) | `e6a5e830-32b2-411e-a014-0c7cb229428b` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000232_e6a5e830-32b2-411e-a014-0c7cb229428b.png |
+| **TEJADOS DE JERICÓ (al atardecer)** — azoteas planas con minifiguras secando lino y charlando, tendederos, cielo naranja-rosa sobre la muralla | `ea9deddb-f2a5-4c04-a117-4a93848f6dd8` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000556_ea9deddb-f2a5-4c04-a117-4a93848f6dd8.png |
+| **RÍO AL AMANECER** — el Jordán en calma con agua brillante, cañas y una barca, bruma rosa-dorada, una garza en la orilla | `f360fc08-f099-4326-a666-0a7bd6a7ac0d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000619_f360fc08-f099-4326-a666-0a7bd6a7ac0d.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -169,6 +178,7 @@
 | **CIELO DE TORMENTA (con rayos)** — nubarrones oscuros y rayos dorados sobre un horizonte tenue (16:9) | `f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235131_f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6.png |
 | **ATARDECER PÚRPURA** — degradados suaves de violeta, rosa y ámbar sobre un horizonte tenue y sereno (16:9) | `ae7e0824-6ffc-40e6-9125-bf7da6f5557c` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235501_ae7e0824-6ffc-40e6-9125-bf7da6f5557c.png |
 | **AMANECER BRUMOSO** — luz dorada pálida y lavanda difusa entre niebla baja sobre un horizonte tenue (16:9) | `4f12b581-13fc-4013-9002-abddcd53774e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000236_4f12b581-13fc-4013-9002-abddcd53774e.png |
+| **CIELO NOCTURNO CON COMETA** — cielo índigo-violeta con un cometa brillante cruzando las estrellas sobre dunas (16:9) | `f23e84b0-e545-47bd-82ad-5127072873be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_f23e84b0-e545-47bd-82ad-5127072873be.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
