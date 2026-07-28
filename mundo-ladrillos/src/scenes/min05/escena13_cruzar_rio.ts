@@ -24,6 +24,10 @@ export const escena13: Min05Scene = {
   noche: true,
   ambiente: 'river',
   spawn: { x: 0, z: -18 },
+  // BLOQUEANTE (nota #29): sin bounds propios, el runner ponía un tope en z≈+8 (spawn.z+26)
+  // → el jugador quedaba clavado a media travesía y NO podía llegar a la otra orilla (z>18).
+  // Con estos bounds cubre desde la orilla de salida (z=-18) hasta pasada la meta (z=26).
+  bounds: { minX: -26, maxX: 26, minZ: -24, maxZ: 28 },
   objetivo: { tipo: 'cruzar', texto: 'Cruza el puente de cuerda manteniendo el equilibrio', target: { x: 0, z: 20 }, radio: 4 },
   exito: '¡Al otro lado, sanos y secos!',
   camara: { yaw: Math.PI, pitch: 0.28, dist: 30 },
@@ -39,7 +43,11 @@ export const escena13: Min05Scene = {
 
     const river = buildRiver(plastic, 70, 22, 0, 4); group.add(river.group);
 
-    const rope = new RopeCrossing(plastic, -6, 14, { amp: 1.6, safeHalf: 1.7 });
+    // Equilibrio AMABLE para peques (nota #30: la ayuda facilita, no regala): el vaivén se
+    // ve y se siente, pero el margen para caer es holgado → cruzar es siempre posible con
+    // solo avanzar, y solo cae quien se desvía MUCHo a propósito. (antes amp1.6/safe1.7 casi
+    // igualados → caídas en bucle que parecían "no se puede cruzar").
+    const rope = new RopeCrossing(plastic, -6, 14, { amp: 1.3, safeHalf: 2.4 });
     group.add(rope.group);
     // faroles en los postes de amarre + faroles a media travesía (P3: camino con luz)
     const lanterns = [
