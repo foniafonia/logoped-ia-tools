@@ -1,0 +1,19 @@
+#!/bin/sh
+# Guardarraíl (regla de oro nº5): impide commitear MATERIAL PRIVADO de la peli.
+# Bloquea SOLO las claves privadas (narración/voz/vídeo/fondos), no los SFX libres
+# (shofar/rumble/din/shout) que sí van en el repo. Se comprueba la versión EN EL INDEX.
+fail=0
+# clips.ts: claves privadas de voz/narración con data-URI
+if git show ":mundo-ladrillos/src/audio/clips.ts" 2>/dev/null | grep -qE '"(narracion_min[0-9-]*|voz_[0-9]+|m0510_[a-z0-9_]+)"[[:space:]]*:[[:space:]]*"data:audio'; then
+  echo "🚫 clips.ts lleva NARRACIÓN/VOZ privada. Restaura: git checkout mundo-ladrillos/src/audio/clips.ts"; fail=1
+fi
+# intro.ts: vídeo de la peli
+if git show ":mundo-ladrillos/src/video/intro.ts" 2>/dev/null | grep -qE 'data:video/[a-z0-9]+;base64,[A-Za-z0-9+/]{200,}'; then
+  echo "🚫 intro.ts lleva el VÍDEO privado. Restaura: git checkout mundo-ladrillos/src/video/intro.ts"; fail=1
+fi
+# fondos.ts: imágenes/fotogramas de la peli
+if git show ":mundo-ladrillos/src/story/fondos.ts" 2>/dev/null | grep -qE 'data:image/[a-z0-9.+-]+;base64,[A-Za-z0-9+/]{200,}'; then
+  echo "🚫 fondos.ts lleva FOTOGRAMAS privados. Restaura: git checkout mundo-ladrillos/src/story/fondos.ts"; fail=1
+fi
+if [ "$fail" = "1" ]; then echo "Commit abortado por el guardarraíl de material privado."; exit 1; fi
+exit 0

@@ -18,7 +18,9 @@ explícito del usuario**.
    "bloques", "minifigura").
 5. 🔒 El **material de la peli** (audio, fotogramas) es **PRIVADO**: jamás al repo.
    `clips.ts` y `fondos.ts` van **vacíos/libres** en el repo; se rellenan solo para
-   entregas.
+   entregas. **Guardarraíl:** hay un hook en `.githooks/pre-commit` que BLOQUEA
+   commitear narración/voz/vídeo/fotogramas privados. Actívalo en cada clon con:
+   `git config core.hooksPath .githooks`
 
 ## Coordinación (producción por minutos, en paralelo)
 - **Los hilos NO comparten chat; solo el repo.** Comunícate por el **tablón**:

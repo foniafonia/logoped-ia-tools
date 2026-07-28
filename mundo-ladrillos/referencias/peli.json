@@ -1,5 +1,5 @@
 {
-  "pelicula": "Construyendo la Conquista de Israel (Estilo Ladrillos LEGO)",
+  "pelicula": "Construyendo la Conquista de Israel (Estilo Ladrillos)",
   "duracion_seg": 1750,
   "personajes": [
     {
@@ -34,7 +34,7 @@
       "objetos": [
         "Saco de dormir de tela",
         "Cuerda de amarre",
-        "Carnero / Cabra de LEGO"
+        "Carnero / Cabra de ladrillos"
       ],
       "notes": "Personaje recurrente que sufre accidentes con su camello sobrecargado, lodo y tesoros"
     },
@@ -70,7 +70,7 @@
       "barba": "Barba corta marrón claro con bigote fino",
       "objetos": [
         "Cuerda de escape",
-        "Vaso de LEGO con café",
+        "Vaso de ladrillos con café",
         "Escudo redondo de bronce"
       ],
       "notes": "Uno de los dos espías enviados a Jericó"
@@ -88,7 +88,7 @@
       "tocado": "Turbante de viaje marrón claro; luego cambia a pasamontañas gris oscuro con visor",
       "barba": "Afeitado, cara juvenil con expresión de concentración",
       "objetos": [
-        "Espada corta de LEGO",
+        "Espada corta de ladrillos",
         "Cuerda",
         "Telescopio de latón"
       ],
@@ -172,7 +172,7 @@
     {
       "id": "set_grabacion",
       "nombre": "Estudio de Cine de Ladrillos",
-      "descripcion": "Estudio con paredes grises acústicas con rejilla de LEGO. En el centro hay una mesa de control con computadora, micrófonos de jirafa, focos de iluminación profesional de ladrillos amarillos y negros, cámaras de cine sobre rieles y una claqueta en el suelo",
+      "descripcion": "Estudio con paredes grises acústicas con rejilla de ladrillos. En el centro hay una mesa de control con computadora, micrófonos de jirafa, focos de iluminación profesional de ladrillos amarillos y negros, cámaras de cine sobre rieles y una claqueta en el suelo",
       "arquitectura": "Estudio moderno cerrado con vigas técnicas aéreas expuestas",
       "hora_del_dia": "Interior / Noche",
       "luz": "Focalizada y artificial con focos colgantes directos",
@@ -232,7 +232,7 @@
     {
       "id": "murallas_jerico",
       "nombre": "Fortaleza y Puerta de Jericó",
-      "descripcion": "Inmensas murallas de ladrillo color beige con almenas y torres de vigilancia. Portón doble de madera reforzada con bisagras negras. Linternas y antorchas con fuegos de LEGO encendidos a los lados de la entrada",
+      "descripcion": "Inmensas murallas de ladrillo color beige con almenas y torres de vigilancia. Portón doble de madera reforzada con bisagras negras. Linternas y antorchas con fuegos de ladrillos encendidos a los lados de la entrada",
       "arquitectura": "Murallas de asedio masivas, torres cuadradas altas con ventanas arqueadas",
       "hora_del_dia": "Noche",
       "luz": "Oscuridad con puntos de luz focalizados de antorchas amarillas",
@@ -247,7 +247,7 @@
     {
       "id": "taberna_rahab",
       "nombre": "Interior del Restaurante de Rahab",
-      "descripcion": "Establecimiento acogedor con estanterías llenas de vasijas, tarros e ingredientes de LEGO. Mesas circulares con jarras transparentes llenas de café humeante (humo de algodón blanco). Un tapiz rústico colgando en la pared con un patrón geométrico",
+      "descripcion": "Establecimiento acogedor con estanterías llenas de vasijas, tarros e ingredientes de ladrillos. Mesas circulares con jarras transparentes llenas de café humeante (humo de algodón blanco). Un tapiz rústico colgando en la pared con un patrón geométrico",
       "arquitectura": "Interior de adobe con vigas de soporte de madera y techos de arco de medio punto",
       "hora_del_dia": "Noche",
       "luz": "Luz tenue e íntima proveniente de lámparas de aceite sobre las mesas",
@@ -277,7 +277,7 @@
     {
       "id": "rio_dividido",
       "nombre": "El Río Jordán Dividido",
-      "descripcion": "El cauce del río abierto por la mitad con dos paredes masivas verticales de agua azul translúcida donde se ven peces de colores de LEGO nadando atrapados. El fondo del río está seco y arenoso con conchas y coral de ladrillos",
+      "descripcion": "El cauce del río abierto por la mitad con dos paredes masivas verticales de agua azul translúcida donde se ven peces de colores de ladrillos nadando atrapados. El fondo del río está seco y arenoso con conchas y coral de ladrillos",
       "arquitectura": "Cañón sobrenatural de agua sostenida verticalmente",
       "hora_del_dia": "Día / Mañana",
       "luz": "Rayos de luz celestiales cayendo verticalmente sobre el cauce seco",
@@ -307,7 +307,7 @@
     {
       "id": "campos_cultivo",
       "nombre": "Tierras de Cultivo y Viñedos",
-      "descripcion": "Campos arados con surcos marrón oscuro donde crecen plantas jóvenes. Viñedos repletos de uvas moradas y verdes de LEGO en canastas de mimbre. Al fondo fluye un río serpenteante rodeado de colinas verdes",
+      "descripcion": "Campos arados con surcos marrón oscuro donde crecen plantas jóvenes. Viñedos repletos de uvas moradas y verdes de ladrillos en canastas de mimbre. Al fondo fluye un río serpenteante rodeado de colinas verdes",
       "arquitectura": "Terrazas agrícolas de ladrillos con casas de campo sencillas",
       "hora_del_dia": "Amanecer dorado",
       "luz": "Luz rasante del amanecer que resalta los cultivos",
@@ -331,7 +331,7 @@
       "personajes_presentes": [],
       "accion_visual": "Aparece el logo de Tula.tv en un fondo de chispas doradas. Luego corta a un pergamino de la Torá hecho completamente de ladrillos que se despliega revelando letras de colores que deletrean el título y dedicatorias",
       "props": [
-        "Pergamino de Torá de LEGO",
+        "Pergamino de Torá de ladrillos",
         "Platos de comida festiva tradicionales de fondo"
       ],
       "texto_en_pantalla": "UNA PRODUCCIÓN DE TuIA.tv - R. AMRAM ANIDJAR / CONSTRUYENDO LA CONQUISTA DE ISRAEL - PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD SHEVET AHIM - PANAMÁ",
@@ -380,7 +380,7 @@
       "accion_visual": "Cámara aérea en movimiento rápido recorre el camino arenoso del desierto hasta revelar un inmenso campamento militar con tiendas de campaña y fogatas que se extiende hasta perderse de vista",
       "props": [
         "Tiendas de campaña de tela",
-        "Fogatas de LEGO"
+        "Fogatas de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -425,13 +425,13 @@
       "personajes_presentes": [
         "beduino"
       ],
-      "accion_visual": "Montaje de personas empacando el campamento. El Beduino intenta enrollar sábanas y atarlas al lomo de su camello. Tres figuras de jóvenes israelitas enrollan una larga cuerda de LEGO. Un grupo da de beber a asnos y camellos de un bebedero largo",
+      "accion_visual": "Montaje de personas empacando el campamento. El Beduino intenta enrollar sábanas y atarlas al lomo de su camello. Tres figuras de jóvenes israelitas enrollan una larga cuerda de ladrillos. Un grupo da de beber a asnos y camellos de un bebedero largo",
       "props": [
         "Sábanas de fieltro",
-        "Cuerda de LEGO",
+        "Cuerda de ladrillos",
         "Bebedero largo con agua azul",
-        "Asnos de LEGO",
-        "Camello de LEGO"
+        "Asnos de ladrillos",
+        "Camello de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -453,7 +453,7 @@
       "accion_visual": "Cuatro niños israelíes cargan alegres canastas de mimbre repletas de panes redondos y rollos de tela mientras avanzan frente al Tabernáculo",
       "props": [
         "Canastas",
-        "Panes de LEGO",
+        "Panes de ladrillos",
         "Rollos de tela"
       ],
       "texto_en_pantalla": null,
@@ -478,9 +478,9 @@
       "accion_visual": "El Beduino sobrecarga la espalda de su camello con vasijas de plata, alfombras y una caja enorme. El camello lo mira disgustado, empieza a temblar y de repente toda la carga colapsa y explota en una nube de polvo gris, dejando al Beduino aplastado y enojado mientras una cabra se burla",
       "props": [
         "Vasijas de plata",
-        "Caja de madera de LEGO",
+        "Caja de madera de ladrillos",
         "Efecto de humo de explosión",
-        "Cabra de LEGO"
+        "Cabra de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -501,7 +501,7 @@
       "personajes_presentes": [],
       "accion_visual": "Gran caravana de israelíes, camellos y carretas cargadas de equipaje avanza en línea cruzando las dunas del desierto bajo el sol brillante",
       "props": [
-        "Carretas de madera de LEGO",
+        "Carretas de madera de ladrillos",
         "Camellos cargados"
       ],
       "texto_en_pantalla": null,
@@ -525,8 +525,8 @@
       ],
       "accion_visual": "Yehoshua parado de espaldas frente a la multitud observa el gran río Jordán que fluye caudaloso. Al otro lado se destaca la inmensa fortaleza amurallada de Jericó rodeada de palmeras",
       "props": [
-        "Río azul de LEGO",
-        "Palmeras de LEGO",
+        "Río azul de ladrillos",
+        "Palmeras de ladrillos",
         "Silueta de Jericó"
       ],
       "texto_en_pantalla": null,
@@ -574,7 +574,7 @@
       "personajes_presentes": [],
       "accion_visual": "Vista nocturna espectacular de las murallas de Jericó con sus torres iluminadas con antorchas encendidas y las ventanas con luz cálida",
       "props": [
-        "Antorchas de fuego de LEGO",
+        "Antorchas de fuego de ladrillos",
         "Muros beige de Jericó"
       ],
       "texto_en_pantalla": null,
@@ -626,7 +626,7 @@
       "accion_visual": "Bajo la noche estrellada, los espías cruzan sigilosamente el río deslizándose colgados de las manos de una cuerda tensa amarrada de orilla a orilla sobre el agua que corre turbulenta",
       "props": [
         "Cuerda de escape larga",
-        "Ladrillos de agua azul oscuro de LEGO",
+        "Ladrillos de agua azul oscuro de ladrillos",
         "Rocas grises"
       ],
       "texto_en_pantalla": null,
@@ -654,7 +654,7 @@
         "Antorchas",
         "Lanzas de metal",
         "Escudo redondo",
-        "Arbustos de LEGO"
+        "Arbustos de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -703,7 +703,7 @@
       ],
       "accion_visual": "Los guardias se dan cuenta de la mentira del 'avión' y caminan de vuelta por las calles internas de Jericó portando un farol, hablando de que los espías de Israel deben de estar cerca",
       "props": [
-        "Farol de mano metálico de LEGO",
+        "Farol de mano metálico de ladrillos",
         "Lanzas de metal"
       ],
       "texto_en_pantalla": null,
@@ -726,10 +726,10 @@
         "guardia_jerico_jefe",
         "guardia_jerico_comun"
       ],
-      "accion_visual": "Primer plano del suelo arenoso de Jericó mostrando marcas de huellas de pies descalzos de LEGO. El jefe de la guardia apunta con su linterna, grita '¡Huellas!' y salen corriendo con pánico y entusiasmo buscando intrusos",
+      "accion_visual": "Primer plano del suelo arenoso de Jericó mostrando marcas de huellas de pies descalzos de ladrillos. El jefe de la guardia apunta con su linterna, grita '¡Huellas!' y salen corriendo con pánico y entusiasmo buscando intrusos",
       "props": [
         "Placa de arena con marcas de huellas",
-        "Farol de mano de LEGO"
+        "Farol de mano de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -780,7 +780,7 @@
       ],
       "accion_visual": "Los espías entran en la taberna y se sientan en la barra. Rahab los recibe de manera atenta y amable. Ellos ordenan un café y un expresso doble",
       "props": [
-        "Estanterías con botellas de LEGO",
+        "Estanterías con botellas de ladrillos",
         "Tazas de barro",
         "Varios clientes cenando al fondo"
       ],
@@ -833,7 +833,7 @@
       ],
       "accion_visual": "El espía negro le revela susurrando a Rahab que son emisarios de Israel enviados por Josué. Le piden que los esconda y a cambio le juran por Dios salvar su vida y darle una gran recompensa cuando conquisten Jericó",
       "props": [
-        "Vasos de LEGO humeantes con café"
+        "Vasos de ladrillos humeantes con café"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -858,7 +858,7 @@
       ],
       "accion_visual": "Rahab acepta de prisa ayudarlos y los manda esconderse. En ese instante, los guardias irrumpen ruidosamente pateando la puerta. El jefe exige saber dónde están los extranjeros",
       "props": [
-        "Puerta de madera abatible de LEGO",
+        "Puerta de madera abatible de ladrillos",
         "Lámparas colgantes de aceite"
       ],
       "texto_en_pantalla": null,
@@ -886,9 +886,9 @@
       "accion_visual": "Montaje de los escondites graciosos. El espía negro se oculta pegado a la pared detrás del tapiz del letrero de Rahab. El espía gris se esconde en una esquina metido dentro de una gran maceta de barro con plantas, usando una maceta pequeña boca abajo en su cabeza como camuflaje. Los guardias los buscan de cerca de manera inútil",
       "props": [
         "Tapestry de tela de Rahab",
-        "Maceteros de barro grandes de LEGO",
+        "Maceteros de barro grandes de ladrillos",
         "Plantas artificiales verdes",
-        "Moscas de LEGO volando"
+        "Moscas de ladrillos volando"
       ],
       "texto_en_pantalla": "RESTAURANTE DE RAHAB",
       "paleta": [
@@ -914,7 +914,7 @@
       "accion_visual": "Rahab miente sonriente a los guardias con calma, señalando con su dedo hacia afuera de la posada asegurando que los hombres sospechosos huyeron hacia la orilla del río. Los guardias salen corriendo gritando '¡Vamos al río!'",
       "props": [
         "Barra de madera",
-        "Vasos vacíos de LEGO"
+        "Vasos vacíos de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -964,8 +964,8 @@
       ],
       "accion_visual": "Reunidos en el balcón que da hacia el exterior de las murallas, Rahab les confiesa que sabe que su Dios es el único Dios verdadero y que les ha otorgado milagros inmensos desde Egipto. Ella pide ser parte del pueblo de Israel",
       "props": [
-        "Mapa de Jericó de pergamino de LEGO sobre la mesa",
-        "Lámpara de aceite encendida de LEGO",
+        "Mapa de Jericó de pergamino de ladrillos sobre la mesa",
+        "Lámpara de aceite encendida de ladrillos",
         "Balcón de madera"
       ],
       "texto_en_pantalla": null,
@@ -990,7 +990,7 @@
       ],
       "accion_visual": "El espía negro le entrega a Rahab un cordón rojo brillante de lana y le indica que debe atarlo fuertemente en el marco de la ventana del balcón. Ese cordón será la señal sagrada para que las tropas israelíes perdonen la vida de todos los que estén dentro",
       "props": [
-        "Cordón de lana roja brillante de LEGO"
+        "Cordón de lana roja brillante de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1013,10 +1013,10 @@
         "espia_gris",
         "rahab"
       ],
-      "accion_visual": "Rahab les ayuda a descender por fuera de la muralla atando cuerdas de LEGO. Los espías van bajando lentamente en silencio y al tocar tierra firme saludan y escapan corriendo con sigilo por la calle del pueblo de abajo",
+      "accion_visual": "Rahab les ayuda a descender por fuera de la muralla atando cuerdas de ladrillos. Los espías van bajando lentamente en silencio y al tocar tierra firme saludan y escapan corriendo con sigilo por la calle del pueblo de abajo",
       "props": [
-        "Cuerdas de LEGO de color marrón",
-        "Farol de pared encendido de LEGO"
+        "Cuerdas de ladrillos de color marrón",
+        "Farol de pared encendido de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1040,7 +1040,7 @@
       ],
       "accion_visual": "Los dos espías corren de noche cruzando un bosque espeso de pinos de bloques verdes y luego cruzan de vuelta el río Jordán tomados de la cuerda con gran agilidad salpicando agua",
       "props": [
-        "Pinos de LEGO verdes y marrones",
+        "Pinos de ladrillos verdes y marrones",
         "Cuerda de río",
         "Efecto de agua salpicada de ladrillos blancos"
       ],
@@ -1069,7 +1069,7 @@
       "props": [
         "Tienda de campaña grande",
         "Alfombra tejida",
-        "Cofres de madera de LEGO"
+        "Cofres de madera de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1092,7 +1092,7 @@
       ],
       "accion_visual": "Los dos espías hacen un saludo militar firme. Josué, parado triunfante de espaldas a su tienda iluminada por la luna, declara solemnemente que con ayuda divina heredarán la tierra prometida y manda reunir el gran ejército",
       "props": [
-        "Linterna de aceite rústica de LEGO",
+        "Linterna de aceite rústica de ladrillos",
         "Postes de madera"
       ],
       "texto_en_pantalla": null,
@@ -1112,13 +1112,13 @@
       "escenario": "campamento_israel",
       "plano": "detalle",
       "personajes_presentes": [],
-      "accion_visual": "Montaje enérgico de preparación de guerra israelí. Soldados afilando espadas de bronce sobre piedras de amolar que giran, flechas de LEGO siendo ordenadas en carcaj, guerreros marchando en formación con escudos con patrones grabados y templando arcos",
+      "accion_visual": "Montaje enérgico de preparación de guerra israelí. Soldados afilando espadas de bronce sobre piedras de amolar que giran, flechas de ladrillos siendo ordenadas en carcaj, guerreros marchando en formación con escudos con patrones grabados y templando arcos",
       "props": [
-        "Espadas de bronce de LEGO",
+        "Espadas de bronce de ladrillos",
         "Piedras de amolar",
-        "Flechas de LEGO",
+        "Flechas de ladrillos",
         "Arcos de madera",
-        "Escudos grabados redondos de LEGO",
+        "Escudos grabados redondos de ladrillos",
         "Hogueras"
       ],
       "texto_en_pantalla": null,
@@ -1142,9 +1142,9 @@
       ],
       "accion_visual": "El Sacerdote (Cohen Gadol) reúne a los levitas en una carpa y ordena preparar los Shofarot de cuerno. Montaje de sacerdotes tallando, puliendo y lijando los cuernos curvos de madera. Escena cómica de un carnero que huye asustado de los sacerdotes que lo persiguen para sacarle el Shofar. Un sacerdote prueba un gran Shofar soplando y emitiendo un sonido grave y vibrante",
       "props": [
-        "Mesa de taller con cinceles y herramientas de LEGO",
+        "Mesa de taller con cinceles y herramientas de ladrillos",
         "Shofarot terminados y en proceso de madera",
-        "Carnero de LEGO",
+        "Carnero de ladrillos",
         "Cuerda de captura"
       ],
       "texto_en_pantalla": null,
@@ -1167,12 +1167,12 @@
         "cohen_gadol",
         "yehoshua"
       ],
-      "accion_visual": "¡Gran escena espectacular! Los sacerdotes con túnicas ceremoniales blancas y cargando en hombros el Arca de la Alianza de oro brillante entran en el río Jordán. Al instante, las aguas se dividen verticalmente creando dos gigantescas paredes de agua translúcida a los lados. Se ve a los israelíes, liderados por Josué, cruzando asombrados por el cauce seco viendo peces multicolores de LEGO en el agua",
+      "accion_visual": "¡Gran escena espectacular! Los sacerdotes con túnicas ceremoniales blancas y cargando en hombros el Arca de la Alianza de oro brillante entran en el río Jordán. Al instante, las aguas se dividen verticalmente creando dos gigantescas paredes de agua translúcida a los lados. Se ve a los israelíes, liderados por Josué, cruzando asombrados por el cauce seco viendo peces multicolores de ladrillos en el agua",
       "props": [
-        "Arca de la Alianza de oro brillante de LEGO con barras",
+        "Arca de la Alianza de oro brillante de ladrillos con barras",
         "Ladrillos de agua azul translúcidos gigantes",
-        "Peces de colores de LEGO (rojo, verde, amarillo, azul)",
-        "Corales de LEGO y conchas en el cauce seco"
+        "Peces de colores de ladrillos (rojo, verde, amarillo, azul)",
+        "Corales de ladrillos y conchas en el cauce seco"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1193,10 +1193,10 @@
       "personajes_presentes": [
         "beduino"
       ],
-      "accion_visual": "El Beduino cómico se queda atascado hasta la cintura en un lodazal marrón de bloques LEGO sueltos. Pide ayuda con furia mientras su carnero lo mira fijamente con tranquilidad y luego huye corriendo, dejándolo atrás gritando",
+      "accion_visual": "El Beduino cómico se queda atascado hasta la cintura en un lodazal marrón de bloques ladrillos sueltos. Pide ayuda con furia mientras su carnero lo mira fijamente con tranquilidad y luego huye corriendo, dejándolo atrás gritando",
       "props": [
         "Placa de lodo marrón con bloques sueltos",
-        "Carnero de LEGO"
+        "Carnero de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1243,7 +1243,7 @@
       "personajes_presentes": [
         "yehoshua"
       ],
-      "accion_visual": "¡Clímax del asedio! En el séptimo día, tras rodear Jericó siete veces, todos los israelíes gritan con fuerza y los Shofares tocan un gran sonido continuo. Las colosales murallas beige de Jericó se agrietan y se derrumban estrepitosamente, rompiéndose y separándose en miles de bloques individuales de LEGO en un estallido de polvo. Los asustados guardias salen huyendo",
+      "accion_visual": "¡Clímax del asedio! En el séptimo día, tras rodear Jericó siete veces, todos los israelíes gritan con fuerza y los Shofares tocan un gran sonido continuo. Las colosales murallas beige de Jericó se agrietan y se derrumban estrepitosamente, rompiéndose y separándose en miles de bloques individuales de ladrillos en un estallido de polvo. Los asustados guardias salen huyendo",
       "props": [
         "Murallas colapsables de Jericó",
         "Efecto de desmoronamiento de ladrillos",
@@ -1270,7 +1270,7 @@
       "props": [
         "Espadas de bronce",
         "Lanzas de metal",
-        "Escombros de LEGO beige"
+        "Escombros de ladrillos beige"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1319,7 +1319,7 @@
       "accion_visual": "El resto de las construcciones internas de Jericó colapsan en escombros humeantes, dejando solo cenizas y restos de piedra",
       "props": [
         "Postes caídos",
-        "Efectos de fuego con fuegos de LEGO",
+        "Efectos de fuego con fuegos de ladrillos",
         "Humo negro de algodón"
       ],
       "texto_en_pantalla": null,
@@ -1367,9 +1367,9 @@
       ],
       "accion_visual": "El Beduino cómico encuentra cofres llenos de rubíes y gemas de colores. Al intentar guardarlas en su saco ignorando la orden de Josué, su carnero lo embiste por detrás de un cabezazo, haciéndole soltar las gemas y quedar enterrado en escombros",
       "props": [
-        "Cofre de tesoro de LEGO",
-        "Rubíes y gemas translúcidas de colores de LEGO",
-        "Carnero de LEGO",
+        "Cofre de tesoro de ladrillos",
+        "Rubíes y gemas translúcidas de colores de ladrillos",
+        "Carnero de ladrillos",
         "Saco"
       ],
       "texto_en_pantalla": null,
@@ -1417,8 +1417,8 @@
       ],
       "accion_visual": "Josué junto a sus comandantes planea la estrategia de batalla sobre una mesa de madera con un mapa dibujado. Explica la estrategia de simular una huida desorganizada para sacar a las tropas enemigas de Hai y emboscarlas por detrás",
       "props": [
-        "Mesa rústica con mapa táctico de LEGO",
-        "Banderas pequeñas de LEGO",
+        "Mesa rústica con mapa táctico de ladrillos",
+        "Banderas pequeñas de ladrillos",
         "Vela encendida"
       ],
       "texto_en_pantalla": "ROAD TO HAI / CITY OF HAI / ISRAELITE CAMP - GILGAL / POTENTIAL AMBUSH POSITIONS",
@@ -1440,8 +1440,8 @@
       "personajes_presentes": [],
       "accion_visual": "Un niño israelí espía la reunión militar oculto debajo de la mesa de Josué. Luego sale corriendo gateando de prisa hacia una fogata cercana donde están reunidos otros tres niños para contarles todo el plan estratégico en secreto",
       "props": [
-        "Mesa de madera de LEGO",
-        "Farol de pie de LEGO",
+        "Mesa de madera de ladrillos",
+        "Farol de pie de ladrillos",
         "Fogata pequeña"
       ],
       "texto_en_pantalla": null,
@@ -1461,14 +1461,14 @@
       "escenario": "campamento_israel",
       "plano": "medio",
       "personajes_presentes": [],
-      "accion_visual": "Montaje divertido de los niños preparándose para su propia 'misión secreta'. Uno se ata cuerdas de LEGO alrededor de su cuerpo, otro baña manzanas de LEGO con miel usando pinceles, otro dibuja caras aterradoras de monstruos en máscaras de madera de LEGO usando pinturas de colores. Otro grupo carga cubetas pesadas llenas de agua y lodo",
+      "accion_visual": "Montaje divertido de los niños preparándose para su propia 'misión secreta'. Uno se ata cuerdas de ladrillos alrededor de su cuerpo, otro baña manzanas de ladrillos con miel usando pinceles, otro dibuja caras aterradoras de monstruos en máscaras de madera de ladrillos usando pinturas de colores. Otro grupo carga cubetas pesadas llenas de agua y lodo",
       "props": [
-        "Cuerda de LEGO",
-        "Manzanas rojas de LEGO",
+        "Cuerda de ladrillos",
+        "Manzanas rojas de ladrillos",
         "Potes de miel",
-        "Máscaras de monstruos de LEGO",
+        "Máscaras de monstruos de ladrillos",
         "Frascos de pintura de colores con etiquetas ('paint')",
-        "Cubetas de madera de LEGO con agua azul y lodo marrón"
+        "Cubetas de madera de ladrillos con agua azul y lodo marrón"
       ],
       "texto_en_pantalla": "paint",
       "paleta": [
@@ -1493,7 +1493,7 @@
       "props": [
         "Antorchas",
         "Portón de Hai",
-        "Caballos de LEGO de color negro y marrón"
+        "Caballos de ladrillos de color negro y marrón"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1514,9 +1514,9 @@
       "personajes_presentes": [],
       "accion_visual": "En la colina de roca de Hai, los soldados que estaban escondidos de Israel asoman tras la colina bajo una luna llena enorme portando espadas y atacando al confiado ejército de Hai de regreso por el desfiladero",
       "props": [
-        "Luna llena de fondo de LEGO",
+        "Luna llena de fondo de ladrillos",
         "Espadas",
-        "Antorchas de fuego de LEGO"
+        "Antorchas de fuego de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1539,7 +1539,7 @@
       "props": [
         "Manzanas cubiertas de miel",
         "Cubetas de agua espumosa",
-        "Máscaras de monstruos de arcilla de LEGO"
+        "Máscaras de monstruos de arcilla de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1558,11 +1558,11 @@
       "escenario": "campo_batalla_hai",
       "plano": "medio",
       "personajes_presentes": [],
-      "accion_visual": "Celebración de la victoria sobre Hai alrededor de una inmensa fogata nocturna. Los israelíes bailan alegres cantando 'Am Israel Chai', tocan tambores de ladrillo y brindan chocando sus tazas de LEGO de manera festiva",
+      "accion_visual": "Celebración de la victoria sobre Hai alrededor de una inmensa fogata nocturna. Los israelíes bailan alegres cantando 'Am Israel Chai', tocan tambores de ladrillo y brindan chocando sus tazas de ladrillos de manera festiva",
       "props": [
-        "Fogata inmensa de LEGO",
-        "Panderos y tambores de LEGO",
-        "Tazas transparentes de LEGO"
+        "Fogata inmensa de ladrillos",
+        "Panderos y tambores de ladrillos",
+        "Tazas transparentes de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1584,10 +1584,10 @@
         "yehoshua",
         "beduino"
       ],
-      "accion_visual": "El Beduino cómico celebra sonriente la victoria en el desierto. Josué, rodeado de los jefes de las doce tribus de Israel alrededor del mapa del territorio, clava banderas de LEGO de distintos colores en las porciones asignadas a cada una",
+      "accion_visual": "El Beduino cómico celebra sonriente la victoria en el desierto. Josué, rodeado de los jefes de las doce tribus de Israel alrededor del mapa del territorio, clava banderas de ladrillos de distintos colores en las porciones asignadas a cada una",
       "props": [
         "Mapa grande de Israel",
-        "Banderas pequeñas de LEGO de colores (azul, verde, rojo, amarillo)"
+        "Banderas pequeñas de ladrillos de colores (azul, verde, rojo, amarillo)"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1606,13 +1606,13 @@
       "escenario": "campos_cultivo",
       "plano": "general",
       "personajes_presentes": [],
-      "accion_visual": "Montaje pacífico de asentamiento de las tribus. Los israelíes labran las tierras con bueyes que tiran de arados de madera, cavan hoyos con palas de LEGO para sembrar brotes verdes de uva, recolectan racimos morados de uvas en canastas de mimbre y siembran granos de trigo arrojándolos al surco labrado de tierra arenosa",
+      "accion_visual": "Montaje pacífico de asentamiento de las tribus. Los israelíes labran las tierras con bueyes que tiran de arados de madera, cavan hoyos con palas de ladrillos para sembrar brotes verdes de uva, recolectan racimos morados de uvas en canastas de mimbre y siembran granos de trigo arrojándolos al surco labrado de tierra arenosa",
       "props": [
-        "Pareja de bueyes de LEGO con yugo",
+        "Pareja de bueyes de ladrillos con yugo",
         "Arado de madera",
-        "Palas de LEGO",
-        "Racimos de uva de LEGO morados y verdes",
-        "Semillas de LEGO doradas",
+        "Palas de ladrillos",
+        "Racimos de uva de ladrillos morados y verdes",
+        "Semillas de ladrillos doradas",
         "Saco de granos"
       ],
       "texto_en_pantalla": null,
@@ -1632,11 +1632,11 @@
       "escenario": "campos_cultivo",
       "plano": "medio",
       "personajes_presentes": [],
-      "accion_visual": "Dos niños se despiden llorando con lágrimas transparentes de LEGO. Para consolarse, uno le regala un 'celulavaso' (teléfono hecho con dos vasos de plástico de LEGO atados con un hilo largo). Los niños se comunican alegres estirando el hilo largo cruzando colinas desérticas con sus tiendas",
+      "accion_visual": "Dos niños se despiden llorando con lágrimas transparentes de ladrillos. Para consolarse, uno le regala un 'celulavaso' (teléfono hecho con dos vasos de plástico de ladrillos atados con un hilo largo). Los niños se comunican alegres estirando el hilo largo cruzando colinas desérticas con sus tiendas",
       "props": [
-        "Vasos de plástico de LEGO",
+        "Vasos de plástico de ladrillos",
         "Hilo blanco largo",
-        "Ovejas de LEGO"
+        "Ovejas de ladrillos"
       ],
       "texto_en_pantalla": null,
       "paleta": [
@@ -1658,9 +1658,9 @@
         "rabino_director",
         "beduino"
       ],
-      "accion_visual": "Un camello de LEGO de pie hace un baile gracioso moviendo el cuello al ritmo de la música tradicional alegre de cierre. Reaparece el Rabino director en su estudio felicitando al Beduino que se muestra cansado pero alegre. Finaliza con los títulos de créditos flotando sobre el campamento de Shiló",
+      "accion_visual": "Un camello de ladrillos de pie hace un baile gracioso moviendo el cuello al ritmo de la música tradicional alegre de cierre. Reaparece el Rabino director en su estudio felicitando al Beduino que se muestra cansado pero alegre. Finaliza con los títulos de créditos flotando sobre el campamento de Shiló",
       "props": [
-        "Camello de LEGO",
+        "Camello de ladrillos",
         "Cámaras de estudio"
       ],
       "texto_en_pantalla": "PELÍCULA DONADA PARA HATZLAJA Y BERAJA DE LA COMUNIDAD - SHEVET AHIM - PANAMÁ / DIRECCIÓN R. AMRAM ANIDJAR / CREACIÓN DE IMAGEN Y EDICIÓN DE VIDEO YAAKOV LEON / SUPERVISIÓN Y CONTENIDO DAVID MIZRAHI - IDAN J. ANIDJAR - ISRAEL CORTES",
