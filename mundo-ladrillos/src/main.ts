@@ -702,7 +702,7 @@ function animate(now: number): void {
       : '👋 Ve a saludar a Yehoshúa');
     if (got >= camp.ropes.length) {
       ropesHechas = true; audio.sfxSuccess(); director.star();
-      director.logro('¡Cuerdas recogidas! Acércate a una oveja y pulsa 🪢 para tirar de la cuerda 🐑');
+      director.logro('¡Cuerdas recogidas! Acércate a una oveja y pulsa la tecla E (o el botón 🪢) para tirar de la cuerda 🐑');
       life.activarOvejas(); herdStart = now; setTarget(camp.ropes.length ? life.redil : null);
     }
   }
@@ -713,7 +713,7 @@ function animate(now: number): void {
     const queda = Math.max(0, HERD_LIMIT - elapsed);
     if (director.beatIndex === 4) {
       const reloj = queda > 0 ? `⏱ ${Math.ceil(queda)}s` : '⏱ ¡tú puedes!';
-      director.setObjetivo(`🐑 Acércate a una oveja y pulsa 🪢 para engancharla; llévala al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
+      director.setObjetivo(`🐑 Acércate a una oveja y pulsa E (o 🪢) para engancharla; llévala al redil (${enRedil}/${life.ovejasObjetivo}) · ${reloj}`);
     }
     if (enRedil >= life.ovejasObjetivo) {
       done.add('camp'); audio.sfxSuccess(); director.star();

@@ -59,7 +59,7 @@ interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
 interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; leashed?: boolean; leash?: THREE.Line; }
 
 // alcance (al cuadrado) para enganchar una oveja al pulsar el botón 🪢
-const GRAB_R2 = 16;   // ~4 m: generoso, que el peque no tenga que clavarse encima
+const GRAB_R2 = 25;   // ~5 m: bien generoso, que el peque no tenga que clavarse encima
 type Oficio = 'moler' | 'amasar' | 'alfarero' | 'sentado';
 interface Faena { fig: Minifigure; tipo: Oficio; ph: number; spin?: THREE.Object3D; }
 
@@ -112,7 +112,15 @@ export class CampLife {
 
     // --- Redil (corral de vallas) + 3 ovejas OBJETIVO para arrear ---
     this.buildPen();
-    for (const [sx, sz] of [[-19, 44], [-22, 49], [-17, 40]] as Array<[number, number]>) {
+    // Posiciones ALEATORIAS cada partida (petición del usuario), en la CORONA
+    // despejada alrededor del redil: fuera del corral (r≈5.4) y dentro de REDIL_CLEAR
+    // (camp.ts) → NUNCA caen dentro de una tienda. Separadas ~120° → no se amontonan.
+    const baseAng = Math.random() * Math.PI * 2;
+    for (let k = 0; k < 3; k++) {
+      const ang = baseAng + k * (Math.PI * 2 / 3) + (Math.random() - 0.5) * 0.7;
+      const rad = 8 + Math.random() * 4;   // 8–12 m: fuera del corral, dentro de la zona despejada
+      const sx = this.pen.x + Math.cos(ang) * rad;
+      const sz = this.pen.z + Math.sin(ang) * rad;
       const s = buildSheep(plastic);
       s.position.set(sx, 0, sz); s.rotation.y = Math.random() * Math.PI;
       const hint = hintArrow(0x7bed7b); hint.visible = false; s.add(hint);   // pista verde: "engancha ESTA oveja"
