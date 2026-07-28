@@ -94,9 +94,9 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
 
   const fx = setupPreciousRender(renderer, scene, camera, { ibl: false });
   const BLOOM_PRESET = {
-    day: { s: 0.30, r: 0.55, t: 0.88 },   // bloom de día al nivel del 0–5 (más cálido)
-    night: { s: 0.50, r: 0.70, t: 0.70 },
-    interior: { s: 0.34, r: 0.60, t: 0.82 }
+    day: { s: 0.21, r: 0.55, t: 0.91 },      // "precioso" −30% (glow): día 0.30→0.21, umbral 0.88→0.91
+    night: { s: 0.35, r: 0.70, t: 0.74 },    // noche 0.50→0.35
+    interior: { s: 0.24, r: 0.60, t: 0.86 }  // interior 0.34→0.24
   } as const;
   function applyBloom(mood: 'day' | 'night' | 'interior'): void {
     const b = BLOOM_PRESET[mood]; const k = fx.lite ? 0.72 : 1;
@@ -109,7 +109,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   // === "PRECIOSO" a nivel 0–5: el plástico REFLEJA el IBL (clearcoat + más reflejo).
   // Faltaba en el runner (por eso los tramos se veían mates/planos frente al 0–5).
   // Gated a desktop (en móvil el IBL va apagado). Sube los 4 tramos de golpe. ===
-  if (!fx.lite) plastic.update({ roughness: 0.28, clearcoat: 0.6, envMapIntensity: 1.5 });
+  if (!fx.lite) plastic.update({ roughness: 0.34, clearcoat: 0.42, envMapIntensity: 1.05 });   // reflejos/brillo −30% (consistente con el 0-5)
   const sound = new SoundEngine();
   sound.init();   // el clic de "seguir" del 0–5 ya es un gesto → desbloquea el audio
 
@@ -139,7 +139,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     const mundo = def.mundo;
     if (mundo === 'interior') {                                   // min10: interior de la taberna
       ground.visible = false; horizon.group.visible = false; nightSky.visible = false;
-      scene.environment = envTex; renderer.toneMappingExposure = 1.15;
+      scene.environment = envTex; renderer.toneMappingExposure = 1.06;
       scene.background = new THREE.Color(0x14100a);
       scene.fog = new THREE.Fog(0x14100a, 34, 74);
       hemi.color.setHex(0xffd9a0); hemi.groundColor.setHex(0x2a1c10); hemi.intensity = 0.5;
@@ -149,7 +149,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     }
     if (mundo === 'calle-noche') {                                // min10: calle nocturna (mercado)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
-      scene.environment = null; renderer.toneMappingExposure = 1.2;
+      scene.environment = null; renderer.toneMappingExposure = 1.1;
       scene.background = new THREE.Color(0x102138);
       scene.fog = new THREE.Fog(0x162943, 60, 250);
       hemi.color.setHex(0x4c6690); hemi.groundColor.setHex(0x2a2a2a); hemi.intensity = 1.05;
@@ -161,7 +161,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     }
     if (mundo === 'campamento' || mundo === 'taller') {           // min15: campamento militar / taller (noche cálida)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
-      scene.environment = null; renderer.toneMappingExposure = 1.15;
+      scene.environment = null; renderer.toneMappingExposure = 1.06;
       scene.background = new THREE.Color(0x161020);
       scene.fog = new THREE.Fog(0x161020, 40, 120);
       hemi.color.setHex(0xffd9a0); hemi.groundColor.setHex(0x2a1c10); hemi.intensity = 0.7;
@@ -172,7 +172,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     }
     if (mundo === 'balcon' || mundo === 'monte') {                // min15: balcón sobre la muralla / monte (noche azul)
       ground.visible = true; horizon.group.visible = true; nightSky.visible = true;
-      scene.environment = null; renderer.toneMappingExposure = 1.2;
+      scene.environment = null; renderer.toneMappingExposure = 1.1;
       scene.background = new THREE.Color(0x0d1a30);
       scene.fog = new THREE.Fog(0x122238, 70, 260);
       hemi.color.setHex(0x4c6690); hemi.groundColor.setHex(0x1a1a22); hemi.intensity = 1.0;
@@ -188,7 +188,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     const street = amb === 'street';
     ground.visible = !interior; horizon.group.visible = !interior;
     if (interior) {
-      scene.environment = null; renderer.toneMappingExposure = 1.12;
+      scene.environment = null; renderer.toneMappingExposure = 1.03;
       scene.background = new THREE.Color(0x140f0a);
       scene.fog = new THREE.Fog(0x140f0a, 22, 72);
       hemi.color.setHex(0x7a5636); hemi.groundColor.setHex(0x1a1006); hemi.intensity = 0.28;
@@ -197,7 +197,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       applyBloom('interior'); if (sound.ready) sound.setAmbience('night'); return;
     }
     if (noche) {
-      scene.environment = null; renderer.toneMappingExposure = 1.2;
+      scene.environment = null; renderer.toneMappingExposure = 1.1;
       scene.background = new THREE.Color(0x102138);
       scene.fog = new THREE.Fog(0x162943, 60, 250);
       hemi.color.setHex(0x466288); hemi.groundColor.setHex(0x172433); hemi.intensity = 0.95;
@@ -208,7 +208,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       groundMat.emissive.setHex(0x0a1320); groundMat.needsUpdate = true;
       applyBloom('night'); if (sound.ready) sound.setAmbience(street ? 'street' : 'night'); return;
     }
-    scene.environment = envTex; renderer.toneMappingExposure = 1.05;
+    scene.environment = envTex; renderer.toneMappingExposure = 0.98;
     scene.background = horizon.daySky;
     scene.fog = new THREE.Fog(horizon.horizonColor, 70, 360);
     hemi.color.setHex(0xffe9c0); hemi.groundColor.setHex(0xa9895f); hemi.intensity = 0.55;
