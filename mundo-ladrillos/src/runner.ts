@@ -93,7 +93,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
 
   const fx = setupPreciousRender(renderer, scene, camera, { ibl: false });
   const BLOOM_PRESET = {
-    day: { s: 0.20, r: 0.50, t: 0.92 },
+    day: { s: 0.30, r: 0.55, t: 0.88 },   // bloom de día al nivel del 0–5 (más cálido)
     night: { s: 0.50, r: 0.70, t: 0.70 },
     interior: { s: 0.34, r: 0.60, t: 0.82 }
   } as const;
@@ -105,6 +105,10 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   }
 
   const plastic = new PlasticMaterialFactory();
+  // === "PRECIOSO" a nivel 0–5: el plástico REFLEJA el IBL (clearcoat + más reflejo).
+  // Faltaba en el runner (por eso los tramos se veían mates/planos frente al 0–5).
+  // Gated a desktop (en móvil el IBL va apagado). Sube los 4 tramos de golpe. ===
+  if (!fx.lite) plastic.update({ roughness: 0.28, clearcoat: 0.6, envMapIntensity: 1.5 });
   const sound = new SoundEngine();
   sound.init();   // el clic de "seguir" del 0–5 ya es un gesto → desbloquea el audio
 
