@@ -135,6 +135,9 @@
 | **ANCLA DE PIEDRA** — ancla de piedra perforada con una cuerda pasada por el agujero (navegación) | `00e045ae-dcff-48dc-b253-2126060c303e` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065543_00e045ae-dcff-48dc-b253-2126060c303e.png |
 | **ÁBACO** — tablero de cuentas de madera con hileras de cuentas de barro (mercader/cálculo) | `162e8c27-ad8e-437f-8485-7f11d9852437` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065545_162e8c27-ad8e-437f-8485-7f11d9852437.png |
 | **PESA DE TELAR** — pesa de barro en forma de rosca con agujero y marca estampada (tejido) | `63d2eea8-c9e9-42ba-9084-b686438c05fd` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065617_63d2eea8-c9e9-42ba-9084-b686438c05fd.png |
+| **HUSILLO** — huso de mano de madera con fusayola de barro e hilo enrollado (hilar) | `691e5cea-1374-4d5c-91a6-8a6df89228c1` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071352_691e5cea-1374-4d5c-91a6-8a6df89228c1.png |
+| **RASTRILLO** — rastrillo de madera con púas talladas y mango largo, algo de paja (agricultura) | `b1b1b932-2d8c-4851-9629-c51284186328` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071353_b1b1b932-2d8c-4851-9629-c51284186328.png |
+| **VELA DE BARCO** — vela triangular de lino recogida en una verga de madera con jarcia (navegación) | `641c255d-2898-4d44-b559-0a2a4e74bd12` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071422_641c255d-2898-4d44-b559-0a2a4e74bd12.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -213,6 +216,7 @@
 | **EMBARCADERO** — pequeño muelle de madera en el Jordán, barcas amarradas, redes secándose, pescadores cargando cestos (mañana) | `63cbd40d-95fb-455b-acbf-b13c77707ddc` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004235_63cbd40d-95fb-455b-acbf-b13c77707ddc.png |
 | **LADERA CON REBAÑO** — ladera verde con un rebaño de ovejas, un pastor con cayado, rocas y un árbol solitario (pastoral, día) | `9068baea-ff67-4635-9687-309214720c8f` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004626_9068baea-ff67-4635-9687-309214720c8f.png |
 | **ATALAYA** — torre de vigilancia de piedra solitaria en la llanura de Jericó, un centinela con antorcha arriba, senda abajo, atardecer | `63f3f007-21f5-4181-9994-c7afed7de8bf` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065618_63f3f007-21f5-4181-9994-c7afed7de8bf.png |
+| **MOLINO DE AGUA** — molino en un arroyo con rueda de madera girando, casa de piedra, minifiguras con sacos de grano (día) | `03a97ee0-a25a-4c50-9941-b03ff8bc85c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071423_03a97ee0-a25a-4c50-9941-b03ff8bc85c6.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -229,6 +233,7 @@
 | **CIELO ANARANJADO POLVORIENTO** — luz cálida ámbar-naranja quemado con sol tenue entre polvo en suspensión (16:9) | `e99bb655-eb26-48d4-b3cd-86653a19de71` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002617_e99bb655-eb26-48d4-b3cd-86653a19de71.png |
 | **ARCOÍRIS TRAS LA LLUVIA** — arcoíris brillante sobre un horizonte recién lavado por la lluvia, nubes abriéndose (16:9, esperanza) | `c97ba099-7658-4ab4-8c28-29e359798e74` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004632_c97ba099-7658-4ab4-8c28-29e359798e74.png |
 | **CIELO CUAJADO DE ESTRELLAS** — campo denso de estrellas brillantes y la banda de la Vía Láctea sobre un horizonte oscuro (16:9) | `0e55d848-eac0-4fb8-9173-d1104c416153` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065619_0e55d848-eac0-4fb8-9173-d1104c416153.png |
+| **NIEBLA ESPESA** — bruma gris pálida densa velando suavemente un horizonte tenue con luz difusa (16:9) | `6dc0b3fc-4bc3-4321-88ae-a5727f9786bb` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071424_6dc0b3fc-4bc3-4321-88ae-a5727f9786bb.png |
 
 ## 🧱 Texturas irregulares (swatches 2048px, tileables)
 | textura | job id | tamaño | URL |
@@ -273,6 +278,11 @@
 | **PAPIRO** — fibras vegetales beige claro tejidas con estriaciones finas horizontales y verticales | `2e50cfdb-6d43-4387-b06e-b444864cd272` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065542_2e50cfdb-6d43-4387-b06e-b444864cd272.png |
 | **LINO CRUDO** — trama de lino natural sin teñir en tono avena con motas y grano suave | `4c6f667e-a55d-49d4-bb46-0c3246e67904` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065613_4c6f667e-a55d-49d4-bb46-0c3246e67904.png |
 | **GRAVA VOLCÁNICA** — guijarros de basalto oscuro porosos en carbón y óxido con superficie mate rugosa | `2aabcbc1-0e72-4e89-9d65-8798615acd3f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_065615_2aabcbc1-0e72-4e89-9d65-8798615acd3f.png |
+| **TERRAZO** — base crema pálida con esquirlas de piedra en ocre, teja y gris (suelo) | `f1acf866-6538-4f06-9ac1-c7963fe8c763` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071348_f1acf866-6538-4f06-9ac1-c7963fe8c763.png |
+| **CORCHO** — gránulos de corcho tostado con moteado suave | `5b4ed080-67ac-4aba-8800-c6f529aa3e90` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071350_5b4ed080-67ac-4aba-8800-c6f529aa3e90.png |
+| **FIELTRO** — fieltro de lana mate en tono avena con superficie fina y afelpada | `26215b7f-4af2-4c82-884f-f3e5f8d01830` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071351_26215b7f-4af2-4c82-884f-f3e5f8d01830.png |
+| **MALLA DE BRONCE** — rejilla fina de alambre de bronce tejido con reflejos metálicos cálidos | `cc677483-afb2-49c7-803b-230919d46ba4` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071418_cc677483-afb2-49c7-803b-230919d46ba4.png |
+| **ARENA ROJA** — arena rojiza fina con suaves ondas de viento y sombras cálidas (suelo desierto) | `91a63139-6ba9-44d7-80c5-326aa8b0dc4a` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_071420_91a63139-6ba9-44d7-80c5-326aa8b0dc4a.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
