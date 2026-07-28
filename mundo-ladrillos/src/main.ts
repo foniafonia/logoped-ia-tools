@@ -233,7 +233,7 @@ const beats: Beat[] = [
     onEnter: () => { caravanaPedida = true; }
   }
 ];
-const director = new Director(beats, null, () => finDelTramo());
+const director = new Director(beats, null, () => lanzarOutro());   // al acabar la narración (o el último beat en mudo) → cierre con outro
 (window as any).__director = director;
 
 // pantalla de recompensa al terminar el tramo. La peli SIGUE acompasada (no se
@@ -246,14 +246,14 @@ const TAREAS_TRAMO: Array<[string, string]> = [
   ['bultos', 'cargar la caravana'],
   ['carav', 'seguir a la caravana']
 ];
-let spine: { stop: () => void } | null = null;   // control del audio narración (para cortarlo al cerrar)
+let spine: { stop: () => void; fade?: (sec?: number) => void } | null = null;   // control del audio narración (cortar/fundir al cerrar)
 let tramoCerrado = false;
 let hijacked = false;   // true cuando el RUNNER de tramos toma el control (0–5 termina)
 let caravanaPedida = false;      // beat 7 pedido; la caravana ESPERA a los mini-juegos (no secuestra)
 let caravanaEnMarcha = false;
 // ---- ADELANTO DE LOS ESPÍAS: usa el helper compartido Cutscene ----------------
-function dispararTeaserEspias(): void {
-  if (teaserVisto) return;       // una sola vez
+function dispararTeaserEspias(esFinal = false): void {
+  if (teaserVisto) { if (esFinal) finDelTramo(); return; }   // una sola vez; si es el cierre, cerrar igual
   teaserVisto = true;
   journey.revelarRio();          // asoma el río Jordán + Jericó (el mundo del 5-10)
   // los dos espías, con su look real del 5-10 (piezas compartidas), cerca de la orilla
@@ -289,8 +289,20 @@ function dispararTeaserEspias(): void {
       tpcam.yaw = camSaved.yaw; tpcam.pitch = camSaved.pitch; tpcam.dist = camSaved.dist;   // restaura cámara
       if (espiaA) { scene.remove(espiaA.root); espiaA = null; }
       if (espiaB) { scene.remove(espiaB.root); espiaB = null; }
+      if (esFinal) finDelTramo();   // el teaser es el CIERRE del 0–5 → ahora sí, pantalla de "Seguir"
     },
   });
+}
+
+// CIERRE del 0–5 (una sola vez): funde la voz (no corta a media frase), y lanza el
+// guiño de los espías como remate; su onEnd abre la pantalla de "Seguir la aventura".
+let outroLanzado = false;
+function lanzarOutro(): void {
+  if (outroLanzado || tramoCerrado) return;
+  outroLanzado = true;
+  setTarget(null);
+  spine?.fade?.(1.6);                                    // funde la narración suavemente
+  setTimeout(() => dispararTeaserEspias(true), 1700);   // deja terminar el fundido, luego el teaser
 }
 
 (window as any).__teaser = () => dispararTeaserEspias();   // hook de pruebas (playtester)
@@ -550,12 +562,12 @@ function checkTargets(): void {
     if (target) setTarget(null);
   }
   // (el Tabernáculo ya no es "visita": ahora es el oficio de llevarle el pan, más abajo)
-  // sigue la caravana al norte (esc. 08, beat 7) → al alcanzarla, CIERRE limpio que
-  // enlaza con el río (tras un ratito para verla alejarse). finDelTramo corta el audio.
+  // sigue la caravana al norte (esc. 08, beat 7) → al alcanzarla, deja VER la caravana
+  // alejarse un buen rato y LUEGO el cierre (funde voz + teaser). Antes cortaba a los 2,6s.
   if (i >= 7 && caravanaEnMarcha && !done.has('carav') && p.z < Journey.MARCHA_Z + 3) {
     done.add('carav'); audio.sfxSuccess(); director.star();
     director.logro('¡Con la caravana rumbo al río! 🐫'); setTarget(null);
-    setTimeout(() => finDelTramo(), 2600);
+    setTimeout(lanzarOutro, 6000);   // ~6s viendo la caravana marchar antes de cerrar
   }
 }
 
@@ -707,14 +719,22 @@ function colisionMishkan(p: THREE.Vector3): void {
   const dx = p.x - 26, dz = p.z - 22;
   const lx = dx * TAB_C + dz * TAB_S, lz = -dx * TAB_S + dz * TAB_C;   // a coords locales del recinto
   const HW = 6.5 * 1.7 + 0.7, HD = 4 * 1.7 + 0.7, PUERTA = 1.3 * 1.7;  // medias-extensiones (con radio) y media-puerta
-  if (Math.abs(lx) < PUERTA) return;                 // pasillo de la puerta → se puede pasar
   if (Math.abs(lx) >= HW || Math.abs(lz) >= HD) return;   // fuera del recinto → nada
-  // dentro (y fuera del pasillo): empujar a la pared lateral o de fondo más cercana
-  let nlx = lx, nlz = lz;
-  if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
-  else nlz = Math.sign(lz || 1) * HD;
-  p.x = 26 + (nlx * TAB_C - nlz * TAB_S);            // de vuelta a coords de mundo
-  p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
+  let nlx = lx, nlz = lz, corregir = false;
+  if (Math.abs(lx) < PUERTA) {
+    // PASILLO DE LA PUERTA (frente, +z): se ENTRA, pero el FONDO (−z) sigue siendo pared
+    // → se puede entrar por la puerta pero NO atravesar el Mishkán de lado a lado.
+    if (lz < -(HD - 1.6)) { nlz = -(HD - 1.6); corregir = true; }
+  } else {
+    // pared lateral o de fondo: empuja fuera por la más cercana
+    if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
+    else nlz = Math.sign(lz || 1) * HD;
+    corregir = true;
+  }
+  if (corregir) {
+    p.x = 26 + (nlx * TAB_C - nlz * TAB_S);          // de vuelta a coords de mundo
+    p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
+  }
 }
 
 function animate(now: number): void {
@@ -909,7 +929,7 @@ function animate(now: number): void {
       journey.arrancarCaravana();
       camp.bultos.forEach((b) => { b.visible = false; });
       loadPad.visible = false;
-      dispararTeaserEspias();     // ojito al siguiente mundo (in-engine, aislado, saltable)
+      journey.revelarRio();       // asoma el río al fondo (SIN los espías todavía: el teaser va al FINAL, nota 15)
       director.logro('¡Yehoshúa encabeza la marcha! ¡Síguele hacia el río! 🐫');
       director.setObjetivo('🐫 Sigue a Yehoshúa hacia el río');
       setTarget({ x: 0, z: Journey.MARCHA_Z });

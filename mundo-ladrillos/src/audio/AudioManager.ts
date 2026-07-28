@@ -88,9 +88,9 @@ export class AudioManager {
    */
   playSpine(name: string, volume = 1, offset = 0): {
     ready: () => boolean; elapsed: () => number; duration: () => number; ended: () => boolean;
-    stop: () => void; pause: () => void; resume: () => void; paused: () => boolean;
+    stop: () => void; pause: () => void; resume: () => void; paused: () => boolean; fade: (sec?: number) => void;
   } {
-    const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, stopped: false, paused: false, pausedAt: 0 };
+    const st = { started: false, startAt: 0, dur: 0, offset, src: null as AudioBufferSourceNode | null, gain: null as GainNode | null, stopped: false, paused: false, pausedAt: 0 };
     // Arranca (o RE-arranca, al reanudar) la fuente desde `from` segundos del clip.
     const startSrc = (from: number): void => {
       if (st.stopped || !this.ac) return;
@@ -101,7 +101,7 @@ export class AudioManager {
       const g = this.ac.createGain(); g.gain.value = volume;
       src.connect(g); g.connect(this.ac.destination);
       try { src.start(0, from); } catch { /* noop */ }
-      st.src = src; st.startAt = this.ac.currentTime; st.offset = from; st.dur = buf.duration; st.started = true;
+      st.src = src; st.gain = g; st.startAt = this.ac.currentTime; st.offset = from; st.dur = buf.duration; st.started = true;
     };
     const startWhenReady = (tries = 0): void => {
       if (st.stopped || !this.ac) return;
@@ -123,7 +123,13 @@ export class AudioManager {
       pause: () => { if (st.paused || !st.started) return; st.pausedAt = nowAt(); st.paused = true; try { st.src?.stop(); } catch { /* noop */ } st.src = null; },
       // REANUDA la voz desde el segundo exacto donde se pausó.
       resume: () => { if (!st.paused) return; st.paused = false; if (this.ac && this.ac.state === 'suspended') void this.ac.resume(); startSrc(st.pausedAt); },
-      paused: () => st.paused
+      paused: () => st.paused,
+      // FUNDE la voz a silencio en `sec` segundos (para cerrar el tramo sin cortar a media frase).
+      fade: (sec = 1.2) => {
+        if (!this.ac || !st.gain) return;
+        const t = this.ac.currentTime;
+        try { st.gain.gain.cancelScheduledValues(t); st.gain.gain.setValueAtTime(st.gain.gain.value, t); st.gain.gain.linearRampToValueAtTime(0.0001, t + sec); } catch { /* noop */ }
+      }
     };
   }
 
