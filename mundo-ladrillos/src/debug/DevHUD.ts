@@ -93,6 +93,86 @@ function copiar(txt: string, ok: () => void): void {
 
 let poll = 0;
 
+/**
+ * Modal de ANOTAR con voz (para que un niño no tenga que teclear). Dos vías:
+ *  - 🎤 Dictar: transcripción del navegador (SpeechRecognition; Chrome + internet).
+ *  - 🔴 Grabar voz: MediaRecorder → descarga un audio para pasárselo a Claude
+ *    (funciona offline; sirve de respaldo si el dictado no está o el micro se bloquea).
+ * Escribir a mano siempre funciona. `onSave(txt, voz?)` recibe el texto y, si grabó,
+ * el nombre del audio descargado (se añade al texto como "[voz: ...]").
+ */
+function abrirModalNota(e: EstadoDev, onSave: (txt: string, voz?: string) => void): void {
+  const SR = (window as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition
+    || (window as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
+  const ov = document.createElement('div');
+  Object.assign(ov.style, { position: 'fixed', inset: '0', zIndex: '95', background: 'rgba(0,0,0,.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto' } as CSSStyleDeclaration);
+  const card = document.createElement('div');
+  Object.assign(card.style, { width: 'min(92vw,430px)', background: '#0c1622', border: '1px solid rgba(143,224,255,.5)', borderRadius: '14px', padding: '14px', boxShadow: '0 12px 40px rgba(0,0,0,.6)', color: '#e8f4ff' } as CSSStyleDeclaration);
+  const head = document.createElement('div');
+  head.textContent = `📝 Nota · ${e.escena} «${e.titulo}»`;
+  Object.assign(head.style, { font: '800 13px system-ui', color: '#8fe0ff', marginBottom: '8px' } as CSSStyleDeclaration);
+  const ta = document.createElement('textarea');
+  ta.placeholder = 'Escribe la nota… o pulsa 🎤 para dictar / 🔴 para grabar tu voz';
+  Object.assign(ta.style, { width: '100%', minHeight: '84px', resize: 'vertical', borderRadius: '8px', border: '1px solid rgba(143,224,255,.35)', background: '#0a1420', color: '#eaf6ff', font: '500 14px system-ui', padding: '8px', boxSizing: 'border-box' } as CSSStyleDeclaration);
+  const status = document.createElement('div');
+  Object.assign(status.style, { minHeight: '16px', margin: '6px 2px', color: '#e8b04b', font: '700 12px system-ui' } as CSSStyleDeclaration);
+  const btns = document.createElement('div');
+  Object.assign(btns.style, { display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px', alignItems: 'center' } as CSSStyleDeclaration);
+  const mk = (t: string): HTMLButtonElement => { const b = document.createElement('button'); b.textContent = t; Object.assign(b.style, { cursor: 'pointer', border: '1px solid rgba(143,224,255,.4)', background: 'rgba(20,40,60,.8)', color: '#dff3ff', borderRadius: '9px', padding: '8px 10px', font: '700 13px system-ui' } as CSSStyleDeclaration); return b; };
+  let voz: string | undefined;
+
+  // --- 🎤 Dictar (SpeechRecognition) ---
+  const dictBtn = mk('🎤 Dictar');
+  let rec: { stop: () => void; start: () => void } | null = null; let dicting = false;
+  if (SR) {
+    dictBtn.addEventListener('click', () => {
+      if (dicting && rec) { try { rec.stop(); } catch { /* noop */ } return; }
+      const R = new (SR as new () => any)();
+      R.lang = 'es-ES'; R.interimResults = true; R.continuous = true;
+      const base = ta.value ? ta.value + ' ' : '';
+      R.onresult = (ev: any): void => { let s = ''; for (let i = ev.resultIndex; i < ev.results.length; i++) s += ev.results[i][0].transcript; ta.value = base + s; };
+      R.onerror = (ev: any): void => { status.textContent = '⚠️ ' + (ev.error === 'not-allowed' ? 'micrófono bloqueado — escribe o graba' : 'no se pudo dictar'); };
+      R.onend = (): void => { dicting = false; dictBtn.textContent = '🎤 Dictar'; };
+      try { R.start(); rec = R; dicting = true; dictBtn.textContent = '⏹ Parar'; status.textContent = '🔴 Escuchando… habla ahora'; } catch { status.textContent = '⚠️ no se pudo iniciar el dictado'; }
+    });
+  } else { dictBtn.disabled = true; dictBtn.style.opacity = '.4'; dictBtn.title = 'Este navegador no transcribe voz'; }
+
+  // --- 🔴 Grabar voz (MediaRecorder) → descarga un audio para enviármelo ---
+  const recBtn = mk('🔴 Grabar voz');
+  let mr: any = null; let recording = false;
+  const hasMR = typeof (window as any).MediaRecorder !== 'undefined' && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  if (hasMR) {
+    recBtn.addEventListener('click', async () => {
+      if (recording && mr) { try { mr.stop(); } catch { /* noop */ } return; }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const M = new (window as any).MediaRecorder(stream); const chunks: BlobPart[] = [];
+        M.ondataavailable = (ev: any): void => { if (ev.data && ev.data.size) chunks.push(ev.data); };
+        M.onstop = (): void => {
+          stream.getTracks().forEach((t: MediaStreamTrack) => t.stop());
+          const type = M.mimeType || 'audio/webm'; const ext = type.includes('ogg') ? 'ogg' : 'webm';
+          const name = `voz_jerico_${Date.now()}.${ext}`;
+          const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(chunks, { type })); a.download = name; a.click();
+          voz = name; status.textContent = `💾 ${name} descargado — adjúntamelo en el chat`;
+          recBtn.textContent = '🔴 Grabar voz'; recording = false;
+        };
+        M.start(); mr = M; recording = true; recBtn.textContent = '⏹ Parar y guardar'; status.textContent = '🔴 Grabando tu voz…';
+      } catch { status.textContent = '⚠️ micrófono bloqueado (archivo local): ábrelo por un servidor local o escribe la nota.'; }
+    });
+  } else { recBtn.disabled = true; recBtn.style.opacity = '.4'; }
+
+  const saveBtn = mk('✅ Guardar'); saveBtn.style.marginLeft = 'auto';
+  const cancelBtn = mk('Cancelar');
+  const cerrar = (): void => { try { rec?.stop(); } catch { /* noop */ } try { if (mr && recording) mr.stop(); } catch { /* noop */ } ov.remove(); };
+  saveBtn.addEventListener('click', () => { onSave(ta.value.trim(), voz); cerrar(); });
+  cancelBtn.addEventListener('click', cerrar);
+  ov.addEventListener('click', (ev) => { if (ev.target === ov) cerrar(); });
+
+  btns.append(dictBtn, recBtn, cancelBtn, saveBtn);
+  card.append(head, ta, status, btns); ov.append(card); document.body.appendChild(ov);
+  ta.focus();
+}
+
 /** Monta (o remonta) el panel DevHUD. Idempotente: quita el anterior y crea uno nuevo. */
 export function installDevHUD(): void {
   document.getElementById('devhud')?.remove();
@@ -203,11 +283,12 @@ export function installDevHUD(): void {
 
   noteBtn.addEventListener('click', () => {
     const e = window.__estado?.(); if (!e) return;
-    const txt = prompt('📝 ¿Qué has visto AQUÍ? (Enter = guardar solo el sitio)');
-    if (txt === null) return;   // cancelado
-    notas.push({ e, txt: txt.trim() });
-    guardar(); refrescarContador();
-    const prev = noteBtn.textContent; noteBtn.textContent = '✅ Anotado'; setTimeout(() => { noteBtn.textContent = prev; }, 900);
+    abrirModalNota(e, (txt, voz) => {
+      const t = voz ? (txt ? `${txt} [voz: ${voz}]` : `[voz adjunta: ${voz}]`) : txt;
+      notas.push({ e, txt: t });
+      guardar(); refrescarContador();
+      const prev = noteBtn.textContent; noteBtn.textContent = '✅ Anotado'; setTimeout(() => { noteBtn.textContent = prev; }, 900);
+    });
   });
   listBtn.addEventListener('click', () => {
     if (!notas.length) { const p = listBtn.textContent; listBtn.textContent = '(vacío)'; setTimeout(() => { listBtn.textContent = p; }, 900); return; }
