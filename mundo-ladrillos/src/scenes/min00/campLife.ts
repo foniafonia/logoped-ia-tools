@@ -59,7 +59,8 @@ interface Load { mesh: THREE.Mesh; base: THREE.Vector3; vel: THREE.Vector3; }
 interface Bicho { g: THREE.Group; vy: number; hopCd: number; target?: boolean; penned?: boolean; hint?: THREE.Mesh; leashed?: boolean; leash?: THREE.Line; }
 
 // alcance (al cuadrado) para enganchar una oveja al pulsar el botón 🪢
-const GRAB_R2 = 25;   // ~5 m: bien generoso, que el peque no tenga que clavarse encima
+const GRAB_R2 = 25;    // ~5 m: enganche de cerca (histórico)
+const THROW_R2 = 150;  // ~12 m: alcance del LANZAMIENTO del lazo (se lanza de lejos, se ve volar)
 type Oficio = 'moler' | 'amasar' | 'alfarero' | 'sentado';
 interface Faena { fig: Minifigure; tipo: Oficio; ph: number; spin?: THREE.Object3D; }
 
@@ -75,6 +76,8 @@ export class CampLife {
   private bedouin: Minifigure;
   private loads: Load[] = [];
   private sheep: Bicho[] = [];      // ovejas que saltan y balan si te acercas
+  private lazo!: THREE.Mesh;        // el lazo que VUELA al lanzarlo (idea del usuario)
+  private throwing: { sheep: Bicho; t: number } | null = null;   // lanzamiento en curso
   private ninos: Nino[] = [];       // niños que desfilan con canastas de pan
   private readonly rutaA = new THREE.Vector3(12, 0, 46);   // ruta de los niños
   private readonly rutaB = new THREE.Vector3(31, 0, 25);   // (hacia el Tabernáculo)
@@ -99,6 +102,10 @@ export class CampLife {
     //     Esto es lo que hace que el campamento "viva" (no solo deambular). ---
     this.buildFaenas();
 
+    // --- Lazo que vuela al lanzarlo (aro de cuerda que gira en el aire) ---
+    this.lazo = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.09, 6, 14), plastic.get(0xb98a4a));
+    this.lazo.rotation.x = Math.PI / 2; this.lazo.visible = false; this.group.add(this.lazo);
+
     // --- Animales ---
     for (const [cx, cz] of [[28, 34], [-24, 44], [30, 58]] as Array<[number, number]>) {
       const camel = buildCamel(plastic); camel.position.set(cx, 0, cz); camel.rotation.y = Math.random() * Math.PI; this.group.add(camel);
@@ -118,7 +125,7 @@ export class CampLife {
     const baseAng = Math.random() * Math.PI * 2;
     for (let k = 0; k < 3; k++) {
       const ang = baseAng + k * (Math.PI * 2 / 3) + (Math.random() - 0.5) * 0.7;
-      const rad = 8 + Math.random() * 4;   // 8–12 m: fuera del corral, dentro de la zona despejada
+      const rad = 12 + Math.random() * 5;   // 12–17 m del redil: hay un ARREO de verdad (se lanza el lazo de lejos)
       const sx = this.pen.x + Math.cos(ang) * rad;
       const sz = this.pen.z + Math.sin(ang) * rad;
       const s = buildSheep(plastic);
@@ -310,12 +317,31 @@ export class CampLife {
     for (const s of this.sheep) {
       if (!s.target || s.penned || s.leashed) continue;
       const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
-      if (dx * dx + dz * dz < GRAB_R2) return true;
+      if (dx * dx + dz * dz < THROW_R2) return true;   // al alcance del lanzamiento del lazo
     }
     return false;
   }
 
   update(dt: number, t: number, playerPos?: THREE.Vector3, onBaa?: () => void, onPenned?: () => void, grab = false): void {
+    // LAZO EN VUELO: arco desde el jugador hasta la oveja; al llegar, la engancha.
+    if (this.throwing && playerPos) {
+      const T = 0.5;
+      this.throwing.t += dt;
+      const k = Math.min(1, this.throwing.t / T);
+      const s = this.throwing.sheep;
+      const lx = playerPos.x + (s.g.position.x - playerPos.x) * k;
+      const lz = playerPos.z + (s.g.position.z - playerPos.z) * k;
+      const ly = 2.4 + Math.sin(k * Math.PI) * 2.6;   // sube y baja (arco por el aire)
+      this.lazo.visible = true; this.lazo.position.set(lx, ly, lz); this.lazo.rotation.y += dt * 16;
+      if (k >= 1) {   // el lazo llega → ¡ENGANCHADA!
+        s.leashed = true;
+        if (s.leash) s.leash.visible = true;
+        if (s.hint) s.hint.visible = false;
+        this.dust.burst(s.g.position.x, 0.8, s.g.position.z, 8);
+        onBaa?.();
+        this.lazo.visible = false; this.throwing = null;
+      }
+    }
     for (const s of this.sheep) {
       if (s.penned) { s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.15; continue; }
       // pista verde que bota sobre la oveja objetivo (guía al peque)
@@ -345,14 +371,10 @@ export class CampLife {
         } else if (playerPos) {
           s.g.position.y = Math.abs(Math.sin(t * 2 + s.g.position.x)) * 0.08;   // idle tranquilo (no huye)
           const dx = playerPos.x - s.g.position.x, dz = playerPos.z - s.g.position.z;
-          // Ahora NO se engancha sola: el peque tiene que PULSAR el botón "🪢 tira"
-          // cuando está al lado (así se ve que él tira de la cuerda y la coge).
-          if (grab && dx * dx + dz * dz < GRAB_R2) {   // ¡ENGANCHADA! (tiró de la cuerda)
-            s.leashed = true;
-            if (s.leash) s.leash.visible = true;
-            if (s.hint) s.hint.visible = false;
-            this.dust.burst(s.g.position.x, 0.8, s.g.position.z, 6);
-            onBaa?.();
+          // Al pulsar (E / botón 🪢) cerca, el peque LANZA el lazo: se ve VOLAR en arco
+          // hasta la oveja y ahí la engancha (idea del usuario; antes se pegaba sola).
+          if (grab && !this.throwing && dx * dx + dz * dz < THROW_R2) {
+            this.throwing = { sheep: s, t: 0 };   // arranca el lanzamiento
           }
         }
         continue;

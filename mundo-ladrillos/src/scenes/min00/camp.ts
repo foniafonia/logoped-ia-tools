@@ -183,7 +183,7 @@ export function buildCamp(scene: THREE.Scene, plastic: PlasticMaterialFactory): 
   const col = new THREE.Color();
   let placed = 0;
   const TAB_CLEAR = { x: 26, z: 22, r: 17 };    // plaza despejada alrededor del Mishkán (que no lo tapen)
-  const REDIL_CLEAR = { x: -30, z: 44, r: 15 }; // corral + CORONA de arreo despejados (las 3 ovejas objetivo se colocan aquí; ninguna tienda dentro → nunca una oveja escondida en una cabaña)
+  const REDIL_CLEAR = { x: -30, z: 44, r: 19 }; // corral + CORONA de arreo (12–17 m) despejados: las 3 ovejas objetivo se colocan aquí, ninguna tienda dentro → nunca una oveja escondida en una cabaña
   const SEP = 11;                                // separación MÍNIMA entre tiendas (que no se amontonen)
   const puestas: Array<{ x: number; z: number }> = [];
   for (let i = 0; i < N; i++) {
