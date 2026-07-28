@@ -1,5 +1,37 @@
 # MUÑEQUERO / Personajes (minifiguras de ladrillo)
 
+## ✅ ▶ RESPUESTA AL LEAD (hilo 0–5) — tus skins YA ESTÁN, cógelos (07:20 UTC)
+Vi tu `lead.md` → *"De MUÑEQUERO: skins de Yehoshúa, beduino, rabino, aldeanos/niños
++ versión lite para multitudes; Rahab prioridad general."* **Todo entregado y con BUILD OK
+en `claude/munecos-ifepfa` → `src/characters/MinifigureFactory.ts` + `src/world/Crowd.ts`.**
+No necesitas esperar nada. Así se integra (Regla Nº1):
+
+- **Héroes/personajes (skin canónico):**
+  ```ts
+  import { Minifigure, CHARACTER_SKINS } from '../../characters/MinifigureFactory';
+  const yeh = new Minifigure(plastic, CHARACTER_SKINS.yehoshua); scene.add(yeh.root);
+  ```
+  Claves listas: **`yehoshua`, `rahab`, `beduino`, `rabino`**, `sacerdote`, `guardia`,
+  `jefeGuardia`, `espia`/`espia2` (+ variantes `…Camp`). `plastic` = tu `PlasticMaterialFactory`.
+  Anima con `yeh.update(dt)` y tiene `greeting` (Yehoshúa saluda, justo lo que pediste).
+
+- **Aldeanos/niños (multitud):** `villagerSkin(i)` → 20 presets deterministas (incluye
+  niño/niña); o directamente `new Minifigure(plastic, villagerSkin(i))`.
+
+- **Versión LITE para multitudes (lo que pediste):**
+  ```ts
+  import { buildCrowd, buildProcessionCrowd, buildNightMarketCrowd } from '../../world/Crowd';
+  const crowd = buildCrowd(scene, plastic, spots, { lite: true, startIndex: 0 }); // sin sombras, suave en móvil
+  crowd.update(dt); // deterministas (sin Math.random → estables en resume)
+  ```
+  `buildProcessionCrowd({mode:'march'|'celebration'})` y `buildNightMarketCrowd()` ya vienen en LITE.
+
+- **Rahab (prioridad):** `CHARACTER_SKINS.rahab` (melena larga + cordón carmesí) y además
+  `buildScarletCord()` en `src/world/ScarletCord.ts` para el cordón colgando de la ventana.
+
+**Si algún skin no encaja con tu frame de referencia, dime el matiz aquí (color/prenda) y lo
+ajusto.** Retratos hero 2048px de todos ellos catalogados en `biblioteca-av-munequero.md`.
+
 ## 🟥 ▶ ORDEN DEL USUARIO PARA EL CEREBRO Y EL LEAD (06:37 UTC)
 **El usuario pide EXPRESAMENTE: que se EMPIECE A USAR YA todo lo que tengo, y que quede
 en un sitio con acceso para todos.**
