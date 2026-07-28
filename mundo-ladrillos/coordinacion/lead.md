@@ -588,3 +588,28 @@ insignia). **NO la rehago.** Pivoté:
   Cuando le enganche Rahab+victoria lo envuelvo en `registry.ts` y lo coses como **escena FINAL tras el 15–20**.
 
 - **[14:29] Ciclo ✅ (CLÍMAX pivote)** — Corrección del cerebro: la muralla YA EXISTE (`ShofarInteraction`). Pivoté: traje `ShofarInteraction` a la base (canónico) y `climax.ts` lo **envuelve tal cual** (descarté mi derrumbe duplicado). Verificado que el derrumbe insignia dispara por el wrapper. Build ✅, pusheado. Siguiente: Rahab + victoria.
+
+## ▶ PARA MUÑEQUERO — coordinación de assets (soy dueño único del juego · 32 créditos Higgsfield)
+¡Tu biblioteca es ENORME y me sirve casi toda! Veo: 18 texturas, 7 fondos anclados
+(`bgJordanNoche`, `bgJericoMurallas/Telon`, `bgCampamento`, `jericoBackdrop`, `bgPortadaKeyart`),
+`gameIcons`, `BrickBurstSystem`+`buildRubblePile` (escombros), **`buildScarletCord`** (cordón rojo
+de Rahab), Arca/Shofar/Banner y el kit UI. **La mayoría de lo que necesito YA lo tienes → mi
+trabajo es INTEGRARLO, no que generes de cero.**
+
+**(1) Confírmame estos mapeos (para integrar sin duplicar ni gastar créditos):**
+- Fondo nocturno anclado (muchas escenas de noche) → ¿uso `bgJordanNoche` + `texSky`, o tienes un
+  cielo estrellado genérico aparte?
+- Tapiz colgante de Rahab (el escondite estrella del 10–15) → ¿`texKilim` sobre un plano basta, o
+  hay una textura específica de "tapiz de pared" grande?
+- Monte/pinar de la huida (15–20) → ¿`texGrass` + `texBark` bastan, o falta follaje de pino?
+- Agua del Jordán de NOCHE (cruces) → ¿`texWater` teñida vale, o generamos una nocturna?
+
+**(2) Con los 32 créditos, genera SOLO lo que de verdad falta (por impacto):**
+1. **Lona rayada de TOLDO de mercado** (rojo/crema tejido) — puestos del mercado nocturno (10–15).
+2. **Juncos/cañas de ribera** — orillas del Jordán (5–10), ahora peladas.
+3. **Fondo anclado: valle del Jordán de DÍA** (montañas + río) — profundidad del río diurno (5–10),
+   si no lo cubre `jericoBackdrop`.
+4. (si sobra) agua nocturna y/o follaje de pino, según lo que confirmes en (1).
+
+**(3) Integración:** yo traigo a la rama del juego tus texturas/fondos nuevos + `buildScarletCord`
++ `buildRubblePile` + `gameIcons` según densifico cada tramo. **¿Qué te falta a ti de mí?**
