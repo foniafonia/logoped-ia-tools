@@ -123,6 +123,9 @@
 | **YUNQUE PEQUEÑO** — yunque de hierro sobre un tocón de madera con un martillito al lado (fragua) | `01231de4-0c4e-40c5-b43d-9ab6002e7bf4` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003204_01231de4-0c4e-40c5-b43d-9ab6002e7bf4.png |
 | **CANDIL DOBLE** — candil de barro de dos picos con dos llamitas cálidas (luz/attrezzo) | `1601288b-ec3c-4168-bea2-86c74c47dcf8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003205_1601288b-ec3c-4168-bea2-86c74c47dcf8.png |
 | **PLATO DE BRONCE** — plato de servir de bronce martillado con borde grabado (vajilla/attrezzo) | `cff328bd-bc7c-4faf-a937-fbf98715a514` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003245_cff328bd-bc7c-4faf-a937-fbf98715a514.png |
+| **CUENCO DE MADERA** — cuenco torneado de madera con veta cálida y una muesca en el borde (vajilla) | `2916819b-2412-4497-b1b9-90a3f4417f24` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003624_2916819b-2412-4497-b1b9-90a3f4417f24.png |
+| **PEINE DE HUESO** — peine tallado de hueso con dientes finos y grabado sencillo (objeto personal) | `2e4e4420-2bb7-4e15-a042-1e6222ae77fb` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003625_2e4e4420-2bb7-4e15-a042-1e6222ae77fb.png |
+| **ANILLO-SELLO** — anillo de oro grabado con un pequeño escudo de león (coleccionable/autoridad) | `91c57471-adfe-4acb-b032-58b456be6eb0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003650_91c57471-adfe-4acb-b032-58b456be6eb0.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -149,6 +152,7 @@
 | **POWER-UP BOTAS DE SALTO** — sandalias de cuero brillantes con suelas-resorte de ladrillos y chispas ascendentes | `d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685.png |
 | **POWER-UP BRÚJULA** — brújula de latón de ladrillos con aguja roja girando y chispas (orientación) | `75d96f55-d959-433d-823d-5020b03f1d00` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002205_75d96f55-d959-433d-823d-5020b03f1d00.png |
 | **POWER-UP POCIÓN AZUL** — frasco redondo de líquido azul en remolino de ladrillos con tapón y chispas | `806bb61a-187d-483b-9bea-2bd955aeb6f3` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003248_806bb61a-187d-483b-9bea-2bd955aeb6f3.png |
+| **POWER-UP RELOJ DE ARENA ROJO** — reloj de arena con arena roja de ladrillos, marco de madera y chispas (tiempo extra) | `21b12b8f-b085-494b-98d4-589f0b51e585` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003653_21b12b8f-b085-494b-98d4-589f0b51e585.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -195,6 +199,7 @@
 | **PLAZA AL MEDIODÍA** — plaza de Jericó con fuente central, minifiguras cruzando y charlando, puestos al borde, sol alto y sombras cortas | `236f6ddc-d808-46e7-85de-ec81cc6d67e3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002227_236f6ddc-d808-46e7-85de-ec81cc6d67e3.png |
 | **CAMINO DEL DESIERTO** — sendero polvoriento de caravana entre roquedales y unas palmeras, un mojón de piedras, luz de mediodía (viaje) | `aa4442fb-4932-4863-8fad-011c2f01e8c0` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002616_aa4442fb-4932-4863-8fad-011c2f01e8c0.png |
 | **OASIS** — charca turquesa rodeada de palmeras, minifiguras y un camello descansando, luz dorada (descanso) | `943a6cc3-72de-4143-b5b8-8b613d65fb9e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003247_943a6cc3-72de-4143-b5b8-8b613d65fb9e.png |
+| **CANTERAS** — obreros cortando sillares de caliza pálida con cuerdas, rampas y trineos de madera, polvo (oficio/industria) | `da421985-0bc5-4c79-ba2d-fa468951b7c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003652_da421985-0bc5-4c79-ba2d-fa468951b7c6.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -233,6 +238,11 @@
 | **TERRACOTA VIDRIADA** — baldosas de arcilla rojiza con vidriado ámbar brillante y craquelado sutil | `2ac32119-653e-42f6-886b-b59a55988178` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003203_2ac32119-653e-42f6-886b-b59a55988178.png |
 | **MÁRMOL VETEADO** — mármol crema pálido con vetas grises y doradas y pulido sutil | `db84155f-2816-4d4e-b647-d93164c70fb7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003242_db84155f-2816-4d4e-b647-d93164c70fb7.png |
 | **COBRE BRUÑIDO** — metal rosa-dorado con hoyuelos de martillado y reflejos suaves | `a3274c21-df43-4191-8374-d7fbba014105` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003244_a3274c21-df43-4191-8374-d7fbba014105.png |
+| **CORTEZA DE OLIVO** — corteza gris-plata nudosa con surcos retorcidos profundos y brillos cálidos | `8dc7b86c-100a-4c3f-979d-4478c88d747c` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003616_8dc7b86c-100a-4c3f-979d-4478c88d747c.png |
+| **TELA DE SACO (arpillera)** — fibras de yute tostadas y bastas en trama de rejilla suelta | `55281e84-43ba-49a4-a0eb-27828e307d20` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003622_55281e84-43ba-49a4-a0eb-27828e307d20.png |
+| **CERÁMICA PINTADA** — cerámica crema con franjas geométricas pintadas a mano en terracota e índigo | `8c34dead-ba5e-4e69-9090-da968976a09b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003623_8c34dead-ba5e-4e69-9090-da968976a09b.png |
+| **HIERBA SECA** — briznas de paja dorada blanqueadas por el sol en un manto suelto | `1dca74d8-6bf8-476e-a0fe-555aace189be` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003647_1dca74d8-6bf8-476e-a0fe-555aace189be.png |
+| **PIZARRA** — losas de pizarra gris frío en capas con vetas azules y óxido sutiles | `227d046b-7b07-4a49-a023-1e0e23c86d5e` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003648_227d046b-7b07-4a49-a023-1e0e23c86d5e.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
