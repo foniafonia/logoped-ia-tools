@@ -145,6 +145,7 @@
 | **CASCABEL** — cascabel de bronce redondo con anilla pequeña (attrezzo/sonido) | `28af4d9d-5685-433d-a47d-956851b92b32` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_074348_28af4d9d-5685-433d-a47d-956851b92b32.png |
 | **BALANZA DE MANO** — balancita de mano con dos platillos de latón colgando de cuerdas en un brazo de madera (mercader) | `207b4705-df6e-4831-88fa-034122f443b2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075319_207b4705-df6e-4831-88fa-034122f443b2.png |
 | **SELLO DE CERA** — sello de cera roja sobre pergamino plegado con escudo de león impreso (documento) | `80145dab-4ef2-4efa-8c82-50bd136674bb` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_075321_80145dab-4ef2-4efa-8c82-50bd136674bb.png |
+| **TABLILLA DE ARCILLA** — tablilla de barro con marcas grabadas tipo cuneiforme (escritura/registro) | `59cde3c1-96a1-48fa-b528-919987a4aac6` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_080425_59cde3c1-96a1-48fa-b528-919987a4aac6.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
