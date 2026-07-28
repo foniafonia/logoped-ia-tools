@@ -25,8 +25,15 @@ import { installDevHUD, saltoPedido, limpiarSalto, EstadoDev, DestinoDev } from 
 import { MIN05_SCENES } from './scenes/min05/registry';
 import { MIN10_SCENES } from './scenes/min10/registry';
 import { MIN15_SCENES } from './scenes/min15/registry';
+import { startMurallaEpica } from './scenes/muralla/murallaEpica';
 
 const app = document.getElementById('app')!;
+
+// ── MODO MURALLA (para grabar el vídeo del Rab) ─────────────────────────────
+// Si el html se abre con #muralla (o ?muralla), al final de este módulo se barre el
+// HUD del 0-5 y se arranca la muralla épica ORIGINAL aislada (motor propio, sin el
+// runner). El 0-5 se construye pero su bucle NO renderiza (guardado con este flag).
+const MURALLA_MODE = /muralla/i.test(location.hash) || /muralla/i.test(location.search);
 
 // ---- Renderer ----
 const renderer = new THREE.WebGLRenderer({ antialias: !IS_MOBILE, powerPreference: 'high-performance' });
@@ -766,6 +773,7 @@ function colisionMishkan(p: THREE.Vector3): void {
 }
 
 function animate(now: number): void {
+  if (MURALLA_MODE) return;   // modo muralla: el 0-5 no se renderiza (la muralla lleva su propio bucle)
   if (hijacked) return;   // el RUNNER de tramos tomó el lienzo → el bucle del 0–5 se detiene
   requestAnimationFrame(animate);
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
@@ -1106,6 +1114,15 @@ const TRAMO_LABELS = [
   d.push({ key: 's35', grupo: TRAMO_LABELS[4], label: 'Esc 35 · La caída de la muralla' });
   return d;
 };
-installDevHUD();
+if (!MURALLA_MODE) installDevHUD();
+
+// === MODO MURALLA: al final del todo, barre TODO el HUD/overlays del 0-5 (deja solo el
+//     lienzo #app) y arranca la muralla épica aislada sobre el mismo renderer. ===
+if (MURALLA_MODE) {
+  Array.from(document.body.children).forEach((el) => {
+    if ((el as HTMLElement).id !== 'app') (el as HTMLElement).remove();
+  });
+  startMurallaEpica(renderer);
+}
 
 (window as any).__READY__ = true;
