@@ -34,7 +34,7 @@ renderer.setPixelRatio(QUALITY.pixelRatio);
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;   // PILOTO "precioso": exposición cálida
+renderer.toneMappingExposure = 0.98;   // "precioso" bajado ~30% (menos brillo, más de juguete)
 renderer.shadowMap.enabled = QUALITY.shadows;
 renderer.shadowMap.type = IS_MOBILE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 app.appendChild(renderer.domElement);
@@ -63,7 +63,7 @@ const tpcam = new ThirdPersonCamera(camera, renderer.domElement);
 const PRECIOSO = !IS_MOBILE;
 const fx = PRECIOSO
   ? setupPreciousRender(renderer, scene, camera, {
-      exposure: 1.05, iblSigma: 0.04, bloom: { strength: 0.32, radius: 0.5, threshold: 0.85 },
+      exposure: 0.98, iblSigma: 0.04, bloom: { strength: 0.22, radius: 0.5, threshold: 0.90 },   // "precioso" −30%: menos glow (bloom 0.32→0.22, umbral 0.85→0.90)
     })
   : null;
 
@@ -87,7 +87,7 @@ scene.add(rim);
 
 const plastic = new PlasticMaterialFactory();
 // PILOTO "precioso": plástico que refleja el IBL (clearcoat + más reflejo). Solo desktop.
-if (PRECIOSO && QUALITY.envMap) plastic.update({ roughness: 0.28, clearcoat: 0.6, envMapIntensity: 1.5 });
+if (PRECIOSO && QUALITY.envMap) plastic.update({ roughness: 0.34, clearcoat: 0.42, envMapIntensity: 1.05 });   // reflejos/brillo −30% (clearcoat 0.6→0.42, envMap 1.5→1.05, algo menos pulido)
 
 // === ENTORNO + CAMPAMENTO + VIDA + VIAJE ===
 setupEnvironment(scene);
@@ -980,7 +980,7 @@ function animate(now: number): void {
     (scene.fog as THREE.Fog).color.copy(DAY_SKY).lerp(NIGHT_SKY, nightF);
     key.intensity = 3.0 * (1 - nightF) + 0.5 * nightF;
     hemi.intensity = 0.55 * (1 - nightF) + 0.18 * nightF;
-    renderer.toneMappingExposure = 1.05 * (1 - nightF) + 0.85 * nightF;
+    renderer.toneMappingExposure = 0.98 * (1 - nightF) + 0.82 * nightF;   // exposición "precioso" bajada
   }
 
   sky.update(dt, nightF);                                   // deriva de nubes + telón que oscurece de noche
