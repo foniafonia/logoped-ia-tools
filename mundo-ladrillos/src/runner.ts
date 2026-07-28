@@ -21,6 +21,7 @@ import { runTramo, TramoRunner, Orquestador, SceneDef } from './core/runTramo';
 import { buildClimax } from './scenes/min25/climax';
 import { Dust } from './effects/Dust';
 import { AudioManager } from './audio/AudioManager';
+import { installDevHUD, EstadoDev, DestinoDev } from './debug/DevHUD';
 
 /**
  * CLÍMAX (min 25) — puente FINO del integrador sobre el módulo del LEAD `buildClimax`
@@ -393,6 +394,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
   let runner: TramoRunner | null = null;
   let lastIndice = -1;
   let ended = false;
+  let sceneClock = 0;   // segundos dentro de la escena actual (para la etiqueta DevHUD)
 
   // COSTURA entre tramos: tarjeta breve (minuto + título) que suaviza el salto de un
   // mundo al siguiente y le deja claro al peque en qué parte de la historia está.
@@ -415,22 +417,26 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     setTimeout(() => { card.style.opacity = '0'; setTimeout(() => { card.remove(); done(); }, 460); }, 1400);
   }
 
-  function startTramo(): void {
+  function startTramo(jumpLocal?: number): void {
     if (ti >= TRAMOS.length) { finalWin(); return; }
     runner = null;   // pausa los updates mientras se muestra la tarjeta de tramo
-    showTramoCard(ti, () => {
+    const begin = (li: number): void => {
       sceneArr = TRAMOS[ti];
       lastIndice = -1; currentInst = null; currentDef = null;
       // runTramo ya dispone la última escena del tramo previo (salir() al pasar de la lista).
-      runner = runTramo(wrap(sceneArr), orq, () => { ti += 1; startTramo(); }, { pauseMs: 2600 });
+      runner = runTramo(wrap(sceneArr), orq, () => { ti += 1; startTramo(); }, { pauseMs: 2600, startIndex: li });
       onSceneChanged();
       lastIndice = runner.indice;
-    });
+    };
+    // Salto directo del DevHUD: sin tarjeta, directo a la escena pedida.
+    if (jumpLocal !== undefined) { begin(jumpLocal); return; }
+    showTramoCard(ti, () => begin(0));
   }
 
   // Cuando el runner cambia de escena (o de tramo): aplica AMBIENTE + HUD + intro.
   function onSceneChanged(): void {
     forceDone = false;
+    sceneClock = 0;
     cineCam.stop();
     dlg.clear();
     if (!runner || runner.indice >= sceneArr.length) return;
@@ -465,7 +471,17 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     fin.querySelector('#reBtn2')?.addEventListener('pointerdown', () => location.reload());
   }
 
-  startTramo();   // muestra la tarjeta del tramo 5–10 y, al acabar, monta esc9 + ambiente/HUD
+  // ¿salto directo del DevHUD? (#go=s<n> → main.ts dejó __gotoNumero). Cae en esa escena.
+  const gnum = (window as any).__gotoNumero;
+  (window as any).__gotoNumero = undefined;
+  let jumpLocal: number | undefined;
+  if (gnum != null) {
+    for (let t = 0; t < TRAMOS.length; t++) {
+      const li = TRAMOS[t].findIndex((s) => s.numero === gnum);
+      if (li >= 0) { ti = t; jumpLocal = li; break; }
+    }
+  }
+  startTramo(jumpLocal);   // tarjeta del tramo 5–10 (o salto directo si vino del DevHUD)
 
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); fx.setSize(innerWidth, innerHeight); });
 
@@ -474,6 +490,7 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
     requestAnimationFrame(animate);
     const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
+    if (runner && !ended) sceneClock += dt;
     if (avisoUntil && now >= avisoUntil) { avisoEl.style.display = 'none'; avisoUntil = 0; }
     dlg.update(dt);
     subEl.style.display = dlg.active ? 'none' : 'block';
@@ -572,5 +589,36 @@ export function startTramoRunner(renderer: THREE.WebGLRenderer): void {
       indice: prev + (runner ? runner.indice : 0), total: TRAMOS.reduce((s, a) => s + a.length, 0)
     };
   };
+  // === DevHUD: el runner REEMPLAZA `__estado` (ahora el mundo vivo es este); la lista
+  // de destinos (`__destinos`) la dejó main.ts completa (beats del 0–5 + escenas) y
+  // sigue valiendo. Se remonta el panel porque el traspaso ocultó el del 0–5. ===
+  (window as any).__estado = (): EstadoDev => {
+    const def = currentDef;
+    const card = TRAMO_CARDS[ti] ?? { min: '', tit: '' };
+    const p = controller.pos;
+    return {
+      mundo: `${card.min.replace('MINUTO ', '')} · ${card.tit}`,
+      escena: def ? 'Escena ' + def.numero : '—',
+      titulo: def?.titulo ?? '—',
+      t: sceneClock,
+      pos: [Math.round(p.x), Math.round(p.z)],
+      rumbo: player.root.rotation.y * 180 / Math.PI,
+      audio: sound.ready ? sound.nowPlaying() : '🔇 ambiente + SFX (voz peli pendiente)',
+      objetivo: def && def.objetivo.tipo !== 'cinematica' ? def.objetivo.texto : ''
+    };
+  };
+  // Respaldo de destinos por si se entrara al runner sin pasar por main (no debería):
+  if (!(window as any).__destinos) {
+    (window as any).__destinos = (): DestinoDev[] => {
+      const d: DestinoDev[] = [{ key: 'b2', grupo: '0–5 · Apertura', label: '↩ Volver al inicio (0–5)' }];
+      for (let t = 0; t < TRAMOS.length; t++) {
+        const g = `${(TRAMO_CARDS[t]?.min || '').replace('MINUTO ', '')} · ${TRAMO_CARDS[t]?.tit || ''}`;
+        TRAMOS[t].forEach((s) => d.push({ key: 's' + s.numero, grupo: g, label: `Esc ${s.numero} · ${s.titulo}` }));
+      }
+      return d;
+    };
+  }
+  installDevHUD();
+
   (window as any).__runnerReady = true;
 }

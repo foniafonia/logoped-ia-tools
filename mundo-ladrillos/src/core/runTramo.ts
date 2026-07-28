@@ -93,6 +93,9 @@ export interface RunTramoOpts {
    *  (la escena cumplida se queda visible ese ratito). Def. 0 = inmediato. El integrador
    *  usaba 2600 ms ("isDone → 2.6s → siguiente"); pásalo aquí para el mismo tacto. */
   pauseMs?: number;
+  /** Índice de la escena por la que EMPIEZA el tramo (def. 0). Lo usa el salto directo
+   *  del DevHUD para caer en una escena concreta sin recorrer las previas. */
+  startIndex?: number;
 }
 
 /** Monta y encadena una lista ORDENADA de escenas. Llama `onFinish` al terminar todas. */
@@ -120,7 +123,7 @@ export function runTramo(scenes: SceneDef[], orq: Orquestador, onFinish?: () => 
     orq.ctx.scene.add(inst.group);
   };
 
-  entrar(0);
+  entrar(Math.max(0, Math.min(scenes.length - 1, opts.startIndex ?? 0)));
 
   return {
     get indice() { return i; },

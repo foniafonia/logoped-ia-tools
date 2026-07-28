@@ -21,6 +21,10 @@ import { StudioIntro } from './scenes/min00/studioIntro';
 import { INTRO_VIDEO } from './video/intro';
 import { Director, Beat } from './scenes/min00/Director';
 import { startTramoRunner } from './runner';
+import { installDevHUD, saltoPedido, limpiarSalto, EstadoDev, DestinoDev } from './debug/DevHUD';
+import { MIN05_SCENES } from './scenes/min05/registry';
+import { MIN10_SCENES } from './scenes/min10/registry';
+import { MIN15_SCENES } from './scenes/min15/registry';
 
 const app = document.getElementById('app')!;
 
@@ -472,7 +476,20 @@ Object.assign(startEl.style, {
   justifyContent: 'center', background: 'radial-gradient(120% 100% at 50% 0%, #3a2a12, #0a0705 72%)', transition: 'opacity .4s'
 } as CSSStyleDeclaration);
 document.body.appendChild(startEl);
+// ¿venimos de un SALTO del DevHUD (#go=…)? Reetiqueta el botón para que quede claro.
+const saltoKey = saltoPedido();
+if (saltoKey) {
+  const btn = startEl.querySelector('#startBtn') as HTMLButtonElement | null;
+  if (btn) {
+    btn.textContent = '▶ Saltar aquí (dev)';
+    setTimeout(() => {   // __destinos ya está definido tras evaluar el módulo
+      const dest = ((window as any).__destinos?.() as DestinoDev[] | undefined)?.find((d) => d.key === saltoKey);
+      if (dest) btn.textContent = '▶ ' + dest.label;
+    }, 0);
+  }
+}
 startEl.addEventListener('pointerdown', () => {
+  if (saltoKey) { ejecutarSalto(saltoKey); return; }
   audio.init();
   startEl.style.opacity = '0';
   setTimeout(() => startEl.remove(), 420);
@@ -536,6 +553,32 @@ function empezarJuegoTrasVideo(): void {
   audio.resume();   // el vídeo suspendió el contexto: hay que reanudarlo o no se oye
   spine = audio.playSpine('narracion_min0-5', 0.95, 25); director.setSpine(spine);
   director.start(25, 1);   // reloj en 25 s; el siguiente beat es el 2 (campamento)
+}
+
+// === SALTO DIRECTO (DevHUD): al recargar con #go=<key>, el botón "Empezar" salta
+// aquí (respeta el gesto que desbloquea el audio). "b<i>" = beat del 0–5; "s<n>" =
+// escena de un tramo del runner. Es una herramienta de trabajo, no de juego. ===
+function ejecutarSalto(key: string): void {
+  limpiarSalto();
+  audio.init();
+  startEl.style.opacity = '0'; setTimeout(() => startEl.remove(), 420);
+  if (key[0] === 'b') {
+    const i = Math.max(0, Math.min(beats.length - 1, parseInt(key.slice(1), 10) || 0));
+    villager.root.visible = true;
+    if (esMovil && !touchCreado) { new TouchControls(controller, { shofar: false, attack: false }); touchCreado = true; }
+    for (let k = 0; k <= i; k++) { try { beats[k].onEnter?.(); } catch { /* estado parcial ok en dev */ } }
+    spine = audio.playSpine('narracion_min0-5', 0.95, beats[i].t); director.setSpine(spine);
+    director.start(beats[i].t, i - 1);   // arranca en ese beat sin re-disparar los previos
+  } else {
+    (window as any).__gotoNumero = parseInt(key.slice(1), 10);
+    hijacked = true; spine?.stop();
+    beacon.visible = false; loadPad.visible = false;
+    Array.from(document.body.children).forEach((el) => {
+      if ((el as HTMLElement).id === 'app') return;
+      (el as HTMLElement).style.display = 'none';
+    });
+    startTramoRunner(renderer);   // el runner lee __gotoNumero y salta a esa escena
+  }
 }
 
 // ---- Bucle ----
@@ -838,4 +881,43 @@ requestAnimationFrame(animate);
   villager.root.rotation.y = Math.atan2(dx, dz);
   return d <= step;
 };
+
+// === DevHUD: etiqueta copiable + menú de salto (transversal 0–5 ↔ runner) ===
+const TRAMO_LABELS = [
+  '0–5 · Apertura (campamento → Jordán)',
+  '5–10 · El Jordán y los dos espías',
+  '10–15 · La posada de Rahab',
+  '15–20 · El cordón rojo y los shofarot',
+  '25 · La caída de la muralla'
+];
+(window as any).__estado = (): EstadoDev => {
+  const p = controller.pos;
+  const i = Math.max(0, director.beatIndex);
+  const b = beats[i] ?? beats[0];
+  const pr = (window as any).__probe?.() ?? {};
+  return {
+    mundo: TRAMO_LABELS[0],
+    escena: 'Beat ' + i,
+    titulo: (b?.sub ?? '').replace(/[«»]/g, '').trim(),
+    t: director.tiempo,
+    pos: [Math.round(p.x), Math.round(p.z)],
+    rumbo: villager.root.rotation.y * 180 / Math.PI,
+    audio: spine ? `narración 0–5 @ ${Math.round(director.tiempo)}s ▶` : '🔇 mudo (build sin voz)',
+    objetivo: (pr.fase as string) || (b?.obj ?? '')
+  };
+};
+(window as any).__destinos = (): DestinoDev[] => {
+  const d: DestinoDev[] = [];
+  beats.forEach((b, i) => d.push({ key: 'b' + i, grupo: TRAMO_LABELS[0], label: `Beat ${i} · ${(b.sub || '').replace(/[«»]/g, '').slice(0, 30)}` }));
+  const push = (arr: Array<{ numero: number; titulo: string }>, grupo: string): void => {
+    arr.forEach((s) => d.push({ key: 's' + s.numero, grupo, label: `Esc ${s.numero} · ${s.titulo}` }));
+  };
+  push(MIN05_SCENES, TRAMO_LABELS[1]);
+  push(MIN10_SCENES, TRAMO_LABELS[2]);
+  push(MIN15_SCENES, TRAMO_LABELS[3]);
+  d.push({ key: 's35', grupo: TRAMO_LABELS[4], label: 'Esc 35 · La caída de la muralla' });
+  return d;
+};
+installDevHUD();
+
 (window as any).__READY__ = true;
