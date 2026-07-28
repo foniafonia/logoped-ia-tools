@@ -78,6 +78,8 @@
 | **CURTIDOR** — delantal de cuero manchado, mangas subidas, una piel al brazo, barba corta | `b2cc2385-82ec-4797-948f-3e26cca2699b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001219_b2cc2385-82ec-4797-948f-3e26cca2699b.png |
 | **HILANDERA** — vestido ocre, huso con hilo de lana, moño sencillo, sonrisa serena | `34988d66-64c6-474b-afc5-d82df184e8ee` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001221_34988d66-64c6-474b-afc5-d82df184e8ee.png |
 | **VIGÍA** — capa con capucha sobre armadura ligera, cuerno y antorcha, ojos alerta, barba corta | `c290327e-7fbe-4622-a4a8-4b3b6a965a55` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001245_c290327e-7fbe-4622-a4a8-4b3b6a965a55.png |
+| **PASTORA** — vestido rojizo y chal de lana, cayado y un corderito al lado, ojos vivos y amables | `dbdf52db-b5c3-4a71-bd50-b48e578aabf6` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001601_dbdf52db-b5c3-4a71-bd50-b48e578aabf6.png |
+| **HERBOLARIO** — túnica verde oliva con bolsitas de hierbas secas, mortero en mano, sonrisa sabia | `a4bcc68a-b706-4537-98d7-6caca6e09efa` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001624_a4bcc68a-b706-4537-98d7-6caca6e09efa.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -109,6 +111,8 @@
 | **JARRA DE MIEL** — jarra de barro con miel dorada, cazoleta de madera y un panal al lado (comida) | `4cd030c1-9047-4c53-bf1c-b99fb9ec5229` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000621_4cd030c1-9047-4c53-bf1c-b99fb9ec5229.png |
 | **CESTO DE PECES** — cesto de mimbre lleno de peces plateados frescos con cañas (comida/mercado) | `5de99c7e-7766-40fe-9571-7c7f6477eac5` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001225_5de99c7e-7766-40fe-9571-7c7f6477eac5.png |
 | **ODRE DE AGUA** — odre de cuero con correa y tapón de madera, hinchado de agua (viaje) | `bab00b2d-eab6-41da-b6c0-94b6ef5f9397` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001250_bab00b2d-eab6-41da-b6c0-94b6ef5f9397.png |
+| **SACO DE SAL** — saco de arpillera con sal blanca atado con cuerda, algo derramándose (recurso) | `43b8e1bf-dc73-48fa-8a18-cd156a91c5ff` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001604_43b8e1bf-dc73-48fa-8a18-cd156a91c5ff.png |
+| **CANASTO DE DÁTILES** — cesto de mimbre lleno de dátiles marrones brillantes, algunos sueltos en el paño (comida) | `2053d9bc-f46a-4aaa-adcd-d2154ecae966` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001627_2053d9bc-f46a-4aaa-adcd-d2154ecae966.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -173,6 +177,8 @@
 | **RÍO AL AMANECER** — el Jordán en calma con agua brillante, cañas y una barca, bruma rosa-dorada, una garza en la orilla | `f360fc08-f099-4326-a666-0a7bd6a7ac0d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000619_f360fc08-f099-4326-a666-0a7bd6a7ac0d.png |
 | **TALLER DEL HERRERO** — herrero en la fragua y el yunque, herramientas colgadas, luz naranja y chispas (oficio) | `da11d9b8-13df-4e1c-97d1-ef412fdd7849` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001223_da11d9b8-13df-4e1c-97d1-ef412fdd7849.png |
 | **CARAVANA LLEGANDO** — caravana comercial llegando a la puerta de Jericó, camellos y burros cargados, polvo, la muralla detrás (tarde) | `2508a7c8-d3af-4422-a24e-bf8bc99c1ad1` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001247_2508a7c8-d3af-4422-a24e-bf8bc99c1ad1.png |
+| **PATIO DE LA POSADA** — viajeros descansando en mesas bajas, un pozo, faroles colgados y parras, luz de tarde (nivel/descanso) | `b059e035-3f7b-4e6c-bd63-315a00bc4843` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001602_b059e035-3f7b-4e6c-bd63-315a00bc4843.png |
+| **HUERTO DE OLIVOS** — hileras de olivos plateados y nudosos, minifiguras vareando y recogiendo en redes, luz dorada (día) | `8430e906-231a-41c6-986b-9eb9e8b830a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001626_8430e906-231a-41c6-986b-9eb9e8b830a7.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -193,6 +199,10 @@
 | **MOSAICO** — suelo de mosaico antiguo, teselas de colores en patrón geométrico con roseta central | `b92c4849-59e4-4efc-a89f-39cd2ec3519d` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001229_b92c4849-59e4-4efc-a89f-39cd2ec3519d.png |
 | **TAPIZ / KILIM** — tejido geométrico de rombos y zigzags en rojos, ocres e índigo con flecos | `a6802bc3-69f6-4ae3-ad40-ccbd383c3b52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001251_a6802bc3-69f6-4ae3-ad40-ccbd383c3b52.png |
 | **ADOBE AGRIETADO** — muro de adobe de arcilla arenosa con grietas finas y motas de paja | `86cdb8d2-85c5-41f6-93bf-ddda8b21f040` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001252_86cdb8d2-85c5-41f6-93bf-ddda8b21f040.png |
+| **ÓXIDO DE BRONCE** — metal cálido con pátina verde-azul (cardenillo) y brillos gastados | `58c36c6d-b0ac-4c63-bce2-0a3af050c2c0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001605_58c36c6d-b0ac-4c63-bce2-0a3af050c2c0.png |
+| **MUSGO SOBRE PIEDRA** — piedras grises curtidas con manchas de musgo verde y líquenes en las grietas | `1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001606_1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9.png |
+| **ESTERA DE JUNCO** — juncos dorados pálidos trenzados en un tejido apretado (suelo/alfombra) | `19187ee7-4598-4f42-88b0-43825feae74f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001629_19187ee7-4598-4f42-88b0-43825feae74f.png |
+| **MADERA VIEJA** — tablas gris-marrón curtidas con veta visible, nudos y grietas pequeñas | `8c3c7b62-4384-4a4b-b7d1-f77c3509d163` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001630_8c3c7b62-4384-4a4b-b7d1-f77c3509d163.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
