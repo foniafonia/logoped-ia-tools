@@ -2,7 +2,7 @@
 
 > Estado: **borrador para retocar y entregar** tras hablarlo en el Zoom.
 > Cifras acordadas: **2.000 €** el juego (1.000 al empezar + 1.000 a la entrega),
-> **120 €/mes** mantenimiento, plazo **~10 semanas** (antes si se puede).
+> **150 €/mes** mantenimiento, plazo **~10 semanas** (antes si se puede).
 > Cuando Idan lo pida, se retoca y se convierte en una página bonita (PDF/web) para enviar.
 
 ---
@@ -49,7 +49,7 @@ el móvil la versión móvil, y quien quiera se lo instala como app.
 - **2.000 €** por el juego completo
   - **1.000 € al empezar**
   - **1.000 € a la entrega final**
-- **120 €/mes** de mantenimiento — incluye:
+- **150 €/mes** de mantenimiento — incluye:
   - Alojamiento (que esté siempre disponible y seguro)
   - Correcciones y que no se rompa con las actualizaciones de los móviles
   - Pequeñas mejoras y soporte
@@ -69,7 +69,7 @@ descargable, con la voz de la película— y a alguien que lo mantiene vivo y lo
 
 - El marco **kodesh** explica el precio bajo por **devoción, no por poco valor** (resuelve
   el riesgo de anclaje). La tabla de mercado al lado remata esa idea.
-- Los **120 €/mes son la semilla de ingreso recurrente**: no regalarlos.
+- Los **150 €/mes son la semilla de ingreso recurrente**: no regalarlos.
 - Objetivo real de Idan: **sueldo/ingreso recurrente**, no maximizar este pago. Este
   cliente es el **ancla / caso de éxito**, no el pagador del sueldo. El sueldo sale de
   **reutilizar el motor** (2.º, 3.º juego bíblico cuestan una fracción) + **vender a la
