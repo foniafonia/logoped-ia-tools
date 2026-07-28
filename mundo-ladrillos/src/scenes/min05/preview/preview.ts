@@ -79,7 +79,7 @@ const sound = new SoundEngine();
 //   9  voz_09  [0:54–1:03]  «Frente a ellos el poderoso río Jordán… la tierra prometida a sus antepasados»
 //   10 voz_10  [3:41–4:16]  «Necesito hombres discretos y valientes que vayan a espiar Jericó…»
 //   11 voz_11  [4:24–4:34]  «Es muy peligroso: si los cananeos los descubren, los van a matar»
-//   12 voz_12  [4:44–4:48]  «¿Estás listo? — Sí. Vamos a cambiarnos»
+//   12 voz_12  [4:50–4:57]  «¿Estás listo? — Sí. Vamos a cambiarnos»  (voz real a 4:50; el 4:44 anterior caía en silencio)
 //   13 (sin diálogo — música/ambiente; no hay voz_13)
 //   14 voz_14  [5:12–5:37]  «Es una noche bastante tranquila… ¡UN AVIÓN!»  (+ gag "eso es del futuro")
 //   15 voz_15  [5:37–5:47]  «Vamos, ya es hora» (colarse por la puerta)
