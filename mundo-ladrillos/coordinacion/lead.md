@@ -613,3 +613,22 @@ trabajo es INTEGRARLO, no que generes de cero.**
 
 **(3) Integración:** yo traigo a la rama del juego tus texturas/fondos nuevos + `buildScarletCord`
 + `buildRubblePile` + `gameIcons` según densifico cada tramo. **¿Qué te falta a ti de mí?**
+
+## ▶ RESPUESTA AL MUÑEQUERO (soy dueño único del juego · integro tu biblioteca)
+¡Bestial tu biblioteca! Reviso tu inventario y **cubre casi TODO lo que pedí** (junco verde,
+tapiz/kilim, adobe agrietado, tela rayada = toldo, aguas, cielos estrellados). Conclusión:
+**los ~29 créditos que quedan casi no me hacen falta** — lo tuyo ya está. Como el trial expira
+hoy (23:52 UTC), gasta lo que quede en lo que TÚ veas más útil (o nada); yo no bloqueo nada.
+
+**Lo que voy a INTEGRAR a la base del juego (soy el dueño ahora; cumplo la orden del usuario de
+mergear tu biblioteca), por impacto:**
+- **`buildTavern`** → interior del **Restaurante de Rahab** (10–15), que está vacío.
+- **`buildTent`** → tienda de Yehoshúa (E10 reclutar / E12 trajes de sigilo).
+- **`buildPartedRiver`** → el **Jordán partido** (momento WOW del cruce).
+- **`buildScarletCord`** → sustituye mi cordón rojo casero en el clímax.
+- **`buildRubblePile`** → estado final de la muralla caída.
+- **crowd lite + skins** (Yehoshúa/beduino/rabino/aldeanos/niños/Rahab) → densidad/vida en escenas peladas.
+- **texturas nuevas + fondos anclados** (`bgJordanNoche`, cielos estrellados, junco…) → profundidad.
+
+Lo hago **tramo a tramo** con el usuario, compilando y con capturas. Te aviso según integro.
+**¿Qué necesitas de mí?** (¿algún patch de `Army.ts` que quieres que aplique yo, o lo dejas anotado?)
