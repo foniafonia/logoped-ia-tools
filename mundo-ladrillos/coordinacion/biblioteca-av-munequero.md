@@ -80,6 +80,8 @@
 | **VIGÍA** — capa con capucha sobre armadura ligera, cuerno y antorcha, ojos alerta, barba corta | `c290327e-7fbe-4622-a4a8-4b3b6a965a55` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001245_c290327e-7fbe-4622-a4a8-4b3b6a965a55.png |
 | **PASTORA** — vestido rojizo y chal de lana, cayado y un corderito al lado, ojos vivos y amables | `dbdf52db-b5c3-4a71-bd50-b48e578aabf6` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001601_dbdf52db-b5c3-4a71-bd50-b48e578aabf6.png |
 | **HERBOLARIO** — túnica verde oliva con bolsitas de hierbas secas, mortero en mano, sonrisa sabia | `a4bcc68a-b706-4537-98d7-6caca6e09efa` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001624_a4bcc68a-b706-4537-98d7-6caca6e09efa.png |
+| **GUARDIÁN DEL POZO** — túnica azul desgastada, cuerda enrollada al hombro y cubo de madera, cara curtida y barba blanca | `10489767-bd68-41bf-a246-e6f4e5f1e9ab` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002159_10489767-bd68-41bf-a246-e6f4e5f1e9ab.png |
+| **PANADERA** — delantal con harina sobre vestido cálido, bandeja de panes, mejillas rosadas, sonrisa alegre | `f72612de-5b8d-4e2d-bdf9-e5d3dc4f06b2` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002225_f72612de-5b8d-4e2d-bdf9-e5d3dc4f06b2.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -113,6 +115,8 @@
 | **ODRE DE AGUA** — odre de cuero con correa y tapón de madera, hinchado de agua (viaje) | `bab00b2d-eab6-41da-b6c0-94b6ef5f9397` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001250_bab00b2d-eab6-41da-b6c0-94b6ef5f9397.png |
 | **SACO DE SAL** — saco de arpillera con sal blanca atado con cuerda, algo derramándose (recurso) | `43b8e1bf-dc73-48fa-8a18-cd156a91c5ff` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001604_43b8e1bf-dc73-48fa-8a18-cd156a91c5ff.png |
 | **CANASTO DE DÁTILES** — cesto de mimbre lleno de dátiles marrones brillantes, algunos sueltos en el paño (comida) | `2053d9bc-f46a-4aaa-adcd-d2154ecae966` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001627_2053d9bc-f46a-4aaa-adcd-d2154ecae966.png |
+| **TINAJA GRANDE** — tinaja de barro (pithos) de boca ancha con asas de cuerda y franjas pintadas (almacenaje) | `b0126c8d-0478-446b-81c1-2e0a2b6ed236` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002203_b0126c8d-0478-446b-81c1-2e0a2b6ed236.png |
+| **HOZ** — hoz curva con mango de madera y hoja de bronce, unas espigas al lado (herramienta de cosecha) | `099fe5fa-fa20-4172-8b3a-933f0f485851` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002228_099fe5fa-fa20-4172-8b3a-933f0f485851.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -137,6 +141,7 @@
 | **POWER-UP ALAS (vuelo)** — par de alas blancas de plumas de ladrillos con aura dorada y chispas | `0778def0-5e87-4e42-adf0-01bfcbc5a26b` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000235_0778def0-5e87-4e42-adf0-01bfcbc5a26b.png |
 | **POWER-UP BOMBA DE LADRILLOS** — bomba redonda de ladrillos con mecha encendida y estallido de piezas de colores (lúdica, no violenta) | `74ab0b20-74a7-49dd-be55-f39bed03cb80` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000559_74ab0b20-74a7-49dd-be55-f39bed03cb80.png |
 | **POWER-UP BOTAS DE SALTO** — sandalias de cuero brillantes con suelas-resorte de ladrillos y chispas ascendentes | `d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685.png |
+| **POWER-UP BRÚJULA** — brújula de latón de ladrillos con aguja roja girando y chispas (orientación) | `75d96f55-d959-433d-823d-5020b03f1d00` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002205_75d96f55-d959-433d-823d-5020b03f1d00.png |
 
 ## 🚩 Emblemas / estandartes
 | asset | job id | tamaño | URL |
@@ -179,6 +184,8 @@
 | **CARAVANA LLEGANDO** — caravana comercial llegando a la puerta de Jericó, camellos y burros cargados, polvo, la muralla detrás (tarde) | `2508a7c8-d3af-4422-a24e-bf8bc99c1ad1` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001247_2508a7c8-d3af-4422-a24e-bf8bc99c1ad1.png |
 | **PATIO DE LA POSADA** — viajeros descansando en mesas bajas, un pozo, faroles colgados y parras, luz de tarde (nivel/descanso) | `b059e035-3f7b-4e6c-bd63-315a00bc4843` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001602_b059e035-3f7b-4e6c-bd63-315a00bc4843.png |
 | **HUERTO DE OLIVOS** — hileras de olivos plateados y nudosos, minifiguras vareando y recogiendo en redes, luz dorada (día) | `8430e906-231a-41c6-986b-9eb9e8b830a7` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001626_8430e906-231a-41c6-986b-9eb9e8b830a7.png |
+| **CELEBRACIÓN CON HOGUERA** — minifiguras bailando y palmeando alrededor de un gran fuego de noche, chispas al cielo estrellado, tiendas y estandartes | `dc6f56df-9b52-4e73-80e9-3e00bd82d5be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002201_dc6f56df-9b52-4e73-80e9-3e00bd82d5be.png |
+| **PLAZA AL MEDIODÍA** — plaza de Jericó con fuente central, minifiguras cruzando y charlando, puestos al borde, sol alto y sombras cortas | `236f6ddc-d808-46e7-85de-ec81cc6d67e3` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002227_236f6ddc-d808-46e7-85de-ec81cc6d67e3.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -203,6 +210,9 @@
 | **MUSGO SOBRE PIEDRA** — piedras grises curtidas con manchas de musgo verde y líquenes en las grietas | `1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001606_1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9.png |
 | **ESTERA DE JUNCO** — juncos dorados pálidos trenzados en un tejido apretado (suelo/alfombra) | `19187ee7-4598-4f42-88b0-43825feae74f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001629_19187ee7-4598-4f42-88b0-43825feae74f.png |
 | **MADERA VIEJA** — tablas gris-marrón curtidas con veta visible, nudos y grietas pequeñas | `8c3c7b62-4384-4a4b-b7d1-f77c3509d163` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001630_8c3c7b62-4384-4a4b-b7d1-f77c3509d163.png |
+| **PIEDRA CALIZA** — sillares cortados color crema-beige con vetas suaves y líneas de mortero gastadas | `a975cbac-168a-4033-92ed-39969a801937` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002206_a975cbac-168a-4033-92ed-39969a801937.png |
+| **TELA RAYADA** — franjas cálidas de crema, ocre, teja e índigo con veta de tejido sutil | `66c9f6d4-5b1f-45c0-8e23-96887803ba31` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002230_66c9f6d4-5b1f-45c0-8e23-96887803ba31.png |
+| **ARENA ONDULADA** — dunas doradas con suaves ondas de viento y sombras tenues (suelo desierto) | `095fe7e4-b675-4ca5-81e3-46f9d5062f52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002231_095fe7e4-b675-4ca5-81e3-46f9d5062f52.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
