@@ -19,6 +19,10 @@ import { Dialogue } from './ui/Dialogue';
 import { YEHOSHUA_SKIN, ESPIA1_SIGILO, ESPIA2_SIGILO, ESPIA1_CAMP, ESPIA2_CAMP } from './scenes/min05/skins';
 import { runTramo, TramoRunner, Orquestador, SceneDef } from './core/runTramo';
 import { buildClimax } from './scenes/min25/climax';
+import { Army } from './world/Army';
+import { buildCourtyard, buildApproach } from './structures/BrickStructureBuilder';
+import { buildScenery } from './world/Scenery';
+import { COURT, ROAD } from './core/Layout';
 import { Dust } from './effects/Dust';
 import { AudioManager } from './audio/AudioManager';
 import { installDevHUD, EstadoDev, DestinoDev } from './debug/DevHUD';
@@ -30,32 +34,57 @@ import { installDevHUD, EstadoDev, DestinoDev } from './debug/DevHUD';
  * del contrato compartido `SceneContext`, para coserlo como final del viaje. El jugador
  * (Yehoshúa) llega al pie de la muralla y toca el shofar (E) → la muralla cae.
  */
+// Marcha épica: el jugador arranca DENTRO de la columna del ejército, camino abajo, y
+// avanza con ellos hasta la plaza de la muralla. (spawn/bounds calculados del Layout que
+// usa el propio Army, para que todo — soldados, camino, plaza — encaje.)
+const CLIMAX_SPAWN_Z = COURT.back + ROAD.len * 0.62;   // en mitad de la columna, camino abajo
 const CLIMAX_SCENE: Min05Scene = {
   id: 'm25_climax_muralla',
   numero: 35,
   titulo: 'La caída de la muralla',
-  subtitulo: '«…y las murallas de Jericó empezaron a temblar.»',
+  subtitulo: '«…marchad con el ejército hasta Jericó y tocad el shofar.»',
   // muralla nativa: muro en z=0, shofar delante en z≈16 (lo gestiona ShofarInteraction).
-  objetivo: { tipo: 'ir_a', texto: 'Ve hasta el shofar y tócalo (E)', target: { x: 0, z: 16 }, radio: 6 },
-  exito: '¡La muralla se deshace en ladrillos!',
-  spawn: { x: 0, z: 30 },
+  objetivo: { tipo: 'ir_a', texto: 'Marcha con el ejército hasta el shofar y tócalo (E)', target: { x: 0, z: 16 }, radio: 6 },
+  exito: '¡La muralla se deshace en ladrillos y estalla la batalla!',
+  spawn: { x: 0, z: CLIMAX_SPAWN_Z },
   ambiente: 'day',
   jugador: 'yoshua',
-  bounds: { minX: -34, maxX: 34, minZ: 8, maxZ: 38 },
-  camara: { yaw: Math.PI, pitch: 0.42, dist: 30 },
+  // caja que cubre TODO: de junto al muro (z=6) a camino arriba (tras el spawn), ancho de
+  // la plaza (para poder llegar a Rahab en x≈34 al caer el muro).
+  bounds: { minX: -(COURT.half - 2), maxX: COURT.half - 2, minZ: 6, maxZ: CLIMAX_SPAWN_Z + 12 },
+  camara: { yaw: Math.PI, pitch: 0.40, dist: 34 },
   build(ctx: SceneContext): SceneInstance {
     const dust = new Dust(ctx.scene);
     const audio = new AudioManager(); audio.init();   // el clic de arranque ya fue el gesto
+    const plastic = ctx.plastic;
+
+    // === "LA GENTE Y LAS COSAS" que se habían perdido ===
+    const escenario = new THREE.Group();
+    escenario.add(buildCourtyard(plastic));   // recinto: muros laterales + trasero + torres
+    escenario.add(buildApproach(plastic));    // camino de aproximación (por donde se marcha)
+    escenario.add(buildScenery(plastic));     // columnas / antorchas / decorado
+    const army = new Army();                   // ejército instanciado: infantería, caballería, arqueros, estandartes
+    escenario.add(army.group);
+    army.start();                              // arranca la marcha ya (el jugador va con ellos)
+
     // ShofarInteraction (dentro de buildClimax) pone el shofar + baliza + prompt "Pulsa E",
     // lee al jugador por proximidad y dispara el derrumbe → cayo(). Solo lo alimento y actualizo.
-    const cl = buildClimax(ctx.scene, ctx.plastic, audio, () => ctx.getPlayer(), dust);
+    const cl = buildClimax(ctx.scene, plastic, audio, () => ctx.getPlayer(), dust);
+    escenario.add(cl.group);                   // reparento el muro/refugio bajo el escenario (un solo group)
+    ctx.scene.add(escenario);
+
+    let batalla = false;
     return {
-      group: cl.group,
-      update(dt, t): void { cl.update(dt, t); dust.update(dt); },
+      group: escenario,
+      update(dt, t): void {
+        cl.update(dt, t); dust.update(dt); army.update(dt, t);
+        // al caer la muralla → salen los defensores de Jericó y estalla la batalla
+        if (cl.cayo() && !batalla) { batalla = true; army.startBattle(); }
+      },
       isDone(): boolean { return cl.cayo(); },
-      status(): string | null { return cl.cayo() ? '¡La muralla ha caído! 🎉' : null; },
+      status(): string | null { return cl.cayo() ? '¡La muralla ha caído! ¡A la batalla! ⚔️' : null; },
       hud() { const g = cl.faseObjetivo(); return g ? { goal: [g.x, g.z] as [number, number] } : { progress: 1 }; },   // usa faseObjetivo (shofar→Rahab→null); antes cl.shofarPos no existía y petaba cada frame
-      dispose(): void { ctx.scene.remove(cl.group); }
+      dispose(): void { ctx.scene.remove(escenario); }
     };
   }
 };
