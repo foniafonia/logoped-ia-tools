@@ -129,6 +129,9 @@
 | **CESTO VACÍO** — cesto de mimbre vacío con asa curva (inventario/attrezzo) | `01a1d5dc-6c76-44ef-8425-7d181df54dbe` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004206_01a1d5dc-6c76-44ef-8425-7d181df54dbe.png |
 | **CUCHARA DE MADERA** — cuchara tallada de mango largo y cuenco poco hondo, veta cálida (cocina) | `cb35941c-1c76-4c14-adc2-5015b8eb92a9` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004207_cb35941c-1c76-4c14-adc2-5015b8eb92a9.png |
 | **MORTERO** — mortero de piedra con maza y unas hierbas molidas dentro (cocina/botica) | `0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004233_0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0.png |
+| **REMO** — remo de barca de madera con pala gastada y empuñadura forrada de cuero (navegación) | `75e196af-625e-4a27-9371-285650fd1013` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004549_75e196af-625e-4a27-9371-285650fd1013.png |
+| **CRIBA** — criba redonda de grano con aro de madera y malla fina, algo de tamo (agricultura) | `ca18ac65-5930-417c-8605-ddabb7615d58` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004550_ca18ac65-5930-417c-8605-ddabb7615d58.png |
+| **ESCOBA DE JUNCOS** — haz de juncos secos atado a un mango de madera (limpieza/hogar) | `ff03a61d-a657-4e5f-b3b6-2639d31e2ecc` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004624_ff03a61d-a657-4e5f-b3b6-2639d31e2ecc.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -205,6 +208,7 @@
 | **OASIS** — charca turquesa rodeada de palmeras, minifiguras y un camello descansando, luz dorada (descanso) | `943a6cc3-72de-4143-b5b8-8b613d65fb9e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003247_943a6cc3-72de-4143-b5b8-8b613d65fb9e.png |
 | **CANTERAS** — obreros cortando sillares de caliza pálida con cuerdas, rampas y trineos de madera, polvo (oficio/industria) | `da421985-0bc5-4c79-ba2d-fa468951b7c6` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_003652_da421985-0bc5-4c79-ba2d-fa468951b7c6.png |
 | **EMBARCADERO** — pequeño muelle de madera en el Jordán, barcas amarradas, redes secándose, pescadores cargando cestos (mañana) | `63cbd40d-95fb-455b-acbf-b13c77707ddc` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004235_63cbd40d-95fb-455b-acbf-b13c77707ddc.png |
+| **LADERA CON REBAÑO** — ladera verde con un rebaño de ovejas, un pastor con cayado, rocas y un árbol solitario (pastoral, día) | `9068baea-ff67-4635-9687-309214720c8f` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004626_9068baea-ff67-4635-9687-309214720c8f.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -219,6 +223,7 @@
 | **AMANECER BRUMOSO** — luz dorada pálida y lavanda difusa entre niebla baja sobre un horizonte tenue (16:9) | `4f12b581-13fc-4013-9002-abddcd53774e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000236_4f12b581-13fc-4013-9002-abddcd53774e.png |
 | **CIELO NOCTURNO CON COMETA** — cielo índigo-violeta con un cometa brillante cruzando las estrellas sobre dunas (16:9) | `f23e84b0-e545-47bd-82ad-5127072873be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_f23e84b0-e545-47bd-82ad-5127072873be.png |
 | **CIELO ANARANJADO POLVORIENTO** — luz cálida ámbar-naranja quemado con sol tenue entre polvo en suspensión (16:9) | `e99bb655-eb26-48d4-b3cd-86653a19de71` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_002617_e99bb655-eb26-48d4-b3cd-86653a19de71.png |
+| **ARCOÍRIS TRAS LA LLUVIA** — arcoíris brillante sobre un horizonte recién lavado por la lluvia, nubes abriéndose (16:9, esperanza) | `c97ba099-7658-4ab4-8c28-29e359798e74` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004632_c97ba099-7658-4ab4-8c28-29e359798e74.png |
 
 ## 🧱 Texturas irregulares (swatches 2048px, tileables)
 | textura | job id | tamaño | URL |
@@ -253,6 +258,11 @@
 | **PANAL** — celdas hexagonales de cera dorada brillando con miel, tonos ámbar cálidos | `111db459-8dbb-474c-a1e9-f20c0fe405e8` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004204_111db459-8dbb-474c-a1e9-f20c0fe405e8.png |
 | **RED ANUDADA** — cuerda tostada anudada en malla romboidal regular con nudos pequeños | `6fe95410-d806-4af8-b6a6-7451c4d6ecb2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004230_6fe95410-d806-4af8-b6a6-7451c4d6ecb2.png |
 | **GUIJARROS DE RÍO** — piedras redondeadas lisas en grises, tostados y azules suaves apretadas | `121637b7-e601-4752-959f-582d63bba670` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004232_121637b7-e601-4752-959f-582d63bba670.png |
+| **HOJAS CAÍDAS** — hojas secas de otoño en ocre, teja y marrón esparcidas y solapadas | `d3926569-4f8d-4803-87ce-a3bbdfb59333` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004545_d3926569-4f8d-4803-87ce-a3bbdfb59333.png |
+| **YESO / cal** — enlucido blanco roto con marcas de llana sutiles y grietas finas | `af408f81-1ea8-422d-bb91-6b8dd685e4cb` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004546_af408f81-1ea8-422d-bb91-6b8dd685e4cb.png |
+| **ESCAMAS DE PEZ** — escamas iridiscentes plata-azul solapadas en hileras con brillos suaves | `d7c64dce-2863-4e02-8714-7f53bb7f63a2` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004547_d7c64dce-2863-4e02-8714-7f53bb7f63a2.png |
+| **BARRO SECO CUARTEADO** — tierra cocida por el sol partida en placas poligonales curvadas, tonos tostados | `23f4f7ae-c294-447c-937e-9994b95182a0` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004621_23f4f7ae-c294-447c-937e-9994b95182a0.png |
+| **PLUMAS** — plumas suaves gris paloma y crema solapadas con barbas finas | `3c9f2f73-f2ec-4202-a519-e7a6dfb935cd` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_004623_3c9f2f73-f2ec-4202-a519-e7a6dfb935cd.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
