@@ -59,10 +59,16 @@ function textoEstado(e: EstadoDev): string {
 
 const NOTAS_KEY = 'jerico_notas_v1';
 
-/** Lote de notas listo para pegar en el chat (una por línea, con su sitio exacto). */
+/** Lote de notas listo para pegar en el chat. Cada nota lleva TODO lo del panel
+ *  (mundo, escena, tiempo, posición+rumbo, audio, objetivo) + el texto apuntado. */
 function textoNotas(notas: Array<{ e: EstadoDev; txt: string }>): string {
   const linea = (e: EstadoDev, i: number, txt: string): string =>
-    `${i}) ${e.mundo} | ${e.escena} «${e.titulo}» | x=${e.pos[0]} z=${e.pos[1]} · ${rumboTxt(e.rumbo)}\n   → ${txt || '(sin texto)'}`;
+    `${i}) 🌍 ${e.mundo}\n` +
+    `   🎬 ${e.escena} «${e.titulo}»\n` +
+    `   ⏱ ${Math.round(e.t)}s · 🧍 x=${e.pos[0]} z=${e.pos[1]} · ${rumboTxt(e.rumbo)}\n` +
+    `   🔊 ${e.audio}\n` +
+    `   🎯 ${e.objetivo || '—'}\n` +
+    `   📝 → ${txt || '(sin texto)'}`;
   return `📋 NOTAS DE JUEGO (${notas.length}):\n\n` + notas.map((n, i) => linea(n.e, i + 1, n.txt)).join('\n\n');
 }
 
