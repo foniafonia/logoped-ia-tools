@@ -75,6 +75,9 @@
 | **VIUDA** — túnica y pañuelo gris oscuro, jarrita de aceite en las manos, ojos amables y cansados | `fb80a6c3-0fdc-4ed2-80e5-1597461e9d68` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000552_fb80a6c3-0fdc-4ed2-80e5-1597461e9d68.png |
 | **COMERCIANTE FENICIO** — túnica púrpura con ribete de oro, collares de cuentas, sonrisa astuta, barba negra, gorro | `927d67af-3321-4f68-8165-2adff88cec51` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000554_927d67af-3321-4f68-8165-2adff88cec51.png |
 | **ESCRIBA** — túnica crema con faja manchada de tinta, cálamo tras la oreja y rollo, gafas, gesto reflexivo | `9f0de567-b0db-4263-a754-de76e1bb1e32` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000617_9f0de567-b0db-4263-a754-de76e1bb1e32.png |
+| **CURTIDOR** — delantal de cuero manchado, mangas subidas, una piel al brazo, barba corta | `b2cc2385-82ec-4797-948f-3e26cca2699b` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001219_b2cc2385-82ec-4797-948f-3e26cca2699b.png |
+| **HILANDERA** — vestido ocre, huso con hilo de lana, moño sencillo, sonrisa serena | `34988d66-64c6-474b-afc5-d82df184e8ee` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001221_34988d66-64c6-474b-afc5-d82df184e8ee.png |
+| **VIGÍA** — capa con capucha sobre armadura ligera, cuerno y antorcha, ojos alerta, barba corta | `c290327e-7fbe-4622-a4a8-4b3b6a965a55` | 1536×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001245_c290327e-7fbe-4622-a4a8-4b3b6a965a55.png |
 
 ## 🏺 Objetos de la historia (key-art)
 | objeto | job id | tamaño | URL |
@@ -104,6 +107,8 @@
 | **TELAR** — telar de madera vertical con tela a rayas a medio tejer y hilos colgando (oficio) | `d6f13a2d-0fdc-45b2-8647-c0c20accd67f` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000233_d6f13a2d-0fdc-45b2-8647-c0c20accd67f.png |
 | **BALANZA** — balanza de bronce de dos platos colgando de cadenas sobre pie de madera (comercio) | `c08b6f3e-ac85-460a-ae4c-d36bd79174e7` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000558_c08b6f3e-ac85-460a-ae4c-d36bd79174e7.png |
 | **JARRA DE MIEL** — jarra de barro con miel dorada, cazoleta de madera y un panal al lado (comida) | `4cd030c1-9047-4c53-bf1c-b99fb9ec5229` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000621_4cd030c1-9047-4c53-bf1c-b99fb9ec5229.png |
+| **CESTO DE PECES** — cesto de mimbre lleno de peces plateados frescos con cañas (comida/mercado) | `5de99c7e-7766-40fe-9571-7c7f6477eac5` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001225_5de99c7e-7766-40fe-9571-7c7f6477eac5.png |
+| **ODRE DE AGUA** — odre de cuero con correa y tapón de madera, hinchado de agua (viaje) | `bab00b2d-eab6-41da-b6c0-94b6ef5f9397` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001250_bab00b2d-eab6-41da-b6c0-94b6ef5f9397.png |
 
 ## ✨ Magias / VFX (efectos)
 | efecto | job id | tamaño | URL |
@@ -166,6 +171,8 @@
 | **POZO DEL PUEBLO (con gente)** — mujeres sacando agua en cántaros y charlando junto a un pozo de piedra, palmeras y casas (día) | `e6a5e830-32b2-411e-a014-0c7cb229428b` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000232_e6a5e830-32b2-411e-a014-0c7cb229428b.png |
 | **TEJADOS DE JERICÓ (al atardecer)** — azoteas planas con minifiguras secando lino y charlando, tendederos, cielo naranja-rosa sobre la muralla | `ea9deddb-f2a5-4c04-a117-4a93848f6dd8` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000556_ea9deddb-f2a5-4c04-a117-4a93848f6dd8.png |
 | **RÍO AL AMANECER** — el Jordán en calma con agua brillante, cañas y una barca, bruma rosa-dorada, una garza en la orilla | `f360fc08-f099-4326-a666-0a7bd6a7ac0d` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000619_f360fc08-f099-4326-a666-0a7bd6a7ac0d.png |
+| **TALLER DEL HERRERO** — herrero en la fragua y el yunque, herramientas colgadas, luz naranja y chispas (oficio) | `da11d9b8-13df-4e1c-97d1-ef412fdd7849` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001223_da11d9b8-13df-4e1c-97d1-ef412fdd7849.png |
+| **CARAVANA LLEGANDO** — caravana comercial llegando a la puerta de Jericó, camellos y burros cargados, polvo, la muralla detrás (tarde) | `2508a7c8-d3af-4422-a24e-bf8bc99c1ad1` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001247_2508a7c8-d3af-4422-a24e-bf8bc99c1ad1.png |
 
 ## 🌌 Cielos / fondos de ambiente (backdrops vacíos)
 | fondo | job id | tamaño | URL |
@@ -179,6 +186,13 @@
 | **ATARDECER PÚRPURA** — degradados suaves de violeta, rosa y ámbar sobre un horizonte tenue y sereno (16:9) | `ae7e0824-6ffc-40e6-9125-bf7da6f5557c` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260727_235501_ae7e0824-6ffc-40e6-9125-bf7da6f5557c.png |
 | **AMANECER BRUMOSO** — luz dorada pálida y lavanda difusa entre niebla baja sobre un horizonte tenue (16:9) | `4f12b581-13fc-4013-9002-abddcd53774e` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000236_4f12b581-13fc-4013-9002-abddcd53774e.png |
 | **CIELO NOCTURNO CON COMETA** — cielo índigo-violeta con un cometa brillante cruzando las estrellas sobre dunas (16:9) | `f23e84b0-e545-47bd-82ad-5127072873be` | 2048×1152 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_000623_f23e84b0-e545-47bd-82ad-5127072873be.png |
+
+## 🧱 Texturas irregulares (swatches 2048px, tileables)
+| textura | job id | tamaño | URL |
+|---|---|---|---|
+| **MOSAICO** — suelo de mosaico antiguo, teselas de colores en patrón geométrico con roseta central | `b92c4849-59e4-4efc-a89f-39cd2ec3519d` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001229_b92c4849-59e4-4efc-a89f-39cd2ec3519d.png |
+| **TAPIZ / KILIM** — tejido geométrico de rombos y zigzags en rojos, ocres e índigo con flecos | `a6802bc3-69f6-4ae3-ad40-ccbd383c3b52` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001251_a6802bc3-69f6-4ae3-ad40-ccbd383c3b52.png |
+| **ADOBE AGRIETADO** — muro de adobe de arcilla arenosa con grietas finas y motas de paja | `86cdb8d2-85c5-41f6-93bf-ddda8b21f040` | 2048×2048 | https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/hf_20260728_001252_86cdb8d2-85c5-41f6-93bf-ddda8b21f040.png |
 
 ## 🎞️ Vídeo (intro cinemática) — _archivado; el usuario pidió centrarse solo en imágenes_
 | vídeo | job id | modelo | notas |
