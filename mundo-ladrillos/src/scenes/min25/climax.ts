@@ -31,6 +31,8 @@ export interface ClimaxBuild {
   ganado(): boolean;
   /** Objetivo actual para la baliza: shofar → Rahab → null (al ganar). */
   faseObjetivo(): { x: number; z: number } | null;
+  /** Libera los recursos del clímax (muro, shofar, refugio) al salir de la escena. */
+  dispose(): void;
 }
 
 const SHOFAR = { x: 0, z: 16 };
@@ -104,5 +106,15 @@ export function buildClimax(
     cayo: () => cayo,
     ganado: () => ganado,
     faseObjetivo: () => (ganado ? null : rescateActivo ? { ...RAHAB } : { ...SHOFAR }),
+    dispose: () => {
+      shofar.dispose();               // libera shofar/anillo/haz/grietas/escombros + listener + cartel
+      scene.remove(group);            // muro + refugio de Rahab
+      group.traverse((o) => {
+        const m = o as THREE.Mesh;
+        m.geometry?.dispose?.();
+        const mat = m.material as THREE.Material | THREE.Material[] | undefined;
+        if (Array.isArray(mat)) mat.forEach((x) => x.dispose()); else mat?.dispose?.();
+      });
+    },
   };
 }

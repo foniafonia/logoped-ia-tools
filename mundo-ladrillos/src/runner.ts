@@ -84,7 +84,7 @@ const CLIMAX_SCENE: Min05Scene = {
       isDone(): boolean { return cl.cayo(); },
       status(): string | null { return cl.cayo() ? '¡La muralla ha caído! ¡A la batalla! ⚔️' : null; },
       hud() { const g = cl.faseObjetivo(); return g ? { goal: [g.x, g.z] as [number, number] } : { progress: 1 }; },   // usa faseObjetivo (shofar→Rahab→null); antes cl.shofarPos no existía y petaba cada frame
-      dispose(): void { ctx.scene.remove(escenario); }
+      dispose(): void { cl.dispose(); ctx.scene.remove(escenario); }   // cl.dispose libera el shofar (que cuelga de la escena, no de escenario)
     };
   }
 };

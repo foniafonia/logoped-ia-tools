@@ -14,6 +14,7 @@ interface Rubble { mesh: THREE.Mesh; vel: THREE.Vector3; rot: THREE.Vector3; act
  * que caen, temblor progresivo y el audio de la película.
  */
 export class ShofarInteraction {
+  readonly group = new THREE.Group();   // TODO lo que añade el clímax cuelga de aquí → se libera de una vez
   private shofar = new THREE.Group();
   private ring: THREE.Mesh;
   private cracks: THREE.Mesh[] = [];
@@ -63,7 +64,7 @@ export class ShofarInteraction {
     this.shofar.add(horn, bell);
     this.shofar.position.set(0, 1.8, 16); // al fondo de la avenida, junto a la muralla
     this.shofar.scale.setScalar(1.5);
-    this.scene.add(this.shofar);
+    this.group.add(this.shofar);
 
     this.ring = new THREE.Mesh(
       new THREE.TorusGeometry(1.3, 0.09, 10, 32),
@@ -71,7 +72,7 @@ export class ShofarInteraction {
     );
     this.ring.rotation.x = Math.PI / 2;
     this.ring.position.copy(this.shofar.position).setY(0.15);
-    this.scene.add(this.ring);
+    this.group.add(this.ring);
 
     // Haz de luz dorado para verlo desde lejos
     const beam = new THREE.Mesh(
@@ -79,7 +80,7 @@ export class ShofarInteraction {
       new THREE.MeshBasicMaterial({ color: 0xffd97a, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false })
     );
     beam.position.set(0, 15, 16);
-    this.scene.add(beam);
+    this.group.add(beam);
 
     // --- Grietas ocultas repartidas por todo el muro ---
     const nCracks = Math.max(6, Math.round(this.halfW / 14));
@@ -94,7 +95,7 @@ export class ShofarInteraction {
       const col = [BrickPalette.SAND, BrickPalette.WARM_SAND, BrickPalette.DARK_SAND, BrickPalette.TAN][i % 4];
       const m = new THREE.Mesh(geometry, this.plastic.get(col));
       m.castShadow = true; m.visible = false;
-      this.scene.add(m);
+      this.group.add(m);
       this.rubble.push({ mesh: m, vel: new THREE.Vector3(), rot: new THREE.Vector3(), active: false, settled: false });
     }
 
@@ -108,7 +109,24 @@ export class ShofarInteraction {
     } as CSSStyleDeclaration);
     document.body.appendChild(this.prompt);
 
-    addEventListener('keydown', (e) => { if (e.code === 'KeyE') this.tryActivate(); });
+    this.scene.add(this.group);   // el contenedor del clímax entra UNA vez en la escena
+    addEventListener('keydown', this.onKey);
+  }
+
+  private onKey = (e: KeyboardEvent): void => { if (e.code === 'KeyE') this.tryActivate(); };
+
+  /** Libera TODO lo que el clímax añadió (evita acumular objetos/listeners al repetir o
+   *  reentrar en la escena, o al ejecutar __dryRunAll varias veces). */
+  dispose(): void {
+    removeEventListener('keydown', this.onKey);
+    this.prompt.remove();
+    this.scene.remove(this.group);
+    this.group.traverse((o) => {
+      const m = o as THREE.Mesh;
+      m.geometry?.dispose?.();
+      const mat = m.material as THREE.Material | THREE.Material[] | undefined;
+      if (Array.isArray(mat)) mat.forEach((x) => x.dispose()); else mat?.dispose?.();
+    });
   }
 
   private makeCrack(cx: number): THREE.Mesh {
@@ -125,7 +143,7 @@ export class ShofarInteraction {
     const geo = mergeSimple(parts);
     const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x140d07, transparent: true, opacity: 0 }));
     mesh.position.z = 1.18;
-    this.scene.add(mesh);
+    this.group.add(mesh);
     return mesh;
   }
 
