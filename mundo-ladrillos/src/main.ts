@@ -169,25 +169,8 @@ addEventListener('keydown', (e) => {
 });
 (window as any).__grab = pressGrab;   // para el playtester sintético
 
-// === Botón 🎯 RECENTRAR cámara ===
-// La cámara es LIBRE: se queda donde la dejes. Si te lías con la vista, este botón la
-// vuelve a poner detrás del jugador de un solo toque (una vez, sin perseguir). Tecla: C.
-const recenterBtn = document.createElement('button');
-recenterBtn.textContent = '🎯';
-recenterBtn.title = 'Poner la cámara detrás (C)';
-recenterBtn.style.cssText = `position:fixed;right:26px;bottom:96px;width:64px;height:64px;
-  border-radius:50%;background:rgba(30,60,90,.62);border:3px solid rgba(255,255,255,.4);
-  font-size:28px;z-index:21;touch-action:none;box-shadow:0 3px 12px rgba(0,0,0,.45);
-  display:none;transition:transform .08s,background .15s;`;
-const pedirRecentrar = (): void => { recenterReq = true; recenterBtn.style.transform = 'scale(.86)'; };
-recenterBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); pedirRecentrar(); });
-recenterBtn.addEventListener('pointerup', () => { recenterBtn.style.transform = 'scale(1)'; });
-document.body.appendChild(recenterBtn);
-addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement | null;
-  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-  if (e.code === 'KeyC') recenterReq = true;
-});
+// CÁMARA: igual que la MURALLA — `ThirdPersonCamera` a pelo (arrastras y orbita, sigue al
+// jugador, se queda donde la dejes). Sin recentrado ni botón: es la que le gusta al usuario.
 
 // === Zona de carga del camello (solo en el mini-juego de bultos) ===
 // Un tapiz dorado en el suelo junto al camello + flecha que bota: deja CLARÍSIMO
@@ -403,10 +386,7 @@ function finDelTramo(): void {
 }
 
 // jugosidad: sonidos, estelas y reacciones
-let wasDragging = false;         // cámara: (sin uso ya; la cámara es libre) — se conserva por compat
-let camRecenter = false;         // cámara: recentrado de una sola vez en curso (solo tras pulsar 🎯)
-let camTarget = 0;               // cámara: yaw objetivo (congelado → no persigue)
-let recenterReq = false;         // cámara: petición del botón 🎯 Recentrar (una sola vez)
+// (cámara libre estilo muralla: sin variables de recentrado)
 let trailCd = 0;                 // temporizador de la estela de polvo
 let waveT = 0;                   // Yehoshúa saludando
 let ropesHechas = false;         // fase A (cuerdas) completada → empieza el arreo
@@ -801,24 +781,10 @@ function animate(now: number): void {
     return;
   }
 
-  if (recenterBtn.style.display === 'none') recenterBtn.style.display = 'block';   // ya en juego → muestra 🎯
   const moving = controller.update(dt, tpcam.yaw);
   colisionMishkan(controller.pos);   // #13: no se atraviesa el Mishkán (solo por la puerta)
-  // CÁMARA LIBRE (nota #33): la cámara se queda EXACTAMENTE donde el jugador la deja.
-  // NO recentra sola nunca (ni en bucle "loca", ni de un tirón al soltar "no me hace
-  // caso y se vuelve a su sitio"). El único que mueve la cámara es el dedo/ratón del
-  // jugador arrastrando. Si quiere volver a ponerse detrás, usa el botón 🎯 Recentrar.
-  if (recenterReq) {
-    // botón pulsado: un empujón suave de una sola vez hasta quedar detrás del jugador
-    camTarget = villager.root.rotation.y; camRecenter = true; recenterReq = false;
-  }
-  if (tpcam.dragging) { camRecenter = false; }   // si tocas la cámara, mandas tú: cancela el recentrado
-  if (camRecenter) {
-    let d = camTarget - tpcam.yaw;
-    while (d > Math.PI) d -= Math.PI * 2;
-    while (d < -Math.PI) d += Math.PI * 2;
-    if (Math.abs(d) < 0.03) { camRecenter = false; } else tpcam.yaw += d * Math.min(1, dt * 6);
-  }
+  // CÁMARA estilo MURALLA: la mueve SOLO el arrastre del jugador (tpcam.update al final
+  // del bucle). No hay recentrado automático → se queda exactamente donde la dejas.
   life.update(dt, now / 1000, controller.pos, baa, ovejaAlRedil, grabReq);
   // Botón "🪢 TIRA": visible solo mientras se arrean ovejas; se ilumina y late
   // cuando hay una oveja al alcance (así el peque sabe CUÁNDO pulsar).
