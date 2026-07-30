@@ -63,7 +63,45 @@ export const escena09: Min05Scene = {
     // ribera exuberante a lo largo del agua (helper del muñequero): juncos,
     // espadañas y rocas esparcidos por la orilla, para que no quede pelada.
     group.add(buildRiverbank(plastic, { ax: -34, az: 10, bx: 34, bz: 10, clumps: 9, jitter: 1.6, seed: 5 }));
-    group.add(buildReeds(plastic, -10, 9, 11));
+    const reeds = buildReeds(plastic, -10, 9, 11);
+    group.add(reeds);
+
+    // VIDA AÑADIDA: pequeños vecinos de la ribera. Son pocos, baratos y no
+    // participan en colisiones: rellenan el plano sin competir con el objetivo.
+    const birds: Array<{ root: THREE.Group; left: THREE.Mesh; right: THREE.Mesh; speed: number; phase: number }> = [];
+    for (let i = 0; i < 3; i++) {
+      const root = new THREE.Group();
+      const left = brickBox(plastic, 1.2, 0.16, 0.42, BrickPalette.DARK_GRAY, -0.7, 0, 0);
+      const right = brickBox(plastic, 1.2, 0.16, 0.42, BrickPalette.DARK_GRAY, 0.7, 0, 0);
+      root.add(left, right);
+      root.position.set(-24 - i * 9, 15 + i * 2, 28 + i * 4);
+      root.scale.setScalar(0.65 + i * 0.08);
+      group.add(root);
+      birds.push({ root, left, right, speed: 3.8 + i * 0.8, phase: i * 1.7 });
+    }
+
+    const frogs: Array<{ root: THREE.Group; phase: number }> = [];
+    for (const [x, z, phase] of [[-5, 9.2, 0.4], [4, 10.4, 2.1]] as const) {
+      const root = new THREE.Group();
+      root.add(brickBox(plastic, 1.1, 0.55, 0.9, BrickPalette.GREEN, 0, 0.3, 0));
+      root.add(brickBox(plastic, 0.72, 0.4, 0.72, BrickPalette.GREEN, 0, 0.75, -0.12));
+      root.add(brickBox(plastic, 0.14, 0.14, 0.14, BrickPalette.WHITE, -0.22, 0.98, -0.48));
+      root.add(brickBox(plastic, 0.14, 0.14, 0.14, BrickPalette.WHITE, 0.22, 0.98, -0.48));
+      root.position.set(x, 0, z);
+      group.add(root);
+      frogs.push({ root, phase });
+    }
+
+    const dragonflies: Array<{ root: THREE.Group; phase: number }> = [];
+    for (const [x, y, z, phase] of [[-9, 4.2, 7, 0.2], [-1, 3.4, 11, 2.4]] as const) {
+      const root = new THREE.Group();
+      root.add(brickBox(plastic, 0.18, 0.9, 0.18, BrickPalette.DARK_BLUE, 0, 0, 0));
+      root.add(brickBox(plastic, 0.8, 0.08, 0.28, 0x8fd3e8, -0.46, 0.1, 0));
+      root.add(brickBox(plastic, 0.8, 0.08, 0.28, 0x8fd3e8, 0.46, 0.1, 0));
+      root.position.set(x, y, z);
+      group.add(root);
+      dragonflies.push({ root, phase });
+    }
 
     const boat = buildBoat(plastic); boat.position.set(-16, 0, 6); boat.rotation.y = 0.5; group.add(boat);
     ctx.addObstacle(-16, 6, 2, 4);
@@ -130,6 +168,25 @@ export const escena09: Min05Scene = {
           const s = Math.sin(t * 0.8 + f.userData.ph);
           f.position.set(f.userData.bx + s * 6, 0.5 + Math.sin(t * 3 + f.userData.ph) * 0.15, f.userData.bz + Math.cos(t * 0.6 + f.userData.ph) * 2);
           f.rotation.y = s > 0 ? 0.4 : -0.4 + Math.PI;
+        }
+        reeds.rotation.z = Math.sin(t * 1.4) * 0.025;
+        for (const bird of birds) {
+          bird.root.position.x += bird.speed * dt;
+          if (bird.root.position.x > 30) bird.root.position.x = -32;
+          bird.root.position.y += Math.sin(t * 1.8 + bird.phase) * 0.006;
+          const flap = Math.sin(t * 8 + bird.phase) * 0.45;
+          bird.left.rotation.z = flap; bird.right.rotation.z = -flap;
+        }
+        for (const frog of frogs) {
+          const hop = Math.max(0, Math.sin(t * 2.2 + frog.phase)) ** 8;
+          frog.root.position.y = hop * 0.75;
+          frog.root.rotation.z = Math.sin(t * 2.2 + frog.phase) * hop * 0.12;
+        }
+        for (const dragonfly of dragonflies) {
+          dragonfly.root.position.x += Math.sin(t * 1.5 + dragonfly.phase) * dt * 0.8;
+          dragonfly.root.position.y += Math.sin(t * 2.4 + dragonfly.phase) * dt * 0.45;
+          dragonfly.root.rotation.y = Math.sin(t * 1.3 + dragonfly.phase) * 0.35;
+          dragonfly.root.rotation.z = Math.sin(t * 11 + dragonfly.phase) * 0.2;
         }
         life.update(dt); g1.update(dt); gems.update(dt, t, player);
         // VERBO: en el promontorio, pulsa E para otear Jericó (la cámara cruza el

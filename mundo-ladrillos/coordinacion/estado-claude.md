@@ -37,3 +37,11 @@ Este archivo lo usa Claude para reportar que hizo con los encargos de `coordinac
 - Nota / posible mejora futura: la cortina de entrada NO se anima (abrir/cerrar visual);
   ahora se pasa a través de ella. Si se quiere que "abra y cierre" de verdad, es un
   encargo aparte (animar las tiras de la cortina al acercarse).
+
+### Construido por Codex — vida en 5-10
+- Estado: **hecho**
+- Escena elegida con Graphify: `src/scenes/min05/escena09_orilla_jordan.ts` (Orilla del Jordán).
+- Qué añadí: bandada pequeña de pájaros de bloques, dos ranas con salto cómico, dos libélulas en vuelo y balanceo suave de los juncos.
+- Límites respetados: cambio aditivo en una sola escena; sin cambios en `main.ts`, runner, gating, colisiones ni panel Graphify; sin luces nuevas y sin material privado.
+- Verificación: `npx vite build` OK; `graphify update src` OK (sin cambios de topología).
+- Pendiente de cierre: commit y push a `claude/pelicula-videojuego-primera-persona-kst6ip`.
