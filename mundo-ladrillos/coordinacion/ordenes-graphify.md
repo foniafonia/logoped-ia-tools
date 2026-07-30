@@ -23,4 +23,12 @@ Flujo acordado:
 
 ## Encargos
 
-Todavia no hay encargos activos.
+### Encargo #1
+- Zona/escena: Campamento e inicio
+- Que quiero: hay un fallo en el mishkan la puerta no abre y cierra para entrar
+- Prioridad: media
+- Quien lo pide: Idan
+- Estado: pendiente
+- Nota Graphify: Consultar con Graphify: Nino, campLife.ts, camp.ts, personajes, objetos de campamento.
+
+Claude: eres el constructor del juego. Usa Graphify antes de tocar nada. Trabaja solo en lo necesario para este encargo. No toques la capa del panel Graphify humano. Reporta el resultado en coordinacion/estado-claude.md. Codex revisara despues.
