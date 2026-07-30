@@ -3,396 +3,410 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Graphify para humanos</title>
+  <title>Graphify humano - panel del juego</title>
   <style>
     :root {
-      --ink: #182025;
-      --muted: #5c6870;
-      --paper: #fffdf8;
-      --line: #d9cbb5;
-      --blue: #2f80ed;
-      --green: #2d9d68;
-      --gold: #c47a16;
-      --red: #c53d3d;
-      --violet: #7a5ccf;
-      --cyan: #118a9a;
-      --shadow: 0 18px 50px rgba(33, 28, 19, .14);
+      --bg: #101418;
+      --panel: rgba(23, 29, 34, .88);
+      --panel-2: rgba(31, 38, 44, .92);
+      --ink: #f5efe3;
+      --muted: #b6c0c7;
+      --line: rgba(177, 205, 224, .22);
+      --hot: #f0b24a;
+      --blue: #61a8ff;
+      --green: #5fd08b;
+      --red: #ff6f61;
+      --violet: #b794ff;
+      --cyan: #67d9e8;
+      --shadow: 0 22px 70px rgba(0, 0, 0, .38);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
       color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,238,.94)),
-        radial-gradient(circle at 12% 8%, rgba(47,128,237,.14), transparent 28%),
-        radial-gradient(circle at 88% 16%, rgba(45,157,104,.13), transparent 24%),
-        #f7efe2;
+        radial-gradient(circle at 20% 12%, rgba(97, 168, 255, .22), transparent 26%),
+        radial-gradient(circle at 80% 24%, rgba(240, 178, 74, .18), transparent 26%),
+        radial-gradient(circle at 46% 88%, rgba(103, 217, 232, .14), transparent 30%),
+        linear-gradient(180deg, #11171c 0%, #0b0f13 100%);
     }
 
     main {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1440px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 28px 0 42px;
+      padding: 22px 0 34px;
     }
 
     header {
       display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 24px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
       align-items: end;
-      padding: 12px 0 22px;
+      margin-bottom: 16px;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(30px, 5vw, 58px);
-      line-height: 1.02;
+      margin: 0 0 8px;
+      font-size: clamp(34px, 5vw, 68px);
+      line-height: .98;
       letter-spacing: 0;
     }
 
     h2 {
-      margin: 0 0 14px;
-      font-size: 22px;
+      margin: 0 0 10px;
+      font-size: 19px;
       letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: 0;
+      color: #fff7e6;
     }
 
     p {
       margin: 0;
       color: var(--muted);
-      font-size: 17px;
-      line-height: 1.55;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .pill {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.7);
-      padding: 8px 11px;
-      border-radius: 999px;
-      font-size: 14px;
-      color: #3a444b;
-    }
-
-    .panel {
-      background: rgba(255,255,255,.76);
-      border: 1px solid rgba(154,128,89,.25);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-    }
-
-    .intro-card {
-      padding: 20px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 330px 1fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    .side {
-      padding: 18px;
-    }
-
-    .side ol {
-      margin: 10px 0 0;
-      padding-left: 22px;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 16px;
-    }
-
-    .side li + li { margin-top: 9px; }
-
-    .legend {
-      display: grid;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .legend-item {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      color: var(--muted);
+      line-height: 1.48;
       font-size: 15px;
     }
 
-    .dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: var(--blue);
-      flex: 0 0 auto;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .map-wrap {
-      position: relative;
-      min-height: 610px;
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 7px;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, .08);
+      color: #fff9ed;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      background: linear-gradient(180deg, #f4bf61, #c98424);
+      border-color: rgba(255, 218, 134, .45);
+      color: #14100a;
+    }
+
+    .btn.dark {
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .card {
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: var(--panel);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .map-title {
+    .graph-card {
+      position: relative;
+      min-height: 700px;
+    }
+
+    .toolbar {
       position: absolute;
-      left: 22px;
-      top: 18px;
-      z-index: 3;
-      max-width: 520px;
+      left: 14px;
+      top: 14px;
+      right: 14px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      pointer-events: none;
     }
 
-    .map-title strong {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 4px;
+    .toolbar > * {
+      pointer-events: auto;
     }
 
-    .map-title span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      border: 1px solid rgba(255, 255, 255, .15);
+      background: rgba(12, 16, 20, .72);
+      color: #eef7fb;
+      padding: 7px 9px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .search {
+      width: min(310px, 100%);
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(7, 10, 13, .74);
+      color: var(--ink);
+      border-radius: 7px;
+      padding: 10px 12px;
+      font: inherit;
+      outline: none;
     }
 
     svg {
       width: 100%;
-      height: 610px;
+      height: 700px;
       display: block;
       background:
-        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
-      background-size: 42px 42px;
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 36px 36px;
     }
 
     .edge {
-      stroke: rgba(54, 61, 64, .32);
-      stroke-width: 3;
+      stroke: var(--line);
+      stroke-width: 2;
       fill: none;
     }
 
-    .edge.main {
-      stroke: rgba(196, 122, 22, .72);
-      stroke-width: 4;
+    .edge.strong {
+      stroke: rgba(240, 178, 74, .66);
+      stroke-width: 3.5;
     }
 
     .node {
       cursor: pointer;
-      transition: transform .15s ease;
     }
 
     .node circle {
-      stroke: rgba(255,255,255,.95);
-      stroke-width: 4;
-      filter: drop-shadow(0 10px 16px rgba(30, 23, 14, .2));
+      stroke: rgba(255, 255, 255, .9);
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 16px rgba(105, 188, 255, .22));
     }
 
     .node text {
-      fill: #182025;
-      font-weight: 700;
-      font-size: 14px;
+      fill: #fffaf1;
       text-anchor: middle;
       dominant-baseline: middle;
-      pointer-events: none;
-    }
-
-    .node:hover circle,
-    .node.active circle {
-      stroke: #1d1d1d;
-      stroke-width: 5;
-    }
-
-    .info {
-      position: absolute;
-      right: 18px;
-      bottom: 18px;
-      width: min(430px, calc(100% - 36px));
-      padding: 18px;
-      z-index: 4;
-    }
-
-    .info .kicker {
-      color: var(--gold);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+      pointer-events: none;
+      paint-order: stroke;
+      stroke: rgba(0,0,0,.55);
+      stroke-width: 3px;
     }
 
-    .info h2 { margin-bottom: 8px; }
-
-    .info ul {
-      margin: 12px 0 0;
-      padding-left: 20px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .journey {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .step {
-      border: 1px solid rgba(154,128,89,.28);
-      background: rgba(255,255,255,.78);
-      border-radius: 8px;
-      padding: 13px 10px;
-      min-height: 82px;
-      display: grid;
-      place-items: center;
-      text-align: center;
+    .node .sub {
+      font-size: 11px;
+      fill: #d9e3e9;
       font-weight: 700;
-      color: #273238;
-      position: relative;
     }
 
-    .step:not(:last-child)::after {
-      content: ">";
-      position: absolute;
-      right: -11px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gold);
-      font-weight: 900;
-      z-index: 1;
+    .node.dim {
+      opacity: .22;
     }
 
-    .plain-box {
-      margin-top: 20px;
-      padding: 18px;
+    .node.active circle {
+      stroke: #fff;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 24px rgba(240, 178, 74, .55));
     }
 
-    .plain-grid {
+    .side {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto 1fr;
       gap: 12px;
+    }
+
+    .panel-section {
+      padding: 16px;
+      background: var(--panel-2);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .selected-title {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--hot);
+      box-shadow: 0 0 18px currentColor;
+      flex: 0 0 auto;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-top: 12px;
     }
 
-    .plain-card {
-      border-left: 5px solid var(--blue);
-      background: rgba(255,255,255,.7);
-      padding: 14px;
-      border-radius: 6px;
-      min-height: 124px;
+    .mini-link {
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .06);
+      border-radius: 7px;
+      padding: 9px 10px;
+      color: #eef7fb;
+      font-size: 13px;
+      font-weight: 700;
     }
 
-    .plain-card strong {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 16px;
+    .mini-link:hover,
+    .btn:hover {
+      border-color: rgba(240, 178, 74, .65);
     }
 
-    .plain-card span {
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 15px;
-    }
-
-    .command-box {
-      margin-top: 20px;
-      padding: 18px;
-    }
-
-    .command-grid {
+    .protocol {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
+      gap: 8px;
+      padding: 16px;
+    }
+
+    .protocol-row {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, .045);
+    }
+
+    .protocol-row strong {
+      color: #fff7e6;
+      font-size: 13px;
+    }
+
+    .protocol-row span {
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 13px;
+    }
+
+    .form {
+      padding: 16px;
     }
 
     label {
       display: grid;
-      gap: 7px;
-      color: #2b363c;
+      gap: 6px;
+      margin-bottom: 10px;
+      color: #fff7e6;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     select,
-    textarea,
-    input {
+    input,
+    textarea {
       width: 100%;
-      border: 1px solid rgba(154,128,89,.38);
-      border-radius: 6px;
-      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 7px;
+      background: rgba(7, 10, 13, .78);
       color: var(--ink);
+      padding: 10px 11px;
       font: inherit;
-      padding: 11px 12px;
+      outline: none;
     }
 
     textarea {
       min-height: 118px;
       resize: vertical;
-      grid-column: 1 / -1;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 12px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 6px;
-      background: var(--gold);
-      color: white;
-      font-weight: 700;
-      padding: 11px 14px;
-      cursor: pointer;
-      font: inherit;
-    }
-
-    button.secondary {
-      background: #273238;
     }
 
     .output {
-      margin-top: 14px;
-      min-height: 180px;
+      min-height: 190px;
       white-space: pre-wrap;
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.45;
-      color: #253039;
+      line-height: 1.42;
+      font-size: 13px;
     }
 
-    @media (max-width: 900px) {
+    .status {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .bottom .card {
+      padding: 16px;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .list a,
+    .list div {
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 7px;
+      padding: 10px;
+      background: rgba(255, 255, 255, .045);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1040px) {
       header,
-      .layout,
-      .plain-grid {
+      .grid,
+      .bottom {
         grid-template-columns: 1fr;
       }
 
-      .command-grid {
-        grid-template-columns: 1fr;
+      .top-actions {
+        justify-content: flex-start;
       }
 
-      .journey {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .step:not(:last-child)::after {
-        display: none;
-      }
-
-      .map-wrap {
-        min-height: 720px;
-      }
-
+      .graph-card,
       svg {
-        height: 720px;
+        min-height: 640px;
+        height: 640px;
       }
     }
   </style>
@@ -401,328 +415,342 @@
   <main>
     <header>
       <div>
-        <h1>Graphify para humanos</h1>
-        <p>Esto es el mismo cerebro del juego, pero traducido: no ves nombres raros, ves ideas. Cada bola es una parte importante y cada línea significa “esto ayuda a esto”.</p>
-        <div class="pill-row">
-          <span class="pill">Sin internet</span>
-          <span class="pill">Sin código visible</span>
-          <span class="pill">Explicado fácil</span>
-        </div>
+        <h1>Graphify humano</h1>
+        <p>Panel intermedio: conserva la sensacion de grafo real, pero usa nombres comprensibles, enlaces para probar cosas y un generador de encargos para Claude.</p>
       </div>
-      <section class="panel intro-card">
-        <h2>La idea en una frase</h2>
-        <p>Graphify mira el juego por dentro y dibuja qué piezas trabajan juntas, para que Claude y Codex no vayan a ciegas.</p>
-      </section>
+      <nav class="top-actions" aria-label="Accesos principales">
+        <a class="btn primary" href="index.html">Probar juego</a>
+        <a class="btn" href="src/graphify-out/graph.html">Ver grafo tecnico</a>
+        <a class="btn" href="coordinacion/ordenes-graphify.md">Buzon Claude</a>
+        <a class="btn" href="coordinacion/revision-codex.md">Revision Codex</a>
+      </nav>
     </header>
 
-    <section class="layout">
-      <aside class="panel side">
-        <h2>Cómo mirarlo</h2>
-        <ol>
-          <li>Empieza por una bola grande: suele ser una pieza importante.</li>
-          <li>Sigue las líneas: te dicen qué cosas trabajan juntas.</li>
-          <li>Toca una bola: abajo aparece la explicación en castellano.</li>
-          <li>Si hay muchas líneas, esa pieza sostiene muchas partes del juego.</li>
-        </ol>
-        <div class="legend">
-          <div class="legend-item"><span class="dot" style="background:var(--gold)"></span> Camino de la historia</div>
-          <div class="legend-item"><span class="dot" style="background:var(--green)"></span> Personas y vida</div>
-          <div class="legend-item"><span class="dot" style="background:var(--blue)"></span> Mundo de ladrillos</div>
-          <div class="legend-item"><span class="dot" style="background:var(--red)"></span> Gran final</div>
-          <div class="legend-item"><span class="dot" style="background:var(--violet)"></span> Ayudas invisibles del juego</div>
+    <section class="grid">
+      <section class="card graph-card">
+        <div class="toolbar">
+          <div class="badge-row">
+            <span class="badge">Claude construye</span>
+            <span class="badge">Codex revisa</span>
+            <span class="badge">Graphify orienta</span>
+          </div>
+          <input class="search" id="search" placeholder="Filtrar: muralla, shofar, Rahab...">
         </div>
-      </aside>
 
-      <section class="panel map-wrap">
-        <div class="map-title">
-          <strong>Mapa sencillo del cerebro del juego</strong>
-          <span>No está todo el grafo técnico. Es una versión reducida con las piezas que una persona puede entender de un vistazo.</span>
-        </div>
-        <svg viewBox="0 0 820 610" role="img" aria-label="Mapa sencillo de Graphify">
-          <path class="edge main" d="M112 292 C190 232, 250 215, 310 250"></path>
-          <path class="edge main" d="M310 250 C392 226, 450 234, 510 292"></path>
-          <path class="edge main" d="M510 292 C570 338, 620 363, 704 342"></path>
-          <path class="edge" d="M112 292 C152 388, 244 422, 332 428"></path>
-          <path class="edge" d="M310 250 C308 164, 374 112, 454 124"></path>
-          <path class="edge" d="M510 292 C548 202, 626 160, 706 182"></path>
-          <path class="edge" d="M704 342 C646 422, 546 456, 430 468"></path>
-          <path class="edge" d="M332 428 C368 468, 388 488, 430 468"></path>
-          <path class="edge" d="M454 124 C528 122, 612 136, 706 182"></path>
-          <path class="edge" d="M430 468 C530 510, 636 482, 704 342"></path>
-          <path class="edge" d="M310 250 C356 332, 384 390, 430 468"></path>
-          <path class="edge" d="M510 292 C448 348, 392 382, 332 428"></path>
+        <svg viewBox="0 0 980 700" role="img" aria-label="Grafo humano del juego">
+          <path class="edge strong" d="M82 350 C165 230, 246 188, 338 236"></path>
+          <path class="edge strong" d="M338 236 C430 190, 520 190, 608 242"></path>
+          <path class="edge strong" d="M608 242 C700 274, 760 328, 858 346"></path>
+          <path class="edge strong" d="M858 346 C776 424, 690 454, 586 476"></path>
+          <path class="edge" d="M338 236 C280 310, 252 408, 310 500"></path>
+          <path class="edge" d="M310 500 C420 540, 510 532, 586 476"></path>
+          <path class="edge" d="M338 236 C406 94, 540 92, 640 152"></path>
+          <path class="edge" d="M640 152 C734 166, 804 230, 858 346"></path>
+          <path class="edge" d="M608 242 C554 322, 534 398, 586 476"></path>
+          <path class="edge" d="M608 242 C686 190, 758 166, 840 174"></path>
+          <path class="edge" d="M840 174 C882 222, 884 288, 858 346"></path>
+          <path class="edge" d="M82 350 C120 470, 202 534, 310 500"></path>
+          <path class="edge" d="M82 350 C124 178, 246 106, 406 116"></path>
+          <path class="edge" d="M406 116 C494 130, 560 142, 640 152"></path>
+          <path class="edge" d="M406 116 C384 176, 368 205, 338 236"></path>
 
-          <g class="node active" data-key="graphify" transform="translate(112 292)">
-            <circle r="62" fill="#c47a16"></circle>
-            <text y="-8">Graphify</text>
-            <text y="11">mira todo</text>
+          <g class="node active" data-key="mapa" transform="translate(82 350)">
+            <circle r="58" fill="#f0b24a"></circle>
+            <text y="-7">Graphify</text><text class="sub" y="13">mapa vivo</text>
           </g>
-          <g class="node" data-key="campamento" transform="translate(310 250)">
-            <circle r="54" fill="#2d9d68"></circle>
-            <text y="-8">Campamento</text>
-            <text y="11">e inicio</text>
+          <g class="node" data-key="campamento" transform="translate(338 236)">
+            <circle r="54" fill="#5fd08b"></circle>
+            <text y="-7">Campamento</text><text class="sub" y="13">inicio</text>
           </g>
-          <g class="node" data-key="nino" transform="translate(332 428)">
-            <circle r="48" fill="#2d9d68"></circle>
-            <text y="-8">Niño</text>
-            <text y="11">jugador</text>
+          <g class="node" data-key="rio" transform="translate(608 242)">
+            <circle r="50" fill="#67d9e8"></circle>
+            <text y="-7">Rio</text><text class="sub" y="13">noche</text>
           </g>
-          <g class="node" data-key="personajes" transform="translate(454 124)">
-            <circle r="58" fill="#2f80ed"></circle>
-            <text y="-8">Personajes</text>
-            <text y="11">de juguete</text>
+          <g class="node" data-key="rahab" transform="translate(858 346)">
+            <circle r="58" fill="#ff6f61"></circle>
+            <text y="-7">Rahab</text><text class="sub" y="13">posada</text>
           </g>
-          <g class="node" data-key="mundo" transform="translate(430 468)">
-            <circle r="56" fill="#118a9a"></circle>
-            <text y="-8">Mundo</text>
-            <text y="11">de ladrillos</text>
+          <g class="node" data-key="cordon" transform="translate(840 174)">
+            <circle r="44" fill="#ff6f61"></circle>
+            <text y="-7">Cordon</text><text class="sub" y="13">rojo</text>
           </g>
-          <g class="node" data-key="muralla" transform="translate(510 292)">
-            <circle r="60" fill="#c53d3d"></circle>
-            <text y="-8">Muralla</text>
-            <text y="11">final</text>
+          <g class="node" data-key="muralla" transform="translate(586 476)">
+            <circle r="62" fill="#f06c4f"></circle>
+            <text y="-7">Muralla</text><text class="sub" y="13">final</text>
           </g>
-          <g class="node" data-key="shofar" transform="translate(706 182)">
-            <circle r="50" fill="#7a5ccf"></circle>
-            <text y="-8">Shofar</text>
-            <text y="11">y sonido</text>
+          <g class="node" data-key="shofar" transform="translate(640 152)">
+            <circle r="48" fill="#b794ff"></circle>
+            <text y="-7">Shofar</text><text class="sub" y="13">sonido</text>
           </g>
-          <g class="node" data-key="batalla" transform="translate(704 342)">
-            <circle r="56" fill="#c53d3d"></circle>
-            <text y="-8">Batalla</text>
-            <text y="11">y caída</text>
+          <g class="node" data-key="nino" transform="translate(310 500)">
+            <circle r="48" fill="#61a8ff"></circle>
+            <text y="-7">Nino</text><text class="sub" y="13">jugador</text>
+          </g>
+          <g class="node" data-key="personajes" transform="translate(406 116)">
+            <circle r="50" fill="#61a8ff"></circle>
+            <text y="-7">Personajes</text><text class="sub" y="13">vida</text>
           </g>
         </svg>
-
-        <article class="panel info" id="info">
-          <div class="kicker">Toca una bola</div>
-          <h2>Graphify mira todo</h2>
-          <p>Es como encender una linterna dentro del juego. Te dice qué partes existen y cuáles trabajan juntas.</p>
-          <ul>
-            <li>Sirve para que Claude y Codex sepan dónde mirar.</li>
-            <li>Evita perderse entre demasiados archivos.</li>
-            <li>Convierte el juego en un mapa de relaciones.</li>
-          </ul>
-        </article>
       </section>
+
+      <aside class="card side">
+        <section class="panel-section">
+          <div class="selected-title">
+            <span class="color-dot" id="selectedDot"></span>
+            <h2 id="selectedTitle">Graphify: mapa vivo</h2>
+          </div>
+          <p id="selectedText">No es un chat: es una capa de orientacion. Te ayuda a elegir una zona, ver conexiones, probar lo relacionado y preparar una orden para Claude.</p>
+          <div class="links" id="selectedLinks"></div>
+        </section>
+
+        <section class="protocol">
+          <h2>Cadena real</h2>
+          <div class="protocol-row"><strong>Tu</strong><span>Decides que quieres cambiar o probar.</span></div>
+          <div class="protocol-row"><strong>Panel</strong><span>Convierte tu idea en encargo claro y enlazado.</span></div>
+          <div class="protocol-row"><strong>Claude</strong><span>Construye el juego y reporta lo hecho.</span></div>
+          <div class="protocol-row"><strong>Codex</strong><span>Revisa con Graphify y avisa de riesgos.</span></div>
+        </section>
+
+        <section class="form">
+          <h2>Ordenar trabajo</h2>
+          <div class="two">
+            <label>Zona
+              <select id="zone"></select>
+            </label>
+            <label>Prioridad
+              <select id="priority">
+                <option>media</option>
+                <option>alta</option>
+                <option>baja</option>
+              </select>
+            </label>
+          </div>
+          <div class="two">
+            <label>Encargo
+              <input id="taskNumber" value="1" inputmode="numeric">
+            </label>
+            <label>Quien pide
+              <input id="requester" value="Idan">
+            </label>
+          </div>
+          <label>Que quieres
+            <textarea id="requestText" placeholder="Ejemplo: quiero que esta zona se sienta mas emocionante y clara para un niño, sin violencia realista."></textarea>
+          </label>
+          <div class="top-actions">
+            <button class="btn primary" id="buildTask" type="button">Generar encargo</button>
+            <button class="btn dark" id="copyTask" type="button">Copiar</button>
+          </div>
+          <textarea class="output" id="taskOutput" readonly></textarea>
+          <div class="status" id="status"></div>
+        </section>
+      </aside>
     </section>
 
-    <section class="journey" aria-label="Recorrido del juego">
-      <div class="step">Campamento</div>
-      <div class="step">Río de noche</div>
-      <div class="step">Posada</div>
-      <div class="step">Cordón rojo</div>
-      <div class="step">Muralla</div>
-      <div class="step">Batalla final</div>
-    </section>
-
-    <section class="panel plain-box">
-      <h2>Traducción rápida</h2>
-      <div class="plain-grid">
-        <div class="plain-card" style="border-color:var(--gold)">
-          <strong>El grafo técnico</strong>
-          <span>Es el archivo que leen Claude y Codex. Tiene todos los puntitos y líneas con nombres exactos.</span>
+    <section class="bottom">
+      <section class="card">
+        <h2>Probar y mirar</h2>
+        <p>Estos accesos sirven para comprobar el juego o abrir material relacionado. Algunos previews necesitan que el servidor Vite este encendido.</p>
+        <div class="list">
+          <a href="index.html">Juego principal</a>
+          <a href="climax.html">Climax / final</a>
+          <a href="src/scenes/min05/preview/index.html">Preview rio y espias</a>
+          <a href="src/scenes/min10/preview/index.html">Preview posada / mercado</a>
+          <a href="src/scenes/min15/preview/index.html">Preview cordon rojo / preparativos</a>
+          <a href="src/graphify-out/graph.html">Grafo tecnico original</a>
         </div>
-        <div class="plain-card" style="border-color:var(--green)">
-          <strong>Este mapa humano</strong>
-          <span>Es una maqueta fácil. No enseña todo, enseña lo necesario para entender qué hace Graphify.</span>
+      </section>
+      <section class="card">
+        <h2>Buzones del circuito</h2>
+        <p>El panel no escribe archivos automaticamente al abrirse con doble clic. Genera el texto; luego se pega en el buzon o se manda a Claude.</p>
+        <div class="list">
+          <a href="coordinacion/ordenes-graphify.md">coordinacion/ordenes-graphify.md</a>
+          <a href="coordinacion/estado-claude.md">coordinacion/estado-claude.md</a>
+          <a href="coordinacion/revision-codex.md">coordinacion/revision-codex.md</a>
+          <div>Para servidor local: abrir terminal en mundo-ladrillos y ejecutar npm run dev</div>
         </div>
-        <div class="plain-card" style="border-color:var(--red)">
-          <strong>Para qué te sirve</strong>
-          <span>Cuando pidas cambios, el asistente puede consultar el mapa antes de tocar el juego.</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel command-box">
-      <h2>Crear encargo para Claude</h2>
-      <p>Este panel no despierta a Claude solo. Te prepara el encargo con el formato pactado para pegarlo en `coordinacion/ordenes-graphify.md` o mandarselo a Claude al abrir su sesion.</p>
-      <div class="command-grid">
-        <label>
-          Zona del juego
-          <select id="zone">
-            <option>Campamento e inicio</option>
-            <option>Rio de noche</option>
-            <option>Posada de Rahab</option>
-            <option>Cordon rojo</option>
-            <option>Muralla final</option>
-            <option>Batalla final</option>
-            <option>Sonido y shofar</option>
-            <option>Personajes</option>
-          </select>
-        </label>
-        <label>
-          Prioridad
-          <select id="priority">
-            <option>media</option>
-            <option>alta</option>
-            <option>baja</option>
-          </select>
-        </label>
-        <label>
-          Numero de encargo
-          <input id="taskNumber" value="1" inputmode="numeric">
-        </label>
-        <label>
-          Quien lo pide
-          <input id="requester" value="Idan">
-        </label>
-        <label>
-          Que quieres que haga Claude
-          <textarea id="requestText" placeholder="Ejemplo: quiero que la caida de la muralla sea mas emocionante, con mas sensacion de shofar, polvo y sorpresa, sin violencia realista."></textarea>
-        </label>
-      </div>
-      <div class="actions">
-        <button id="buildTask" type="button">Generar encargo</button>
-        <button class="secondary" id="copyTask" type="button">Copiar texto</button>
-      </div>
-      <textarea class="output" id="taskOutput" readonly></textarea>
+      </section>
     </section>
   </main>
 
   <script>
-    const copy = {
-      graphify: {
-        title: "Graphify mira todo",
-        text: "Es como encender una linterna dentro del juego. Te dice qué partes existen y cuáles trabajan juntas.",
-        bullets: [
-          "Sirve para que Claude y Codex sepan dónde mirar.",
-          "Evita perderse entre demasiados archivos.",
-          "Convierte el juego en un mapa de relaciones."
+    const nodes = {
+      mapa: {
+        label: "Graphify: mapa vivo",
+        zone: "Graphify / panel",
+        color: "#f0b24a",
+        text: "Capa de orientacion: muestra conexiones, enlaza pruebas y prepara encargos. No sustituye a Claude ni a Codex.",
+        note: "Usar Graphify para ubicar piezas conectadas antes de pedir cambios.",
+        links: [
+          ["Grafo tecnico", "src/graphify-out/graph.html"],
+          ["Buzon Claude", "coordinacion/ordenes-graphify.md"]
         ]
       },
       campamento: {
-        title: "Campamento e inicio",
-        text: "Graphify vio que el inicio del juego se relaciona con la vida del campamento, el niño, señales de ayuda y pequeños detalles del mundo.",
-        bullets: [
-          "Aquí empieza la aventura.",
-          "Aparecen cosas de vida cotidiana, como animales y objetos.",
-          "El juego prepara al niño para moverse y entender el camino."
+        label: "Campamento e inicio",
+        zone: "Campamento e inicio",
+        color: "#5fd08b",
+        text: "Inicio jugable: vida del campamento, niño, personajes, señales de ayuda y objetos cotidianos.",
+        note: "Consultar con Graphify: Nino, campLife.ts, camp.ts, personajes, objetos de campamento.",
+        links: [
+          ["Juego principal", "index.html"],
+          ["README", "README.md"]
         ]
       },
-      nino: {
-        title: "Niño jugador",
-        text: "El niño es la mirada del jugador. Graphify lo conecta con el campamento, los personajes y las acciones que dan vida a la escena.",
-        bullets: [
-          "Es quien vive la aventura.",
-          "Se mueve por el mundo.",
-          "Recibe pistas y participa en lo que pasa."
+      rio: {
+        label: "Rio de noche",
+        zone: "Rio de noche",
+        color: "#67d9e8",
+        text: "Tramo de cruce nocturno y espias. Interesa revisar ambiente, agua, visibilidad, guias y ritmo.",
+        note: "Consultar con Graphify: min05, cruce, espias, agua, noche y ambiente.",
+        links: [
+          ["Preview rio", "src/scenes/min05/preview/index.html"],
+          ["Notas tramo", "src/scenes/min05/README.md"]
         ]
       },
-      personajes: {
-        title: "Personajes de juguete",
-        text: "Graphify detecta que los personajes son una de las piezas más conectadas del juego. Eso significa que muchas escenas dependen de ellos.",
-        bullets: [
-          "Sirven para contar la historia.",
-          "Aparecen en muchas partes.",
-          "Dan vida al campamento, la ciudad y la batalla."
+      rahab: {
+        label: "Rahab y posada",
+        zone: "Posada de Rahab",
+        color: "#ff6f61",
+        text: "Zona narrativa: posada, espias, tension, proteccion y decisiones claras para el niño.",
+        note: "Consultar con Graphify: Rahab, posada, espias, interiores y escenas min10.",
+        links: [
+          ["Preview posada", "src/scenes/min10/preview/index.html"],
+          ["Buzon Claude", "coordinacion/ordenes-graphify.md"]
         ]
       },
-      mundo: {
-        title: "Mundo de ladrillos",
-        text: "Aquí entran colores, materiales, piezas, suelos, muros y objetos. Es la caja de construcción del juego.",
-        bullets: [
-          "Hace que todo parezca construido con bloques.",
-          "Une escenarios, objetos y personajes.",
-          "Es una base común que usan muchas escenas."
+      cordon: {
+        label: "Cordon rojo",
+        zone: "Cordon rojo",
+        color: "#ff6f61",
+        text: "Señal visual importante. Debe entenderse rapido: cuerda, ventana, promesa y salida.",
+        note: "Consultar con Graphify: cordon, balcon, Rahab, descuelgue y señales visuales.",
+        links: [
+          ["Preview cordon", "src/scenes/min15/preview/index.html"],
+          ["Buzon Claude", "coordinacion/ordenes-graphify.md"]
         ]
       },
       muralla: {
-        title: "Muralla final",
-        text: "Graphify muestra que la muralla está conectada con shofar, sonido, polvo, personajes, ejército y escenario.",
-        bullets: [
-          "Es una parte central del gran final.",
-          "Necesita sonido y efectos para sentirse épica.",
-          "Conecta la escena con la batalla."
+        label: "Muralla final",
+        zone: "Muralla final",
+        color: "#f06c4f",
+        text: "Gran cierre visual: muralla, polvo, ejercito, camara, personajes, shofar y caida.",
+        note: "Consultar con Graphify: murallaEpica.ts, ShofarInteraction, Army, Dust, sonido y escenario.",
+        links: [
+          ["Climax", "climax.html"],
+          ["Grafo muralla", "src/graphify-out/graph.html"]
         ]
       },
       shofar: {
-        title: "Shofar y sonido",
-        text: "La muralla y el shofar están conectados directamente. En humano: el momento del shofar forma parte del corazón del final.",
-        bullets: [
-          "Marca un momento especial.",
-          "Se une al sonido del juego.",
-          "Ayuda a que la caída de la muralla tenga fuerza."
+        label: "Shofar y sonido",
+        zone: "Sonido y shofar",
+        color: "#b794ff",
+        text: "Momento de sonido y accion. El shofar esta conectado directamente con el final de la muralla.",
+        note: "Consultar con Graphify: ShofarInteraction, AudioManager, SoundEngine y climax.",
+        links: [
+          ["Climax", "climax.html"],
+          ["Grafo tecnico", "src/graphify-out/graph.html"]
         ]
       },
-      batalla: {
-        title: "Batalla y caída",
-        text: "Graphify conecta la batalla con la muralla, personajes, ejército, sonido y efectos. Es una escena que junta muchas piezas.",
-        bullets: [
-          "Es el cierre de la aventura.",
-          "Usa personajes y movimiento.",
-          "Necesita que varias partes trabajen a la vez."
+      nino: {
+        label: "Niño jugador",
+        zone: "Niño jugador",
+        color: "#61a8ff",
+        text: "La experiencia del niño: moverse, mirar, entender pistas y sentir la aventura sin perderse.",
+        note: "Consultar con Graphify: Nino, CharacterController, TouchControls, camara y pistas.",
+        links: [
+          ["Juego principal", "index.html"],
+          ["Estado Claude", "coordinacion/estado-claude.md"]
+        ]
+      },
+      personajes: {
+        label: "Personajes",
+        zone: "Personajes",
+        color: "#61a8ff",
+        text: "Una de las piezas mas conectadas del juego. Si se tocan personajes, muchas escenas pueden verse afectadas.",
+        note: "Consultar con Graphify: Minifigure, createMinifigure, Npc, skins y personajes de escena.",
+        links: [
+          ["Juego principal", "index.html"],
+          ["Revision Codex", "coordinacion/revision-codex.md"]
         ]
       }
     };
 
-    const info = document.querySelector("#info");
-    const nodes = document.querySelectorAll(".node");
-
-    function selectNode(node) {
-      nodes.forEach((item) => item.classList.remove("active"));
-      node.classList.add("active");
-      const data = copy[node.dataset.key];
-      info.innerHTML = `
-        <div class="kicker">Ahora estás viendo</div>
-        <h2>${data.title}</h2>
-        <p>${data.text}</p>
-        <ul>${data.bullets.map((item) => `<li>${item}</li>`).join("")}</ul>
-      `;
-    }
-
-    nodes.forEach((node) => {
-      node.addEventListener("click", () => selectNode(node));
-    });
-
+    const selectedTitle = document.querySelector("#selectedTitle");
+    const selectedText = document.querySelector("#selectedText");
+    const selectedDot = document.querySelector("#selectedDot");
+    const selectedLinks = document.querySelector("#selectedLinks");
     const zone = document.querySelector("#zone");
     const priority = document.querySelector("#priority");
     const taskNumber = document.querySelector("#taskNumber");
     const requester = document.querySelector("#requester");
     const requestText = document.querySelector("#requestText");
     const taskOutput = document.querySelector("#taskOutput");
+    const status = document.querySelector("#status");
+    const search = document.querySelector("#search");
+    const graphNodes = Array.from(document.querySelectorAll(".node"));
+    let selectedKey = "mapa";
 
-    function graphifyNote(selectedZone) {
-      const notes = {
-        "Campamento e inicio": "Antes de tocar, consultar en Graphify: Nino, campLife.ts, camp.ts, personajes, objetos de campamento.",
-        "Rio de noche": "Antes de tocar, consultar en Graphify las escenas del cruce, noche, espias, agua y ambiente.",
-        "Posada de Rahab": "Antes de tocar, consultar en Graphify Rahab, posada, espias, interiores y escenas relacionadas.",
-        "Cordon rojo": "Antes de tocar, consultar en Graphify cordon, balcon, Rahab, descuelgue y senales visuales.",
-        "Muralla final": "Antes de tocar, consultar en Graphify murallaEpica.ts, ShofarInteraction, Army, Dust, sonido y escenario.",
-        "Batalla final": "Antes de tocar, consultar en Graphify batalla, muralla, ejercito, personajes, polvo, sonido y camara.",
-        "Sonido y shofar": "Antes de tocar, consultar en Graphify ShofarInteraction, AudioManager, SoundEngine y climax.",
-        "Personajes": "Antes de tocar, consultar en Graphify Minifigure, createMinifigure, Npc y personajes de cada escena."
-      };
-      return notes[selectedZone] || "Antes de tocar, consultar Graphify para ver piezas conectadas.";
+    Object.entries(nodes).forEach(([key, value]) => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = value.zone;
+      zone.appendChild(option);
+    });
+
+    function select(key) {
+      selectedKey = key;
+      const item = nodes[key];
+      selectedTitle.textContent = item.label;
+      selectedText.textContent = item.text;
+      selectedDot.style.background = item.color;
+      selectedDot.style.color = item.color;
+      selectedLinks.innerHTML = item.links.map(([label, href]) => `<a class="mini-link" href="${href}">${label}</a>`).join("");
+      zone.value = key;
+      graphNodes.forEach((node) => node.classList.toggle("active", node.dataset.key === key));
+      buildTaskText();
     }
 
     function buildTaskText() {
-      const selectedZone = zone.value;
+      const item = nodes[zone.value] || nodes[selectedKey];
       const number = taskNumber.value.trim() || "N";
       const who = requester.value.trim() || "Idan";
-      const want = requestText.value.trim() || "[Escribe aqui lo que quieres]";
+      const want = requestText.value.trim() || "[Escribe aqui lo que quieres que Claude construya]";
       taskOutput.value = `### Encargo #${number}
-- Zona/escena: ${selectedZone}
+- Zona/escena: ${item.zone}
 - Que quiero: ${want}
 - Prioridad: ${priority.value}
 - Quien lo pide: ${who}
 - Estado: pendiente
-- Nota Graphify: ${graphifyNote(selectedZone)}
+- Nota Graphify: ${item.note}
 
-Claude: eres el constructor del juego. Usa Graphify antes de tocar nada, trabaja solo en lo necesario para este encargo, reporta el resultado en coordinacion/estado-claude.md y no pidas a Codex que construya. Codex revisara despues.`;
+Claude: eres el constructor del juego. Usa Graphify antes de tocar nada. Trabaja solo en lo necesario para este encargo. No toques la capa del panel Graphify humano. Reporta el resultado en coordinacion/estado-claude.md. Codex revisara despues.`;
     }
 
+    graphNodes.forEach((node) => node.addEventListener("click", () => select(node.dataset.key)));
+    zone.addEventListener("change", () => select(zone.value));
+    [priority, taskNumber, requester, requestText].forEach((input) => input.addEventListener("input", buildTaskText));
     document.querySelector("#buildTask").addEventListener("click", buildTaskText);
     document.querySelector("#copyTask").addEventListener("click", async () => {
-      if (!taskOutput.value.trim()) buildTaskText();
+      buildTaskText();
       try {
         await navigator.clipboard.writeText(taskOutput.value);
+        status.textContent = "Encargo copiado. Pegalo en ordenes-graphify.md o en Claude.";
       } catch (error) {
         taskOutput.select();
+        status.textContent = "No pude copiar automaticamente. El texto queda seleccionado para copiarlo.";
       }
     });
 
-    buildTaskText();
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      graphNodes.forEach((node) => {
+        const item = nodes[node.dataset.key];
+        const haystack = `${item.label} ${item.zone} ${item.text}`.toLowerCase();
+        node.classList.toggle("dim", q && !haystack.includes(q));
+      });
+    });
+
+    select("mapa");
   </script>
 </body>
 </html>
