@@ -11,7 +11,7 @@
       "_origin": "ast",
       "id": "assets_texearth",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "texearth.ts"
     },
     {
@@ -21,8 +21,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "assets_texkilim",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "texkilim.ts"
     },
     {
@@ -32,8 +32,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "assets_texrock",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "texrock.ts"
     },
     {
@@ -109,8 +109,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "audio_audiomanager",
-      "community": 38,
-      "community_name": "AudioManager.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "audiomanager.ts"
     },
     {
@@ -120,8 +120,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "audio_audiomanager_base64toarraybuffer",
-      "community": 38,
-      "community_name": "AudioManager.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "base64toarraybuffer()"
     },
     {
@@ -131,8 +131,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager",
-      "community": 27,
-      "community_name": "AudioManager",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "audiomanager"
     },
     {
@@ -142,8 +142,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_init",
-      "community": 38,
-      "community_name": "AudioManager.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".init()"
     },
     {
@@ -154,7 +154,7 @@
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_resume",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": ".resume()"
     },
     {
@@ -164,8 +164,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_loop",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".loop()"
     },
     {
@@ -176,7 +176,7 @@
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_playspine",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": ".playspine()"
     },
     {
@@ -187,7 +187,7 @@
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_tone",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": ".tone()"
     },
     {
@@ -209,7 +209,7 @@
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_sfxsuccess",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": ".sfxsuccess()"
     },
     {
@@ -220,7 +220,7 @@
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_sfxsparkle",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": ".sfxsparkle()"
     },
     {
@@ -230,8 +230,8 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_sfxanimal",
-      "community": 27,
-      "community_name": "AudioManager",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".sfxanimal()"
     },
     {
@@ -241,8 +241,8 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "audio_audiomanager_audiomanager_play",
-      "community": 25,
-      "community_name": "ShofarInteraction",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": ".play()"
     },
     {
@@ -253,7 +253,7 @@
       "_origin": "ast",
       "id": "audio_clips",
       "community": 38,
-      "community_name": "AudioManager.ts",
+      "community_name": "SoundEngine.ts",
       "norm_label": "clips.ts"
     },
     {
@@ -264,7 +264,7 @@
       "_origin": "ast",
       "id": "audio_clips_clips",
       "community": 38,
-      "community_name": "AudioManager.ts",
+      "community_name": "SoundEngine.ts",
       "norm_label": "clips"
     },
     {
@@ -274,7 +274,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "bricks_brickdimensions",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickdimensions.ts"
     },
@@ -285,8 +285,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "brickgeometryfactory.ts"
     },
     {
@@ -296,8 +296,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_piecekind",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "piecekind"
     },
     {
@@ -308,7 +308,7 @@
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_normalizegeometry",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "normalizegeometry()"
     },
     {
@@ -318,8 +318,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_normalize",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "normalize()"
     },
     {
@@ -329,8 +329,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_makestudgeometry",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "makestudgeometry()"
     },
     {
@@ -340,8 +340,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_stud_geo",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "stud_geo"
     },
     {
@@ -351,8 +351,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_brickgeometryresult",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "brickgeometryresult"
     },
     {
@@ -362,8 +362,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "bricks_brickgeometryfactory_makebrickgeometry",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "makebrickgeometry()"
     },
     {
@@ -417,8 +417,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "characters_charactercontroller",
-      "community": 24,
-      "community_name": "CharacterController.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "charactercontroller.ts"
     },
     {
@@ -429,7 +429,7 @@
       "_origin": "ast",
       "id": "characters_charactercontroller_lerpangle",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": "lerpangle()"
     },
     {
@@ -440,7 +440,7 @@
       "_origin": "ast",
       "id": "characters_charactercontroller_charactercontroller",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": "charactercontroller"
     },
     {
@@ -451,7 +451,7 @@
       "_origin": "ast",
       "id": "characters_charactercontroller_charactercontroller_constructor",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".constructor()"
     },
     {
@@ -462,7 +462,7 @@
       "_origin": "ast",
       "id": "characters_charactercontroller_charactercontroller_update",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".update()"
     },
     {
@@ -472,7 +472,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "characters_minifigurefactory",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "minifigurefactory.ts"
     },
@@ -483,8 +483,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "characters_minifigurefactory_emotion",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "emotion"
     },
     {
@@ -495,7 +495,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_minifigureskin",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "minifigureskin"
     },
     {
@@ -506,7 +506,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_yoshua_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "yoshua_skin"
     },
     {
@@ -517,7 +517,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_spy_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "spy_skin"
     },
     {
@@ -528,7 +528,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_spy2_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "spy2_skin"
     },
     {
@@ -538,7 +538,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "characters_minifigurefactory_spy_camp_skin",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "spy_camp_skin"
     },
@@ -549,7 +549,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "characters_minifigurefactory_spy2_camp_skin",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "spy2_camp_skin"
     },
@@ -560,8 +560,8 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "characters_minifigurefactory_rahab_skin",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "rahab_skin"
     },
     {
@@ -572,7 +572,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_guard_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guard_skin"
     },
     {
@@ -582,7 +582,7 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "characters_minifigurefactory_guard_chief_skin",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guard_chief_skin"
     },
@@ -593,7 +593,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "id": "characters_minifigurefactory_priest_skin",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "priest_skin"
     },
@@ -604,8 +604,8 @@
       "source_location": "L227",
       "_origin": "ast",
       "id": "characters_minifigurefactory_bedouin_skin",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "bedouin_skin"
     },
     {
@@ -615,7 +615,7 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "characters_minifigurefactory_rabbi_skin",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "rabbi_skin"
     },
@@ -626,7 +626,7 @@
       "source_location": "L262",
       "_origin": "ast",
       "id": "characters_minifigurefactory_character_skins",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "character_skins"
     },
@@ -637,7 +637,7 @@
       "source_location": "L281",
       "_origin": "ast",
       "id": "characters_minifigurefactory_villager_presets",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "villager_presets"
     },
@@ -649,7 +649,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_villagerskin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "villagerskin()"
     },
     {
@@ -682,7 +682,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_minifigure_attack",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".attack()"
     },
     {
@@ -924,7 +924,7 @@
       "_origin": "ast",
       "id": "characters_minifigurefactory_minifigure_update",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".update()"
     },
     {
@@ -934,7 +934,7 @@
       "source_location": "L878",
       "_origin": "ast",
       "id": "characters_minifigurefactory_createminifigure",
-      "community": 0,
+      "community": 8,
       "community_name": "MinifigureFactory.ts",
       "norm_label": "createminifigure()"
     },
@@ -945,8 +945,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "core_layout",
-      "community": 24,
-      "community_name": "CharacterController.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "layout.ts"
     },
     {
@@ -956,8 +956,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "core_layout_court",
-      "community": 24,
-      "community_name": "CharacterController.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "court"
     },
     {
@@ -967,8 +967,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "core_layout_road",
-      "community": 24,
-      "community_name": "CharacterController.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "road"
     },
     {
@@ -1055,8 +1055,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "core_quality",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "quality.ts"
     },
     {
@@ -1066,8 +1066,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "core_quality_qualitysettings",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "qualitysettings"
     },
     {
@@ -1253,8 +1253,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "debug_devhud_estadodev",
-      "community": 28,
-      "community_name": "DevHUD.ts",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": "estadodev"
     },
     {
@@ -1264,8 +1264,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "debug_devhud_destinodev",
-      "community": 28,
-      "community_name": "DevHUD.ts",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": "destinodev"
     },
     {
@@ -1364,7 +1364,7 @@
       "_origin": "ast",
       "id": "debug_devhud_limpiarsalto",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "limpiarsalto()"
     },
     {
@@ -1374,8 +1374,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "effects_dust",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "dust.ts"
     },
     {
@@ -1385,8 +1385,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "effects_dust_softtexture",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "softtexture()"
     },
     {
@@ -1396,8 +1396,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "effects_dust_dust",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "dust"
     },
     {
@@ -1407,8 +1407,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "effects_dust_dust_constructor",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -1418,8 +1418,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "effects_dust_dust_burst",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".burst()"
     },
     {
@@ -1429,8 +1429,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "effects_dust_dust_update",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".update()"
     },
     {
@@ -1440,8 +1440,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "interactions_combat",
-      "community": 18,
-      "community_name": "Army.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "combat.ts"
     },
     {
@@ -1452,7 +1452,7 @@
       "_origin": "ast",
       "id": "interactions_combat_combat",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "combat"
     },
     {
@@ -1463,7 +1463,7 @@
       "_origin": "ast",
       "id": "interactions_combat_combat_constructor",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -1474,7 +1474,7 @@
       "_origin": "ast",
       "id": "interactions_combat_combat_attack",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".attack()"
     },
     {
@@ -1485,7 +1485,7 @@
       "_origin": "ast",
       "id": "interactions_combat_combat_update",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".update()"
     },
     {
@@ -1495,8 +1495,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "interactions_shofarinteraction",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "shofarinteraction.ts"
     },
     {
@@ -1506,8 +1506,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "interactions_shofarinteraction_rubble",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "rubble"
     },
     {
@@ -1528,8 +1528,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "interactions_shofarinteraction_shofarinteraction_constructor",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -1561,8 +1561,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "interactions_shofarinteraction_shofarinteraction_makecrack",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": ".makecrack()"
     },
     {
@@ -1627,8 +1627,8 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "interactions_shofarinteraction_mergesimple",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "mergesimple()"
     },
     {
@@ -1924,8 +1924,8 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "main_settarget",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "settarget()"
     },
     {
@@ -2035,7 +2035,7 @@
       "_origin": "ast",
       "id": "main_terminarintro",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "terminarintro()"
     },
     {
@@ -2079,7 +2079,7 @@
       "_origin": "ast",
       "id": "main_dispararteaserespias",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": "dispararteaserespias()"
     },
     {
@@ -2089,8 +2089,8 @@
       "source_location": "L324",
       "_origin": "ast",
       "id": "main_lanzaroutro",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "lanzaroutro()"
     },
     {
@@ -2101,7 +2101,7 @@
       "_origin": "ast",
       "id": "main_findeltramo",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": "findeltramo()"
     },
     {
@@ -2254,8 +2254,8 @@
       "source_location": "L472",
       "_origin": "ast",
       "id": "main_apilarbulto",
-      "community": 27,
-      "community_name": "AudioManager",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": "apilarbulto()"
     },
     {
@@ -2299,7 +2299,7 @@
       "_origin": "ast",
       "id": "main_pintarcartas",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "pintarcartas()"
     },
     {
@@ -2309,8 +2309,8 @@
       "source_location": "L502",
       "_origin": "ast",
       "id": "main_ganarcarta",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "ganarcarta()"
     },
     {
@@ -2331,8 +2331,8 @@
       "source_location": "L519",
       "_origin": "ast",
       "id": "main_tareaactivapendiente",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "tareaactivapendiente()"
     },
     {
@@ -2343,7 +2343,7 @@
       "_origin": "ast",
       "id": "main_forzarsaludo",
       "community": 27,
-      "community_name": "AudioManager",
+      "community_name": "dispararTeaserEspias",
       "norm_label": "forzarsaludo()"
     },
     {
@@ -2353,8 +2353,8 @@
       "source_location": "L537",
       "_origin": "ast",
       "id": "main_avanzarunpaso",
-      "community": 27,
-      "community_name": "AudioManager",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": "avanzarunpaso()"
     },
     {
@@ -2365,7 +2365,7 @@
       "_origin": "ast",
       "id": "main_usarayuda",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "usarayuda()"
     },
     {
@@ -2375,8 +2375,8 @@
       "source_location": "L566",
       "_origin": "ast",
       "id": "main_actualizarcartas",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "actualizarcartas()"
     },
     {
@@ -2386,8 +2386,8 @@
       "source_location": "L576",
       "_origin": "ast",
       "id": "main_checktargets",
-      "community": 17,
-      "community_name": "animate",
+      "community": 27,
+      "community_name": "dispararTeaserEspias",
       "norm_label": "checktargets()"
     },
     {
@@ -2431,7 +2431,7 @@
       "_origin": "ast",
       "id": "main_arrancarconestudio3d",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "arrancarconestudio3d()"
     },
     {
@@ -2442,7 +2442,7 @@
       "_origin": "ast",
       "id": "main_videobloburl",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "videobloburl()"
     },
     {
@@ -2453,7 +2453,7 @@
       "_origin": "ast",
       "id": "main_reproducirintrovideo",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "reproducirintrovideo()"
     },
     {
@@ -2464,7 +2464,7 @@
       "_origin": "ast",
       "id": "main_empezarjuegotrasvideo",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "empezarjuegotrasvideo()"
     },
     {
@@ -2475,7 +2475,7 @@
       "_origin": "ast",
       "id": "main_ejecutarsalto",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": "ejecutarsalto()"
     },
     {
@@ -2540,7 +2540,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "materials_brickpalette",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickpalette.ts"
     },
@@ -2551,7 +2551,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "materials_brickpalette_brickpalette",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickpalette"
     },
@@ -2562,7 +2562,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "materials_brickpalette_brickcolorname",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickcolorname"
     },
@@ -2573,7 +2573,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "materials_brickpalette_color",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "color()"
     },
@@ -2584,8 +2584,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "plasticmaterialfactory.ts"
     },
     {
@@ -2595,8 +2595,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_plasticconfig",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "plasticconfig"
     },
     {
@@ -2606,8 +2606,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_default_plastic",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "default_plastic"
     },
     {
@@ -2617,7 +2617,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_plasticmaterialfactory",
-      "community": 8,
+      "community": 20,
       "community_name": "PlasticMaterialFactory",
       "norm_label": "plasticmaterialfactory"
     },
@@ -2628,7 +2628,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_plasticmaterialfactory_constructor",
-      "community": 8,
+      "community": 20,
       "community_name": "PlasticMaterialFactory",
       "norm_label": ".constructor()"
     },
@@ -2639,8 +2639,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_plasticmaterialfactory_get",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": ".get()"
     },
     {
@@ -2650,8 +2650,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "materials_plasticmaterialfactory_plasticmaterialfactory_update",
-      "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": ".update()"
     },
     {
@@ -2661,8 +2661,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "materials_tiling",
-      "community": 15,
-      "community_name": "min25/preview.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "tiling.ts"
     },
     {
@@ -2672,8 +2672,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "materials_tiling_tiledtexture",
-      "community": 15,
-      "community_name": "min25/preview.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "tiledtexture()"
     },
     {
@@ -2683,8 +2683,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "materials_tiling_applytiledtexture",
-      "community": 15,
-      "community_name": "min25/preview.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "applytiledtexture()"
     },
     {
@@ -2991,8 +2991,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min00_camp",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "camp.ts"
     },
     {
@@ -3002,8 +3002,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "scenes_min00_camp_villager_skin",
-      "community": 2,
-      "community_name": "main.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "villager_skin"
     },
     {
@@ -3013,8 +3013,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "scenes_min00_camp_campbuild",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "campbuild"
     },
     {
@@ -3024,8 +3024,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "scenes_min00_camp_tentclothtexture",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "tentclothtexture()"
     },
     {
@@ -3035,8 +3035,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "scenes_min00_camp_ropetexture",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "ropetexture()"
     },
     {
@@ -3046,8 +3046,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "scenes_min00_camp_buildcoiledrope",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "buildcoiledrope()"
     },
     {
@@ -3057,8 +3057,8 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "scenes_min00_camp_hintarrow",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "hintarrow()"
     },
     {
@@ -3068,8 +3068,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "scenes_min00_camp_tentguyropesgeometry",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "tentguyropesgeometry()"
     },
     {
@@ -3079,8 +3079,8 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "scenes_min00_camp_buildtracks",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "buildtracks()"
     },
     {
@@ -3090,8 +3090,8 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "scenes_min00_camp_buildcamp",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "buildcamp()"
     },
     {
@@ -3101,8 +3101,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min00_camplife",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "camplife.ts"
     },
     {
@@ -3112,8 +3112,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "scenes_min00_camplife_rbox",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "rbox()"
     },
     {
@@ -3123,8 +3123,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "scenes_min00_camplife_buildcamel",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildcamel()"
     },
     {
@@ -3134,8 +3134,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "scenes_min00_camplife_buildsheep",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildsheep()"
     },
     {
@@ -3145,8 +3145,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "scenes_min00_camplife_buildbasket",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildbasket()"
     },
     {
@@ -3156,8 +3156,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "scenes_min00_camplife_nino",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "nino"
     },
     {
@@ -3167,8 +3167,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "scenes_min00_camplife_wander",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "wander"
     },
     {
@@ -3178,8 +3178,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "scenes_min00_camplife_load",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "load"
     },
     {
@@ -3189,8 +3189,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "scenes_min00_camplife_bicho",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "bicho"
     },
     {
@@ -3200,8 +3200,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "scenes_min00_camplife_oficio",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "oficio"
     },
     {
@@ -3211,8 +3211,8 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "scenes_min00_camplife_faena",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "faena"
     },
     {
@@ -3222,8 +3222,8 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": "camplife"
     },
     {
@@ -3233,8 +3233,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_constructor",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": ".constructor()"
     },
     {
@@ -3244,8 +3244,8 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_buildpen",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": ".buildpen()"
     },
     {
@@ -3255,8 +3255,8 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_colocar",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": ".colocar()"
     },
     {
@@ -3266,8 +3266,8 @@
       "source_location": "L226",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_buildfogata",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": ".buildfogata()"
     },
     {
@@ -3277,8 +3277,8 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_buildfaenas",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": ".buildfaenas()"
     },
     {
@@ -3288,8 +3288,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_activarovejas",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".activarovejas()"
     },
     {
@@ -3299,8 +3299,8 @@
       "source_location": "L291",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_beduinopos",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".beduinopos()"
     },
     {
@@ -3310,8 +3310,8 @@
       "source_location": "L293",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_derrumbar",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".derrumbar()"
     },
     {
@@ -3321,8 +3321,8 @@
       "source_location": "L294",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_ovejasobjetivo",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".ovejasobjetivo()"
     },
     {
@@ -3332,8 +3332,8 @@
       "source_location": "L295",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_ovejasenredil",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".ovejasenredil()"
     },
     {
@@ -3343,8 +3343,8 @@
       "source_location": "L298",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_ayudameterunaoveja",
-      "community": 27,
-      "community_name": "AudioManager",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".ayudameterunaoveja()"
     },
     {
@@ -3354,8 +3354,8 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_redil",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".redil()"
     },
     {
@@ -3365,8 +3365,8 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_targets",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": "._targets()"
     },
     {
@@ -3376,8 +3376,8 @@
       "source_location": "L315",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_ovejaenganchable",
-      "community": 17,
-      "community_name": "animate",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".ovejaenganchable()"
     },
     {
@@ -3387,8 +3387,8 @@
       "source_location": "L325",
       "_origin": "ast",
       "id": "scenes_min00_camplife_camplife_update",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 12,
+      "community_name": "CampLife",
       "norm_label": ".update()"
     },
     {
@@ -3586,7 +3586,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "studiointro.ts"
     },
     {
@@ -3597,7 +3597,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro_rabino_skin",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "rabino_skin"
     },
     {
@@ -3608,7 +3608,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro_beduino_skin",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "beduino_skin"
     },
     {
@@ -3619,7 +3619,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro_pergaminotexture",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "pergaminotexture()"
     },
     {
@@ -3629,8 +3629,8 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "scenes_min00_studiointro_studiointro",
-      "community": 26,
-      "community_name": "StudioIntro",
+      "community": 17,
+      "community_name": "animate",
       "norm_label": "studiointro"
     },
     {
@@ -3641,7 +3641,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro_studiointro_constructor",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -3652,7 +3652,7 @@
       "_origin": "ast",
       "id": "scenes_min00_studiointro_studiointro_setactive",
       "community": 26,
-      "community_name": "StudioIntro",
+      "community_name": "ejecutarSalto",
       "norm_label": ".setactive()"
     },
     {
@@ -3662,8 +3662,8 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "scenes_min00_studiointro_studiointro_update",
-      "community": 26,
-      "community_name": "StudioIntro",
+      "community": 17,
+      "community_name": "animate",
       "norm_label": ".update()"
     },
     {
@@ -3673,8 +3673,8 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "scenes_min00_studiointro_studiointro_framecamera",
-      "community": 26,
-      "community_name": "StudioIntro",
+      "community": 17,
+      "community_name": "animate",
       "norm_label": ".framecamera()"
     },
     {
@@ -3685,7 +3685,7 @@
       "_origin": "ast",
       "id": "scenes_min00_textiles",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "textiles.ts"
     },
     {
@@ -3696,7 +3696,7 @@
       "_origin": "ast",
       "id": "scenes_min00_textiles_kilimpal",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "kilimpal"
     },
     {
@@ -3707,7 +3707,7 @@
       "_origin": "ast",
       "id": "scenes_min00_textiles_kilim_pals",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "kilim_pals"
     },
     {
@@ -3718,7 +3718,7 @@
       "_origin": "ast",
       "id": "scenes_min00_textiles_kilimtexture",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "kilimtexture()"
     },
     {
@@ -3729,7 +3729,7 @@
       "_origin": "ast",
       "id": "scenes_min00_textiles_buildrug",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "buildrug()"
     },
     {
@@ -3740,7 +3740,7 @@
       "_origin": "ast",
       "id": "scenes_min05_audio_soundengine",
       "community": 38,
-      "community_name": "AudioManager.ts",
+      "community_name": "SoundEngine.ts",
       "norm_label": "soundengine.ts"
     },
     {
@@ -3761,8 +3761,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "scenes_min05_audio_soundengine_soundengine_init",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": ".init()"
     },
     {
@@ -3816,8 +3816,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "scenes_min05_audio_soundengine_soundengine_playsceneclip",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": ".playsceneclip()"
     },
     {
@@ -4058,8 +4058,8 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "scenes_min05_audio_soundengine_soundengine_success",
-      "community": 21,
-      "community_name": "animate",
+      "community": 14,
+      "community_name": "SoundEngine",
       "norm_label": ".success()"
     },
     {
@@ -4080,7 +4080,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena09_orilla_jordan",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena09_orilla_jordan.ts"
     },
@@ -4088,10 +4088,10 @@
       "label": "escena09",
       "file_type": "code",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "scenes_min05_escena09_orilla_jordan_escena09",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena09"
     },
@@ -4102,7 +4102,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena10_reclutar_espias",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena10_reclutar_espias.ts"
     },
@@ -4113,7 +4113,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "scenes_min05_escena10_reclutar_espias_escena10",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena10"
     },
@@ -4124,7 +4124,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena11_murallas_noche",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena11_murallas_noche.ts"
     },
@@ -4135,7 +4135,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "scenes_min05_escena11_murallas_noche_escena11",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena11"
     },
@@ -4146,7 +4146,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena12_trajes_sigilo",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena12_trajes_sigilo.ts"
     },
@@ -4157,7 +4157,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "scenes_min05_escena12_trajes_sigilo_escena12",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena12"
     },
@@ -4168,7 +4168,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena13_cruzar_rio",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena13_cruzar_rio.ts"
     },
@@ -4179,7 +4179,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "scenes_min05_escena13_cruzar_rio_escena13",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena13"
     },
@@ -4190,7 +4190,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena14_treta_avion",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena14_treta_avion.ts"
     },
@@ -4201,7 +4201,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "scenes_min05_escena14_treta_avion_roundrect",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "roundrect()"
     },
@@ -4212,7 +4212,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "scenes_min05_escena14_treta_avion_escena14",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena14"
     },
@@ -4223,7 +4223,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena15_colarse_puerta",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena15_colarse_puerta.ts"
     },
@@ -4234,7 +4234,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "scenes_min05_escena15_colarse_puerta_escena15",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena15"
     },
@@ -4245,7 +4245,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_escena16_guardias_calles",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena16_guardias_calles.ts"
     },
@@ -4256,7 +4256,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "scenes_min05_escena16_guardias_calles_escena16",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena16"
     },
@@ -4267,7 +4267,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "distraction.ts"
     },
@@ -4279,7 +4279,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": "distraction"
     },
     {
@@ -4290,7 +4290,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_constructor",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".constructor()"
     },
     {
@@ -4301,7 +4301,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_makemark",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".makemark()"
     },
     {
@@ -4312,7 +4312,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_buildplane",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".buildplane()"
     },
     {
@@ -4323,7 +4323,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_active",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".active()"
     },
     {
@@ -4334,7 +4334,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_spent",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".spent()"
     },
     {
@@ -4345,7 +4345,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_planeobject",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".planeobject()"
     },
     {
@@ -4356,7 +4356,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_window",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".window()"
     },
     {
@@ -4367,7 +4367,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_trigger",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".trigger()"
     },
     {
@@ -4378,7 +4378,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_spawnpuff",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".spawnpuff()"
     },
     {
@@ -4389,7 +4389,7 @@
       "_origin": "ast",
       "id": "scenes_min05_mechanics_distraction_distraction_update",
       "community": 20,
-      "community_name": "Distraction",
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".update()"
     },
     {
@@ -4399,7 +4399,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_mechanics_ropecrossing",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "ropecrossing.ts"
     },
@@ -4498,8 +4498,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_mechanics_stealthsystem",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": "stealthsystem.ts"
     },
     {
@@ -4509,8 +4509,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "scenes_min05_mechanics_stealthsystem_guardconfig",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": "guardconfig"
     },
     {
@@ -4520,8 +4520,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "scenes_min05_mechanics_stealthsystem_hidingspot",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": "hidingspot"
     },
     {
@@ -4652,8 +4652,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_preview_navbeacon",
-      "community": 42,
-      "community_name": "NavBeacon",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": "navbeacon.ts"
     },
     {
@@ -4663,8 +4663,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "scenes_min05_preview_navbeacon_navbeacon",
-      "community": 42,
-      "community_name": "NavBeacon",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": "navbeacon"
     },
     {
@@ -4674,8 +4674,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "scenes_min05_preview_navbeacon_navbeacon_constructor",
-      "community": 42,
-      "community_name": "NavBeacon",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -4685,8 +4685,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "scenes_min05_preview_navbeacon_navbeacon_update",
-      "community": 42,
-      "community_name": "NavBeacon",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": ".update()"
     },
     {
@@ -4696,8 +4696,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "scenes_min05_preview_navbeacon_navbeacon_hide",
-      "community": 42,
-      "community_name": "NavBeacon",
+      "community": 48,
+      "community_name": "runner.ts",
       "norm_label": ".hide()"
     },
     {
@@ -4707,8 +4707,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_preview_previewcontroller",
-      "community": 4,
-      "community_name": "min05/preview/preview.ts",
+      "community": 5,
+      "community_name": "min15/preview/preview.ts",
       "norm_label": "previewcontroller.ts"
     },
     {
@@ -4718,8 +4718,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "scenes_min05_preview_previewcontroller_obstacle",
-      "community": 4,
-      "community_name": "min05/preview/preview.ts",
+      "community": 5,
+      "community_name": "min15/preview/preview.ts",
       "norm_label": "obstacle"
     },
     {
@@ -5455,8 +5455,8 @@
       "source_location": "L316",
       "_origin": "ast",
       "id": "scenes_min05_preview_preview_fireintro",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "fireintro()"
     },
     {
@@ -5477,8 +5477,8 @@
       "source_location": "L328",
       "_origin": "ast",
       "id": "scenes_min05_preview_preview_startscenefilm",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "startscenefilm()"
     },
     {
@@ -5510,8 +5510,8 @@
       "source_location": "L412",
       "_origin": "ast",
       "id": "scenes_min05_preview_preview_startgame",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "startgame()"
     },
     {
@@ -5598,7 +5598,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickprops.ts"
     },
@@ -5609,7 +5609,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_brickbox",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "brickbox()"
     },
@@ -5620,7 +5620,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_studdedplate",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "studdedplate()"
     },
@@ -5631,7 +5631,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildriver",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildriver()"
     },
@@ -5642,7 +5642,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildfish",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildfish()"
     },
@@ -5654,7 +5654,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildtent",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildtent()"
     },
     {
@@ -5664,7 +5664,7 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildpalm",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildpalm()"
     },
@@ -5675,7 +5675,7 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildtorch",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildtorch()"
     },
@@ -5686,7 +5686,7 @@
       "source_location": "L239",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildcitygate",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildcitygate()"
     },
@@ -5697,7 +5697,7 @@
       "source_location": "L288",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildboat",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildboat()"
     },
@@ -5708,7 +5708,7 @@
       "source_location": "L304",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildreeds",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildreeds()"
     },
@@ -5719,7 +5719,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildrock",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildrock()"
     },
@@ -5730,7 +5730,7 @@
       "source_location": "L338",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_builddistantjericho",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "builddistantjericho()"
     },
@@ -5741,7 +5741,7 @@
       "source_location": "L365",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildbarrel",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildbarrel()"
     },
@@ -5752,7 +5752,7 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildmarketstall",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildmarketstall()"
     },
@@ -5763,7 +5763,7 @@
       "source_location": "L419",
       "_origin": "ast",
       "id": "scenes_min05_props_brickprops_buildhouse",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildhouse()"
     },
@@ -5774,8 +5774,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": "cinematiccamera.ts"
     },
     {
@@ -5785,8 +5785,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_xyz",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": "xyz"
     },
     {
@@ -5796,8 +5796,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_cinematiccamera",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": "cinematiccamera"
     },
     {
@@ -5807,8 +5807,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_cinematiccamera_constructor",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": ".constructor()"
     },
     {
@@ -5818,8 +5818,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_cinematiccamera_active",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": ".active()"
     },
     {
@@ -5829,8 +5829,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_cinematiccamera_focus",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": ".focus()"
     },
     {
@@ -5851,8 +5851,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "scenes_min05_props_cinematiccamera_cinematiccamera_stop",
-      "community": 21,
-      "community_name": "animate",
+      "community": 13,
+      "community_name": "CinematicCamera",
       "norm_label": ".stop()"
     },
     {
@@ -5873,7 +5873,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_collectibles",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "collectibles.ts"
     },
@@ -5884,7 +5884,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "scenes_min05_props_collectibles_collectibles",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "collectibles"
     },
@@ -5895,8 +5895,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "scenes_min05_props_collectibles_collectibles_constructor",
-      "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community": 14,
+      "community_name": "SoundEngine",
       "norm_label": ".constructor()"
     },
     {
@@ -5906,7 +5906,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "scenes_min05_props_collectibles_collectibles_total",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".total()"
     },
@@ -5917,7 +5917,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "scenes_min05_props_collectibles_collectibles_got",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".got()"
     },
@@ -5939,7 +5939,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_guard",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guard.ts"
     },
@@ -5950,8 +5950,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "scenes_min05_props_guard_buildguard",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "buildguard()"
     },
     {
@@ -6005,7 +6005,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "nightambience.ts"
     },
@@ -6016,7 +6016,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience_buildlantern",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildlantern()"
     },
@@ -6027,7 +6027,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience_buildbrazier",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildbrazier()"
     },
@@ -6038,7 +6038,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience_buildbanner",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildbanner()"
     },
@@ -6049,7 +6049,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience_buildarchgate",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildarchgate()"
     },
@@ -6060,8 +6060,8 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "scenes_min05_props_nightambience_buildnightsky",
-      "community": 48,
-      "community_name": "runner.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildnightsky()"
     },
     {
@@ -6082,7 +6082,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_npc",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "npc.ts"
     },
@@ -6093,8 +6093,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": "npc"
     },
     {
@@ -6105,7 +6105,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_constructor",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -6115,8 +6115,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_setpatrol",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".setpatrol()"
     },
     {
@@ -6126,8 +6126,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_lookat",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".lookat()"
     },
     {
@@ -6137,8 +6137,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_position",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".position()"
     },
     {
@@ -6148,8 +6148,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_yaw",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".yaw()"
     },
     {
@@ -6159,8 +6159,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_npc_update",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": ".update()"
     },
     {
@@ -6170,8 +6170,8 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_visioncone",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": "visioncone"
     },
     {
@@ -6181,8 +6181,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_visioncone_constructor",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": ".constructor()"
     },
     {
@@ -6192,8 +6192,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_visioncone_place",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": ".place()"
     },
     {
@@ -6203,8 +6203,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_visioncone_setalert",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": ".setalert()"
     },
     {
@@ -6214,8 +6214,8 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "scenes_min05_props_npc_visioncone_contains",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 32,
+      "community_name": "StealthSystem",
       "norm_label": ".contains()"
     },
     {
@@ -6226,7 +6226,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "min05/props/rughide.ts"
     },
     {
@@ -6237,7 +6237,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughideopts",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "rughideopts"
     },
     {
@@ -6248,7 +6248,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughide",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "rughide"
     },
     {
@@ -6259,7 +6259,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughide_constructor",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -6270,7 +6270,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughide_hidingspot",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".hidingspot()"
     },
     {
@@ -6281,7 +6281,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughide_contains",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".contains()"
     },
     {
@@ -6292,7 +6292,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_rughide_rughide_update",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".update()"
     },
     {
@@ -6302,7 +6302,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_walls",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "walls.ts"
     },
@@ -6313,7 +6313,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "scenes_min05_props_walls_buildstraightwalllike",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildstraightwalllike()"
     },
@@ -6324,8 +6324,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_props_wanderers",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "wanderers.ts"
     },
     {
@@ -6335,8 +6335,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "scenes_min05_props_wanderers_w",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "w"
     },
     {
@@ -6346,7 +6346,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "scenes_min05_props_wanderers_wanderers",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "wanderers"
     },
@@ -6358,7 +6358,7 @@
       "_origin": "ast",
       "id": "scenes_min05_props_wanderers_wanderers_constructor",
       "community": 8,
-      "community_name": "PlasticMaterialFactory",
+      "community_name": "MinifigureFactory.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -6368,7 +6368,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "scenes_min05_props_wanderers_wanderers_update",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".update()"
     },
@@ -6379,7 +6379,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_registry",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min05/registry.ts"
     },
@@ -6391,7 +6391,7 @@
       "_origin": "ast",
       "id": "scenes_min05_registry_min05_scenes",
       "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community_name": "MIN05_SCENES",
       "norm_label": "min05_scenes"
     },
     {
@@ -6402,7 +6402,7 @@
       "_origin": "ast",
       "id": "scenes_min05_registry_scenebyid",
       "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community_name": "MIN05_SCENES",
       "norm_label": "scenebyid()"
     },
     {
@@ -6413,7 +6413,7 @@
       "_origin": "ast",
       "id": "scenes_min05_registry_scenebynumero",
       "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community_name": "MIN05_SCENES",
       "norm_label": "scenebynumero()"
     },
     {
@@ -6423,7 +6423,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_skins",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "skins.ts"
     },
@@ -6434,7 +6434,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min05_types",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min05/types.ts"
     },
@@ -6456,8 +6456,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "scenes_min05_types_playerskinid",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "playerskinid"
     },
     {
@@ -6467,8 +6467,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "scenes_min05_types_hudstate",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "hudstate"
     },
     {
@@ -6478,8 +6478,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "scenes_min05_types_min05objetivotipo",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min05objetivotipo"
     },
     {
@@ -6489,8 +6489,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "scenes_min05_types_min05objetivo",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min05objetivo"
     },
     {
@@ -6500,8 +6500,8 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "scenes_min05_types_camerahint",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "camerahint"
     },
     {
@@ -6511,8 +6511,8 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "sceneinstance"
     },
     {
@@ -6522,8 +6522,8 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance_update",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".update()"
     },
     {
@@ -6533,8 +6533,8 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance_isdone",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".isdone()"
     },
     {
@@ -6544,8 +6544,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance_status",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".status()"
     },
     {
@@ -6555,8 +6555,8 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance_hud",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".hud()"
     },
     {
@@ -6566,8 +6566,8 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "scenes_min05_types_sceneinstance_dispose",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".dispose()"
     },
     {
@@ -6577,7 +6577,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "scenes_min05_types_min05scene",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min05scene"
     },
@@ -6599,8 +6599,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min10_escena17_huellas",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "escena17_huellas.ts"
     },
     {
@@ -6621,8 +6621,8 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "scenes_min10_escena17_huellas_makebang",
-      "community": 7,
-      "community_name": "escena15_colarse_puerta.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "makebang()"
     },
     {
@@ -6632,8 +6632,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min10_escena18_carrera_mercado",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "escena18_carrera_mercado.ts"
     },
     {
@@ -6665,8 +6665,8 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "scenes_min10_escena18_carrera_mercado_makesprite",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "makesprite()"
     },
     {
@@ -7523,8 +7523,8 @@
       "source_location": "L333",
       "_origin": "ast",
       "id": "scenes_min10_preview_preview_startgame",
-      "community": 14,
-      "community_name": "SoundEngine",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "startgame()"
     },
     {
@@ -7612,7 +7612,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "min10/props/rughide.ts"
     },
     {
@@ -7623,7 +7623,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughideopts",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "rughideopts"
     },
     {
@@ -7634,7 +7634,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "rughide"
     },
     {
@@ -7645,7 +7645,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide_constructor",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -7656,7 +7656,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide_registercollision",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".registercollision()"
     },
     {
@@ -7667,7 +7667,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide_hidingspot",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".hidingspot()"
     },
     {
@@ -7678,7 +7678,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide_contains",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".contains()"
     },
     {
@@ -7689,7 +7689,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_rughide_update",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": ".update()"
     },
     {
@@ -7700,7 +7700,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_pothideopts",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "pothideopts"
     },
     {
@@ -7777,7 +7777,7 @@
       "_origin": "ast",
       "id": "scenes_min10_props_rughide_buildfootprints",
       "community": 6,
-      "community_name": "min10/props/RugHide.ts",
+      "community_name": "camp.ts",
       "norm_label": "buildfootprints()"
     },
     {
@@ -7864,8 +7864,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "scenes_min10_props_stage_tavern_bounds",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 3,
+      "community_name": "min10/preview/preview.ts",
       "norm_label": "tavern_bounds"
     },
     {
@@ -8096,7 +8096,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena26_confesion",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena26_confesion.ts"
     },
     {
@@ -8107,7 +8107,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena26_confesion_escena26",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena26"
     },
     {
@@ -8118,7 +8118,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena27_cordon_rojo",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena27_cordon_rojo.ts"
     },
     {
@@ -8129,7 +8129,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena27_cordon_rojo_escena27",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena27"
     },
     {
@@ -8140,7 +8140,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena28_descuelgue",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena28_descuelgue.ts"
     },
     {
@@ -8151,7 +8151,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena28_descuelgue_escena28",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena28"
     },
     {
@@ -8162,7 +8162,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena29_monte",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena29_monte.ts"
     },
     {
@@ -8173,7 +8173,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena29_monte_escena29",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena29"
     },
     {
@@ -8184,7 +8184,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena30_cruce",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena30_cruce.ts"
     },
     {
@@ -8195,7 +8195,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena30_cruce_escena30",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena30"
     },
     {
@@ -8206,7 +8206,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena31_reporte",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena31_reporte.ts"
     },
     {
@@ -8217,7 +8217,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena31_reporte_line",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "line"
     },
     {
@@ -8228,7 +8228,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena31_reporte_dialogo",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "dialogo"
     },
     {
@@ -8239,7 +8239,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena31_reporte_escena31",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena31"
     },
     {
@@ -8250,7 +8250,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena32_ejercito",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena32_ejercito.ts"
     },
     {
@@ -8261,7 +8261,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena32_ejercito_squad",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "squad"
     },
     {
@@ -8272,7 +8272,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena32_ejercito_rallies",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "rallies"
     },
     {
@@ -8283,7 +8283,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena32_ejercito_escena32",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena32"
     },
     {
@@ -8294,7 +8294,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena33_preparativos",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena33_preparativos.ts"
     },
     {
@@ -8305,7 +8305,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena33_preparativos_station",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "station"
     },
     {
@@ -8316,7 +8316,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena33_preparativos_stations",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "stations"
     },
     {
@@ -8327,7 +8327,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena33_preparativos_escena33",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena33"
     },
     {
@@ -8338,7 +8338,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena34_shofarot.ts"
     },
     {
@@ -8349,7 +8349,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot_benches",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "benches"
     },
     {
@@ -8360,7 +8360,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot_cohen",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "cohen"
     },
     {
@@ -8371,7 +8371,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot_buildshofar",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildshofar()"
     },
     {
@@ -8382,7 +8382,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot_buildram",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildram()"
     },
     {
@@ -8393,7 +8393,7 @@
       "_origin": "ast",
       "id": "scenes_min15_escena34_shofarot_escena34",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "escena34"
     },
     {
@@ -8887,8 +8887,8 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "scenes_min15_preview_preview_fireintro",
-      "community": 5,
-      "community_name": "min15/preview/preview.ts",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "fireintro()"
     },
     {
@@ -8931,8 +8931,8 @@
       "source_location": "L299",
       "_origin": "ast",
       "id": "scenes_min15_preview_preview_startgame",
-      "community": 5,
-      "community_name": "min15/preview/preview.ts",
+      "community": 10,
+      "community_name": "loadScene",
       "norm_label": "startgame()"
     },
     {
@@ -9217,7 +9217,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min15_props_balcony",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "balcony.ts"
     },
@@ -9229,7 +9229,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_window_pos",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "window_pos"
     },
     {
@@ -9240,7 +9240,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_rope_line",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "rope_line"
     },
     {
@@ -9251,7 +9251,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_rope_top",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "rope_top"
     },
     {
@@ -9261,8 +9261,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_balcony_bounds",
-      "community": 5,
-      "community_name": "min15/preview/preview.ts",
+      "community": 0,
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "balcony_bounds"
     },
     {
@@ -9273,7 +9273,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_balconyhandle",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "balconyhandle"
     },
     {
@@ -9284,7 +9284,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_balconyhandle_update",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".update()"
     },
     {
@@ -9295,7 +9295,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_balconyhandle_dispose",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".dispose()"
     },
     {
@@ -9305,7 +9305,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_cityrooftops",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "cityrooftops()"
     },
@@ -9316,7 +9316,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_pine",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "pine()"
     },
@@ -9327,7 +9327,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "scenes_min15_props_balcony_buildwallbalcony",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildwallbalcony()"
     },
@@ -9338,8 +9338,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min15_props_climax_offer",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "climax_offer.ts"
     },
     {
@@ -9349,8 +9349,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "scenes_min15_props_climax_offer_buildredcordsignal",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildredcordsignal()"
     },
     {
@@ -9360,8 +9360,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "scenes_min15_props_climax_offer_buildshofar",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildshofar()"
     },
     {
@@ -9371,8 +9371,8 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "scenes_min15_props_climax_offer_buildmarchbanner",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 11,
+      "community_name": ".get",
       "norm_label": "buildmarchbanner()"
     },
     {
@@ -9383,7 +9383,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guide.ts"
     },
     {
@@ -9394,7 +9394,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guidebeacon"
     },
     {
@@ -9405,7 +9405,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_constructor",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -9416,7 +9416,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_setpos",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".setpos()"
     },
     {
@@ -9427,7 +9427,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_setcolor",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".setcolor()"
     },
     {
@@ -9438,7 +9438,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_visible",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".visible()"
     },
     {
@@ -9449,7 +9449,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_update",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".update()"
     },
     {
@@ -9460,7 +9460,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_guidebeacon_dispose",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": ".dispose()"
     },
     {
@@ -9471,7 +9471,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_makebubble",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "makebubble()"
     },
     {
@@ -9482,7 +9482,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_wraptext",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "wraptext()"
     },
     {
@@ -9493,7 +9493,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_guide_roundrect",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "roundrect()"
     },
     {
@@ -9504,7 +9504,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "wild.ts"
     },
     {
@@ -9515,7 +9515,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_p",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "p"
     },
     {
@@ -9526,7 +9526,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildground",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildground()"
     },
     {
@@ -9537,7 +9537,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildpine",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildpine()"
     },
     {
@@ -9548,7 +9548,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildbush",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildbush()"
     },
     {
@@ -9559,7 +9559,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildboulder",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildboulder()"
     },
     {
@@ -9570,7 +9570,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildhideout",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildhideout()"
     },
     {
@@ -9581,7 +9581,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildmoonnight",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildmoonnight()"
     },
     {
@@ -9592,7 +9592,7 @@
       "_origin": "ast",
       "id": "scenes_min15_props_wild_buildpineridge",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildpineridge()"
     },
     {
@@ -9603,7 +9603,7 @@
       "_origin": "ast",
       "id": "scenes_min15_registry",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min15/registry.ts"
     },
     {
@@ -9613,8 +9613,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "scenes_min15_registry_min15_scenes",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 21,
+      "community_name": "animate",
       "norm_label": "min15_scenes"
     },
     {
@@ -9624,8 +9624,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "scenes_min15_registry_scenebyid",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 21,
+      "community_name": "animate",
       "norm_label": "scenebyid()"
     },
     {
@@ -9635,8 +9635,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "scenes_min15_registry_scenebynumero",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 21,
+      "community_name": "animate",
       "norm_label": "scenebynumero()"
     },
     {
@@ -9647,7 +9647,7 @@
       "_origin": "ast",
       "id": "scenes_min15_registry_beat_local",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "beat_local"
     },
     {
@@ -9658,7 +9658,7 @@
       "_origin": "ast",
       "id": "scenes_min15_types",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min15/types.ts"
     },
     {
@@ -9669,7 +9669,7 @@
       "_origin": "ast",
       "id": "scenes_min15_types_min15mundo",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min15mundo"
     },
     {
@@ -9680,7 +9680,7 @@
       "_origin": "ast",
       "id": "scenes_min15_types_min15scene",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "min15scene"
     },
     {
@@ -9690,8 +9690,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_min25_climax",
-      "community": 36,
-      "community_name": "climax.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "climax.ts"
     },
     {
@@ -9702,7 +9702,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": "climaxbuild"
     },
     {
@@ -9713,7 +9713,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild_update",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": ".update()"
     },
     {
@@ -9724,7 +9724,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild_cayo",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": ".cayo()"
     },
     {
@@ -9735,7 +9735,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild_ganado",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": ".ganado()"
     },
     {
@@ -9746,7 +9746,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild_faseobjetivo",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": ".faseobjetivo()"
     },
     {
@@ -9757,7 +9757,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_climaxbuild_dispose",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": ".dispose()"
     },
     {
@@ -9767,8 +9767,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "scenes_min25_climax_shofar",
-      "community": 36,
-      "community_name": "climax.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "shofar"
     },
     {
@@ -9778,8 +9778,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "scenes_min25_climax_rahab",
-      "community": 36,
-      "community_name": "climax.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "rahab"
     },
     {
@@ -9790,7 +9790,7 @@
       "_origin": "ast",
       "id": "scenes_min25_climax_buildclimax",
       "community": 36,
-      "community_name": "climax.ts",
+      "community_name": "buildClimax",
       "norm_label": "buildclimax()"
     },
     {
@@ -9801,7 +9801,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "min25/preview.ts"
     },
     {
@@ -9812,7 +9812,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_renderer",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "renderer"
     },
     {
@@ -9823,7 +9823,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_scene",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "scene"
     },
     {
@@ -9834,7 +9834,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_camera",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "camera"
     },
     {
@@ -9845,7 +9845,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_key",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "key"
     },
     {
@@ -9856,7 +9856,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_ground",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "ground"
     },
     {
@@ -9867,7 +9867,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_plastic",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "plastic"
     },
     {
@@ -9878,7 +9878,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_dust",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "dust"
     },
     {
@@ -9889,7 +9889,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_audio",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "audio"
     },
     {
@@ -9900,7 +9900,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_player",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "player"
     },
     {
@@ -9911,7 +9911,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_victoria",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "victoria()"
     },
     {
@@ -9922,7 +9922,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_cl",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "cl"
     },
     {
@@ -9933,7 +9933,7 @@
       "_origin": "ast",
       "id": "scenes_min25_preview_animate",
       "community": 15,
-      "community_name": "min25/preview.ts",
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "animate()"
     },
     {
@@ -9943,8 +9943,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_muralla_murallaepica",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "murallaepica.ts"
     },
     {
@@ -9954,8 +9954,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "scenes_muralla_murallaepica_startmurallaepica",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "startmurallaepica()"
     },
     {
@@ -9987,7 +9987,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "brickstructurebuilder.ts"
     },
@@ -9998,7 +9998,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_geomemo",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "geomemo"
     },
@@ -10009,7 +10009,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_memogeo",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "memogeo()"
     },
@@ -10020,7 +10020,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_brickaccumulator",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "brickaccumulator"
     },
@@ -10031,7 +10031,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_brickaccumulator_push",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".push()"
     },
@@ -10042,7 +10042,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_brickaccumulator_addgeometry",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".addgeometry()"
     },
@@ -10053,7 +10053,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_brickaccumulator_addbrick",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".addbrick()"
     },
@@ -10064,8 +10064,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_brickaccumulator_build",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".build()"
     },
     {
@@ -10075,7 +10075,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_sand_tones",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "sand_tones"
     },
@@ -10086,7 +10086,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_sandfor",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "sandfor()"
     },
@@ -10097,7 +10097,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_corbelgeo",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "corbelgeo()"
     },
@@ -10108,7 +10108,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_blockgeo",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "blockgeo()"
     },
@@ -10119,7 +10119,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_walloptions",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "walloptions"
     },
@@ -10130,7 +10130,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addwallcourses",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addwallcourses()"
     },
@@ -10141,7 +10141,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addcrown",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addcrown()"
     },
@@ -10152,7 +10152,7 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addbatter",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addbatter()"
     },
@@ -10163,7 +10163,7 @@
       "source_location": "L150",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addslitwindow",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addslitwindow()"
     },
@@ -10174,7 +10174,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addmerlons",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addmerlons()"
     },
@@ -10185,7 +10185,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addtower",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addtower()"
     },
@@ -10196,7 +10196,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_addbaseplate",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "addbaseplate()"
     },
@@ -10207,8 +10207,8 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_jerichobuild",
-      "community": 12,
-      "community_name": "ShofarInteraction.ts",
+      "community": 15,
+      "community_name": "PlasticMaterialFactory.ts",
       "norm_label": "jerichobuild"
     },
     {
@@ -10218,8 +10218,8 @@
       "source_location": "L227",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_buildjericho",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildjericho()"
     },
     {
@@ -10229,7 +10229,7 @@
       "source_location": "L267",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_buildstraightwall",
-      "community": 11,
+      "community": 18,
       "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildstraightwall()"
     },
@@ -10240,8 +10240,8 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_buildcourtyard",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildcourtyard()"
     },
     {
@@ -10251,8 +10251,8 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_buildapproach",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildapproach()"
     },
     {
@@ -10262,8 +10262,8 @@
       "source_location": "L346",
       "_origin": "ast",
       "id": "structures_brickstructurebuilder_buildbrickcolumn",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildbrickcolumn()"
     },
     {
@@ -10498,6 +10498,72 @@
       "norm_label": ".close()"
     },
     {
+      "label": "SceneTag.ts",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "ui_scenetag",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": "scenetag.ts"
+    },
+    {
+      "label": "SceneTagInfo",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "ui_scenetag_scenetaginfo",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": "scenetaginfo"
+    },
+    {
+      "label": "SceneTagHandle",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "ui_scenetag_scenetaghandle",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": "scenetaghandle"
+    },
+    {
+      "label": ".setAudio()",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "ui_scenetag_scenetaghandle_setaudio",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": ".setaudio()"
+    },
+    {
+      "label": ".dispose()",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "ui_scenetag_scenetaghandle_dispose",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": ".dispose()"
+    },
+    {
+      "label": "mountSceneTag()",
+      "file_type": "code",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "ui_scenetag_mountscenetag",
+      "community": 42,
+      "community_name": "mountSceneTag",
+      "norm_label": "mountscenetag()"
+    },
+    {
       "label": "TouchControls.ts",
       "file_type": "code",
       "source_file": "src/ui/TouchControls.ts",
@@ -10505,7 +10571,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": "touchcontrols.ts"
     },
     {
@@ -10516,7 +10582,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols_touchopts",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": "touchopts"
     },
     {
@@ -10527,7 +10593,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols_touchcontrols",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": "touchcontrols"
     },
     {
@@ -10538,7 +10604,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols_touchcontrols_constructor",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".constructor()"
     },
     {
@@ -10549,7 +10615,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols_touchcontrols_buildjoystick",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".buildjoystick()"
     },
     {
@@ -10560,7 +10626,7 @@
       "_origin": "ast",
       "id": "ui_touchcontrols_touchcontrols_buildbutton",
       "community": 24,
-      "community_name": "CharacterController.ts",
+      "community_name": "CharacterController",
       "norm_label": ".buildbutton()"
     },
     {
@@ -10703,7 +10769,7 @@
       "_origin": "ast",
       "id": "world_army",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "army.ts"
     },
     {
@@ -10714,7 +10780,7 @@
       "_origin": "ast",
       "id": "world_army_plasticstd",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "plasticstd()"
     },
     {
@@ -10725,7 +10791,7 @@
       "_origin": "ast",
       "id": "world_army_robes",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "robes"
     },
     {
@@ -10736,7 +10802,7 @@
       "_origin": "ast",
       "id": "world_army_turbans",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "turbans"
     },
     {
@@ -10747,7 +10813,7 @@
       "_origin": "ast",
       "id": "world_army_enemy_robes",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "enemy_robes"
     },
     {
@@ -10758,7 +10824,7 @@
       "_origin": "ast",
       "id": "world_army_enemy_helms",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "enemy_helms"
     },
     {
@@ -10769,7 +10835,7 @@
       "_origin": "ast",
       "id": "world_army_isr_banners",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "isr_banners"
     },
     {
@@ -10780,7 +10846,7 @@
       "_origin": "ast",
       "id": "world_army_ene_banners",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "ene_banners"
     },
     {
@@ -10791,7 +10857,7 @@
       "_origin": "ast",
       "id": "world_army_rbox",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "rbox()"
     },
     {
@@ -10802,7 +10868,7 @@
       "_origin": "ast",
       "id": "world_army_cyl",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "cyl()"
     },
     {
@@ -10813,7 +10879,7 @@
       "_origin": "ast",
       "id": "world_army_soldierstate",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "soldierstate"
     },
     {
@@ -10824,7 +10890,7 @@
       "_origin": "ast",
       "id": "world_army_soldier",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "soldier"
     },
     {
@@ -10835,7 +10901,7 @@
       "_origin": "ast",
       "id": "world_army_army",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "army"
     },
     {
@@ -10846,7 +10912,7 @@
       "_origin": "ast",
       "id": "world_army_army_constructor",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -10857,7 +10923,7 @@
       "_origin": "ast",
       "id": "world_army_army_placeisraelites",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".placeisraelites()"
     },
     {
@@ -10868,7 +10934,7 @@
       "_origin": "ast",
       "id": "world_army_army_placeenemies",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".placeenemies()"
     },
     {
@@ -10879,7 +10945,7 @@
       "_origin": "ast",
       "id": "world_army_army_start",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".start()"
     },
     {
@@ -10890,7 +10956,7 @@
       "_origin": "ast",
       "id": "world_army_army_startbattle",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".startbattle()"
     },
     {
@@ -10901,7 +10967,7 @@
       "_origin": "ast",
       "id": "world_army_army_hitnear",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".hitnear()"
     },
     {
@@ -10912,7 +10978,7 @@
       "_origin": "ast",
       "id": "world_army_army_update",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".update()"
     },
     {
@@ -10923,7 +10989,7 @@
       "_origin": "ast",
       "id": "world_army_army_writeall",
       "community": 18,
-      "community_name": "Army.ts",
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": ".writeall()"
     },
     {
@@ -11011,7 +11077,7 @@
       "_origin": "ast",
       "id": "world_clutter",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "clutter.ts"
     },
     {
@@ -11022,7 +11088,7 @@
       "_origin": "ast",
       "id": "world_clutter_pos",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "pos"
     },
     {
@@ -11033,7 +11099,7 @@
       "_origin": "ast",
       "id": "world_clutter_place",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "place()"
     },
     {
@@ -11044,7 +11110,7 @@
       "_origin": "ast",
       "id": "world_clutter_buildcratestack",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildcratestack()"
     },
     {
@@ -11055,7 +11121,7 @@
       "_origin": "ast",
       "id": "world_clutter_buildsackpile",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildsackpile()"
     },
     {
@@ -11066,7 +11132,7 @@
       "_origin": "ast",
       "id": "world_clutter_buildpotcluster",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildpotcluster()"
     },
     {
@@ -11076,8 +11142,8 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "world_clutter_buildpalm",
-      "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community": 6,
+      "community_name": "camp.ts",
       "norm_label": "buildpalm()"
     },
     {
@@ -11088,7 +11154,7 @@
       "_origin": "ast",
       "id": "world_clutter_buildfirepit",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "buildfirepit()"
     },
     {
@@ -11098,8 +11164,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "world_crowd",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "crowd.ts"
     },
     {
@@ -11109,8 +11175,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "world_crowd_crowdspot",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "crowdspot"
     },
     {
@@ -11120,8 +11186,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "world_crowd_crowdwalker",
-      "community": 1,
-      "community_name": "stage.ts",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "crowdwalker"
     },
     {
@@ -11362,8 +11428,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "world_scenery",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "scenery.ts"
     },
     {
@@ -11373,8 +11439,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "world_scenery_buildscenery",
-      "community": 13,
-      "community_name": "murallaEpica.ts",
+      "community": 18,
+      "community_name": "BrickStructureBuilder.ts",
       "norm_label": "buildscenery()"
     },
     {
@@ -11384,8 +11450,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "world_shofar",
-      "community": 46,
-      "community_name": "Shofar.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": "shofar.ts"
     },
     {
@@ -11395,8 +11461,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "world_shofar_radiusat",
-      "community": 46,
-      "community_name": "Shofar.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": "radiusat()"
     },
     {
@@ -11406,8 +11472,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "world_shofar_buildshofar",
-      "community": 46,
-      "community_name": "Shofar.ts",
+      "community": 20,
+      "community_name": "PlasticMaterialFactory",
       "norm_label": "buildshofar()"
     },
     {
@@ -11494,8 +11560,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "world_tavern",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "tavern.ts"
     },
     {
@@ -11505,8 +11571,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "world_tavern_tavernoptions",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "tavernoptions"
     },
     {
@@ -11516,8 +11582,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "world_tavern_tavernhandle",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": "tavernhandle"
     },
     {
@@ -11527,8 +11593,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "world_tavern_tavernhandle_dispose",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 1,
+      "community_name": "stage.ts",
       "norm_label": ".dispose()"
     },
     {
@@ -11538,8 +11604,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "world_tavern_kilimtexture",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "kilimtexture()"
     },
     {
@@ -11549,8 +11615,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "world_tavern_buildtavern",
-      "community": 9,
-      "community_name": "Minifigure",
+      "community": 8,
+      "community_name": "MinifigureFactory.ts",
       "norm_label": "buildtavern()"
     },
     {
@@ -11726,7 +11792,7 @@
       "_origin": "ast",
       "id": "scenes_min05_skins_yehoshua_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "yehoshua_skin"
     },
     {
@@ -11737,7 +11803,7 @@
       "_origin": "ast",
       "id": "scenes_min05_skins_espia1_sigilo",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "espia1_sigilo"
     },
     {
@@ -11748,7 +11814,7 @@
       "_origin": "ast",
       "id": "scenes_min05_skins_espia2_sigilo",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "espia2_sigilo"
     },
     {
@@ -11759,7 +11825,7 @@
       "_origin": "ast",
       "id": "scenes_min05_skins_guardia_skin",
       "community": 0,
-      "community_name": "MinifigureFactory.ts",
+      "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "guardia_skin"
     },
     {
@@ -11769,7 +11835,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "scenes_min05_skins_jefe_guardia_skin",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "jefe_guardia_skin"
     },
@@ -11780,7 +11846,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "scenes_min05_skins_espia1_camp",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "espia1_camp"
     },
@@ -11791,7 +11857,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "scenes_min05_skins_espia2_camp",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "espia2_camp"
     },
@@ -11802,7 +11868,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "scenes_min05_skins_rahab_mujer",
-      "community": 7,
+      "community": 0,
       "community_name": "escena15_colarse_puerta.ts",
       "norm_label": "rahab_mujer"
     }
@@ -14588,7 +14654,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -14684,7 +14750,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -20846,7 +20912,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -21158,7 +21224,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -26950,7 +27016,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -26962,7 +27028,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -26974,7 +27040,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -26986,7 +27052,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -26998,7 +27064,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27010,7 +27076,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27022,7 +27088,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27034,7 +27100,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27046,7 +27112,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27058,7 +27124,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27070,7 +27136,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27082,7 +27148,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27094,7 +27160,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27106,7 +27172,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27118,7 +27184,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27130,7 +27196,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27142,7 +27208,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27154,7 +27220,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27166,7 +27232,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L9",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27178,7 +27244,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L9",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27190,7 +27256,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27202,7 +27268,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27214,7 +27280,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27226,7 +27292,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27238,7 +27304,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27250,7 +27316,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27262,7 +27328,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27274,7 +27340,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -27286,7 +27352,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/escena09_orilla_jordan.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scenes_min05_escena09_orilla_jordan",
@@ -32161,6 +32227,42 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min05/preview/preview.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min05_preview_preview",
+      "target": "ui_scenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min05/preview/preview.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min05_preview_preview",
+      "target": "ui_scenetag_mountscenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min05/preview/preview.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min05_preview_preview",
+      "target": "ui_scenetag_scenetaghandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min05/preview/preview.ts",
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
@@ -32419,6 +32521,18 @@
       "_origin": "ast",
       "source": "scenes_min05_preview_preview_loadscene",
       "target": "ui_dialogue_dialogue_say"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min05/preview/preview.ts",
+      "source_location": "L371",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min05_preview_preview_loadscene",
+      "target": "ui_scenetag_mountscenetag",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -38065,6 +38179,42 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/scenes/min10/preview/preview.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min10_preview_preview",
+      "target": "ui_scenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min10/preview/preview.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min10_preview_preview",
+      "target": "ui_scenetag_mountscenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min10/preview/preview.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min10_preview_preview",
+      "target": "ui_scenetag_scenetaghandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min10/preview/preview.ts",
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
@@ -38214,6 +38364,18 @@
       "_origin": "ast",
       "source": "scenes_min10_preview_preview_animate",
       "target": "scenes_min10_preview_preview_loadscene",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min10/preview/preview.ts",
+      "source_location": "L295",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min10_preview_preview_loadscene",
+      "target": "ui_scenetag_mountscenetag",
       "confidence_score": 1.0
     },
     {
@@ -41733,6 +41895,42 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min15/preview/preview.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min15_preview_preview",
+      "target": "ui_scenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min15/preview/preview.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min15_preview_preview",
+      "target": "ui_scenetag_mountscenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min15/preview/preview.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min15_preview_preview",
+      "target": "ui_scenetag_scenetaghandle",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -41838,6 +42036,18 @@
       "_origin": "ast",
       "source": "scenes_min15_preview_preview_animate",
       "target": "scenes_min15_preview_preview_loadscene",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scenes/min15/preview/preview.ts",
+      "source_location": "L261",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scenes_min15_preview_preview_loadscene",
+      "target": "ui_scenetag_mountscenetag",
       "confidence_score": 1.0
     },
     {
@@ -44458,6 +44668,73 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag",
+      "target": "ui_scenetag_mountscenetag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag",
+      "target": "ui_scenetag_scenetaghandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag",
+      "target": "ui_scenetag_scenetaginfo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag_mountscenetag",
+      "target": "ui_scenetag_scenetaginfo"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag_scenetaghandle",
+      "target": "ui_scenetag_scenetaghandle_dispose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/SceneTag.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "ui_scenetag_scenetaghandle",
+      "target": "ui_scenetag_scenetaghandle_setaudio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/TouchControls.ts",
       "source_location": "L13",
       "weight": 1.0,
@@ -45780,5 +46057,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a0743d2a1bb7d43e89106d64fd1ddd3902a8cfc3"
+  "built_at_commit": "7520491f5b7a406b354139854dcc105e19d6d1c0"
 }

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { Min05Scene, SceneContext, SceneInstance } from './types';
 import { BrickPalette } from '../../materials/BrickPalette';
 import {
@@ -68,39 +69,61 @@ export const escena09: Min05Scene = {
 
     // VIDA AÑADIDA: pequeños vecinos de la ribera. Son pocos, baratos y no
     // participan en colisiones: rellenan el plano sin competir con el objetivo.
-    const birds: Array<{ root: THREE.Group; left: THREE.Mesh; right: THREE.Mesh; speed: number; phase: number }> = [];
+    const rounded = (w: number, h: number, d: number, color: number): THREE.Mesh => {
+      const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, 0.06), plastic.get(color));
+      mesh.castShadow = true;
+      return mesh;
+    };
+    const birds: Array<{ root: THREE.Group; left: THREE.Mesh; right: THREE.Mesh; baseY: number; speed: number; phase: number }> = [];
     for (let i = 0; i < 3; i++) {
       const root = new THREE.Group();
-      const left = brickBox(plastic, 1.2, 0.16, 0.42, BrickPalette.DARK_GRAY, -0.7, 0, 0);
-      const right = brickBox(plastic, 1.2, 0.16, 0.42, BrickPalette.DARK_GRAY, 0.7, 0, 0);
-      root.add(left, right);
-      root.position.set(-24 - i * 9, 15 + i * 2, 28 + i * 4);
-      root.scale.setScalar(0.65 + i * 0.08);
+      const body = rounded(1.45, 0.48, 0.65, BrickPalette.DARK_BLUE);
+      const head = rounded(0.62, 0.55, 0.58, BrickPalette.BLUE); head.position.set(0.82, 0.13, 0);
+      const beak = rounded(0.34, 0.22, 0.32, BrickPalette.YELLOW); beak.position.set(1.3, 0.03, 0);
+      const left = rounded(1.25, 0.16, 0.5, BrickPalette.BLUE); left.position.set(-0.78, 0, 0);
+      const right = rounded(1.25, 0.16, 0.5, BrickPalette.BLUE); right.position.set(0.78, 0, 0);
+      root.add(body, head, beak, left, right);
+      const baseY = 9.5 + i * 1.5;
+      root.position.set(-15 - i * 10, baseY, 13 + i * 3);
+      root.scale.setScalar(0.9 + i * 0.1);
       group.add(root);
-      birds.push({ root, left, right, speed: 3.8 + i * 0.8, phase: i * 1.7 });
+      birds.push({ root, left, right, baseY, speed: 3.8 + i * 0.8, phase: i * 1.7 });
     }
 
     const frogs: Array<{ root: THREE.Group; phase: number }> = [];
-    for (const [x, z, phase] of [[-5, 9.2, 0.4], [4, 10.4, 2.1]] as const) {
+    for (const [x, z, phase] of [[-5, 8.2, 0.4], [4, 10.8, 2.1]] as const) {
       const root = new THREE.Group();
-      root.add(brickBox(plastic, 1.1, 0.55, 0.9, BrickPalette.GREEN, 0, 0.3, 0));
-      root.add(brickBox(plastic, 0.72, 0.4, 0.72, BrickPalette.GREEN, 0, 0.75, -0.12));
-      root.add(brickBox(plastic, 0.14, 0.14, 0.14, BrickPalette.WHITE, -0.22, 0.98, -0.48));
-      root.add(brickBox(plastic, 0.14, 0.14, 0.14, BrickPalette.WHITE, 0.22, 0.98, -0.48));
+      root.add(rounded(1.65, 0.7, 1.2, BrickPalette.GREEN));
+      root.add(rounded(1.05, 0.62, 0.92, BrickPalette.YELLOW));
+      root.children[1].position.set(0, 0.58, -0.18);
+      root.add(rounded(0.28, 0.28, 0.28, BrickPalette.WHITE));
+      root.add(rounded(0.28, 0.28, 0.28, BrickPalette.WHITE));
+      root.children[2].position.set(-0.3, 0.98, -0.48);
+      root.children[3].position.set(0.3, 0.98, -0.48);
+      root.add(rounded(0.12, 0.12, 0.12, BrickPalette.BLACK));
+      root.add(rounded(0.12, 0.12, 0.12, BrickPalette.BLACK));
+      root.children[4].position.set(-0.3, 0.98, -0.65);
+      root.children[5].position.set(0.3, 0.98, -0.65);
+      root.add(rounded(0.72, 0.24, 0.45, BrickPalette.DARK_GREEN));
+      root.children[6].position.set(-0.72, 0.2, 0.2);
+      root.add(rounded(0.72, 0.24, 0.45, BrickPalette.DARK_GREEN));
+      root.children[7].position.set(0.72, 0.2, 0.2);
       root.position.set(x, 0, z);
       group.add(root);
       frogs.push({ root, phase });
     }
 
-    const dragonflies: Array<{ root: THREE.Group; phase: number }> = [];
-    for (const [x, y, z, phase] of [[-9, 4.2, 7, 0.2], [-1, 3.4, 11, 2.4]] as const) {
+    const dragonflies: Array<{ root: THREE.Group; baseX: number; baseY: number; phase: number }> = [];
+    for (const [x, y, z, phase] of [[-9, 5.2, 9, 0.2], [-1, 4.4, 13, 2.4]] as const) {
       const root = new THREE.Group();
-      root.add(brickBox(plastic, 0.18, 0.9, 0.18, BrickPalette.DARK_BLUE, 0, 0, 0));
-      root.add(brickBox(plastic, 0.8, 0.08, 0.28, 0x8fd3e8, -0.46, 0.1, 0));
-      root.add(brickBox(plastic, 0.8, 0.08, 0.28, 0x8fd3e8, 0.46, 0.1, 0));
+      root.add(rounded(0.22, 1.05, 0.22, BrickPalette.DARK_BLUE));
+      root.add(rounded(1.25, 0.1, 0.52, 0x8fd3e8));
+      root.add(rounded(1.25, 0.1, 0.52, 0x66b7d5));
+      root.children[1].position.set(-0.58, 0.16, 0);
+      root.children[2].position.set(0.58, 0.16, 0);
       root.position.set(x, y, z);
       group.add(root);
-      dragonflies.push({ root, phase });
+      dragonflies.push({ root, baseX: x, baseY: y, phase });
     }
 
     const boat = buildBoat(plastic); boat.position.set(-16, 0, 6); boat.rotation.y = 0.5; group.add(boat);
@@ -173,7 +196,7 @@ export const escena09: Min05Scene = {
         for (const bird of birds) {
           bird.root.position.x += bird.speed * dt;
           if (bird.root.position.x > 30) bird.root.position.x = -32;
-          bird.root.position.y += Math.sin(t * 1.8 + bird.phase) * 0.006;
+          bird.root.position.y = bird.baseY + Math.sin(t * 1.8 + bird.phase) * 0.35;
           const flap = Math.sin(t * 8 + bird.phase) * 0.45;
           bird.left.rotation.z = flap; bird.right.rotation.z = -flap;
         }
@@ -183,8 +206,8 @@ export const escena09: Min05Scene = {
           frog.root.rotation.z = Math.sin(t * 2.2 + frog.phase) * hop * 0.12;
         }
         for (const dragonfly of dragonflies) {
-          dragonfly.root.position.x += Math.sin(t * 1.5 + dragonfly.phase) * dt * 0.8;
-          dragonfly.root.position.y += Math.sin(t * 2.4 + dragonfly.phase) * dt * 0.45;
+          dragonfly.root.position.x = dragonfly.baseX + Math.sin(t * 1.5 + dragonfly.phase) * 1.5;
+          dragonfly.root.position.y = dragonfly.baseY + Math.sin(t * 2.4 + dragonfly.phase) * 0.8;
           dragonfly.root.rotation.y = Math.sin(t * 1.3 + dragonfly.phase) * 0.35;
           dragonfly.root.rotation.z = Math.sin(t * 11 + dragonfly.phase) * 0.2;
         }
