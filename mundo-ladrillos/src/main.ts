@@ -739,17 +739,37 @@ let last = 0;
 const TAB_C = Math.cos(0.35), TAB_S = Math.sin(0.35);
 function colisionMishkan(p: THREE.Vector3): void {
   const dx = p.x - 26, dz = p.z - 22;
-  const lx = dx * TAB_C + dz * TAB_S, lz = -dx * TAB_S + dz * TAB_C;   // a coords locales del recinto
-  const HW = 6.5 * 1.7 + 0.7, HD = 4 * 1.7 + 0.7;                      // medias-extensiones (con radio)
-  if (Math.abs(lx) >= HW || Math.abs(lz) >= HD) return;   // fuera del recinto → nada
-  // RECINTO SÓLIDO: empuja SIEMPRE a la pared más cercana (suave, sin saltos). Antes
-  // había un "pasillo de puerta" que creaba una discontinuidad en el borde → glitch
-  // (el jugador se colaba/saltaba al otro lado y no podía llegar al tapiz azul).
-  let nlx = lx, nlz = lz;
-  if (HW - Math.abs(lx) < HD - Math.abs(lz)) nlx = Math.sign(lx || 1) * HW;
-  else nlz = Math.sign(lz || 1) * HD;
-  p.x = 26 + (nlx * TAB_C - nlz * TAB_S);            // de vuelta a coords de mundo
-  p.z = 22 + (nlx * TAB_S + nlz * TAB_C);
+  let lx = dx * TAB_C + dz * TAB_S, lz = -dx * TAB_S + dz * TAB_C;   // a coords locales del recinto
+  const HWg = 6.5 * 1.7, HDg = 4 * 1.7;   // medio-recinto GEOMÉTRICO (las paredes/cortinas), escala 1.7
+  if (Math.abs(lx) > HWg + 3 || Math.abs(lz) > HDg + 3) return;      // lejos del Mishkán → nada
+  // PUERTA QUE FUNCIONA (encargo #1): antes el recinto era SÓLIDO y te expulsaba, así que
+  // no se podía entrar. Ahora se modela como PAREDES (cajas finas): fondo, dos lados, y el
+  // frente (+z) partido en dos con un HUECO central = la puerta (donde está la cortina de
+  // entrada). Empujar fuera de cada caja fina es continuo → sin el glitch de teletransporte.
+  const R = 0.9;          // radio del jugador
+  const WT = 0.4;         // medio-grosor de las cortinas
+  const DOOR = 2.2;       // medio-hueco de la puerta (coincide con el hueco visible del modelo)
+  const FL = (HWg - DOOR) / 2;   // medio-ancho de cada segmento del frente
+  // paredes en local: {centro x, centro z, medio-ancho x, medio-ancho z}
+  const walls = [
+    { cx: 0, cz: -HDg, hx: HWg, hz: WT },                       // fondo (-z)
+    { cx: -HWg, cz: 0, hx: WT, hz: HDg },                       // lado izq
+    { cx: HWg, cz: 0, hx: WT, hz: HDg },                        // lado der
+    { cx: -(HWg + DOOR) / 2, cz: HDg, hx: FL, hz: WT },         // frente izq del hueco
+    { cx: (HWg + DOOR) / 2, cz: HDg, hx: FL, hz: WT },          // frente der del hueco
+    { cx: 0, cz: -1.5 * 1.7, hx: 2.8 * 1.7, hz: 1.7 * 1.7 },    // tienda sagrada central (sólida)
+  ];
+  for (const w of walls) {
+    const wdx = lx - w.cx, wdz = lz - w.cz;
+    const px = w.hx + R - Math.abs(wdx);
+    const pz = w.hz + R - Math.abs(wdz);
+    if (px > 0 && pz > 0) {   // solapa esta pared → expulsa por el eje de menor penetración
+      if (px < pz) lx = w.cx + Math.sign(wdx || 1) * (w.hx + R);
+      else lz = w.cz + Math.sign(wdz || 1) * (w.hz + R);
+    }
+  }
+  p.x = 26 + (lx * TAB_C - lz * TAB_S);            // de vuelta a coords de mundo
+  p.z = 22 + (lx * TAB_S + lz * TAB_C);
 }
 
 function animate(now: number): void {

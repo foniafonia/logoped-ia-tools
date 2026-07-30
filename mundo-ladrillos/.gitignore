@@ -8,3 +8,6 @@ public/fondos/
 **/graphify-out/cache/
 /graphify-out/
 **/graphify-out/*.html
+**/graphify-out/.graphify_labels.json
+**/graphify-out/.graphify_labels.json.sig
+**/graphify-out/GRAPH_REPORT.md
