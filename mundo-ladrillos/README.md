@@ -42,3 +42,16 @@ git config core.hooksPath .githooks
 ## Estado y pendientes
 Ver `coordinacion/backlog-calidad.md` (calidad) y `coordinacion/ideas-futuras.md`
 (distribución, juegos logopédicos, DA3).
+
+## Cerebro compartido (Graphify)
+`src/graphify-out/graph.json` es un **grafo de conocimiento del código** (Graphify) que
+Codex y Claude pueden consultar → ambos "parten del mismo mapa". Se **commitea** (Graphify
+trae un merge-driver de git para unirlo entre ramas).
+
+- **Refrescar tras cambios de código** (local, sin LLM/coste): `graphify update src`
+- **Consultar:** `graphify query "tu pregunta" --graph src/graphify-out/graph.json`
+- **Hubs de arquitectura:** `graphify god-nodes --graph src/graphify-out/graph.json`
+- **Registrar el skill `/graphify` en cada asistente (en TU máquina, una vez):**
+  `uv tool install graphifyy` → `graphify claude install` (Claude Code) y
+  `graphify codex install` (Codex). La parte semántica de docs/PDF necesita una API key
+  (ANTHROPIC/OPENAI/GEMINI…) o un Ollama local; el grafo de **código es gratis**.
