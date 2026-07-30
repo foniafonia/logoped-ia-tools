@@ -129,3 +129,25 @@ Está a salvo en git (commit `ae8b2b7`) y en los módulos `Army.ts`,
 
 _Mantener este documento al día es responsabilidad de todos. Si tomas una decisión
 o corriges un rumbo, escríbelo aquí._
+
+---
+
+## Estado actual (2026-07-30) — hitos recientes
+- **Muralla épica RESCATADA.** Se recuperó la escena insignia original (ejército que
+  marcha, caballería, arqueros, estandartes → shofar → derrumbe en ladrillos → batalla +
+  rescate de Rahab). Vive como escena aislada `scenes/muralla/murallaEpica.ts`, accesible
+  con `#muralla` (o el fichero `🎺 Muralla épica.html`, que entra directo). Motor propio,
+  sin el post-proceso pesado del runner → fluida.
+- **Cámara unificada.** El 0-5 usa ya la misma cámara que la muralla (`ThirdPersonCamera`
+  "a pelo": arrastras y orbita, sigue al jugador, se queda donde la dejes). Sin recentrado
+  automático ni botón.
+- **Escena 13 (puente del río)** desatascada: bounds propios (llegaba a media travesía y
+  no podía cruzar) + equilibrio más amable para peques.
+- **Fuga de recursos del clímax** arreglada: `ShofarInteraction` cuelga todo de un `group`
+  y tiene `dispose()`; `buildClimax` y el runner lo llaman al salir.
+- **TypeScript:** añadido `@types/three` (de 153 → ~20 errores; el resto, contratos reales,
+  en el backlog).
+- **Distribución (plan):** un solo build → online + **PWA** (instalable, offline, sin
+  tiendas) + HTML offline; Tauri (.exe/.app) solo si se pide. Ver `coordinacion/ideas-futuras.md`.
+- **Trato con el cliente (Irán, hijo del Rab):** 2000 € (1000 + 1000) + 150 €/mes
+  mantenimiento, ~10 semanas. (Detalle en `coordinacion/propuesta-cliente.md`.)

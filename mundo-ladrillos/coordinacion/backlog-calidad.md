@@ -23,10 +23,28 @@ sin romper lo bueno**.
   ~2,2 MB sin audio; 9,6 MB con voces). Cargar solo 0-5 al inicio y el resto bajo demanda.
   ⚠️ Toca el arranque → hacer con cuidado y verificar. Objetivo: interactivo <5 s en móvil
   razonable, 30 FPS móvil / 60 FPS escritorio.
-- **TypeScript limpio (`tsc --noEmit`).** 153 errores, casi todos por falta de tipos de
-  three (`TS7016`). Añadir `@types/three` quita ~90%; quedan unos pocos reales (contratos
-  `Spine`, `SceneContext`/`SceneCtx`, algún `implicit any`). Riesgo cero en runtime (Vite
-  no typa). Hacer que el pipeline corra `tsc` antes de aceptar entrega.
+- **TypeScript limpio (`tsc --noEmit`).** ✅ Añadido `@types/three` → de **153 a ~20 errores**.
+  Los ~20 restantes son contratos reales (para una tanda con cuidado, tocan runtime):
+  - `main.ts` (×3): el objeto del outro/teaser no cumple el interface `Spine` (le faltan
+    `ready/elapsed/ended`).
+  - `runner.ts` (391): `SceneContext` vs `SceneCtx` (dos contratos a unificar); (410) un
+    `implicit any` (trivial).
+  - `PreciousRender.ts` (116): llamada con 2 args donde el tipo espera 0 (API postproceso).
+  - `scenes/min15/escena29..34` (×6): un parámetro tipado como **literal de color** en vez
+    de `number` → widen del parámetro en un sitio arregla los 6.
+  - **Previews (dev-only, no van al juego):** import de `../ui/SceneTag` inexistente (×3),
+    `ambiente "interior"` fuera de la unión, y `min25/preview.ts` usa `cl.shofarPos` (ya no
+    existe → usar `faseObjetivo`). Bajo valor (solo herramientas de dev).
+  - Hacer que el pipeline corra `tsc` antes de aceptar entrega (cuando esté a 0).
+
+## 🧹 Código muerto — candidatos (NO borrar a ciegas)
+El heurístico "sin import" da falsos positivos; verificado uno a uno:
+- **NO tocar:** `scenes/**/preview*.ts` (son *entradas* de dev con su propio vite config),
+  `story/fondos.ts` (hueco de material privado), `world/Ark.ts`/`Shofar.ts`/`Banner.ts`/
+  `Relic.ts` (probable trabajo preparado para el tramo **20-25**), `assets/tex*.ts` (los usa
+  `materials/tiling.ts`).
+- **Revisar con calma (posible retirada):** `ui/VisualGuide.ts`, `scenes/min15/props/climax_offer.ts`.
+- Regla: cualquier retirada = confirmar con `build` + `grep` antes, un commit por retirada.
 
 ### P2
 - **Accesibilidad** (clave para el salto a logopedia): navegación por teclado, controles
