@@ -7,3 +7,4 @@ public/fondos/
 # Graphify: se COMPARTE graph.json (cerebro común Codex+Claude); se ignora la caché
 **/graphify-out/cache/
 /graphify-out/
+**/graphify-out/*.html
