@@ -45,3 +45,14 @@ Este archivo lo usa Claude para reportar que hizo con los encargos de `coordinac
 - Límites respetados: cambio aditivo en una sola escena; sin cambios en `main.ts`, runner, gating, colisiones ni panel Graphify; sin luces nuevas y sin material privado.
 - Verificación: `npx vite build` OK; `graphify update src` OK (sin cambios de topología).
 - Pendiente de cierre: commit y push a `claude/pelicula-videojuego-primera-persona-kst6ip`.
+
+### Sesión: espaciador (runner) + diagnóstico del muñeco del río
+- HECHO: el `PreviewController` (runner) ahora ignora las teclas de juego cuando escribes
+  en un campo (nota del 🐞) → el ESPACIADOR y las flechas funcionan al anotar en el río/tramos
+  (antes solo estaba arreglado en el 0-5 vía CharacterController).
+- DIAGNOSTICADO (pendiente de arreglar): en la escena 9 (orilla del Jordán) el muñeco "no se
+  mueve". Probado: `__walk` SÍ lo mueve → NO está atrapado. La causa es la CINEMÁTICA de
+  entrada (`intro`): mientras `cineCam.active`, el runner bloquea el teclado (`if(!cine)`), y
+  como el tiempo se mide por frames (dt tope 0.05), en equipos lentos esa cinemática de 4s
+  dura mucho → parece congelado. ARREGLO PROPUESTO: que `CinematicCamera` use TIEMPO REAL
+  (performance.now) en vez de acumular dt, y hacerla SALTABLE al pulsar una tecla.

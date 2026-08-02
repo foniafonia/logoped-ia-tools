@@ -27,6 +27,8 @@ export class PreviewController {
 
   constructor(private fig: Minifigure) {
     addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement | null;   // si escribes en un campo (nota del 🐞), NO captures teclas de juego (deja el espacio, flechas…)
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
       this.keys.add(e.code);
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
     });
