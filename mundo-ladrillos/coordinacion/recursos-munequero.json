@@ -1,0 +1,2366 @@
+{
+  "$schema": "munequero-recursos/v1",
+  "proyecto": "La Caída de Jericó — juego web (estética ladrillo/juguete, Three.js)",
+  "generadoPor": "MUÑEQUERO (rama claude/munecos-ifepfa)",
+  "fecha": "2026-08-13",
+  "imagenes": {
+    "descripcion": "Key-arts, retratos, objetos de inventario, texturas tileables, escenas, cielos y VFX. Generadas con Higgsfield (modelo z_image, PNG).",
+    "acceso": {
+      "cdnBase": "https://d8j0ntlcm91z4.cloudfront.net/user_2zti5fQAAhfvJesTMKviz7U8cLw/",
+      "nota": "URLs del CDN privado de la cuenta Higgsfield del usuario. Solo cargan con sesion Higgsfield iniciada; desde fuera dan Access Denied. Para uso en produccion: descargar cada PNG y servirlo desde tu propio hosting/CDN o /assets de la app.",
+      "urlPattern": "{cdnBase}{file}"
+    },
+    "categorias": {
+      "caratula": "Portada tipo caja/CD del juego (cuadrada).",
+      "pantallas": "Pantallas de inicio / fin / carga.",
+      "posters": "Posters y pantallas extra.",
+      "retratos": "Retratos de personajes (heroes, aldeanos, ninos) — 3:4.",
+      "objetos": "Objetos de inventario / props de la historia — 1:1.",
+      "vfx": "Hojas de efectos, power-ups y magias.",
+      "emblemas": "Emblemas / estandartes.",
+      "escenas": "Escenas clave de la historia — 16:9.",
+      "cielos": "Cielos / fondos de ambiente vacios (backdrops) — 16:9.",
+      "texturas": "Swatches tileables 2048px (materiales para el 3D)."
+    },
+    "total": 252,
+    "items": [
+      {
+        "id": "74bd9499-06c0-4255-9850-d8461f500431",
+        "name": "CARÁTULA (cuadrada, tipo caja/CD)",
+        "cat": "caratula",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_222636_74bd9499-06c0-4255-9850-d8461f500431.png",
+        "desc": "murallas deshaciéndose en ladrillos al atardecer, héroe con shofar + estandartes"
+      },
+      {
+        "id": "2bf1e829-7439-4837-9abb-75e5c01eaeee",
+        "name": "PÓSTER VERTICAL (caja/movie-poster)",
+        "cat": "caratula",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_224301_2bf1e829-7439-4837-9abb-75e5c01eaeee.png",
+        "desc": "murallas altísimas al atardecer, héroe alzando el shofar, ladrillos cayendo"
+      },
+      {
+        "id": "ef15900a-6d06-4a5b-b9f9-5281f9047bef",
+        "name": "TÍTULO / inicio",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_222653_ef15900a-6d06-4a5b-b9f9-5281f9047bef.png",
+        "desc": "Jericó amurallada al amanecer sobre el desierto, el Jordán y el campamento al fondo (16:9)"
+      },
+      {
+        "id": "72641d8a-d9f5-42b8-9631-a0a11630f326",
+        "name": "VICTORIA",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_222641_72641d8a-d9f5-42b8-9631-a0a11630f326.png",
+        "desc": "muralla caída en montones de ladrillos, israelitas celebrando con estandartes, cielo dorado-rosa (16:9)"
+      },
+      {
+        "id": "a7b7b556-0e34-4317-bd26-468aaea79de3",
+        "name": "GAME OVER / reintentar",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_222647_a7b7b556-0e34-4317-bd26-468aaea79de3.png",
+        "desc": "espía solo escondido junto a la muralla de noche, luz de luna azul, antorchas (16:9)"
+      },
+      {
+        "id": "5189724f-0766-4ec2-af49-444f3bf384a0",
+        "name": "AJUSTES / opciones",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_230252_5189724f-0766-4ec2-af49-444f3bf384a0.png",
+        "desc": "interior de casa de Jericó con vasijas y alfombra, luz de candil (16:9)"
+      },
+      {
+        "id": "c5985a55-dfd1-4b5b-8b87-3c76c09d77a2",
+        "name": "CRÉDITOS",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_230258_c5985a55-dfd1-4b5b-8b87-3c76c09d77a2.png",
+        "desc": "cielo estrellado sobre la silueta de las murallas y palmeras (16:9)"
+      },
+      {
+        "id": "9dddb11a-ab64-4a67-9099-8fb8b02597bb",
+        "name": "TUTORIAL",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233056_9dddb11a-ab64-4a67-9099-8fb8b02597bb.png",
+        "desc": "calle de Jericó de día con poste indicador y mano señalando, hueco para texto de UI (16:9)"
+      },
+      {
+        "id": "07ee1161-ecc7-4353-ba4f-1a9afd8388b3",
+        "name": "CARGA / loading",
+        "cat": "pantallas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233112_07ee1161-ecc7-4353-ba4f-1a9afd8388b3.png",
+        "desc": "shofar brillante y ladrillos ensamblándose en el aire sobre degradado, hueco para barra (16:9)"
+      },
+      {
+        "id": "9b2831f3-0afa-43b6-9892-d443d44b1c65",
+        "name": "PÓSTER DE PERSONAJES",
+        "cat": "posters",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224255_9b2831f3-0afa-43b6-9892-d443d44b1c65.png",
+        "desc": "fila: Yehoshúa, Rahab (cordón rojo), 2 espías, guardia de bronce, sacerdote con mitra+shofar"
+      },
+      {
+        "id": "f463f84e-0d02-4865-8723-3e7834f57bd4",
+        "name": "MAPA / selección de nivel",
+        "cat": "posters",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224307_f463f84e-0d02-4865-8723-3e7834f57bd4.png",
+        "desc": "mapa ilustrado del viaje (campamento → Jordán → marcha → Jericó) con senda punteada"
+      },
+      {
+        "id": "f5242e5c-7d73-4ae6-8d90-b61cad4bc956",
+        "name": "RESCATE DE RAHAB",
+        "cat": "posters",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224312_f5242e5c-7d73-4ae6-8d90-b61cad4bc956.png",
+        "desc": "cordón rojo colgando de la ventana del muro de noche, espías bajando, Rahab asomada"
+      },
+      {
+        "id": "23298da9-0b0f-4e8c-a103-59680993e04b",
+        "name": "YEHOSHÚA (Josué)",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_225049_23298da9-0b0f-4e8c-a103-59680993e04b.png",
+        "desc": "túnica azul real + banda, barba blanca larga"
+      },
+      {
+        "id": "d324bb38-b452-4a8b-8c78-bda59dd38794",
+        "name": "RAHAB",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_225056_d324bb38-b452-4a8b-8c78-bda59dd38794.png",
+        "desc": "vestido plateado con el cordón rojo al hombro"
+      },
+      {
+        "id": "03736fff-b68e-4f7e-b870-2f1ae34cab05",
+        "name": "ESPÍA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_230312_03736fff-b68e-4f7e-b870-2f1ae34cab05.png",
+        "desc": "traje de sigilo oscuro con capucha, expresión alerta"
+      },
+      {
+        "id": "244f0cce-c726-4d99-999a-5b997c267d7d",
+        "name": "GUARDIA de Jericó",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_230709_244f0cce-c726-4d99-999a-5b997c267d7d.png",
+        "desc": "cota de malla gris, bigote negro, casco de bronce, escudo con león"
+      },
+      {
+        "id": "64a2d686-8dcd-4dcb-b58d-14d502da8ca2",
+        "name": "SACERDOTE",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_230714_64a2d686-8dcd-4dcb-b58d-14d502da8ca2.png",
+        "desc": "túnica blanca, pectoral dorado, mitra, shofar"
+      },
+      {
+        "id": "6c41a236-1b47-4373-a50f-9bc33b0a529c",
+        "name": "BEDUINO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_230719_6c41a236-1b47-4373-a50f-9bc33b0a529c.png",
+        "desc": "túnica verde oliva, keffiyeh arena, barba marrón"
+      },
+      {
+        "id": "f39fbd55-e216-4464-aea9-3728c3eb98b1",
+        "name": "JEFE DE LA GUARDIA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_231050_f39fbd55-e216-4464-aea9-3728c3eb98b1.png",
+        "desc": "túnica roja a franjas, casco con pluma, barba rubia"
+      },
+      {
+        "id": "204dad1d-6fd6-4a7e-9699-7b398af2c81e",
+        "name": "MERCADER",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_231055_204dad1d-6fd6-4a7e-9699-7b398af2c81e.png",
+        "desc": "túnica de rayas de colores, turbante, sonrisa pícara, moneda"
+      },
+      {
+        "id": "e306dd96-8f28-47e0-99a0-3f87edf76252",
+        "name": "AGUADORA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_231104_e306dd96-8f28-47e0-99a0-3f87edf76252.png",
+        "desc": "túnica y pañuelo índigo, cántaro al hombro"
+      },
+      {
+        "id": "c1060a57-05d9-4249-8902-84d3f28abeae",
+        "name": "RABINO / maestro",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_232053_c1060a57-05d9-4249-8902-84d3f28abeae.png",
+        "desc": "túnica azul marino, gafas redondas, kipá, expresión sabia"
+      },
+      {
+        "id": "d596a242-0329-45a1-9be8-a4e8d31f28c0",
+        "name": "MUCHACHO / pastor",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_232323_d596a242-0329-45a1-9be8-a4e8d31f28c0.png",
+        "desc": "túnica beige, honda de cuero, expresión valiente y curiosa"
+      },
+      {
+        "id": "d15f1268-8e51-4893-b603-cf460bf5ee6b",
+        "name": "DANZARINA / música",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_232357_d15f1268-8e51-4893-b603-cf460bf5ee6b.png",
+        "desc": "vestido rosa y crema, pandereta, pañuelo, expresión radiante"
+      },
+      {
+        "id": "aa5c313b-4e1b-4487-ac2b-cf39ac04953c",
+        "name": "REY DE JERICÓ (jefe rival)",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_232601_aa5c313b-4e1b-4487-ac2b-cf39ac04953c.png",
+        "desc": "túnica púrpura y oro, corona enjoyada, barba trenzada, gesto altivo"
+      },
+      {
+        "id": "1494ee5f-7677-40b2-a0a9-d7b7212b595d",
+        "name": "ANCIANA / abuela",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_233058_1494ee5f-7677-40b2-a0a9-d7b7212b595d.png",
+        "desc": "pelo gris con pañuelo marrón, sonrisa amable, chal de tonos tierra"
+      },
+      {
+        "id": "d8508f9f-774c-45a5-829e-a09c1834b94b",
+        "name": "SOLDADO DE JERICÓ",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_233114_d8508f9f-774c-45a5-829e-a09c1834b94b.png",
+        "desc": "armadura de escamas de bronce, casco con carrilleras, lanza y escudo redondo"
+      },
+      {
+        "id": "9b304109-e9ad-4ff5-8ed2-769b28ba88c7",
+        "name": "HERRERO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_233648_9b304109-e9ad-4ff5-8ed2-769b28ba88c7.png",
+        "desc": "delantal de cuero sobre túnica teja, cara tiznada, martillo en mano"
+      },
+      {
+        "id": "cefe142e-0b89-4231-869c-d25cc87cc99d",
+        "name": "GRANJERA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_233650_cefe142e-0b89-4231-869c-d25cc87cc99d.png",
+        "desc": "vestido verde oliva, sombrero de paja, gavilla de trigo, sonrisa pecosa"
+      },
+      {
+        "id": "a310e4d0-7deb-4730-aa6f-80bf4efd0879",
+        "name": "LÍDER TRIBAL",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_233702_a310e4d0-7deb-4730-aa6f-80bf4efd0879.png",
+        "desc": "túnica con estampado tierra, bastón, barba gris larga, faja de su tribu"
+      },
+      {
+        "id": "44062152-4fe4-4641-b799-f5b828a8a07e",
+        "name": "ARQUERO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234107_44062152-4fe4-4641-b799-f5b828a8a07e.png",
+        "desc": "armadura de cuero ligera sobre túnica arena, carcaj, arco de madera, gesto decidido"
+      },
+      {
+        "id": "03e90a1f-79b1-4177-ab60-36de48c984f8",
+        "name": "PANADERO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234108_03e90a1f-79b1-4177-ab60-36de48c984f8.png",
+        "desc": "delantal crema con harina, hogaza de pan, mejillas redondas, gorro de tela"
+      },
+      {
+        "id": "cd60b6cd-7b35-485b-935d-5ca3043936ac",
+        "name": "NIÑA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234119_cd60b6cd-7b35-485b-935d-5ca3043936ac.png",
+        "desc": "vestido ocre, dos trencitas, corderito de ladrillos en brazos, ojos alegres"
+      },
+      {
+        "id": "4b86eabb-9c77-4422-9085-da3d67189d7e",
+        "name": "GUARDIA JOVEN",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234527_4b86eabb-9c77-4422-9085-da3d67189d7e.png",
+        "desc": "casco de bronce algo grande, armadura ligera, primera barba, gesto nervioso, lanza"
+      },
+      {
+        "id": "32503ad9-7b7f-45ce-aa03-2bd2467f6f01",
+        "name": "ALFARERO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234529_32503ad9-7b7f-45ce-aa03-2bd2467f6f01.png",
+        "desc": "delantal manchado de barro, vasija a medio hacer, cinta en la cabeza, barba entrecana"
+      },
+      {
+        "id": "732397c3-564d-4473-a00b-049d6705cf83",
+        "name": "PESCADOR",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_234542_732397c3-564d-4473-a00b-049d6705cf83.png",
+        "desc": "túnica remangada, red al hombro, cara curtida, barba entrecana, sonrisa entornada"
+      },
+      {
+        "id": "b89eb06d-dbe5-4f1f-bf58-bd23376685a1",
+        "name": "TEJEDORA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235047_b89eb06d-dbe5-4f1f-bf58-bd23376685a1.png",
+        "desc": "vestido terracota, chal tejido de colores, huso de hilo, pelo recogido"
+      },
+      {
+        "id": "205a09f7-d6f2-4602-9f12-6766b3e4c1aa",
+        "name": "MENSAJERO / corredor",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235048_205a09f7-d6f2-4602-9f12-6766b3e4c1aa.png",
+        "desc": "túnica corta ceñida para correr, funda de cuero con rollo, pelo al viento"
+      },
+      {
+        "id": "cf0a0184-88e0-4f9f-a7a3-5aa70256c948",
+        "name": "VIEJO PROFETA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235059_cf0a0184-88e0-4f9f-a7a3-5aa70256c948.png",
+        "desc": "túnica marrón basta, barba blanca larga, ojos sabios hundidos, bastón"
+      },
+      {
+        "id": "b9b858a1-c5fb-4246-94d3-bd023c25d731",
+        "name": "CANTORA LEVITA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235454_b9b858a1-c5fb-4246-94d3-bd023c25d731.png",
+        "desc": "túnica blanca y oro, arpa de mano, expresión serena y devota, cabello con velo de lino"
+      },
+      {
+        "id": "a27a43a3-6919-459a-aa57-055e2f38b74f",
+        "name": "NIÑO PEQUEÑO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235456_a27a43a3-6919-459a-aa57-055e2f38b74f.png",
+        "desc": "túnica corta, pelo oscuro alborotado, juguete de madera, sonrisa curiosa"
+      },
+      {
+        "id": "a0363448-6a56-4082-a0ad-b54029abb8ef",
+        "name": "CAPITÁN",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260727_235523_a0363448-6a56-4082-a0ad-b54029abb8ef.png",
+        "desc": "peto de bronce sobre túnica roja, casco con cresta bajo el brazo, cicatriz, gesto de mando"
+      },
+      {
+        "id": "6743cfec-be97-499b-8833-9fe3ad834bc3",
+        "name": "TAMBORILERO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_000159_6743cfec-be97-499b-8833-9fe3ad834bc3.png",
+        "desc": "tambor de mano a la cintura, manos en alto a medio golpe, gran sonrisa, faja de colores"
+      },
+      {
+        "id": "5f7b1c3e-0070-4511-95a7-0950ba147dc2",
+        "name": "AGUADOR JOVEN",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_000201_5f7b1c3e-0070-4511-95a7-0950ba147dc2.png",
+        "desc": "cántaro de barro al hombro, túnica arena húmeda, gesto trabajador y alegre"
+      },
+      {
+        "id": "fb80a6c3-0fdc-4ed2-80e5-1597461e9d68",
+        "name": "VIUDA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_000552_fb80a6c3-0fdc-4ed2-80e5-1597461e9d68.png",
+        "desc": "túnica y pañuelo gris oscuro, jarrita de aceite en las manos, ojos amables y cansados"
+      },
+      {
+        "id": "927d67af-3321-4f68-8165-2adff88cec51",
+        "name": "COMERCIANTE FENICIO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_000554_927d67af-3321-4f68-8165-2adff88cec51.png",
+        "desc": "túnica púrpura con ribete de oro, collares de cuentas, sonrisa astuta, barba negra, gorro"
+      },
+      {
+        "id": "9f0de567-b0db-4263-a754-de76e1bb1e32",
+        "name": "ESCRIBA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_000617_9f0de567-b0db-4263-a754-de76e1bb1e32.png",
+        "desc": "túnica crema con faja manchada de tinta, cálamo tras la oreja y rollo, gafas, gesto reflexivo"
+      },
+      {
+        "id": "b2cc2385-82ec-4797-948f-3e26cca2699b",
+        "name": "CURTIDOR",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_001219_b2cc2385-82ec-4797-948f-3e26cca2699b.png",
+        "desc": "delantal de cuero manchado, mangas subidas, una piel al brazo, barba corta"
+      },
+      {
+        "id": "34988d66-64c6-474b-afc5-d82df184e8ee",
+        "name": "HILANDERA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_001221_34988d66-64c6-474b-afc5-d82df184e8ee.png",
+        "desc": "vestido ocre, huso con hilo de lana, moño sencillo, sonrisa serena"
+      },
+      {
+        "id": "c290327e-7fbe-4622-a4a8-4b3b6a965a55",
+        "name": "VIGÍA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_001245_c290327e-7fbe-4622-a4a8-4b3b6a965a55.png",
+        "desc": "capa con capucha sobre armadura ligera, cuerno y antorcha, ojos alerta, barba corta"
+      },
+      {
+        "id": "dbdf52db-b5c3-4a71-bd50-b48e578aabf6",
+        "name": "PASTORA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_001601_dbdf52db-b5c3-4a71-bd50-b48e578aabf6.png",
+        "desc": "vestido rojizo y chal de lana, cayado y un corderito al lado, ojos vivos y amables"
+      },
+      {
+        "id": "a4bcc68a-b706-4537-98d7-6caca6e09efa",
+        "name": "HERBOLARIO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_001624_a4bcc68a-b706-4537-98d7-6caca6e09efa.png",
+        "desc": "túnica verde oliva con bolsitas de hierbas secas, mortero en mano, sonrisa sabia"
+      },
+      {
+        "id": "10489767-bd68-41bf-a246-e6f4e5f1e9ab",
+        "name": "GUARDIÁN DEL POZO",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_002159_10489767-bd68-41bf-a246-e6f4e5f1e9ab.png",
+        "desc": "túnica azul desgastada, cuerda enrollada al hombro y cubo de madera, cara curtida y barba blanca"
+      },
+      {
+        "id": "f72612de-5b8d-4e2d-bdf9-e5d3dc4f06b2",
+        "name": "PANADERA",
+        "cat": "retratos",
+        "w": 1536,
+        "h": 2048,
+        "file": "hf_20260728_002225_f72612de-5b8d-4e2d-bdf9-e5d3dc4f06b2.png",
+        "desc": "delantal con harina sobre vestido cálido, bandeja de panes, mejillas rosadas, sonrisa alegre"
+      },
+      {
+        "id": "1c064e49-1a5f-4e88-95b3-65799d102a24",
+        "name": "EL ARCA DE LA ALIANZA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_231117_1c064e49-1a5f-4e88-95b3-65799d102a24.png",
+        "desc": "cofre dorado con dos querubines alados y varas, brillo suave"
+      },
+      {
+        "id": "aaaaa297-4765-4eda-b778-9a217c0e3914",
+        "name": "MAPA-PERGAMINO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_231632_aaaaa297-4765-4eda-b778-9a217c0e3914.png",
+        "desc": "mapa antiguo de la ruta a Jericó con senda punteada y rosa de los vientos"
+      },
+      {
+        "id": "70351ef9-84e8-40d8-a228-6d80a634dcef",
+        "name": "MENORÁ",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232325_70351ef9-84e8-40d8-a228-6d80a634dcef.png",
+        "desc": "candelabro dorado de siete brazos con llamas cálidas, construcción de ladrillos"
+      },
+      {
+        "id": "2ac5237d-a0fc-4d52-b140-2deb10534fb8",
+        "name": "CARNERO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232355_2ac5237d-a0fc-4d52-b140-2deb10534fb8.png",
+        "desc": "carnero de grandes cuernos rizados (origen del shofar), luz pastoral"
+      },
+      {
+        "id": "43c197c0-ffc0-49d7-9298-9ad99b1a3fa3",
+        "name": "CERÁMICA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232358_43c197c0-ffc0-49d7-9298-9ad99b1a3fa3.png",
+        "desc": "cántaros, ánforas, cuencos y candiles de barro en tonos terracota (inventario)"
+      },
+      {
+        "id": "78920a85-5ddb-45a5-9d3e-3e603dd3cea2",
+        "name": "COFRE DEL TESORO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232507_78920a85-5ddb-45a5-9d3e-3e603dd3cea2.png",
+        "desc": "cofre rebosante de monedas de oro, joyas y un cáliz (recompensa/loot)"
+      },
+      {
+        "id": "15aac704-4b08-45ef-a33f-10d91fb4791b",
+        "name": "CESTA DE COMIDA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232509_15aac704-4b08-45ef-a33f-10d91fb4791b.png",
+        "desc": "panes, uvas moradas, higos, granadas y aceitunas (cosecha/inventario)"
+      },
+      {
+        "id": "4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b",
+        "name": "ASEDIO / defensas",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232603_4f0ff2bc-4c8c-49c4-b6b5-9ebe56cebb0b.png",
+        "desc": "puerta de madera, escaleras de asedio, torre de vigía y antorchas (props)"
+      },
+      {
+        "id": "02b03931-5d27-4e4d-8956-d9a38444b415",
+        "name": "SACO DE GRANO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233102_02b03931-5d27-4e4d-8956-d9a38444b415.png",
+        "desc": "saco atado con cuerda derramando trigo dorado, con cazo de madera (recurso)"
+      },
+      {
+        "id": "9d636d89-1cf7-43fc-838a-d096c2682a52",
+        "name": "LLAVE GRANDE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233117_9d636d89-1cf7-43fc-838a-d096c2682a52.png",
+        "desc": "llave de bronce antigua y ornamentada (objeto de misión)"
+      },
+      {
+        "id": "3e866584-be59-4353-8200-7c225320f6a3",
+        "name": "LIRA / ARPA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233651_3e866584-be59-4353-8200-7c225320f6a3.png",
+        "desc": "lira de madera con cuerdas doradas y marco tallado (instrumento)"
+      },
+      {
+        "id": "202283c7-51ef-42f0-b757-6cc3aceaf465",
+        "name": "TAMBOR",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233706_202283c7-51ef-42f0-b757-6cc3aceaf465.png",
+        "desc": "tambor de mano con parche de piel y aro de madera tallado (instrumento)"
+      },
+      {
+        "id": "02440b34-e200-4fa5-b7b9-9830a75af991",
+        "name": "BRASERO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234112_02440b34-e200-4fa5-b7b9-9830a75af991.png",
+        "desc": "brasero de bronce de tres patas con brasas y llamas cálidas (attrezzo)"
+      },
+      {
+        "id": "0c5f15a9-834d-4c93-8723-0c804dbc1fdf",
+        "name": "RUEDA DE CARRO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234123_0c5f15a9-834d-4c93-8723-0c804dbc1fdf.png",
+        "desc": "rueda de madera con llanta de hierro gastada, ligeramente inclinada (attrezzo)"
+      },
+      {
+        "id": "224bbc48-40b1-4681-a415-11fda0a670db",
+        "name": "RED DE PESCAR",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234533_224bbc48-40b1-4681-a415-11fda0a670db.png",
+        "desc": "red plegada con flotadores de madera y pesos de barro (attrezzo/recurso)"
+      },
+      {
+        "id": "aa8c4ce8-3457-49d2-8002-7e0338fb7543",
+        "name": "ESTANDARTE INDIVIDUAL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234545_aa8c4ce8-3457-49d2-8002-7e0338fb7543.png",
+        "desc": "banderín azul con emblema de león dorado y borlas en asta de madera"
+      },
+      {
+        "id": "4908eae9-d6c1-435f-9cb4-9236584f1c8a",
+        "name": "PAN Y ACEITE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235053_4908eae9-d6c1-435f-9cb4-9236584f1c8a.png",
+        "desc": "hogaza redonda, jarrita de aceite de oliva y cuenco de aceitunas sobre un paño (comida)"
+      },
+      {
+        "id": "623f830b-ee64-423c-91ae-fdfebcb4d978",
+        "name": "ÁNFORA DE VINO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235103_623f830b-ee64-423c-91ae-fdfebcb4d978.png",
+        "desc": "ánfora de barro alta de dos asas con tapón y base trenzada, franjas pintadas"
+      },
+      {
+        "id": "28ce29fe-bb11-4900-933a-9dd276571e52",
+        "name": "CAYADO DE PASTOR",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235500_28ce29fe-bb11-4900-933a-9dd276571e52.png",
+        "desc": "cayado de madera pulida con curva y empuñadura de cuero (objeto/símbolo)"
+      },
+      {
+        "id": "51561b5b-57b4-4ed4-bd68-16741d19df5c",
+        "name": "HONDA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235526_51561b5b-57b4-4ed4-bd68-16741d19df5c.png",
+        "desc": "honda de cuero y cuerda con una piedra lisa al lado (arma humilde, no violenta)"
+      },
+      {
+        "id": "6f9df363-46ee-466f-976a-09ad0af8d6e7",
+        "name": "SELLO / MONEDA ANTIGUA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235529_6f9df363-46ee-466f-976a-09ad0af8d6e7.png",
+        "desc": "sello cilíndrico y moneda de bronce gastada con motivo de león (coleccionable)"
+      },
+      {
+        "id": "85a5820d-d240-4d74-b833-21d39061611c",
+        "name": "FAROL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000205_85a5820d-d240-4d74-b833-21d39061611c.png",
+        "desc": "farol de metal labrado con llama de vela cálida dentro y anilla para colgar (attrezzo/luz)"
+      },
+      {
+        "id": "d6f13a2d-0fdc-45b2-8647-c0c20accd67f",
+        "name": "TELAR",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000233_d6f13a2d-0fdc-45b2-8647-c0c20accd67f.png",
+        "desc": "telar de madera vertical con tela a rayas a medio tejer y hilos colgando (oficio)"
+      },
+      {
+        "id": "c08b6f3e-ac85-460a-ae4c-d36bd79174e7",
+        "name": "BALANZA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000558_c08b6f3e-ac85-460a-ae4c-d36bd79174e7.png",
+        "desc": "balanza de bronce de dos platos colgando de cadenas sobre pie de madera (comercio)"
+      },
+      {
+        "id": "4cd030c1-9047-4c53-bf1c-b99fb9ec5229",
+        "name": "JARRA DE MIEL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000621_4cd030c1-9047-4c53-bf1c-b99fb9ec5229.png",
+        "desc": "jarra de barro con miel dorada, cazoleta de madera y un panal al lado (comida)"
+      },
+      {
+        "id": "5de99c7e-7766-40fe-9571-7c7f6477eac5",
+        "name": "CESTO DE PECES",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001225_5de99c7e-7766-40fe-9571-7c7f6477eac5.png",
+        "desc": "cesto de mimbre lleno de peces plateados frescos con cañas (comida/mercado)"
+      },
+      {
+        "id": "bab00b2d-eab6-41da-b6c0-94b6ef5f9397",
+        "name": "ODRE DE AGUA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001250_bab00b2d-eab6-41da-b6c0-94b6ef5f9397.png",
+        "desc": "odre de cuero con correa y tapón de madera, hinchado de agua (viaje)"
+      },
+      {
+        "id": "43b8e1bf-dc73-48fa-8a18-cd156a91c5ff",
+        "name": "SACO DE SAL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001604_43b8e1bf-dc73-48fa-8a18-cd156a91c5ff.png",
+        "desc": "saco de arpillera con sal blanca atado con cuerda, algo derramándose (recurso)"
+      },
+      {
+        "id": "2053d9bc-f46a-4aaa-adcd-d2154ecae966",
+        "name": "CANASTO DE DÁTILES",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001627_2053d9bc-f46a-4aaa-adcd-d2154ecae966.png",
+        "desc": "cesto de mimbre lleno de dátiles marrones brillantes, algunos sueltos en el paño (comida)"
+      },
+      {
+        "id": "b0126c8d-0478-446b-81c1-2e0a2b6ed236",
+        "name": "TINAJA GRANDE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002203_b0126c8d-0478-446b-81c1-2e0a2b6ed236.png",
+        "desc": "tinaja de barro (pithos) de boca ancha con asas de cuerda y franjas pintadas (almacenaje)"
+      },
+      {
+        "id": "099fe5fa-fa20-4172-8b3a-933f0f485851",
+        "name": "HOZ",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002228_099fe5fa-fa20-4172-8b3a-933f0f485851.png",
+        "desc": "hoz curva con mango de madera y hoja de bronce, unas espigas al lado (herramienta de cosecha)"
+      },
+      {
+        "id": "39cb4397-84bf-416e-a509-692fb798153d",
+        "name": "RUECA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002553_39cb4397-84bf-416e-a509-692fb798153d.png",
+        "desc": "rueca y huso de madera con lana cruda enrollada (oficio de hilar)"
+      },
+      {
+        "id": "30f19367-7108-4c8b-9eb7-ea91c8d61f08",
+        "name": "CUERNO DE ACEITE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002554_30f19367-7108-4c8b-9eb7-ea91c8d61f08.png",
+        "desc": "cuerno de carnero pulido como vasija de aceite con tapón, una gota dorada (unción/ceremonia)"
+      },
+      {
+        "id": "788d2bf7-04e7-4869-aab3-a852d83c82ab",
+        "name": "AZADA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002615_788d2bf7-04e7-4869-aab3-a852d83c82ab.png",
+        "desc": "azada de madera con hoja de bronce y mango gastado, algo de tierra en la hoja (herramienta)"
+      },
+      {
+        "id": "01231de4-0c4e-40c5-b43d-9ab6002e7bf4",
+        "name": "YUNQUE PEQUEÑO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003204_01231de4-0c4e-40c5-b43d-9ab6002e7bf4.png",
+        "desc": "yunque de hierro sobre un tocón de madera con un martillito al lado (fragua)"
+      },
+      {
+        "id": "1601288b-ec3c-4168-bea2-86c74c47dcf8",
+        "name": "CANDIL DOBLE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003205_1601288b-ec3c-4168-bea2-86c74c47dcf8.png",
+        "desc": "candil de barro de dos picos con dos llamitas cálidas (luz/attrezzo)"
+      },
+      {
+        "id": "cff328bd-bc7c-4faf-a937-fbf98715a514",
+        "name": "PLATO DE BRONCE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003245_cff328bd-bc7c-4faf-a937-fbf98715a514.png",
+        "desc": "plato de servir de bronce martillado con borde grabado (vajilla/attrezzo)"
+      },
+      {
+        "id": "2916819b-2412-4497-b1b9-90a3f4417f24",
+        "name": "CUENCO DE MADERA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003624_2916819b-2412-4497-b1b9-90a3f4417f24.png",
+        "desc": "cuenco torneado de madera con veta cálida y una muesca en el borde (vajilla)"
+      },
+      {
+        "id": "2e4e4420-2bb7-4e15-a042-1e6222ae77fb",
+        "name": "PEINE DE HUESO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003625_2e4e4420-2bb7-4e15-a042-1e6222ae77fb.png",
+        "desc": "peine tallado de hueso con dientes finos y grabado sencillo (objeto personal)"
+      },
+      {
+        "id": "91c57471-adfe-4acb-b032-58b456be6eb0",
+        "name": "ANILLO-SELLO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003650_91c57471-adfe-4acb-b032-58b456be6eb0.png",
+        "desc": "anillo de oro grabado con un pequeño escudo de león (coleccionable/autoridad)"
+      },
+      {
+        "id": "01a1d5dc-6c76-44ef-8425-7d181df54dbe",
+        "name": "CESTO VACÍO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004206_01a1d5dc-6c76-44ef-8425-7d181df54dbe.png",
+        "desc": "cesto de mimbre vacío con asa curva (inventario/attrezzo)"
+      },
+      {
+        "id": "cb35941c-1c76-4c14-adc2-5015b8eb92a9",
+        "name": "CUCHARA DE MADERA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004207_cb35941c-1c76-4c14-adc2-5015b8eb92a9.png",
+        "desc": "cuchara tallada de mango largo y cuenco poco hondo, veta cálida (cocina)"
+      },
+      {
+        "id": "0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0",
+        "name": "MORTERO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004233_0e03db10-f3ac-4d2d-bd7f-cf5b09bc5ec0.png",
+        "desc": "mortero de piedra con maza y unas hierbas molidas dentro (cocina/botica)"
+      },
+      {
+        "id": "75e196af-625e-4a27-9371-285650fd1013",
+        "name": "REMO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004549_75e196af-625e-4a27-9371-285650fd1013.png",
+        "desc": "remo de barca de madera con pala gastada y empuñadura forrada de cuero (navegación)"
+      },
+      {
+        "id": "ca18ac65-5930-417c-8605-ddabb7615d58",
+        "name": "CRIBA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004550_ca18ac65-5930-417c-8605-ddabb7615d58.png",
+        "desc": "criba redonda de grano con aro de madera y malla fina, algo de tamo (agricultura)"
+      },
+      {
+        "id": "ff03a61d-a657-4e5f-b3b6-2639d31e2ecc",
+        "name": "ESCOBA DE JUNCOS",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004624_ff03a61d-a657-4e5f-b3b6-2639d31e2ecc.png",
+        "desc": "haz de juncos secos atado a un mango de madera (limpieza/hogar)"
+      },
+      {
+        "id": "00e045ae-dcff-48dc-b253-2126060c303e",
+        "name": "ANCLA DE PIEDRA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065543_00e045ae-dcff-48dc-b253-2126060c303e.png",
+        "desc": "ancla de piedra perforada con una cuerda pasada por el agujero (navegación)"
+      },
+      {
+        "id": "162e8c27-ad8e-437f-8485-7f11d9852437",
+        "name": "ÁBACO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065545_162e8c27-ad8e-437f-8485-7f11d9852437.png",
+        "desc": "tablero de cuentas de madera con hileras de cuentas de barro (mercader/cálculo)"
+      },
+      {
+        "id": "63d2eea8-c9e9-42ba-9084-b686438c05fd",
+        "name": "PESA DE TELAR",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065617_63d2eea8-c9e9-42ba-9084-b686438c05fd.png",
+        "desc": "pesa de barro en forma de rosca con agujero y marca estampada (tejido)"
+      },
+      {
+        "id": "691e5cea-1374-4d5c-91a6-8a6df89228c1",
+        "name": "HUSILLO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071352_691e5cea-1374-4d5c-91a6-8a6df89228c1.png",
+        "desc": "huso de mano de madera con fusayola de barro e hilo enrollado (hilar)"
+      },
+      {
+        "id": "b1b1b932-2d8c-4851-9629-c51284186328",
+        "name": "RASTRILLO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071353_b1b1b932-2d8c-4851-9629-c51284186328.png",
+        "desc": "rastrillo de madera con púas talladas y mango largo, algo de paja (agricultura)"
+      },
+      {
+        "id": "641c255d-2898-4d44-b559-0a2a4e74bd12",
+        "name": "VELA DE BARCO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071422_641c255d-2898-4d44-b559-0a2a4e74bd12.png",
+        "desc": "vela triangular de lino recogida en una verga de madera con jarcia (navegación)"
+      },
+      {
+        "id": "ae85fffa-3fa7-4f3f-8b32-0939333ff69b",
+        "name": "ESPEJO DE BRONCE",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_072653_ae85fffa-3fa7-4f3f-8b32-0939333ff69b.png",
+        "desc": "espejo de mano de bronce pulido con mango ornamentado (objeto personal)"
+      },
+      {
+        "id": "f14510d9-45af-48df-bc83-a4432af89ec3",
+        "name": "CUCHILLO DE PEDERNAL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_072654_f14510d9-45af-48df-bc83-a4432af89ec3.png",
+        "desc": "cuchillo de hoja de piedra tallada y mango de cuero atado (herramienta primitiva)"
+      },
+      {
+        "id": "0178ea01-2448-4b09-8e35-3a82a2e8d8d9",
+        "name": "DADO DE HUESO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_073414_0178ea01-2448-4b09-8e35-3a82a2e8d8d9.png",
+        "desc": "dadito de hueso tallado con puntos taladrados (pieza de juego)"
+      },
+      {
+        "id": "0c158a1d-d0ca-4e87-a7b3-e680ef426302",
+        "name": "TINTERO Y CÁLAMO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_074347_0c158a1d-d0ca-4e87-a7b3-e680ef426302.png",
+        "desc": "tintero de barro con un cálamo de caña encima, tinta oscura (escriba)"
+      },
+      {
+        "id": "28af4d9d-5685-433d-a47d-956851b92b32",
+        "name": "CASCABEL",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_074348_28af4d9d-5685-433d-a47d-956851b92b32.png",
+        "desc": "cascabel de bronce redondo con anilla pequeña (attrezzo/sonido)"
+      },
+      {
+        "id": "207b4705-df6e-4831-88fa-034122f443b2",
+        "name": "BALANZA DE MANO",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_075319_207b4705-df6e-4831-88fa-034122f443b2.png",
+        "desc": "balancita de mano con dos platillos de latón colgando de cuerdas en un brazo de madera (mercader)"
+      },
+      {
+        "id": "80145dab-4ef2-4efa-8c82-50bd136674bb",
+        "name": "SELLO DE CERA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_075321_80145dab-4ef2-4efa-8c82-50bd136674bb.png",
+        "desc": "sello de cera roja sobre pergamino plegado con escudo de león impreso (documento)"
+      },
+      {
+        "id": "59cde3c1-96a1-48fa-b528-919987a4aac6",
+        "name": "TABLILLA DE ARCILLA",
+        "cat": "objetos",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_080425_59cde3c1-96a1-48fa-b528-919987a4aac6.png",
+        "desc": "tablilla de barro con marcas grabadas tipo cuneiforme (escritura/registro)"
+      },
+      {
+        "id": "68dfa99e-f9c5-45f3-9e68-e15591b587fa",
+        "name": "HOJA DE VFX",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_231612_68dfa99e-f9c5-45f3-9e68-e15591b587fa.png",
+        "desc": "anillo de choque, chispas, remolino de polvo, escudo de luz, onda de trompeta"
+      },
+      {
+        "id": "058274a4-6637-43a0-be78-3f68504aa5c0",
+        "name": "SHOFAR MÁGICO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_231618_058274a4-6637-43a0-be78-3f68504aa5c0.png",
+        "desc": "el cuerno brillando con energía dorada y anillos de sonido"
+      },
+      {
+        "id": "19fccc65-9585-47b4-8b72-0b3736833c06",
+        "name": "MILAGRO DE LUZ",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_231604_19fccc65-9585-47b4-8b72-0b3736833c06.png",
+        "desc": "rayo dorado divino rompiendo las nubes sobre las murallas"
+      },
+      {
+        "id": "6d042452-f337-4f84-85bd-32e1f25852e4",
+        "name": "HOJA DE VFX 2",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232329_6d042452-f337-4f84-85bd-32e1f25852e4.png",
+        "desc": "onda de trompeta, cruz verde de curación, remolino de velocidad, burbuja-escudo, estallido de estrella"
+      },
+      {
+        "id": "456ccaf0-ecbf-469c-9c31-d8d58f200946",
+        "name": "MURO → LADRILLOS",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232400_456ccaf0-ecbf-469c-9c31-d8d58f200946.png",
+        "desc": "sección de muro deshaciéndose en una lluvia de ladrillos de colores y chispas (regla de oro nº3)"
+      },
+      {
+        "id": "c8ad789b-49a0-4fc1-8799-b3e927c5ea4b",
+        "name": "ESCUDO DE LUZ",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232513_c8ad789b-49a0-4fc1-8799-b3e927c5ea4b.png",
+        "desc": "cúpula protectora dorada de luz y ladrillos con runas y chispas (power-up defensa)"
+      },
+      {
+        "id": "89a6a3ff-9709-45ee-8d1c-1bb915f2de57",
+        "name": "TERREMOTO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_232606_89a6a3ff-9709-45ee-8d1c-1bb915f2de57.png",
+        "desc": "el suelo se abre en una grieta dorada con ladrillos y polvo saltando (VFX de la caída)"
+      },
+      {
+        "id": "976e10ac-0a90-40de-88c6-6d073c92c840",
+        "name": "POWER-UP CURACIÓN",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233652_976e10ac-0a90-40de-88c6-6d073c92c840.png",
+        "desc": "cruz verde luminosa dentro de un corazón de luz con chispas y ladrillos"
+      },
+      {
+        "id": "e834245c-bf01-45c3-85b4-59640eec5c70",
+        "name": "POWER-UP PRISA",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_233724_e834245c-bf01-45c3-85b4-59640eec5c70.png",
+        "desc": "sandalias aladas brillantes con estelas de movimiento y ladrillos"
+      },
+      {
+        "id": "ec3f5e46-ed9f-4d27-921c-2ade7b95274b",
+        "name": "POWER-UP INVISIBILIDAD",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234113_ec3f5e46-ed9f-4d27-921c-2ade7b95274b.png",
+        "desc": "capa con capucha translúcida y reluciente, chispas y ladrillos desvaneciéndose"
+      },
+      {
+        "id": "48c55e99-8268-4dd2-8ef8-5e3ab7f5c92d",
+        "name": "POWER-UP IMÁN DE MONEDAS",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234127_48c55e99-8268-4dd2-8ef8-5e3ab7f5c92d.png",
+        "desc": "imán de herradura atrayendo un remolino de monedas de oro con chispas"
+      },
+      {
+        "id": "45596687-00c5-43d2-bc46-fed38c2cd1ad",
+        "name": "POWER-UP DOBLE SALTO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234536_45596687-00c5-43d2-bc46-fed38c2cd1ad.png",
+        "desc": "dos flechas-galón ascendentes de ladrillos con chispas y una nubecita"
+      },
+      {
+        "id": "2ea64d7d-2727-4b62-b8f3-911f66e79a07",
+        "name": "POWER-UP x2 (multiplicador)",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_234547_2ea64d7d-2727-4b62-b8f3-911f66e79a07.png",
+        "desc": "símbolo dorado \"x2\" de ladrillos rodeado de chispas y monedas"
+      },
+      {
+        "id": "2c467ceb-f58a-4717-8527-fd58e40db4c3",
+        "name": "POWER-UP ESCUDO DE FUERZA",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235053_2c467ceb-f58a-4717-8527-fd58e40db4c3.png",
+        "desc": "burbuja hexagonal de energía azul y ladrillos con chispas"
+      },
+      {
+        "id": "e8ed8fb3-f3a3-4e52-bbe3-e21a0ad0c4bd",
+        "name": "POWER-UP CONGELAR TIEMPO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235129_e8ed8fb3-f3a3-4e52-bbe3-e21a0ad0c4bd.png",
+        "desc": "reloj de arena envuelto en cristales de hielo azul con chispas y ladrillos"
+      },
+      {
+        "id": "506b3657-b4b5-4683-a633-15266f0b0464",
+        "name": "POWER-UP CORAZÓN EXTRA (vida)",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260727_235528_506b3657-b4b5-4683-a633-15266f0b0464.png",
+        "desc": "corazón rojo de ladrillos con aura dorada y chispas"
+      },
+      {
+        "id": "5ecc2969-9ea7-470e-9d2d-a4c75175ab1e",
+        "name": "POWER-UP LLAVE DORADA",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000205_5ecc2969-9ea7-470e-9d2d-a4c75175ab1e.png",
+        "desc": "llave dorada ornamentada de ladrillos con aura radiante y chispas (abre/desbloquea)"
+      },
+      {
+        "id": "0778def0-5e87-4e42-adf0-01bfcbc5a26b",
+        "name": "POWER-UP ALAS (vuelo)",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000235_0778def0-5e87-4e42-adf0-01bfcbc5a26b.png",
+        "desc": "par de alas blancas de plumas de ladrillos con aura dorada y chispas"
+      },
+      {
+        "id": "74ab0b20-74a7-49dd-be55-f39bed03cb80",
+        "name": "POWER-UP BOMBA DE LADRILLOS",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000559_74ab0b20-74a7-49dd-be55-f39bed03cb80.png",
+        "desc": "bomba redonda de ladrillos con mecha encendida y estallido de piezas de colores (lúdica, no violenta)"
+      },
+      {
+        "id": "d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685",
+        "name": "POWER-UP BOTAS DE SALTO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_000623_d3fa0cbd-4ad9-458c-a4e1-40d4ba45f685.png",
+        "desc": "sandalias de cuero brillantes con suelas-resorte de ladrillos y chispas ascendentes"
+      },
+      {
+        "id": "75d96f55-d959-433d-823d-5020b03f1d00",
+        "name": "POWER-UP BRÚJULA",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002205_75d96f55-d959-433d-823d-5020b03f1d00.png",
+        "desc": "brújula de latón de ladrillos con aguja roja girando y chispas (orientación)"
+      },
+      {
+        "id": "806bb61a-187d-483b-9bea-2bd955aeb6f3",
+        "name": "POWER-UP POCIÓN AZUL",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003248_806bb61a-187d-483b-9bea-2bd955aeb6f3.png",
+        "desc": "frasco redondo de líquido azul en remolino de ladrillos con tapón y chispas"
+      },
+      {
+        "id": "21b12b8f-b085-494b-98d4-589f0b51e585",
+        "name": "POWER-UP RELOJ DE ARENA ROJO",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003653_21b12b8f-b085-494b-98d4-589f0b51e585.png",
+        "desc": "reloj de arena con arena roja de ladrillos, marco de madera y chispas (tiempo extra)"
+      },
+      {
+        "id": "515eefee-d204-4698-8059-9cefdca07644",
+        "name": "POWER-UP CAMPANA",
+        "cat": "vfx",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004236_515eefee-d204-4698-8059-9cefdca07644.png",
+        "desc": "campanilla de bronce de ladrillos con anillos de sonido y chispas (alerta/aviso)"
+      },
+      {
+        "id": "3b901af8-e3d5-47a7-8166-75ad99bd1c9c",
+        "name": "ESTANDARTES DE LAS 12 TRIBUS",
+        "cat": "emblemas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_225108_3b901af8-e3d5-47a7-8166-75ad99bd1c9c.png",
+        "desc": "hoja 3×4 de banderines con emblemas"
+      },
+      {
+        "id": "6338b751-6ed1-4802-8445-7a84aaf5c842",
+        "name": "EL JORDÁN SE PARTE",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224536_6338b751-6ed1-4802-8445-7a84aaf5c842.png",
+        "desc": "dos muros de agua-ladrillo, israelitas cruzando con el Arca"
+      },
+      {
+        "id": "579cfdbc-ed15-4641-b4b6-1ec998fc4027",
+        "name": "EL SHOFAR EN LA MURALLA (clímax)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_225102_579cfdbc-ed15-4641-b4b6-1ec998fc4027.png",
+        "desc": "el héroe toca el shofar y saltan los primeros ladrillos"
+      },
+      {
+        "id": "673747c6-be6a-4cc8-805b-7375c3f21589",
+        "name": "LA POSADA DE RAHAB",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_230306_673747c6-be6a-4cc8-805b-7375c3f21589.png",
+        "desc": "espías escondidos entre lino en la azotea mientras pasa un guardia"
+      },
+      {
+        "id": "1c592793-8a8e-4711-ae15-6d20c24aa619",
+        "name": "RECLUTAR ESPÍAS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_230725_1c592793-8a8e-4711-ae15-6d20c24aa619.png",
+        "desc": "Yehoshúa instruye a dos espías al borde del campamento al atardecer, mapa en el suelo"
+      },
+      {
+        "id": "add15b5a-813e-40dd-a4ce-d21abdd85a16",
+        "name": "CRUCE DEL RÍO DE NOCHE",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_230730_add15b5a-813e-40dd-a4ce-d21abdd85a16.png",
+        "desc": "los espías bajan por la cuerda del muro y vadean el Jordán a la luz de la luna"
+      },
+      {
+        "id": "bae39555-77f0-4846-98d1-264686823a60",
+        "name": "TALLER DE SHOFAROT",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_231111_bae39555-77f0-4846-98d1-264686823a60.png",
+        "desc": "artesanos dando forma y puliendo cuernos de carnero en un banco, dentro de una tienda"
+      },
+      {
+        "id": "f81e57e7-d48c-4598-8e42-b89e9ac6885b",
+        "name": "ENTRADA A LA TIERRA PROMETIDA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_231625_f81e57e7-d48c-4598-8e42-b89e9ac6885b.png",
+        "desc": "multitud jubilosa con estandartes por campos verdes hacia un horizonte luminoso"
+      },
+      {
+        "id": "6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d",
+        "name": "LA MARCHA (7 vueltas)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224542_6cf8bb7a-8d0e-4e61-b1bc-9f5a95cd238d.png",
+        "desc": "procesión con estandartes y shofarot rodeando Jericó"
+      },
+      {
+        "id": "3135c867-d057-4309-bb54-0ba301fa0b5d",
+        "name": "PANTALLA DE PAUSA / menú",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_224549_3135c867-d057-4309-bb54-0ba301fa0b5d.png",
+        "desc": "campamento tranquilo al atardecer con fogata"
+      },
+      {
+        "id": "5df014ca-32a6-40f2-a81f-cdad854484a7",
+        "name": "HUIDA POR LA MURALLA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_232327_5df014ca-32a6-40f2-a81f-cdad854484a7.png",
+        "desc": "dos espías bajan por el cordón rojo de noche mientras Rahab ayuda desde la ventana"
+      },
+      {
+        "id": "31ddfcb7-b565-42ce-aeb5-81423880d1c3",
+        "name": "LOS SIETE SACERDOTES",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_232511_31ddfcb7-b565-42ce-aeb5-81423880d1c3.png",
+        "desc": "fila solemne tocando shofarot ante la muralla al amanecer, el Arca detrás (ceremonia)"
+      },
+      {
+        "id": "aadca81c-a0b6-4c1c-b640-3f22fc643411",
+        "name": "MERCADO NOCTURNO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_232605_aadca81c-a0b6-4c1c-b640-3f22fc643411.png",
+        "desc": "bazar animado dentro de Jericó, puestos con fruta y cerámica, luz de farol (nivel/ambiente)"
+      },
+      {
+        "id": "13bd457a-446f-4c41-9dff-7700b2b672fe",
+        "name": "TRETA EN LA PUERTA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233100_13bd457a-446f-4c41-9dff-7700b2b672fe.png",
+        "desc": "un mercader con el carro de fruta volcado arma un alboroto amistoso mientras un espía se cuela (de día)"
+      },
+      {
+        "id": "b0db9527-8956-439a-93bc-f80a77fd6003",
+        "name": "CELEBRACIÓN (confeti de ladrillos)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233115_b0db9527-8956-439a-93bc-f80a77fd6003.png",
+        "desc": "israelitas bailando mientras estallan ladrillos de colores como confeti, estandartes al viento"
+      },
+      {
+        "id": "f93f5a89-e65c-433d-ad51-52a23703aba9",
+        "name": "ASAMBLEA DEL CAMPAMENTO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233704_f93f5a89-e65c-433d-ad51-52a23703aba9.png",
+        "desc": "minifiguras en semicírculo de tiendas escuchando a un líder sobre una roca, fogata y estandartes (de día)"
+      },
+      {
+        "id": "731a9ba1-809b-419a-b06a-234e5ef1e27f",
+        "name": "FESTÍN DE VICTORIA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233654_731a9ba1-809b-419a-b06a-234e5ef1e27f.png",
+        "desc": "mesas largas con pan, fruta y jarras bajo guirnaldas de faroles al anochecer"
+      },
+      {
+        "id": "beb4159d-1160-420b-9e11-bfe2a4596816",
+        "name": "PATRULLA NOCTURNA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234111_beb4159d-1160-420b-9e11-bfe2a4596816.png",
+        "desc": "guardias con antorchas y lanzas caminando por lo alto de la muralla, luz de luna azul"
+      },
+      {
+        "id": "44c31a18-dc27-4a4e-bec5-9d7001ef7049",
+        "name": "RECONSTRUCCIÓN CON LADRILLOS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234121_44c31a18-dc27-4a4e-bec5-9d7001ef7049.png",
+        "desc": "minifiguras reconstruyendo una casa con ladrillos de colores tras la caída (día, cooperativo)"
+      },
+      {
+        "id": "4f916e4d-3bbd-46f6-bfa7-80fc1183f5ca",
+        "name": "CRUCE DEL VADO (de día)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234531_4f916e4d-3bbd-46f6-bfa7-80fc1183f5ca.png",
+        "desc": "israelitas vadeando un río poco profundo con fardos y un burro, agua al sol, cañas y palmeras"
+      },
+      {
+        "id": "46e60234-0923-46dd-9b7f-1d7a0814e066",
+        "name": "HOGUERA DEL CONSEJO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234543_46e60234-0923-46dd-9b7f-1d7a0814e066.png",
+        "desc": "ancianos sentados en piedras deliberando alrededor del fuego de noche, tiendas y estrellas detrás"
+      },
+      {
+        "id": "c4a09b11-2094-4d36-9582-258794b513cc",
+        "name": "TALLER DE ALFARERÍA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235051_c4a09b11-2094-4d36-9582-258794b513cc.png",
+        "desc": "alfarero al torno, estantes de vasijas secándose y un hornillo, luz de día (nivel/oficio)"
+      },
+      {
+        "id": "ae786ed2-cf3a-4610-ae9c-ad0e9e4d58f4",
+        "name": "CAMPAMENTO AL AMANECER",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235101_ae786ed2-cf3a-4610-ae9c-ad0e9e4d58f4.png",
+        "desc": "filas de tiendas con humo suave, minifiguras despertando, luz rosa-dorada sobre el desierto"
+      },
+      {
+        "id": "2d3e9215-82c9-4e3f-b67f-c385444a2fa5",
+        "name": "PROCESIÓN CON EL ARCA (de día)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235458_2d3e9215-82c9-4e3f-b67f-c385444a2fa5.png",
+        "desc": "procesión solemne portando el Arca dorada en varas, sacerdotes de blanco, estandartes y multitud, luz de desierto"
+      },
+      {
+        "id": "8de471e1-79dd-4032-9910-219ba4ec39bd",
+        "name": "HUERTO / VIÑEDO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235525_8de471e1-79dd-4032-9910-219ba4ec39bd.png",
+        "desc": "laderas con viñas cargadas de uvas moradas, higueras y olivos, minifiguras vendimiando (día)"
+      },
+      {
+        "id": "cee19f59-d432-4c9a-87f7-171e21ae026a",
+        "name": "MERCADO DE DÍA (bullicioso)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000203_cee19f59-d432-4c9a-87f7-171e21ae026a.png",
+        "desc": "calle de mercado con toldos de colores, puestos de fruta/cerámica/tela y multitud regateando (mediodía)"
+      },
+      {
+        "id": "1d9c16bc-ed28-4df2-ac5f-29b38d08f0f3",
+        "name": "ERA DE TRILLAR",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000230_1d9c16bc-ed28-4df2-ac5f-29b38d08f0f3.png",
+        "desc": "minifiguras aventando grano dorado con horcas, un buey tirando del trillo, montones de paja (tarde)"
+      },
+      {
+        "id": "e6a5e830-32b2-411e-a014-0c7cb229428b",
+        "name": "POZO DEL PUEBLO (con gente)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000232_e6a5e830-32b2-411e-a014-0c7cb229428b.png",
+        "desc": "mujeres sacando agua en cántaros y charlando junto a un pozo de piedra, palmeras y casas (día)"
+      },
+      {
+        "id": "ea9deddb-f2a5-4c04-a117-4a93848f6dd8",
+        "name": "TEJADOS DE JERICÓ (al atardecer)",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000556_ea9deddb-f2a5-4c04-a117-4a93848f6dd8.png",
+        "desc": "azoteas planas con minifiguras secando lino y charlando, tendederos, cielo naranja-rosa sobre la muralla"
+      },
+      {
+        "id": "f360fc08-f099-4326-a666-0a7bd6a7ac0d",
+        "name": "RÍO AL AMANECER",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000619_f360fc08-f099-4326-a666-0a7bd6a7ac0d.png",
+        "desc": "el Jordán en calma con agua brillante, cañas y una barca, bruma rosa-dorada, una garza en la orilla"
+      },
+      {
+        "id": "da11d9b8-13df-4e1c-97d1-ef412fdd7849",
+        "name": "TALLER DEL HERRERO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_001223_da11d9b8-13df-4e1c-97d1-ef412fdd7849.png",
+        "desc": "herrero en la fragua y el yunque, herramientas colgadas, luz naranja y chispas (oficio)"
+      },
+      {
+        "id": "2508a7c8-d3af-4422-a24e-bf8bc99c1ad1",
+        "name": "CARAVANA LLEGANDO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_001247_2508a7c8-d3af-4422-a24e-bf8bc99c1ad1.png",
+        "desc": "caravana comercial llegando a la puerta de Jericó, camellos y burros cargados, polvo, la muralla detrás (tarde)"
+      },
+      {
+        "id": "b059e035-3f7b-4e6c-bd63-315a00bc4843",
+        "name": "PATIO DE LA POSADA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_001602_b059e035-3f7b-4e6c-bd63-315a00bc4843.png",
+        "desc": "viajeros descansando en mesas bajas, un pozo, faroles colgados y parras, luz de tarde (nivel/descanso)"
+      },
+      {
+        "id": "8430e906-231a-41c6-986b-9eb9e8b830a7",
+        "name": "HUERTO DE OLIVOS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_001626_8430e906-231a-41c6-986b-9eb9e8b830a7.png",
+        "desc": "hileras de olivos plateados y nudosos, minifiguras vareando y recogiendo en redes, luz dorada (día)"
+      },
+      {
+        "id": "dc6f56df-9b52-4e73-80e9-3e00bd82d5be",
+        "name": "CELEBRACIÓN CON HOGUERA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_002201_dc6f56df-9b52-4e73-80e9-3e00bd82d5be.png",
+        "desc": "minifiguras bailando y palmeando alrededor de un gran fuego de noche, chispas al cielo estrellado, tiendas y estandartes"
+      },
+      {
+        "id": "236f6ddc-d808-46e7-85de-ec81cc6d67e3",
+        "name": "PLAZA AL MEDIODÍA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_002227_236f6ddc-d808-46e7-85de-ec81cc6d67e3.png",
+        "desc": "plaza de Jericó con fuente central, minifiguras cruzando y charlando, puestos al borde, sol alto y sombras cortas"
+      },
+      {
+        "id": "aa4442fb-4932-4863-8fad-011c2f01e8c0",
+        "name": "CAMINO DEL DESIERTO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_002616_aa4442fb-4932-4863-8fad-011c2f01e8c0.png",
+        "desc": "sendero polvoriento de caravana entre roquedales y unas palmeras, un mojón de piedras, luz de mediodía (viaje)"
+      },
+      {
+        "id": "943a6cc3-72de-4143-b5b8-8b613d65fb9e",
+        "name": "OASIS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_003247_943a6cc3-72de-4143-b5b8-8b613d65fb9e.png",
+        "desc": "charca turquesa rodeada de palmeras, minifiguras y un camello descansando, luz dorada (descanso)"
+      },
+      {
+        "id": "da421985-0bc5-4c79-ba2d-fa468951b7c6",
+        "name": "CANTERAS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_003652_da421985-0bc5-4c79-ba2d-fa468951b7c6.png",
+        "desc": "obreros cortando sillares de caliza pálida con cuerdas, rampas y trineos de madera, polvo (oficio/industria)"
+      },
+      {
+        "id": "63cbd40d-95fb-455b-acbf-b13c77707ddc",
+        "name": "EMBARCADERO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_004235_63cbd40d-95fb-455b-acbf-b13c77707ddc.png",
+        "desc": "pequeño muelle de madera en el Jordán, barcas amarradas, redes secándose, pescadores cargando cestos (mañana)"
+      },
+      {
+        "id": "9068baea-ff67-4635-9687-309214720c8f",
+        "name": "LADERA CON REBAÑO",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_004626_9068baea-ff67-4635-9687-309214720c8f.png",
+        "desc": "ladera verde con un rebaño de ovejas, un pastor con cayado, rocas y un árbol solitario (pastoral, día)"
+      },
+      {
+        "id": "63f3f007-21f5-4181-9994-c7afed7de8bf",
+        "name": "ATALAYA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_065618_63f3f007-21f5-4181-9994-c7afed7de8bf.png",
+        "desc": "torre de vigilancia de piedra solitaria en la llanura de Jericó, un centinela con antorcha arriba, senda abajo, atardecer"
+      },
+      {
+        "id": "03a97ee0-a25a-4c50-9941-b03ff8bc85c6",
+        "name": "MOLINO DE AGUA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_071423_03a97ee0-a25a-4c50-9941-b03ff8bc85c6.png",
+        "desc": "molino en un arroyo con rueda de madera girando, casa de piedra, minifiguras con sacos de grano (día)"
+      },
+      {
+        "id": "39c039be-877f-4528-83eb-62a84e789e40",
+        "name": "MERCADO AL AMANECER",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_073416_39c039be-877f-4528-83eb-62a84e789e40.png",
+        "desc": "plaza de mercado despertando, vendedores montando toldos a rayas y cajas, luz rosa-dorada temprana (tranquila)"
+      },
+      {
+        "id": "ff1ae921-9b58-4974-93f1-d322feba20a7",
+        "name": "PUENTE DE CUERDA",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_074350_ff1ae921-9b58-4974-93f1-d322feba20a7.png",
+        "desc": "puente de cuerdas y tablones sobre un desfiladero rocoso, una minifigura cruzando con cuidado, luz de día (aventura)"
+      },
+      {
+        "id": "1a75d9c7-a052-4605-a868-b3ad685d6891",
+        "name": "CORRAL DE OVEJAS",
+        "cat": "escenas",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_075322_1a75d9c7-a052-4605-a868-b3ad685d6891.png",
+        "desc": "redil bajo de piedra y madera lleno de ovejas, un pastor en la puerta, luz de tarde (pastoral)"
+      },
+      {
+        "id": "704a6f88-4566-49e4-9ddd-b56381c72205",
+        "name": "TORMENTA DE POLVO",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233103_704a6f88-4566-49e4-9ddd-b56381c72205.png",
+        "desc": "nubes de arena ocre y ámbar arremolinándose sobre un horizonte tenue (16:9)"
+      },
+      {
+        "id": "f24a2ad1-4d27-48c2-939e-06bbf3df27ab",
+        "name": "NOCHE ESTRELLADA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233118_f24a2ad1-4d27-48c2-939e-06bbf3df27ab.png",
+        "desc": "cielo azul profundo con estrellas cálidas y luna creciente sobre dunas y palmeras (16:9)"
+      },
+      {
+        "id": "6757bd4a-3627-4ea5-8292-ba5b8070e310",
+        "name": "AURORA DORADA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_233717_6757bd4a-3627-4ea5-8292-ba5b8070e310.png",
+        "desc": "rayos cálidos rompiendo sobre un horizonte pálido dorado con nubes suaves (16:9)"
+      },
+      {
+        "id": "21444758-ae17-4593-b445-e011fb3441f1",
+        "name": "MEDIODÍA DESPEJADO",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234128_21444758-ae17-4593-b445-e011fb3441f1.png",
+        "desc": "azul vivo con nubes de ladrillo blancas sobre horizonte pálido de desierto (16:9)"
+      },
+      {
+        "id": "c89e169a-4ed1-43c4-a4d7-32174beeb3af",
+        "name": "ECLIPSE ROJO",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_234548_c89e169a-4ed1-43c4-a4d7-32174beeb3af.png",
+        "desc": "luna oscura con corona rojo sangre sobre un horizonte tenue y ominoso (16:9)"
+      },
+      {
+        "id": "f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6",
+        "name": "CIELO DE TORMENTA (con rayos)",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235131_f3c3d7fc-29c4-41b0-8ae6-f0787fe474d6.png",
+        "desc": "nubarrones oscuros y rayos dorados sobre un horizonte tenue (16:9)"
+      },
+      {
+        "id": "ae7e0824-6ffc-40e6-9125-bf7da6f5557c",
+        "name": "ATARDECER PÚRPURA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260727_235501_ae7e0824-6ffc-40e6-9125-bf7da6f5557c.png",
+        "desc": "degradados suaves de violeta, rosa y ámbar sobre un horizonte tenue y sereno (16:9)"
+      },
+      {
+        "id": "4f12b581-13fc-4013-9002-abddcd53774e",
+        "name": "AMANECER BRUMOSO",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000236_4f12b581-13fc-4013-9002-abddcd53774e.png",
+        "desc": "luz dorada pálida y lavanda difusa entre niebla baja sobre un horizonte tenue (16:9)"
+      },
+      {
+        "id": "f23e84b0-e545-47bd-82ad-5127072873be",
+        "name": "CIELO NOCTURNO CON COMETA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_000623_f23e84b0-e545-47bd-82ad-5127072873be.png",
+        "desc": "cielo índigo-violeta con un cometa brillante cruzando las estrellas sobre dunas (16:9)"
+      },
+      {
+        "id": "e99bb655-eb26-48d4-b3cd-86653a19de71",
+        "name": "CIELO ANARANJADO POLVORIENTO",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_002617_e99bb655-eb26-48d4-b3cd-86653a19de71.png",
+        "desc": "luz cálida ámbar-naranja quemado con sol tenue entre polvo en suspensión (16:9)"
+      },
+      {
+        "id": "c97ba099-7658-4ab4-8c28-29e359798e74",
+        "name": "ARCOÍRIS TRAS LA LLUVIA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_004632_c97ba099-7658-4ab4-8c28-29e359798e74.png",
+        "desc": "arcoíris brillante sobre un horizonte recién lavado por la lluvia, nubes abriéndose (16:9, esperanza)"
+      },
+      {
+        "id": "0e55d848-eac0-4fb8-9173-d1104c416153",
+        "name": "CIELO CUAJADO DE ESTRELLAS",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_065619_0e55d848-eac0-4fb8-9173-d1104c416153.png",
+        "desc": "campo denso de estrellas brillantes y la banda de la Vía Láctea sobre un horizonte oscuro (16:9)"
+      },
+      {
+        "id": "6dc0b3fc-4bc3-4321-88ae-a5727f9786bb",
+        "name": "NIEBLA ESPESA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_071424_6dc0b3fc-4bc3-4321-88ae-a5727f9786bb.png",
+        "desc": "bruma gris pálida densa velando suavemente un horizonte tenue con luz difusa (16:9)"
+      },
+      {
+        "id": "89935035-d6d8-41b9-a300-4fe02969c509",
+        "name": "CREPÚSCULO TURQUESA",
+        "cat": "cielos",
+        "w": 2048,
+        "h": 1152,
+        "file": "hf_20260728_073418_89935035-d6d8-41b9-a300-4fe02969c509.png",
+        "desc": "degradado suave de turquesa a melocotón en un horizonte en calma con la primera estrella (16:9)"
+      },
+      {
+        "id": "b92c4849-59e4-4efc-a89f-39cd2ec3519d",
+        "name": "MOSAICO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001229_b92c4849-59e4-4efc-a89f-39cd2ec3519d.png",
+        "desc": "suelo de mosaico antiguo, teselas de colores en patrón geométrico con roseta central"
+      },
+      {
+        "id": "a6802bc3-69f6-4ae3-ad40-ccbd383c3b52",
+        "name": "TAPIZ / KILIM",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001251_a6802bc3-69f6-4ae3-ad40-ccbd383c3b52.png",
+        "desc": "tejido geométrico de rombos y zigzags en rojos, ocres e índigo con flecos"
+      },
+      {
+        "id": "86cdb8d2-85c5-41f6-93bf-ddda8b21f040",
+        "name": "ADOBE AGRIETADO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001252_86cdb8d2-85c5-41f6-93bf-ddda8b21f040.png",
+        "desc": "muro de adobe de arcilla arenosa con grietas finas y motas de paja"
+      },
+      {
+        "id": "58c36c6d-b0ac-4c63-bce2-0a3af050c2c0",
+        "name": "ÓXIDO DE BRONCE",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001605_58c36c6d-b0ac-4c63-bce2-0a3af050c2c0.png",
+        "desc": "metal cálido con pátina verde-azul (cardenillo) y brillos gastados"
+      },
+      {
+        "id": "1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9",
+        "name": "MUSGO SOBRE PIEDRA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001606_1cfef3f1-ebc4-41e0-a454-a5b52b3c13d9.png",
+        "desc": "piedras grises curtidas con manchas de musgo verde y líquenes en las grietas"
+      },
+      {
+        "id": "19187ee7-4598-4f42-88b0-43825feae74f",
+        "name": "ESTERA DE JUNCO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001629_19187ee7-4598-4f42-88b0-43825feae74f.png",
+        "desc": "juncos dorados pálidos trenzados en un tejido apretado (suelo/alfombra)"
+      },
+      {
+        "id": "8c3c7b62-4384-4a4b-b7d1-f77c3509d163",
+        "name": "MADERA VIEJA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_001630_8c3c7b62-4384-4a4b-b7d1-f77c3509d163.png",
+        "desc": "tablas gris-marrón curtidas con veta visible, nudos y grietas pequeñas"
+      },
+      {
+        "id": "a975cbac-168a-4033-92ed-39969a801937",
+        "name": "PIEDRA CALIZA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002206_a975cbac-168a-4033-92ed-39969a801937.png",
+        "desc": "sillares cortados color crema-beige con vetas suaves y líneas de mortero gastadas"
+      },
+      {
+        "id": "66c9f6d4-5b1f-45c0-8e23-96887803ba31",
+        "name": "TELA RAYADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002230_66c9f6d4-5b1f-45c0-8e23-96887803ba31.png",
+        "desc": "franjas cálidas de crema, ocre, teja e índigo con veta de tejido sutil"
+      },
+      {
+        "id": "095fe7e4-b675-4ca5-81e3-46f9d5062f52",
+        "name": "ARENA ONDULADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002231_095fe7e4-b675-4ca5-81e3-46f9d5062f52.png",
+        "desc": "dunas doradas con suaves ondas de viento y sombras tenues (suelo desierto)"
+      },
+      {
+        "id": "286a5cf3-26b4-4cd8-9f63-26c03b019d8c",
+        "name": "LADRILLO COCIDO ROJO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002548_286a5cf3-26b4-4cd8-9f63-26c03b019d8c.png",
+        "desc": "muro de ladrillos terracota en hiladas escalonadas con mortero claro y desgaste"
+      },
+      {
+        "id": "1f820444-34d4-48e6-8b18-ef73c4827092",
+        "name": "CUERO REPUJADO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002549_1f820444-34d4-48e6-8b18-ef73c4827092.png",
+        "desc": "piel color tostado con motivos geométricos repujados y brillo gastado"
+      },
+      {
+        "id": "7563544b-2264-4ba0-8971-28a3b5a60174",
+        "name": "AGUA CLARA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002551_7563544b-2264-4ba0-8971-28a3b5a60174.png",
+        "desc": "superficie de agua turquesa con suaves ondas y reflejos cáusticos"
+      },
+      {
+        "id": "47416c40-ebde-4cca-adbc-88a59520d3ad",
+        "name": "HOJA DE PALMA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002611_47416c40-ebde-4cca-adbc-88a59520d3ad.png",
+        "desc": "frondas verdes solapadas con venas paralelas finas y brillos cálidos"
+      },
+      {
+        "id": "dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9",
+        "name": "GRAVA DE CAMINO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_002612_dc42dd3c-e5f2-4b27-9af1-bf5b6ca52cc9.png",
+        "desc": "guijarros y polvo tostado-gris compactados (suelo de sendero)"
+      },
+      {
+        "id": "227ec460-c4f8-4c2b-8485-34ec56aea510",
+        "name": "LANA CARDADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003202_227ec460-c4f8-4c2b-8485-34ec56aea510.png",
+        "desc": "fibras crema-blancas mullidas con sombras suaves y tono cálido (materia textil)"
+      },
+      {
+        "id": "71511a61-f973-46af-8583-f7bf8de52d9b",
+        "name": "SAL CRISTALIZADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003203_71511a61-f973-46af-8583-f7bf8de52d9b.png",
+        "desc": "cristales blancos gruesos de sal con destellos gris pálido y crema"
+      },
+      {
+        "id": "2ac32119-653e-42f6-886b-b59a55988178",
+        "name": "TERRACOTA VIDRIADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003203_2ac32119-653e-42f6-886b-b59a55988178.png",
+        "desc": "baldosas de arcilla rojiza con vidriado ámbar brillante y craquelado sutil"
+      },
+      {
+        "id": "db84155f-2816-4d4e-b647-d93164c70fb7",
+        "name": "MÁRMOL VETEADO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003242_db84155f-2816-4d4e-b647-d93164c70fb7.png",
+        "desc": "mármol crema pálido con vetas grises y doradas y pulido sutil"
+      },
+      {
+        "id": "a3274c21-df43-4191-8374-d7fbba014105",
+        "name": "COBRE BRUÑIDO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003244_a3274c21-df43-4191-8374-d7fbba014105.png",
+        "desc": "metal rosa-dorado con hoyuelos de martillado y reflejos suaves"
+      },
+      {
+        "id": "8dc7b86c-100a-4c3f-979d-4478c88d747c",
+        "name": "CORTEZA DE OLIVO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003616_8dc7b86c-100a-4c3f-979d-4478c88d747c.png",
+        "desc": "corteza gris-plata nudosa con surcos retorcidos profundos y brillos cálidos"
+      },
+      {
+        "id": "55281e84-43ba-49a4-a0eb-27828e307d20",
+        "name": "TELA DE SACO (arpillera)",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003622_55281e84-43ba-49a4-a0eb-27828e307d20.png",
+        "desc": "fibras de yute tostadas y bastas en trama de rejilla suelta"
+      },
+      {
+        "id": "8c34dead-ba5e-4e69-9090-da968976a09b",
+        "name": "CERÁMICA PINTADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003623_8c34dead-ba5e-4e69-9090-da968976a09b.png",
+        "desc": "cerámica crema con franjas geométricas pintadas a mano en terracota e índigo"
+      },
+      {
+        "id": "1dca74d8-6bf8-476e-a0fe-555aace189be",
+        "name": "HIERBA SECA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003647_1dca74d8-6bf8-476e-a0fe-555aace189be.png",
+        "desc": "briznas de paja dorada blanqueadas por el sol en un manto suelto"
+      },
+      {
+        "id": "227d046b-7b07-4a49-a023-1e0e23c86d5e",
+        "name": "PIZARRA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_003648_227d046b-7b07-4a49-a023-1e0e23c86d5e.png",
+        "desc": "losas de pizarra gris frío en capas con vetas azules y óxido sutiles"
+      },
+      {
+        "id": "21335aac-a2c8-440e-a431-6ed2f35df8a4",
+        "name": "JUNCO VERDE",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004201_21335aac-a2c8-440e-a431-6ed2f35df8a4.png",
+        "desc": "juncos y cañas verdes frescas verticales apretadas con brillos cálidos"
+      },
+      {
+        "id": "5eadec4b-3ef9-4bae-8dae-8c86393beeda",
+        "name": "ARCILLA HÚMEDA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004203_5eadec4b-3ef9-4bae-8dae-8c86393beeda.png",
+        "desc": "arcilla marrón-rojiza lisa con marcas de dedos sutiles y brillo suave"
+      },
+      {
+        "id": "111db459-8dbb-474c-a1e9-f20c0fe405e8",
+        "name": "PANAL",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004204_111db459-8dbb-474c-a1e9-f20c0fe405e8.png",
+        "desc": "celdas hexagonales de cera dorada brillando con miel, tonos ámbar cálidos"
+      },
+      {
+        "id": "6fe95410-d806-4af8-b6a6-7451c4d6ecb2",
+        "name": "RED ANUDADA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004230_6fe95410-d806-4af8-b6a6-7451c4d6ecb2.png",
+        "desc": "cuerda tostada anudada en malla romboidal regular con nudos pequeños"
+      },
+      {
+        "id": "121637b7-e601-4752-959f-582d63bba670",
+        "name": "GUIJARROS DE RÍO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004232_121637b7-e601-4752-959f-582d63bba670.png",
+        "desc": "piedras redondeadas lisas en grises, tostados y azules suaves apretadas"
+      },
+      {
+        "id": "d3926569-4f8d-4803-87ce-a3bbdfb59333",
+        "name": "HOJAS CAÍDAS",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004545_d3926569-4f8d-4803-87ce-a3bbdfb59333.png",
+        "desc": "hojas secas de otoño en ocre, teja y marrón esparcidas y solapadas"
+      },
+      {
+        "id": "af408f81-1ea8-422d-bb91-6b8dd685e4cb",
+        "name": "YESO / cal",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004546_af408f81-1ea8-422d-bb91-6b8dd685e4cb.png",
+        "desc": "enlucido blanco roto con marcas de llana sutiles y grietas finas"
+      },
+      {
+        "id": "d7c64dce-2863-4e02-8714-7f53bb7f63a2",
+        "name": "ESCAMAS DE PEZ",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004547_d7c64dce-2863-4e02-8714-7f53bb7f63a2.png",
+        "desc": "escamas iridiscentes plata-azul solapadas en hileras con brillos suaves"
+      },
+      {
+        "id": "23f4f7ae-c294-447c-937e-9994b95182a0",
+        "name": "BARRO SECO CUARTEADO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004621_23f4f7ae-c294-447c-937e-9994b95182a0.png",
+        "desc": "tierra cocida por el sol partida en placas poligonales curvadas, tonos tostados"
+      },
+      {
+        "id": "3c9f2f73-f2ec-4202-a519-e7a6dfb935cd",
+        "name": "PLUMAS",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_004623_3c9f2f73-f2ec-4202-a519-e7a6dfb935cd.png",
+        "desc": "plumas suaves gris paloma y crema solapadas con barbas finas"
+      },
+      {
+        "id": "4f70443a-0b5f-400a-a2e3-0257b0f7040d",
+        "name": "LADRILLO BLANCO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065539_4f70443a-0b5f-400a-a2e3-0257b0f7040d.png",
+        "desc": "ladrillos encalados pálidos en hiladas escalonadas con parches gastados"
+      },
+      {
+        "id": "589d6c4d-8260-4e5c-a011-a82294d5003a",
+        "name": "MIMBRE",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065541_589d6c4d-8260-4e5c-a011-a82294d5003a.png",
+        "desc": "tiras de sauce tostadas tejidas en patrón de cesta apretado"
+      },
+      {
+        "id": "2e50cfdb-6d43-4387-b06e-b444864cd272",
+        "name": "PAPIRO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065542_2e50cfdb-6d43-4387-b06e-b444864cd272.png",
+        "desc": "fibras vegetales beige claro tejidas con estriaciones finas horizontales y verticales"
+      },
+      {
+        "id": "4c6f667e-a55d-49d4-bb46-0c3246e67904",
+        "name": "LINO CRUDO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065613_4c6f667e-a55d-49d4-bb46-0c3246e67904.png",
+        "desc": "trama de lino natural sin teñir en tono avena con motas y grano suave"
+      },
+      {
+        "id": "2aabcbc1-0e72-4e89-9d65-8798615acd3f",
+        "name": "GRAVA VOLCÁNICA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_065615_2aabcbc1-0e72-4e89-9d65-8798615acd3f.png",
+        "desc": "guijarros de basalto oscuro porosos en carbón y óxido con superficie mate rugosa"
+      },
+      {
+        "id": "f1acf866-6538-4f06-9ac1-c7963fe8c763",
+        "name": "TERRAZO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071348_f1acf866-6538-4f06-9ac1-c7963fe8c763.png",
+        "desc": "base crema pálida con esquirlas de piedra en ocre, teja y gris (suelo)"
+      },
+      {
+        "id": "5b4ed080-67ac-4aba-8800-c6f529aa3e90",
+        "name": "CORCHO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071350_5b4ed080-67ac-4aba-8800-c6f529aa3e90.png",
+        "desc": "gránulos de corcho tostado con moteado suave"
+      },
+      {
+        "id": "26215b7f-4af2-4c82-884f-f3e5f8d01830",
+        "name": "FIELTRO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071351_26215b7f-4af2-4c82-884f-f3e5f8d01830.png",
+        "desc": "fieltro de lana mate en tono avena con superficie fina y afelpada"
+      },
+      {
+        "id": "cc677483-afb2-49c7-803b-230919d46ba4",
+        "name": "MALLA DE BRONCE",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071418_cc677483-afb2-49c7-803b-230919d46ba4.png",
+        "desc": "rejilla fina de alambre de bronce tejido con reflejos metálicos cálidos"
+      },
+      {
+        "id": "91a63139-6ba9-44d7-80c5-326aa8b0dc4a",
+        "name": "ARENA ROJA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_071420_91a63139-6ba9-44d7-80c5-326aa8b0dc4a.png",
+        "desc": "arena rojiza fina con suaves ondas de viento y sombras cálidas (suelo desierto)"
+      },
+      {
+        "id": "5f651d8b-1745-4af4-a761-78e71f9a97ef",
+        "name": "TEJADO DE TEJA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_072648_5f651d8b-1745-4af4-a761-78e71f9a97ef.png",
+        "desc": "tejas de arcilla curvas solapadas en teja rojiza con desgaste suave (tejados)"
+      },
+      {
+        "id": "8520d951-93ef-4842-9c32-93e730dc7f1f",
+        "name": "LADRILLO VIDRIADO AZUL",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_072650_8520d951-93ef-4842-9c32-93e730dc7f1f.png",
+        "desc": "ladrillos cerámicos azul lapislázuli brillantes en hiladas (muro noble, tipo Babilonia)"
+      },
+      {
+        "id": "d993ad95-963e-4a0b-a65f-55e5a8c3d1d2",
+        "name": "HUESO PULIDO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_072652_d993ad95-963e-4a0b-a65f-55e5a8c3d1d2.png",
+        "desc": "superficie marfil-crema con estriaciones naturales finas y brillo suave"
+      },
+      {
+        "id": "6032d24b-a3e7-4d60-8a46-e22fa7cd9fbd",
+        "name": "LACA ROJA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_073412_6032d24b-a3e7-4d60-8a46-e22fa7cd9fbd.png",
+        "desc": "superficie lacada bermellón profunda y brillante con reflejos suaves"
+      },
+      {
+        "id": "9e53c249-ec73-4de3-8239-a38736286353",
+        "name": "SAL DE ROCA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_073413_9e53c249-ec73-4de3-8239-a38736286353.png",
+        "desc": "cristales gruesos de sal translúcida blanca y rosa pálido con destellos suaves"
+      },
+      {
+        "id": "8a030e97-1934-49f0-b519-989af5f1fcbf",
+        "name": "MÁRMOL NEGRO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_074343_8a030e97-1934-49f0-b519-989af5f1fcbf.png",
+        "desc": "mármol carbón profundo con vetas doradas y grises finas y pulido brillante"
+      },
+      {
+        "id": "5b9ba8f8-318b-4f32-9bf5-376a79b96687",
+        "name": "COBRE OXIDADO",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_074346_5b9ba8f8-318b-4f32-9bf5-376a79b96687.png",
+        "desc": "lámina de cobre cálido virada a cardenillo verde-azulado con pátina moteada"
+      },
+      {
+        "id": "203b26a5-4601-44da-b177-acb6a7172dd8",
+        "name": "ÓNIX",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_075316_203b26a5-4601-44da-b177-acb6a7172dd8.png",
+        "desc": "piedra pulida lisa con bandas concéntricas ámbar y crema"
+      },
+      {
+        "id": "82c3987d-07d2-496b-a89f-296186b2e13f",
+        "name": "MADREPERLA",
+        "cat": "texturas",
+        "w": 2048,
+        "h": 2048,
+        "file": "hf_20260728_075317_82c3987d-07d2-496b-a89f-296186b2e13f.png",
+        "desc": "nácar iridiscente con destellos rosa, azul y crema suaves"
+      }
+    ]
+  },
+  "muniecos3D": {
+    "descripcion": "Sistema de minifiguras parametricas en Three.js (geometria por codigo, NO son las imagenes). Colores por skin.",
+    "modulos": {
+      "MinifigureFactory": "mundo-ladrillos/src/characters/MinifigureFactory.ts",
+      "Crowd": "mundo-ladrillos/src/world/Crowd.ts",
+      "CharacterController": "mundo-ladrillos/src/characters/CharacterController.ts"
+    },
+    "api": {
+      "createMinifigure": "createMinifigure(plastic: PlasticMaterialFactory, skin?: MinifigureSkin): Minifigure",
+      "Minifigure": {
+        "root": "THREE.Group  // anadir a la escena",
+        "update": "update(dt: number, moving: boolean, speed=1): void",
+        "attack": "attack(): boolean"
+      },
+      "villagerSkin": "villagerSkin(i: number): MinifigureSkin  // aldeano determinista por indice"
+    },
+    "skinsHeroe": {
+      "descripcion": "CHARACTER_SKINS: Record<string, MinifigureSkin>",
+      "claves": [
+        "espia",
+        "espia2",
+        "espiaCamp",
+        "espia2Camp",
+        "yehoshua",
+        "rahab",
+        "guardia",
+        "jefeGuardia",
+        "sacerdote",
+        "beduino",
+        "rabino"
+      ]
+    },
+    "aldeanos": {
+      "VILLAGER_PRESETS": "MinifigureSkin[]  (20 presets: hombres, mujeres, ninos, ancianos)",
+      "total": 20,
+      "uso": "villagerSkin(i) o VILLAGER_PRESETS[i]"
+    },
+    "emociones": [
+      "happy",
+      "neutral",
+      "worried",
+      "stern",
+      "surprised",
+      "alert",
+      "angry",
+      "sad",
+      "scared",
+      "sly",
+      "joyful",
+      "awe",
+      "determined"
+    ],
+    "peinados": [
+      "turban",
+      "hood",
+      "ninja",
+      "coneHelmet",
+      "plumeHelmet",
+      "mitre",
+      "kippah",
+      "longHair"
+    ],
+    "multitudes": {
+      "buildCrowd": "buildCrowd(scene, plastic, spots: CrowdSpot[], opts?: {startIndex?,scale?,walkers?,lite?}) => {group,update,dispose}",
+      "buildNightMarketCrowd": "buildNightMarketCrowd(scene, plastic, opts?: {center?,radius?,density?:'low'|'med',startIndex?,extraSpots?,extraWalkers?}) => {group,update,dispose}",
+      "buildProcessionCrowd": "buildProcessionCrowd(scene, plastic, opts?: {mode?:'march'|'celebration',origin?,rows?,perRow?,spacing?,facingYaw?,advance?,startIndex?,extraSpots?}) => {group,update,dispose}",
+      "nota": "opts.lite=true quita sombras (barato para densidad de fondo / movil)."
+    }
+  }
+}
