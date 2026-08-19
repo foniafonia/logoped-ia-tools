@@ -68,3 +68,18 @@ Una rebanada jugable: **el patio del cole (Modo Empatía)** o **arranque suave c
   de escenarios explorables a partir de la peli, con nuestra jugabilidad Three.js encima.
   Peros: exploración limitada a ángulos filmados, mejor entornos estáticos, pesa, y no es
   un motor de juego (la jugabilidad la montamos nosotros).
+
+## 4. Editor de mundos "por trazos" que autogenera ladrillos (inspiración: Canvas of Kings)
+Idea vista en un post (Canvas of Kings, de Hannes Breuer): dibujas trazos (caminos, ríos,
+murallas, aldeas) y el sistema **coloca los elementos automáticamente** sobre tu trazado; el
+mapa "cobra vida solo".
+- **La herramienta en sí NO nos sirve directa:** genera mapas **2D** (estilo tablero D&D) y
+  nuestro mundo es **3D de ladrillo** → mismo choque de tecnologías que los fondos de la peli.
+  Su export (imagen 2D) no se juega en Three.js.
+- **Lo que SÍ nos llevamos = el PATRÓN, no el programa:** montar **nuestro** mini-editor de
+  niveles donde dibujas un camino/muralla/río y **se autogeneran los ladrillos, tiendas y
+  murallas** encima. Aceleraría muchísimo montar los **juegos 2 y 3** (menos construir a mano).
+- Usos menores: **plano de nivel** antes de construir en 3D; **mapa decorativo 2D** para un
+  menú o selector de mundos ("elige mundo").
+- Prioridad: **baja / futura** — anotado por si al final compensa implementarlo cuando estén
+  en marcha las entregas 2 y 3.
