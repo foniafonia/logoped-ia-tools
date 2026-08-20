@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapa de Mundos — maqueta</title>
+<style>
+  :root{
+    --arena:#e9cf9d; --arena-2:#d9b878; --arena-3:#c19a5b;
+    --cielo-1:#8fc8e8; --cielo-2:#cfe8f2;
+    --piedra:#a89377; --piedra-osc:#7d6a52;
+    --ladrillo:#c9553f; --ladrillo-osc:#9c3d2c;
+    --oro:#f3ba36; --oro-osc:#c8901c;
+    --verde:#57a05a; --verde-osc:#3d7a41;
+    --tinta:#3b2c1e; --tinta-2:#6b573f;
+    --papel:#fdf6e6;
+    --sombra:0 6px 0 rgba(0,0,0,.18), 0 12px 24px rgba(59,44,30,.18);
+    --radio:14px;
+    --fuente: ui-rounded, "Segoe UI Rounded", "SF Pro Rounded", "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--fuente);
+    color:var(--tinta);
+    background:linear-gradient(180deg,var(--cielo-1) 0%, var(--cielo-2) 17%, var(--arena) 17%, var(--arena-2) 62%, var(--arena-3) 100%);
+    min-height:100dvh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- barra superior ---------- */
+  .barra{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding:10px clamp(12px,3vw,24px);
+    background:rgba(253,246,230,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:3px solid var(--piedra-osc);
+  }
+  .marca{display:flex;align-items:center;gap:10px;margin-right:auto}
+  .logo{
+    width:34px;height:34px;border-radius:8px;
+    background:linear-gradient(180deg,var(--ladrillo),var(--ladrillo-osc));
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,.2);
+    position:relative;flex:none;
+  }
+  .logo::before,.logo::after{
+    content:"";position:absolute;top:5px;width:9px;height:9px;border-radius:50%;
+    background:rgba(255,255,255,.45);box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);
+  }
+  .logo::before{left:6px}.logo::after{right:6px}
+  .marca h1{font-size:1.02rem;margin:0;letter-spacing:.2px}
+  .marca small{display:block;font-size:.72rem;color:var(--tinta-2);font-weight:600}
+
+  .contador{
+    display:flex;align-items:center;gap:7px;
+    background:var(--papel);border:3px solid var(--piedra-osc);
+    border-radius:999px;padding:5px 13px 5px 9px;
+    font-weight:800;font-variant-numeric:tabular-nums;
+    box-shadow:0 3px 0 rgba(0,0,0,.15);
+  }
+  .contador .icono{font-size:1.05rem;line-height:1}
+
+  .btn{
+    font-family:inherit;font-weight:800;cursor:pointer;
+    border:3px solid var(--piedra-osc);border-radius:12px;
+    background:var(--papel);color:var(--tinta);
+    padding:7px 14px;box-shadow:0 4px 0 rgba(0,0,0,.18);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 5px 0 rgba(0,0,0,.18)}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+  .btn:focus-visible{outline:4px solid #2b7fd4;outline-offset:2px}
+  .btn.principal{background:linear-gradient(180deg,var(--verde),var(--verde-osc));color:#fff;border-color:#2f6033}
+  .btn.pequeno{padding:5px 11px;font-size:.82rem}
+
+  /* ---------- selector de mundos (la saga) ---------- */
+  .mundos{
+    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    padding:16px clamp(12px,3vw,24px) 4px;
+  }
+  .mundo{
+    display:flex;align-items:center;gap:10px;
+    border:3px solid var(--piedra-osc);border-radius:var(--radio);
+    background:var(--papel);padding:8px 14px;cursor:pointer;
+    font-family:inherit;font-weight:800;color:var(--tinta);
+    box-shadow:0 4px 0 rgba(0,0,0,.18);
+    transition:transform .08s ease;
+  }
+  .mundo:hover:not([disabled]){transform:translateY(-2px)}
+  .mundo[aria-current="true"]{background:linear-gradient(180deg,#fff3d3,#f7e2ae);border-color:var(--oro-osc)}
+  .mundo[disabled]{opacity:.55;cursor:not-allowed;filter:grayscale(.5)}
+  .mundo .num{
+    width:26px;height:26px;border-radius:7px;flex:none;
+    background:linear-gradient(180deg,var(--ladrillo),var(--ladrillo-osc));color:#fff;
+    display:grid;place-items:center;font-size:.85rem;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+  }
+  .mundo[disabled] .num{background:linear-gradient(180deg,#9c9c9c,#777)}
+  .mundo .txt{display:flex;flex-direction:column;line-height:1.15;text-align:left}
+  .mundo .txt small{font-weight:600;font-size:.7rem;color:var(--tinta-2)}
+
+  /* ---------- el mapa ---------- */
+  .lienzo{
+    position:relative;
+    width:min(920px, 96vw);
+    margin:6px auto 54px;
+    aspect-ratio: 390 / 1420;
+  }
+  @media (min-width:820px){ .lienzo{ aspect-ratio: 920 / 660; } }
+
+  .lienzo svg{position:absolute;inset:0;width:100%;height:100%}
+
+  /* decorado del paisaje (puramente visual) */
+  .deco{position:absolute;translate:-50% -100%;pointer-events:none;user-select:none}
+  .tienda{width:64px;height:44px}
+  .tienda i{
+    position:absolute;bottom:0;left:50%;translate:-50% 0;
+    width:0;height:0;border-left:32px solid transparent;border-right:32px solid transparent;
+    border-bottom:44px solid #d8b489;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15));
+  }
+  .tienda b{
+    position:absolute;bottom:0;left:50%;translate:-50% 0;
+    width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
+    border-bottom:22px solid #8a6a4d;
+  }
+  .palmera{width:52px;height:66px}
+  .palmera i{position:absolute;bottom:0;left:50%;translate:-50% 0;width:8px;height:50px;
+    border-radius:4px;background:linear-gradient(90deg,#9a7853,#6d523a)}
+  .palmera b,.palmera u{position:absolute;top:6px;width:26px;height:12px;
+    background:linear-gradient(180deg,#6bb066,#42824a);box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+  .palmera b{left:0;border-radius:13px 4px 4px 13px;rotate:-12deg}
+  .palmera u{right:0;border-radius:4px 13px 13px 4px;rotate:12deg}
+  .palmera::after{content:"";position:absolute;top:0;left:50%;translate:-50% 0;
+    width:20px;height:11px;border-radius:10px 10px 3px 3px;
+    background:linear-gradient(180deg,#78bd70,#4b8c52)}
+  .roca{width:40px;height:22px;border-radius:14px 16px 4px 4px;
+    background:linear-gradient(180deg,#c3ab86,#a08a68);box-shadow:0 3px 0 rgba(0,0,0,.12)}
+  .muralla{display:flex;gap:3px;align-items:flex-end}
+  .muralla span{width:15px;height:34px;border-radius:3px;
+    background:linear-gradient(180deg,#d9c39c,#b79c72);box-shadow:inset 0 -4px 0 rgba(0,0,0,.14)}
+  .muralla span:nth-child(even){height:26px}
+
+  /* el nivel final manda */
+  .nodo.final{
+    width:clamp(64px,9.4vw,84px);height:clamp(64px,9.4vw,84px);
+    border-width:5px;font-size:1.35rem;
+  }
+  .nodo.final .corona{position:absolute;top:-30px;left:50%;translate:-50% 0;font-size:1.2rem}
+
+  .nodo{
+    position:absolute;
+    translate:-50% -50%;
+    width:clamp(52px,7.6vw,68px);
+    height:clamp(52px,7.6vw,68px);
+    border-radius:16px;
+    border:4px solid var(--piedra-osc);
+    background:linear-gradient(180deg,#f4e3bd,#dcc192);
+    box-shadow:var(--sombra);
+    cursor:pointer;font-family:inherit;color:var(--tinta);
+    display:grid;place-items:center;
+    font-weight:900;font-size:1.15rem;
+    transition:transform .1s ease;
+    padding:0;
+  }
+  .nodo:hover:not([disabled]){transform:translate(-50%,-50%) scale(1.08)}
+  .nodo:focus-visible{outline:4px solid #2b7fd4;outline-offset:3px}
+  /* pivotes de ladrillo arriba */
+  .nodo::before,.nodo::after{
+    content:"";position:absolute;top:-9px;width:14px;height:9px;
+    border-radius:5px 5px 2px 2px;background:inherit;
+    border:4px solid var(--piedra-osc);border-bottom:none;
+  }
+  .nodo::before{left:9px}.nodo::after{right:9px}
+
+  .nodo.hecho{background:linear-gradient(180deg,#7fc684,var(--verde-osc));color:#fff}
+  .nodo.actual{background:linear-gradient(180deg,#ffd977,var(--oro));border-color:var(--oro-osc);animation:latido 1.6s ease-in-out infinite}
+  .nodo.bloqueado{background:linear-gradient(180deg,#c3bdb2,#9b9488);color:#5c574e;cursor:not-allowed}
+  @keyframes latido{
+    0%,100%{transform:translate(-50%,-50%) scale(1)}
+    50%{transform:translate(-50%,-50%) scale(1.09)}
+  }
+  @media (prefers-reduced-motion:reduce){ .nodo.actual{animation:none} }
+
+  .estrellitas{
+    position:absolute;bottom:-13px;left:50%;translate:-50% 0;
+    display:flex;gap:1px;font-size:.78rem;line-height:1;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));
+    white-space:nowrap;
+  }
+  .etiqueta{
+    position:absolute;top:calc(100% + 26px);left:50%;translate:-50% 0;
+    background:rgba(253,246,230,.94);border:2px solid var(--piedra-osc);
+    border-radius:8px;padding:3px 8px;font-size:.7rem;font-weight:800;color:var(--tinta);
+    white-space:nowrap;pointer-events:none;
+  }
+  @media (max-width:819px){
+    .etiqueta{
+      top:50%; translate:0 -50%;
+      max-width:42vw; white-space:normal; text-align:left; line-height:1.2;
+    }
+    .etiqueta[data-lado="der"]{ left:calc(100% + 12px); }
+    .etiqueta[data-lado="izq"]{ left:auto; right:calc(100% + 12px); text-align:right; }
+  }
+
+  /* ---------- panel de nivel ---------- */
+  .velo{
+    position:fixed;inset:0;z-index:60;
+    background:rgba(40,28,16,.55);
+    display:grid;place-items:center;padding:16px;
+  }
+  .velo[hidden]{display:none}
+  .tarjeta{
+    width:min(430px,100%);
+    background:var(--papel);
+    border:5px solid var(--piedra-osc);border-radius:20px;
+    box-shadow:0 14px 0 rgba(0,0,0,.2), 0 30px 60px rgba(0,0,0,.35);
+    padding:20px;
+  }
+  .tarjeta h2{margin:0 0 2px;font-size:1.3rem;text-wrap:balance}
+  .tarjeta .capitulo{font-size:.74rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-2);margin:0 0 8px}
+  .tarjeta p.desc{margin:0 0 14px;line-height:1.5;color:var(--tinta-2);font-weight:600}
+  .estrellas-grandes{font-size:1.7rem;letter-spacing:4px;margin:0 0 14px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+  .acciones{display:flex;gap:10px;flex-wrap:wrap}
+  .acciones .btn{flex:1;min-width:120px}
+
+  /* ---------- pie ---------- */
+  .pie{
+    max-width:760px;margin:0 auto 40px;padding:0 clamp(12px,4vw,24px);
+    font-size:.86rem;line-height:1.55;color:var(--tinta-2);font-weight:600;
+  }
+  .pie .caja{
+    background:rgba(253,246,230,.85);border:3px dashed var(--piedra-osc);
+    border-radius:var(--radio);padding:14px 16px;
+  }
+  .pie code{
+    background:#f0e2c4;border:1px solid var(--piedra);border-radius:5px;
+    padding:1px 5px;font-size:.85em;
+  }
+  .pie h3{margin:0 0 6px;font-size:.95rem;color:var(--tinta)}
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="marca">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Mapa de Mundos</h1>
+      <small>maqueta — no es el juego</small>
+    </div>
+  </div>
+  <div class="contador" title="Estrellas conseguidas">
+    <span class="icono" aria-hidden="true">⭐</span>
+    <span id="marcador-estrellas">0 / 36</span>
+  </div>
+  <div class="contador" title="Monedas">
+    <span class="icono" aria-hidden="true">🪙</span>
+    <span id="marcador-monedas">0</span>
+  </div>
+  <button class="btn pequeno" id="btn-reiniciar">Empezar de cero</button>
+</header>
+
+<nav class="mundos" id="mundos" aria-label="Los tres juegos de la saga"></nav>
+
+<main class="lienzo" id="lienzo">
+  <svg id="camino" viewBox="0 0 920 900" preserveAspectRatio="none" aria-hidden="true"></svg>
+</main>
+
+<section class="pie">
+  <div class="caja">
+    <h3>Qué estás viendo</h3>
+    <p style="margin:0 0 10px">
+      Una maqueta del <strong>mapa de niveles</strong>: el caminito, las estrellas, lo que está
+      abierto y lo que está cerrado, y los tres juegos de la saga arriba. Pulsa un nivel y dale a
+      <em>Jugar</em> para ver cómo avanza. El progreso se guarda en este navegador.
+    </p>
+    <p style="margin:0">
+      <strong>Lo importante que demuestra:</strong> los 12 niveles no están programados uno a uno.
+      Están escritos como <strong>fichas</strong> en una lista dentro del archivo
+      (<code>MUNDOS</code>). Cambia un nombre o añade una línea y el mapa se redibuja solo.
+      Eso es la idea de «escenas como fichas» que planteamos, aquí ya funcionando.
+    </p>
+  </div>
+</section>
+
+<div class="velo" id="velo" hidden role="dialog" aria-modal="true" aria-labelledby="titulo-nivel">
+  <div class="tarjeta">
+    <p class="capitulo" id="capitulo-nivel"></p>
+    <h2 id="titulo-nivel"></h2>
+    <p class="desc" id="desc-nivel"></p>
+    <p class="estrellas-grandes" id="estrellas-nivel"></p>
+    <div class="acciones">
+      <button class="btn" id="btn-cerrar">Volver</button>
+      <button class="btn principal" id="btn-jugar">Jugar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   LAS FICHAS. Todo el mapa sale de aquí. Nada más hay que tocar para
+   cambiar niveles, nombres o el orden.
+   ========================================================================= */
+const MUNDOS = [
+  {
+    id: 'jerico',
+    nombre: 'La Caída de Jericó',
+    subtitulo: 'Juego 1',
+    abierto: true,
+    niveles: [
+      { t:'El campamento',        d:'Conoce a tu gente y prepara el viaje.' },
+      { t:'La tienda de Josué',   d:'Recibe la misión de labios de Josué.' },
+      { t:'Camino al Jordán',     d:'Cruza el desierto siguiendo el arca.' },
+      { t:'La orilla del río',    d:'Reúne a los tuyos junto al agua.' },
+      { t:'Cruzar el Jordán',     d:'Pasa al otro lado sin caerte.' },
+      { t:'Elegir a los espías',  d:'Escoge a los dos más valientes.' },
+      { t:'Trajes de sigilo',     d:'Disfrázate para entrar sin que te vean.' },
+      { t:'A las puertas',        d:'Llega a la muralla sin ser descubierto.' },
+      { t:'El mercado',           d:'Cruza el bullicio esquivando a los guardias.' },
+      { t:'La casa de Rajav',     d:'Encuentra refugio en el último momento.' },
+      { t:'El escondite',         d:'Ocúltate bajo las mantas de la azotea.' },
+      { t:'¡La muralla cae!',     d:'Toca el shofar y contempla lo que ocurre.' },
+    ]
+  },
+  { id:'dos',  nombre:'Segunda historia', subtitulo:'Juego 2', abierto:false, niveles:[] },
+  { id:'tres', nombre:'Tercera historia', subtitulo:'Juego 3', abierto:false, niveles:[] },
+];
+
+/* Posiciones del caminito, en % del lienzo. Serpentea de abajo a arriba. */
+const RUTA_ANCHA = [ /* pantallas anchas: serpentea de abajo a arriba */
+  [11,84],[29,89],[47,83],[65,88],[82,77],[79,60],
+  [61,55],[43,60],[25,54],[15,35],[34,26],[55,20],
+];
+const RUTA_ESTRECHA = [ /* movil: columna en zigzag, bien repartida */
+  [30,95],[64,87],[30,79],[64,71],[30,62],[64,54],
+  [30,46],[64,38],[30,30],[64,21],[30,13],[56,5],
+];
+
+/* ---------------- estado guardado ---------------- */
+const CLAVE = 'maqueta-mapa-mundos-v1';
+let estado = cargar();
+
+function cargar(){
+  try{
+    const g = JSON.parse(localStorage.getItem(CLAVE) || 'null');
+    if (g && Array.isArray(g.estrellas)) return g;
+  }catch(e){ /* si está corrupto, empezamos limpio */ }
+  return { estrellas: [], monedas: 0, mundo: 0 };
+}
+function guardar(){
+  try{ localStorage.setItem(CLAVE, JSON.stringify(estado)); }catch(e){}
+}
+
+const mundoActual = () => MUNDOS[estado.mundo] || MUNDOS[0];
+const estrellasDe = (i) => estado.estrellas[i] || 0;
+/** El primer nivel sin terminar. Los de más allá están cerrados. */
+function indiceActual(){
+  const n = mundoActual().niveles.length;
+  for (let i = 0; i < n; i++) if (!estrellasDe(i)) return i;
+  return n; // todo hecho
+}
+
+/* ---------------- pintar los mundos ---------------- */
+function pintarMundos(){
+  const nav = document.getElementById('mundos');
+  nav.innerHTML = '';
+  MUNDOS.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.className = 'mundo';
+    b.type = 'button';
+    if (i === estado.mundo) b.setAttribute('aria-current','true');
+    if (!m.abierto) b.disabled = true;
+    b.innerHTML = `<span class="num">${i+1}</span>
+      <span class="txt"><span>${m.nombre}</span>
+      <small>${m.abierto ? m.subtitulo : 'aún cerrado'}</small></span>`;
+    b.addEventListener('click', () => { estado.mundo = i; guardar(); pintarTodo(); });
+    nav.appendChild(b);
+  });
+}
+
+/* ---------------- pintar el mapa ---------------- */
+function ruta(){
+  return matchMedia('(min-width: 820px)').matches ? RUTA_ANCHA : RUTA_ESTRECHA;
+}
+
+/* Adornos del paisaje. Solo decoran: no se pueden pulsar. */
+const DECORADO = [
+  { c:'tienda',   x:49, y:43, html:'<i></i><b></b>' },
+  { c:'tienda',   x:57, y:46, html:'<i></i><b></b>' },
+  { c:'palmera',  x:6,  y:70, html:'<i></i><b></b><u></u>' },
+  { c:'palmera',  x:94, y:88, html:'<i></i><b></b><u></u>' },
+  { c:'roca',     x:91, y:40, html:'' },
+  { c:'roca',     x:38, y:99, html:'' },
+  { c:'muralla',  x:73, y:31, html:'<span></span><span></span><span></span><span></span><span></span>' },
+];
+
+function pintarDecorado(lienzo){
+  [...lienzo.querySelectorAll('.deco')].forEach(d => d.remove());
+  if (!matchMedia('(min-width: 820px)').matches) return; // en movil no cabe: fuera
+  DECORADO.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'deco ' + d.c;
+    el.style.left = d.x + '%';
+    el.style.top  = d.y + '%';
+    el.setAttribute('aria-hidden','true');
+    el.innerHTML = d.html;
+    lienzo.appendChild(el);
+  });
+}
+
+function pintarMapa(){
+  const lienzo = document.getElementById('lienzo');
+  const svg = document.getElementById('camino');
+  [...lienzo.querySelectorAll('.nodo')].forEach(n => n.remove());
+  pintarDecorado(lienzo);
+
+  const niveles = mundoActual().niveles;
+  const pts = ruta().slice(0, niveles.length);
+  const actual = indiceActual();
+
+  /* el caminito de piedra */
+  svg.setAttribute('viewBox', '0 0 100 100');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  const d = pts.map((p,i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+  svg.innerHTML = pts.length
+    ? `<path d="${d}" fill="none" stroke="#7d6a52" stroke-width="11"
+             stroke-linecap="round" stroke-linejoin="round"
+             vector-effect="non-scaling-stroke" opacity=".55"/>
+       <path d="${d}" fill="none" stroke="#e8d7b4" stroke-width="7"
+             stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 11"
+             vector-effect="non-scaling-stroke"/>`
+    : '';
+
+  niveles.forEach((niv, i) => {
+    const [x,y] = pts[i];
+    const est = estrellasDe(i);
+    const cerrado = i > actual;
+
+    const b = document.createElement('button');
+    b.type = 'button';
+    const esFinal = i === niveles.length - 1;
+    b.className = 'nodo ' + (est ? 'hecho' : cerrado ? 'bloqueado' : 'actual') + (esFinal ? ' final' : '');
+    b.style.left = x + '%';
+    b.style.top  = y + '%';
+    b.disabled = cerrado;
+    b.setAttribute('aria-label',
+      `Nivel ${i+1}: ${niv.t}. ` +
+      (est ? `Superado con ${est} de 3 estrellas.` : cerrado ? 'Todavía cerrado.' : 'Disponible.'));
+    b.textContent = cerrado ? '🔒' : (i+1);
+    if (esFinal){
+      const c = document.createElement('span');
+      c.className = 'corona'; c.setAttribute('aria-hidden','true'); c.textContent = '👑';
+      b.appendChild(c);
+    }
+
+    if (est){
+      const e = document.createElement('span');
+      e.className = 'estrellitas';
+      e.setAttribute('aria-hidden','true');
+      e.textContent = '⭐'.repeat(est) + '·'.repeat(3-est);
+      b.appendChild(e);
+    }
+    const lbl = document.createElement('span');
+    lbl.className = 'etiqueta';
+    lbl.setAttribute('aria-hidden','true');
+    lbl.dataset.lado = x < 50 ? 'der' : 'izq';
+    lbl.textContent = cerrado ? '· · ·' : niv.t;
+    b.appendChild(lbl);
+
+    b.addEventListener('click', () => abrirNivel(i));
+    lienzo.appendChild(b);
+  });
+}
+
+function pintarMarcadores(){
+  const niveles = mundoActual().niveles;
+  const total = niveles.length * 3;
+  const suma = niveles.reduce((s,_,i) => s + estrellasDe(i), 0);
+  document.getElementById('marcador-estrellas').textContent = `${suma} / ${total}`;
+  document.getElementById('marcador-monedas').textContent = estado.monedas;
+}
+
+function pintarTodo(){ pintarMundos(); pintarMapa(); pintarMarcadores(); }
+
+/* ---------------- el panel del nivel ---------------- */
+let nivelAbierto = null;
+const velo = document.getElementById('velo');
+
+function abrirNivel(i){
+  const niv = mundoActual().niveles[i];
+  nivelAbierto = i;
+  document.getElementById('capitulo-nivel').textContent = `Nivel ${i+1} de ${mundoActual().niveles.length}`;
+  document.getElementById('titulo-nivel').textContent = niv.t;
+  document.getElementById('desc-nivel').textContent = niv.d;
+  const est = estrellasDe(i);
+  document.getElementById('estrellas-nivel').textContent = '⭐'.repeat(est) + '☆'.repeat(3-est);
+  document.getElementById('btn-jugar').textContent = est ? 'Volver a jugar' : 'Jugar';
+  velo.hidden = false;
+  document.getElementById('btn-jugar').focus();
+}
+function cerrarNivel(){ velo.hidden = true; nivelAbierto = null; }
+
+document.getElementById('btn-cerrar').addEventListener('click', cerrarNivel);
+velo.addEventListener('click', e => { if (e.target === velo) cerrarNivel(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !velo.hidden) cerrarNivel(); });
+
+/* En la maqueta, "jugar" simula que lo superas: 1-3 estrellas y unas monedas.
+   En el juego de verdad, aquí se cargaría la escena. */
+document.getElementById('btn-jugar').addEventListener('click', () => {
+  const i = nivelAbierto;
+  if (i === null) return;
+  const ganadas = 1 + Math.floor(Math.random() * 3);
+  if (ganadas > estrellasDe(i)){
+    estado.monedas += (ganadas - estrellasDe(i)) * 5;
+    estado.estrellas[i] = ganadas;
+  }
+  guardar();
+  cerrarNivel();
+  pintarTodo();
+});
+
+document.getElementById('btn-reiniciar').addEventListener('click', () => {
+  estado = { estrellas: [], monedas: 0, mundo: estado.mundo };
+  guardar(); pintarTodo();
+});
+
+addEventListener('resize', pintarMapa);
+pintarTodo();
+</script>
+</body>
+</html>
