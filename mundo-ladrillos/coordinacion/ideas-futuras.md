@@ -83,3 +83,15 @@ mapa "cobra vida solo".
   menú o selector de mundos ("elige mundo").
 - Prioridad: **baja / futura** — anotado por si al final compensa implementarlo cuando estén
   en marcha las entregas 2 y 3.
+
+## 5. Mapa de mundos — maqueta APARCADA (hay que rehacerla bien)
+`prototipos/mapa-de-mundos.html` — maqueta del mapa de niveles (caminito, estrellas,
+bloqueo/desbloqueo, monedas, los 3 juegos de la saga, progreso guardado).
+- **Veredicto de Idan: queda cutre.** No sirve como está; se rehará cuando toque.
+- Lo único que SÍ vale de ella: los 12 niveles salen de una lista de fichas (`MUNDOS`),
+  no están programados uno a uno → demuestra la idea de "escenas como fichas".
+- Al rehacerla: el problema es **visual**, no funcional. El decorado (palmeras, tiendas,
+  rocas dibujadas con CSS) es pobre y el mapa parece un diagrama, no un mundo. Camino
+  probable: mapa **renderizado en 3D de ladrillo** con el propio motor (mismo mundo, misma
+  estética) en vez de HTML plano, o al menos con arte de verdad en vez de formas CSS.
+- Prioridad: baja. No tocar hasta que se retome el tema del mapa de niveles.
