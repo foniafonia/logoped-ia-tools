@@ -33,6 +33,7 @@ export interface MinifigureSkin {
     | 'plumeHelmet'  // casco con plumas (jefe de guardia)
     | 'mitre'        // mitra alta (sacerdote)
     | 'kippah'       // kipá + pelo corto (rabino)
+    | 'cap'          // gorro redondeado ajustado con borde enrollado (Yehoshúa)
     | 'longHair';    // melena larga (Rahab)
 
   beard?: number;             // barba (color) — opcional
@@ -84,7 +85,7 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   arms: 0x8a5a34,        // MANGAS café medio (hoja oficial, no azul)
   hands: 0xf4d03f,
   headwear: 0x1c2e5a,    // gorro azul MARINO (no cobalto)
-  headStyle: 'turban',   // aprox. de gorro redondeado (sin pieza "cap" propia)
+  headStyle: 'cap',      // gorro redondeado ajustado con borde enrollado (hoja oficial)
   turbanStripe: 0xc3c8d0, // bordado con hilo PLATEADO
   beard: 0xc4c9ce,       // barba gris plateada, muy larga y densa
   beardStyle: 'long',
@@ -836,6 +837,40 @@ export class Minifigure {
         this.root.add(this.box(0.16, 0.72, 0.5, hair, -0.5, 3.98, -0.02));
         this.root.add(this.box(0.16, 0.72, 0.5, hair, 0.5, 3.98, -0.02));
         this.root.add(this.box(1.0, 0.5, 0.3, hair, 0, 4.0, -0.44));
+        break;
+      }
+      case 'cap': {
+        // Gorro redondeado AJUSTADO (hoja oficial de Yehoshúa): cúpula suave que
+        // abraza la cabeza + borde inferior grueso y enrollado + bandas de
+        // bordado plateado. Debajo, solo mechones compactos café oscuro en los
+        // lados y la nuca (nunca cabello largo descubierto).
+        if (hw === undefined) break;
+        const stripe = s.turbanStripe ?? 0xc3c8d0;    // hilo plateado
+        const hair = 0x3a2a1c;                          // café oscuro bajo el gorro
+        // Cúpula ajustada
+        const dome = new THREE.SphereGeometry(0.6, 30, 20, 0, Math.PI * 2, 0, Math.PI / 2);
+        const domeMesh = this.mesh(dome, hw, 0, 4.02, -0.02);
+        domeMesh.scale.set(1.02, 1.04, 1.02);
+        this.root.add(domeMesh);
+        // Borde inferior GRUESO y enrollado
+        const brim = new THREE.TorusGeometry(0.585, 0.12, 14, 34);
+        brim.rotateX(Math.PI / 2);
+        this.root.add(this.mesh(brim, hw, 0, 4.02, -0.02));
+        // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
+        const bandSpecs: Array<[number, number, number]> = [
+          [0.585, 0.045, 4.16],   // baja
+          [0.545, 0.05, 4.30],    // central ornamental
+          [0.45, 0.035, 4.44],    // alta
+        ];
+        bandSpecs.forEach(([r, t, y]) => {
+          const g = new THREE.TorusGeometry(r, t, 10, 34);
+          g.rotateX(Math.PI / 2);
+          this.root.add(this.mesh(g, stripe, 0, y, -0.02));
+        });
+        // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
+        this.root.add(this.box(0.16, 0.5, 0.42, hair, -0.52, 3.86, -0.05));
+        this.root.add(this.box(0.16, 0.5, 0.42, hair, 0.52, 3.86, -0.05));
+        this.root.add(this.box(0.98, 0.42, 0.28, hair, 0, 3.9, -0.46));
         break;
       }
       case 'longHair': {

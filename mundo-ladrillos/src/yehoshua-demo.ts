@@ -2,15 +2,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { setupPreciousRender } from './core/PreciousRender';
 import { PlasticMaterialFactory } from './materials/PlasticMaterialFactory';
-import { createMinifigure, YOSHUA_SKIN } from './characters/MinifigureFactory';
+import { createMinifigure, YOSHUA_SKIN, type Emotion, type Minifigure } from './characters/MinifigureFactory';
 
 /**
- * ESTUDIO DE FIDELIDAD — Yehoshúa.
- * Un espacio vacío (fondo blanco, luz de estudio uniforme, cámara a la altura del
- * torso, sombra de contacto muy tenue) tal como pide la hoja de personaje oficial,
- * para inspeccionar al Yehoshúa reconstruido desde todos los ángulos y medir
- * cuánto se parece al de la película. Sin escenografía a propósito: aquí solo
- * importa el personaje.
+ * ESTUDIO DE FIDELIDAD — Yehoshúa EN ACCIÓN.
+ * Espacio vacío (fondo blanco, luz de estudio uniforme, sombra de contacto tenue,
+ * cámara a la altura del torso) tal como pide la hoja de personaje oficial. El
+ * muñeco camina, saluda/gesticula y cambia de expresión para comprobar cómo se
+ * mueve el Yehoshúa reconstruido. Sin escenografía: aquí solo importa el personaje.
  */
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -20,30 +19,26 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-const BG_LIGHT = new THREE.Color(0xffffff);   // fondo blanco puro (hoja oficial)
-const BG_DARK = new THREE.Color(0x1d1f24);    // alternativa para juzgar siluetas
+const BG_LIGHT = new THREE.Color(0xffffff);
+const BG_DARK = new THREE.Color(0x1d1f24);
 scene.background = BG_LIGHT.clone();
 
-// Plástico limpio con reflejos suaves y bordes redondeados (look de juguete).
 const plastic = new PlasticMaterialFactory();
 plastic.update({ roughness: 0.32, clearcoat: 0.55, envMapIntensity: 1.15 });
 
 // Suelo blanco que solo recoge una sombra de contacto muy tenue.
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(80, 80),
-  new THREE.ShadowMaterial({ opacity: 0.12 })   // invisible salvo la sombra
+  new THREE.ShadowMaterial({ opacity: 0.12 })
 );
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-// Iluminación de estudio BLANCA y uniforme (poco contraste, sin tinte cálido).
+// Iluminación de estudio BLANCA y uniforme.
 scene.add(new THREE.HemisphereLight(0xffffff, 0xdedede, 1.15));
-const fill = new THREE.DirectionalLight(0xffffff, 0.9);
-fill.position.set(-6, 5, 6); scene.add(fill);
-const rim = new THREE.DirectionalLight(0xffffff, 0.6);
-rim.position.set(6, 4, -5); scene.add(rim);
-// Cenital tenue: la única que proyecta la sombra de contacto suave.
+const fill = new THREE.DirectionalLight(0xffffff, 0.9); fill.position.set(-6, 5, 6); scene.add(fill);
+const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(6, 4, -5); scene.add(rim);
 const key = new THREE.DirectionalLight(0xffffff, 0.7);
 key.position.set(0.5, 12, 3.5);
 key.castShadow = true;
@@ -51,41 +46,53 @@ key.shadow.mapSize.set(2048, 2048);
 key.shadow.camera.near = 1; key.shadow.camera.far = 30;
 key.shadow.camera.left = -6; key.shadow.camera.right = 6;
 key.shadow.camera.top = 6; key.shadow.camera.bottom = -6;
-key.shadow.radius = 6;             // penumbra amplia = sombra muy suave
-key.shadow.bias = -0.0005;
+key.shadow.radius = 6; key.shadow.bias = -0.0005;
 scene.add(key);
 
-// El personaje canónico, centrado en el origen.
-const yeho = createMinifigure(plastic, YOSHUA_SKIN);
-yeho.root.traverse((o) => { if ((o as THREE.Mesh).isMesh) { o.castShadow = true; } });
-scene.add(yeho.root);
+// --- El personaje (se puede reconstruir para cambiar la expresión) ---
+const EMOTIONS: Emotion[] = ['worried', 'neutral', 'stern', 'alert', 'happy', 'awe'];
+let emoIdx = 0;
+let yeho: Minifigure;
 
-// Altura aproximada de la minifigura ≈ 5.15; torso ≈ 2.8.
+function buildYeho(): void {
+  if (yeho) scene.remove(yeho.root);
+  yeho = createMinifigure(plastic, { ...YOSHUA_SKIN, emotion: EMOTIONS[emoIdx] });
+  yeho.root.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
+  scene.add(yeho.root);
+  const el = document.getElementById('emo'); if (el) el.textContent = EMOTIONS[emoIdx];
+}
+buildYeho();
+
 const TORSO_Y = 2.8;
 const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 200);
 const HOME = new THREE.Vector3(0, TORSO_Y, 11);
 camera.position.copy(HOME);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.target.set(0, TORSO_Y - 0.3, 0);   // encuadra el personaje completo
-controls.minDistance = 6;
-controls.maxDistance = 20;
-controls.maxPolarAngle = Math.PI * 0.52;     // no bajar bajo el suelo
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.target.set(0, TORSO_Y - 0.3, 0);
+controls.minDistance = 6; controls.maxDistance = 20;
+controls.maxPolarAngle = Math.PI * 0.52;
 controls.update();
 
 const fx = setupPreciousRender(renderer, scene, camera, {
   exposure: 1.0,
-  bloom: { strength: 0.08, radius: 0.4, threshold: 1.0 }   // casi sin bloom: fondo blanco limpio
+  bloom: { strength: 0.08, radius: 0.4, threshold: 1.0 }
 });
 
-// --- Interacción ---
-let turntable = false;      // giro de turnaround (tecla G)
-let dark = false;           // fondo claro/oscuro (tecla F)
+// --- Interacción / acción ---
+let walking = true;      // arranca caminando en el sitio (en acción)
+let turntable = false;
+let dark = false;
+function setState(el: string, v: string): void { const n = document.getElementById(el); if (n) n.textContent = v; }
+setState('walk', 'sí');
+
 addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
-  if (k === 'g') turntable = !turntable;
+  if (k === 'w') { walking = !walking; setState('walk', walking ? 'sí' : 'no'); }
+  else if (e.code === 'Space') { e.preventDefault(); yeho.attack(); }   // gesto/saludo del brazo
+  else if (k === 'e') { emoIdx = (emoIdx + 1) % EMOTIONS.length; buildYeho(); }
+  else if (k === 'g') { turntable = !turntable; }
   else if (k === 'r') { camera.position.copy(HOME); controls.target.set(0, TORSO_Y - 0.3, 0); controls.update(); }
   else if (k === 'f') { dark = !dark; scene.background = (dark ? BG_DARK : BG_LIGHT).clone(); }
 });
@@ -94,8 +101,8 @@ const clock = new THREE.Clock();
 function loop(): void {
   requestAnimationFrame(loop);
   const dt = Math.min(clock.getDelta(), 0.05);
-  if (turntable) yeho.root.rotation.y += dt * 0.5;   // vuelta lenta para el turnaround
-  yeho.update(dt, false);                            // respiración/idle sutil, quieto
+  if (turntable) yeho.root.rotation.y += dt * 0.5;
+  yeho.update(dt, walking, 1);
   controls.update();
   fx.render();
   (window as any).__ready = true;
