@@ -145,22 +145,22 @@ export function makeBeardTexture(): THREE.CanvasTexture {
   return canvasTex(768, 768, (g) => {
     // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
     const base = g.createLinearGradient(0, 0, 0, 768);
-    base.addColorStop(0, '#a2a7ac');
-    base.addColorStop(0.35, '#bcc1c6');
-    base.addColorStop(0.75, '#d2d6da');
-    base.addColorStop(1, '#e3e6e8');
+    base.addColorStop(0, '#8d9399');
+    base.addColorStop(0.35, '#a7adb3');
+    base.addColorStop(0.75, '#bec3c8');
+    base.addColorStop(1, '#d3d7da');
     g.fillStyle = base; g.fillRect(0, 0, 768, 768);
 
-    const cold = ['#d9dcdf', '#c3c8cd', '#aab0b6', '#93999f'];
-    const warm = ['#c9c0b1', '#b3a794', '#9c8f7c', '#8a7d6b']; // vetas marrones
+    const cold = ['#ccd1d5', '#b2b8be', '#99a0a6', '#828990'];
+    const warm = ['#c4b6a0', '#ab9a80', '#93826a', '#7d6c56']; // vetas marrones
     const r = rng(20260824);
 
     // 1) Mechones anchos: agrupan el pelo en madejas (lo que da el veteado).
     for (let i = 0; i < 120; i++) {
       const x = r() * 768;
-      const warmish = r() < 0.38;
+      const warmish = r() < 0.5;
       g.strokeStyle = (warmish ? warm : cold)[Math.floor(r() * 4)];
-      g.globalAlpha = warmish ? 0.3 : 0.4;
+      g.globalAlpha = warmish ? 0.42 : 0.4;
       g.lineWidth = 16 + r() * 40;
       g.beginPath();
       g.moveTo(x, -30);
@@ -183,7 +183,7 @@ export function makeBeardTexture(): THREE.CanvasTexture {
     // 3) Hebras finas: el detalle que de cerca lee como pelo de verdad.
     for (let i = 0; i < 5200; i++) {
       const x = r() * 768, y0 = -40 + r() * 620, len = 120 + r() * 380;
-      const warmish = r() < 0.3;
+      const warmish = r() < 0.44;
       g.strokeStyle = (warmish ? warm : cold)[Math.floor(r() * 4)];
       g.globalAlpha = 0.22 + r() * 0.5;
       g.lineWidth = 0.7 + r() * 1.7;

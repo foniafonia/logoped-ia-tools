@@ -779,25 +779,27 @@ export class Minifigure {
         // textura, no la geometría: es la única forma de que no lea como bulto.
         const hairTex = beardTex();
         const prof: Array<[number, number]> = [
-          [0.04, 0], [0.20, 0.14], [0.36, 0.34], [0.50, 0.6],
-          [0.60, 0.88], [0.655, 1.16], [0.67, 1.36], [0.64, 1.5]
+          [0.00, 0.00], [0.15, 0.06], [0.24, 0.15], [0.31, 0.28],
+          [0.36, 0.45], [0.40, 0.65], [0.428, 0.88], [0.45, 1.12],
+          [0.478, 1.34], [0.50, 1.52], [0.52, 1.66], [0.51, 1.74]
         ];
         const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
         lathe.scale(1, 1, 0.74);
-        this.root.add(this.texMesh(lathe, hairTex, 0, 2.10, 0.26));
+        this.root.add(this.texMesh(lathe, hairTex, 0, 1.88, 0.26));
         // Patillas de pelo que suben por las mejillas y enmarcan la cara
         [-1, 1].forEach((sx) => {
-          const cheek = new THREE.CylinderGeometry(0.13, 0.2, 0.5, 16);
+          const cheek = new THREE.CylinderGeometry(0.115, 0.17, 0.48, 16);
           const m = this.texMesh(cheek, hairTex, sx * 0.38, 3.62, 0.04);
           m.scale.set(0.95, 1, 0.72);
           m.rotation.z = sx * 0.12;
           this.root.add(m);
         });
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
-        const mus = new THREE.SphereGeometry(0.15, 14, 10);
-        [-0.15, 0.15].forEach((mx) => {
-          const m = this.texMesh(mus, hairTex, mx, 3.84, 0.45);
-          m.scale.set(1.12, 0.5, 0.62);
+        const mus = new THREE.SphereGeometry(0.17, 16, 12);
+        [-1, 1].forEach((sx) => {
+          const m = this.texMesh(mus, hairTex, sx * 0.15, 3.79, 0.45);
+          m.scale.set(1.05, 0.44, 0.6);
+          m.rotation.z = -sx * 0.2;    // puntas ligeramente hacia abajo
           this.root.add(m);
         });
       } else {
