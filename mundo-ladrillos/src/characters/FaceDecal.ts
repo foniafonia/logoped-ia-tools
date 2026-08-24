@@ -145,10 +145,10 @@ export function makeBeardTexture(): THREE.CanvasTexture {
   return canvasTex(768, 768, (g) => {
     // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
     const base = g.createLinearGradient(0, 0, 0, 768);
-    base.addColorStop(0, '#3f3a33');
-    base.addColorStop(0.35, '#585349');
-    base.addColorStop(0.75, '#726c63');
-    base.addColorStop(1, '#8b857c');
+    base.addColorStop(0, '#37332c');
+    base.addColorStop(0.35, '#4c483f');
+    base.addColorStop(0.75, '#635e56');
+    base.addColorStop(1, '#7a746c');
     g.fillStyle = base; g.fillRect(0, 0, 768, 768);
 
     const cold = ['#b3aea7', '#9a948c', '#827c74', '#6a645c'];
@@ -197,7 +197,7 @@ export function makeBeardTexture(): THREE.CanvasTexture {
     // 4) Puntas: hebras claras y sueltas en la parte baja (remate irregular).
     for (let i = 0; i < 900; i++) {
       const x = r() * 768, y0 = 470 + r() * 260;
-      g.strokeStyle = r() < 0.5 ? '#c4beb6' : '#aea89f';
+      g.strokeStyle = r() < 0.5 ? '#a9a39b' : '#948e86';
       g.globalAlpha = 0.3 + r() * 0.55;
       g.lineWidth = 0.7 + r() * 1.3;
       g.beginPath();

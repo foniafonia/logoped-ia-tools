@@ -97,7 +97,7 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const s = Math.sin(th), c = Math.cos(th);
     const centro = 1 - Math.abs(u - 0.5) * 2;          // 1 en el centro, 0 en los lados
     // más largos en el centro; los laterales suben más arriba y son cortos
-    const len = 0.5 + 1.22 * Math.pow(centro, 1.25) + (((i * 29) % 7) / 7) * 0.14;
+    const len = 0.44 + 1.03 * Math.pow(centro, 1.25) + (((i * 29) % 7) / 7) * 0.12;
     const rootY = Y + (1 - centro) * 0.34;             // los laterales nacen más altos
     const rad = 0.20 + 0.085 * centro;
     out.push({
@@ -122,7 +122,7 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const s = Math.sin(th), c = Math.cos(th);
     const centro = 1 - Math.abs(u - 0.5) * 2;
     const jitter = ((i * 37) % 11) / 11;               // determinista
-    const len = 0.38 + 1.0 * Math.pow(centro, 1.2) + jitter * 0.18;
+    const len = 0.34 + 0.84 * Math.pow(centro, 1.2) + jitter * 0.15;
     out.push({
       root: V(R * 0.82 * s, Y - 0.06 + (1 - centro) * 0.26, Z + R * 0.7 * c + 0.16 + (i % 2 ? 0.07 : -0.03)),
       dir: V(s * (0.26 - 0.66 * (1 - centro)), -1, c * 0.18 + 0.3),
