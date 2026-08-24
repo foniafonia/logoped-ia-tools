@@ -782,13 +782,23 @@ export class Minifigure {
         // textura, no la geometría: es la única forma de que no lea como bulto.
         const hairTex = beardTex();
         const prof: Array<[number, number]> = [
-          [0.00, 0.00], [0.15, 0.06], [0.24, 0.15], [0.31, 0.28],
-          [0.36, 0.45], [0.40, 0.65], [0.428, 0.88], [0.45, 1.12],
-          [0.478, 1.30], [0.50, 1.44], [0.52, 1.55], [0.51, 1.62]
+          [0.00, 0.00], [0.17, 0.06], [0.28, 0.15], [0.36, 0.28],
+          [0.42, 0.45], [0.465, 0.65], [0.49, 0.88], [0.505, 1.12],
+          [0.515, 1.30], [0.522, 1.44], [0.526, 1.55], [0.515, 1.62]
         ];
         const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
         lathe.scale(1, 1, 0.74);
         this.root.add(this.texMesh(lathe, hairTex, 0, 2.02, 0.26));
+        // Mejillas: la barba sube por los lados de la mandíbula (como en la hoja)
+        // dejando libre el centro para la boca. Con la MISMA textura de pelo:
+        // antes eran cajas planas del color del skin y leían como bandas blancas.
+        const jaw = new THREE.SphereGeometry(0.25, 18, 14);
+        [-1, 1].forEach((sx) => {
+          const m = this.texMesh(jaw, hairTex, sx * 0.37, 3.76, 0.24);
+          m.scale.set(0.62, 1.0, 0.86);
+          m.rotation.z = sx * 0.06;
+          this.root.add(m);
+        });
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
         const mus = new THREE.SphereGeometry(0.17, 16, 12);
         [-1, 1].forEach((sx) => {
