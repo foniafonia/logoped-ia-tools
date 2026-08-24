@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
+import { buildBeardGeometry, buildMustacheGeometry } from './BeardSculpt';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -435,7 +436,7 @@ export class Minifigure {
     grow.forEach(([gx, gy], i) => {
       const mat = new THREE.MeshPhysicalMaterial({
         map: beardFuzz(i), transparent: true, alphaTest: 0.34,
-        metalness: 0, roughness: 0.72, clearcoat: 0.12, depthWrite: true
+        metalness: 0, roughness: 0.9, clearcoat: 0, sheen: 0.4, sheenRoughness: 0.9, depthWrite: true
       });
       const m = new THREE.Mesh(geo, mat);
       m.position.set(x, y, z);
@@ -451,11 +452,16 @@ export class Minifigure {
   /** Malla con TEXTURA pintada (cara impresa, pelo, bordado) y acabado plástico. */
   private texMesh(
     geo: THREE.BufferGeometry, tex: THREE.Texture, x: number, y: number, z: number,
-    opts: { cutout?: boolean; side?: THREE.Side } = {}
+    opts: { cutout?: boolean; side?: THREE.Side; hair?: boolean; cloth?: boolean } = {}
   ): THREE.Mesh {
+    // Material por familia: el pelo y la tela NO deben brillar como el plástico.
+    const rough = opts.hair ? 0.86 : opts.cloth ? 0.8 : 0.42;
+    const sideDefault = opts.hair ? THREE.DoubleSide : THREE.FrontSide;
+    const coat = opts.hair ? 0.0 : opts.cloth ? 0.06 : 0.45;
     const mat = new THREE.MeshPhysicalMaterial({
-      map: tex, metalness: 0, roughness: 0.42, clearcoat: 0.45, clearcoatRoughness: 0.3,
-      transparent: !!opts.cutout, alphaTest: opts.cutout ? 0.25 : 0, side: opts.side ?? THREE.FrontSide
+      map: tex, metalness: 0, roughness: rough, clearcoat: coat, clearcoatRoughness: 0.4,
+      sheen: opts.hair ? 0.5 : 0, sheenRoughness: 0.9,
+      transparent: !!opts.cutout, alphaTest: opts.cutout ? 0.25 : 0, side: opts.side ?? sideDefault
     });
     const m = new THREE.Mesh(geo, mat);
     m.position.set(x, y, z);
@@ -607,23 +613,25 @@ export class Minifigure {
     // --- Piernas cortas (pivote en la cadera, y ~1.25) ---
     this.legL.position.set(-0.32, 1.25, 0);
     this.legR.position.set(0.32, 1.25, 0);
-    this.legL.add(this.box(0.6, 1.2, 0.8, s.legs, 0, -0.6, 0));
-    this.legR.add(this.box(0.6, 1.2, 0.8, s.legs, 0, -0.6, 0));
-    this.legL.add(this.box(0.62, 0.16, 0.9, 0x3a2e24, 0, -1.18, 0.05)); // pie
-    this.legR.add(this.box(0.62, 0.16, 0.9, 0x3a2e24, 0, -1.18, 0.05));
+    const LL = s.printed ? 0.86 : 1.2;                       // pierna más corta = más rechoncho
+    this.legL.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
+    this.legR.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
+    const FW = s.printed ? 0.56 : 0.62, FD = s.printed ? 0.78 : 0.9;
+    this.legL.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05)); // pie
+    this.legR.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05));
     this.root.add(this.legL, this.legR);
 
     // --- Cadera + torso trapezoidal ---
     this.root.add(this.box(1.32, 0.5, 0.85, s.legs, 0, 1.5, 0)); // cadera
-    this.root.add(this.box(1.2, 1.4, 0.8, s.torso, 0, 2.5, 0));  // torso
-    this.root.add(this.box(1.5, 0.7, 0.86, s.torso, 0, 3.0, 0)); // hombros anchos
+    this.root.add(this.box(1.2, s.printed ? 1.24 : 1.4, 0.8, s.torso, 0, s.printed ? 2.44 : 2.5, 0));  // torso
+    this.root.add(this.box(s.printed ? 1.30 : 1.5, 0.7, 0.86, s.torso, 0, s.printed ? 2.88 : 3.0, 0)); // hombros
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
-    this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
+    this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, s.printed ? 2.93 : 3.05, 0.38)); // cuello en V
 
     if (s.printed) {
       // TORSO IMPRESO: como la serigrafía de un torso real. Pinta chaleco,
       // costuras negras, pliegues y la prenda interior beige con detalles dorados.
-      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.22, 1.26), torsoTex(), 0, 2.67, 0.445));
+      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.22, 1.26), torsoTex(), 0, 2.55, 0.445));
       // Cinturón: franjas de cuero y el gran nudo ovalado delineado en negro.
       this.root.add(this.texMesh(new THREE.PlaneGeometry(1.38, 0.3), beltTex(), 0, 1.9, 0.462));
     }
@@ -699,18 +707,21 @@ export class Minifigure {
     }
 
     // --- Brazos cortos (pivote en el hombro, y ~3.15) ---
-    this.armL.position.set(-0.82, 3.15, 0.05);
-    this.armR.position.set(0.82, 3.15, 0.05);
-    this.armR.rotation.z = -0.18;
+    const AX = s.printed ? 0.72 : 0.82;
+    this.armL.position.set(-AX, s.printed ? 3.02 : 3.15, 0.05);
+    this.armR.position.set(AX, s.printed ? 3.02 : 3.15, 0.05);
+    this.armR.rotation.z = s.printed ? 0.36 : -0.18;
     // Gesto de saludo: brazo IZQUIERDO en alto y hacia fuera (el derecho suele llevar cayado)
     if (s.greeting) { this.armL.rotation.z = 2.55; this.armL.rotation.x = 0.35; }
-    else { this.armL.rotation.z = 0.18; }
-    this.armL.add(this.box(0.42, 1.05, 0.52, s.arms, 0, -0.5, 0.08));
-    this.armR.add(this.box(0.42, 1.05, 0.52, s.arms, 0, -0.5, 0.08));
-    const handGeo = new THREE.TorusGeometry(0.19, 0.1, 10, 18);
+    else { this.armL.rotation.z = s.printed ? -0.36 : 0.18; }
+    const AL = s.printed ? 1.06 : 1.05;                 // brazo compacto
+    const AW = s.printed ? 0.56 : 0.44, AD = s.printed ? 0.62 : 0.54;
+    this.armL.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
+    this.armR.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
+    const handGeo = new THREE.TorusGeometry(s.printed ? 0.25 : 0.19, s.printed ? 0.115 : 0.1, 12, 22);
     handGeo.rotateX(Math.PI / 2);
     const handL = new THREE.Mesh(handGeo, this.plastic.get(s.hands));
-    handL.position.set(0, -1.05, 0.16); handL.castShadow = true;
+    handL.position.set(0, -(AL + 0.06), 0.16); handL.castShadow = true;
     this.armL.add(handL); this.armR.add(handL.clone());
     this.root.add(this.armL, this.armR);
 
@@ -731,7 +742,7 @@ export class Minifigure {
     }
 
     // --- Cuello corto ---
-    this.root.add(this.cyl(0.26, 0.16, s.head, 0, 3.35, 0));
+    this.root.add(this.cyl(0.26, 0.16, s.head, 0, s.printed ? 3.22 : 3.35, 0));
 
     // --- Cabeza + cara ---
     if (s.headStyle === 'ninja') {
@@ -742,13 +753,14 @@ export class Minifigure {
       this.addBrows(4.2, 0.58, emotion, 0x2a2016, 0.22);
       this.addMouth(3.62, 0.57, emotion);
     } else {
-      this.root.add(this.cyl(0.55, 0.92, s.head, 0, 3.9, 0, 30));           // cabeza de piel
+      const HR = s.printed ? 0.66 : 0.55, HH = s.printed ? 1.06 : 0.92, HY = s.printed ? 3.84 : 3.9;
+      this.root.add(this.cyl(HR, HH, s.head, 0, HY, 0, 34));               // cabeza de piel
       if (s.printed) {
         // CARA IMPRESA: placa curva que envuelve el frente de la cabeza con la
         // cara pintada (ojos, cejas, ceño, arrugas y boca). Como una calcomanía.
         const arc = Math.PI * 0.7;
-        const plate = new THREE.CylinderGeometry(0.558, 0.558, 0.92, 40, 1, true, -arc / 2, arc);
-        this.root.add(this.texMesh(plate, makeElderFaceTexture(emotion), 0, 3.9, 0, { cutout: true }));
+        const plate = new THREE.CylinderGeometry(HR + 0.008, HR + 0.008, HH, 44, 1, true, -arc / 2, arc);
+        this.root.add(this.texMesh(plate, makeElderFaceTexture(emotion), 0, HY, 0, { cutout: true }));
       } else {
       this.addEyes(3.98, 0.54, 0.19);
       this.addBrows(4.15, 0.54, emotion, 0x3a2a1a, 0.2, s.feminine);
@@ -800,42 +812,25 @@ export class Minifigure {
         this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
       }
       if (s.printed) {
-        // Barba de PELO: silueta torneada (ancha en las mejillas, con cuerpo y
-        // punta redondeada) + textura de hebras veteadas. El pelo lo aporta la
-        // textura, no la geometría: es la única forma de que no lea como bulto.
+        // BARBA ESCULPIDA: malla propia con masas grandes (mechones), masas
+        // secundarias irregulares y remate dividido en puntas. Sustituye al
+        // torno de revolución, que solo sabía hacer conos y cortinas.
         const hairTex = beardTex();
-        const prof: Array<[number, number]> = [
-          [0.00, 0.00], [0.17, 0.06], [0.28, 0.15], [0.36, 0.28],
-          [0.42, 0.45], [0.465, 0.65], [0.49, 0.88], [0.505, 1.12],
-          [0.515, 1.30], [0.522, 1.44], [0.526, 1.55], [0.515, 1.62]
-        ];
-        const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
-        lathe.scale(1, 1, 0.74);
-        this.root.add(this.texMesh(lathe, hairTex, 0, 2.02, 0.26));
-        this.addFuzz(lathe, 0, 2.02, 0.26, new THREE.Vector3(1, 1, 1));
-        // Mejillas: la barba sube por los lados de la mandíbula (como en la hoja)
-        // dejando libre el centro para la boca. Con la MISMA textura de pelo:
-        // antes eran cajas planas del color del skin y leían como bandas blancas.
+        const geo = buildBeardGeometry({ height: 1.62, width: 0.74, depth: 0.8, lobes: 5 });
+        this.root.add(this.texMesh(geo, hairTex, 0, 1.92, 0.20, { hair: true }));
+        this.addFuzz(geo, 0, 1.92, 0.20, new THREE.Vector3(1, 1, 1), 0, 0.8);
+        // Masas de mejilla: la barba nace ahí y envuelve la mandíbula.
         [-1, 1].forEach((sx) => {
-          // Cilindro en vez de esfera: la UV corre limpia de arriba abajo (una
-          // esfera hace remolino en el polo). Se ensancha hacia abajo, como la
-          // barba real, y la textura va girada para que el pelo caiga en
-          // diagonal hacia el centro.
-          const jaw = new THREE.CylinderGeometry(0.18, 0.28, 0.66, 20, 1);
-          const m = this.texMesh(jaw, beardTexRot(sx * 0.38), sx * 0.35, 3.68, 0.2);
-          m.scale.set(1, 1, 0.82);
-          m.rotation.z = sx * 0.14;      // se abre hacia la oreja
+          const jaw = new THREE.CylinderGeometry(0.15, 0.23, 0.72, 22, 1);
+          const m = this.texMesh(jaw, beardTexRot(sx * 0.38), sx * 0.53, 3.5, 0.14, { hair: true });
+          m.scale.set(1, 1, 0.86);
+          m.rotation.z = sx * 0.05;
           this.root.add(m);
-          this.addFuzz(jaw, sx * 0.35, 3.68, 0.2, new THREE.Vector3(1, 1, 0.82), sx * 0.14, 0.6);
+          this.addFuzz(jaw, sx * 0.53, 3.5, 0.14, new THREE.Vector3(1, 1, 0.86), sx * 0.05, 0.5);
         });
-        // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
-        const mus = new THREE.SphereGeometry(0.17, 16, 12);
-        [-1, 1].forEach((sx) => {
-          const m = this.texMesh(mus, beardTexRot(sx * 1.35), sx * 0.14, 3.76, 0.46);
-          m.scale.set(1.02, 0.4, 0.55);
-          m.rotation.z = -sx * 0.2;    // puntas ligeramente hacia abajo
-          this.root.add(m);
-        });
+        // Bigote: pieza propia que cae por los extremos y enmarca la boca.
+        const mus = buildMustacheGeometry();
+        this.root.add(this.texMesh(mus, beardTexRot(1.35), 0, 3.75, 0.46, { hair: true }));
       } else {
       // Cuerpo: cono que arranca en la barbilla (~3.45) y baja en punta al pecho
       const bg = new THREE.ConeGeometry(0.5, 1.45, 22);
@@ -952,21 +947,21 @@ export class Minifigure {
         const stripe = s.turbanStripe ?? 0xc3c8d0;    // hilo plateado
         const hair = 0x3a2a1c;
         // Cúpula ajustada
-        const dome = new THREE.SphereGeometry(0.6, 30, 20, 0, Math.PI * 2, 0, Math.PI / 2);
+        const dome = new THREE.SphereGeometry(s.printed ? 0.70 : 0.6, 34, 22, 0, Math.PI * 2, 0, Math.PI / 2);
         const domeMesh = s.printed
-          ? this.texMesh(dome, capTex(), 0, 4.24, -0.02)
+          ? this.texMesh(dome, capTex(), 0, 4.16, -0.02, { cloth: true })
           : this.mesh(dome, hw, 0, 4.24, -0.02);
-        domeMesh.scale.set(1.02, 1.04, 1.02);
+        domeMesh.scale.set(s.printed ? 1.06 : 1.02, s.printed ? 0.60 : 1.04, s.printed ? 1.06 : 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
-        const brim = new THREE.TorusGeometry(0.6, 0.085, 14, 36);
+        const brim = new THREE.TorusGeometry(s.printed ? 0.70 : 0.6, s.printed ? 0.1 : 0.085, 16, 40);
         brim.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(brim, hw, 0, 4.24, -0.02));
+        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.16 : 4.24, -0.02));
         if (s.printed) {
           // Banda bordada: cono que sigue la curva del gorro, justo sobre el
           // borde enrollado (posición controlada en 3D, no por UV de la esfera).
-          const band = new THREE.CylinderGeometry(0.567, 0.611, 0.23, 48, 1, true);
-          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.40, -0.02));
+          const band = new THREE.CylinderGeometry(0.70, 0.742, 0.2, 52, 1, true);
+          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.31, -0.02, { cloth: true }));
         } else {
         // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
         const bandSpecs: Array<[number, number, number]> = [
@@ -981,9 +976,10 @@ export class Minifigure {
         });
         }
         // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
-        this.root.add(this.box(0.16, 0.5, 0.42, hair, -0.52, 3.86, -0.05));
-        this.root.add(this.box(0.16, 0.5, 0.42, hair, 0.52, 3.86, -0.05));
-        this.root.add(this.box(0.98, 0.42, 0.28, hair, 0, 3.9, -0.46));
+        const HX = s.printed ? 0.62 : 0.52, HYY = s.printed ? 3.82 : 3.86;
+        this.root.add(this.box(0.16, 0.5, 0.42, hair, -HX, HYY, -0.05));
+        this.root.add(this.box(0.16, 0.5, 0.42, hair, HX, HYY, -0.05));
+        this.root.add(this.box(s.printed ? 1.1 : 0.98, 0.42, 0.28, hair, 0, HYY + 0.04, s.printed ? -0.54 : -0.46));
         break;
       }
       case 'longHair': {

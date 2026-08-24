@@ -19,7 +19,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-const BG_LIGHT = new THREE.Color(0xffffff);
+const BG_LIGHT = new THREE.Color(0xf7f7f8);
 const BG_DARK = new THREE.Color(0x1d1f24);
 scene.background = BG_LIGHT.clone();
 
@@ -29,25 +29,31 @@ plastic.update({ roughness: 0.32, clearcoat: 0.55, envMapIntensity: 1.15 });
 // Suelo blanco que solo recoge una sombra de contacto muy tenue.
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(80, 80),
-  new THREE.ShadowMaterial({ opacity: 0.12 })
+  new THREE.ShadowMaterial({ opacity: 0.3 })
 );
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
+(window as any).__floor = floor;   // permite ocultarlo al medir la silueta
 
-// Iluminación de estudio BLANCA y uniforme.
-scene.add(new THREE.HemisphereLight(0xffffff, 0xdedede, 1.15));
-const fill = new THREE.DirectionalLight(0xffffff, 0.9); fill.position.set(-6, 5, 6); scene.add(fill);
-const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(6, 4, -5); scene.add(rim);
-const key = new THREE.DirectionalLight(0xffffff, 0.7);
-key.position.set(0.5, 12, 3.5);
+// ILUMINACIÓN DE PRODUCTO: key grande y suave + fill + rim discreta.
+// Una luz plana y uniforme aplana el volumen; esto lo modela.
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8dc, 0.62));   // ambiente contenido
+// KEY: grande, alta y ligeramente a la izquierda; es la que da la forma.
+const key = new THREE.DirectionalLight(0xfffaf2, 2.1);
+key.position.set(-4.5, 9.5, 7.5);
 key.castShadow = true;
 key.shadow.mapSize.set(2048, 2048);
-key.shadow.camera.near = 1; key.shadow.camera.far = 30;
-key.shadow.camera.left = -6; key.shadow.camera.right = 6;
-key.shadow.camera.top = 6; key.shadow.camera.bottom = -6;
-key.shadow.radius = 6; key.shadow.bias = -0.0005;
+key.shadow.camera.near = 1; key.shadow.camera.far = 40;
+key.shadow.camera.left = -7; key.shadow.camera.right = 7;
+key.shadow.camera.top = 8; key.shadow.camera.bottom = -3;
+key.shadow.radius = 9; key.shadow.bias = -0.0004;
 scene.add(key);
+// FILL: suave desde el lado opuesto, sin sombra, para abrir las sombras.
+const fill = new THREE.DirectionalLight(0xeef2ff, 0.75); fill.position.set(6, 3.5, 5); scene.add(fill);
+// RIM: recorta el contorno contra el fondo y separa la figura.
+const rim = new THREE.DirectionalLight(0xffffff, 1.15); rim.position.set(2.5, 5.5, -7); scene.add(rim);
+const rim2 = new THREE.DirectionalLight(0xffffff, 0.5); rim2.position.set(-5, 3, -5); scene.add(rim2);
 
 // --- El personaje (se puede reconstruir para cambiar la expresión) ---
 const EMOTIONS: Emotion[] = ['worried', 'neutral', 'stern', 'alert', 'happy', 'awe'];
@@ -64,19 +70,19 @@ function buildYeho(): void {
 buildYeho();
 
 const TORSO_Y = 2.8;
-const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 200);
-const HOME = new THREE.Vector3(0, TORSO_Y, 11);
+const camera = new THREE.PerspectiveCamera(20, innerWidth / innerHeight, 0.1, 200);   // ≈85 mm
+const HOME = new THREE.Vector3(0, TORSO_Y, 20);
 camera.position.copy(HOME);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.target.set(0, TORSO_Y - 0.3, 0);
-controls.minDistance = 6; controls.maxDistance = 20;
+controls.minDistance = 9; controls.maxDistance = 34;
 controls.maxPolarAngle = Math.PI * 0.52;
 controls.update();
 
 const fx = setupPreciousRender(renderer, scene, camera, {
-  exposure: 1.0,
+  exposure: 1.12,
   bloom: { strength: 0.08, radius: 0.4, threshold: 1.0 }
 });
 
