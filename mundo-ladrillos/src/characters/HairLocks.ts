@@ -18,6 +18,9 @@ export interface LockSpec {
   bend?: THREE.Vector3;     // desvío del extremo (curvatura)
   flatten?: number;         // aplastado en Z (1 = redondo)
   taper?: number;           // 0..1, cuánto adelgaza la punta
+  /** Franja de la textura que usa este mechón (0..1). Da a cada uno un tono
+   *  ligeramente distinto para que se lean por separado dentro de la masa. */
+  shade?: number;
 }
 
 /** Tubo de radio decreciente barrido sobre una curva suave. */
@@ -50,7 +53,8 @@ export function buildLock(s: LockSpec, radialSeg = 9, steps = 14): THREE.BufferG
         p.y + r * (cx * N.y + sy * B.y * fz),
         p.z + r * (cx * N.z + sy * B.z * fz)
       );
-      uv.push(j / radialSeg, 1 - t);   // v cae con el mechón → el pelo corre a lo largo
+      // franja propia de la textura (tono) + v a lo largo del mechón
+      uv.push((s.shade ?? 0) + (j / radialSeg) * 0.22, 1 - t);
     }
   }
   const row = radialSeg + 1;
@@ -105,7 +109,8 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
       // se curvan hacia el centro y hacia delante al caer
       bend: V(-s * (0.14 + 0.42 * (1 - centro)), -0.05, 0.08 + 0.12 * centro),
       flatten: 0.8,
-      taper: 0.5
+      taper: 0.5,
+      shade: ((i * 3) % 7) / 9
     });
   }
 
@@ -119,13 +124,33 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const jitter = ((i * 37) % 11) / 11;               // determinista
     const len = 0.38 + 1.0 * Math.pow(centro, 1.2) + jitter * 0.18;
     out.push({
-      root: V(R * 0.82 * s, Y - 0.06 + (1 - centro) * 0.26, Z + R * 0.7 * c + 0.16),
+      root: V(R * 0.82 * s, Y - 0.06 + (1 - centro) * 0.26, Z + R * 0.7 * c + 0.16 + (i % 2 ? 0.07 : -0.03)),
       dir: V(s * (0.26 - 0.66 * (1 - centro)), -1, c * 0.18 + 0.3),
       length: len,
       radius: 0.135 + 0.06 * centro,
       bend: V(-s * (0.1 + 0.34 * (1 - centro)), -0.03, 0.1),
       flatten: 0.78,
-      taper: 0.55
+      taper: 0.55,
+      shade: ((i * 4 + 2) % 7) / 9
+    });
+  }
+  // --- 8 mechones cortos de MEJILLA: la barba vuelve a cubrir los laterales
+  //     de la cara sin ensanchar el pico de abajo ---
+  const C = 8;
+  for (let i = 0; i < C; i++) {
+    const sx = i < C / 2 ? -1 : 1;
+    const k = i % (C / 2);
+    const th = sx * (1.02 + k * 0.3);
+    const sn = Math.sin(th), cs = Math.cos(th);
+    out.push({
+      root: V(R * 0.96 * sn, Y + 0.46 - k * 0.1, Z + R * 0.8 * cs),
+      dir: V(sn * 0.16, -1, cs * 0.24 + 0.12),
+      length: 0.52 + k * 0.1,
+      radius: 0.16,
+      bend: V(-sn * 0.2, -0.02, 0.06),
+      flatten: 0.8,
+      taper: 0.5,
+      shade: ((i * 5) % 7) / 9
     });
   }
   return out;

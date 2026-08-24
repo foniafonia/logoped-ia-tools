@@ -644,10 +644,13 @@ export class Minifigure {
       // Cinturón: franjas de cuero y el gran nudo ovalado delineado en negro.
       this.root.add(this.texMesh(new THREE.PlaneGeometry(1.38, 0.3), beltTex(), 0, 1.9, 0.462));
       // Volumen real: dos bandas superpuestas y un nudo central saliente.
-      this.root.add(this.box(1.4, 0.12, 0.94, 0x5d3a20, 0, 1.99, 0));
-      this.root.add(this.box(1.4, 0.1, 0.93, 0x714b2c, 0, 1.83, 0));
-      const knot = new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), this.plastic.get(0x7a5230));
-      knot.position.set(0, 1.9, 0.49); knot.scale.set(1.15, 0.72, 0.5); knot.castShadow = true;
+      // Cuatro bandas de cuero superpuestas, cada una con su tono y grosor
+      this.root.add(this.box(1.42, 0.11, 0.95, 0x5d3a20, 0, 2.01, 0));
+      this.root.add(this.box(1.41, 0.1, 0.945, 0x7a5230, 0, 1.9, 0));
+      this.root.add(this.box(1.4, 0.09, 0.94, 0x50331c, 0, 1.8, 0));
+      this.root.add(this.box(1.38, 0.08, 0.93, 0x6b452a, 0, 1.71, 0));
+      const knot = new THREE.Mesh(new THREE.SphereGeometry(0.23, 20, 16), this.plastic.get(0x7a5230));
+      knot.position.set(0, 1.89, 0.5); knot.scale.set(1.3, 0.86, 0.62); knot.castShadow = true;
       this.root.add(knot);
     }
     // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
