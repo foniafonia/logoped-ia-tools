@@ -17,6 +17,10 @@ export interface BeardOpts {
   width?: number;       // radio máximo
   depth?: number;       // aplastado frontal/trasero (1 = redondo)
   lobes?: number;       // nº de mechones principales
+  /** Cuánto SUBE la barba por los laterales (patillas). El borde superior no es
+   *  un anillo plano: baja en el frente (para dejar la boca libre) y sube por
+   *  las mejillas, de modo que patillas y barba son UNA SOLA masa continua. */
+  sideRise?: number;
   seed?: number;
 }
 
@@ -43,6 +47,7 @@ export function buildBeardGeometry(o: BeardOpts = {}): THREE.BufferGeometry {
   const R = o.width ?? 0.46;
   const D = o.depth ?? 0.74;
   const L = o.lobes ?? 5;
+  const RISE = o.sideRise ?? 0.44;
   const SU = 96, SV = 56;
 
   const pos: number[] = [], uv: number[] = [], idx: number[] = [];
@@ -59,6 +64,10 @@ export function buildBeardGeometry(o: BeardOpts = {}): THREE.BufferGeometry {
     for (let iu = 0; iu <= SU; iu++) {
       const u = iu / SU;
       const th = u * Math.PI * 2;
+      // Subida lateral: nula justo al frente (boca libre), máxima en mejillas y
+      // nuca. Solo actúa en la parte alta (v²) para no deformar la caída.
+      const f = Math.max(0, Math.cos(th));
+      const rise = RISE * (1 - f * f) * v * v;
 
       // MASAS PRINCIPALES: mechones anchos alrededor (70 % de la forma)
       const mech = 0.13 * Math.cos(L * th) * (0.35 + 0.65 * carve);
@@ -72,7 +81,7 @@ export function buildBeardGeometry(o: BeardOpts = {}): THREE.BufferGeometry {
       const r = Math.max(0.02, base * (1 + mech + sec + tips) + front * R);
       const x = r * Math.sin(th);
       const z = r * Math.cos(th) * D;
-      pos.push(x, y, z);
+      pos.push(x, y + rise, z);
       uv.push(u, v);
     }
   }

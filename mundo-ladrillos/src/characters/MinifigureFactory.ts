@@ -816,18 +816,9 @@ export class Minifigure {
         // secundarias irregulares y remate dividido en puntas. Sustituye al
         // torno de revolución, que solo sabía hacer conos y cortinas.
         const hairTex = beardTex();
-        const geo = buildBeardGeometry({ height: 1.62, width: 0.74, depth: 0.8, lobes: 5 });
+        const geo = buildBeardGeometry({ height: 1.62, width: 0.74, depth: 0.8, lobes: 5, sideRise: 0.3 });
         this.root.add(this.texMesh(geo, hairTex, 0, 1.92, 0.20, { hair: true }));
         this.addFuzz(geo, 0, 1.92, 0.20, new THREE.Vector3(1, 1, 1), 0, 0.8);
-        // Masas de mejilla: la barba nace ahí y envuelve la mandíbula.
-        [-1, 1].forEach((sx) => {
-          const jaw = new THREE.CylinderGeometry(0.15, 0.23, 0.72, 22, 1);
-          const m = this.texMesh(jaw, beardTexRot(sx * 0.38), sx * 0.53, 3.5, 0.14, { hair: true });
-          m.scale.set(1, 1, 0.86);
-          m.rotation.z = sx * 0.05;
-          this.root.add(m);
-          this.addFuzz(jaw, sx * 0.53, 3.5, 0.14, new THREE.Vector3(1, 1, 0.86), sx * 0.05, 0.5);
-        });
         // Bigote: pieza propia que cae por los extremos y enmarca la boca.
         const mus = buildMustacheGeometry();
         this.root.add(this.texMesh(mus, beardTexRot(1.35), 0, 3.75, 0.46, { hair: true }));
@@ -949,19 +940,19 @@ export class Minifigure {
         // Cúpula ajustada
         const dome = new THREE.SphereGeometry(s.printed ? 0.70 : 0.6, 34, 22, 0, Math.PI * 2, 0, Math.PI / 2);
         const domeMesh = s.printed
-          ? this.texMesh(dome, capTex(), 0, 4.16, -0.02, { cloth: true })
+          ? this.texMesh(dome, capTex(), 0, 4.25, -0.02, { cloth: true })
           : this.mesh(dome, hw, 0, 4.24, -0.02);
         domeMesh.scale.set(s.printed ? 1.06 : 1.02, s.printed ? 0.60 : 1.04, s.printed ? 1.06 : 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
         const brim = new THREE.TorusGeometry(s.printed ? 0.70 : 0.6, s.printed ? 0.1 : 0.085, 16, 40);
         brim.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.16 : 4.24, -0.02));
+        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.25 : 4.24, -0.02));
         if (s.printed) {
           // Banda bordada: cono que sigue la curva del gorro, justo sobre el
           // borde enrollado (posición controlada en 3D, no por UV de la esfera).
           const band = new THREE.CylinderGeometry(0.70, 0.742, 0.2, 52, 1, true);
-          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.31, -0.02, { cloth: true }));
+          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.40, -0.02, { cloth: true }));
         } else {
         // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
         const bandSpecs: Array<[number, number, number]> = [
