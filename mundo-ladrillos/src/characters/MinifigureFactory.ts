@@ -70,25 +70,29 @@ export interface MinifigureSkin {
   mantle?: number;            // manto/chal sobre los hombros (ancianos/sacerdote)
 }
 
-/** Yehoshúa (según frame): AZUL dominante — chaleco/pantalón azul, cinturón
- *  marrón, barba larga blanca-canosa, turbante cobalto y bastón. */
+/** Yehoshúa — según la HOJA DE PERSONAJE OFICIAL (documento de producción):
+ *  túnica azul profundo, MANGAS CAFÉ, PIERNAS AZULES con botas café oscuro,
+ *  gorro azul marino con bordado PLATEADO, barba gris plateada muy larga,
+ *  expresión de preocupación contenida. La hoja prohíbe capa/bastón/espada/
+ *  objetos, así que el skin canónico va SIN accesorio (el juego puede añadir
+ *  shofar/bastón aparte al instanciar si lo necesita la jugabilidad). */
 export const YOSHUA_SKIN: MinifigureSkin = {
   head: 0xf4d03f,
-  torso: 0x2471c2,       // túnica azul real (biblia #2980B9)
-  belt: 0x8d4f2a,        // cinturón marrón (biblia #8D4F2A)
-  legs: 0xa9743f,        // pantalones marrón claro (biblia)
-  arms: 0x2c7bb0,        // mangas azul algo más claro
+  torso: 0x1f558f,       // túnica azul PROFUNDO
+  belt: 0x7c4a2a,        // cinturón café ancho con hebilla ovalada
+  legs: 0x21599e,        // piernas azul profundo (parte baja = botas café)
+  arms: 0x8a5a34,        // MANGAS café medio (hoja oficial, no azul)
   hands: 0xf4d03f,
-  headwear: 0x2980b9,    // turbante azul cobalto
-  headStyle: 'turban',
-  turbanStripe: 0xf4efe4, // franjas blancas
-  beard: 0xbdc3c7,       // barba larga blanca/canosa
+  headwear: 0x1c2e5a,    // gorro azul MARINO (no cobalto)
+  headStyle: 'turban',   // aprox. de gorro redondeado (sin pieza "cap" propia)
+  turbanStripe: 0xc3c8d0, // bordado con hilo PLATEADO
+  beard: 0xc4c9ce,       // barba gris plateada, muy larga y densa
   beardStyle: 'long',
-  vestPanel: 0x184e78,   // chaleco azul más oscuro (pechera)
-  collar: 0x3a7fb5,      // cuello en V azul claro
-  loincloth: 0x6e4a2c,   // faldón de cuero al frente
-  emotion: 'neutral',    // líder mayor, solemne
-  accessory: 'staff'
+  vestPanel: 0x17406e,   // pechera azul más oscura
+  collar: 0xd6c199,      // prenda interior beige/arena en la abertura central
+  loincloth: 0x6e4a2c,   // faldón/tira de la túnica (café)
+  emotion: 'worried',    // "autoridad serena + preocupación contenida"
+  accessory: 'none'      // la hoja prohíbe bastón/capa/espada/objetos
 };
 
 /** Espía 1 (ninja simpático): traje azul pizarra, máscara azulada, cara amable. */
