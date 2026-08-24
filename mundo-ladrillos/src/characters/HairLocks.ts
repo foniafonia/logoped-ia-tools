@@ -93,7 +93,7 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
   const N = 14;
   for (let i = 0; i < N; i++) {
     const u = i / (N - 1);                 // 0..1
-    const th = (-1 + 2 * u) * 1.95;        // ±112°
+    const th = (-1 + 2 * u) * 2.3;         // ±132°: envuelve también hacia atrás
     const s = Math.sin(th), c = Math.cos(th);
     const centro = 1 - Math.abs(u - 0.5) * 2;          // 1 en el centro, 0 en los lados
     // más largos en el centro; los laterales suben más arriba y son cortos
@@ -103,11 +103,11 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     out.push({
       root: V(R * s, rootY, Z + R * c * 0.92),
       // hacia dentro: cuanto más lateral, más converge al centro (barba recogida)
-      dir: V(s * (0.34 - 0.78 * (1 - centro)), -1, c * 0.26 + 0.16),
+      dir: V(s * (0.34 - 0.78 * (1 - centro)), -1, c * 0.10 + 0.03),
       length: len,
       radius: rad,
       // se curvan hacia el centro y hacia delante al caer
-      bend: V(-s * (0.14 + 0.42 * (1 - centro)), -0.05, 0.08 + 0.12 * centro),
+      bend: V(-s * (0.14 + 0.42 * (1 - centro)), -0.05, 0.01 + 0.03 * centro),
       flatten: 0.8,
       taper: 0.5,
       shade: ((i * 3) % 7) / 9
@@ -125,10 +125,10 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const len = 0.255 + 0.63 * Math.pow(centro, 1.2) + jitter * 0.11;
     out.push({
       root: V(R * 0.82 * s, Y - 0.06 + (1 - centro) * 0.26, Z + R * 0.7 * c + 0.16 + (i % 2 ? 0.07 : -0.03)),
-      dir: V(s * (0.26 - 0.66 * (1 - centro)), -1, c * 0.18 + 0.3),
+      dir: V(s * (0.26 - 0.66 * (1 - centro)), -1, c * 0.08 + 0.1),
       length: len,
       radius: 0.135 + 0.06 * centro,
-      bend: V(-s * (0.1 + 0.34 * (1 - centro)), -0.03, 0.1),
+      bend: V(-s * (0.1 + 0.34 * (1 - centro)), -0.03, 0.02),
       flatten: 0.78,
       taper: 0.55,
       shade: ((i * 4 + 2) % 7) / 9
@@ -144,10 +144,10 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const sn = Math.sin(th), cs = Math.cos(th);
     out.push({
       root: V(R * 0.96 * sn, Y + 0.46 - k * 0.1, Z + R * 0.8 * cs),
-      dir: V(sn * 0.16, -1, cs * 0.24 + 0.12),
+      dir: V(sn * 0.16, -1, cs * 0.12 + 0.04),
       length: 0.52 + k * 0.1,
       radius: 0.16,
-      bend: V(-sn * 0.2, -0.02, 0.06),
+      bend: V(-sn * 0.2, -0.02, 0.01),
       flatten: 0.8,
       taper: 0.5,
       shade: ((i * 5) % 7) / 9
@@ -194,6 +194,27 @@ export function moustacheLockSpecs(y = 3.86, z = 0.54): LockSpec[] {
       taper: 0.5
     });
   });
+  return out;
+}
+
+/** NUCA: mechones oscuros bajo el gorro por detrás (antes era una caja plana). */
+export function napeHairSpecs(y = 3.98, r = 0.6): LockSpec[] {
+  const out: LockSpec[] = [];
+  const N = 10;
+  for (let i = 0; i < N; i++) {
+    const u = i / (N - 1);
+    const th = Math.PI + (-1.15 + 2.3 * u);      // arco trasero
+    const sn = Math.sin(th), cs = Math.cos(th);
+    out.push({
+      root: V(r * sn, y, r * cs),
+      dir: V(sn * 0.14, -1, cs * 0.2),
+      length: 0.46 + (((i * 13) % 5) / 5) * 0.14,
+      radius: 0.17,
+      bend: V(0, -0.02, cs * 0.05),
+      flatten: 0.85,
+      taper: 0.55
+    });
+  }
   return out;
 }
 

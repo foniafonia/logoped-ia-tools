@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
-import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, sideHairSpecs } from './HairLocks';
+import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, sideHairSpecs, napeHairSpecs } from './HairLocks';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -1024,10 +1024,9 @@ export class Minifigure {
         // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
         if (s.printed) {
           // Pelo marrón oscuro que asoma entre el gorro y la barba (clave en la ref)
-          const hg = mergeLocks(sideHairSpecs(3.98, 0.57, 0.0));
+          const hg = mergeLocks([...sideHairSpecs(3.98, 0.57, 0.0), ...napeHairSpecs(3.96, 0.685)]);
           const hm = new THREE.Mesh(hg, this.plastic.get(hair));
           hm.castShadow = true; this.root.add(hm);
-          this.root.add(this.box(1.06, 0.4, 0.3, hair, 0, 3.9, -0.5));
         } else {
           this.root.add(this.box(0.16, 0.5, 0.42, hair, -0.52, 3.86, -0.05));
           this.root.add(this.box(0.16, 0.5, 0.42, hair, 0.52, 3.86, -0.05));

@@ -103,6 +103,14 @@ addEventListener('keydown', (e) => {
   else if (k === 'f') { dark = !dark; scene.background = (dark ? BG_DARK : BG_LIGHT).clone(); }
 });
 
+// Ganchos para grabar el vídeo de presentación (giro y órbita dirigidos).
+(window as any).__rig = {
+  get fig() { return yeho.root; },
+  camera, controls,
+  setTurn(on: boolean) { turntable = on; },
+  setWalk(on: boolean) { walking = on; }
+};
+
 const clock = new THREE.Clock();
 function loop(): void {
   requestAnimationFrame(loop);
