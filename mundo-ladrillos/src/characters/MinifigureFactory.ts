@@ -873,7 +873,7 @@ export class Minifigure {
         this.root.add(this.texMesh(mergeLocks(beardLockSpecs({ jawY: 3.46, jawR: 0.52, z: 0.08 })),
           hairTex, 0, 0, 0, { hair: true }));
         // BIGOTE: dos masas propias por delante de la barba, boca libre entre ellas.
-        this.root.add(this.texMesh(mergeLocks(moustacheLockSpecs(3.80, 0.54)),
+        this.root.add(this.texMesh(mergeLocks(moustacheLockSpecs(3.72, 0.54)),
           hairTex, 0, 0, 0, { hair: true }));
       } else {
       // Cuerpo: cono que arranca en la barbilla (~3.45) y baja en punta al pecho
