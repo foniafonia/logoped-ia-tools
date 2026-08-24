@@ -83,18 +83,18 @@ export interface MinifigureSkin {
  *  objetos, así que el skin canónico va SIN accesorio (el juego puede añadir
  *  shofar/bastón aparte al instanciar si lo necesita la jugabilidad). */
 export const YOSHUA_SKIN: MinifigureSkin = {
-  head: 0xf4d03f,
-  torso: 0x1f558f,       // túnica azul PROFUNDO
-  belt: 0x7c4a2a,        // cinturón café ancho con hebilla ovalada
-  legs: 0x21599e,        // piernas azul profundo (parte baja = botas café)
-  arms: 0x8a5a34,        // MANGAS café medio (hoja oficial, no azul)
-  hands: 0xf4d03f,
-  headwear: 0x1c2e5a,    // gorro azul MARINO (no cobalto)
+  head: 0xf2b40a,        // amarillo dorado (muestreado de la hoja)
+  torso: 0x155789,       // túnica azul PROFUNDO (muestreado)
+  belt: 0x654328,        // cinturón café oscuro (muestreado)
+  legs: 0x14508a,        // piernas azul profundo (muestreado)
+  arms: 0x6b3d24,        // MANGAS café OSCURO (muestreado; antes iban claras)
+  hands: 0xf2b40a,
+  headwear: 0x0e3a64,    // gorro azul profundo (muestreado)
   headStyle: 'cap',      // gorro redondeado ajustado con borde enrollado (hoja oficial)
   turbanStripe: 0xc3c8d0, // bordado con hilo PLATEADO
   beard: 0xc4c9ce,       // barba gris plateada, muy larga y densa
   beardStyle: 'long',
-  vestPanel: 0x17406e,   // pechera azul más oscura
+  vestPanel: 0x104263,   // pechera azul más oscura
   collar: 0xd6c199,      // prenda interior beige/arena en la abertura central
   loincloth: 0x6e4a2c,   // faldón/tira de la túnica (café)
   printed: true,         // cara impresa + barba de pelo + bordado (máxima fidelidad)
@@ -770,9 +770,12 @@ export class Minifigure {
         const mR = this.box(0.36, 0.13, 0.32, col, 0.17, 3.79, 0.42); mR.rotation.z = -0.24;
         this.root.add(mL, mR);
       }
-      // Patillas que enmarcan la cara por los lados (no cruzan la boca)
-      this.root.add(this.box(0.18, 0.62, 0.3, col, -0.44, 3.6, 0.32));
-      this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
+      // Patillas que enmarcan la cara por los lados (no cruzan la boca).
+      // En 'printed' NO se ponen: leían como dos bandas blancas sin sentido.
+      if (!s.printed) {
+        this.root.add(this.box(0.18, 0.62, 0.3, col, -0.44, 3.6, 0.32));
+        this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
+      }
       if (s.printed) {
         // Barba de PELO: silueta torneada (ancha en las mejillas, con cuerpo y
         // punta redondeada) + textura de hebras veteadas. El pelo lo aporta la
@@ -781,24 +784,16 @@ export class Minifigure {
         const prof: Array<[number, number]> = [
           [0.00, 0.00], [0.15, 0.06], [0.24, 0.15], [0.31, 0.28],
           [0.36, 0.45], [0.40, 0.65], [0.428, 0.88], [0.45, 1.12],
-          [0.478, 1.34], [0.50, 1.52], [0.52, 1.66], [0.51, 1.74]
+          [0.478, 1.30], [0.50, 1.44], [0.52, 1.55], [0.51, 1.62]
         ];
         const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
         lathe.scale(1, 1, 0.74);
-        this.root.add(this.texMesh(lathe, hairTex, 0, 1.88, 0.26));
-        // Patillas de pelo que suben por las mejillas y enmarcan la cara
-        [-1, 1].forEach((sx) => {
-          const cheek = new THREE.CylinderGeometry(0.115, 0.17, 0.48, 16);
-          const m = this.texMesh(cheek, hairTex, sx * 0.38, 3.62, 0.04);
-          m.scale.set(0.95, 1, 0.72);
-          m.rotation.z = sx * 0.12;
-          this.root.add(m);
-        });
+        this.root.add(this.texMesh(lathe, hairTex, 0, 2.02, 0.26));
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
         const mus = new THREE.SphereGeometry(0.17, 16, 12);
         [-1, 1].forEach((sx) => {
-          const m = this.texMesh(mus, hairTex, sx * 0.15, 3.79, 0.45);
-          m.scale.set(1.05, 0.44, 0.6);
+          const m = this.texMesh(mus, hairTex, sx * 0.13, 3.76, 0.46);
+          m.scale.set(0.92, 0.4, 0.55);
           m.rotation.z = -sx * 0.2;    // puntas ligeramente hacia abajo
           this.root.add(m);
         });
@@ -916,7 +911,7 @@ export class Minifigure {
         // lados y la nuca (nunca cabello largo descubierto).
         if (hw === undefined) break;
         const stripe = s.turbanStripe ?? 0xc3c8d0;    // hilo plateado
-        const hair = 0x3a2a1c;                          // café oscuro bajo el gorro
+        const hair = 0x3a2a1c;
         // Cúpula ajustada
         const dome = new THREE.SphereGeometry(0.6, 30, 20, 0, Math.PI * 2, 0, Math.PI / 2);
         const domeMesh = s.printed

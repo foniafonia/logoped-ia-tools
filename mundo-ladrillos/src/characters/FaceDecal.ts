@@ -145,14 +145,14 @@ export function makeBeardTexture(): THREE.CanvasTexture {
   return canvasTex(768, 768, (g) => {
     // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
     const base = g.createLinearGradient(0, 0, 0, 768);
-    base.addColorStop(0, '#8d9399');
-    base.addColorStop(0.35, '#a7adb3');
-    base.addColorStop(0.75, '#bec3c8');
-    base.addColorStop(1, '#d3d7da');
+    base.addColorStop(0, '#5f574e');
+    base.addColorStop(0.35, '#7c736a');
+    base.addColorStop(0.75, '#98918a');
+    base.addColorStop(1, '#b0aaa2');
     g.fillStyle = base; g.fillRect(0, 0, 768, 768);
 
-    const cold = ['#ccd1d5', '#b2b8be', '#99a0a6', '#828990'];
-    const warm = ['#c4b6a0', '#ab9a80', '#93826a', '#7d6c56']; // vetas marrones
+    const cold = ['#b3aea7', '#9a948c', '#827c74', '#6a645c'];
+    const warm = ['#a8967e', '#8f7f68', '#786952', '#5f5342']; // vetas marrones
     const r = rng(20260824);
 
     // 1) Mechones anchos: agrupan el pelo en madejas (lo que da el veteado).
@@ -171,7 +171,7 @@ export function makeBeardTexture(): THREE.CanvasTexture {
     // 2) Surcos de separación: sombras finas entre madejas (dan volumen).
     for (let i = 0; i < 60; i++) {
       const x = r() * 768;
-      g.strokeStyle = 'rgba(96,102,108,.5)';
+      g.strokeStyle = 'rgba(62,56,48,.55)';
       g.globalAlpha = 0.35;
       g.lineWidth = 3 + r() * 7;
       g.beginPath();
@@ -197,7 +197,7 @@ export function makeBeardTexture(): THREE.CanvasTexture {
     // 4) Puntas: hebras claras y sueltas en la parte baja (remate irregular).
     for (let i = 0; i < 900; i++) {
       const x = r() * 768, y0 = 470 + r() * 260;
-      g.strokeStyle = r() < 0.5 ? '#eef0f1' : '#dfe2e4';
+      g.strokeStyle = r() < 0.5 ? '#c4beb6' : '#aea89f';
       g.globalAlpha = 0.3 + r() * 0.55;
       g.lineWidth = 0.7 + r() * 1.3;
       g.beginPath();
@@ -214,7 +214,7 @@ export function makeBeardTexture(): THREE.CanvasTexture {
  * ------------------------------------------------------------------ */
 
 /** Banda de bordado: hilo plateado en zigzag y puntadas sobre tela azul. */
-export function makeEmbroideryTexture(cloth = '#1c2e5a', thread = '#e6eaee'): THREE.CanvasTexture {
+export function makeEmbroideryTexture(cloth = '#0e3a64', thread = '#e6eaee'): THREE.CanvasTexture {
   const t = canvasTex(1024, 256, (g) => {
     g.fillStyle = cloth; g.fillRect(0, 0, 1024, 256);
     // dos hilos rectos que enmarcan la banda
@@ -258,11 +258,11 @@ export function makeTorsoTexture(): THREE.CanvasTexture {
     const W = 512, H = 528;
     // Túnica azul profundo con volumen (más clara en el centro)
     const cloth = g.createLinearGradient(0, 0, W, 0);
-    cloth.addColorStop(0, '#173f6d'); cloth.addColorStop(0.5, '#22609f'); cloth.addColorStop(1, '#173f6d');
+    cloth.addColorStop(0, '#103c62'); cloth.addColorStop(0.5, '#1a5b8e'); cloth.addColorStop(1, '#103c62');
     g.fillStyle = cloth; g.fillRect(0, 0, W, H);
 
     // Chaleco: panel frontal algo más oscuro con borde marcado
-    g.fillStyle = '#17406e';
+    g.fillStyle = '#104263';
     g.beginPath();
     g.moveTo(W * 0.14, 0); g.lineTo(W * 0.86, 0);
     g.lineTo(W * 0.82, H); g.lineTo(W * 0.18, H);
@@ -316,13 +316,13 @@ export function makeBeltTexture(): THREE.CanvasTexture {
   return canvasTex(920, 200, (g) => {
     const W = 920, H = 200;
     const lea = g.createLinearGradient(0, 0, 0, H);
-    lea.addColorStop(0, '#6b4024'); lea.addColorStop(0.5, '#8a5730'); lea.addColorStop(1, '#5d3720');
+    lea.addColorStop(0, '#553620'); lea.addColorStop(0.5, '#6f4a2b'); lea.addColorStop(1, '#472c19');
     g.fillStyle = lea; g.fillRect(0, 0, W, H);
     // franjas horizontales oscuras (varias tiras superpuestas)
     g.strokeStyle = 'rgba(40,22,10,.6)'; g.lineWidth = 7;
     for (const y of [H * 0.24, H * 0.52, H * 0.8]) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
     // nudo / hebilla ovalada al frente, delineada en negro
-    g.fillStyle = '#8f5c33';
+    g.fillStyle = '#714b2c';
     g.beginPath(); g.ellipse(W / 2, H / 2, 92, 68, 0, 0, Math.PI * 2); g.fill();
     g.strokeStyle = '#1b0f06'; g.lineWidth = 9;
     g.beginPath(); g.ellipse(W / 2, H / 2, 92, 68, 0, 0, Math.PI * 2); g.stroke();
@@ -335,7 +335,7 @@ export function makeBeltTexture(): THREE.CanvasTexture {
 }
 
 /** Gorro: lana de punto con costillas finas + bordado plateado alrededor. */
-export function makeCapTexture(cloth = '#1c2e5a', thread = '#e6eaee'): THREE.CanvasTexture {
+export function makeCapTexture(cloth = '#0e3a64', thread = '#e6eaee'): THREE.CanvasTexture {
   const t = canvasTex(1024, 512, (g) => {
     const W = 1024, H = 512;
     g.fillStyle = cloth; g.fillRect(0, 0, W, H);
