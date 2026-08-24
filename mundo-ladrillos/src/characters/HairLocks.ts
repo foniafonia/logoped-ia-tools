@@ -93,16 +93,17 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const s = Math.sin(th), c = Math.cos(th);
     const centro = 1 - Math.abs(u - 0.5) * 2;          // 1 en el centro, 0 en los lados
     // más largos en el centro; los laterales suben más arriba y son cortos
-    const len = 0.66 + 0.96 * Math.pow(centro, 0.7) + (((i * 29) % 7) / 7) * 0.18;
+    const len = 0.5 + 1.22 * Math.pow(centro, 1.25) + (((i * 29) % 7) / 7) * 0.14;
     const rootY = Y + (1 - centro) * 0.34;             // los laterales nacen más altos
     const rad = 0.20 + 0.085 * centro;
     out.push({
       root: V(R * s, rootY, Z + R * c * 0.92),
-      dir: V(s * 0.30, -1, c * 0.30 + 0.16),
+      // hacia dentro: cuanto más lateral, más converge al centro (barba recogida)
+      dir: V(s * (0.34 - 0.78 * (1 - centro)), -1, c * 0.26 + 0.16),
       length: len,
       radius: rad,
       // se curvan hacia el centro y hacia delante al caer
-      bend: V(-s * 0.16 * centro, -0.04, 0.1 + 0.12 * centro),
+      bend: V(-s * (0.14 + 0.42 * (1 - centro)), -0.05, 0.08 + 0.12 * centro),
       flatten: 0.8,
       taper: 0.5
     });
@@ -116,13 +117,13 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const s = Math.sin(th), c = Math.cos(th);
     const centro = 1 - Math.abs(u - 0.5) * 2;
     const jitter = ((i * 37) % 11) / 11;               // determinista
-    const len = 0.5 + 0.86 * Math.pow(centro, 0.8) + jitter * 0.22;
+    const len = 0.38 + 1.0 * Math.pow(centro, 1.2) + jitter * 0.18;
     out.push({
       root: V(R * 0.82 * s, Y - 0.06 + (1 - centro) * 0.26, Z + R * 0.7 * c + 0.16),
-      dir: V(s * 0.22, -1, c * 0.2 + 0.3),
+      dir: V(s * (0.26 - 0.66 * (1 - centro)), -1, c * 0.18 + 0.3),
       length: len,
       radius: 0.135 + 0.06 * centro,
-      bend: V(-s * 0.1, -0.03, 0.12),
+      bend: V(-s * (0.1 + 0.34 * (1 - centro)), -0.03, 0.1),
       flatten: 0.78,
       taper: 0.55
     });
@@ -134,15 +135,30 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
 export function moustacheLockSpecs(y = 3.86, z = 0.54): LockSpec[] {
   // DOS masas separadas: nacen bajo la nariz, se abren hacia fuera y caen por
   // los lados de la boca. El centro queda libre para que la boca se vea.
-  return [-1, 1].map((sx) => ({
-    root: V(sx * 0.13, y, z),
-    dir: V(sx * 0.66, -0.75, 0.02),
-    length: 0.34,
-    radius: 0.105,
-    bend: V(sx * 0.05, -0.12, -0.06),
-    flatten: 0.82,
-    taper: 0.42
-  }));
+  const out: LockSpec[] = [];
+  [-1, 1].forEach((sx) => {
+    // masa principal: nace bajo la nariz, se abre y cae por el lado de la boca
+    out.push({
+      root: V(sx * 0.1, y + 0.04, z),
+      dir: V(sx * 0.82, -0.62, 0.04),
+      length: 0.4,
+      radius: 0.135,
+      bend: V(sx * 0.06, -0.2, -0.05),
+      flatten: 0.86,
+      taper: 0.4
+    });
+    // refuerzo por delante y algo más abajo: le da volumen y remate
+    out.push({
+      root: V(sx * 0.16, y - 0.02, z + 0.04),
+      dir: V(sx * 0.62, -0.82, 0.0),
+      length: 0.3,
+      radius: 0.1,
+      bend: V(sx * 0.04, -0.1, -0.04),
+      flatten: 0.84,
+      taper: 0.5
+    });
+  });
+  return out;
 }
 
 /** PELO LATERAL: masas marrones que asoman entre el gorro y la barba. */

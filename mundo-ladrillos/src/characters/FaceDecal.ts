@@ -145,14 +145,14 @@ export function makeBeardTexture(): THREE.CanvasTexture {
   return canvasTex(768, 768, (g) => {
     // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
     const base = g.createLinearGradient(0, 0, 0, 768);
-    base.addColorStop(0, '#4f483f');
-    base.addColorStop(0.35, '#6b635a');
-    base.addColorStop(0.75, '#867f77');
-    base.addColorStop(1, '#9d968e');
+    base.addColorStop(0, '#3f3a33');
+    base.addColorStop(0.35, '#585349');
+    base.addColorStop(0.75, '#726c63');
+    base.addColorStop(1, '#8b857c');
     g.fillStyle = base; g.fillRect(0, 0, 768, 768);
 
     const cold = ['#b3aea7', '#9a948c', '#827c74', '#6a645c'];
-    const warm = ['#a8967e', '#8f7f68', '#786952', '#5f5342']; // vetas marrones
+    const warm = ['#8e7f6a', '#786a56', '#635746', '#4e4436']; // vetas marrones
     const r = rng(20260824);
 
     // 1) Mechones anchos: agrupan el pelo en madejas (lo que da el veteado).

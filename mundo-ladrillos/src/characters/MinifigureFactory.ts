@@ -990,19 +990,19 @@ export class Minifigure {
         // Cúpula ajustada
         const dome = new THREE.SphereGeometry(s.printed ? 0.70 : 0.6, 34, 22, 0, Math.PI * 2, 0, Math.PI / 2);
         const domeMesh = s.printed
-          ? this.texMesh(dome, capTex(), 0, 4.25, -0.02, { cloth: true })
+          ? this.texMesh(dome, capTex(), 0, 4.30, -0.02, { cloth: true })
           : this.mesh(dome, hw, 0, 4.24, -0.02);
-        domeMesh.scale.set(s.printed ? 1.04 : 1.02, s.printed ? 0.86 : 1.04, s.printed ? 1.04 : 1.02);
+        domeMesh.scale.set(s.printed ? 1.03 : 1.02, s.printed ? 1.06 : 1.04, s.printed ? 1.03 : 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
-        const brim = new THREE.TorusGeometry(s.printed ? 0.70 : 0.6, s.printed ? 0.145 : 0.085, 18, 44);
+        const brim = new THREE.TorusGeometry(s.printed ? 0.715 : 0.6, s.printed ? 0.2 : 0.085, 20, 48);
         brim.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.25 : 4.24, -0.02));
+        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.30 : 4.24, -0.02));
         if (s.printed) {
           // Banda bordada: cono que sigue la curva del gorro, justo sobre el
           // borde enrollado (posición controlada en 3D, no por UV de la esfera).
-          const band = new THREE.CylinderGeometry(0.685, 0.723, 0.16, 52, 1, true);
-          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.40, -0.02, { cloth: true }));
+          const band = new THREE.CylinderGeometry(0.70, 0.735, 0.15, 52, 1, true);
+          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.55, -0.02, { cloth: true }));
         } else {
         // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
         const bandSpecs: Array<[number, number, number]> = [
