@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
-import { makeElderFaceTexture, beardTex, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
+import { makeElderFaceTexture, beardTex, beardTexRot, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -792,18 +792,22 @@ export class Minifigure {
         // Mejillas: la barba sube por los lados de la mandíbula (como en la hoja)
         // dejando libre el centro para la boca. Con la MISMA textura de pelo:
         // antes eran cajas planas del color del skin y leían como bandas blancas.
-        const jaw = new THREE.SphereGeometry(0.25, 18, 14);
         [-1, 1].forEach((sx) => {
-          const m = this.texMesh(jaw, hairTex, sx * 0.37, 3.76, 0.24);
-          m.scale.set(0.62, 1.0, 0.86);
-          m.rotation.z = sx * 0.06;
+          // Cilindro en vez de esfera: la UV corre limpia de arriba abajo (una
+          // esfera hace remolino en el polo). Se ensancha hacia abajo, como la
+          // barba real, y la textura va girada para que el pelo caiga en
+          // diagonal hacia el centro.
+          const jaw = new THREE.CylinderGeometry(0.18, 0.28, 0.66, 20, 1);
+          const m = this.texMesh(jaw, beardTexRot(sx * 0.38), sx * 0.35, 3.68, 0.2);
+          m.scale.set(1, 1, 0.82);
+          m.rotation.z = sx * 0.14;      // se abre hacia la oreja
           this.root.add(m);
         });
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
         const mus = new THREE.SphereGeometry(0.17, 16, 12);
         [-1, 1].forEach((sx) => {
-          const m = this.texMesh(mus, hairTex, sx * 0.13, 3.76, 0.46);
-          m.scale.set(0.92, 0.4, 0.55);
+          const m = this.texMesh(mus, beardTexRot(sx * 1.35), sx * 0.14, 3.76, 0.46);
+          m.scale.set(1.02, 0.4, 0.55);
           m.rotation.z = -sx * 0.2;    // puntas ligeramente hacia abajo
           this.root.add(m);
         });

@@ -371,3 +371,18 @@ export const beltTex = (): THREE.CanvasTexture => (_belt ??= makeBeltTexture());
 export const capTex = (): THREE.CanvasTexture => (_cap ??= makeCapTexture());
 let _emb: THREE.CanvasTexture | null = null;
 export const embroideryTex = (): THREE.CanvasTexture => (_emb ??= makeEmbroideryTexture());
+
+/** Barba con las hebras GIRADAS: sirve para que el pelo de las mejillas caiga en
+ *  diagonal (hacia dentro y abajo) siguiendo la mandíbula, en vez de recto. */
+const _rot = new Map<number, THREE.CanvasTexture>();
+export function beardTexRot(angle: number): THREE.CanvasTexture {
+  let t = _rot.get(angle);
+  if (!t) {
+    t = beardTex().clone();
+    t.center.set(0.5, 0.5);
+    t.rotation = angle;
+    t.needsUpdate = true;
+    _rot.set(angle, t);
+  }
+  return t;
+}
