@@ -85,16 +85,33 @@ export function makeElderFaceTexture(emotion: Emotion): THREE.CanvasTexture {
     g.strokeStyle = 'rgba(150,110,50,.55)'; g.lineWidth = 5; g.lineCap = 'round';
     g.beginPath(); g.moveTo(CX, BROW_Y + 26); g.lineTo(CX - 2, BROW_Y + 58); g.stroke();
 
-    // --- Ojos: óvalos negros pequeños con reflejo blanco redondo ---
+    // --- Ojos: óvalos negros con párpado, reflejo y ojera (mirada de anciano) ---
     for (const sx of [-1, 1]) {
       const ex = CX + sx * DX;
-      g.fillStyle = '#120d08';
-      g.beginPath(); g.ellipse(ex, EYE_Y, 24, 29, 0, 0, Math.PI * 2); g.fill();
+      // cuenca: sombra suave alrededor para hundir el ojo
+      const soc = g.createRadialGradient(ex, EYE_Y, 6, ex, EYE_Y, 52);
+      soc.addColorStop(0, 'rgba(150,105,40,.34)');
+      soc.addColorStop(1, 'rgba(150,105,40,0)');
+      g.fillStyle = soc;
+      g.beginPath(); g.ellipse(ex, EYE_Y, 52, 44, 0, 0, Math.PI * 2); g.fill();
+      // globo: óvalo negro algo mayor y más definido
+      g.fillStyle = '#0d0a07';
+      g.beginPath(); g.ellipse(ex, EYE_Y, 26, 32, 0, 0, Math.PI * 2); g.fill();
+      // reflejo principal (arriba-izquierda) + chispa secundaria abajo
       g.fillStyle = '#ffffff';
-      g.beginPath(); g.arc(ex - 8, EYE_Y - 9, 8, 0, Math.PI * 2); g.fill();
-      // párpado superior: sombra fina que da edad
-      g.strokeStyle = 'rgba(90,62,30,.5)'; g.lineWidth = 6; g.lineCap = 'round';
-      g.beginPath(); g.arc(ex, EYE_Y + 2, 30, Math.PI * 1.12, Math.PI * 1.88); g.stroke();
+      g.beginPath(); g.arc(ex - 9, EYE_Y - 11, 8.5, 0, Math.PI * 2); g.fill();
+      g.globalAlpha = 0.5;
+      g.beginPath(); g.arc(ex + 8, EYE_Y + 12, 4, 0, Math.PI * 2); g.fill();
+      g.globalAlpha = 1;
+      // párpado superior grueso que pisa el globo (da peso a la mirada)
+      g.strokeStyle = 'rgba(78,52,24,.85)'; g.lineWidth = 8; g.lineCap = 'round';
+      g.beginPath(); g.arc(ex, EYE_Y + 4, 31, Math.PI * 1.08, Math.PI * 1.92); g.stroke();
+      // pliegue del párpado, por encima
+      g.strokeStyle = 'rgba(150,105,40,.55)'; g.lineWidth = 5;
+      g.beginPath(); g.arc(ex, EYE_Y + 12, 40, Math.PI * 1.15, Math.PI * 1.85); g.stroke();
+      // ojera / bolsa inferior
+      g.strokeStyle = 'rgba(150,105,40,.42)'; g.lineWidth = 5;
+      g.beginPath(); g.arc(ex, EYE_Y - 6, 34, Math.PI * 0.18, Math.PI * 0.82); g.stroke();
     }
 
     // --- Líneas de edad en las mejillas (discretas) ---
@@ -125,31 +142,67 @@ export function makeElderFaceTexture(emotion: Emotion): THREE.CanvasTexture {
  * da el aspecto de PELO en vez de plástico liso.
  */
 export function makeBeardTexture(): THREE.CanvasTexture {
-  return canvasTex(512, 512, (g) => {
-    g.fillStyle = '#c2c7cc'; g.fillRect(0, 0, 512, 512);
-    const tones = ['#d7dade', '#b3b8bd', '#9aa0a6', '#c8c1b4', '#8d9298', '#e2e4e6'];
+  return canvasTex(768, 768, (g) => {
+    // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
+    const base = g.createLinearGradient(0, 0, 0, 768);
+    base.addColorStop(0, '#a2a7ac');
+    base.addColorStop(0.35, '#bcc1c6');
+    base.addColorStop(0.75, '#d2d6da');
+    base.addColorStop(1, '#e3e6e8');
+    g.fillStyle = base; g.fillRect(0, 0, 768, 768);
+
+    const cold = ['#d9dcdf', '#c3c8cd', '#aab0b6', '#93999f'];
+    const warm = ['#c9c0b1', '#b3a794', '#9c8f7c', '#8a7d6b']; // vetas marrones
     const r = rng(20260824);
-    // Mechones anchos que agrupan el pelo (veteado en bandas suaves)
-    for (let i = 0; i < 90; i++) {
-      const x = r() * 512;
-      g.strokeStyle = tones[(i * 7) % tones.length] + '';
-      g.globalAlpha = 0.35;
-      g.lineWidth = 12 + r() * 26;
+
+    // 1) Mechones anchos: agrupan el pelo en madejas (lo que da el veteado).
+    for (let i = 0; i < 120; i++) {
+      const x = r() * 768;
+      const warmish = r() < 0.38;
+      g.strokeStyle = (warmish ? warm : cold)[Math.floor(r() * 4)];
+      g.globalAlpha = warmish ? 0.3 : 0.4;
+      g.lineWidth = 16 + r() * 40;
       g.beginPath();
-      g.moveTo(x, -20);
-      g.bezierCurveTo(x + (r() - 0.5) * 60, 170, x + (r() - 0.5) * 80, 340, x + (r() - 0.5) * 50, 532);
+      g.moveTo(x, -30);
+      g.bezierCurveTo(x + (r() - 0.5) * 70, 250, x + (r() - 0.5) * 90, 500, x + (r() - 0.5) * 60, 800);
       g.stroke();
     }
-    // Hebras finas: el detalle que lee como pelo
-    g.globalAlpha = 1;
-    for (let i = 0; i < 2600; i++) {
-      const x = r() * 512, len = 90 + r() * 300, y0 = -30 + r() * 400;
-      g.strokeStyle = tones[Math.floor(r() * tones.length)];
-      g.globalAlpha = 0.25 + r() * 0.5;
-      g.lineWidth = 0.8 + r() * 1.8;
+
+    // 2) Surcos de separación: sombras finas entre madejas (dan volumen).
+    for (let i = 0; i < 60; i++) {
+      const x = r() * 768;
+      g.strokeStyle = 'rgba(96,102,108,.5)';
+      g.globalAlpha = 0.35;
+      g.lineWidth = 3 + r() * 7;
+      g.beginPath();
+      g.moveTo(x, -20);
+      g.quadraticCurveTo(x + (r() - 0.5) * 50, 380, x + (r() - 0.5) * 40, 790);
+      g.stroke();
+    }
+
+    // 3) Hebras finas: el detalle que de cerca lee como pelo de verdad.
+    for (let i = 0; i < 5200; i++) {
+      const x = r() * 768, y0 = -40 + r() * 620, len = 120 + r() * 380;
+      const warmish = r() < 0.3;
+      g.strokeStyle = (warmish ? warm : cold)[Math.floor(r() * 4)];
+      g.globalAlpha = 0.22 + r() * 0.5;
+      g.lineWidth = 0.7 + r() * 1.7;
+      const drift = (r() - 0.5) * 30;
       g.beginPath();
       g.moveTo(x, y0);
-      g.quadraticCurveTo(x + (r() - 0.5) * 26, y0 + len * 0.5, x + (r() - 0.5) * 34, y0 + len);
+      g.bezierCurveTo(x + drift * 0.4, y0 + len * 0.35, x + drift, y0 + len * 0.7, x + drift * 1.5, y0 + len);
+      g.stroke();
+    }
+
+    // 4) Puntas: hebras claras y sueltas en la parte baja (remate irregular).
+    for (let i = 0; i < 900; i++) {
+      const x = r() * 768, y0 = 470 + r() * 260;
+      g.strokeStyle = r() < 0.5 ? '#eef0f1' : '#dfe2e4';
+      g.globalAlpha = 0.3 + r() * 0.55;
+      g.lineWidth = 0.7 + r() * 1.3;
+      g.beginPath();
+      g.moveTo(x, y0);
+      g.quadraticCurveTo(x + (r() - 0.5) * 16, y0 + 40, x + (r() - 0.5) * 26, y0 + 80 + r() * 60);
       g.stroke();
     }
     g.globalAlpha = 1;
@@ -165,32 +218,156 @@ export function makeEmbroideryTexture(cloth = '#1c2e5a', thread = '#e6eaee'): TH
   const t = canvasTex(1024, 256, (g) => {
     g.fillStyle = cloth; g.fillRect(0, 0, 1024, 256);
     // dos hilos rectos que enmarcan la banda
-    g.strokeStyle = thread; g.lineWidth = 10; g.globalAlpha = 1;
+    g.strokeStyle = thread; g.lineWidth = 8; g.globalAlpha = 1;
     for (const y of [40, 216]) { g.beginPath(); g.moveTo(0, y); g.lineTo(1024, y); g.stroke(); }
     // zigzag central continuo
-    g.lineWidth = 11; g.lineJoin = 'round';
+    g.lineWidth = 7; g.lineJoin = 'round';
     g.beginPath();
-    for (let i = 0; i <= 32; i++) {
-      const x = (i / 32) * 1024, y = i % 2 ? 96 : 160;
+    for (let i = 0; i <= 72; i++) {
+      const x = (i / 72) * 1024, y = i % 2 ? 92 : 164;
       i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
     }
     g.stroke();
     // rombos entre picos (motivo angular tipo montañas)
-    g.lineWidth = 5; g.globalAlpha = 0.85;
-    for (let i = 0; i < 16; i++) {
-      const cx = (i + 0.5) / 16 * 1024;
+    g.lineWidth = 5; g.globalAlpha = 0.95;
+    for (let i = 0; i < 36; i++) {
+      const cx = (i + 0.5) / 36 * 1024;
       g.beginPath();
-      g.moveTo(cx - 20, 128); g.lineTo(cx, 108); g.lineTo(cx + 20, 128); g.lineTo(cx, 148);
+      g.moveTo(cx - 9, 128); g.lineTo(cx, 116); g.lineTo(cx + 9, 128); g.lineTo(cx, 140);
       g.closePath(); g.stroke();
     }
     // puntadas cortas sobre los hilos rectos
-    g.lineWidth = 4; g.globalAlpha = 0.7;
-    for (let i = 0; i < 64; i++) {
-      const x = (i / 64) * 1024;
-      for (const y of [40, 216]) { g.beginPath(); g.moveTo(x, y - 9); g.lineTo(x + 10, y + 9); g.stroke(); }
+    g.lineWidth = 2.4; g.globalAlpha = 0.5;
+    for (let i = 0; i < 150; i++) {
+      const x = (i / 150) * 1024;
+      for (const y of [40, 216]) { g.beginPath(); g.moveTo(x, y - 6); g.lineTo(x + 6, y + 6); g.stroke(); }
     }
     g.globalAlpha = 1;
   });
   t.wrapS = THREE.RepeatWrapping;
   return t;
 }
+
+/* ------------------------------------------------------------------ *
+ * TORSO IMPRESO Y GORRO DE PUNTO
+ * ------------------------------------------------------------------ */
+
+/** Túnica azul con costuras negras, chaleco y prenda interior beige con oro. */
+export function makeTorsoTexture(): THREE.CanvasTexture {
+  return canvasTex(512, 528, (g) => {
+    const W = 512, H = 528;
+    // Túnica azul profundo con volumen (más clara en el centro)
+    const cloth = g.createLinearGradient(0, 0, W, 0);
+    cloth.addColorStop(0, '#173f6d'); cloth.addColorStop(0.5, '#22609f'); cloth.addColorStop(1, '#173f6d');
+    g.fillStyle = cloth; g.fillRect(0, 0, W, H);
+
+    // Chaleco: panel frontal algo más oscuro con borde marcado
+    g.fillStyle = '#17406e';
+    g.beginPath();
+    g.moveTo(W * 0.14, 0); g.lineTo(W * 0.86, 0);
+    g.lineTo(W * 0.82, H); g.lineTo(W * 0.18, H);
+    g.closePath(); g.fill();
+
+    // Abertura central en V: prenda interior beige/arena
+    g.fillStyle = '#d8c49b';
+    g.beginPath();
+    g.moveTo(W * 0.36, 0); g.lineTo(W * 0.64, 0);
+    g.lineTo(W * 0.5, H * 0.42); g.closePath(); g.fill();
+    // Detalles dorados apagados sobre el beige
+    g.strokeStyle = '#b99a4e'; g.lineWidth = 4; g.globalAlpha = 0.85;
+    for (let i = 0; i < 3; i++) {
+      const y = H * (0.07 + i * 0.085), half = (W * 0.13) * (1 - i * 0.26);
+      g.beginPath(); g.moveTo(W * 0.5 - half, y); g.lineTo(W * 0.5 + half, y); g.stroke();
+    }
+    g.fillStyle = '#c2a458';
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.arc(W * 0.5, H * (0.115 + i * 0.085), 5, 0, Math.PI * 2); g.fill(); }
+    g.globalAlpha = 1;
+
+    // Costuras negras discretas: bordes del chaleco y del cuello en V
+    g.strokeStyle = 'rgba(10,16,26,.72)'; g.lineWidth = 6; g.lineJoin = 'round';
+    g.beginPath();
+    g.moveTo(W * 0.36, 0); g.lineTo(W * 0.5, H * 0.42); g.lineTo(W * 0.64, 0);
+    g.stroke();
+    g.lineWidth = 5;
+    g.beginPath(); g.moveTo(W * 0.14, 0); g.lineTo(W * 0.18, H); g.stroke();
+    g.beginPath(); g.moveTo(W * 0.86, 0); g.lineTo(W * 0.82, H); g.stroke();
+
+    // Pliegues: líneas finas verticales con ligera curva (la tela cae)
+    const r = rng(4242);
+    g.lineCap = 'round';
+    for (let i = 0; i < 26; i++) {
+      const x = W * (0.2 + r() * 0.6);
+      g.strokeStyle = r() < 0.5 ? 'rgba(9,26,48,.4)' : 'rgba(120,168,214,.22)';
+      g.lineWidth = 2 + r() * 4;
+      g.beginPath();
+      g.moveTo(x, H * (0.3 + r() * 0.2));
+      g.quadraticCurveTo(x + (r() - 0.5) * 26, H * 0.7, x + (r() - 0.5) * 34, H);
+      g.stroke();
+    }
+    // Sombra bajo el cuello y en los costados (integra con el 3D)
+    const sh = g.createLinearGradient(0, 0, 0, H * 0.3);
+    sh.addColorStop(0, 'rgba(0,0,0,.32)'); sh.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = sh; g.fillRect(0, 0, W, H * 0.3);
+  });
+}
+
+/** Cinturón: franjas de cuero y gran nudo ovalado delineado en negro. */
+export function makeBeltTexture(): THREE.CanvasTexture {
+  return canvasTex(920, 200, (g) => {
+    const W = 920, H = 200;
+    const lea = g.createLinearGradient(0, 0, 0, H);
+    lea.addColorStop(0, '#6b4024'); lea.addColorStop(0.5, '#8a5730'); lea.addColorStop(1, '#5d3720');
+    g.fillStyle = lea; g.fillRect(0, 0, W, H);
+    // franjas horizontales oscuras (varias tiras superpuestas)
+    g.strokeStyle = 'rgba(40,22,10,.6)'; g.lineWidth = 7;
+    for (const y of [H * 0.24, H * 0.52, H * 0.8]) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+    // nudo / hebilla ovalada al frente, delineada en negro
+    g.fillStyle = '#8f5c33';
+    g.beginPath(); g.ellipse(W / 2, H / 2, 92, 68, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#1b0f06'; g.lineWidth = 9;
+    g.beginPath(); g.ellipse(W / 2, H / 2, 92, 68, 0, 0, Math.PI * 2); g.stroke();
+    g.strokeStyle = 'rgba(40,22,10,.75)'; g.lineWidth = 7;
+    g.beginPath(); g.ellipse(W / 2, H / 2, 52, 36, 0, 0, Math.PI * 2); g.stroke();
+    // brillo suave del cuero
+    g.globalAlpha = 0.18; g.fillStyle = '#e2b98a';
+    g.fillRect(0, H * 0.3, W, H * 0.12); g.globalAlpha = 1;
+  });
+}
+
+/** Gorro: lana de punto con costillas finas + bordado plateado alrededor. */
+export function makeCapTexture(cloth = '#1c2e5a', thread = '#e6eaee'): THREE.CanvasTexture {
+  const t = canvasTex(1024, 512, (g) => {
+    const W = 1024, H = 512;
+    g.fillStyle = cloth; g.fillRect(0, 0, W, H);
+    const r = rng(909);
+    // Punto de lana: costillas verticales finas alternando luz y sombra
+    for (let i = 0; i < 150; i++) {
+      const x = (i / 150) * W;
+      g.strokeStyle = i % 2 ? 'rgba(255,255,255,.09)' : 'rgba(0,0,0,.22)';
+      g.lineWidth = 3 + r() * 2;
+      g.beginPath(); g.moveTo(x, 0); g.lineTo(x + (r() - 0.5) * 6, H); g.stroke();
+    }
+    // Puntadas de lana (pequeñas uves) para que se lea el tejido de cerca
+    g.strokeStyle = 'rgba(255,255,255,.07)'; g.lineWidth = 2;
+    for (let y = 8; y < H; y += 18) {
+      for (let x = 6; x < W; x += 14) {
+        g.beginPath(); g.moveTo(x, y + 7); g.lineTo(x + 4, y); g.lineTo(x + 8, y + 7); g.stroke();
+      }
+    }
+    g.globalAlpha = 1;
+  });
+  t.wrapS = THREE.RepeatWrapping;
+  return t;
+}
+
+/* Memorización: estas texturas no dependen de la emoción, se reutilizan. */
+let _beard: THREE.CanvasTexture | null = null;
+let _torso: THREE.CanvasTexture | null = null;
+let _belt: THREE.CanvasTexture | null = null;
+let _cap: THREE.CanvasTexture | null = null;
+export const beardTex = (): THREE.CanvasTexture => (_beard ??= makeBeardTexture());
+export const torsoTex = (): THREE.CanvasTexture => (_torso ??= makeTorsoTexture());
+export const beltTex = (): THREE.CanvasTexture => (_belt ??= makeBeltTexture());
+export const capTex = (): THREE.CanvasTexture => (_cap ??= makeCapTexture());
+let _emb: THREE.CanvasTexture | null = null;
+export const embroideryTex = (): THREE.CanvasTexture => (_emb ??= makeEmbroideryTexture());

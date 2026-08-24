@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
-import { makeElderFaceTexture, makeBeardTexture, makeEmbroideryTexture } from './FaceDecal';
+import { makeElderFaceTexture, beardTex, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -597,18 +597,26 @@ export class Minifigure {
     this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
     this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, 3.05, 0.38)); // cuello en V
 
+    if (s.printed) {
+      // TORSO IMPRESO: como la serigrafía de un torso real. Pinta chaleco,
+      // costuras negras, pliegues y la prenda interior beige con detalles dorados.
+      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.22, 1.26), torsoTex(), 0, 2.67, 0.445));
+      // Cinturón: franjas de cuero y el gran nudo ovalado delineado en negro.
+      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.38, 0.3), beltTex(), 0, 1.9, 0.462));
+    }
     // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
-    if (s.vestPanel !== undefined) {
+    if (!s.printed && s.vestPanel !== undefined) {
       this.root.add(this.box(0.92, 1.5, 0.12, s.vestPanel, 0, 2.5, 0.4));   // pechera
     }
     // Cuello en V marcado (dos tiras cruzadas del color del collar)
-    if (s.collar !== undefined) {
+    if (!s.printed && s.collar !== undefined) {
       const cl = this.box(0.16, 0.7, 0.1, s.collar, -0.18, 2.98, 0.47); cl.rotation.z = 0.5;
       const cr = this.box(0.16, 0.7, 0.1, s.collar, 0.18, 2.98, 0.47); cr.rotation.z = -0.5;
       this.root.add(cl, cr);
     }
-    // Faldón / tira frontal que cuelga del cinturón (Yehoshúa).
-    if (s.loincloth !== undefined) {
+    // Faldón / tira frontal que cuelga del cinturón (la hoja oficial NO lo lleva:
+    // en 'printed' se omite y el frente lo resuelve la serigrafía del torso).
+    if (!s.printed && s.loincloth !== undefined) {
       this.root.add(this.box(0.5, 1.0, 0.14, s.loincloth, 0, 1.35, 0.42));
       this.root.add(this.box(0.5, 0.18, 0.16, s.belt, 0, 1.86, 0.44)); // remache al cinturón
     }
@@ -769,20 +777,20 @@ export class Minifigure {
         // Barba de PELO: silueta torneada (ancha en las mejillas, con cuerpo y
         // punta redondeada) + textura de hebras veteadas. El pelo lo aporta la
         // textura, no la geometría: es la única forma de que no lea como bulto.
-        const hairTex = makeBeardTexture();
+        const hairTex = beardTex();
         const prof: Array<[number, number]> = [
-          [0.03, 0], [0.18, 0.13], [0.32, 0.32], [0.45, 0.58],
-          [0.55, 0.86], [0.60, 1.14], [0.62, 1.36], [0.60, 1.5]
+          [0.04, 0], [0.20, 0.14], [0.36, 0.34], [0.50, 0.6],
+          [0.60, 0.88], [0.655, 1.16], [0.67, 1.36], [0.64, 1.5]
         ];
         const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
         lathe.scale(1, 1, 0.74);
         this.root.add(this.texMesh(lathe, hairTex, 0, 2.10, 0.26));
         // Patillas de pelo que suben por las mejillas y enmarcan la cara
         [-1, 1].forEach((sx) => {
-          const cheek = new THREE.CylinderGeometry(0.16, 0.21, 0.56, 16);
-          const m = this.texMesh(cheek, hairTex, sx * 0.42, 3.72, 0.2);
-          m.scale.set(1, 1, 0.8);
-          m.rotation.z = sx * 0.1;
+          const cheek = new THREE.CylinderGeometry(0.13, 0.2, 0.5, 16);
+          const m = this.texMesh(cheek, hairTex, sx * 0.38, 3.62, 0.04);
+          m.scale.set(0.95, 1, 0.72);
+          m.rotation.z = sx * 0.12;
           this.root.add(m);
         });
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
@@ -909,7 +917,9 @@ export class Minifigure {
         const hair = 0x3a2a1c;                          // café oscuro bajo el gorro
         // Cúpula ajustada
         const dome = new THREE.SphereGeometry(0.6, 30, 20, 0, Math.PI * 2, 0, Math.PI / 2);
-        const domeMesh = this.mesh(dome, hw, 0, 4.24, -0.02);
+        const domeMesh = s.printed
+          ? this.texMesh(dome, capTex(), 0, 4.24, -0.02)
+          : this.mesh(dome, hw, 0, 4.24, -0.02);
         domeMesh.scale.set(1.02, 1.04, 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
@@ -917,10 +927,10 @@ export class Minifigure {
         brim.rotateX(Math.PI / 2);
         this.root.add(this.mesh(brim, hw, 0, 4.24, -0.02));
         if (s.printed) {
-          // BORDADO impreso: banda cónica que sigue la curva del gorro con el
-          // hilo plateado en zigzag pintado (puntadas y rombos), como el real.
-          const band = new THREE.CylinderGeometry(0.495, 0.602, 0.26, 44, 1, true);
-          this.root.add(this.texMesh(band, makeEmbroideryTexture('#1c2e5a', '#e6eaee'), 0, 4.50, -0.02));
+          // Banda bordada: cono que sigue la curva del gorro, justo sobre el
+          // borde enrollado (posición controlada en 3D, no por UV de la esfera).
+          const band = new THREE.CylinderGeometry(0.567, 0.611, 0.23, 48, 1, true);
+          this.root.add(this.texMesh(band, embroideryTex(), 0, 4.40, -0.02));
         } else {
         // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
         const bandSpecs: Array<[number, number, number]> = [
