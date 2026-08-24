@@ -161,10 +161,21 @@ export function moustacheLockSpecs(y = 3.86, z = 0.54): LockSpec[] {
   // DOS masas separadas: nacen bajo la nariz, se abren hacia fuera y caen por
   // los lados de la boca. El centro queda libre para que la boca se vea.
   const out: LockSpec[] = [];
+  // PUENTE CENTRAL: cruza el labio de lado a lado y cierra el hueco que quedaba
+  // entre las dos mitades. El bigote pasa a ser una pieza continua.
+  out.push({
+    root: V(-0.15, y + 0.05, z + 0.02),
+    dir: V(1, -0.08, 0),
+    length: 0.3,
+    radius: 0.115,
+    bend: V(0, -0.03, 0),
+    flatten: 0.9,
+    taper: 0.1
+  });
   [-1, 1].forEach((sx) => {
     // masa principal: nace bajo la nariz, se abre y cae por el lado de la boca
     out.push({
-      root: V(sx * 0.1, y + 0.04, z),
+      root: V(sx * 0.07, y + 0.05, z),
       dir: V(sx * 0.82, -0.62, 0.04),
       length: 0.4,
       radius: 0.135,

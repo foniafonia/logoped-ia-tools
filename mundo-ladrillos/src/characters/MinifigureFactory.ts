@@ -998,9 +998,11 @@ export class Minifigure {
         domeMesh.scale.set(s.printed ? 1.03 : 1.02, s.printed ? 1.06 : 1.04, s.printed ? 1.03 : 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
-        const brim = new THREE.TorusGeometry(s.printed ? 0.715 : 0.6, s.printed ? 0.2 : 0.085, 20, 48);
+        const brim = new THREE.TorusGeometry(s.printed ? 0.685 : 0.6, s.printed ? 0.105 : 0.085, 20, 48);
         brim.rotateX(Math.PI / 2);
-        this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.30 : 4.24, -0.02));
+        const brimMesh = this.mesh(brim, hw, 0, s.printed ? 4.28 : 4.24, -0.02);
+        if (s.printed) brimMesh.scale.set(1, 0.5, 1);   // banda PLANA, no rulo
+        this.root.add(brimMesh);
         if (s.printed) {
           // Banda bordada: cono que sigue la curva del gorro, justo sobre el
           // borde enrollado (posición controlada en 3D, no por UV de la esfera).
