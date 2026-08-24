@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yehoshúa · estudio de fidelidad</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#ffffff}
+  canvas{display:block}
+  #hud{position:fixed;left:16px;top:14px;font:13px/1.5 system-ui,sans-serif;color:#2b2b2b;
+       background:rgba(255,255,255,.72);backdrop-filter:blur(4px);border:1px solid #e4e4e4;
+       border-radius:10px;padding:12px 14px;max-width:280px;user-select:none}
+  #hud h1{margin:0 0 4px;font-size:14px;letter-spacing:.2px}
+  #hud .sub{color:#8a8a8a;font-size:11px;margin-bottom:8px}
+  #hud kbd{background:#f0f0f0;border:1px solid #d8d8d8;border-bottom-width:2px;border-radius:4px;
+           padding:0 5px;font:11px ui-monospace,monospace}
+  #hud .row{display:flex;justify-content:space-between;gap:10px;margin:2px 0}
+  #tag{position:fixed;right:16px;bottom:14px;font:11px system-ui,sans-serif;color:#b0b0b0}
+</style></head>
+<body>
+  <div id="hud">
+    <h1>Yehoshúa — estudio de fidelidad</h1>
+    <div class="sub">Reconstrucción según la hoja de personaje oficial. Gíralo para comparar con el original.</div>
+    <div class="row"><span>Orbitar / zoom</span><kbd>arrastrar</kbd> <kbd>rueda</kbd></div>
+    <div class="row"><span>Turnaround auto</span><kbd>G</kbd></div>
+    <div class="row"><span>Reiniciar vista</span><kbd>R</kbd></div>
+    <div class="row"><span>Fondo claro/oscuro</span><kbd>F</kbd></div>
+  </div>
+  <div id="tag">espacio de pruebas · sin escenografía</div>
+  <script type="module" src="/src/yehoshua-demo.ts"></script>
+</body></html>
