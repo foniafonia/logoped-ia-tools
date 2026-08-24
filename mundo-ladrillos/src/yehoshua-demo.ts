@@ -57,7 +57,7 @@ let yeho: Minifigure;
 function buildYeho(): void {
   if (yeho) scene.remove(yeho.root);
   yeho = createMinifigure(plastic, { ...YOSHUA_SKIN, emotion: EMOTIONS[emoIdx] });
-  yeho.root.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
+  yeho.root.traverse((o) => { if ((o as THREE.Mesh).isMesh && !o.userData.noShadow) o.castShadow = true; });
   scene.add(yeho.root);
   const el = document.getElementById('emo'); if (el) el.textContent = EMOTIONS[emoIdx];
 }

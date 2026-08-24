@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
-import { makeElderFaceTexture, beardTex, beardTexRot, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
+import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -425,6 +425,29 @@ export class Minifigure {
     return m;
   }
 
+  /** Capas de PELUSA sobre una pieza de pelo: copias un poco mayores y cada vez
+   *  más ralas. Rompen la silueta lisa y dan sensación mullida. */
+  private addFuzz(
+    geo: THREE.BufferGeometry, x: number, y: number, z: number,
+    base: THREE.Vector3, rotZ = 0, k = 1
+  ): void {
+    const grow: Array<[number, number]> = [[0.028, 0.008], [0.055, 0.016], [0.085, 0.024]];
+    grow.forEach(([gx, gy], i) => {
+      const mat = new THREE.MeshPhysicalMaterial({
+        map: beardFuzz(i), transparent: true, alphaTest: 0.34,
+        metalness: 0, roughness: 0.72, clearcoat: 0.12, depthWrite: true
+      });
+      const m = new THREE.Mesh(geo, mat);
+      m.position.set(x, y, z);
+      m.scale.set(base.x * (1 + gx * k), base.y * (1 + gy * k), base.z * (1 + gx * k));
+      m.rotation.z = rotZ;
+      // La pelusa NO proyecta sombra: con alphaTest produce manchas de auto-sombra.
+      m.castShadow = false;
+      m.userData.noShadow = true;
+      this.root.add(m);
+    });
+  }
+
   /** Malla con TEXTURA pintada (cara impresa, pelo, bordado) y acabado plástico. */
   private texMesh(
     geo: THREE.BufferGeometry, tex: THREE.Texture, x: number, y: number, z: number,
@@ -789,6 +812,7 @@ export class Minifigure {
         const lathe = new THREE.LatheGeometry(prof.map(([x, y]) => new THREE.Vector2(x, y)), 34);
         lathe.scale(1, 1, 0.74);
         this.root.add(this.texMesh(lathe, hairTex, 0, 2.02, 0.26));
+        this.addFuzz(lathe, 0, 2.02, 0.26, new THREE.Vector3(1, 1, 1));
         // Mejillas: la barba sube por los lados de la mandíbula (como en la hoja)
         // dejando libre el centro para la boca. Con la MISMA textura de pelo:
         // antes eran cajas planas del color del skin y leían como bandas blancas.
@@ -802,6 +826,7 @@ export class Minifigure {
           m.scale.set(1, 1, 0.82);
           m.rotation.z = sx * 0.14;      // se abre hacia la oreja
           this.root.add(m);
+          this.addFuzz(jaw, sx * 0.35, 3.68, 0.2, new THREE.Vector3(1, 1, 0.82), sx * 0.14, 0.6);
         });
         // Bigote y patillas con la misma textura, para que todo sea el mismo pelo
         const mus = new THREE.SphereGeometry(0.17, 16, 12);

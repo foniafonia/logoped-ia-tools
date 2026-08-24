@@ -386,3 +386,41 @@ export function beardTexRot(angle: number): THREE.CanvasTexture {
   }
   return t;
 }
+
+/**
+ * PELUSA para capas de pelo ("shell fur"): fondo transparente con marcas finas
+ * de hebra. Superponiendo varias capas cada vez más grandes y con menos densidad
+ * se consigue una barba MULLIDA y con el borde roto, en vez de una superficie
+ * lisa. `density` 0..1 controla cuánta hebra sobrevive en esa capa.
+ */
+export function makeBeardFuzzTexture(density: number, seed: number): THREE.CanvasTexture {
+  return canvasTex(768, 768, (g) => {
+    g.clearRect(0, 0, 768, 768);
+    const r = rng(seed);
+    const tones = ['#b3aea7', '#9a948c', '#827c74', '#a8967e', '#8f7f68', '#c4beb6'];
+    const n = Math.round(4200 * density);
+    for (let i = 0; i < n; i++) {
+      const x = r() * 768, y0 = -30 + r() * 700, len = 60 + r() * 190;
+      g.strokeStyle = tones[Math.floor(r() * tones.length)];
+      g.globalAlpha = 0.5 + r() * 0.5;
+      g.lineWidth = 1.1 + r() * 2.2;
+      g.lineCap = 'round';
+      const drift = (r() - 0.5) * 26;
+      g.beginPath();
+      g.moveTo(x, y0);
+      g.quadraticCurveTo(x + drift * 0.5, y0 + len * 0.55, x + drift, y0 + len);
+      g.stroke();
+    }
+    g.globalAlpha = 1;
+  });
+}
+
+const _fuzz = new Map<number, THREE.CanvasTexture>();
+export function beardFuzz(level: number): THREE.CanvasTexture {
+  let t = _fuzz.get(level);
+  if (!t) {
+    t = makeBeardFuzzTexture([0.7, 0.45, 0.26][level] ?? 0.2, 5150 + level * 97);
+    _fuzz.set(level, t);
+  }
+  return t;
+}
