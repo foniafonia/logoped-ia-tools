@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
-import { buildBeardGeometry, buildMustacheGeometry } from './BeardSculpt';
+import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, sideHairSpecs } from './HairLocks';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -88,7 +88,7 @@ export const YOSHUA_SKIN: MinifigureSkin = {
   torso: 0x155789,       // túnica azul PROFUNDO (muestreado)
   belt: 0x654328,        // cinturón café oscuro (muestreado)
   legs: 0x14508a,        // piernas azul profundo (muestreado)
-  arms: 0x6b3d24,        // MANGAS café OSCURO (muestreado; antes iban claras)
+  arms: 0x5e3520,        // MANGAS café OSCURO (muestreado)
   hands: 0xf2b40a,
   headwear: 0x0e3a64,    // gorro azul profundo (muestreado)
   headStyle: 'cap',      // gorro redondeado ajustado con borde enrollado (hoja oficial)
@@ -617,8 +617,17 @@ export class Minifigure {
     this.legL.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
     this.legR.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
     const FW = s.printed ? 0.56 : 0.62, FD = s.printed ? 0.78 : 0.9;
-    this.legL.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05)); // pie
-    this.legR.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05));
+    if (s.printed) {
+      // Bota: pieza moldeada que cubre el tercio bajo de la pierna (como la ref)
+      const BH = LL * 0.34;
+      [this.legL, this.legR].forEach((g) => {
+        g.add(this.box(0.62, BH, 0.84, 0x5b3a22, 0, -(LL - BH / 2), 0.02));
+        g.add(this.box(0.64, 0.12, 0.9, 0x4a2f1b, 0, -(LL + 0.02), 0.04));   // suela
+      });
+    } else {
+      this.legL.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05)); // pie
+      this.legR.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05));
+    }
     this.root.add(this.legL, this.legR);
 
     // --- Cadera + torso trapezoidal ---
@@ -634,6 +643,12 @@ export class Minifigure {
       this.root.add(this.texMesh(new THREE.PlaneGeometry(1.22, 1.26), torsoTex(), 0, 2.55, 0.445));
       // Cinturón: franjas de cuero y el gran nudo ovalado delineado en negro.
       this.root.add(this.texMesh(new THREE.PlaneGeometry(1.38, 0.3), beltTex(), 0, 1.9, 0.462));
+      // Volumen real: dos bandas superpuestas y un nudo central saliente.
+      this.root.add(this.box(1.4, 0.12, 0.94, 0x5d3a20, 0, 1.99, 0));
+      this.root.add(this.box(1.4, 0.1, 0.93, 0x714b2c, 0, 1.83, 0));
+      const knot = new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 14), this.plastic.get(0x7a5230));
+      knot.position.set(0, 1.9, 0.49); knot.scale.set(1.15, 0.72, 0.5); knot.castShadow = true;
+      this.root.add(knot);
     }
     // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
     if (!s.printed && s.vestPanel !== undefined) {
@@ -716,12 +731,48 @@ export class Minifigure {
     else { this.armL.rotation.z = s.printed ? -0.36 : 0.18; }
     const AL = s.printed ? 1.06 : 1.05;                 // brazo compacto
     const AW = s.printed ? 0.56 : 0.44, AD = s.printed ? 0.62 : 0.54;
-    this.armL.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
-    this.armR.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
-    const handGeo = new THREE.TorusGeometry(s.printed ? 0.25 : 0.19, s.printed ? 0.115 : 0.1, 12, 22);
-    handGeo.rotateX(Math.PI / 2);
-    const handL = new THREE.Mesh(handGeo, this.plastic.get(s.hands));
-    handL.position.set(0, -(AL + 0.06), 0.16); handL.castShadow = true;
+    if (s.printed) {
+      // Brazo tipo minifigura: masa gruesa con hombro redondeado y ligera
+      // curvatura, no un prisma inclinado.
+      [this.armL, this.armR].forEach((g, k) => {
+        const sx = k === 0 ? -1 : 1;
+        const arm = buildLock({
+          root: new THREE.Vector3(0, -0.04, 0.06),
+          dir: new THREE.Vector3(sx * 0.1, -1, 0.02),
+          length: AL, radius: 0.3, taper: 0.26, flatten: 0.92,
+          bend: new THREE.Vector3(sx * 0.06, 0, 0.1)
+        }, 14, 12);
+        const m = new THREE.Mesh(arm, this.plastic.get(s.arms));
+        m.castShadow = true; g.add(m);
+        // hombro redondeado que remata la pieza
+        const sh = new THREE.Mesh(new THREE.SphereGeometry(0.29, 18, 14), this.plastic.get(s.arms));
+        sh.position.set(0, -0.02, 0.06); sh.scale.set(1, 0.9, 0.95); sh.castShadow = true;
+        g.add(sh);
+      });
+    } else {
+      this.armL.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
+      this.armR.add(this.box(AW, AL, AD, s.arms, 0, -AL / 2, 0.08));
+    }
+    let handL: THREE.Object3D;
+    if (s.printed) {
+      // Mano de pinza: anillo ABIERTO (forma de C) + muñeca cilíndrica.
+      const hand = new THREE.Group();
+      const ring = new THREE.TorusGeometry(0.23, 0.085, 12, 26, Math.PI * 1.45);
+      ring.rotateX(Math.PI / 2); ring.rotateY(Math.PI * 0.62);
+      const rm = new THREE.Mesh(ring, this.plastic.get(s.hands)); rm.castShadow = true;
+      hand.add(rm);
+      const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.22, 16), this.plastic.get(s.hands));
+      wrist.position.set(0, 0.16, 0); wrist.castShadow = true;
+      hand.add(wrist);
+      hand.position.set(0, -(AL + 0.02), 0.14);
+      handL = hand;
+    } else {
+      const handGeo = new THREE.TorusGeometry(0.19, 0.1, 10, 18);
+      handGeo.rotateX(Math.PI / 2);
+      const h = new THREE.Mesh(handGeo, this.plastic.get(s.hands));
+      h.position.set(0, -(AL + 0.06), 0.16); h.castShadow = true;
+      handL = h;
+    }
     this.armL.add(handL); this.armR.add(handL.clone());
     this.root.add(this.armL, this.armR);
 
@@ -812,16 +863,15 @@ export class Minifigure {
         this.root.add(this.box(0.18, 0.62, 0.3, col, 0.44, 3.6, 0.32));
       }
       if (s.printed) {
-        // BARBA ESCULPIDA: malla propia con masas grandes (mechones), masas
-        // secundarias irregulares y remate dividido en puntas. Sustituye al
-        // torno de revolución, que solo sabía hacer conos y cortinas.
+        // BARBA DE MECHONES: pieza moldeada formada por masas grandes que nacen
+        // en la mandíbula, caen con curvatura propia y terminan a distinta
+        // altura. Nada de pelo fino ni capas de pelusa: 23 masas geométricas.
         const hairTex = beardTex();
-        const geo = buildBeardGeometry({ height: 1.62, width: 0.74, depth: 0.8, lobes: 5, sideRise: 0.3 });
-        this.root.add(this.texMesh(geo, hairTex, 0, 1.92, 0.20, { hair: true }));
-        this.addFuzz(geo, 0, 1.92, 0.20, new THREE.Vector3(1, 1, 1), 0, 0.8);
-        // Bigote: pieza propia que cae por los extremos y enmarca la boca.
-        const mus = buildMustacheGeometry();
-        this.root.add(this.texMesh(mus, beardTexRot(1.35), 0, 3.75, 0.46, { hair: true }));
+        this.root.add(this.texMesh(mergeLocks(beardLockSpecs({ jawY: 3.46, jawR: 0.52, z: 0.08 })),
+          hairTex, 0, 0, 0, { hair: true }));
+        // BIGOTE: dos masas propias por delante de la barba, boca libre entre ellas.
+        this.root.add(this.texMesh(mergeLocks(moustacheLockSpecs(3.80, 0.54)),
+          hairTex, 0, 0, 0, { hair: true }));
       } else {
       // Cuerpo: cono que arranca en la barbilla (~3.45) y baja en punta al pecho
       const bg = new THREE.ConeGeometry(0.5, 1.45, 22);
@@ -942,16 +992,16 @@ export class Minifigure {
         const domeMesh = s.printed
           ? this.texMesh(dome, capTex(), 0, 4.25, -0.02, { cloth: true })
           : this.mesh(dome, hw, 0, 4.24, -0.02);
-        domeMesh.scale.set(s.printed ? 1.06 : 1.02, s.printed ? 0.60 : 1.04, s.printed ? 1.06 : 1.02);
+        domeMesh.scale.set(s.printed ? 1.04 : 1.02, s.printed ? 0.86 : 1.04, s.printed ? 1.04 : 1.02);
         this.root.add(domeMesh);
         // Borde inferior GRUESO y enrollado
-        const brim = new THREE.TorusGeometry(s.printed ? 0.70 : 0.6, s.printed ? 0.1 : 0.085, 16, 40);
+        const brim = new THREE.TorusGeometry(s.printed ? 0.70 : 0.6, s.printed ? 0.145 : 0.085, 18, 44);
         brim.rotateX(Math.PI / 2);
         this.root.add(this.mesh(brim, hw, 0, s.printed ? 4.25 : 4.24, -0.02));
         if (s.printed) {
           // Banda bordada: cono que sigue la curva del gorro, justo sobre el
           // borde enrollado (posición controlada en 3D, no por UV de la esfera).
-          const band = new THREE.CylinderGeometry(0.70, 0.742, 0.2, 52, 1, true);
+          const band = new THREE.CylinderGeometry(0.685, 0.723, 0.16, 52, 1, true);
           this.root.add(this.texMesh(band, embroideryTex(), 0, 4.40, -0.02, { cloth: true }));
         } else {
         // Bandas de bordado plateado (2 finas + 1 central algo más marcada)
@@ -967,10 +1017,17 @@ export class Minifigure {
         });
         }
         // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
-        const HX = s.printed ? 0.62 : 0.52, HYY = s.printed ? 3.82 : 3.86;
-        this.root.add(this.box(0.16, 0.5, 0.42, hair, -HX, HYY, -0.05));
-        this.root.add(this.box(0.16, 0.5, 0.42, hair, HX, HYY, -0.05));
-        this.root.add(this.box(s.printed ? 1.1 : 0.98, 0.42, 0.28, hair, 0, HYY + 0.04, s.printed ? -0.54 : -0.46));
+        if (s.printed) {
+          // Pelo marrón oscuro que asoma entre el gorro y la barba (clave en la ref)
+          const hg = mergeLocks(sideHairSpecs(3.98, 0.57, 0.0));
+          const hm = new THREE.Mesh(hg, this.plastic.get(hair));
+          hm.castShadow = true; this.root.add(hm);
+          this.root.add(this.box(1.06, 0.4, 0.3, hair, 0, 3.9, -0.5));
+        } else {
+          this.root.add(this.box(0.16, 0.5, 0.42, hair, -0.52, 3.86, -0.05));
+          this.root.add(this.box(0.16, 0.5, 0.42, hair, 0.52, 3.86, -0.05));
+          this.root.add(this.box(0.98, 0.42, 0.28, hair, 0, 3.9, -0.46));
+        }
         break;
       }
       case 'longHair': {
