@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yehoshúa · presentación</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#f5f5f7;
+            font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#2a2e35}
+  canvas{display:block}
+  #cap{position:fixed;left:0;right:0;bottom:18px;text-align:center;pointer-events:none;user-select:none}
+  #cap h1{margin:0;font-size:19px;font-weight:650;letter-spacing:.2px}
+  #cap p{margin:3px 0 0;font-size:12px;color:#8b9099}
+  #hint{position:fixed;left:0;right:0;top:22px;text-align:center;font-size:12px;color:#9aa0a8;
+        pointer-events:none;user-select:none;transition:opacity .6s ease}
+  #hint kbd{background:#e9eaec;border:1px solid #d7d9dd;border-bottom-width:2px;border-radius:4px;
+            padding:0 5px;font:11px ui-monospace,monospace;color:#5b6069}
+  @media (prefers-color-scheme: dark){
+    html,body{background:#111317;color:#e8eaee}
+    #cap p,#hint{color:#7b818a}
+    #hint kbd{background:#23262c;border-color:#31353c;color:#aab0b8}
+  }
+</style></head>
+<body>
+  <div id="hint">Arrastra para girarlo · rueda para acercar · <kbd>espacio</kbd> saluda · <kbd>P</kbd> pausa el giro</div>
+  <div id="cap">
+    <h1>Yehoshúa</h1>
+    <p>Reconstrucción según la hoja de personaje oficial</p>
+  </div>
+  <script type="module" src="/src/yehoshua-showcase.ts"></script>
+</body></html>
