@@ -146,10 +146,10 @@ export function beardLockSpecs(
   [-1, 1].forEach((sx) => {
     for (let k = 0; k < C; k++) {
       const u = k / (C - 1);                 // 0 = pegado al pelo, 1 = hacia el centro
-      const th = sx * (0.95 - 0.42 * u);     // de 0.95 rad (lateral) a 0.53 (frontal)
+      const th = sx * (0.98 - 0.38 * u);     // de 0.98 rad (lateral) a 0.60 (frontal)
       const sn = Math.sin(th), cs = Math.cos(th);
       out.push({
-        root: V(SK * sn, TOP - u * 0.16, SK * cs),
+        root: V(SK * sn, TOP - u * 0.30, SK * cs),
         // cae hacia abajo y va cerrándose hacia el centro y hacia delante
         dir: V(-sn * 0.16, -1, cs * 0.06 + 0.05),
         length: 0.62 + u * 0.34,
@@ -227,6 +227,38 @@ export function napeHairSpecs(y = 3.98, r = 0.6): LockSpec[] {
       taper: 0.55
     });
   }
+  return out;
+}
+
+/**
+ * FLEQUILLO: mechones cortos que nacen JUSTO BAJO EL BORDE DEL GORRO y caen
+ * sobre las sienes. En la hoja oficial el gorro no se apoya sobre piel pelada:
+ * de debajo asoma pelo que baja y se encuentra con la barba.
+ */
+export function fringeSpecs(y = 4.16, r = 0.70): LockSpec[] {
+  const out: LockSpec[] = [];
+  // Medido en la hoja: a la altura de las cejas el pelo ocupa solo el 10 % de
+  // media cara; justo bajo el gorro se ensancha hasta un 30 %. O sea, un
+  // flequillo CORTO en la esquina de la frente, no una cortina sobre los ojos.
+  const N = 5;                       // por lado
+  [-1, 1].forEach((sx) => {
+    for (let k = 0; k < N; k++) {
+      const u = k / (N - 1);                     // 0 = lateral, 1 = esquina de la frente
+      const th = sx * (0.95 - 0.29 * u);         // arco corto: no puede desbordar la cabeza
+      const sn = Math.sin(th), cs = Math.cos(th);
+      out.push({
+        root: V(r * sn, y - u * 0.02, r * cs),
+        // cae a plomo y se retira un pelín hacia fuera al bajar (deja la sien libre)
+        dir: V(sn * 0.05, -1, cs * 0.04 + 0.03),
+        length: (0.36 - u * 0.14) + (((k * 17) % 5) / 5) * 0.07,
+        radius: 0.085 - 0.018 * u,
+        bend: V(sn * 0.03, -0.02, 0.02),
+        flatten: 0.78,
+        taper: 0.62,
+        shade: ((k * 3) % 7) / 9
+      });
+    }
+  });
   return out;
 }
 

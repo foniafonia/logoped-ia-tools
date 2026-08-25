@@ -128,3 +128,24 @@ Los mechones de mejilla de la barba nacen **sobre la superficie de la cabeza**
 (radio 0.685), entre 0.53 y 0.95 rad desde el frente, arrancando a y ≈ 3,92
 justo bajo el borde del gorro. Antes nacían a radio 0.44, es decir dentro del
 cráneo, y por eso sólo asomaban trozos sueltos.
+
+### Flequillo y color del pelo
+
+Muestreado en la sien de la hoja oficial: el pelo bajo el gorro es **gris cálido
+oscuro** (#55504b, con luces hasta #8c8782 y sombras a #2d231c), no marrón
+chocolate. Es de la misma familia que la barba, sólo que más oscuro, y va
+aclarándose al bajar hasta enlazar con el gris de la barba (#9c9993). Por eso la
+textura del casquete es un degradado #2f2b28 → #8b857d.
+
+Anchura del pelo en la cara, medida por filas:
+
+| altura | pelo visible a cada lado |
+|---|---|
+| justo bajo el gorro (y ≈ 4,16) | ~30 % de media cara |
+| a la altura de las cejas (y ≈ 4,02) | ~10 % de media cara |
+| pómulo (y ≈ 3,84) | ya se junta con la barba |
+
+O sea: **flequillo corto en la esquina de la frente**, no una cortina sobre los
+ojos. En el código son 5 mechones por lado (`fringeSpecs`) en un arco de 0,95 a
+0,66 rad sobre un radio de 0,70, con grosor pequeño para que ni un mechón
+desborde la silueta de la cabeza (0,66).

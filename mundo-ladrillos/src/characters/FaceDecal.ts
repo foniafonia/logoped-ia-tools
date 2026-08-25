@@ -369,30 +369,44 @@ export function makeCapTexture(cloth = '#0c3252', thread = '#e6eaee'): THREE.Can
  */
 export function makeHeadHairTexture(): THREE.CanvasTexture {
   return canvasTex(512, 512, (g) => {
+    // Muestreado de la hoja oficial: la sien es GRIS CÁLIDO OSCURO (#55504b),
+    // no marrón. Baja aclarándose hasta enlazar con el gris de la barba, para
+    // que pelo y barba se lean como la misma mata.
     const base = g.createLinearGradient(0, 0, 0, 512);
-    base.addColorStop(0, '#241a10');
-    base.addColorStop(0.55, '#3a2a1c');
-    base.addColorStop(1, '#4a3722');
+    base.addColorStop(0, '#2f2b28');     // pegado al gorro, en sombra
+    base.addColorStop(0.35, '#4b4641');
+    base.addColorStop(0.72, '#6d675f');
+    base.addColorStop(1, '#8b857d');     // ya casi el tono de la barba
     g.fillStyle = base; g.fillRect(0, 0, 512, 512);
     const r = rng(77123);
-    const tonos = ['#1d150d', '#2e2114', '#43301d', '#553f27', '#664c2f'];
+    const grises = ['#3a3532', '#565049', '#797472', '#8c8782', '#a09a92'];
+    const calidos = ['#4a4038', '#5c5045', '#6e6154'];   // alguna veta parda, pocas
     g.lineCap = 'round';
     for (let i = 0; i < 260; i++) {
       const x = r() * 512;
-      g.strokeStyle = tonos[Math.floor(r() * tonos.length)];
-      g.globalAlpha = 0.35 + r() * 0.4;
+      const parda = r() < 0.22;
+      g.strokeStyle = parda ? calidos[Math.floor(r() * 3)] : grises[Math.floor(r() * 5)];
+      g.globalAlpha = 0.3 + r() * 0.38;
       g.lineWidth = 3 + r() * 9;
       g.beginPath();
       g.moveTo(x, -20);
       g.bezierCurveTo(x + (r() - 0.5) * 26, 180, x + (r() - 0.5) * 34, 340, x + (r() - 0.5) * 22, 540);
       g.stroke();
     }
-    // puntas deshilachadas abajo, donde el pelo se mezcla con la barba
+    // Surcos de separación entre mechas
+    g.globalAlpha = 0.5;
+    for (let i = 0; i < 70; i++) {
+      const x = r() * 512;
+      g.strokeStyle = 'rgba(34,30,27,.6)'; g.lineWidth = 1.5 + r() * 3;
+      g.beginPath(); g.moveTo(x, 0); g.quadraticCurveTo(x + (r() - 0.5) * 20, 256, x + (r() - 0.5) * 26, 512); g.stroke();
+    }
+    // Puntas deshilachadas abajo, donde el pelo se mezcla con la barba
     g.globalAlpha = 1;
-    for (let i = 0; i < 90; i++) {
-      const x = r() * 512, h = 30 + r() * 70;
-      g.strokeStyle = 'rgba(20,14,8,.5)'; g.lineWidth = 2 + r() * 4;
-      g.beginPath(); g.moveTo(x, 512); g.lineTo(x + (r() - 0.5) * 14, 512 - h); g.stroke();
+    for (let i = 0; i < 100; i++) {
+      const x = r() * 512, h = 30 + r() * 80;
+      g.strokeStyle = r() < 0.5 ? 'rgba(40,36,32,.45)' : 'rgba(150,144,136,.4)';
+      g.lineWidth = 2 + r() * 4;
+      g.beginPath(); g.moveTo(x, 512); g.lineTo(x + (r() - 0.5) * 16, 512 - h); g.stroke();
     }
   });
 }

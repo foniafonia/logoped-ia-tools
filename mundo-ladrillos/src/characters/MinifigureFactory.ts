@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
 import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, headHairTex, embroideryTex } from './FaceDecal';
-import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, napeHairSpecs } from './HairLocks';
+import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, fringeSpecs, napeHairSpecs } from './HairLocks';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -1098,10 +1098,14 @@ export class Minifigure {
           // enganchan sin dejar piel amarilla en medio.
           const shell = new THREE.CylinderGeometry(0.675, 0.675, 1.06, 44, 1, true, 0.92, Math.PI * 2 - 1.84);
           this.root.add(this.texMesh(shell, headHairTex(), 0, 3.79, 0, { hair: true, side: THREE.DoubleSide }));
-          // Sólo la nuca conserva mechones con relieve (ahí no molestan a la silueta)
-          const hg = mergeLocks(napeHairSpecs(4.12, 0.672));
-          const hm = new THREE.Mesh(hg, this.plastic.get(hair));
-          hm.castShadow = true; this.root.add(hm);
+          // FLEQUILLO + NUCA: mechones con relieve que nacen bajo el borde del
+          // gorro. El del frente cae sobre las sienes y engancha con la barba;
+          // el de atrás remata la nuca. Van con la misma textura gris cálida
+          // que el casquete, así que toda la mata se lee como una sola pieza.
+          this.root.add(this.texMesh(
+            mergeLocks([...fringeSpecs(4.2, 0.685), ...napeHairSpecs(4.12, 0.672)]),
+            headHairTex(), 0, 0, 0, { hair: true }
+          ));
         } else {
           this.root.add(this.box(0.16, 0.5, 0.42, hair, -0.52, 3.86, -0.05));
           this.root.add(this.box(0.16, 0.5, 0.42, hair, 0.52, 3.86, -0.05));
