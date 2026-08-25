@@ -146,6 +146,21 @@ Anchura del pelo en la cara, medida por filas:
 | pómulo (y ≈ 3,84) | ya se junta con la barba |
 
 O sea: **flequillo corto en la esquina de la frente**, no una cortina sobre los
-ojos. En el código son 5 mechones por lado (`fringeSpecs`) en un arco de 0,95 a
-0,66 rad sobre un radio de 0,70, con grosor pequeño para que ni un mechón
+ojos. En el código son 3 mechones por lado (`fringeSpecs`) en un arco de 0,99 a
+0,86 rad sobre un radio de 0,70, con grosor pequeño para que ni un mechón
 desborde la silueta de la cabeza (0,66).
+
+### Cómo comprobar que no hay pelo de más
+
+`pelo.py` mide, fila a fila, qué porcentaje de MEDIA CARA ocupa el pelo a cada
+lado, en la referencia y en nuestro render. Es la forma rápida de ver si el
+flequillo se está comiendo la cara:
+
+| altura (% desde arriba) | referencia | nuestro |
+|---|---|---|
+| 19 % | 29 % | 27 % |
+| 21 % | 22 % | 22 % |
+| 23 % | 22 % | 27 % |
+| 25 % | 30 % | 34 % |
+
+Por encima del 35 % en las filas 19-23 el muñeco ya lee como si llevara melena.

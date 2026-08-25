@@ -240,21 +240,21 @@ export function fringeSpecs(y = 4.16, r = 0.70): LockSpec[] {
   // Medido en la hoja: a la altura de las cejas el pelo ocupa solo el 10 % de
   // media cara; justo bajo el gorro se ensancha hasta un 30 %. O sea, un
   // flequillo CORTO en la esquina de la frente, no una cortina sobre los ojos.
-  const N = 5;                       // por lado
+  const N = 3;                       // por lado: tres mechones, no una cortina
   [-1, 1].forEach((sx) => {
     for (let k = 0; k < N; k++) {
       const u = k / (N - 1);                     // 0 = lateral, 1 = esquina de la frente
-      const th = sx * (0.95 - 0.29 * u);         // arco corto: no puede desbordar la cabeza
+      const th = sx * (0.99 - 0.13 * u);         // arco muy corto, pegado al borde
       const sn = Math.sin(th), cs = Math.cos(th);
       out.push({
         root: V(r * sn, y - u * 0.02, r * cs),
-        // cae a plomo y se retira un pelín hacia fuera al bajar (deja la sien libre)
-        dir: V(sn * 0.05, -1, cs * 0.04 + 0.03),
-        length: (0.36 - u * 0.14) + (((k * 17) % 5) / 5) * 0.07,
-        radius: 0.085 - 0.018 * u,
+        // cae a plomo y se retira hacia fuera al bajar (deja la sien libre)
+        dir: V(sn * 0.10, -1, cs * 0.04 + 0.03),
+        length: (0.24 - u * 0.05) + (((k * 17) % 5) / 5) * 0.05,
+        radius: 0.07 - 0.015 * u,
         bend: V(sn * 0.03, -0.02, 0.02),
         flatten: 0.78,
-        taper: 0.62,
+        taper: 0.66,
         shade: ((k * 3) % 7) / 9
       });
     }
