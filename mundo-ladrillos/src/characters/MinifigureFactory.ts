@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { PlasticMaterialFactory } from '../materials/PlasticMaterialFactory';
-import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, embroideryTex } from './FaceDecal';
-import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, sideHairSpecs, napeHairSpecs } from './HairLocks';
+import { makeElderFaceTexture, beardTex, beardTexRot, beardFuzz, torsoTex, beltTex, capTex, headHairTex, embroideryTex } from './FaceDecal';
+import { buildLock, mergeLocks, beardLockSpecs, moustacheLockSpecs, napeHairSpecs } from './HairLocks';
 
 /**
  * Minifigura procedural con silueta clásica de juguete de ladrillo (cabeza
@@ -1090,14 +1090,16 @@ export class Minifigure {
         // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
         if (s.printed) {
           // Pelo marrón oscuro que asoma entre el gorro y la barba (clave en la ref)
-          // Casquete SÓLIDO pegado al cráneo: tapa la nuca y los lados para que
-          // no se vea piel amarilla entre mechón y mechón.
-          const shell = new THREE.CylinderGeometry(0.665, 0.665, 1.0, 36, 1, true, Math.PI - 1.25, 2.5);
-          const cap0 = new THREE.Mesh(shell, this.plastic.get(hair).clone());
-          cap0.position.set(0, 3.77, 0); cap0.castShadow = true;
-          (cap0.material as THREE.Material).side = THREE.DoubleSide;
-          this.root.add(cap0);
-          const hg = mergeLocks([...sideHairSpecs(4.14, 0.50, 0.0), ...napeHairSpecs(4.12, 0.665)]);
+          // PELO DE LOS LADOS Y LA NUCA: casquete pegado al cráneo con textura de
+          // hebras, no mechones sueltos. En la referencia el pelo va raso con la
+          // cabeza; si sobresale, ensancha la cara y encima quedan "patillas"
+          // colgando sin tocar la barba. El casquete llega por delante hasta
+          // donde arrancan los mechones de mejilla, así que pelo y barba se
+          // enganchan sin dejar piel amarilla en medio.
+          const shell = new THREE.CylinderGeometry(0.675, 0.675, 1.06, 44, 1, true, 0.92, Math.PI * 2 - 1.84);
+          this.root.add(this.texMesh(shell, headHairTex(), 0, 3.79, 0, { hair: true, side: THREE.DoubleSide }));
+          // Sólo la nuca conserva mechones con relieve (ahí no molestan a la silueta)
+          const hg = mergeLocks(napeHairSpecs(4.12, 0.672));
           const hm = new THREE.Mesh(hg, this.plastic.get(hair));
           hm.castShadow = true; this.root.add(hm);
         } else {

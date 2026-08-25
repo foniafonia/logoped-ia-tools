@@ -110,3 +110,21 @@ Renders limpios (sin HUD ni sombra de suelo) contra el frontal oficial:
 
 El resto de la diferencia es de técnica, no de forma: la barba de la referencia
 es una textura fotográfica de pelo y la nuestra está pintada a mano en canvas.
+
+### Pelo lateral y patillas
+
+El pelo de los lados **va raso con el cráneo**, no son mechones que sobresalgan.
+Si sobresale ensancha la cara por encima de lo que marca la hoja y además las
+patillas quedan colgando sin llegar a tocar la barba.
+
+Implementación: un casquete cilíndrico de radio 0.675 (la cabeza es 0.66) con
+textura de hebras, que va desde 0.92 rad por un lado hasta 0.92 rad por el otro
+pasando por la nuca. Por delante llega justo hasta donde arrancan los mechones
+de mejilla de la barba, así que **pelo y barba se enganchan** sin dejar piel
+amarilla en medio. Sólo la nuca conserva mechones con relieve, que ahí no
+afectan a la silueta frontal.
+
+Los mechones de mejilla de la barba nacen **sobre la superficie de la cabeza**
+(radio 0.685), entre 0.53 y 0.95 rad desde el frente, arrancando a y ≈ 3,92
+justo bajo el borde del gorro. Antes nacían a radio 0.44, es decir dentro del
+cráneo, y por eso sólo asomaban trozos sueltos.

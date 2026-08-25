@@ -83,7 +83,9 @@ const V = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Vector3(
  * caen hacia abajo y adelante, más largos en el centro y más cortos y
  * envolventes en los lados. Dos capas: primarios (masa) y secundarios (relieve).
  */
-export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } = {}): LockSpec[] {
+export function beardLockSpecs(
+  o: { jawY?: number; jawR?: number; z?: number; skullR?: number; cheekTopY?: number } = {}
+): LockSpec[] {
   const Y = o.jawY ?? 3.46;      // altura de la mandíbula
   const R = o.jawR ?? 0.47;      // radio de la línea de nacimiento
   const Z = o.z ?? 0.10;
@@ -134,25 +136,31 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
       shade: ((i * 4 + 2) % 7) / 9
     });
   }
-  // --- 8 mechones cortos de MEJILLA: la barba vuelve a cubrir los laterales
-  //     de la cara sin ensanchar el pico de abajo ---
-  const C = 8;
-  for (let i = 0; i < C; i++) {
-    const sx = i < C / 2 ? -1 : 1;
-    const k = i % (C / 2);
-    const th = sx * (1.02 + k * 0.3);
-    const sn = Math.sin(th), cs = Math.cos(th);
-    out.push({
-      root: V(R * 0.9 * sn, Y + 0.46 - k * 0.1, Z + R * 0.8 * cs),
-      dir: V(sn * 0.14, -1, cs * 0.12 + 0.04),
-      length: 0.52 + k * 0.1,
-      radius: 0.145,
-      bend: V(-sn * 0.2, -0.02, 0.01),
-      flatten: 0.8,
-      taper: 0.5,
-      shade: ((i * 5) % 7) / 9
-    });
-  }
+  // --- MEJILLAS: la barba sube por el lado de la cara hasta ENGANCHAR con el
+  //     pelo que baja del gorro. Antes nacían a radio 0.44 (dentro del cráneo,
+  //     que es de 0.66) y por eso sólo asomaban trozos sueltos y colgantes.
+  //     Ahora nacen SOBRE la superficie de la cabeza, de fuera hacia dentro.
+  const SK = o.skullR ?? 0.685;      // radio de la cabeza + un pelo
+  const TOP = o.cheekTopY ?? 3.92;   // arranque, justo bajo el borde del gorro
+  const C = 5;                       // por lado
+  [-1, 1].forEach((sx) => {
+    for (let k = 0; k < C; k++) {
+      const u = k / (C - 1);                 // 0 = pegado al pelo, 1 = hacia el centro
+      const th = sx * (0.95 - 0.42 * u);     // de 0.95 rad (lateral) a 0.53 (frontal)
+      const sn = Math.sin(th), cs = Math.cos(th);
+      out.push({
+        root: V(SK * sn, TOP - u * 0.16, SK * cs),
+        // cae hacia abajo y va cerrándose hacia el centro y hacia delante
+        dir: V(-sn * 0.16, -1, cs * 0.06 + 0.05),
+        length: 0.62 + u * 0.34,
+        radius: 0.125 + 0.02 * u,
+        bend: V(-sn * (0.16 + 0.14 * u), -0.03, 0.03),
+        flatten: 0.8,
+        taper: 0.46,
+        shade: ((k * 5) % 7) / 9
+      });
+    }
+  });
   return out;
 }
 

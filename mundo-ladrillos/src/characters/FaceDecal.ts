@@ -361,14 +361,52 @@ export function makeCapTexture(cloth = '#0c3252', thread = '#e6eaee'): THREE.Can
 }
 
 /* Memorización: estas texturas no dependen de la emoción, se reutilizan. */
+/**
+ * PELO DE LA CABEZA: la banda café oscuro que asoma entre el gorro y la barba.
+ * En la referencia va RASA con el cráneo (no son mechones que sobresalgan), así
+ * que aquí es una textura de hebras verticales sobre un casquete pegado a la
+ * cabeza, no geometría que ensanche la silueta.
+ */
+export function makeHeadHairTexture(): THREE.CanvasTexture {
+  return canvasTex(512, 512, (g) => {
+    const base = g.createLinearGradient(0, 0, 0, 512);
+    base.addColorStop(0, '#241a10');
+    base.addColorStop(0.55, '#3a2a1c');
+    base.addColorStop(1, '#4a3722');
+    g.fillStyle = base; g.fillRect(0, 0, 512, 512);
+    const r = rng(77123);
+    const tonos = ['#1d150d', '#2e2114', '#43301d', '#553f27', '#664c2f'];
+    g.lineCap = 'round';
+    for (let i = 0; i < 260; i++) {
+      const x = r() * 512;
+      g.strokeStyle = tonos[Math.floor(r() * tonos.length)];
+      g.globalAlpha = 0.35 + r() * 0.4;
+      g.lineWidth = 3 + r() * 9;
+      g.beginPath();
+      g.moveTo(x, -20);
+      g.bezierCurveTo(x + (r() - 0.5) * 26, 180, x + (r() - 0.5) * 34, 340, x + (r() - 0.5) * 22, 540);
+      g.stroke();
+    }
+    // puntas deshilachadas abajo, donde el pelo se mezcla con la barba
+    g.globalAlpha = 1;
+    for (let i = 0; i < 90; i++) {
+      const x = r() * 512, h = 30 + r() * 70;
+      g.strokeStyle = 'rgba(20,14,8,.5)'; g.lineWidth = 2 + r() * 4;
+      g.beginPath(); g.moveTo(x, 512); g.lineTo(x + (r() - 0.5) * 14, 512 - h); g.stroke();
+    }
+  });
+}
+
 let _beard: THREE.CanvasTexture | null = null;
 let _torso: THREE.CanvasTexture | null = null;
 let _belt: THREE.CanvasTexture | null = null;
 let _cap: THREE.CanvasTexture | null = null;
+let _headHair: THREE.CanvasTexture | null = null;
 export const beardTex = (): THREE.CanvasTexture => (_beard ??= makeBeardTexture());
 export const torsoTex = (): THREE.CanvasTexture => (_torso ??= makeTorsoTexture());
 export const beltTex = (): THREE.CanvasTexture => (_belt ??= makeBeltTexture());
 export const capTex = (): THREE.CanvasTexture => (_cap ??= makeCapTexture());
+export const headHairTex = (): THREE.CanvasTexture => (_headHair ??= makeHeadHairTexture());
 let _emb: THREE.CanvasTexture | null = null;
 export const embroideryTex = (): THREE.CanvasTexture => (_emb ??= makeEmbroideryTexture());
 
