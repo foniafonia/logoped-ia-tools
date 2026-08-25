@@ -85,7 +85,7 @@ const V = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Vector3(
  */
 export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } = {}): LockSpec[] {
   const Y = o.jawY ?? 3.46;      // altura de la mandíbula
-  const R = o.jawR ?? 0.50;      // radio de la línea de nacimiento
+  const R = o.jawR ?? 0.47;      // radio de la línea de nacimiento
   const Z = o.z ?? 0.10;
   const out: LockSpec[] = [];
 
@@ -143,10 +143,10 @@ export function beardLockSpecs(o: { jawY?: number; jawR?: number; z?: number } =
     const th = sx * (1.02 + k * 0.3);
     const sn = Math.sin(th), cs = Math.cos(th);
     out.push({
-      root: V(R * 0.96 * sn, Y + 0.46 - k * 0.1, Z + R * 0.8 * cs),
-      dir: V(sn * 0.16, -1, cs * 0.12 + 0.04),
+      root: V(R * 0.9 * sn, Y + 0.46 - k * 0.1, Z + R * 0.8 * cs),
+      dir: V(sn * 0.14, -1, cs * 0.12 + 0.04),
       length: 0.52 + k * 0.1,
-      radius: 0.16,
+      radius: 0.145,
       bend: V(-sn * 0.2, -0.02, 0.01),
       flatten: 0.8,
       taper: 0.5,
@@ -203,13 +203,17 @@ export function napeHairSpecs(y = 3.98, r = 0.6): LockSpec[] {
   const N = 10;
   for (let i = 0; i < N; i++) {
     const u = i / (N - 1);
-    const th = Math.PI + (-1.15 + 2.3 * u);      // arco trasero
+    // Arco trasero CORTO: si se abre más, el pelo de la nuca asoma por los
+    // lados y ensancha la silueta de la cara, cosa que en la referencia no pasa.
+    const th = Math.PI + (-1.05 + 2.1 * u);
     const sn = Math.sin(th), cs = Math.cos(th);
+    const lado = Math.abs(u - 0.5) * 2;               // 0 en la nuca, 1 en los lados
     out.push({
-      root: V(r * sn, y, r * cs),
-      dir: V(sn * 0.14, -1, cs * 0.2),
-      length: 0.46 + (((i * 13) % 5) / 5) * 0.14,
-      radius: 0.17,
+      // en los lados el mechón se mete hacia dentro para no ensanchar la cara
+      root: V(r * sn * (1 - 0.12 * lado), y, r * cs),
+      dir: V(sn * 0.06, -1, cs * 0.2),
+      length: 0.78 + (((i * 13) % 5) / 5) * 0.16,
+      radius: 0.155 - 0.03 * lado,
       bend: V(0, -0.02, cs * 0.05),
       flatten: 0.85,
       taper: 0.55
@@ -219,15 +223,15 @@ export function napeHairSpecs(y = 3.98, r = 0.6): LockSpec[] {
 }
 
 /** PELO LATERAL: masas marrones que asoman entre el gorro y la barba. */
-export function sideHairSpecs(y = 3.98, x = 0.56, z = 0.02): LockSpec[] {
+export function sideHairSpecs(y = 3.98, x = 0.53, z = 0.02): LockSpec[] {
   const out: LockSpec[] = [];
   [-1, 1].forEach((sx) => {
     for (let k = 0; k < 2; k++) {
       out.push({
         root: V(sx * x, y - k * 0.06, z - 0.06 - k * 0.16),
-        dir: V(sx * 0.22, -1, -0.1),
-        length: 0.5 - k * 0.08,
-        radius: 0.15 - k * 0.02,
+        dir: V(sx * 0.06, -1, -0.1),
+        length: 0.68 - k * 0.08,
+        radius: 0.125 - k * 0.02,
         bend: V(sx * 0.05, 0, -0.04),
         flatten: 0.8,
         taper: 0.7

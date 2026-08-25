@@ -19,7 +19,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-const BG_LIGHT = new THREE.Color(0xf7f7f8);
+const BG_LIGHT = new THREE.Color(0xffffff);
 const BG_DARK = new THREE.Color(0x1d1f24);
 scene.background = BG_LIGHT.clone();
 
@@ -38,9 +38,9 @@ scene.add(floor);
 
 // ILUMINACIÓN DE PRODUCTO: key grande y suave + fill + rim discreta.
 // Una luz plana y uniforme aplana el volumen; esto lo modela.
-scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8dc, 0.62));   // ambiente contenido
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8dc, 0.5));    // ambiente contenido
 // KEY: grande, alta y ligeramente a la izquierda; es la que da la forma.
-const key = new THREE.DirectionalLight(0xfffaf2, 2.1);
+const key = new THREE.DirectionalLight(0xfffaf2, 1.85);
 key.position.set(-4.5, 9.5, 7.5);
 key.castShadow = true;
 key.shadow.mapSize.set(2048, 2048);
@@ -50,7 +50,7 @@ key.shadow.camera.top = 8; key.shadow.camera.bottom = -3;
 key.shadow.radius = 9; key.shadow.bias = -0.0004;
 scene.add(key);
 // FILL: suave desde el lado opuesto, sin sombra, para abrir las sombras.
-const fill = new THREE.DirectionalLight(0xeef2ff, 0.75); fill.position.set(6, 3.5, 5); scene.add(fill);
+const fill = new THREE.DirectionalLight(0xeef2ff, 0.62); fill.position.set(6, 3.5, 5); scene.add(fill);
 // RIM: recorta el contorno contra el fondo y separa la figura.
 const rim = new THREE.DirectionalLight(0xffffff, 1.15); rim.position.set(2.5, 5.5, -7); scene.add(rim);
 const rim2 = new THREE.DirectionalLight(0xffffff, 0.5); rim2.position.set(-5, 3, -5); scene.add(rim2);
@@ -82,7 +82,7 @@ controls.maxPolarAngle = Math.PI * 0.52;
 controls.update();
 
 const fx = setupPreciousRender(renderer, scene, camera, {
-  exposure: 1.12,
+  exposure: 0.92,
   bloom: { strength: 0.08, radius: 0.4, threshold: 1.0 }
 });
 

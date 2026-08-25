@@ -125,10 +125,10 @@ export function makeElderFaceTexture(emotion: Emotion): THREE.CanvasTexture {
 
     // --- Boca pequeña entreabierta (queda bajo el bigote) ---
     const MY = 344;
-    g.fillStyle = '#5d3218';
-    g.beginPath(); g.ellipse(CX, MY, 40, 20, 0, 0, Math.PI * 2); g.fill();
-    g.fillStyle = '#8a4d27';
-    g.beginPath(); g.ellipse(CX, MY + 12, 34, 9, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#40200f';
+    g.beginPath(); g.ellipse(CX, MY, 31, 14, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#6b3a1d';
+    g.beginPath(); g.ellipse(CX, MY + 8, 26, 6, 0, 0, Math.PI * 2); g.fill();
   });
 }
 
@@ -145,14 +145,14 @@ export function makeBeardTexture(): THREE.CanvasTexture {
   return canvasTex(768, 768, (g) => {
     // Base con degradado: raíces más oscuras arriba, puntas claras abajo.
     const base = g.createLinearGradient(0, 0, 0, 768);
-    base.addColorStop(0, '#37332c');
-    base.addColorStop(0.35, '#4c483f');
-    base.addColorStop(0.75, '#635e56');
-    base.addColorStop(1, '#7a746c');
+    base.addColorStop(0, '#2b2721');
+    base.addColorStop(0.35, '#3e3a33');
+    base.addColorStop(0.75, '#524d45');
+    base.addColorStop(1, '#67615a');
     g.fillStyle = base; g.fillRect(0, 0, 768, 768);
 
-    const cold = ['#b3aea7', '#9a948c', '#827c74', '#6a645c'];
-    const warm = ['#8e7f6a', '#786a56', '#635746', '#4e4436']; // vetas marrones
+    const cold = ['#a09b94', '#8a847c', '#726c64', '#5a544c'];
+    const warm = ['#79684f', '#63543f', '#4f4331', '#3b3124']; // vetas marrones
     const r = rng(20260824);
 
     // 1) Mechones anchos: agrupan el pelo en madejas (lo que da el veteado).
@@ -258,11 +258,11 @@ export function makeTorsoTexture(): THREE.CanvasTexture {
     const W = 512, H = 528;
     // Túnica azul profundo con volumen (más clara en el centro)
     const cloth = g.createLinearGradient(0, 0, W, 0);
-    cloth.addColorStop(0, '#103c62'); cloth.addColorStop(0.5, '#1a5b8e'); cloth.addColorStop(1, '#103c62');
+    cloth.addColorStop(0, '#0a3763'); cloth.addColorStop(0.5, '#0f5a95'); cloth.addColorStop(1, '#0a3763');
     g.fillStyle = cloth; g.fillRect(0, 0, W, H);
 
     // Chaleco: panel frontal algo más oscuro con borde marcado
-    g.fillStyle = '#104263';
+    g.fillStyle = '#0a3f66';
     g.beginPath();
     g.moveTo(W * 0.14, 0); g.lineTo(W * 0.86, 0);
     g.lineTo(W * 0.82, H); g.lineTo(W * 0.18, H);
@@ -335,7 +335,7 @@ export function makeBeltTexture(): THREE.CanvasTexture {
 }
 
 /** Gorro: lana de punto con costillas finas + bordado plateado alrededor. */
-export function makeCapTexture(cloth = '#0e3a64', thread = '#e6eaee'): THREE.CanvasTexture {
+export function makeCapTexture(cloth = '#0c3252', thread = '#e6eaee'): THREE.CanvasTexture {
   const t = canvasTex(1024, 512, (g) => {
     const W = 1024, H = 512;
     g.fillStyle = cloth; g.fillRect(0, 0, W, H);
@@ -343,7 +343,7 @@ export function makeCapTexture(cloth = '#0e3a64', thread = '#e6eaee'): THREE.Can
     // Punto de lana: costillas verticales finas alternando luz y sombra
     for (let i = 0; i < 150; i++) {
       const x = (i / 150) * W;
-      g.strokeStyle = i % 2 ? 'rgba(255,255,255,.09)' : 'rgba(0,0,0,.22)';
+      g.strokeStyle = i % 2 ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.26)';
       g.lineWidth = 3 + r() * 2;
       g.beginPath(); g.moveTo(x, 0); g.lineTo(x + (r() - 0.5) * 6, H); g.stroke();
     }

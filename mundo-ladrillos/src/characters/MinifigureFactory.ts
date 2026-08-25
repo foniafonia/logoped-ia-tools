@@ -85,12 +85,12 @@ export interface MinifigureSkin {
  *  shofar/bastón aparte al instanciar si lo necesita la jugabilidad). */
 export const YOSHUA_SKIN: MinifigureSkin = {
   head: 0xf2b40a,        // amarillo dorado (muestreado de la hoja)
-  torso: 0x155789,       // túnica azul PROFUNDO (muestreado)
-  belt: 0x654328,        // cinturón café oscuro (muestreado)
+  torso: 0x0d5288,       // túnica azul PROFUNDO (muestreado: menos rojo que antes)
+  belt: 0x4a2f1a,        // cinturón café oscuro (muestreado)
   legs: 0x14508a,        // piernas azul profundo (muestreado)
   arms: 0x5e3520,        // MANGAS café OSCURO (muestreado)
   hands: 0xf2b40a,
-  headwear: 0x0e3a64,    // gorro azul profundo (muestreado)
+  headwear: 0x0c2f4d,    // gorro azul profundo (muestreado)
   headStyle: 'cap',      // gorro redondeado ajustado con borde enrollado (hoja oficial)
   turbanStripe: 0xc3c8d0, // bordado con hilo PLATEADO
   beard: 0xc4c9ce,       // barba gris plateada, muy larga y densa
@@ -411,6 +411,32 @@ export class Minifigure {
     m.receiveShadow = true;
     return m;
   }
+  /**
+   * Caja TRAPEZOIDAL: ancha abajo, estrecha arriba. El torso de la referencia no
+   * es un prisma recto: se ensancha desde el cuello hasta el cinturón. Se
+   * construye deformando los vértices superiores de una caja redondeada.
+   */
+  private trapBox(
+    wTop: number, wBot: number, h: number, d: number,
+    color: number, x: number, y: number, z: number
+  ): THREE.Mesh {
+    const g = new RoundedBoxGeometry(wBot, h, d, 3, 0.05);
+    const pos = g.attributes.position as THREE.BufferAttribute;
+    const half = h / 2;
+    for (let i = 0; i < pos.count; i++) {
+      const vy = pos.getY(i);
+      const t = THREE.MathUtils.clamp((vy + half) / h, 0, 1);       // 0 abajo, 1 arriba
+      const k = THREE.MathUtils.lerp(1, wTop / wBot, t);
+      pos.setX(i, pos.getX(i) * k);
+    }
+    pos.needsUpdate = true;
+    g.computeVertexNormals();
+    const m = new THREE.Mesh(g, this.plastic.get(color));
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    return m;
+  }
   private cyl(r: number, h: number, color: number, x: number, y: number, z: number, seg = 20): THREE.Mesh {
     const g = new THREE.CylinderGeometry(r, r, h, seg);
     const m = new THREE.Mesh(g, this.plastic.get(color));
@@ -611,18 +637,25 @@ export class Minifigure {
     const emotion = s.emotion ?? 'happy';
 
     // --- Piernas cortas (pivote en la cadera, y ~1.25) ---
-    this.legL.position.set(-0.32, 1.25, 0);
-    this.legR.position.set(0.32, 1.25, 0);
+    // Medidas tomadas de la hoja oficial: cada pierna ocupa 0.275 del ancho
+    // total de la figura y la separación entre ambas es solo 0.055 (casi se
+    // tocan). Antes estaban demasiado estrechas y demasiado juntas.
+    const LX = s.printed ? 0.455 : 0.32;
+    this.legL.position.set(-LX, 1.25, 0);
+    this.legR.position.set(LX, 1.25, 0);
     const LL = s.printed ? 0.86 : 1.2;                       // pierna más corta = más rechoncho
-    this.legL.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
-    this.legR.add(this.box(0.6, LL, 0.8, s.legs, 0, -LL / 2, 0));
+    const LW = s.printed ? 0.76 : 0.6;
+    const LD = s.printed ? 0.9 : 0.8;
+    this.legL.add(this.box(LW, LL, LD, s.legs, 0, -LL / 2, 0));
+    this.legR.add(this.box(LW, LL, LD, s.legs, 0, -LL / 2, 0));
     const FW = s.printed ? 0.56 : 0.62, FD = s.printed ? 0.78 : 0.9;
     if (s.printed) {
-      // Bota: pieza moldeada que cubre el tercio bajo de la pierna (como la ref)
-      const BH = LL * 0.34;
+      // Bota: en la referencia ocupa el 12% final de la altura de la figura,
+      // o sea algo más de la mitad de la pierna visible, no un tercio.
+      const BH = LL * 0.55;
       [this.legL, this.legR].forEach((g) => {
-        g.add(this.box(0.62, BH, 0.84, 0x5b3a22, 0, -(LL - BH / 2), 0.02));
-        g.add(this.box(0.64, 0.12, 0.9, 0x4a2f1b, 0, -(LL + 0.02), 0.04));   // suela
+        g.add(this.box(LW, BH, LD + 0.02, 0x5b3a22, 0, -(LL - BH / 2), 0.02));
+        g.add(this.box(LW - 0.02, 0.09, LD + 0.04, 0x4a2f1b, 0, -(LL + 0.01), 0.04));   // suela
       });
     } else {
       this.legL.add(this.box(FW, 0.16, FD, 0x3a2e24, 0, -(LL + 0.06), 0.05)); // pie
@@ -631,26 +664,43 @@ export class Minifigure {
     this.root.add(this.legL, this.legR);
 
     // --- Cadera + torso trapezoidal ---
-    this.root.add(this.box(1.32, 0.5, 0.85, s.legs, 0, 1.5, 0)); // cadera
-    this.root.add(this.box(1.2, s.printed ? 1.24 : 1.4, 0.8, s.torso, 0, s.printed ? 2.44 : 2.5, 0));  // torso
-    this.root.add(this.box(s.printed ? 1.30 : 1.5, 0.7, 0.86, s.torso, 0, s.printed ? 2.88 : 3.0, 0)); // hombros
-    this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
-    this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, s.printed ? 2.93 : 3.05, 0.38)); // cuello en V
+    if (s.printed) {
+      // TORSO TRAPEZOIDAL de verdad: estrecho en los hombros (1.22) y ancho en
+      // el cinturón (1.64), como en la hoja oficial. La versión anterior era un
+      // prisma recto y encima más ancho arriba que abajo: justo lo contrario.
+      this.root.add(this.box(1.62, 0.55, 0.96, s.legs, 0, 1.475, 0));              // cadera
+      this.root.add(this.trapBox(1.36, 1.73, 1.28, 0.96, s.torso, 0, 2.62, 0));    // torso
+      this.root.add(this.box(1.70, 0.28, 1.0, s.belt, 0, 1.9, 0));                 // cinturón
+    } else {
+      this.root.add(this.box(1.32, 0.5, 0.85, s.legs, 0, 1.5, 0)); // cadera
+      this.root.add(this.box(1.2, 1.4, 0.8, s.torso, 0, 2.5, 0));  // torso
+      this.root.add(this.box(1.5, 0.7, 0.86, s.torso, 0, 3.0, 0)); // hombros
+      this.root.add(this.box(1.36, 0.28, 0.9, s.belt, 0, 1.9, 0)); // cinturón
+    }
+    this.root.add(this.box(0.55, 0.55, 0.2, s.belt, 0, s.printed ? 3.0 : 3.05, s.printed ? 0.48 : 0.38)); // cuello en V
 
     if (s.printed) {
       // TORSO IMPRESO: como la serigrafía de un torso real. Pinta chaleco,
       // costuras negras, pliegues y la prenda interior beige con detalles dorados.
-      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.22, 1.26), torsoTex(), 0, 2.55, 0.445));
+      // El plano sigue el trapecio del torso: se estrecha hacia arriba.
+      const tp = new THREE.PlaneGeometry(1.71, 1.26);
+      const tpp = tp.attributes.position as THREE.BufferAttribute;
+      for (let i = 0; i < tpp.count; i++) {
+        const t = THREE.MathUtils.clamp((tpp.getY(i) + 0.63) / 1.26, 0, 1);
+        tpp.setX(i, tpp.getX(i) * THREE.MathUtils.lerp(1, 1.35 / 1.71, t));
+      }
+      tpp.needsUpdate = true;
+      this.root.add(this.texMesh(tp, torsoTex(), 0, 2.6, 0.492));
       // Cinturón: franjas de cuero y el gran nudo ovalado delineado en negro.
-      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.38, 0.3), beltTex(), 0, 1.9, 0.462));
-      // Volumen real: dos bandas superpuestas y un nudo central saliente.
-      // Cuatro bandas de cuero superpuestas, cada una con su tono y grosor
-      this.root.add(this.box(1.42, 0.11, 0.95, 0x5d3a20, 0, 2.01, 0));
-      this.root.add(this.box(1.41, 0.1, 0.945, 0x7a5230, 0, 1.9, 0));
-      this.root.add(this.box(1.4, 0.09, 0.94, 0x50331c, 0, 1.8, 0));
-      this.root.add(this.box(1.38, 0.08, 0.93, 0x6b452a, 0, 1.71, 0));
-      const knot = new THREE.Mesh(new THREE.SphereGeometry(0.23, 20, 16), this.plastic.get(0x7a5230));
-      knot.position.set(0, 1.89, 0.5); knot.scale.set(1.3, 0.86, 0.62); knot.castShadow = true;
+      this.root.add(this.texMesh(new THREE.PlaneGeometry(1.66, 0.3), beltTex(), 0, 1.9, 0.512));
+      // Volumen real: cuatro bandas de cuero superpuestas, cada una con su tono
+      // y grosor, y un nudo central saliente.
+      this.root.add(this.box(1.74, 0.11, 1.04, 0x452a13, 0, 2.01, 0));
+      this.root.add(this.box(1.73, 0.1, 1.035, 0x593a20, 0, 1.9, 0));
+      this.root.add(this.box(1.70, 0.09, 1.03, 0x3a2411, 0, 1.8, 0));
+      this.root.add(this.box(1.66, 0.08, 1.025, 0x4c301a, 0, 1.71, 0));
+      const knot = new THREE.Mesh(new THREE.SphereGeometry(0.23, 20, 16), this.plastic.get(0x5c3c21));
+      knot.position.set(0, 1.89, 0.51); knot.scale.set(1.55, 0.92, 0.4); knot.castShadow = true;
       this.root.add(knot);
     }
     // Chaleco de héroe: panel frontal de color propio sobre la "camisa" del torso.
@@ -725,31 +775,36 @@ export class Minifigure {
     }
 
     // --- Brazos cortos (pivote en el hombro, y ~3.15) ---
-    const AX = s.printed ? 0.72 : 0.82;
-    this.armL.position.set(-AX, s.printed ? 3.02 : 3.15, 0.05);
-    this.armR.position.set(AX, s.printed ? 3.02 : 3.15, 0.05);
-    this.armR.rotation.z = s.printed ? 0.36 : -0.18;
+    // Apertura medida en la hoja oficial: el brazo baja casi vertical (0.362 rad)
+    // pegado al costado del torso, y solo se despega de él en el último tercio.
+    const AX = s.printed ? 0.65 : 0.82;
+    this.armL.position.set(-AX, s.printed ? 3.12 : 3.15, 0.05);
+    this.armR.position.set(AX, s.printed ? 3.12 : 3.15, 0.05);
+    const SPLAY = s.printed ? 0.30 : 0.18;
+    this.armR.rotation.z = s.printed ? SPLAY : -0.18;
     // Gesto de saludo: brazo IZQUIERDO en alto y hacia fuera (el derecho suele llevar cayado)
     if (s.greeting) { this.armL.rotation.z = 2.55; this.armL.rotation.x = 0.35; }
-    else { this.armL.rotation.z = s.printed ? -0.36 : 0.18; }
-    const AL = s.printed ? 1.06 : 1.05;                 // brazo compacto
+    else { this.armL.rotation.z = s.printed ? -SPLAY : 0.18; }
+    const AL = s.printed ? 1.30 : 1.05;                 // brazo compacto
     const AW = s.printed ? 0.56 : 0.44, AD = s.printed ? 0.62 : 0.54;
     if (s.printed) {
       // Brazo tipo minifigura: masa gruesa con hombro redondeado y ligera
       // curvatura, no un prisma inclinado.
       [this.armL, this.armR].forEach((g, k) => {
         const sx = k === 0 ? -1 : 1;
+        // Manga: masa de grosor casi constante (una minifigura no tiene el brazo
+        // afilado); solo se estrecha un poco hacia la muñeca.
         const arm = buildLock({
           root: new THREE.Vector3(0, -0.04, 0.06),
           dir: new THREE.Vector3(sx * 0.1, -1, 0.02),
-          length: AL, radius: 0.3, taper: 0.26, flatten: 0.92,
-          bend: new THREE.Vector3(sx * 0.06, 0, 0.1)
-        }, 14, 12);
+          length: AL, radius: 0.26, taper: 0.08, flatten: 1.0,
+          bend: new THREE.Vector3(sx * 0.05, 0, 0.09)
+        }, 16, 12);
         const m = new THREE.Mesh(arm, this.plastic.get(s.arms));
         m.castShadow = true; g.add(m);
-        // hombro redondeado que remata la pieza
+        // hombro redondeado, metido hacia el torso para que no lea como bola
         const sh = new THREE.Mesh(new THREE.SphereGeometry(0.29, 18, 14), this.plastic.get(s.arms));
-        sh.position.set(0, -0.02, 0.06); sh.scale.set(1, 0.9, 0.95); sh.castShadow = true;
+        sh.position.set(-sx * 0.03, -0.02, 0.05); sh.scale.set(1, 0.92, 0.95); sh.castShadow = true;
         g.add(sh);
       });
     } else {
@@ -758,17 +813,26 @@ export class Minifigure {
     }
     let handL: THREE.Object3D;
     if (s.printed) {
-      // Mano de pinza: anillo ABIERTO (forma de C) + muñeca cilíndrica.
-      const hand = new THREE.Group();
-      const ring = new THREE.TorusGeometry(0.23, 0.085, 12, 26, Math.PI * 1.45);
-      ring.rotateX(Math.PI / 2); ring.rotateY(Math.PI * 0.62);
-      const rm = new THREE.Mesh(ring, this.plastic.get(s.hands)); rm.castShadow = true;
-      hand.add(rm);
-      const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.22, 16), this.plastic.get(s.hands));
-      wrist.position.set(0, 0.16, 0); wrist.castShadow = true;
-      hand.add(wrist);
-      hand.position.set(0, -(AL + 0.02), 0.14);
-      handL = hand;
+      // Mano en "C": garra abierta vista de frente (eje hacia el espectador),
+      // con la muñeca cilíndrica que la une a la manga. La abertura mira hacia
+      // abajo y hacia fuera, como en la hoja oficial.
+      const makeHand = (sx: number): THREE.Group => {
+        const hand = new THREE.Group();
+        const ring = new THREE.TorusGeometry(0.157, 0.079, 12, 28, Math.PI * 1.62);
+        ring.rotateZ(sx > 0 ? -Math.PI * 0.71 : Math.PI * 0.29);   // la "C" abre hacia el cuerpo
+        const rm = new THREE.Mesh(ring, this.plastic.get(s.hands)); rm.castShadow = true;
+        rm.scale.y = 1.36;                         // garra más alta que ancha, como la ref
+        hand.add(rm);
+        const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 0.26, 16), this.plastic.get(s.hands));
+        wrist.position.set(0, 0.17, 0); wrist.castShadow = true;
+        hand.add(wrist);
+        hand.position.set(0, -(AL + 0.06), 0.11);
+        hand.rotation.z = -sx * SPLAY;            // la mano cuelga vertical, no inclinada
+        return hand;
+      };
+      this.armL.add(makeHand(-1)); this.armR.add(makeHand(1));
+      this.root.add(this.armL, this.armR);
+      handL = new THREE.Group();   // ya colocadas
     } else {
       const handGeo = new THREE.TorusGeometry(0.19, 0.1, 10, 18);
       handGeo.rotateX(Math.PI / 2);
@@ -776,8 +840,10 @@ export class Minifigure {
       h.position.set(0, -(AL + 0.06), 0.16); h.castShadow = true;
       handL = h;
     }
-    this.armL.add(handL); this.armR.add(handL.clone());
-    this.root.add(this.armL, this.armR);
+    if (!s.printed) {
+      this.armL.add(handL); this.armR.add(handL.clone());
+      this.root.add(this.armL, this.armR);
+    }
 
     // Correas tácticas del chaleco (espía)
     if (s.straps !== undefined) {
@@ -870,7 +936,7 @@ export class Minifigure {
         // en la mandíbula, caen con curvatura propia y terminan a distinta
         // altura. Nada de pelo fino ni capas de pelusa: 23 masas geométricas.
         const hairTex = beardTex();
-        this.root.add(this.texMesh(mergeLocks(beardLockSpecs({ jawY: 3.46, jawR: 0.52, z: 0.08 })),
+        this.root.add(this.texMesh(mergeLocks(beardLockSpecs({ jawY: 3.46, jawR: 0.49, z: 0.08 })),
           hairTex, 0, 0, 0, { hair: true }));
         // BIGOTE: dos masas propias por delante de la barba, boca libre entre ellas.
         this.root.add(this.texMesh(mergeLocks(moustacheLockSpecs(3.72, 0.54)),
@@ -1024,7 +1090,14 @@ export class Minifigure {
         // Mechones compactos café oscuro: lados y nuca (la cara queda libre)
         if (s.printed) {
           // Pelo marrón oscuro que asoma entre el gorro y la barba (clave en la ref)
-          const hg = mergeLocks([...sideHairSpecs(3.98, 0.57, 0.0), ...napeHairSpecs(3.96, 0.685)]);
+          // Casquete SÓLIDO pegado al cráneo: tapa la nuca y los lados para que
+          // no se vea piel amarilla entre mechón y mechón.
+          const shell = new THREE.CylinderGeometry(0.665, 0.665, 1.0, 36, 1, true, Math.PI - 1.25, 2.5);
+          const cap0 = new THREE.Mesh(shell, this.plastic.get(hair).clone());
+          cap0.position.set(0, 3.77, 0); cap0.castShadow = true;
+          (cap0.material as THREE.Material).side = THREE.DoubleSide;
+          this.root.add(cap0);
+          const hg = mergeLocks([...sideHairSpecs(4.14, 0.50, 0.0), ...napeHairSpecs(4.12, 0.665)]);
           const hm = new THREE.Mesh(hg, this.plastic.get(hair));
           hm.castShadow = true; this.root.add(hm);
         } else {

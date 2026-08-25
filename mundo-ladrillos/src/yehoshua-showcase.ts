@@ -55,9 +55,9 @@ floor.receiveShadow = true;
 scene.add(floor);
 
 // Luz de producto: key grande y suave + fill + doble rim para recortar el borde.
-const hemi = new THREE.HemisphereLight(0xffffff, 0xd8d8dc, dark ? 0.42 : 0.62);
+const hemi = new THREE.HemisphereLight(0xffffff, 0xd8d8dc, dark ? 0.34 : 0.5);
 scene.add(hemi);
-const key = new THREE.DirectionalLight(0xfffaf2, 2.1);
+const key = new THREE.DirectionalLight(0xfffaf2, 1.85);
 key.position.set(-4.5, 9.5, 7.5);
 key.castShadow = true;
 key.shadow.mapSize.set(MOBILE ? 1024 : 2048, MOBILE ? 1024 : 2048);
@@ -66,7 +66,7 @@ key.shadow.camera.left = -7; key.shadow.camera.right = 7;
 key.shadow.camera.top = 8; key.shadow.camera.bottom = -3;
 key.shadow.radius = 9; key.shadow.bias = -0.0004;
 scene.add(key);
-const fill = new THREE.DirectionalLight(0xeef2ff, 0.75); fill.position.set(6, 3.5, 5); scene.add(fill);
+const fill = new THREE.DirectionalLight(0xeef2ff, 0.62); fill.position.set(6, 3.5, 5); scene.add(fill);
 const rim = new THREE.DirectionalLight(0xffffff, 1.15); rim.position.set(2.5, 5.5, -7); scene.add(rim);
 const rim2 = new THREE.DirectionalLight(0xffffff, 0.5); rim2.position.set(-5, 3, -5); scene.add(rim2);
 
@@ -95,7 +95,7 @@ controls.maxPolarAngle = Math.PI * 0.52;
 controls.update();
 
 const fx = setupPreciousRender(renderer, scene, camera, {
-  exposure: 1.12,
+  exposure: 0.92,
   bloom: { strength: 0.08, radius: 0.4, threshold: 1.0 }
 });
 

@@ -58,3 +58,55 @@ escenarios o personajes adicionales.
 ## Vistas incluidas en la hoja
 Turnaround completo: frontal oficial, tres cuartos izq/der, perfil izq/der, vista
 posterior. Regla: misma identidad desde todos los ángulos.
+
+---
+
+## Proporciones MEDIDAS sobre la hoja oficial (2026-08-25)
+
+Se midió el frontal oficial píxel a píxel y se ajustó la geometría hasta
+igualarlo. Todo está normalizado al **ancho total de la figura** (de punta de
+mano a punta de mano) salvo donde se indica.
+
+| rasgo | valor |
+|---|---|
+| ancho total / altura total | 0,571 |
+| torso a la altura de los hombros (36 %) | 0,466 |
+| torso a la altura del cinturón (63 %) | 0,624 |
+| bloque de cadera / arranque de piernas | 0,598 |
+| una pierna | 0,275 |
+| separación entre piernas | 0,055 |
+| grosor de la manga | 0,10 |
+| ancho de la mano en "C" | 0,167 |
+| alto de la mano | 0,193 |
+
+Alturas, en porcentaje de la altura total contando desde arriba:
+
+| referencia | % |
+|---|---|
+| arranque del torso / hombros | 35–37 % |
+| el brazo se despega del costado | 62 % |
+| centro de la mano | 65–66 % |
+| entrepierna (se abre el hueco) | 79–81 % |
+| corte de la bota | 88 % |
+
+Consecuencias para el código (`printed: true` en `MinifigureFactory`):
+
+- El torso es un **trapecio**: estrecho arriba (1,22–1,36) y ancho abajo (1,73).
+  Antes era un prisma recto y además más ancho arriba: justo al revés.
+- El brazo cae casi vertical (**0,30–0,36 rad**) pegado al costado y solo se
+  separa en el último tercio.
+- Las piernas casi se tocan (`LX ≈ 0,455`, `LW ≈ 0,76`).
+- La bota ocupa el **12 % final de la altura**, no un tercio de la pierna.
+- La mano es un aro en "C" **más alto que ancho**, con la abertura hacia el
+  cuerpo, no un anillo tumbado.
+
+### Cómo se comprueba
+
+Renders limpios (sin HUD ni sombra de suelo) contra el frontal oficial:
+
+- **IoU de silueta: 92,9 %** (cabeza/gorro 95,0 · torso/brazos 95,3 · piernas/botas 88,6)
+- **Coincidencia de color: 81,9 %**
+- Error medio del perfil de anchuras por bandas: **0,0080** en unidades de altura.
+
+El resto de la diferencia es de técnica, no de forma: la barba de la referencia
+es una textura fotográfica de pelo y la nuestra está pintada a mano en canvas.

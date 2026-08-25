@@ -6,3 +6,7 @@ public/fondos/
 
 # Audio maestro de la peli (privado, no subir)
 assets-privados/
+
+# builds de un solo fichero del estudio de Yehoshua (se regeneran con vite.*.config.ts)
+dist-yeho/
+dist-show/
