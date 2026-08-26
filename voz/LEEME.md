@@ -77,19 +77,34 @@ secuencia entera.
 
 ---
 
-## Regenerar en otro proyecto
+## `generar.mjs` — haz tus propias locuciones con la misma voz
+
+Los 537 MP3 de aquí cubren el vocabulario de FonoMundos y nada más. Si tu
+juego dice otras cosas, genera las tuyas: suenan idénticas porque es el mismo
+modelo con los mismos ajustes.
 
 ```bash
 pip install piper-tts
 
-# El modelo (60 MB) y su configuración
+# El modelo (81 MB) y su configuración
 B=https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/sharvard/medium
 curl -L -o es_ES-sharvard-medium.onnx      $B/es_ES-sharvard-medium.onnx
 curl -L -o es_ES-sharvard-medium.onnx.json $B/es_ES-sharvard-medium.onnx.json
 
-echo "¿Con qué sonido empieza?" | python3 -m piper \
-  -m es_ES-sharvard-medium.onnx -s 1 --length-scale 1.35 -f salida.wav
+# Una locución por línea
+cat > textos.txt <<'FIN'
+Escucha el sonido
+Toca el bloque correcto
+Muy bien
+FIN
+
+node generar.mjs textos.txt mi-voz/
 ```
+
+Saca un MP3 por línea con nombre legible y un `indice.json`.
+
+**No generes fonemas con esto.** Ninguna máquina dice una /m/ sola sin colar
+una vocal. Usa los de `fonemas-jose/`.
 
 Los scripts de FonoMundos sirven de plantilla:
 
