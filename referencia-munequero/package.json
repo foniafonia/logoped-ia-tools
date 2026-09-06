@@ -1,0 +1,12 @@
+{
+  "name": "referencia-munequero",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:suelto": "vite build --config vite.singlefile.config.ts"
+  },
+  "dependencies": { "three": "^0.169.0" },
+  "devDependencies": { "vite": "^5.4.0", "vite-plugin-singlefile": "^2.0.0", "typescript": "^5.5.0" }
+}
