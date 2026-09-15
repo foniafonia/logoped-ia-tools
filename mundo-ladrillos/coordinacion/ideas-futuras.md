@@ -81,6 +81,11 @@ mapa "cobra vida solo".
   murallas** encima. Aceleraría muchísimo montar los **juegos 2 y 3** (menos construir a mano).
 - Usos menores: **plano de nivel** antes de construir en 3D; **mapa decorativo 2D** para un
   menú o selector de mundos ("elige mundo").
+- **Detalle clave si lo implementamos (de un segundo post sobre la misma herramienta):** al
+  autodistribuir elementos hay que **meter variación** (giro, escala, color, separación
+  irregular) o el resultado "parece repetitivo" y se nota que lo ha puesto una máquina. Ese
+  es el truco que separa un autogenerador usable de uno que canta. Aplica igual a nuestras
+  tiendas, rocas y multitudes de ladrillo.
 - Prioridad: **baja / futura** — anotado por si al final compensa implementarlo cuando estén
   en marcha las entregas 2 y 3.
 
