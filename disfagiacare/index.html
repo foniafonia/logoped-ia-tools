@@ -1,0 +1,2160 @@
+<!DOCTYPE html><html lang="es" class="h-full"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisfagiaCare Pro - Sistema Avanzado de Recetas Adaptadas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.bd4eeeb8e8e02052ee92.js"></script></head>
+<body class="h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
+    <div id="app" class="min-h-full">
+        <!-- Header -->
+        <header class="bg-primary dark:bg-primary-dark shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/5a9e8e78c3ad75024c490603117c59b2c1ac50645758d4895485869ff2901886?w=1024&amp;h=1024" alt="DisfagiaCare Logo" class="w-8 h-8 mr-3">
+                        <h1 class="text-2xl font-bold text-white">DisfagiaCare</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <button onclick="showSection('inicio')" class="text-white hover:text-gray-200 transition-colors">
+                            <i class="fas fa-home mr-1"></i>Inicio
+                        </button>
+                        <button onclick="showSection('evaluacion')" class="text-white hover:text-gray-200 transition-colors">
+                            <i class="fas fa-clipboard-list mr-1"></i>Evaluación
+                        </button>
+                        <button onclick="showSection('menu')" class="text-white hover:text-gray-200 transition-colors">
+                            <i class="fas fa-calendar-alt mr-1"></i>Mi Menú
+                        </button>
+                        <button onclick="showSection('info')" class="text-white hover:text-gray-200 transition-colors">
+                            <i class="fas fa-info-circle mr-1"></i>Información
+                        </button>
+                        <button onclick="showSection('recursos')" class="text-white hover:text-gray-200 transition-colors">
+                            <i class="fas fa-book-medical mr-1"></i>Centro de Ayuda
+                        </button>
+                    </nav>
+                    <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobileMenu" class="hidden md:hidden bg-primary-dark">
+                <div class="px-4 pb-4 space-y-2">
+                    <button onclick="showSection('inicio'); toggleMobileMenu()" class="block w-full text-left text-white py-2">
+                        <i class="fas fa-home mr-2"></i>Inicio
+                    </button>
+                    <button onclick="showSection('evaluacion'); toggleMobileMenu()" class="block w-full text-left text-white py-2">
+                        <i class="fas fa-clipboard-list mr-2"></i>Evaluación
+                    </button>
+                    <button onclick="showSection('menu'); toggleMobileMenu()" class="block w-full text-left text-white py-2">
+                        <i class="fas fa-calendar-alt mr-2"></i>Mi Menú
+                    </button>
+                    <button onclick="showSection('info'); toggleMobileMenu()" class="block w-full text-left text-white py-2">
+                        <i class="fas fa-info-circle mr-2"></i>Información
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Sección Introducción -->
+            <section id="introduccion" class="section-content">
+                <div class="min-h-screen flex items-center justify-center">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <!-- Logo/Imagen principal -->
+                        <div class="mb-8">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/5a9e8e78c3ad75024c490603117c59b2c1ac50645758d4895485869ff2901886?w=1024&amp;h=1024" alt="DisfagiaCare - Logo principal" class="mx-auto w-80 h-80 object-contain">
+                        </div>
+                        
+                        <!-- Título y descripción -->
+                        <div class="mb-12">
+                            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary dark:text-white">
+                                Bienvenido a DisfagiaCare
+                            </h1>
+                            <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                                Tu aplicación especializada para crear menús seguros y nutritivos 
+                                adaptados a las necesidades de la disfagia según estándares IDDSI.
+                            </p>
+                        </div>
+
+                        <!-- Características principales -->
+                        <div class="grid md:grid-cols-3 gap-6 mb-12">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                                <div class="text-primary text-3xl mb-3">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Evaluación Clínica</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Determina tu nivel IDDSI personalizado
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                                <div class="text-primary text-3xl mb-3">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Menús Adaptados</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Recetas seguras según tu nivel
+                                </p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                                <div class="text-primary text-3xl mb-3">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <h3 class="font-semibold mb-2">Herramientas</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Guías paso a paso y calculadoras
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Botón continuar -->
+                        <button onclick="showSection('inicio')" class="bg-primary hover:bg-primary-dark text-white font-bold py-4 px-12 rounded-xl text-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            Continuar
+                            <i class="fas fa-arrow-right ml-3"></i>
+                        </button>
+
+                        <!-- Disclaimer -->
+                        <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-400">
+                            <p class="text-sm text-blue-800 dark:text-blue-200">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                <strong>Importante:</strong> Esta aplicación es una herramienta de apoyo. 
+                                Siempre consulta con profesionales especializados en disfagia.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Inicio -->
+            <section id="inicio" class="section-content">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 text-primary dark:text-white">Bienvenido a DisfagiaCare</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                        Tu asistente personal para crear menús seguros y nutritivos adaptados a las necesidades de la disfagia.
+                        Utilizamos la clasificación IDDSI para garantizar texturas apropiadas.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div class="text-center">
+                            <i class="fas fa-user-check text-primary text-4xl mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-3">Evaluación Personalizada</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Cuestionario detallado para determinar tu nivel de disfagia y necesidades específicas.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div class="text-center">
+                            <i class="fas fa-utensils text-primary text-4xl mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-3">Menús Adapatados</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Recetas seguras y nutritivas clasificadas según los niveles IDDSI.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div class="text-center">
+                            <i class="fas fa-heart text-primary text-4xl mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-3">Seguridad Alimentaria</h3>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                Basado en evidencia científica para prevenir aspiración y mejorar la nutrición.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="showSection('evaluacion')" class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
+                        Comenzar Evaluación
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <div class="mt-12 bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-200">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Importante: Consulta Profesional
+                    </h3>
+                    <p class="text-blue-700 dark:text-blue-300">
+                        Esta aplicación es una herramienta de apoyo. Siempre consulta con un logopeda o nutricionista especializado 
+                        para obtener un diagnóstico preciso y recomendaciones personalizadas para tu caso específico.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Sección Evaluación -->
+            <section id="evaluacion" class="section-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-primary dark:text-white">Evaluación de Disfagia</h2>
+                    
+                    <form id="evaluationForm" class="space-y-8">
+                        <!-- Datos básicos -->
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Información General</h3>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Edad (años)</label>
+                                    <input type="number" id="edad" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" min="18" max="120" required="">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Peso (kg)</label>
+                                    <input type="number" id="peso" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" min="30" max="200" step="0.1" required="">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Altura (cm)</label>
+                                    <input type="number" id="altura" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" min="80" max="230" required="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluación clínica específica -->
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Evaluación Clínica de Deglución</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">¿Tose con agua o líquidos sin espesar?</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="tos_liquidos_finos" value="true" class="mr-2">
+                                            Sí, frecuentemente
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="tos_liquidos_finos" value="false" class="mr-2">
+                                            No o muy raramente
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">¿Aparece voz 'húmeda' tras beber?</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="voz_humeda" value="true" class="mr-2">
+                                            Sí, habitualmente
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="voz_humeda" value="false" class="mr-2">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">¿Quedan restos de sólidos en boca o carrillos?</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="residuos_solidos" value="true" class="mr-2">
+                                            Sí, con frecuencia
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="residuos_solidos" value="false" class="mr-2">
+                                            No o muy raramente
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Capacidad masticatoria</label>
+                                    <select id="fuerza_masticatoria" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required="">
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="normal">Normal - puedo masticar alimentos duros</option>
+                                        <option value="algo_reducida">Algo reducida - dificultad con alimentos duros</option>
+                                        <option value="muy_reducida">Muy reducida - solo alimentos muy blandos</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Pérdida de peso en los últimos 3 meses</label>
+                                    <select id="perdida_peso" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required="">
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="no">No he perdido peso</option>
+                                        <option value="1-3kg">He perdido entre 1-3 kg</option>
+                                        <option value=">3kg">He perdido más de 3 kg</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Restricciones dietéticas -->
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Restricciones y Preferencias</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Alergias o intolerancias</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="alergias" value="lactosa" class="mr-2">
+                                            Intolerancia a la lactosa
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="alergias" value="gluten" class="mr-2">
+                                            Celiaquía/intolerancia al gluten
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="alergias" value="frutos_secos" class="mr-2">
+                                            Alergia a frutos secos
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="alergias" value="huevo" class="mr-2">
+                                            Alergia al huevo
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Tipo de dieta</label>
+                                    <select id="tipoDieta" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                                        <option value="omnivora">Omnívora</option>
+                                        <option value="vegetariana">Vegetariana</option>
+                                        <option value="vegana">Vegana</option>
+                                        <option value="pescetariana">Pescetariana</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Condiciones médicas especiales</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="condiciones" value="diabetes" class="mr-2">
+                                            Diabetes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="condiciones" value="hipertension" class="mr-2">
+                                            Hipertensión
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="condiciones" value="colesterol" class="mr-2">
+                                            Colesterol alto
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
+                                Generar Mi Menú Personalizado
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Sección Menú -->
+            <section id="menu" class="section-content hidden">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-primary dark:text-white">Tu Menú Personalizado</h2>
+                    
+                    <div id="menuResults" class="hidden">
+                        <!-- Nivel recomendado -->
+                        <div id="nivelRecomendado" class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg mb-8">
+                        </div>
+
+                        <!-- Menú del día -->
+                        <div id="menuDelDia" class="grid lg:grid-cols-2 gap-8">
+                        </div>
+
+                        <!-- Consejos -->
+                        <div class="mt-8 bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-green-800 dark:text-green-200">
+                                <i class="fas fa-lightbulb mr-2"></i>
+                                Consejos Importantes
+                            </h3>
+                            <ul class="text-green-700 dark:text-green-300 space-y-2">
+                                <li><i class="fas fa-check mr-2"></i>Come lentamente y en pequeñas cantidades</li>
+                                <li><i class="fas fa-check mr-2"></i>Mantén una postura erguida mientras comes</li>
+                                <li><i class="fas fa-check mr-2"></i>Evita distraerte durante las comidas</li>
+                                <li><i class="fas fa-check mr-2"></i>Si experimentas tos o dificultades, para inmediatamente</li>
+                                <li><i class="fas fa-check mr-2"></i>Consulta regularmente con tu especialista</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="noMenuMessage" class="text-center">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-lg">
+                            <i class="fas fa-clipboard-list text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">No hay menú disponible</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Primero necesitas completar la evaluación para generar tu menú personalizado.
+                            </p>
+                            <button onclick="showSection('evaluacion')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-6 rounded-lg transition-colors">
+                                Realizar Evaluación
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Centro de Ayuda -->
+            <section id="recursos" class="section-content hidden">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-primary dark:text-white">Centro de Ayuda IDDSI</h2>
+                    
+                    <!-- Banner de seguridad -->
+                    <div id="safetyBanner" class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg mb-8 border-l-4 border-yellow-400">
+                        <p class="text-yellow-800 dark:text-yellow-200">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <strong>Importante:</strong> Esta guía NO sustituye la valoración clínica. Si observas tos frecuente, voz húmeda, pérdida de peso o fiebre, consulta con tu profesional.
+                        </p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-8">
+                        <!-- Guía Rápida para Familias -->
+                        <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                            <h3 class="text-2xl font-semibold mb-4 text-primary dark:text-white">
+                                <i class="fas fa-users mr-2"></i>
+                                Guía Rápida para Familias
+                            </h3>
+                            <div id="guiaFamilias" class="space-y-4">
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    La <strong>disfagia</strong> es dificultad para tragar. Puede causar atragantamientos, 
+                                    neumonía por aspiración y deshidratación.
+                                </p>
+                                
+                                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Reglas de oro en casa ✅</h4>
+                                    <ul class="text-green-700 dark:text-green-300 space-y-1 text-sm">
+                                        <li>• Postura sentada, barbilla ligeramente hacia abajo</li>
+                                        <li>• Bocados pequeños (menos de una cucharadita)</li>
+                                        <li>• Ritmo lento, pausa entre bocados</li>
+                                        <li>• Líquidos espesados si tu profesional lo indicó</li>
+                                        <li>• Sin distracciones durante las comidas</li>
+                                        <li>• Si tose o se atraganta, para inmediatamente</li>
+                                    </ul>
+                                </div>
+
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-blue-600 mb-1">1</div>
+                                        <h5 class="font-semibold text-blue-800 dark:text-blue-200">Cuestionario</h5>
+                                        <p class="text-xs text-blue-700 dark:text-blue-300">Responde sobre tos con líquidos y hábitos</p>
+                                    </div>
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-blue-600 mb-1">2</div>
+                                        <h5 class="font-semibold text-blue-800 dark:text-blue-200">Niveles IDDSI</h5>
+                                        <p class="text-xs text-blue-700 dark:text-blue-300">El sistema sugiere un nivel seguro</p>
+                                    </div>
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-blue-600 mb-1">3</div>
+                                        <h5 class="font-semibold text-blue-800 dark:text-blue-200">Recetas y menú</h5>
+                                        <p class="text-xs text-blue-700 dark:text-blue-300">Obtén recetas ajustadas a la textura</p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-red-800 dark:text-red-200 mb-2">Señales de alerta ⚠️</h4>
+                                    <p class="text-red-700 dark:text-red-300 text-sm">
+                                        Contacta inmediatamente si hay: tos frecuente, voz húmeda tras beber, 
+                                        pérdida de peso, fiebre, rechazo a comer/beber.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Glosario y Calculadora -->
+                        <div class="space-y-6">
+                            <!-- Calculadora de Espesante -->
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold mb-4 text-primary dark:text-white">
+                                    <i class="fas fa-calculator mr-2"></i>
+                                    Calculadora de Espesante
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Nivel IDDSI</label>
+                                        <select id="nivelCalc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-base">
+                                            <option value="1">1 - Ligeramente espeso</option>
+                                            <option value="2">2 - Néctar</option>
+                                            <option value="3" selected="">3 - Miel</option>
+                                            <option value="4">4 - Pudín</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Volumen (ml)</label>
+                                        <input type="number" id="volumenCalc" value="200" min="50" max="1000" step="50" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-base">
+                                    </div>
+                                    <button onclick="calcularEspesante()" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded transition-colors">
+                                        Calcular
+                                    </button>
+                                    <div id="resultadoCalc" class="bg-gray-50 dark:bg-gray-700 p-3 rounded text-sm"></div>
+                                </div>
+                            </div>
+
+                            <!-- Glosario Rápido -->
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold mb-4 text-primary dark:text-white">
+                                    <i class="fas fa-book mr-2"></i>
+                                    Glosario Esencial
+                                </h3>
+                                <div id="glosarioRapido" class="space-y-2 text-sm">
+                                    <div class="border-b border-gray-200 dark:border-gray-600 pb-2">
+                                        <strong>Aspiración:</strong> Entrada de alimento/líquido en vías respiratorias
+                                    </div>
+                                    <div class="border-b border-gray-200 dark:border-gray-600 pb-2">
+                                        <strong>Voz húmeda:</strong> Cambio de voz tras beber que suena burbujeante
+                                    </div>
+                                    <div class="border-b border-gray-200 dark:border-gray-600 pb-2">
+                                        <strong>Doble textura:</strong> Sólido + líquido en la misma cucharada (riesgoso)
+                                    </div>
+                                    <div class="border-b border-gray-200 dark:border-gray-600 pb-2">
+                                        <strong>IDDSI:</strong> Estándar internacional de texturas (0-7)
+                                    </div>
+                                    <button onclick="mostrarGlosarioCompleto()" class="text-primary hover:text-primary-dark text-sm mt-2">
+                                        Ver glosario completo →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chuleta IDDSI -->
+                    <div class="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold mb-6 text-primary dark:text-white">
+                            <i class="fas fa-layer-group mr-2"></i>
+                            Chuleta IDDSI - Niveles de Consistencia
+                        </h3>
+                        <div id="iddsiCards" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                        
+                        <!-- Ejemplos SÍ/NO -->
+                        <div class="mt-6 grid md:grid-cols-3 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-center">Nivel 4 (Puré) - Ejemplos</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="text-green-700 dark:text-green-300">
+                                        <strong>✅ SÍ:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Puré de pollo homogéneo</li>
+                                            <li>Compota espesa de manzana</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        <strong>❌ NO:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Sopa con fideos</li>
+                                            <li>Arroz suelto</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-center">Nivel 5 (Picado) - Ejemplos</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="text-green-700 dark:text-green-300">
+                                        <strong>✅ SÍ:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Pescado desmenuzado con salsa</li>
+                                            <li>Carne picada muy fina</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        <strong>❌ NO:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Frutos secos</li>
+                                            <li>Pan crujiente</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-3 text-center">Nivel 6 (Suave) - Ejemplos</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="text-green-700 dark:text-green-300">
+                                        <strong>✅ SÍ:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Tortilla jugosa</li>
+                                            <li>Verduras tiernas con salsa</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        <strong>❌ NO:</strong>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li>Zanahoria cruda</li>
+                                            <li>Tostadas duras</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQs -->
+                    <div class="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold mb-6 text-primary dark:text-white">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            Preguntas Frecuentes
+                        </h3>
+                        <div id="faqsContainer" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Manual para Enfermería (Modo Avanzado) -->
+                    <div id="manualEnfermeria" class="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hidden">
+                        <h3 class="text-2xl font-semibold mb-6 text-primary dark:text-white">
+                            <i class="fas fa-user-nurse mr-2"></i>
+                            Manual para Enfermería
+                        </h3>
+                        <div class="space-y-4 text-sm">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold mb-2">Verificación de bandejas</h4>
+                                    <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                                        <li>• Comprobar nivel IDDSI prescrito</li>
+                                        <li>• Verificar textura con prueba de cuchara/tenedor</li>
+                                        <li>• Bebidas al nivel espesado indicado</li>
+                                        <li>• Etiquetado claro en bandeja</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Registro de incidencias</h4>
+                                    <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                                        <li>• Observar tos durante/después de comer</li>
+                                        <li>• Registrar voz húmeda tras ingesta</li>
+                                        <li>• Anotar residuos orales</li>
+                                        <li>• Avisar ante signos de aspiración</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Medicación</h4>
+                                <p class="text-yellow-700 dark:text-yellow-300">
+                                    Confirmar SIEMPRE con farmacia antes de triturar. Usar vehículo adecuado (puré/gel). 
+                                    Nunca mezclar múltiples fármacos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón modo avanzado -->
+                    <div class="mt-8 text-center">
+                        <button id="toggleAdvanced" onclick="toggleAdvancedMode()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-cog mr-2"></i>
+                            Mostrar Modo Avanzado
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Información -->
+            <section id="info" class="section-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-primary dark:text-white">Información sobre Disfagia</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-2xl font-semibold mb-4">¿Qué es la Disfagia?</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                La disfagia es la dificultad para tragar alimentos o líquidos. Es un problema frecuente, 
+                                especialmente en personas mayores o con ciertas condiciones neurológicas. En España, 
+                                se estima que podría afectar a unos dos millones de personas.
+                            </p>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Una alimentación adaptada es fundamental para prevenir complicaciones como la 
+                                desnutrición, deshidratación y neumonía por aspiración.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-2xl font-semibold mb-4">Clasificación IDDSI</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Utilizamos la escala IDDSI (International Dysphagia Diet Standardisation Initiative) 
+                                que define 8 niveles de consistencia:
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-semibold mb-2">Líquidos (0-4)</h4>
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                        <li><strong>0:</strong> Líquido fino (agua)</li>
+                                        <li><strong>1:</strong> Ligeramente espeso</li>
+                                        <li><strong>2:</strong> Espesura néctar</li>
+                                        <li><strong>3:</strong> Espesura miel</li>
+                                        <li><strong>4:</strong> Extremadamente espeso</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Sólidos (4-7)</h4>
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                        <li><strong>4:</strong> Puré (triturado)</li>
+                                        <li><strong>5:</strong> Picado fino</li>
+                                        <li><strong>6:</strong> Suave y húmedo</li>
+                                        <li><strong>7:</strong> Textura normal</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                Alimentos de Alto Riesgo a Evitar
+                            </h3>
+                            <ul class="text-yellow-700 dark:text-yellow-300 space-y-2">
+                                <li><i class="fas fa-times mr-2"></i>Alimentos con doble textura (sopa con fideos)</li>
+                                <li><i class="fas fa-times mr-2"></i>Alimentos que liberan líquido (sandía, naranja)</li>
+                                <li><i class="fas fa-times mr-2"></i>Alimentos pegajosos (mantequilla de cacahuete)</li>
+                                <li><i class="fas fa-times mr-2"></i>Alimentos que se disgregan (arroz suelto, galletas)</li>
+                                <li><i class="fas fa-times mr-2"></i>Alimentos que se funden (helado, gelatina)</li>
+                                <li><i class="fas fa-times mr-2"></i>Alimentos duros o crujientes (frutos secos, tostadas)</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-red-800 dark:text-red-200">
+                                <i class="fas fa-stethoscope mr-2"></i>
+                                Consulta Profesional
+                            </h3>
+                            <p class="text-red-700 dark:text-red-300">
+                                Es fundamental que un logopeda o nutricionista especializado evalúe tu caso específico. 
+                                Esta aplicación es una herramienta de apoyo, pero no sustituye el diagnóstico y 
+                                seguimiento profesional. Consulta siempre con tu equipo médico antes de realizar 
+                                cambios significativos en tu dieta.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal personalizado para alertas -->
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+            <div id="modalContent"></div>
+            <div class="flex justify-end mt-4">
+                <button onclick="closeModal()" class="px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-colors">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Widget Disfagia Modal -->
+    <div id="df-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55)">
+      <div style="max-width:980px;margin:40px auto;background:#0f172a;border:1px solid #1f2937;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#0b1228;border-bottom:1px solid #1f2937">
+          <div id="df-title" style="color:#e5e7eb;font-weight:700">Tu resultado y cómo avanzar</div>
+          <button id="df-close" style="background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:10px;padding:8px 12px;cursor:pointer">Cerrar ✕</button>
+        </div>
+        <div id="df-alert" style="background:#2a1313;color:#fecaca;border-top:1px solid #5a1d1d;border-bottom:1px solid #5a1d1d;padding:8px 16px;font-size:14px">⚠️ Esta guía no sustituye la valoración clínica.</div>
+        <div id="df-intro" style="padding:10px 16px;color:#cbd5e1;font-size:14px"></div>
+
+        <div style="display:flex;gap:0;border-bottom:1px solid #1f2937">
+          <button class="df-tab df-active" data-tab="howto">Cómo preparar</button>
+          <button class="df-tab" data-tab="calculator">Calculadora</button>
+          <button class="df-tab" data-tab="resources">Recursos</button>
+          <button class="df-tab" data-tab="iddsi">Chuleta IDDSI</button>
+          <button class="df-tab" data-tab="faq">FAQs</button>
+          <style>
+            .df-tab{flex:1;background:#0f172a;color:#e5e7eb;border:none;border-right:1px solid #1f2937;padding:12px;cursor:pointer;font-size:14px}
+            .df-tab.df-active{background:#111827;font-weight:700}
+            .df-tab:hover{background:#111827}
+          </style>
+        </div>
+
+        <div id="df-body" style="padding:16px;color:#e5e7eb;max-height:60vh;overflow-y:auto">
+          <div data-panel="howto">
+            <div id="df-howto"></div>
+            <div style="margin-top:12px;padding:10px;background:#112a1f;border:1px solid #1f4734;border-radius:12px;color:#d9f99d;font-size:14px">
+              ✅ Consejos de servicio: postura erguida, bocados pequeños, ritmo lento, volver a comprobar textura.
+            </div>
+          </div>
+
+          <div data-panel="calculator" style="display:none">
+            <p id="df-calc-explain" style="color:#cbd5e1;margin-bottom:12px"></p>
+            <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+              <div>
+                <label style="font-size:12px;color:#9ca3af">Nivel de líquidos (IDDSI)</label><br>
+                <select id="df-c-nivel" style="background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:6px;padding:6px">
+                  <option value="1">1 (Ligeramente espeso)</option>
+                  <option value="2">2 (Néctar)</option>
+                  <option value="3">3 (Miel)</option>
+                  <option value="4">4 (Pudín)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:12px;color:#9ca3af">Volumen (ml)</label><br>
+                <input id="df-c-vol" type="number" min="10" step="10" value="200" style="background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:6px;padding:6px;width:80px">
+              </div>
+              <div>
+                <label style="font-size:12px;color:#9ca3af">Marca (referencia)</label><br>
+                <select id="df-c-marca" style="background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:6px;padding:6px"><option>generica</option></select>
+              </div>
+              <button id="df-calc" style="background:#5D5CDE;color:#e5e7eb;border:none;border-radius:6px;padding:8px 12px;cursor:pointer;font-weight:600">Calcular</button>
+            </div>
+            <div id="df-c-out" style="background:#0c1a37;border:1px solid #243a73;border-radius:12px;padding:10px;margin-bottom:16px"></div>
+
+            <h4 style="margin:16px 0 6px 0;color:#e5e7eb">Ejemplos de espesantes</h4>
+            <ul id="df-brand-ex" style="color:#cbd5e1;font-size:13px;padding-left:16px"></ul>
+            <h4 style="margin:12px 0 6px 0;color:#e5e7eb">Notas de seguridad</h4>
+            <ul id="df-c-safety" style="color:#cbd5e1;font-size:13px;padding-left:16px"></ul>
+          </div>
+
+          <div data-panel="resources" style="display:none">
+            <h4 style="color:#e5e7eb;margin-bottom:8px">Aparatos recomendados</h4>
+            <ul id="df-appliances" style="color:#cbd5e1;font-size:13px;padding-left:16px;margin-bottom:16px"></ul>
+            <h4 style="color:#e5e7eb;margin-bottom:8px">Otros útiles</h4>
+            <ul id="df-others" style="color:#cbd5e1;font-size:13px;padding-left:16px"></ul>
+          </div>
+
+          <div data-panel="iddsi" style="display:none">
+            <div id="df-iddsi-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px"></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+              <div><b style="color:#e5e7eb">Nivel 4: SÍ/NO</b><div id="df-yesno-4" style="color:#cbd5e1;font-size:12px;margin-top:6px"></div></div>
+              <div><b style="color:#e5e7eb">Nivel 5: SÍ/NO</b><div id="df-yesno-5" style="color:#cbd5e1;font-size:12px;margin-top:6px"></div></div>
+              <div><b style="color:#e5e7eb">Nivel 6: SÍ/NO</b><div id="df-yesno-6" style="color:#cbd5e1;font-size:12px;margin-top:6px"></div></div>
+            </div>
+          </div>
+
+          <div data-panel="faq" style="display:none">
+            <div id="df-faq"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        // ===================== CONFIGURACIÓN INICIAL =====================
+        // Configuración de modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // ===================== BASE DE DATOS AVANZADA =====================
+        const DATA = {
+            // Guía de espesantes (g por 100ml) - CONFIGURAR POR MARCA
+            guiaEspesante: {
+                generica: { 1: 1.5, 2: 2.5, 3: 3.8, 4: 5.0 }
+            },
+            
+            // Reglas de puntuación para evaluación IDDSI
+            reglas: {
+                pesos: {
+                    "tos_liquidos_finos": { liq: 3 },
+                    "voz_humeda": { liq: 3 },
+                    "residuos_solidos": { sol: 2 },
+                    "fuerza_masticatoria_baja:algo_reducida": { sol: 1 },
+                    "fuerza_masticatoria_baja:muy_reducida": { sol: 2 },
+                    "perdida_peso:1-3kg": { nut: 1 },
+                    "perdida_peso:>3kg": { nut: 2 }
+                },
+                umbrales: {
+                    liquidos: [
+                        { max: 2, nivel: 0 },
+                        { min: 3, max: 4, nivel: 2 },
+                        { min: 5, max: 6, nivel: 3 },
+                        { min: 7, nivel: 4 }
+                    ],
+                    solidos: [
+                        { max: 1, nivel: 6 },
+                        { min: 2, max: 3, nivel: 5 },
+                        { min: 4, nivel: 4 }
+                    ]
+                },
+                nutricion: {
+                    kcal_kg: { base: 27, desnutricion: 30, obesidad: 22 },
+                    prot_g_kg: { base: 1.0, fragilidad: 1.2 }
+                }
+            },
+            
+            // Base de datos de recetas con metadatos completos
+            recetas: [
+                {
+                    id: "R001",
+                    nombre: "Papilla de avena y plátano",
+                    iddsi_solido: 4,
+                    iddsi_liquido_recomendado: [3,4],
+                    dietas_permitidas: ["omnivora","vegetariana","kosher"],
+                    alergenos: ["gluten"],
+                    tags: ["desayuno","vegetariano"],
+                    porciones: 1,
+                    nutricion: { kcal: 320, prot: 11, grasa: 7, carb: 54, fibra: 6, sodio_mg: 120 },
+                    ingredientes: [
+                        { nombre: "copos de avena finos", cantidad: 50, unidad: "g", prep: "cocidos" },
+                        { nombre: "leche o bebida vegetal", cantidad: 200, unidad: "ml" },
+                        { nombre: "plátano maduro", cantidad: 100, unidad: "g", prep: "triturado" },
+                        { nombre: "espesante", cantidad: "según prueba", unidad: "g" }
+                    ],
+                    pasos: [
+                        "Cocer avena en leche 6-8 min.",
+                        "Añadir plátano y triturar.",
+                        "Ajustar a IDDSI 4 (prueba de cuchara)."
+                    ],
+                    equipamiento: ["cazo","batidora"],
+                    pruebas_iddsi: ["prueba_cuchara"],
+                    riesgos_a_evitar: ["doble_textura","trozos_duros"]
+                },
+                {
+                    id: "R002",
+                    nombre: "Puré de pollo con verduras",
+                    iddsi_solido: 4,
+                    iddsi_liquido_recomendado: [3,4],
+                    dietas_permitidas: ["omnivora","kosher"],
+                    alergenos: [],
+                    tags: ["almuerzo","cena","tradicional"],
+                    porciones: 1,
+                    nutricion: { kcal: 450, prot: 30, grasa: 15, carb: 45, fibra: 6, sodio_mg: 300 },
+                    ingredientes: [
+                        { nombre: "pechuga de pollo", cantidad: 100, unidad: "g", prep: "cocida" },
+                        { nombre: "patata", cantidad: 150, unidad: "g", prep: "cocida" },
+                        { nombre: "zanahoria", cantidad: 100, unidad: "g", prep: "cocida" },
+                        { nombre: "caldo bajo en sal", cantidad: 200, unidad: "ml" },
+                        { nombre: "aceite de oliva", cantidad: 10, unidad: "ml" },
+                        { nombre: "espesante", cantidad: "según prueba", unidad: "g" }
+                    ],
+                    pasos: [
+                        "Cocer pollo y verduras muy tiernos.",
+                        "Triturar con caldo y aceite hasta puré homogéneo.",
+                        "Ajustar a IDDSI 4 (prueba de cuchara/tenedor)."
+                    ],
+                    equipamiento: ["batidora","tamiz"],
+                    pruebas_iddsi: ["prueba_cuchara","prueba_tenedor"],
+                    riesgos_a_evitar: ["grumos","doble_textura"]
+                },
+                {
+                    id: "R003",
+                    nombre: "Crema de lentejas rojas y calabaza",
+                    iddsi_solido: 4,
+                    iddsi_liquido_recomendado: [3,4],
+                    dietas_permitidas: ["omnivora","vegetariana","vegana","kosher"],
+                    alergenos: [],
+                    tags: ["almuerzo","cena","vegetariano"],
+                    porciones: 1,
+                    nutricion: { kcal: 400, prot: 18, grasa: 9, carb: 58, fibra: 9, sodio_mg: 240 },
+                    ingredientes: [
+                        { nombre: "lenteja roja", cantidad: 80, unidad: "g", prep: "cocida" },
+                        { nombre: "calabaza", cantidad: 120, unidad: "g", prep: "cocida" },
+                        { nombre: "zanahoria", cantidad: 60, unidad: "g", prep: "cocida" },
+                        { nombre: "agua/caldo", cantidad: 300, unidad: "ml" },
+                        { nombre: "aceite de oliva", cantidad: 10, unidad: "ml" }
+                    ],
+                    pasos: [
+                        "Cocer lentejas y verduras.",
+                        "Triturar muy fino, añadir aceite.",
+                        "Ajustar a IDDSI 4."
+                    ],
+                    equipamiento: ["batidora"],
+                    pruebas_iddsi: ["prueba_cuchara"],
+                    riesgos_a_evitar: ["grumos","pieles"]
+                },
+                {
+                    id: "R004",
+                    nombre: "Pescado desmenuzado con puré de verduras",
+                    iddsi_solido: 5,
+                    iddsi_liquido_recomendado: [2,3],
+                    dietas_permitidas: ["omnivora","kosher"],
+                    alergenos: ["pescado","lactosa"],
+                    tags: ["almuerzo","cena"],
+                    porciones: 1,
+                    nutricion: { kcal: 500, prot: 32, grasa: 14, carb: 60, fibra: 7, sodio_mg: 330 },
+                    ingredientes: [
+                        { nombre: "filete de merluza sin espinas", cantidad: 120, unidad: "g", prep: "horneado" },
+                        { nombre: "calabacín", cantidad: 100, unidad: "g", prep: "cocido" },
+                        { nombre: "patata", cantidad: 100, unidad: "g", prep: "cocida" },
+                        { nombre: "leche", cantidad: 50, unidad: "ml" },
+                        { nombre: "mantequilla", cantidad: 5, unidad: "g" }
+                    ],
+                    pasos: [
+                        "Hornear pescado tierno; desmenuzar muy fino.",
+                        "Hacer puré espeso de verduras.",
+                        "Mezclar parte del puré con pescado para ligar (IDDSI 5)."
+                    ],
+                    equipamiento: ["horno","tenedor"],
+                    pruebas_iddsi: ["prueba_tenedor"],
+                    riesgos_a_evitar: ["espinas","trozos_grandes"]
+                },
+                {
+                    id: "R005",
+                    nombre: "Pollo en salsa suave",
+                    iddsi_solido: 6,
+                    iddsi_liquido_recomendado: [1,2],
+                    dietas_permitidas: ["omnivora","kosher"],
+                    alergenos: [],
+                    tags: ["almuerzo","cena"],
+                    porciones: 1,
+                    nutricion: { kcal: 520, prot: 35, grasa: 18, carb: 50, fibra: 4, sodio_mg: 340 },
+                    ingredientes: [
+                        { nombre: "pechuga de pollo", cantidad: 120, unidad: "g", prep: "guisada" },
+                        { nombre: "zanahoria", cantidad: 60, unidad: "g", prep: "dado tierno" },
+                        { nombre: "calabacín", cantidad: 60, unidad: "g", prep: "dado tierno" },
+                        { nombre: "caldo", cantidad: 120, unidad: "ml" },
+                        { nombre: "maicena", cantidad: 5, unidad: "g" }
+                    ],
+                    pasos: [
+                        "Guisar pollo con verduras hasta muy tierno.",
+                        "Espesar caldo con maicena para salsa.",
+                        "Comprobar que se corta con tenedor (IDDSI 6)."
+                    ],
+                    equipamiento: ["sartén","tenedor"],
+                    pruebas_iddsi: ["prueba_tenedor"],
+                    riesgos_a_evitar: ["trozos_duros","sequedad"]
+                },
+                {
+                    id: "R006",
+                    nombre: "Tortilla esponjosa con queso suave",
+                    iddsi_solido: 6,
+                    iddsi_liquido_recomendado: [1,2],
+                    dietas_permitidas: ["omnivora","vegetariana","kosher"],
+                    alergenos: ["huevo","lactosa"],
+                    tags: ["desayuno","cena","tradicional"],
+                    porciones: 1,
+                    nutricion: { kcal: 350, prot: 22, grasa: 24, carb: 2, fibra: 0, sodio_mg: 320 },
+                    ingredientes: [
+                        { nombre: "huevos", cantidad: 2, unidad: "ud" },
+                        { nombre: "queso fresco suave", cantidad: 30, unidad: "g", prep: "rallado" },
+                        { nombre: "leche", cantidad: 30, unidad: "ml" },
+                        { nombre: "aceite de oliva", cantidad: 5, unidad: "ml" }
+                    ],
+                    pasos: [
+                        "Batir huevos con leche, cuajar suave.",
+                        "Añadir queso a medio cuajar.",
+                        "Servir jugosa; cortar con tenedor (IDDSI 6)."
+                    ],
+                    equipamiento: ["sartén","batidor"],
+                    pruebas_iddsi: ["prueba_tenedor"],
+                    riesgos_a_evitar: ["sequedad","trozos_duros"]
+                }
+            ]
+        };
+
+        // Variables globales
+        let menuGenerado = null;
+        let evaluacionCompleta = false;
+        let perfilPaciente = null;
+
+        // ===================== UTILIDADES =====================
+        function calcIMC(peso, alturaCm) {
+            const h = alturaCm / 100;
+            return peso && h ? +(peso / (h*h)).toFixed(1) : null;
+        }
+
+        function mapUmbral(reglas, score) {
+            for (const r of reglas) {
+                const okMin = r.min === undefined || score >= r.min;
+                const okMax = r.max === undefined || score <= r.max;
+                if (okMin && okMax) return r.nivel;
+            }
+            // fallback conservador
+            return reglas[reglas.length-1]?.nivel ?? 4;
+        }
+
+        function showCustomModal(message) {
+            document.getElementById('modalContent').innerHTML = `<p class="text-gray-700 dark:text-gray-300">${message}</p>`;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        // ===================== NAVEGACIÓN =====================
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            if (sectionId === 'menu') {
+                checkMenuAvailable();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // ===================== ALGORITMO DE EVALUACIÓN AVANZADO =====================
+        function scoreCuestionario(res) {
+            let sLiq = 0, sSol = 0, sNut = 0;
+
+            // Puntuación según síntomas específicos
+            if (res.tos_liquidos_finos) sLiq += DATA.reglas.pesos["tos_liquidos_finos"].liq;
+            if (res.voz_humeda) sLiq += DATA.reglas.pesos["voz_humeda"].liq;
+            if (res.residuos_solidos) sSol += DATA.reglas.pesos["residuos_solidos"].sol;
+
+            if (res.fuerza_masticatoria === "algo_reducida")
+                sSol += DATA.reglas.pesos["fuerza_masticatoria_baja:algo_reducida"].sol;
+            if (res.fuerza_masticatoria === "muy_reducida")
+                sSol += DATA.reglas.pesos["fuerza_masticatoria_baja:muy_reducida"].sol;
+
+            if (res.perdida_peso === "1-3kg") sNut += DATA.reglas.pesos["perdida_peso:1-3kg"].nut;
+            if (res.perdida_peso === ">3kg") sNut += DATA.reglas.pesos["perdida_peso:>3kg"].nut;
+
+            // Mapear puntuaciones a niveles IDDSI
+            const nivelLiquidos = mapUmbral(DATA.reglas.umbrales.liquidos, sLiq);
+            const nivelSolidos = mapUmbral(DATA.reglas.umbrales.solidos, sSol);
+
+            // Calcular objetivos nutricionales
+            const imc = calcIMC(res.peso, res.altura);
+            let kcalKg = DATA.reglas.nutricion.kcal_kg.base;
+            if (sNut >= 2) kcalKg = DATA.reglas.nutricion.kcal_kg.desnutricion;
+            if (imc && imc >= 30) kcalKg = DATA.reglas.nutricion.kcal_kg.obesidad;
+
+            let protKg = DATA.reglas.nutricion.prot_g_kg.base;
+            if (res.edad && res.edad >= 70) protKg = DATA.reglas.nutricion.prot_g_kg.fragilidad;
+
+            const kcalObjetivo = Math.round(kcalKg * (res.peso || 70));
+            const protObjetivo = +(protKg * (res.peso || 70)).toFixed(0);
+
+            return {
+                nivelLiquidos,
+                nivelSolidos,
+                kcalObjetivo,
+                protObjetivo,
+                imc,
+                scoreNutricion: sNut,
+                alertas: generarAlertas(res, { nivelLiquidos, nivelSolidos, imc, sNut })
+            };
+        }
+
+        function generarAlertas(res, scores) {
+            const alertas = [];
+            
+            if (scores.nivelSolidos <= 4 && scores.nivelLiquidos >= 3) {
+                alertas.push("⚠️ Nivel de riesgo alto - Consulte inmediatamente con logopeda");
+            }
+            
+            if (res.perdida_peso === ">3kg") {
+                alertas.push("⚠️ Pérdida de peso significativa - Evaluación nutricional urgente");
+            }
+            
+            if (scores.imc && scores.imc < 18.5) {
+                alertas.push("⚠️ Bajo peso - Considerar suplementación nutricional");
+            }
+            
+            return alertas;
+        }
+
+        // ===================== FILTRADO Y GENERACIÓN DE MENÚ =====================
+        function filtrarRecetas({ nivelSolidos, dietas, alergenos_excluir, tagsPreferidas }) {
+            return DATA.recetas.filter(r => {
+                const okNivel = r.iddsi_solido <= nivelSolidos;
+                const okDieta = !dietas?.length || r.dietas_permitidas.some(d => dietas.includes(d));
+                const okAlergenos = !alergenos_excluir?.length || r.alergenos.every(a => !alergenos_excluir.includes(a));
+                const okTag = !tagsPreferidas?.length || r.tags.some(t => tagsPreferidas.includes(t));
+                return okNivel && okDieta && okAlergenos && okTag;
+            });
+        }
+
+        function elegirPorTag(candidatas, tag, yaElegidasIds = new Set()) {
+            const pool = candidatas.filter(r => r.tags.includes(tag) && !yaElegidasIds.has(r.id));
+            return pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
+        }
+
+        function generarPlanDiario(perfil, recetas) {
+            const ids = new Set();
+            const plan = {};
+
+            // Desayuno
+            let desayuno = elegirPorTag(recetas, "desayuno", ids) || recetas.find(r => r.iddsi_solido <= 4 && !ids.has(r.id));
+            if (desayuno) { plan["Desayuno"] = desayuno; ids.add(desayuno.id); }
+
+            // Almuerzo
+            let almuerzo = elegirPorTag(recetas, "almuerzo", ids) || recetas.find(r => !ids.has(r.id));
+            if (almuerzo) { plan["Almuerzo"] = almuerzo; ids.add(almuerzo.id); }
+
+            // Merienda
+            let merienda = elegirPorTag(recetas, "vegetariano", ids);
+            if (merienda) { plan["Merienda"] = merienda; ids.add(merienda.id); }
+
+            // Cena
+            let cena = elegirPorTag(recetas, "cena", ids) || recetas.find(r => !ids.has(r.id));
+            if (cena) { plan["Cena"] = cena; ids.add(cena.id); }
+
+            // Calcular totales nutricionales
+            const totales = Object.values(plan).reduce((acc, r) => {
+                acc.kcal += r.nutricion.kcal; 
+                acc.prot += r.nutricion.prot;
+                acc.grasa += r.nutricion.grasa; 
+                acc.carb += r.nutricion.carb;
+                acc.fibra += r.nutricion.fibra; 
+                acc.sodio_mg += r.nutricion.sodio_mg;
+                return acc;
+            }, {kcal:0, prot:0, grasa:0, carb:0, fibra:0, sodio_mg:0});
+
+            return { plan, totales };
+        }
+
+        function listaCompra(plan) {
+            const map = new Map();
+            for (const r of Object.values(plan)) {
+                r.ingredientes.forEach(ing => {
+                    const key = `${ing.nombre}|${ing.unidad}|${ing.prep||""}`;
+                    const prev = map.get(key) || 0;
+                    const cant = typeof ing.cantidad === "number" ? ing.cantidad : 0;
+                    map.set(key, prev + cant);
+                });
+            }
+            return Array.from(map.entries()).map(([k,v]) => {
+                const [nombre, unidad, prep] = k.split("|");
+                return { nombre, cantidad: v, unidad, prep: prep || undefined };
+            });
+        }
+
+        function calcEspesante({ nivel, volumen_ml, marca = "generica" }) {
+            const tabla = DATA.guiaEspesante[marca];
+            if (!tabla || !tabla[nivel]) return { gramos: null, nota: "Configura guía de espesante por marca" };
+            const g100 = tabla[nivel];
+            const gramos = +(g100 * (volumen_ml / 100)).toFixed(1);
+            return { gramos, nota: "Validar con pruebas IDDSI y tabla del fabricante." };
+        }
+
+        // ===================== MANEJADORES DE FORMULARIO =====================
+        document.getElementById('evaluationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validar campos obligatorios
+            const camposRequeridos = ['edad', 'peso', 'altura'];
+            for (const campo of camposRequeridos) {
+                if (!document.getElementById(campo).value) {
+                    showCustomModal(`Por favor, completa el campo: ${campo}`);
+                    return;
+                }
+            }
+
+            // Validar campos de radio
+            if (!document.querySelector('input[name="tos_liquidos_finos"]:checked')) {
+                showCustomModal('Por favor, indica si toses con líquidos finos.');
+                return;
+            }
+
+            if (!document.querySelector('input[name="voz_humeda"]:checked')) {
+                showCustomModal('Por favor, indica si aparece voz húmeda tras beber.');
+                return;
+            }
+
+            if (!document.querySelector('input[name="residuos_solidos"]:checked')) {
+                showCustomModal('Por favor, indica si quedan residuos de sólidos en la boca.');
+                return;
+            }
+
+            // Recopilar datos del formulario
+            const formData = {
+                edad: parseInt(document.getElementById('edad').value),
+                peso: parseFloat(document.getElementById('peso').value),
+                altura: parseInt(document.getElementById('altura').value),
+                tos_liquidos_finos: document.querySelector('input[name="tos_liquidos_finos"]:checked')?.value === 'true',
+                voz_humeda: document.querySelector('input[name="voz_humeda"]:checked')?.value === 'true',
+                residuos_solidos: document.querySelector('input[name="residuos_solidos"]:checked')?.value === 'true',
+                fuerza_masticatoria: document.getElementById('fuerza_masticatoria').value,
+                perdida_peso: document.getElementById('perdida_peso').value,
+                alergenos: Array.from(document.querySelectorAll('input[name="alergias"]:checked')).map(cb => cb.value),
+                dietas: [document.getElementById('tipoDieta').value],
+                condiciones: Array.from(document.querySelectorAll('input[name="condiciones"]:checked')).map(cb => cb.value)
+            };
+
+            // Evaluar paciente con algoritmo avanzado
+            perfilPaciente = scoreCuestionario(formData);
+            perfilPaciente.formData = formData;
+            
+            // Filtrar recetas según perfil
+            const candidatas = filtrarRecetas({
+                nivelSolidos: perfilPaciente.nivelSolidos,
+                dietas: formData.dietas,
+                alergenos_excluir: formData.alergenos,
+                tagsPreferidas: ["tradicional"] // Se puede personalizar más
+            });
+
+            const { plan, totales } = generarPlanDiario(perfilPaciente, candidatas);
+
+            menuGenerado = {
+                perfil: perfilPaciente,
+                plan,
+                totales,
+                listaCompra: listaCompra(plan),
+                candidatas
+            };
+
+            evaluacionCompleta = true;
+
+            // Mostrar resultados
+            mostrarMenuAvanzado();
+            showSection('menu');
+        });
+
+        // ===================== VISUALIZACIÓN AVANZADA =====================
+        function mostrarMenuAvanzado() {
+            if (!menuGenerado) return;
+
+            const { perfil, plan, totales, listaCompra } = menuGenerado;
+            
+            // Preparar datos para el modal (sin abrir automáticamente)
+            window.menuData = {
+                nivelSolidos: perfil.nivelSolidos,
+                nivelLiquidos: perfil.nivelLiquidos,
+                recetas: Object.values(plan)
+            };
+
+            // Mostrar nivel recomendado con alertas
+            const niveles = {
+                4: { nombre: "Puré (IDDSI 4)", descripcion: "Alimentos triturados de consistencia homogénea", color: "red" },
+                5: { nombre: "Picado Fino (IDDSI 5)", descripcion: "Alimentos en trozos muy pequeños y húmedos", color: "orange" },
+                6: { nombre: "Suave (IDDSI 6)", descripcion: "Alimentos tiernos que se deshacen fácilmente", color: "yellow" },
+                7: { nombre: "Normal (IDDSI 7)", descripcion: "Alimentos de textura regular", color: "green" }
+            };
+
+            const liquidosDesc = {
+                0: "Líquidos finos normales",
+                1: "Líquidos ligeramente espesados",
+                2: "Líquidos con consistencia de néctar", 
+                3: "Líquidos con consistencia de miel",
+                4: "Líquidos extremadamente espesos"
+            };
+
+            // Cálculo de espesante
+            const espesanteEjemplo = calcEspesante({ 
+                nivel: perfil.nivelLiquidos, 
+                volumen_ml: 200 
+            });
+
+            document.getElementById('nivelRecomendado').innerHTML = `
+                <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-200">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Evaluación y Recomendaciones
+                </h3>
+                
+                ${perfil.alertas.length > 0 ? `
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg mb-4 border-l-4 border-red-400">
+                        <h4 class="font-semibold text-red-800 dark:text-red-200 mb-2">Alertas Importantes:</h4>
+                        <ul class="text-red-700 dark:text-red-300 space-y-1">
+                            ${perfil.alertas.map(alerta => `<li>${alerta}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border">
+                        <h4 class="font-semibold mb-2">Nivel de Sólidos</h4>
+                        <p class="text-lg font-medium text-${niveles[perfil.nivelSolidos]?.color || 'gray'}-600">
+                            ${niveles[perfil.nivelSolidos]?.nombre || 'Nivel personalizado'}
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${niveles[perfil.nivelSolidos]?.descripcion || ''}</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border">
+                        <h4 class="font-semibold mb-2">Nivel de Líquidos</h4>
+                        <p class="text-lg font-medium">${liquidosDesc[perfil.nivelLiquidos]}</p>
+                        ${perfil.nivelLiquidos > 0 ? `
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                <i class="fas fa-beaker mr-1"></i>
+                                Espesante para 200ml: ~${espesanteEjemplo.gramos || 'N/A'} g
+                            </p>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-4 mt-4">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border text-center">
+                        <h4 class="font-semibold mb-1">Objetivo Calórico</h4>
+                        <p class="text-2xl font-bold text-primary">${perfil.kcalObjetivo}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">kcal/día</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border text-center">
+                        <h4 class="font-semibold mb-1">Objetivo Proteína</h4>
+                        <p class="text-2xl font-bold text-primary">${perfil.protObjetivo}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">g/día</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border text-center">
+                        <h4 class="font-semibold mb-1">IMC</h4>
+                        <p class="text-2xl font-bold text-primary">${perfil.imc || 'N/A'}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">kg/m²</p>
+                    </div>
+                </div>
+            `;
+
+            // Mostrar menú del día con información nutricional
+            const menuContainer = document.getElementById('menuDelDia');
+            menuContainer.innerHTML = '';
+
+            const comidas = [
+                { key: 'Desayuno', icon: 'fas fa-coffee' },
+                { key: 'Almuerzo', icon: 'fas fa-utensils' },
+                { key: 'Merienda', icon: 'fas fa-cookie-bite' },
+                { key: 'Cena', icon: 'fas fa-moon' }
+            ];
+
+            comidas.forEach(comida => {
+                const receta = plan[comida.key];
+                if (receta) {
+                    const recetaCard = document.createElement('div');
+                    recetaCard.className = 'bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 border';
+                    recetaCard.innerHTML = `
+                        <h3 class="text-xl font-semibold mb-4 text-primary dark:text-white">
+                            <i class="${comida.icon} mr-2"></i>
+                            ${comida.key}
+                        </h3>
+                        <h4 class="text-lg font-medium mb-3">${receta.nombre}</h4>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <h5 class="font-semibold mb-2">Ingredientes:</h5>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                    ${receta.ingredientes.map(ing => 
+                                        `<li>• ${ing.nombre}: ${ing.cantidad}${typeof ing.cantidad==='number'?' ':''}${ing.unidad}${ing.prep?` (${ing.prep})`:''}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold mb-2">Información Nutricional:</h5>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Calorías:</span>
+                                        <span class="font-medium">${receta.nutricion.kcal} kcal</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Proteínas:</span>
+                                        <span class="font-medium">${receta.nutricion.prot} g</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Grasas:</span>
+                                        <span class="font-medium">${receta.nutricion.grasa} g</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Carbohidratos:</span>
+                                        <span class="font-medium">${receta.nutricion.carb} g</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5 class="font-semibold mb-2">Preparación:</h5>
+                            <ol class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                ${receta.pasos.map((paso, idx) => `<li>${idx+1}. ${paso}</li>`).join('')}
+                            </ol>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Consistencia IDDSI: ${receta.iddsi_solido} | 
+                                Pruebas: ${receta.pruebas_iddsi?.join(', ') || 'N/A'}
+                            </p>
+                        </div>
+                    `;
+                    menuContainer.appendChild(recetaCard);
+                }
+            });
+
+            // Agregar resumen nutricional diario
+            const resumenCard = document.createElement('div');
+            resumenCard.className = 'col-span-full bg-gradient-to-r from-primary/10 to-blue-500/10 p-6 rounded-lg border-2 border-primary/20';
+            resumenCard.innerHTML = `
+                <h3 class="text-xl font-semibold mb-4 text-primary dark:text-white">
+                    <i class="fas fa-chart-pie mr-2"></i>
+                    Resumen Nutricional Diario
+                </h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-primary">${totales.kcal}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">kcal totales</p>
+                        <p class="text-xs ${totales.kcal >= perfil.kcalObjetivo ? 'text-green-600' : 'text-orange-600'}">
+                            ${totales.kcal >= perfil.kcalObjetivo ? '✓' : '⚠'} Objetivo: ${perfil.kcalObjetivo}
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-primary">${totales.prot}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">g proteína</p>
+                        <p class="text-xs ${totales.prot >= perfil.protObjetivo ? 'text-green-600' : 'text-orange-600'}">
+                            ${totales.prot >= perfil.protObjetivo ? '✓' : '⚠'} Objetivo: ${perfil.protObjetivo}
+                        </p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-primary">${totales.fibra}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">g fibra</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-primary">${Math.round(totales.sodio_mg)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">mg sodio</p>
+                    </div>
+                </div>
+                
+                <!-- Herramientas de Preparación -->
+                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <h4 class="text-lg font-semibold mb-4 text-center">
+                        <i class="fas fa-tools mr-2"></i>
+                        Herramientas de Preparación
+                    </h4>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <button onclick="abrirModalTab('howto')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-utensils block text-lg mb-1"></i>
+                            Cómo preparar
+                        </button>
+                        <button onclick="abrirModalTab('calculator')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-calculator block text-lg mb-1"></i>
+                            Calculadora
+                        </button>
+                        <button onclick="abrirModalTab('resources')" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-3 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-shopping-bag block text-lg mb-1"></i>
+                            Recursos
+                        </button>
+                        <button onclick="abrirModalTab('iddsi')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-layer-group block text-lg mb-1"></i>
+                            Chuleta IDDSI
+                        </button>
+                        <button onclick="abrirModalTab('faq')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-question-circle block text-lg mb-1"></i>
+                            FAQs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botón para ver lista de compra -->
+                <div class="mt-4 text-center">
+                    <button onclick="mostrarListaCompra()" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-shopping-list mr-2"></i>
+                        Ver Lista de Compra
+                    </button>
+                </div>
+            `;
+            menuContainer.appendChild(resumenCard);
+
+            document.getElementById('menuResults').classList.remove('hidden');
+            document.getElementById('noMenuMessage').classList.add('hidden');
+        }
+
+        function mostrarListaCompra() {
+            if (!menuGenerado) return;
+            
+            const lista = menuGenerado.listaCompra;
+            const contenido = `
+                <h3 class="text-lg font-semibold mb-4">Lista de Compra</h3>
+                <div class="max-h-60 overflow-y-auto">
+                    <ul class="space-y-2">
+                        ${lista.map(item => `
+                            <li class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                                <span>${item.nombre}${item.prep ? ` (${item.prep})` : ''}</span>
+                                <span class="font-medium">${item.cantidad > 0 ? item.cantidad : ''} ${item.unidad}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('modalContent').innerHTML = contenido;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function checkMenuAvailable() {
+            if (evaluacionCompleta && menuGenerado) {
+                document.getElementById('menuResults').classList.remove('hidden');
+                document.getElementById('noMenuMessage').classList.add('hidden');
+            } else {
+                document.getElementById('menuResults').classList.add('hidden');
+                document.getElementById('noMenuMessage').classList.remove('hidden');
+            }
+        }
+
+        // ===================== CONTENT PACK Y CENTRO DE AYUDA =====================
+        const CONTENT_PACK = {
+            iddsiCards: [
+                { level: 0, name: "Líquido fino", looklike: "Agua, café, té sin espesar.", howtoCheck: "Fluye libremente en vaso." },
+                { level: 1, name: "Ligeramente espeso", looklike: "Apenas más denso que el agua.", howtoCheck: "Se nota más lento al beber con vaso." },
+                { level: 2, name: "Néctar", looklike: "Zumo espeso, batido ligero.", howtoCheck: "Fluye, pero más lento; no forma montón en cuchara." },
+                { level: 3, name: "Miel", looklike: "Cae lentamente de la cuchara.", howtoCheck: "Forma cinta lenta; mejor con cuchara que con pajita." },
+                { level: 4, name: "Pudín / Puré", looklike: "Se come con cuchara, no gotea.", howtoCheck: "Mantiene forma; prueba de cuchara/tenedor." },
+                { level: 5, name: "Picado húmedo", looklike: "Trozos muy pequeños ligados con salsa.", howtoCheck: "Se aplasta fácil con tenedor." },
+                { level: 6, name: "Fácil masticación", looklike: "Piezas blandas que se cortan con tenedor.", howtoCheck: "Sin bordes duros; jugoso con salsa." },
+                { level: 7, name: "Comida normal", looklike: "Textura habitual.", howtoCheck: "Solo si está indicado por profesional." }
+            ],
+            faqs: [
+                { q: "El puré quedó muy líquido, ¿qué hago?", a: "Añade espesante poco a poco, mezcla 30 seg y repite hasta consistencia pudín (IDDSI 4)." },
+                { q: "¿Puedo usar pajita?", a: "En niveles 3-4 se recomienda cuchara; pajita suele no ser adecuada." },
+                { q: "¿Divido comidas si se cansa?", a: "Sí: porciones pequeñas y más tomas (4-6 al día)." },
+                { q: "¿Helado o gelatina?", a: "Evítalos si espesas líquidos: al derretirse pasan a líquido fino y aumentan riesgo." },
+                { q: "¿Cómo sé si el nivel es correcto?", a: "No debe haber tos, voz húmeda ni residuos en boca. Si aparecen, consulta." },
+                { q: "¿Puedo triturar pastillas?", a: "NUNCA sin consultar. Muchas no pueden triturarse. Pregunta a farmacia." },
+                { q: "¿Qué hago si rechaza la comida?", a: "Varía sabores, presenta atractivo y consulta nutricionista para opciones." },
+                { q: "¿Cuánto líquido al día?", a: "Mínimo 1.5-2 litros, incluyendo espesados, caldos y agua de preparaciones." },
+                { q: "¿El nivel es para siempre?", a: "No. Puede cambiar. Revisiones periódicas son importantes." },
+                { q: "¿Qué son pruebas cuchara/tenedor?", a: "Tests para verificar que textura corresponde al nivel IDDSI indicado." },
+                { q: "¿Puede comer fuera de casa?", a: "Sí, llevando comida adaptada o verificando preparación adecuada." },
+                { q: "¿Cómo espeso líquidos calientes?", a: "Igual que fríos, mezclando bien. Temperatura puede afectar viscosidad." }
+            ],
+            glossary: [
+                { term: "Aspiración", def: "Entrada de alimento/líquido en vías respiratorias." },
+                { term: "Voz húmeda", def: "Cambio de voz tras beber que suena burbujeante." },
+                { term: "Doble textura", def: "Sólido + líquido en la misma cucharada (riesgoso)." },
+                { term: "IDDSI", def: "Estándar internacional de texturas (0-7)." },
+                { term: "Disfagia", def: "Dificultad para tragar alimentos o líquidos de forma segura." },
+                { term: "Espesante", def: "Producto que modifica consistencia sin cambiar sabor." },
+                { term: "Puré", def: "Alimento triturado homogéneo sin grumos (IDDSI 4)." },
+                { term: "Residuos orales", def: "Restos de comida que quedan en boca tras tragar." },
+                { term: "Viscosidad", def: "Grosor o densidad de un líquido." },
+                { term: "Deglución", def: "Proceso de tragar desde la boca al estómago." }
+            ]
+        };
+
+        // Funciones del Centro de Ayuda
+        function inicializarCentroAyuda() {
+            // Renderizar cards IDDSI
+            const cardsContainer = document.getElementById('iddsiCards');
+            if (cardsContainer) {
+                CONTENT_PACK.iddsiCards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border';
+                    cardElement.innerHTML = `
+                        <div class="text-center mb-2">
+                            <span class="inline-flex items-center justify-center w-8 h-8 bg-primary text-white rounded-full text-sm font-bold">
+                                ${card.level}
+                            </span>
+                        </div>
+                        <h4 class="font-semibold text-sm mb-2 text-center">${card.name}</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                            <strong>Cómo se ve:</strong> ${card.looklike}
+                        </p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                            <strong>Comprobación:</strong> ${card.howtoCheck}
+                        </p>
+                    `;
+                    cardsContainer.appendChild(cardElement);
+                });
+            }
+
+            // Renderizar FAQs
+            const faqsContainer = document.getElementById('faqsContainer');
+            if (faqsContainer) {
+                CONTENT_PACK.faqs.forEach((faq, index) => {
+                    const faqElement = document.createElement('div');
+                    faqElement.className = 'border border-gray-200 dark:border-gray-600 rounded-lg';
+                    faqElement.innerHTML = `
+                        <button onclick="toggleFAQ(${index})" class="w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium pr-4">${faq.q}</h4>
+                                <i id="faq-icon-${index}" class="fas fa-chevron-down text-gray-400 transform transition-transform"></i>
+                            </div>
+                        </button>
+                        <div id="faq-answer-${index}" class="hidden px-4 pb-4">
+                            <p class="text-gray-600 dark:text-gray-400">${faq.a}</p>
+                        </div>
+                    `;
+                    faqsContainer.appendChild(faqElement);
+                });
+            }
+        }
+
+        function toggleFAQ(index) {
+            const answer = document.getElementById(`faq-answer-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                answer.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        function calcularEspesante() {
+            const nivel = parseInt(document.getElementById('nivelCalc').value);
+            const volumen = parseInt(document.getElementById('volumenCalc').value);
+            const resultado = calcEspesante({ nivel, volumen_ml: volumen });
+            
+            const resultadoDiv = document.getElementById('resultadoCalc');
+            if (resultado.gramos) {
+                resultadoDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-primary mb-1">~${resultado.gramos} gramos</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">
+                            Para ${volumen}ml a nivel IDDSI ${nivel}
+                        </div>
+                        <div class="text-xs text-yellow-600 dark:text-yellow-400 mt-2">
+                            ⚠️ ${resultado.nota}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultadoDiv.innerHTML = `
+                    <div class="text-center text-red-600 dark:text-red-400">
+                        <div class="text-sm">No configurado para este nivel</div>
+                        <div class="text-xs mt-1">${resultado.nota}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function mostrarGlosarioCompleto() {
+            const contenido = `
+                <h3 class="text-lg font-semibold mb-4">Glosario Completo</h3>
+                <div class="max-h-96 overflow-y-auto space-y-3">
+                    ${CONTENT_PACK.glossary.map(item => `
+                        <div class="border-b border-gray-200 dark:border-gray-600 pb-2">
+                            <h4 class="font-semibold text-primary">${item.term}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${item.def}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('modalContent').innerHTML = contenido;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        let modoAvanzado = false;
+
+        function toggleAdvancedMode() {
+            modoAvanzado = !modoAvanzado;
+            const button = document.getElementById('toggleAdvanced');
+            const manual = document.getElementById('manualEnfermeria');
+            
+            if (modoAvanzado) {
+                button.innerHTML = '<i class="fas fa-cog mr-2"></i>Ocultar Modo Avanzado';
+                button.className = 'bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition-colors';
+                manual.classList.remove('hidden');
+            } else {
+                button.innerHTML = '<i class="fas fa-cog mr-2"></i>Mostrar Modo Avanzado';
+                button.className = 'bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors';
+                manual.classList.add('hidden');
+            }
+        }
+
+        // ===================== WIDGET DISFAGIA MODAL =====================
+        const HELP_PACK = {
+            "onResultModal": {
+                "title": "Tu resultado y cómo avanzar",
+                "intro": "Ya tienes tu nivel IDDSI de SÓLIDOS y LÍQUIDOS. Aquí aprendes a preparar, espesar y servir de forma segura.",
+                "tabs": [
+                    {
+                        "key": "howto",
+                        "title": "Cómo preparar (paso a paso)",
+                        "bodyByLevel": {
+                            "liquids": {
+                                "1": "🥤 Añade poco espesante en polvo. Mezcla 30 segundos. Espera 2-3 minutos. Comprueba: debe fluir más lento que el agua pero sin formar montón en cuchara.",
+                                "2": "🥤 Añade espesante hasta textura de zumo espeso. Mezcla bien 30-60 segundos. Reposa 2-3 minutos. Comprueba: fluye lento pero no forma montón en cuchara (textura néctar).",
+                                "3": "🥤 Añade espesante hasta que caiga en 'cinta' lenta de la cuchara. Mezcla 60 segundos. Reposa 3 minutos. Comprueba: mejor tomar con cuchara que pajita (textura miel).",
+                                "4": "🥤 Añade espesante hasta consistencia de pudín. Mezcla muy bien. Reposa 3-5 minutos. Comprueba: se come con cuchara, mantiene forma, no gotea (textura pudín)."
+                            },
+                            "solids": {
+                                "4": "🍲 Tritura TODO hasta puré completamente homogéneo (sin grumos). Usa batidora potente. Añade líquido poco a poco hasta textura de pudín espeso. Comprueba: se mantiene en la cuchara sin gotear, pasa prueba de cuchara IDDSI.",
+                                "5": "🍲 Pica MUY fino (trozos máximo 4mm). Liga SIEMPRE con salsa espesa o puré. Los trozos deben estar húmedos y cohesivos. Comprueba: se aplasta fácilmente con tenedor, no hay partículas secas sueltas.",
+                                "6": "🍲 Corta en piezas blandas (máximo 15mm). Cocina hasta que esté MUY tierno. Sirve con salsa. Comprueba: se corta solo con tenedor, no hay bordes duros, está jugoso."
+                            }
+                        },
+                        "checklists": {
+                            "kitchenSetup": [
+                                "✅ Batidora limpia y funcionando",
+                                "✅ Báscula de cocina (precisión 1g) o cucharas medidoras",
+                                "✅ Jarra medidora transparente",
+                                "✅ Espesante específico recomendado",
+                                "✅ Termómetro para comprobar temperatura",
+                                "✅ Colador fino para eliminar grumos"
+                            ],
+                            "servingRules": [
+                                "✅ Postura erguida (sentado derecho, barbilla neutra)",
+                                "✅ Bocados pequeños (menos de 1 cucharadita)",
+                                "✅ Ritmo lento (pausa entre bocados)",
+                                "✅ Sin distracciones (TV apagada, concentrarse)",
+                                "✅ Revisar textura cada 2-3 minutos (puede cambiar)",
+                                "✅ Parar SI hay tos, atragantamiento o voz húmeda"
+                            ]
+                        }
+                    },
+                    {
+                        "key": "calculator",
+                        "title": "Calculadora de espesante",
+                        "explain": "💧 Espesar hace que el líquido vaya más lento por la garganta y sea más seguro de tragar (evita aspiración - entrada en pulmones). Mide el volumen exacto, añade espesante poco a poco, mezcla 30-60 segundos y vuelve a comprobar textura a los 2-3 minutos.",
+                        "brandExamples": [
+                            {
+                                "type": "espesante en polvo (almidón modificado)",
+                                "name": "Ejemplo: ThickenUp Clear, Resource Thicken",
+                                "note": "Revisar SIEMPRE tabla específica del fabricante"
+                            },
+                            {
+                                "type": "espesante en polvo (goma xantana)",
+                                "name": "Ejemplo: Simply Thick, Thick-It",
+                                "note": "Suele requerir MENOS cantidad - ajustar con cuidado"
+                            },
+                            {
+                                "type": "agua gelificada lista",
+                                "name": "Ejemplo: AquaGel, H2O Thick",
+                                "note": "Para hidratación rápida y medicación líquida"
+                            },
+                            {
+                                "type": "gelificante para hacer en casa",
+                                "name": "Ejemplo: Gelespessa, Nutilis Aqua",
+                                "note": "Seguir instrucciones exactas del envase"
+                            }
+                        ],
+                        "safetyNotes": [
+                            "⚠️ NO uses helados, gelatinas o hielos si debes espesar: se licúan en la boca y vuelven a líquido fino (peligroso)",
+                            "⚠️ Vuelve a comprobar textura tras 2-3 minutos: algunos espesantes siguen espesando",
+                            "⚠️ Temperatura afecta: líquidos calientes pueden parecer más finos",
+                            "⚠️ Cada marca es diferente: NUNCA intercambies sin consultar tabla",
+                            "⚠️ Si hay dudas sobre textura: mejor más espeso que menos",
+                            "⚠️ Desecha preparaciones de más de 24h (pueden cambiar consistencia)"
+                        ]
+                    },
+                    {
+                        "key": "resources",
+                        "title": "Marcas y recursos útiles",
+                        "appliances": [
+                            {
+                                "name": "Batidora de vaso potente (600-1000W)",
+                                "why": "Lograr purés completamente homogéneos sin grumos (esencial IDDSI 4)"
+                            },
+                            {
+                                "name": "Báscula digital de cocina (precisión 1g)",
+                                "why": "Medir espesante con exactitud y controlar raciones"
+                            },
+                            {
+                                "name": "Moldes de silicona alimentaria",
+                                "why": "Dar forma atractiva a purés y hacer porciones individuales"
+                            },
+                            {
+                                "name": "Vasos con pico ancho o boquilla",
+                                "why": "Control mejor del flujo de líquidos espesos"
+                            },
+                            {
+                                "name": "Termo de boca ancha y jarra medidora",
+                                "why": "Mantener temperatura y medir volúmenes exactos"
+                            },
+                            {
+                                "name": "Procesador de alimentos con cuchillas",
+                                "why": "Picar fino para IDDSI 5 de manera uniforme"
+                            }
+                        ],
+                        "other": [
+                            "Jeringa oral graduada (para medir volúmenes pequeños)",
+                            "Cucharas medidoras de precisión (0.5ml, 1ml, 2.5ml)",
+                            "Pajitas anchas especiales (diámetro 8-10mm, si procede)",
+                            "Coladores de malla muy fina (eliminar grumos)",
+                            "Espátulas de silicona (mezclar sin dañar textura)",
+                            "Recipientes con tapa hermética (conservar preparaciones)"
+                        ]
+                    },
+                    {
+                        "key": "iddsi",
+                        "title": "Chuleta IDDSI",
+                        "cards": [
+                            {
+                                "level": 0,
+                                "name": "Líquido fino",
+                                "looklike": "Agua, té, café, caldos claros sin espesar.",
+                                "howtoCheck": "Fluye libremente del vaso como el agua normal."
+                            },
+                            {
+                                "level": 1,
+                                "name": "Ligeramente espeso",
+                                "looklike": "Un poco más denso que el agua, casi imperceptible.",
+                                "howtoCheck": "Fluye ligeramente más lento que el agua al beber."
+                            },
+                            {
+                                "level": 2,
+                                "name": "Néctar",
+                                "looklike": "Zumo espeso, batido ligero, leche con cacao.",
+                                "howtoCheck": "Fluye lento pero continuo; no forma montón en cuchara."
+                            },
+                            {
+                                "level": 3,
+                                "name": "Miel",
+                                "looklike": "Cae de la cuchara en 'cinta' lenta y continua.",
+                                "howtoCheck": "Mejor tomar con cuchara; difícil con pajita normal."
+                            },
+                            {
+                                "level": 4,
+                                "name": "Pudín/Puré",
+                                "looklike": "Se come con cuchara, mantiene forma como natillas.",
+                                "howtoCheck": "No gotea de cuchara; mantiene forma; pasa prueba IDDSI."
+                            },
+                            {
+                                "level": 5,
+                                "name": "Picado húmedo",
+                                "looklike": "Trozos muy pequeños ligados con salsa espesa.",
+                                "howtoCheck": "Se aplasta fácilmente con tenedor; trozos cohesivos."
+                            },
+                            {
+                                "level": 6,
+                                "name": "Fácil masticación",
+                                "looklike": "Piezas blandas que se cortan solo con tenedor.",
+                                "howtoCheck": "Sin bordes duros; jugoso; se deshace al presionar."
+                            },
+                            {
+                                "level": 7,
+                                "name": "Normal",
+                                "looklike": "Textura habitual de comida regular.",
+                                "howtoCheck": "Solo usar si profesional confirma que es seguro."
+                            }
+                        ],
+                        "yesNo": {
+                            "4": {
+                                "yes": [
+                                    "Puré de pollo completamente liso",
+                                    "Compota espesa de manzana sin trozos",
+                                    "Crema de verduras muy fina",
+                                    "Papilla de cereales homogénea"
+                                ],
+                                "no": [
+                                    "Sopa con fideos o trozos",
+                                    "Arroz suelto (partículas secas)",
+                                    "Yogur con trozos de fruta",
+                                    "Purés con grumos"
+                                ]
+                            },
+                            "5": {
+                                "yes": [
+                                    "Carne picada muy fina ligada con salsa",
+                                    "Pescado desmenuzado mezclado con puré",
+                                    "Verduras muy trituradas con espesante",
+                                    "Huevo revuelto muy cremoso"
+                                ],
+                                "no": [
+                                    "Frutos secos enteros o troceados",
+                                    "Pan crujiente o tostado",
+                                    "Verduras con piel o hebras",
+                                    "Carne en trozos grandes"
+                                ]
+                            },
+                            "6": {
+                                "yes": [
+                                    "Tortilla muy jugosa y tierna",
+                                    "Verduras muy cocidas con salsa",
+                                    "Pasta muy blanda con salsa cremosa",
+                                    "Pescado muy tierno sin espinas"
+                                ],
+                                "no": [
+                                    "Zanahoria cruda o poco cocida",
+                                    "Tostadas, crackers o pan duro",
+                                    "Carnes fibrosas o secas",
+                                    "Manzana cruda"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "key": "faq",
+                        "title": "FAQs rápidas",
+                        "items": [
+                            {
+                                "q": "🚨 El puré me quedó muy líquido, ¿qué hago?",
+                                "a": "Añade espesante poco a poco (0.5g cada vez), mezcla 30 segundos y espera 2-3 minutos. Repite hasta lograr textura de pudín que no gotee."
+                            },
+                            {
+                                "q": "🚨 ¿Puedo usar pajita con líquidos espesos?",
+                                "a": "En niveles IDDSI 3-4 es mejor usar cuchara. Si usas pajita, que sea ancha (8-10mm) y succiona despacio."
+                            },
+                            {
+                                "q": "🚨 Se cansa mucho al comer, ¿qué hago?",
+                                "a": "Ofrece porciones pequeñas en 4-6 tomas al día en lugar de 3 comidas grandes. Descansa entre bocados."
+                            },
+                            {
+                                "q": "🚨 ¿Puedo darle helado o gelatina?",
+                                "a": "NO si debe tomar líquidos espesos: se derriten en la boca y vuelven a líquido fino (riesgo de aspiración)."
+                            },
+                            {
+                                "q": "🚨 Tose al beber, ¿es normal?",
+                                "a": "NO. Para inmediatamente. Puede ser aspiración (líquido en pulmones). Consulta con profesional urgente."
+                            },
+                            {
+                                "q": "🚨 ¿Cómo sé si la textura es correcta?",
+                                "a": "No debe haber tos, voz húmeda ni restos en la boca. Si aparecen estos signos, para y consulta."
+                            },
+                            {
+                                "q": "🚨 ¿Puedo triturar las pastillas?",
+                                "a": "NUNCA sin consultar farmacia. Muchas no pueden triturarse. Pide alternativas (jarabes, dispersables)."
+                            },
+                            {
+                                "q": "🚨 Rechaza la comida adaptada, ¿qué hago?",
+                                "a": "Varía sabores, mejora presentación (moldes, colores), mantén temperatura adecuada. Consulta nutricionista."
+                            },
+                            {
+                                "q": "🚨 ¿Cuánto líquido debe tomar al día?",
+                                "a": "Mínimo 1.5-2 litros incluyendo líquidos espesados, caldos, agua de preparaciones y gelatinas."
+                            },
+                            {
+                                "q": "🚨 ¿El nivel IDDSI es para siempre?",
+                                "a": "No necesariamente. Puede mejorar o empeorar. Revisiones cada 3-6 meses o si cambian síntomas."
+                            }
+                        ]
+                    }
+                ],
+                "microcopy": {
+                    "openCalculator": "🧮 Calcular espesante exacto",
+                    "safety": "⚠️ Si hay tos frecuente, voz húmeda o pérdida de peso, consulta con tu logopeda o médico inmediatamente.",
+                    "recheck": "🔄 Revisa la textura de nuevo a los 2-3 minutos después de mezclar."
+                }
+            }
+        };
+
+        // Tabla de espesante (g por 100 ml) - AJUSTAR según tu marca
+        const THICKENER_TABLE = { generica: { 1: 1.5, 2: 2.5, 3: 3.8, 4: 5.0 } };
+
+        // API del widget para integrar en el flujo
+        window.DF = {
+            showMenu({ nivelSolidos, nivelLiquidos, recetas }) {
+                // Título + intro
+                document.getElementById('df-title').textContent = HELP_PACK.onResultModal.title || 'Tu resultado';
+                document.getElementById('df-intro').textContent = HELP_PACK.onResultModal.intro || '';
+
+                // HOWTO (elige bloques por nivel)
+                const how = HELP_PACK.onResultModal.tabs.find(t => t.key === 'howto');
+                const howDiv = document.getElementById('df-howto');
+                howDiv.innerHTML = `
+                    <p style="margin-bottom:12px"><b>Sólidos (IDDSI ${nivelSolidos})</b>: ${how.bodyByLevel.solids[String(nivelSolidos)] || '--'}</p>
+                    <p style="margin-bottom:12px"><b>Líquidos (IDDSI ${nivelLiquidos})</b>: ${how.bodyByLevel.liquids[String(nivelLiquidos)] || '--'}</p>
+                    <h4 style="margin:12px 0 6px 0;color:#e5e7eb">Preparar cocina</h4>
+                    <ul style="padding-left:16px">${(how.checklists.kitchenSetup || []).map(x => `<li style="margin-bottom:4px">${x}</li>`).join('')}</ul>
+                    <h4 style="margin:12px 0 6px 0;color:#e5e7eb">Servir con seguridad</h4>
+                    <ul style="padding-left:16px">${(how.checklists.servingRules || []).map(x => `<li style="margin-bottom:4px">${x}</li>`).join('')}</ul>
+                    <h4 style="margin:12px 0 6px 0;color:#e5e7eb">Menú generado</h4>
+                    ${recetas?.length
+                        ? `<ul style="padding-left:16px">${recetas.map(r => `<li style="margin-bottom:4px">${r.nombre} <small>(IDDSI ${r.iddsi_solido})</small></li>`).join('')}</ul>`
+                        : '<small>No hay recetas en la llamada.</small>'
+                    }
+                `;
+
+                // Calculadora
+                const calcTab = HELP_PACK.onResultModal.tabs.find(t => t.key === 'calculator');
+                document.getElementById('df-calc-explain').textContent = calcTab.explain || '';
+                const brandUl = document.getElementById('df-brand-ex'); brandUl.innerHTML = '';
+                (calcTab.brandExamples || []).forEach(b => {
+                    const li = document.createElement('li');
+                    li.style.marginBottom = '4px';
+                    li.textContent = `${b.type}: ${b.name} -- ${b.note || ''}`;
+                    brandUl.appendChild(li);
+                });
+                const sUl = document.getElementById('df-c-safety'); sUl.innerHTML = '';
+                (calcTab.safetyNotes || []).forEach(t => {
+                    const li = document.createElement('li'); 
+                    li.style.marginBottom = '4px';
+                    li.textContent = t; 
+                    sUl.appendChild(li);
+                });
+
+                // Recursos
+                const resTab = HELP_PACK.onResultModal.tabs.find(t => t.key === 'resources');
+                const ap = document.getElementById('df-appliances'); ap.innerHTML = '';
+                (resTab.appliances || []).forEach(a => {
+                    const li = document.createElement('li'); 
+                    li.style.marginBottom = '4px';
+                    li.textContent = `${a.name} -- ${a.why}`; 
+                    ap.appendChild(li);
+                });
+                const oth = document.getElementById('df-others'); oth.innerHTML = '';
+                (resTab.other || []).forEach(x => {
+                    const li = document.createElement('li'); 
+                    li.style.marginBottom = '4px';
+                    li.textContent = x; 
+                    oth.appendChild(li);
+                });
+
+                // IDDSI
+                const idTab = HELP_PACK.onResultModal.tabs.find(t => t.key === 'iddsi');
+                const cardsDiv = document.getElementById('df-iddsi-cards'); cardsDiv.innerHTML = '';
+                (idTab.cards || []).forEach(c => {
+                    const card = document.createElement('div');
+                    card.style.cssText = "background:#0b1329;border:1px solid #1d2540;border-radius:12px;padding:10px;margin-bottom:8px";
+                    card.innerHTML = `<b style="color:#e5e7eb">Nivel ${c.level} -- ${c.name}</b><div style="color:#cbd5e1;font-size:12px">Cómo se ve: ${c.looklike}</div><div style="color:#cbd5e1;font-size:12px">Comprobar: ${c.howtoCheck}</div>`;
+                    cardsDiv.appendChild(card);
+                });
+                const setYesNo = (lvl, id) => {
+                    const d = idTab.yesNo?.[String(lvl)];
+                    document.getElementById(id).innerHTML = d
+                        ? `<div style="display:flex;gap:16px"><div>${(d.yes || []).map(x => '✅ ' + x).join('<br>')}</div><div>${(d.no || []).map(x => '⛔ ' + x).join('<br>')}</div></div>`
+                        : '<small>--</small>';
+                };
+                setYesNo(4, 'df-yesno-4'); setYesNo(5, 'df-yesno-5'); setYesNo(6, 'df-yesno-6');
+
+                // FAQ
+                const faqTab = HELP_PACK.onResultModal.tabs.find(t => t.key === 'faq');
+                const faqDiv = document.getElementById('df-faq'); faqDiv.innerHTML = '';
+                (faqTab.items || []).forEach(f => {
+                    const box = document.createElement('div');
+                    box.style.cssText = "border-top:1px solid #1f2937;padding:8px 0";
+                    box.innerHTML = `<b style="color:#e5e7eb">${f.q}</b><div style="color:#cbd5e1;margin-top:4px">${f.a}</div>`;
+                    faqDiv.appendChild(box);
+                });
+
+                // Abrir modal
+                document.getElementById('df-modal').style.display = 'block';
+                // Preseleccionar niveles en calculadora
+                document.getElementById('df-c-nivel').value = String(nivelLiquidos);
+            }
+        };
+
+        // Tabs + cerrar + calculadora
+        document.querySelectorAll('.df-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.df-tab').forEach(b => b.classList.remove('df-active'));
+                btn.classList.add('df-active');
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('#df-body [data-panel]').forEach(p => {
+                    p.style.display = (p.getAttribute('data-panel') === tab) ? 'block' : 'none';
+                });
+            });
+        });
+        document.getElementById('df-close').addEventListener('click', () => { 
+            document.getElementById('df-modal').style.display = 'none'; 
+        });
+
+        document.getElementById('df-calc').addEventListener('click', () => {
+            const nivel = +document.getElementById('df-c-nivel').value;
+            const vol = +document.getElementById('df-c-vol').value;
+            const marca = document.getElementById('df-c-marca').value || 'generica';
+            const g100 = THICKENER_TABLE?.[marca]?.[nivel];
+            const out = document.getElementById('df-c-out');
+            if (!g100) { 
+                out.innerHTML = "<b style='color:#e5e7eb'>No configurado para esta marca.</b>"; 
+                return; 
+            }
+            const gramos = (g100 * (vol / 100)).toFixed(1);
+            out.innerHTML = `<div><b style='color:#e5e7eb'>Resultado:</b> ~${gramos} g para ${vol} ml (nivel ${nivel}).</div><div style="color:#cbd5e1;margin-top:6px">Añade poco a poco, mezcla 30--60 s y vuelve a comprobar a los 2--3 min.</div>`;
+        });
+
+        // ===================== FUNCIÓN PARA ABRIR MODAL EN PESTAÑA ESPECÍFICA =====================
+        function abrirModalTab(tabName) {
+            if (!window.menuData) {
+                showCustomModal('Primero debes completar la evaluación para acceder a las herramientas de preparación.');
+                return;
+            }
+            
+            // Abrir el modal con los datos del menú
+            DF.showMenu(window.menuData);
+            
+            // Cambiar a la pestaña específica
+            setTimeout(() => {
+                // Quitar clase activa de todas las pestañas
+                document.querySelectorAll('.df-tab').forEach(b => b.classList.remove('df-active'));
+                
+                // Ocultar todos los paneles
+                document.querySelectorAll('#df-body [data-panel]').forEach(p => {
+                    p.style.display = 'none';
+                });
+                
+                // Activar la pestaña seleccionada
+                const targetTab = document.querySelector(`[data-tab="${tabName}"]`);
+                if (targetTab) {
+                    targetTab.classList.add('df-active');
+                }
+                
+                // Mostrar el panel correspondiente
+                const targetPanel = document.querySelector(`[data-panel="${tabName}"]`);
+                if (targetPanel) {
+                    targetPanel.style.display = 'block';
+                }
+            }, 100);
+        }
+
+        // ===================== INICIALIZACIÓN =====================
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('introduccion');
+            inicializarCentroAyuda();
+        });
+    </script>
+
+
+</body></html>
